@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "29868595195",
+    "firebase_url": "https://gestmob-348a8.firebaseio.com",
+    "project_id": "gestmob-348a8",
+    "storage_bucket": "gestmob-348a8.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:29868595195:android:1a86c0d23eea986f461d5e",
+        "android_client_info": {
+          "package_name": "com.cirtait.gestmob"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "29868595195-r7gs08mhho6chbo8adj785rubsdi44js.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.cirtait.gestmob",
+            "certificate_hash": "0349856eed4546ef975ad293d0c42a80dd748106"
+          }
+        },
+        {
+          "client_id": "29868595195-fo6bnoi82rn2lji1b1nv46tvb8br6gpc.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBF3NOZcjgVBR577pzvVbBcU-l6yfVNNJs"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "29868595195-fo6bnoi82rn2lji1b1nv46tvb8br6gpc.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

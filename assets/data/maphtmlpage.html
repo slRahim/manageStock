@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html>
+	<head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, height=device-height, initial-scale=1.0, user-scalable=yes">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+         <link rel="stylesheet" href="https://unpkg.com/leaflet@1.3.4/dist/leaflet.css"integrity="sha512-puBpdR0798OZvTTbP4A8Ix/l+A4dHDD0DGqYW6RQ+9jxkRFclaxxQb/SJAWZfWAkuyeQUytO7+7N4QKrDh+drA=="
+                   crossorigin=""/>
+        <link rel="https://cdnjs.cloudflare.com/ajax/libs/perliedman-leaflet-control-geocoder/1.5.5/Control.Geocoder.min.css"/>
+        <link rel="stylesheet" href="https://unpkg.com/leaflet@1.2.0/dist/leaflet.css" />
+        <link rel="stylesheet" href="https://unpkg.com/leaflet-routing-machine@latest/dist/leaflet-routing-machine.css" />
+        <link rel="https://cdnjs.cloudflare.com/ajax/libs/leaflet-routing-machine/3.2.5/leaflet-routing-machine.css"/>
+        <link rel="stylesheet" href="https://unpkg.com/leaflet@1.2.0/dist/leaflet.css" />
+        <script src="https://unpkg.com/leaflet@1.3.4/dist/leaflet.js"integrity="sha512-nMMmRyTVoLYqjP9hrbed9S+FzjZHW5gY1TWCHA5ckwXZBadntCNs8kEqAWdrb9O7rxbCaA4lKTIWjDXZxflOcA=="crossorigin=""></script>
+         <style>
+            html, body {
+                height: 100%;
+                width: 100%;
+                margin: 0;
+                padding: 0;
+            }
+             #map{
+                     height: 100%;
+                     width: 100%;
+                     margin: 0;
+                     padding: 0 0 0 0;
+                     float: left;
+                     display:inline;
+             }
+              a{
+                  display : none!important;
+              }
+        </style>
+<!--      -->
+        <script type="text/javascript">
+			var lat = 36.360155;
+			var lon =  6.642433;
+			var macarte = null;
+            var mypos;
+            var IconModele= L.Icon.extend({
+                                            options: {
+                                                iconSize:     [48, 48],
+                                                shadowSize:   [20, 50],
+                                                iconAnchor:   [22, 45],
+                                                shadowAnchor: [ 4, 62],
+                                                popupAnchor:  [-3,-44]
+                                            }
+            });
+            var Markerspath="file:///D:/Projets de Anis/Cirta GParc/1.0/Bin/maps/Markers/";
+            encodeURI(Markerspath);
+            /////
+            function MyPosition() {
+                if (navigator.geolocation) {
+                    navigator.geolocation.getCurrentPosition(showMyPosition);
+                }
+                else {
+                }
+            };
+            function showMyPosition(position) {
+                document.getElementById('lat').value =position.coords.latitude;
+                document.getElementById('lon').value =position.coords.longitude;
+                macarte.setView([position.coords.latitude,position.coords.longitude],18);
+                macarte.removeLayer(mypos);
+                mypos = new L.circle([position.coords.latitude,position.coords.longitude],20,{color:'yellow',opacity:0.5,fillColor: 'blue',fillOpacity:.3}).addTo(macarte);
+            };
+            function initMap() {
+                macarte = L.map('map').setView([lat, lon], 5);
+                L.tileLayer('https://{s}.tile.openstreetmap.fr/osmfr/{z}/{x}/{y}.png', {
+                    noWrap: true,
+                    minZoom: 1,
+                    maxZoom: 20,
+                }).addTo(macarte);
+                macarte.removeControl(macarte.zoomControl);
+                macarte.on('click', onMapClick);
+                  marker = new L.marker([36.097938,4.411010],{icon:new IconModele({iconUrl:Markerspath+"marker.png"}) ,draggable: false});
+                  marker.addTo(macarte);
+                  macarte.setView([36.097938,4.411010],8);
+            };
+            /////
+            function SetZoom(level) {
+                macarte.setZoom(level);
+            };
+            /////
+            function chooseAddr(lat1, lng1){
+
+                macarte.setView([lat1, lng1],18);
+            };
+            /////
+            function onMapClick(e) {
+                 if(typeof(marker)==='undefined')
+                 {
+                  marker = new L.marker(e.latlng,{icon:new IconModele({iconUrl:Markerspath+"marker.png"}) ,draggable: false});
+                  marker.addTo(macarte);
+                 }
+                 else
+                 {
+                  marker.setLatLng(e.latlng)
+                 };
+                document.getElementById("lat").value=e.latlng.lat;
+                document.getElementById("lon").value=e.latlng.lng;
+            };
+    </script>
+<!--      -->
+	<title>G&#xE8;olocalisation</title>
+	</head>
+	<body>
+   <script type="text/javascript" >
+        window.onload = function(){
+            initMap();
+        };
+    </script>
+        <div id="map">
+                <input type="hidden" name="lat" id="lat" value="">
+                <input type="hidden" name="lon" id="lon" value="">
+        </div>
+	</body>
+</html>
+

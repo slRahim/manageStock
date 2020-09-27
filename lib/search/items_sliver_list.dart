@@ -1,0 +1,67 @@
+import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
+import 'package:gestmob/Helpers/Helpers.dart';
+import 'package:gestmob/Helpers/QueryCtr.dart';
+import 'package:gestmob/Helpers/Statics.dart';
+import 'package:gestmob/Widgets/article_list_item.dart';
+import 'package:gestmob/Widgets/piece_list_item.dart';
+import 'package:gestmob/Widgets/tier_list_item.dart';
+import 'package:gestmob/models/Article.dart';
+import 'package:gestmob/models/Piece.dart';
+import 'package:gestmob/models/Tiers.dart';
+import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
+
+import 'search_input_sliver.dart';
+import 'sliver_list_data_source.dart';
+
+class ItemsSliverList extends StatefulWidget {
+  final SliverListDataSource dataSource;
+
+  ItemsSliverList({Key key, @required this.dataSource}) : super(key: key);
+
+  @override
+  _ItemsSliverListState createState() => _ItemsSliverListState();
+}
+
+class _ItemsSliverListState extends State<ItemsSliverList> {
+
+
+  @override
+  Widget build(BuildContext context) => RefreshIndicator(
+        onRefresh: () => Future.sync(
+          widget.dataSource.refresh,
+        ),
+        child: CustomScrollView(
+          slivers: <Widget>[
+            /*ArticleSearchInputSliver(
+              onChanged: widget.dataSource.updateSearchTerm,
+            ),*/
+            PagedSliverList<int, Object>(
+              dataSource: widget.dataSource,
+              builderDelegate: PagedChildBuilderDelegate<Object>(
+                itemBuilder: (context, _item, index) => createItemWidget(_item)
+              ),
+            ),
+          ],
+        ),
+      );
+
+  Widget createItemWidget(item){
+    if(item is Article){
+      return ArticleListItem(article: item,);
+    } else if(item is Tiers){
+      item.originClientOrFourn = widget.dataSource.listType == ItemsListTypes.clientsList? 0 : 2;
+      return TierListItem(tier: item);
+    } else if(item is Piece){
+      return PieceListItem(piece: item);
+    } else{
+      return null;
+    }
+  }
+
+  @override
+  void dispose() {
+    widget.dataSource.dispose();
+    super.dispose();
+  }
+}
