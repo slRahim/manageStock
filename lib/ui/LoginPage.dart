@@ -1,8 +1,10 @@
 import 'dart:async';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:gestmob/Helpers/QueryCtr.dart';
 import 'package:gestmob/Helpers/Statics.dart';
 import 'package:gestmob/Helpers/TouchIdUtil.dart';
+import 'package:gestmob/models/Profile.dart';
 import 'package:intl/intl.dart';
 
 class LoginApp extends StatefulWidget {
@@ -16,8 +18,14 @@ class _LoginAppState extends State<LoginApp> {
   @override
   void initState() {
     super.initState();
-
     _auth = TouchIdUtil(context);
+  }
+
+  Future<bool> futureInitState() async {
+    QueryCtr queryCtr = QueryCtr();
+    Profiles.CurrentProfile = await queryCtr.getProfileById(1);
+
+    return Future<bool>.value(_auth.isActive());
   }
 
   @override
@@ -61,7 +69,7 @@ class _LoginAppState extends State<LoginApp> {
             Expanded(child: OtpSceern(),
             ),
             FutureBuilder<bool>(
-              future: _auth.isActive(),
+              future: futureInitState(),
               builder: (context, snapshot) {
                 if (snapshot.hasData && snapshot.data) {
                   return IconButton(
@@ -260,7 +268,7 @@ class _OtpSceernState extends State<OtpSceern> {
       strPin += e;
     });
     if (pinIndex == 4) {
-      String pass = "0000";
+      String pass = Profiles.CurrentProfile.codepin;
       if (pass == strPin) {
         await startTime();
       } else {

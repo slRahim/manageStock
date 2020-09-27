@@ -56,7 +56,7 @@ class ArticleFamille {
 
   @override
   String toString() {
-    return 'ArticleFamille{_libelle: $_libelle}';
+    return _libelle;
   }
 
   @override

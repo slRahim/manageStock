@@ -24,7 +24,7 @@ class AddEditBar extends StatefulWidget with PreferredSizeWidget{
   }
 
   @override
-  Size get preferredSize => Size.fromHeight(127);
+  Size get preferredSize => Size.fromHeight(58);
 
 }
 
@@ -35,9 +35,7 @@ class AddEditBarState extends State<AddEditBar>{
     return AppBar(
       leading: IconButton(
         icon: Icon(widget.editMode && widget.modification? Icons.cancel: Icons.arrow_back, size: 25),
-        onPressed: () => {
-          widget.onCancelPressed
-        },
+        onPressed: widget.onCancelPressed
       ),
       title: Text(widget.title),
       backgroundColor: widget.editMode ? Colors.green : Colors.blue,

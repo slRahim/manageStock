@@ -57,7 +57,7 @@ class ArticleMarque {
 
   @override
   String toString() {
-    return 'ArticleMarque{_libelle: $_libelle}';
+    return _libelle;
   }
 
   @override

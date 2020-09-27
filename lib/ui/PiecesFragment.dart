@@ -65,6 +65,7 @@ class _PiecesFragmentState extends State<PiecesFragment> {
           child: Icon(Icons.add),
         ),
         appBar: SearchBar(
+          mainContext: context,
           title: "Devis",
           isFilterOn: isFilterOn,
           onSearchChanged: (String search) => _dataSource.updateSearchTerm(search),

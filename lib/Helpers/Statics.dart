@@ -1,4 +1,6 @@
 
+import 'package:gestmob/models/Profile.dart';
+
 class Statics {
   static const RoutesKeys routes = const RoutesKeys();
   static const addArticle = '/add_article';
@@ -17,10 +19,16 @@ class Statics {
   ];
 }
 
+class Profiles {
+  const Profiles();
+  static Profile CurrentProfile;
+}
+
 class RoutesKeys {
   const RoutesKeys();
   static const homePage = '/home_page';
-  static const societePage = '/societe_page';
+  static const profilePage = '/profilePage';
+  static const loginPage = '/loginPage';
   static const addArticle = '/add_article';
   static const addTier = '/add_tier';
   static const addPiece = '/add_piece';
@@ -38,6 +46,7 @@ class ItemsListTypes {
 
 class DbTablesNames {
   const DbTablesNames();
+  static const profile = 'Profile';
   static const articles = 'Articles';
   static const articlesMarques = 'ArticlesMarques';
   static const articlesFamilles = 'ArticlesFamilles';

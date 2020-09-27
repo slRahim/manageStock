@@ -26,7 +26,7 @@ class ArticleTva {
 
   @override
   String toString() {
-    return 'ArticleTva{_tva: $_tva}';
+    return _tva.toString();
   }
 
   @override

@@ -32,7 +32,7 @@ class TiersFamille{
 
   @override
   String toString() {
-    return 'TiersFamille{_id: $_id, _libelle: $_libelle}';
+    return _libelle;
   }
 
   @override

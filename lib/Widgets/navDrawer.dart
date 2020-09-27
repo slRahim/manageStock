@@ -9,6 +9,7 @@ import 'package:gestmob/Helpers/Statics.dart';
 import 'package:gestmob/cubit/home_cubit.dart';
 import 'package:gestmob/generated/l10n.dart';
 import 'package:gestmob/models/HomeItem.dart';
+import 'package:gestmob/models/Profile.dart';
 import 'package:gestmob/ui/home.dart';
 
 import 'ItemsWidgets.dart';
@@ -39,25 +40,31 @@ class NavDrawer extends StatelessWidget {
   List<Widget> getNavDrawerWidgetList(context) {
     homeItemWidgetList = <Widget>[
       DrawerHeader(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            CircleAvatar(
-              radius: 40,
-              backgroundImage:
-                  NetworkImage('https://i.stack.imgur.com/Dw6f7.png'),
-            ),
-            Padding(padding: const EdgeInsets.all(10)),
-            Text(
-              "Client",
-              style: TextStyle(
-                color: Color.fromRGBO(41, 128, 185,1.0),
-                fontSize: 25,
+        child: InkWell(
+            onTap: (){
+              Navigator.of(context).pushNamed(
+                  RoutesKeys.profilePage,
+              );
+            },
+            child: new Container(
+              width: 500.0,
+              padding: new EdgeInsets.fromLTRB(20.0, 40.0, 20.0, 40.0),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.fromLTRB(20,0,0,60),
+                    child: Image(image: AssetImage('assets/logos/profile_logo.png')),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.fromLTRB(40,0,0,0),
+                    child: Image(image: AssetImage('assets/logos/profile_logo.png')),
+                  ),
+                ],
               ),
-            ),
-          ],
+            )
         ),
-        decoration: BoxDecoration(color: Colors.blue[50]),
+        decoration: BoxDecoration(color: Colors.blue[200]),
       )
     ];
 

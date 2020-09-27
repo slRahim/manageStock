@@ -7,6 +7,7 @@ import 'package:gestmob/Helpers/Statics.dart';
 import 'package:gestmob/cubit/home_cubit.dart';
 import 'package:gestmob/models/Article.dart';
 import 'package:gestmob/models/HomeItem.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 
 Widget getDrawerItemWidget(_context, data) {
@@ -73,12 +74,12 @@ class HomeDraggableItem extends DraggableItem {
             Text(
               title,
               textAlign: TextAlign.center,
-              style: TextStyle(color: Colors.white, fontSize: 15),/*GoogleFonts.openSans(
+              style: GoogleFonts.openSans(
                   textStyle: TextStyle(
                       color: Colors.white,
                       fontSize: 12,
                       fontWeight: FontWeight.w600)
-              ),*/
+              ),
             ),
           ],
         ),

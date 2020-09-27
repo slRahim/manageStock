@@ -7,6 +7,7 @@ import 'package:gestmob/Helpers/Helpers.dart';
 import 'package:gestmob/Helpers/QueryCtr.dart';
 import 'package:gestmob/Helpers/Statics.dart';
 import 'package:gestmob/Widgets/CustomWidgets/add_save_bar.dart';
+import 'package:gestmob/Widgets/CustomWidgets/bottom_tab_bar.dart';
 import 'package:gestmob/Widgets/CustomWidgets/image_picker_widget.dart';
 import 'package:gestmob/Widgets/CustomWidgets/list_dropdown.dart';
 import 'package:gestmob/models/Article.dart';
@@ -64,8 +65,6 @@ class _AddPiecePageState extends State<AddPiecePage>
   List<DropdownMenuItem<Object>> _familleDropdownItems;
   var _selectedFamille;
 
-  bool price2 = Prefs.PriceCount > 1;
-  bool price3 = Prefs.PriceCount > 2;
   bool _validateRaison = false;
 
   TextEditingController _raisonSocialeControl = new TextEditingController();
@@ -156,18 +155,6 @@ class _AddPiecePageState extends State<AddPiecePage>
                 editMode: editMode,
                 modification: modification,
                 title: appBarTitle,
-                bottom: TabBar(
-                  tabs: [
-                    Tab(
-                      icon: Icon(Icons.insert_drive_file),
-                      text: 'Fiche',
-                    ),
-                    Tab(
-                      icon: Icon(Icons.image),
-                      text: 'Photo',
-                    ),
-                  ],
-                ),
                 onCancelPressed: () => {
                   if(modification){
                     if(editMode){
@@ -196,13 +183,25 @@ class _AddPiecePageState extends State<AddPiecePage>
                     }
                   } else {
                     Helpers.showFlushBar(
-                        context, "Please enter Tier Raison sociale");
+                        context, "Please enter Raison sociale");
 
                     setState(() {
                       _validateRaison = true;
                     });
                   }
                 },
+              ),
+              bottomNavigationBar: BottomTabBar(
+                tabs: [
+                  Tab(
+                    icon: Icon(Icons.insert_drive_file),
+                    text: 'Fiche',
+                  ),
+                  Tab(
+                    icon: Icon(Icons.image),
+                    text: 'Photo',
+                  ),
+                ],
               ),
               body: Builder(
                 builder: (context) => TabBarView(
@@ -493,7 +492,37 @@ class _AddPiecePageState extends State<AddPiecePage>
               ),
             ),
           ),
-          dropdowns(),
+
+          ListDropDown(
+            editMode: editMode,
+            value: _selectedFamille,
+            items: _familleDropdownItems,
+            onChanged: (value) {
+              setState(() {
+                _selectedFamille = value;
+              });
+            },
+            onAddPressed: () async {
+              await showDialog(
+                  context: context,
+                  builder: (BuildContext context) {
+                    return addFamilledialogue();
+                  }).then((val) {
+                setState(() {});
+              });
+            },
+          ),
+          ListDropDown(
+            libelle: "Tarification:  ",
+            editMode: editMode,
+            value: _selectedTarification,
+            items: _tarificationDropdownItems,
+            onChanged: (value) {
+              setState(() {
+                _selectedTarification = value;
+              });
+            },),
+
           Container(
             decoration: editMode? new BoxDecoration(
               border: Border.all(color: Colors.blueAccent,),
@@ -521,47 +550,6 @@ class _AddPiecePageState extends State<AddPiecePage>
       {
         _itemImage = imageFile
       }),
-    );
-  }
-
-  Widget dropdowns() {
-    return Center(
-      child: Wrap(
-        spacing: 10,
-        runSpacing: 10,
-        direction: Axis.horizontal,
-        children: [
-          ListDropDown(
-            editMode: editMode,
-            value: _selectedFamille,
-            items: _familleDropdownItems,
-            onChanged: (value) {
-              setState(() {
-                _selectedFamille = value;
-              });
-            },
-            onAddPressed: () async {
-              await showDialog(
-                  context: context,
-                  builder: (BuildContext context) {
-                    return addFamilledialogue();
-                  }).then((val) {
-                setState(() {});
-              });
-            },
-          ),
-          ListDropDown(
-            label: "Tarification:  ",
-            editMode: editMode,
-            value: _selectedTarification,
-            items: _tarificationDropdownItems,
-            onChanged: (value) {
-              setState(() {
-                _selectedTarification = value;
-              });
-            },),
-        ],
-      ),
     );
   }
 
@@ -779,4 +767,5 @@ class _AddPiecePageState extends State<AddPiecePage>
       return Future.value(-1);
     }
   }
+
 }

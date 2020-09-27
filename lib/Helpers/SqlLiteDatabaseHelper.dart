@@ -26,7 +26,7 @@ class SqlLiteDatabaseHelper {
 
   initDb() async {
     String databasesPath = await getDatabasesPath();
-    String dbPath = join(databasesPath, 'gestionstock.db');
+    String dbPath = join(databasesPath, 'gestmob.db');
 
     Database database = await openDatabase(dbPath, version: 1, onCreate: _onCreate);
     return database;
@@ -35,24 +35,26 @@ class SqlLiteDatabaseHelper {
   void _onCreate(Database db, int version) async {
 
 
-    await createSocieteTables(db, version);
-    await createArticlesTables(db, version);
-    await createTiersTables(db, version);
-    await createPiecesTables(db, version);
-    await createJournauxTables(db, version);
+    await createProfileTable(db, version);
+    await createArticlesTable(db, version);
+    await createTiersTable(db, version);
+    await createPiecesTable(db, version);
+    await createJournauxTable(db, version);
 
     await setInitialData(db, version);
 
   }
 
-  Future<void> createSocieteTables(Database db, int version) async {
-    await db.execute("""CREATE TABLE IF NOT EXISTS MySociete (
+  Future<void> createProfileTable(Database db, int version) async {
+    await db.execute("""CREATE TABLE IF NOT EXISTS Profile (
         
         id INTEGER PRIMARY KEY,
         BytesImageString TEXT,
         Raison VARCHAR(100),
-        Statut VARCHAR(10),
+        CodePin VARCHAR(4),
+        Statut integer,
         Adresse VARCHAR(100),
+        AdresseWeb VARCHAR(100),
         Ville VARCHAR(25),
         Departement VARCHAR(25),
         Pays VARCHAR(25),
@@ -73,14 +75,14 @@ class SqlLiteDatabaseHelper {
         Capital Double,
         Activite TEXT,
         Nis VARCHAR(25),
-        codedouane VARCHAR(15),
+        Codedouane VARCHAR(15),
         Maposition VARCHAR(20)
         
         )""");
 
   }
 
-  Future<void> createArticlesTables(Database db, int version) async {
+  Future<void> createArticlesTable(Database db, int version) async {
     await db.execute("""CREATE TABLE IF NOT EXISTS Articles (
         
         id INTEGER PRIMARY KEY,
@@ -138,7 +140,7 @@ class SqlLiteDatabaseHelper {
         )""");
   }
 
-  Future<void> createTiersTables(Database db, int version) async {
+  Future<void> createTiersTable(Database db, int version) async {
     await db.execute("""CREATE TABLE IF NOT EXISTS Tiers (
         
         id INTEGER PRIMARY KEY,
@@ -173,7 +175,7 @@ class SqlLiteDatabaseHelper {
         )""");
   }
 
-  Future<void> createPiecesTables(Database db, int version) async {
+  Future<void> createPiecesTable(Database db, int version) async {
     await db.execute("""CREATE TABLE IF NOT EXISTS Pieces (
         
         id INTEGER PRIMARY KEY,
@@ -195,7 +197,7 @@ class SqlLiteDatabaseHelper {
         )""");
   }
 
-  Future<void> createJournauxTables(Database db, int version) async {
+  Future<void> createJournauxTable(Database db, int version) async {
     await db.execute("""CREATE TABLE IF NOT EXISTS Journaux (
         
         id INTEGER PRIMARY KEY,
@@ -213,7 +215,10 @@ class SqlLiteDatabaseHelper {
   Future<void> setInitialData(Database db, int version) async {
     Batch batch = db.batch();
 
-    batch.rawInsert("""INSERT INTO `MySociete` (`BytesImageString`, `Raison`, `Statut`, `Adresse`, `Ville`, `Departement`, `Pays`, `Cp`, `Telephone`, `Telephone2`, `Fax`, `Mobile`, `Mobile2`, `Mail`, `Site`, `Rc`, `Nif`, `Ai`, `Numtva`, `Siret`, `Naf`, `Capital`, `Activite`, `Nis`, `Codedouane`, `Maposition`) VALUES('', 'Cirta it\r\n', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '');""");
+    batch.rawInsert('INSERT INTO Profile(BytesImageString, Raison, CodePin, Statut, Adresse, AdresseWeb, Ville, Departement, Pays, Cp, Telephone, Telephone2, Fax, Mobile, Mobile2,'
+        'Mail, Site, Rc, Nif, Ai, Numtva, Siret, Naf, Capital, Activite, Nis, Codedouane, Maposition) '
+        'VALUES("", "Raison", "1111", 1, "Adresse", "AdresseWeb", "Ville", "Departement", "Pays", "Cp", "Telephone", "Telephone2", "Fax", "Mobile", "Mobile2",'
+        '"Mail", "Site", "Rc", "Nif", "Ai", "Numtva", "Siret", "Naf", "25", "Activite", "Nis", "Codedouane", "Maposition")');
 
     batch.rawInsert('INSERT INTO ArticlesMarques(Libelle, BytesImageString) VALUES("Marque", "")');
     batch.rawInsert('INSERT INTO ArticlesMarques(Libelle, BytesImageString) VALUES("Marque 1", "")');
@@ -227,7 +232,7 @@ class SqlLiteDatabaseHelper {
     batch.rawInsert('INSERT INTO ArticlesFamilles(Libelle, BytesImageString) VALUES("Famille 3", "")');
     batch.rawInsert('INSERT INTO ArticlesFamilles(Libelle, BytesImageString) VALUES("Famille 4", "")');
 
-    batch.rawInsert('INSERT INTO TiersFamilles(Libelle) VALUES("Famile")');
+    batch.rawInsert('INSERT INTO TiersFamilles(Libelle) VALUES("Famille")');
     batch.rawInsert('INSERT INTO TiersFamilles(Libelle) VALUES("Famille 1")');
     batch.rawInsert('INSERT INTO TiersFamilles(Libelle) VALUES("Famille 2")');
     batch.rawInsert('INSERT INTO TiersFamilles(Libelle) VALUES("Famille 3")');

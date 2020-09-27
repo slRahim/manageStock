@@ -3,14 +3,15 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gestmob/cubit/home_cubit.dart';
 import 'package:gestmob/models/Article.dart';
 import 'package:gestmob/models/Piece.dart';
+import 'package:gestmob/models/Profile.dart';
 import 'package:gestmob/models/Tiers.dart';
 import 'package:gestmob/ui/AddPiecePage.dart';
 import 'package:gestmob/ui/AddTierPage.dart';
+import 'package:gestmob/ui/ProfilePage.dart';
 import 'package:gestmob/ui/HelpPage.dart';
 import 'package:gestmob/ui/LoginPage.dart';
 import 'package:gestmob/ui/SettingsPage.dart';
 import 'package:gestmob/ui/AddArticlePage.dart';
-import 'package:gestmob/ui/SocietePage.dart';
 import 'package:gestmob/ui/home.dart';
 
 import 'QueryCtr.dart';
@@ -22,7 +23,7 @@ class RouteGenerator {
     final args = settings.arguments;
 
     switch (settings.name) {
-      case '/':
+      case RoutesKeys.loginPage:
         return MaterialPageRoute(
           builder: (_) => LoginApp(),
         );
@@ -31,9 +32,9 @@ class RouteGenerator {
         return MaterialPageRoute(
             builder: (_) => BlocProvider(
                 create: (context) => HomeCubit(), child: new home()));
-      case RoutesKeys.societePage:
+      case RoutesKeys.profilePage:
         return MaterialPageRoute(
-          builder: (_) => SocietePage(arguments: args,),
+          builder: (_) => ProfilePage(),
         );
        break;
       case RoutesKeys.addArticle:

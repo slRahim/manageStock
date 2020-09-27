@@ -115,6 +115,8 @@ flutter:
     - assets/setting.png
     - assets/Tresorerie.png
     - assets/addArticle.png
+    - assets/logos/cirtait_logo.png
+    - assets/logos/profile_logo.png
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware.

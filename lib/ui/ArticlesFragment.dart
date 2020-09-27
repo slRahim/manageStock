@@ -68,6 +68,7 @@ class _ArticlesFragmentState extends State<ArticlesFragment> {
           child: Icon(Icons.add),
         ),
         appBar: SearchBar(
+          mainContext: context,
           title: S.of(context).articles,
           isFilterOn: isFilterOn,
           onSearchChanged: (String search) => _dataSource.updateSearchTerm(search),

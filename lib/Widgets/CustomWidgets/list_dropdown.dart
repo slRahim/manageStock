@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 class ListDropDown extends StatefulWidget {
-  final String label;
+  final String libelle;
   final bool editMode;
   final value;
   final items;
@@ -10,7 +10,7 @@ class ListDropDown extends StatefulWidget {
 
   const ListDropDown(
       {Key key,
-      this.label,
+      this.libelle,
       this.editMode,
       this.value,
       this.items,
@@ -30,6 +30,7 @@ class ListDropDownState extends State<ListDropDown> {
   @override
   Widget build(BuildContext context) {
     return Container(
+      width: double.infinity,
       padding: const EdgeInsets.all(5),
       decoration: widget.editMode
           ? new BoxDecoration(
@@ -42,12 +43,12 @@ class ListDropDownState extends State<ListDropDown> {
       child: Row(
         mainAxisSize: MainAxisSize.min,
         children: [
-          widget.label != null
+          widget.libelle != null
               ? new GestureDetector(
                   onTap: () {
                     openDropdown();
                   },
-                  child: new Text(widget.label,
+                  child: new Text(widget.libelle,
                       style: TextStyle(
                           fontSize: 16,
                           color:

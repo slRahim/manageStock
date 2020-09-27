@@ -7,11 +7,12 @@ import 'package:material_design_icons_flutter/material_design_icons_flutter.dart
 
 class SearchBar extends StatefulWidget with PreferredSizeWidget{
   final String title;
+  final BuildContext mainContext;
   final bool isFilterOn;
   final VoidCallback onFilterPressed;
   final Function(String search) onSearchChanged;
 
-  const SearchBar({Key key, @required this.title, this.onFilterPressed, this.onSearchChanged, this.isFilterOn}) : super(key: key);
+  const SearchBar({Key key, @required this.title, this.onFilterPressed, this.onSearchChanged, this.isFilterOn, this.mainContext}) : super(key: key);
 
   @override
   State<StatefulWidget> createState() {
@@ -28,10 +29,11 @@ class SearchBarState extends State<SearchBar>{
   @override
   Widget build(BuildContext context) {
     return AppBar(
-      leading: IconButton(
+      leading: widget.mainContext != null? IconButton(
         icon: Icon(Icons.menu, size: 25), // change this size and style
-        onPressed: () => Scaffold.of(context).openDrawer(),
-      ),
+        onPressed: () => Scaffold.of(widget.mainContext).openDrawer(),
+      ) : null,
+      automaticallyImplyLeading: false,
       titleSpacing: 0,
       title: !isSearching
           ? Text(widget.title)

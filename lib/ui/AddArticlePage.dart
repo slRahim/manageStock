@@ -7,6 +7,7 @@ import 'package:gestmob/Helpers/Helpers.dart';
 import 'package:gestmob/Helpers/QueryCtr.dart';
 import 'package:gestmob/Helpers/Statics.dart';
 import 'package:gestmob/Widgets/CustomWidgets/add_save_bar.dart';
+import 'package:gestmob/Widgets/CustomWidgets/bottom_tab_bar.dart';
 import 'package:gestmob/Widgets/CustomWidgets/image_picker_widget.dart';
 import 'package:gestmob/Widgets/CustomWidgets/list_dropdown.dart';
 import 'package:gestmob/models/Article.dart';
@@ -174,7 +175,7 @@ class _AddArticlePageState extends State<AddArticlePage> {
                       });
                     }
                   } else {
-                    Helpers.showFlushBar(context, "Please enter article désignation");
+                    Helpers.showFlushBar(context, "Please enter désignation");
 
                     setState(() {
                       _validateDes = true;
@@ -182,20 +183,19 @@ class _AddArticlePageState extends State<AddArticlePage> {
                   }
                 },
               ),
-              bottomNavigationBar: BottomNavigationBar(
-                currentIndex: 0,
-                items: [
-                  BottomNavigationBarItem(
+              bottomNavigationBar: BottomTabBar(
+                tabs: [
+                  Tab(
                     icon: Icon(Icons.insert_drive_file),
-                    title: Text('Fiche d\'article'),
+                    text: 'Fiche d\'article',
                   ),
-                  BottomNavigationBarItem(
+                  Tab(
                     icon: Icon(Icons.image),
-                    title: Text('Photo'),
+                    text: 'Photo',
                   ),
-                  BottomNavigationBarItem(
+                  Tab(
                     icon: Icon(Icons.description),
-                    title: Text('Description'),
+                    text: 'Description',
                   ),
                 ],
               ),
@@ -545,7 +545,7 @@ class _AddArticlePageState extends State<AddArticlePage> {
         children: [
           ListDropDown(
             editMode: editMode,
-            label: "TVA:  ",
+            libelle: "TVA:  ",
             value: _selectedTva,
             items: _tvaDropdownItems,
             onChanged: (value) {
@@ -1014,5 +1014,6 @@ class _AddArticlePageState extends State<AddArticlePage> {
 
     // widget._queryCtr.saveTestArticle();
   }
+
 
 }

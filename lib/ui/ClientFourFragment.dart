@@ -65,6 +65,7 @@ class _ClientFourFragmentState extends State<ClientFourFragment> {
           child: Icon(Icons.add),
         ),
         appBar: SearchBar(
+          mainContext: context,
           title: widget.clientFourn == 0? "Clients" : "Fournisseurs",
           isFilterOn: isFilterOn,
           onSearchChanged: (String search) => _dataSource.updateSearchTerm(search),

@@ -28,7 +28,7 @@ void main() {
         primarySwatch: Colors.red,
       ),
 
-      initialRoute: '/',
+      initialRoute: RoutesKeys.homePage,
       onGenerateRoute: RouteGenerator.generateRoute,
 
      /* home: BlocProvider(

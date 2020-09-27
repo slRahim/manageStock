@@ -6,6 +6,7 @@ import 'package:gestmob/models/ArticleFamille.dart';
 import 'package:gestmob/models/ArticleMarque.dart';
 import 'package:gestmob/models/ArticleTva.dart';
 import 'package:gestmob/models/Piece.dart';
+import 'package:gestmob/models/Profile.dart';
 import 'package:gestmob/models/Tiers.dart';
 import 'package:gestmob/models/TiersFamille.dart';
 import 'package:gestmob/ui/AddArticlePage.dart';
@@ -22,6 +23,15 @@ import 'Helpers.dart';
 
 class QueryCtr {
   SqlLiteDatabaseHelper _databaseHelper = SqlLiteDatabaseHelper();
+
+  Future<Profile> getProfileById(int id) async {
+    Database dbClient = await _databaseHelper.db;
+    var res = await dbClient.rawQuery('SELECT * FROM ' + DbTablesNames.profile + ' where id like $id');
+
+    Profile profile = new Profile.fromMap(res[0]);
+
+    return profile;
+  }
 
   Future<List<Article>> getAllArticles(int offset, int limit, {String searchTerm, Map<String, dynamic> filters}) async {
     String query = 'SELECT * FROM ' + DbTablesNames.articles;
