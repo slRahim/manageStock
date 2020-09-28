@@ -169,4 +169,8 @@ class Helpers {
     return dateText;
   }
 
+  static void quitApp() {
+    SystemChannels.platform.invokeMethod('SystemNavigator.pop');
+  }
+
 }

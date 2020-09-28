@@ -43,15 +43,19 @@ class Profile{
   String _rc;
   String _nif;
   String _ai;
-  String _numtva;
-  String _siret;
-  String _naf;
   double _capital;
   String _activite;
   String _nis;
   String _codedouane;
   String _maposition;
+  bool _codePinEnabled;
 
+
+  bool get codePinEnabled => _codePinEnabled;
+
+  set codePinEnabled(bool value) {
+    _codePinEnabled = value;
+  }
 
   Profile.fromMap(dynamic obj) {
     this._id = obj["id"];
@@ -75,14 +79,12 @@ class Profile{
     this._rc = obj["Rc"];
     this._nif = obj["Nif"];
     this._ai = obj["Ai"];
-    this._numtva = obj["Numtva"];
-    this._siret = obj["Siret"];
-    this._naf = obj["Naf"];
     this._capital = obj["Capital"];
     this._activite = obj["Activite"];
     this._nis = obj["Nis"];
     this._codedouane = obj["Codedouane"];
     this._maposition = obj["Maposition"];
+    this._codePinEnabled = obj["CodePinEnabled"] == 1? true : false;;
 
   }
 
@@ -96,6 +98,7 @@ class Profile{
     map["id"] = this._id;
     map["Raison"] = this._raisonSociale;
     map["Statut"] = this._statut;
+    map["CodePin"] = this._codepin;
     map["Adresse"] = this._adresse;
     map["Ville"] = this._ville;
     map["Departement"] = this._departement;
@@ -111,14 +114,12 @@ class Profile{
     map["Rc"] = this._rc;
     map["Nif"] = this._nif;
     map["Ai"] = this._ai;
-    map["Numtva"] = this._numtva;
-    map["Siret"] = this._siret;
-    map["Naf"] = this._naf;
     map["Capital"] = this._capital;
     map["Activite"] = this._activite;
     map["Nis"] = this._nis;
     map["Codedouane"] = this._codedouane;
     map["Maposition"] = this._maposition;
+    map["CodePinEnabled"] = this._codePinEnabled? 1 : 0;
 
 
     return map;
@@ -236,24 +237,6 @@ class Profile{
 
   set ai(String value) {
     _ai = value;
-  }
-
-  String get numtva => _numtva;
-
-  set numtva(String value) {
-    _numtva = value;
-  }
-
-  String get siret => _siret;
-
-  set siret(String value) {
-    _siret = value;
-  }
-
-  String get naf => _naf;
-
-  set naf(String value) {
-    _naf = value;
   }
 
   double get capital => _capital;

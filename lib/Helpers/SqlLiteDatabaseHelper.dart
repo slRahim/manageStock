@@ -52,6 +52,7 @@ class SqlLiteDatabaseHelper {
         BytesImageString TEXT,
         Raison VARCHAR(100),
         CodePin VARCHAR(4),
+        CodePinEnabled integer,
         Statut integer,
         Adresse VARCHAR(100),
         AdresseWeb VARCHAR(100),
@@ -69,9 +70,6 @@ class SqlLiteDatabaseHelper {
         Rc VARCHAR(25),
         Nif VARCHAR(25),
         Ai VARCHAR(25),
-        Numtva VARCHAR(19),
-        Siret VARCHAR(14),
-        Naf VARCHAR(5),
         Capital Double,
         Activite TEXT,
         Nis VARCHAR(25),
@@ -215,10 +213,10 @@ class SqlLiteDatabaseHelper {
   Future<void> setInitialData(Database db, int version) async {
     Batch batch = db.batch();
 
-    batch.rawInsert('INSERT INTO Profile(BytesImageString, Raison, CodePin, Statut, Adresse, AdresseWeb, Ville, Departement, Pays, Cp, Telephone, Telephone2, Fax, Mobile, Mobile2,'
-        'Mail, Site, Rc, Nif, Ai, Numtva, Siret, Naf, Capital, Activite, Nis, Codedouane, Maposition) '
-        'VALUES("", "Raison", "1111", 1, "Adresse", "AdresseWeb", "Ville", "Departement", "Pays", "Cp", "Telephone", "Telephone2", "Fax", "Mobile", "Mobile2",'
-        '"Mail", "Site", "Rc", "Nif", "Ai", "Numtva", "Siret", "Naf", "25", "Activite", "Nis", "Codedouane", "Maposition")');
+    batch.rawInsert('INSERT INTO Profile(BytesImageString, Raison, CodePin, CodePinEnabled, Statut, Adresse, AdresseWeb, Ville, Departement, Pays, Cp, Telephone, Telephone2, Fax, Mobile, Mobile2,'
+        'Mail, Site, Rc, Nif, Ai, Capital, Activite, Nis, Codedouane, Maposition) '
+        'VALUES("", "Raison", "", 0, 1, "Adresse", "AdresseWeb", "Ville", "Departement", "Pays", "Cp", "Telephone", "Telephone2", "Fax", "Mobile", "Mobile2",'
+        '"Mail", "Site", "Rc", "Nif", "Ai", "25", "Activite", "Nis", "Codedouane", "Maposition")');
 
     batch.rawInsert('INSERT INTO ArticlesMarques(Libelle, BytesImageString) VALUES("Marque", "")');
     batch.rawInsert('INSERT INTO ArticlesMarques(Libelle, BytesImageString) VALUES("Marque 1", "")');

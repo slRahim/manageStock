@@ -3,7 +3,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gestmob/cubit/home_cubit.dart';
 import 'package:gestmob/models/Article.dart';
 import 'package:gestmob/models/Piece.dart';
-import 'package:gestmob/models/Profile.dart';
 import 'package:gestmob/models/Tiers.dart';
 import 'package:gestmob/ui/AddPiecePage.dart';
 import 'package:gestmob/ui/AddTierPage.dart';

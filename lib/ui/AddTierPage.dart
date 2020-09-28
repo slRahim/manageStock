@@ -267,6 +267,7 @@ class _AddTierPageState extends State<AddTierPage>
                 },
               ),
               bottomNavigationBar: BottomTabBar(
+                selectedIndex: _tabSelectedIndex,
                 controller: _tabController,
                 tabs: [
                   Tab(

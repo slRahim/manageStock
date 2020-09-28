@@ -8,6 +8,7 @@ import 'package:gestmob/Helpers/QueryCtr.dart';
 import 'package:gestmob/Helpers/Statics.dart';
 import 'package:gestmob/Widgets/CustomWidgets/add_save_bar.dart';
 import 'package:gestmob/Widgets/CustomWidgets/bottom_tab_bar.dart';
+import 'package:gestmob/Widgets/CustomWidgets/enterPin.dart';
 import 'package:gestmob/Widgets/CustomWidgets/image_picker_widget.dart';
 import 'package:gestmob/Widgets/CustomWidgets/list_dropdown.dart';
 import 'package:gestmob/models/Article.dart';
@@ -31,7 +32,9 @@ class _ProfilePageState extends State<ProfilePage>
     with TickerProviderStateMixin {
   
   var arguments;
-  
+
+  TabController _tabController;
+
   final _scaffoldKey = GlobalKey<ScaffoldState>();
 
   bool editMode = true;
@@ -71,6 +74,8 @@ class _ProfilePageState extends State<ProfilePage>
   
   void initState() {
     super.initState();
+    _tabController = TabController(length: 3, vsync: this);
+
     _dataSource = SliverListDataSource(ItemsListTypes.articlesList, new Map<String, dynamic>());
     _queryCtr = _dataSource.queryCtr;
     
@@ -83,6 +88,7 @@ class _ProfilePageState extends State<ProfilePage>
 
   @override
   void dispose() {
+    _tabController.dispose();
     super.dispose();
   }
 
@@ -164,6 +170,7 @@ class _ProfilePageState extends State<ProfilePage>
                 },
               ),
               bottomNavigationBar: BottomTabBar(
+                controller: _tabController,
                 tabs: [
                   Tab(
                     icon: Icon(Icons.insert_drive_file),
@@ -181,6 +188,7 @@ class _ProfilePageState extends State<ProfilePage>
               ),
               body: Builder(
                 builder: (context) => TabBarView(
+                  controller: _tabController,
                   children: [
                     fichetab(),
                     imageTab(),
@@ -566,6 +574,22 @@ class _ProfilePageState extends State<ProfilePage>
               ),
             ),
           ),
+          Switch(
+            value: arguments.codePinEnabled,
+            onChanged: editMode?(bool isOn) {
+              setState(() {
+                arguments.codePinEnabled = isOn;
+                if(isOn){
+                  setState(() {
+                    _tabController.index = 2;
+                  });
+                }
+              });
+            }: null,
+            activeColor: Colors.blue,
+            inactiveTrackColor: Colors.grey,
+            inactiveThumbColor: Colors.grey,
+          )
         ],
       ),
     );
@@ -582,18 +606,15 @@ class _ProfilePageState extends State<ProfilePage>
   }
 
   Widget securityTab() {
-    return SingleChildScrollView(
-      child: ImagePickerWidget(
-          editMode: editMode, onImageChange: (File imageFile) =>
-      {
-        _itemImage = imageFile
-      }),
-    );
+    return EnterPin(editMode?onCodePinChanged:null, arguments.codepin);
   }
 
   Future<Object> makeItem() async {
     var item = new Profile.empty();
     item.id = arguments.id;
+
+    item.codepin = arguments.codepin;
+    item.codePinEnabled = arguments.codePinEnabled;
 
    item.raisonSociale = _raisonSocialeControl.text;
    item.statut = Statics.statutItems.indexOf(_selectedStatut);
@@ -623,6 +644,13 @@ class _ProfilePageState extends State<ProfilePage>
     return item;
 
     return await _queryCtr.getProfileById(1);
+  }
+
+  onCodePinChanged (String newCodePin){
+    arguments.codepin = newCodePin;
+    setState(() {
+      _tabController.index = 0;
+    });
   }
 
   Future<void> setDataFromItem(Profile item) async {

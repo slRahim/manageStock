@@ -1,117 +1,89 @@
-import 'dart:async';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:gestmob/Helpers/Helpers.dart';
-import 'package:gestmob/Helpers/QueryCtr.dart';
-import 'package:gestmob/Helpers/Statics.dart';
 import 'package:gestmob/Helpers/TouchIdUtil.dart';
-import 'package:gestmob/models/Profile.dart';
-import 'package:intl/intl.dart';
 import 'package:vibration/vibration.dart';
 
-class LoginApp extends StatefulWidget {
+class EnterPin extends StatefulWidget {
+  final Function(String newCodePin) onCodePinChanged;
+  final String codePin;
+  EnterPin(this.onCodePinChanged, this.codePin);
+
   @override
-  _LoginAppState createState() => _LoginAppState();
+  _EnterPinState createState() => _EnterPinState();
 }
 
-class _LoginAppState extends State<LoginApp> {
-  TouchIdUtil _auth;
-
-  Future<bool> _futureInitState;
+class _EnterPinState extends State<EnterPin> {
 
   @override
   void initState() {
     super.initState();
-    _futureInitState = futureInitState();
-  }
-
-  Future<bool> futureInitState() async {
-    QueryCtr queryCtr = QueryCtr();
-    Profiles.CurrentProfile = await queryCtr.getProfileById(1);
-
-    if (Profiles.CurrentProfile.codepin == null ||
-        Profiles.CurrentProfile.codepin.isEmpty || !Profiles.CurrentProfile.codePinEnabled) {
-      navigationStateHomePage();
-      return null;
-    }
-    _auth = TouchIdUtil(context);
-    return Future<bool>.value(_auth.isActive());
-  }
-
-  @override
-  void dispose() {
-    super.dispose();
-  }
-
-  _touchIdAuth() async {
-    bool success = await _auth.auth();
-    if (success) {
-      startTime();
-    }
-  }
-
-  startTime() {
-    // PatienterPopupwidget(context);
-    var _duration = new Duration(milliseconds: 200);
-    new Timer(_duration, navigationStateHomePage);
-  }
-
-  void navigationStateHomePage() {
-    Navigator.of(context).pushReplacementNamed(RoutesKeys.homePage);
   }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: Container(
-        decoration: BoxDecoration(
-            gradient: LinearGradient(
-                // colors: [Color(0xFF088787), Color(0xFF1FC877)],
-                colors: [Colors.lightBlueAccent, Colors.blueAccent],
-                begin: FractionalOffset.topLeft,
-                end: FractionalOffset.bottomRight,
-                stops: [0.0, 1.0],
-                tileMode: TileMode.clamp)),
-        child: FutureBuilder<bool>(
-          future: _futureInitState,
-          builder: (context, snapshot) {
-            if (snapshot.hasData) {
-              return Column(children: <Widget>[
-                Expanded(
-                  child: OtpSceern(startTime),
-                ),
-                fingerPrintIcon(snapshot),
-                SizedBox(height: 10),
-              ]);
-            }
-            return Container();
-          },
-        ),
+    return Container(
+      decoration: BoxDecoration(
+          gradient: LinearGradient(
+              colors: [Colors.lightBlueAccent, Colors.blueAccent],
+              begin: FractionalOffset.topLeft,
+              end: FractionalOffset.bottomRight,
+              stops: [0.0, 1.0],
+              tileMode: TileMode.clamp)),
+      child: widget.onCodePinChanged == null? buildNotEditMode()
+          : Column(
+        children: <Widget>[
+          Expanded(
+            child: OtpSceern(widget.onCodePinChanged),
+          ),
+        ],
       ),
     );
   }
 
-  Widget fingerPrintIcon(AsyncSnapshot<bool> snapshot) {
-    if (snapshot.data) {
-      return IconButton(
-        icon: Icon(
-          Icons.fingerprint,
-          color: Colors.white,
+  Widget buildNotEditMode() {
+    return Center(
+      child: Container(
+        margin: EdgeInsets.all(16.0),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: <Widget>[
+            Icon(
+              Icons.lock,
+              color: Colors.white,
+              size: 100,
+            ),
+            SizedBox(height: 20),
+            Text(
+              widget.codePin.isEmpty
+                  ? "You didn't set password yet"
+                  : "Your password is ***" + widget.codePin.substring(3, 4),
+              style: TextStyle(
+                color: Colors.white70,
+                fontSize: 21.0,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+            SizedBox(
+              height: 10,
+            ),
+            Text(widget.codePin.isEmpty
+                ? "Click edit to set your password"
+                : "Click edit to change your password",
+              style: TextStyle(
+                color: Colors.white70,
+                fontSize: 12.0,
+              ),
+            ),
+          ],
         ),
-        iconSize: 80,
-        onPressed: _touchIdAuth,
-      );
-    }
-    return Container();
+      ),
+    );
   }
 }
 
 class OtpSceern extends StatefulWidget {
-  final VoidCallback startTime;
-
-  const OtpSceern(this.startTime);
-
+  final Function(String newCodePin) onCodePinChanged;
+  OtpSceern(this.onCodePinChanged);
   @override
   _OtpSceernState createState() => _OtpSceernState();
 }
@@ -122,24 +94,33 @@ class _OtpSceernState extends State<OtpSceern> {
   TextEditingController pinTwoController = TextEditingController();
   TextEditingController pinThreeController = TextEditingController();
   TextEditingController pinFourController = TextEditingController();
+  String fisrt;
   var outlineInputBorder = OutlineInputBorder(
     borderRadius: BorderRadius.circular(10.0),
     borderSide: BorderSide(color: Colors.white30),
   );
   int pinIndex = 0;
-  // MyLocalization localization;
+
+  @override
+  void initState() {
+    super.initState();
+    fisrt = "";
+  }
+
   @override
   Widget build(BuildContext context) {
-    /*localization = new MyLocalization(Provider
-        .of<AppStateNotifier>(context, listen: false)
-        .language);*/
     return SafeArea(
       child: Column(
         children: <Widget>[
-          buildExitButton(),
+          SizedBox(height: 20),
+          Icon(
+            Icons.lock,
+            color: Colors.white,
+            size: 80,
+          ),
           Expanded(
             child: Container(
-              alignment: Alignment(0, 0.5),
+              alignment: Alignment(0, 0.4),
               padding: EdgeInsets.symmetric(horizontal: 16.0),
               child: Column(
                 mainAxisSize: MainAxisSize.min,
@@ -149,6 +130,7 @@ class _OtpSceernState extends State<OtpSceern> {
                     height: 40,
                   ),
                   buildPinRow(),
+                  SizedBox(height: 10),
                 ],
               ),
             ),
@@ -170,17 +152,17 @@ class _OtpSceernState extends State<OtpSceern> {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: <Widget>[
-                keyboardNumber(
+                KeyboardNumber(
                     n: 1,
                     onPressed: () {
                       pinIndexSetup("1");
                     }),
-                keyboardNumber(
+                KeyboardNumber(
                     n: 2,
                     onPressed: () {
                       pinIndexSetup("2");
                     }),
-                keyboardNumber(
+                KeyboardNumber(
                     n: 3,
                     onPressed: () {
                       pinIndexSetup("3");
@@ -191,17 +173,17 @@ class _OtpSceernState extends State<OtpSceern> {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: <Widget>[
-                keyboardNumber(
+                KeyboardNumber(
                     n: 4,
                     onPressed: () {
                       pinIndexSetup("4");
                     }),
-                keyboardNumber(
+                KeyboardNumber(
                     n: 5,
                     onPressed: () {
                       pinIndexSetup("5");
                     }),
-                keyboardNumber(
+                KeyboardNumber(
                     n: 6,
                     onPressed: () {
                       pinIndexSetup("6");
@@ -212,17 +194,17 @@ class _OtpSceernState extends State<OtpSceern> {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: <Widget>[
-                keyboardNumber(
+                KeyboardNumber(
                     n: 7,
                     onPressed: () {
                       pinIndexSetup("7");
                     }),
-                keyboardNumber(
+                KeyboardNumber(
                     n: 8,
                     onPressed: () {
                       pinIndexSetup("8");
                     }),
-                keyboardNumber(
+                KeyboardNumber(
                     n: 9,
                     onPressed: () {
                       pinIndexSetup("9");
@@ -240,7 +222,7 @@ class _OtpSceernState extends State<OtpSceern> {
                     child: SizedBox(),
                   ),
                 ),
-                keyboardNumber(
+                KeyboardNumber(
                     n: 0,
                     onPressed: () {
                       pinIndexSetup("0");
@@ -268,7 +250,7 @@ class _OtpSceernState extends State<OtpSceern> {
     );
   }
 
-  pinIndexSetup(String text) {
+  pinIndexSetup(String text) async {
     if (pinIndex == 0) {
       pinIndex = 1;
     } else if (pinIndex < 4) {
@@ -281,14 +263,25 @@ class _OtpSceernState extends State<OtpSceern> {
       strPin += e;
     });
     if (pinIndex == 4) {
-      String pass = Profiles.CurrentProfile.codepin;
-      if (pass == strPin) {
-        widget.startTime();
+      if (fisrt == "") {
+        fisrt = strPin;
+        pinIndex = 0;
+        pinOneController.clear();
+        pinTwoController.clear();
+        pinThreeController.clear();
+        pinFourController.clear();
       } else {
-        Vibration.vibrate(duration: 200);
-        Helpers.showToast("CodePINIncorrect");
-        // Toast.show("CodePINIncorrect", context,
-        //     backgroundColor:Theme.of(context).errorColor, gravity: Toast.CENTER);
+        String message;
+        if (fisrt == strPin) {
+          widget.onCodePinChanged(strPin);
+          message = "Click save to store your password";
+        } else {
+          message = "CodePINIncorrect";
+          Vibration.vibrate(duration: 200);
+        }
+        Helpers.showToast(message);
+
+        fisrt = "";
         pinIndex = 0;
         pinOneController.clear();
         pinTwoController.clear();
@@ -296,6 +289,7 @@ class _OtpSceernState extends State<OtpSceern> {
         pinFourController.clear();
       }
     }
+    setState(() {});
   }
 
   setPin(int n, String text) {
@@ -353,39 +347,35 @@ class _OtpSceernState extends State<OtpSceern> {
     );
   }
 
-  buildSecuritytext() {
-    return Text(
-      "LoginAvecPIN",
-      style: TextStyle(
-        color: Colors.white70,
-        fontSize: 21.0,
-        fontWeight: FontWeight.bold,
-      ),
-    );
-  }
-
-  buildExitButton() {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.end,
+  Widget buildSecuritytext() {
+    return Column(
       children: <Widget>[
-        Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: MaterialButton(
-            onPressed: () {
-              Helpers.quitApp();
-            },
-            height: 50.0,
-            shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(50.0)),
-            child: Icon(
-              Icons.close,
-              color: Colors.white,
-            ),
+        Text(
+          fisrt == ""
+              ? "ChoisissezVotreCodePIN"
+              : "ConfirmezVotreCodePIN",
+          style: TextStyle(
+            color: Colors.white70,
+            fontSize: 21.0,
+            fontWeight: FontWeight.bold,
           ),
-        )
+        ),
+        SizedBox(
+          height: 10,
+        ),
+        Text(
+          fisrt == ""
+              ? 'EntrezVotreCodePINPourProtegerVosDonnees'
+              : "ConfirmezVotreCodePINPourProtegerVosDonnees",
+          style: TextStyle(
+            color: Colors.white70,
+            fontSize: 12.0,
+          ),
+        ),
       ],
     );
   }
+
 }
 
 class PinNumber extends StatelessWidget {
@@ -416,11 +406,11 @@ class PinNumber extends StatelessWidget {
   }
 }
 
-class keyboardNumber extends StatelessWidget {
+class KeyboardNumber extends StatelessWidget {
   final int n;
   final Function() onPressed;
 
-  keyboardNumber({this.n, this.onPressed});
+  KeyboardNumber({this.n, this.onPressed});
 
   @override
   Widget build(BuildContext context) {
@@ -428,7 +418,7 @@ class keyboardNumber extends StatelessWidget {
       width: 60.0,
       height: 60.0,
       decoration:
-          BoxDecoration(shape: BoxShape.circle, color: Colors.transparent),
+      BoxDecoration(shape: BoxShape.circle, color: Colors.transparent),
       alignment: Alignment.center,
       child: MaterialButton(
         onPressed: onPressed,
