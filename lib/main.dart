@@ -11,31 +11,47 @@ import 'Helpers/route_generator.dart';
 
 
 void main() {
+
+  runApp(MyApp());
+
+}
+
+class MyApp extends StatelessWidget {
   int index = 0;
   List<Locale> localeList = [Locale('en'), Locale('fr'), Locale('ar')];
 
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+        onTap: () {
+          FocusScopeNode currentFocus = FocusScope.of(context);
 
-  runApp(new MaterialApp(
+          if (!currentFocus.hasPrimaryFocus && currentFocus.focusedChild != null) {
+            FocusManager.instance.primaryFocus.unfocus();
+          }
+        },
+        child: new MaterialApp(
 
-    localizationsDelegates: [S.delegate],
-    supportedLocales: S.delegate.supportedLocales,
-    // localeResolutionCallback: S.delegate.resolution(fallback: Locale('en')),
+          localizationsDelegates: [S.delegate],
+          supportedLocales: S.delegate.supportedLocales,
+          // localeResolutionCallback: S.delegate.resolution(fallback: Locale('en')),
 
-    locale: localeList[index],
+          locale: localeList[index],
 
-    title: "GestMob",
-    theme: ThemeData(
-        primarySwatch: Colors.red,
-      ),
+          title: "GestMob",
+          theme: ThemeData(
+            primarySwatch: Colors.red,
+          ),
 
-      initialRoute: RoutesKeys.loginPage,
-      onGenerateRoute: RouteGenerator.generateRoute,
+          initialRoute: RoutesKeys.loginPage,
+          onGenerateRoute: RouteGenerator.generateRoute,
 
-     /* home: BlocProvider(
+          /* home: BlocProvider(
           create: (context) => HomeCubit(),
           child: new home())*/
-  ));
-
+        )
+    );
+  }
 }
 
 

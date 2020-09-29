@@ -55,6 +55,8 @@ dependencies:
 
   settings_ui: ^0.4.0
 
+  barcode_scan: any
+
   local_auth: ^0.6.3+2
   vibration: ^1.5.0
 

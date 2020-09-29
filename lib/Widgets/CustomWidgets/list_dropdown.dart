@@ -5,6 +5,7 @@ class ListDropDown extends StatefulWidget {
   final bool editMode;
   final value;
   final items;
+  final leftIcon;
   final Function(Object value) onChanged;
   final VoidCallback onAddPressed;
 
@@ -15,7 +16,7 @@ class ListDropDown extends StatefulWidget {
       this.value,
       this.items,
       this.onChanged,
-      this.onAddPressed})
+      this.onAddPressed, this.leftIcon})
       : super(key: key);
 
   @override
@@ -41,50 +42,42 @@ class ListDropDownState extends State<ListDropDown> {
             )
           : null,
       child: Row(
-        mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        mainAxisSize: MainAxisSize.max,
         children: [
+          SizedBox(width: 6),
+          Icon(Icons.help, color: Colors.grey,),
+          /*widget.leftIcon != null? Icon(widget.leftIcon, size: 20) : SizedBox(height: 1),*/
+          SizedBox(width: 13),
           widget.libelle != null
-              ? new GestureDetector(
-                  onTap: () {
-                    openDropdown();
-                  },
-                  child: new Text(widget.libelle,
-                      style: TextStyle(
-                          fontSize: 16,
-                          color:
-                              widget.editMode ? Colors.black : Colors.black54)),
-                )
+              ? new Text(widget.libelle,
+                  style: TextStyle(
+                      fontSize: 16,
+                      color:
+                          widget.editMode ? Colors.blue[700] : Colors.black54))
               : SizedBox(height: 1),
-          DropdownButtonHideUnderline(
-            child: DropdownButton<Object>(
-                key: dropdownKey,
-                disabledHint: Text(widget.value.toString()),
-                icon: widget.onAddPressed != null
-                    ? IconButton(
-                        icon: Icon(Icons.add),
-                        onPressed: widget.editMode ? widget.onAddPressed : null)
-                    : SizedBox(height: 1),
-                value: widget.value,
-                items: widget.items,
-                onChanged: widget.editMode ? widget.onChanged : null),
+          Expanded(
+            child: DropdownButtonHideUnderline(
+              child: DropdownButton<Object>(
+                  key: dropdownKey,
+                  disabledHint: Text(widget.value.toString()),
+                  icon: widget.onAddPressed != null
+                      ? Row(
+                        children: [
+                          Icon(Icons.arrow_drop_down),
+                          IconButton(
+                              icon: Icon(Icons.add),
+                              onPressed: widget.editMode ? widget.onAddPressed : null),
+                        ],
+                      )
+                      : SizedBox(height: 1),
+                  value: widget.value,
+                  items: widget.items,
+                  onChanged: widget.editMode ? widget.onChanged : null),
+            ),
           ),
         ],
       ),
     );
-  }
-
-  void openDropdown() {
-    /*dropdownKey.currentContext.visitChildElements((element) {
-      if (element.widget != null && element.widget is Semantics) {
-        element.visitChildElements((element) {
-          if (element.widget != null && element.widget is Actions) {
-            element.visitChildElements((element) {
-              Actions.invoke(element, Intent());
-              return false;
-            });
-          }
-        });
-      }
-    });*/
   }
 }

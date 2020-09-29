@@ -265,4 +265,12 @@ class Article{
   String toString() {
     return 'Article{_image: $_image, _imageUint8List: $_imageUint8List, _designation: $_designation, _ref: $_ref, _description: $_description, _codeBar: $_codeBar, _id: $_id, _idFamille: $_idFamille, _idMarque: $_idMarque, _colis: $_colis, _prixVente1TTC: $_prixVente1TTC, _prixVente1: $_prixVente1, _prixVente2TTC: $_prixVente2TTC, _prixVente2: $_prixVente2, _prixVente3TTC: $_prixVente3TTC, _prixVente3: $_prixVente3, _qteInit: $_qteInit, _qte: $_qte, _qteMin: $_qteMin, _qteColis: $_qteColis, _prixAchat: $_prixAchat, _pmpInit: $_pmpInit, _pmp: $_pmp, _tva: $_tva, _bloquer: $_bloquer, _stockable: $_stockable}';
   }
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is Article && runtimeType == other.runtimeType && _id == other._id;
+
+  @override
+  int get hashCode => _id.hashCode;
 }

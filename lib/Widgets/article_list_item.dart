@@ -5,33 +5,60 @@ import 'package:gestmob/models/Article.dart';
 
 import 'CustomWidgets/list_tile_card.dart';
 
-class ArticleListItem extends StatelessWidget {
+class ArticleListItem extends StatefulWidget {
   const ArticleListItem({
     @required this.article,
     Key key,
+    this.onItemSelected,
   })  : assert(article != null),
         super(key: key);
 
   final Article article;
+  final Function(Object) onItemSelected;
 
   @override
-  Widget build(BuildContext context) => ListTileCard(
-    onTap: () => {
-      Navigator.of(context).pushNamed(
-          RoutesKeys.addArticle,
-          arguments: article
-      )
-    },
-    leading: CircleAvatar(
-      radius: 20,
-      backgroundImage: MemoryImage(article.imageUint8List),
-    ),
-    title: Text(article.designation),
-    subtitle: Text("Ref: " + article.ref),
-    trailingChildren: [
-      Text(article.prixVente1.toString(), style: TextStyle(fontSize: 16.0, fontWeight: FontWeight.bold),),
-      SizedBox(height: 5),
-      Text(article.quantite.toString(), style: TextStyle(color: article.quantite <= article.quantiteMinimum? Colors.redAccent : Colors.black, fontSize: 15.0),)
-    ],
-  );
+  _ArticleListItemState createState() => _ArticleListItemState();
+}
+
+class _ArticleListItemState extends State<ArticleListItem> {
+  bool itemSelected = false;
+
+  @override
+  Widget build(BuildContext context) {
+    return ListTileCard(
+      onTap: () {
+        if(widget.onItemSelected != null){
+          setState(() {
+            itemSelected = !itemSelected;
+          });
+          widget.onItemSelected(widget.article);
+        } else{
+          Navigator.of(context).pushNamed(RoutesKeys.addArticle, arguments: widget.article);
+        }
+      },
+
+      itemSelected: itemSelected,
+      leading: CircleAvatar(
+        radius: 20,
+        backgroundImage: MemoryImage(widget.article.imageUint8List),
+      ),
+      title: Text(widget.article.designation),
+      subtitle: Text("Ref: " + widget.article.ref),
+      trailingChildren: [
+        Text(
+          widget.article.prixVente1.toString(),
+          style: TextStyle(fontSize: 16.0, fontWeight: FontWeight.bold),
+        ),
+        SizedBox(height: 5),
+        Text(
+          widget.article.quantite.toString(),
+          style: TextStyle(
+              color: widget.article.quantite <= widget.article.quantiteMinimum
+                  ? Colors.redAccent
+                  : Colors.black,
+              fontSize: 15.0),
+        )
+      ],
+    );
+  }
 }

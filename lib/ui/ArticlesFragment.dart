@@ -9,9 +9,9 @@ import 'package:gestmob/generated/l10n.dart';
 import 'package:gestmob/models/Article.dart';
 import 'package:gestmob/models/ArticleFamille.dart';
 import 'package:gestmob/models/ArticleMarque.dart';
+import 'package:gestmob/search/items_sliver_list.dart';
 import 'package:gestmob/search/search_input_sliver.dart';
-import 'file:///E:/AndroidStudio/FlutterProjects/gestionstock/lib/search/items_sliver_list.dart';
-import 'file:///E:/AndroidStudio/FlutterProjects/gestionstock/lib/search/sliver_list_data_source.dart';
+import 'package:gestmob/search/sliver_list_data_source.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 import 'package:gestmob/Widgets/utils.dart' as utils;
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
@@ -22,6 +22,9 @@ class ArticlesFragment extends StatefulWidget {
   // final QueryCtr queryCtr;
   // const ArticlesFragment ({Key key, this.queryCtr}): super(key: key);
 
+  final Function(Object) onItemSelected;
+
+  const ArticlesFragment({Key key, this.onItemSelected}) : super(key: key);
   @override
   _ArticlesFragmentState createState() => _ArticlesFragmentState();
 }
@@ -60,7 +63,7 @@ class _ArticlesFragmentState extends State<ArticlesFragment> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        floatingActionButton: FloatingActionButton(
+        floatingActionButton: widget.onItemSelected != null? null : FloatingActionButton(
           onPressed: () {
              Navigator.of(context).pushNamed(RoutesKeys.addArticle,
                 arguments: new Article.init());
@@ -68,7 +71,7 @@ class _ArticlesFragmentState extends State<ArticlesFragment> {
           child: Icon(Icons.add),
         ),
         appBar: SearchBar(
-          mainContext: context,
+          mainContext: widget.onItemSelected != null? null : context,
           title: S.of(context).articles,
           isFilterOn: isFilterOn,
           onSearchChanged: (String search) => _dataSource.updateSearchTerm(search),
@@ -80,7 +83,7 @@ class _ArticlesFragmentState extends State<ArticlesFragment> {
                 });
           },
         ),
-        body: ItemsSliverList(dataSource: _dataSource));
+        body: ItemsSliverList(dataSource: _dataSource, onItemSelected: widget.onItemSelected));
   }
 
   Future<Widget> futureInitState() async {

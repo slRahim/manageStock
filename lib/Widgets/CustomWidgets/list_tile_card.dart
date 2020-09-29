@@ -10,6 +10,7 @@ class ListTileCard extends StatelessWidget {
 
 
   final int id;
+  final bool itemSelected;
   final Widget leading;
   final Widget title;
   final Widget subtitle;
@@ -17,7 +18,7 @@ class ListTileCard extends StatelessWidget {
   final GestureTapCallback onTap;
   final ConfirmDismissCallback confirmDismiss;
 
-  const ListTileCard({Key key, this.id, this.leading, this.title, this.subtitle, this.trailingChildren, this.onTap, this.confirmDismiss}) : super(key: key);
+  const ListTileCard({Key key, this.id, this.leading, this.title, this.subtitle, this.trailingChildren, this.onTap, this.confirmDismiss, this.itemSelected}) : super(key: key);
 
   @override
   Widget build(BuildContext context) => Card(
@@ -60,17 +61,20 @@ class ListTileCard extends StatelessWidget {
   );
 
   Widget listTile(){
-    return ListTile(
-      onTap: onTap?? onTap,
-      leading: leading?? leading,
-      title: title??title,
-      subtitle: subtitle??subtitle,
-      trailing: Container(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.end,
-            children: trailingChildren??trailingChildren,
-          )),
+    return Container(
+      color: itemSelected ? Colors.greenAccent : null, // if current item is selected show blue color
+      child: ListTile(
+        onTap: onTap?? onTap,
+        leading: leading?? leading,
+        title: title??title,
+        subtitle: subtitle??subtitle,
+        trailing: Container(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.end,
+              children: trailingChildren??trailingChildren,
+            )),
+      )
     );
   }
 }

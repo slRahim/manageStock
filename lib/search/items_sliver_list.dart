@@ -16,8 +16,9 @@ import 'sliver_list_data_source.dart';
 
 class ItemsSliverList extends StatefulWidget {
   final SliverListDataSource dataSource;
+  final Function(Object) onItemSelected;
 
-  ItemsSliverList({Key key, @required this.dataSource}) : super(key: key);
+  ItemsSliverList({Key key, @required this.dataSource, this.onItemSelected}) : super(key: key);
 
   @override
   _ItemsSliverListState createState() => _ItemsSliverListState();
@@ -48,7 +49,7 @@ class _ItemsSliverListState extends State<ItemsSliverList> {
 
   Widget createItemWidget(item){
     if(item is Article){
-      return ArticleListItem(article: item,);
+      return ArticleListItem(article: item, onItemSelected: widget.onItemSelected,);
     } else if(item is Tiers){
       item.originClientOrFourn = widget.dataSource.listType == ItemsListTypes.clientsList? 0 : 2;
       return TierListItem(tier: item);

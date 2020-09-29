@@ -172,18 +172,9 @@ class _ProfilePageState extends State<ProfilePage>
               bottomNavigationBar: BottomTabBar(
                 controller: _tabController,
                 tabs: [
-                  Tab(
-                    icon: Icon(Icons.insert_drive_file),
-                    text: 'Fiche',
-                  ),
-                  Tab(
-                    icon: Icon(Icons.image),
-                    text: 'Logo',
-                  ),
-                  Tab(
-                    icon: Icon(Icons.fingerprint),
-                    text: 'Security',
-                  ),
+                  Tab(child: Column( children: [ Icon(Icons.insert_drive_file),SizedBox(height: 2), Text("Fiche"), ], )),
+                  Tab(child: Column( children: [ Icon(Icons.image), SizedBox(height: 2), Text("Logo"), ], )),
+                  Tab(child: Column( children: [ Icon(Icons.fingerprint), SizedBox(height: 2), Text("Security"), ], )),
                 ],
               ),
               body: Builder(
@@ -574,22 +565,58 @@ class _ProfilePageState extends State<ProfilePage>
               ),
             ),
           ),
-          Switch(
-            value: arguments.codePinEnabled,
-            onChanged: editMode?(bool isOn) {
-              setState(() {
-                arguments.codePinEnabled = isOn;
-                if(isOn){
-                  setState(() {
-                    _tabController.index = 2;
-                  });
-                }
-              });
-            }: null,
-            activeColor: Colors.blue,
-            inactiveTrackColor: Colors.grey,
-            inactiveThumbColor: Colors.grey,
+          Container(
+            width: double.infinity,
+            padding: const EdgeInsets.all(5),
+            decoration: editMode
+                ? new BoxDecoration(
+              border: Border.all(
+                color: Colors.blueAccent,
+              ),
+              borderRadius: BorderRadius.circular(20.0),
+            )
+                : null,
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              mainAxisSize: MainAxisSize.max,
+              children: [
+                SizedBox(width: 6),
+                Icon(
+                  Icons.security, color: Colors.blue[700],),
+                SizedBox(width: 13),
+                Expanded(
+                  child: GestureDetector(
+                    onTap: () {
+                      arguments.codePinEnabled = !arguments.codePinEnabled;
+                    },
+                    child: new Text("Enable pin code",
+                      style: TextStyle(
+                          fontSize: 16,
+                          color:
+                          editMode ? Colors.black : Colors.black54)),
+                  ),
+                ),
+
+                Switch(
+                  value: arguments.codePinEnabled,
+                  onChanged: editMode?(bool isOn) {
+                    setState(() {
+                      arguments.codePinEnabled = isOn;
+                      if(isOn){
+                        setState(() {
+                          _tabController.index = 2;
+                        });
+                      }
+                    });
+                  }: null,
+                  activeColor: Colors.blue,
+                  inactiveTrackColor: Colors.grey,
+                  inactiveThumbColor: editMode? Colors.blue:Colors.grey,
+                )
+              ],
+            ),
           )
+
         ],
       ),
     );
@@ -598,6 +625,7 @@ class _ProfilePageState extends State<ProfilePage>
   Widget imageTab() {
     return SingleChildScrollView(
       child: ImagePickerWidget(
+        imageFile: _itemImage,
           editMode: editMode, onImageChange: (File imageFile) =>
       {
         _itemImage = imageFile

@@ -34,7 +34,10 @@ class AddArticlePage extends StatefulWidget {
   _AddArticlePageState createState() => _AddArticlePageState();
 }
 
-class _AddArticlePageState extends State<AddArticlePage> {
+class _AddArticlePageState extends State<AddArticlePage>  with AutomaticKeepAliveClientMixin{
+  @override
+  bool get wantKeepAlive => true;
+
   final _scaffoldKey = GlobalKey<ScaffoldState>();
 
   bool editMode = true;
@@ -185,18 +188,9 @@ class _AddArticlePageState extends State<AddArticlePage> {
               ),
               bottomNavigationBar: BottomTabBar(
                 tabs: [
-                  Tab(
-                    icon: Icon(Icons.insert_drive_file),
-                    text: 'Fiche d\'article',
-                  ),
-                  Tab(
-                    icon: Icon(Icons.image),
-                    text: 'Photo',
-                  ),
-                  Tab(
-                    icon: Icon(Icons.description),
-                    text: 'Description',
-                  ),
+                  Tab(child: Column( children: [ Icon(Icons.insert_drive_file),SizedBox(height: 2), Text("Fiche d\'article"), ], )),
+                  Tab(child: Column( children: [ Icon(Icons.image), SizedBox(height: 2), Text("Photo"), ], )),
+                  Tab(child: Column( children: [ Icon(Icons.description), SizedBox(height: 2), Text("Description"), ], )),
                 ],
               ),
               body: Builder(
@@ -289,6 +283,7 @@ class _AddArticlePageState extends State<AddArticlePage> {
               Visibility(
                 visible: _stockable,
                 child: Flexible(
+                  flex: 10,
                   child: TextField(
                     enabled: editMode && _stockable,
                     controller: _prixAchatControl,
@@ -312,8 +307,9 @@ class _AddArticlePageState extends State<AddArticlePage> {
                   ),
                 ),
               ),
-              Padding(padding: EdgeInsets.fromLTRB(_stockable?10:0, 0, 0, 0)),
+              Padding(padding: EdgeInsets.fromLTRB(_stockable?8:0, 0, 0, 0)),
               Flexible(
+                flex: 10,
                 child: Container(
                   decoration: editMode? new BoxDecoration(
                     border: Border.all(color: Colors.blueAccent,),
@@ -386,7 +382,7 @@ class _AddArticlePageState extends State<AddArticlePage> {
                   ),
                 ),
               ),
-              Padding(padding: EdgeInsets.all(5)),
+              Padding(padding: EdgeInsets.all(4)),
               Visibility(
                 visible: !modification,
                 child: Flexible(
@@ -494,7 +490,9 @@ class _AddArticlePageState extends State<AddArticlePage> {
 
   Widget imageTab() {
     return SingleChildScrollView(
-      child: ImagePickerWidget(editMode: editMode, onImageChange: (File imageFile) => {
+      child: ImagePickerWidget(
+        imageFile: _articleImage,
+          editMode: editMode, onImageChange: (File imageFile) => {
         _articleImage = imageFile
       }),
     );
@@ -544,8 +542,9 @@ class _AddArticlePageState extends State<AddArticlePage> {
         direction: Axis.horizontal,
         children: [
           ListDropDown(
+            leftIcon: Icons.attach_money,
             editMode: editMode,
-            libelle: "TVA:  ",
+            libelle: "TVA  ",
             value: _selectedTva,
             items: _tvaDropdownItems,
             onChanged: (value) {

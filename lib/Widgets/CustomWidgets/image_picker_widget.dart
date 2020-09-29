@@ -7,10 +7,11 @@ import 'package:image_picker/image_picker.dart';
 class ImagePickerWidget extends StatefulWidget {
   final bool editMode;
   final int scallFactor;
+  final File imageFile;
   final Function(File imageFile) onImageChange;
 
   const ImagePickerWidget(
-      {Key key, @required this.editMode, this.onImageChange, this.scallFactor})
+      {Key key, @required this.editMode, this.onImageChange, this.scallFactor, this.imageFile})
       : super(key: key);
 
   @override
@@ -25,6 +26,7 @@ class ImagePickerWidgetState extends State<ImagePickerWidget> {
 
   @override
   Widget build(BuildContext context) {
+    _imageFile = widget.imageFile;
     return Column(
         mainAxisSize: MainAxisSize.min,
         children: [

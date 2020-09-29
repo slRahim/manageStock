@@ -10,6 +10,7 @@ import 'package:gestmob/Widgets/CustomWidgets/add_save_bar.dart';
 import 'package:gestmob/Widgets/CustomWidgets/bottom_tab_bar.dart';
 import 'package:gestmob/Widgets/CustomWidgets/image_picker_widget.dart';
 import 'package:gestmob/Widgets/CustomWidgets/list_dropdown.dart';
+import 'package:gestmob/Widgets/article_list_item.dart';
 import 'package:gestmob/models/Article.dart';
 import 'package:gestmob/models/Piece.dart';
 import 'package:gestmob/models/Tiers.dart';
@@ -21,6 +22,8 @@ import 'package:gestmob/Widgets/utils.dart' as utils;
 import 'package:map_launcher/map_launcher.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 
+import 'ArticlesFragment.dart';
+
 class AddPiecePage extends StatefulWidget {
   var arguments;
   AddPiecePage({Key key, @required this.arguments}) : super(key: key);
@@ -30,7 +33,10 @@ class AddPiecePage extends StatefulWidget {
 }
 
 class _AddPiecePageState extends State<AddPiecePage>
-    with TickerProviderStateMixin {
+    with TickerProviderStateMixin, AutomaticKeepAliveClientMixin {
+  @override
+  bool get wantKeepAlive => true;
+
   final _scaffoldKey = GlobalKey<ScaffoldState>();
 
   bool editMode = true;
@@ -54,6 +60,9 @@ class _AddPiecePageState extends State<AddPiecePage>
     "EPIC.",
     "ETP."
   ];
+
+  List<Object> _selectedItems = new List<Object>();
+
   List<DropdownMenuItem<String>> _statutDropdownItems;
   String _selectedStatut;
 
@@ -87,12 +96,13 @@ class _AddPiecePageState extends State<AddPiecePage>
 
   SliverListDataSource _dataSource;
   QueryCtr _queryCtr;
-  
+
   void initState() {
     super.initState();
-    _dataSource = SliverListDataSource(ItemsListTypes.articlesList, new Map<String, dynamic>());
+    _dataSource = SliverListDataSource(
+        ItemsListTypes.articlesList, new Map<String, dynamic>());
     _queryCtr = _dataSource.queryCtr;
-    
+
     futureInitState().then((val) {
       setState(() {
         finishedLoading = true;
@@ -109,7 +119,8 @@ class _AddPiecePageState extends State<AddPiecePage>
     _familleItems = await _queryCtr.getAllTierFamilles();
     _familleDropdownItems = utils.buildDropFamilleTier(_familleItems);
     _statutDropdownItems = utils.buildDropStatutTier(_statutItems);
-    _tarificationDropdownItems = utils.buildDropTarificationTier(_tarificationItems);
+    _tarificationDropdownItems =
+        utils.buildDropTarificationTier(_tarificationItems);
 
     _selectedStatut = _statutItems[0];
     _selectedTarification = _tarificationItems[0];
@@ -156,16 +167,21 @@ class _AddPiecePageState extends State<AddPiecePage>
                 modification: modification,
                 title: appBarTitle,
                 onCancelPressed: () => {
-                  if(modification){
-                    if(editMode){
-                      Navigator.of(context)
-                          .pushReplacementNamed(RoutesKeys.addTier, arguments: widget.arguments)
-                    } else{
-                      Navigator.pop(context)
+                  if (modification)
+                    {
+                      if (editMode)
+                        {
+                          Navigator.of(context).pushReplacementNamed(
+                              RoutesKeys.addTier,
+                              arguments: widget.arguments)
+                        }
+                      else
+                        {Navigator.pop(context)}
                     }
-                  } else{
-                    Navigator.pop(context),
-                  }
+                  else
+                    {
+                      Navigator.pop(context),
+                    }
                 },
                 onEditPressed: () {
                   setState(() {
@@ -194,13 +210,21 @@ class _AddPiecePageState extends State<AddPiecePage>
               bottomNavigationBar: BottomTabBar(
                 tabs: [
                   Tab(
-                    icon: Icon(Icons.insert_drive_file),
-                    text: 'Fiche',
-                  ),
+                      child: Column(
+                    children: [
+                      Icon(Icons.insert_drive_file),
+                      SizedBox(height: 2),
+                      Text("Fiche"),
+                    ],
+                  )),
                   Tab(
-                    icon: Icon(Icons.image),
-                    text: 'Photo',
-                  ),
+                      child: Column(
+                    children: [
+                      Icon(Icons.image),
+                      SizedBox(height: 2),
+                      Text("Photo"),
+                    ],
+                  )),
                 ],
               ),
               body: Builder(
@@ -216,346 +240,375 @@ class _AddPiecePageState extends State<AddPiecePage>
 
   Widget fichetab() {
     return SingleChildScrollView(
-      padding: const EdgeInsets.fromLTRB(15, 25, 15, 15),
-      child: Wrap(
-        spacing: 13,
-        runSpacing: 13,
-        children: [
-          Row(
+        physics: ScrollPhysics(),
+        padding: const EdgeInsets.fromLTRB(15, 25, 15, 15),
+        child: Column(
+            mainAxisSize: MainAxisSize.max,
             children: [
-              Flexible(
+          Wrap(
+            spacing: 13,
+            runSpacing: 13,
+            children: [
+              Row(
+                children: [
+                  Flexible(
+                    child: TextField(
+                      decoration: InputDecoration(
+                        prefixIcon: Icon(
+                          MdiIcons.idCard,
+                          color: Colors.orange[900],
+                        ),
+                        focusedBorder: OutlineInputBorder(
+                            borderSide: BorderSide(color: Colors.orange[900]),
+                            borderRadius: BorderRadius.circular(20)),
+                        labelText: "Raison Sociale",
+                        errorText: _validateRaison ? 'Champ obligatoire' : null,
+                        labelStyle: TextStyle(color: Colors.orange[900]),
+                        enabledBorder: OutlineInputBorder(
+                          gapPadding: 3.3,
+                          borderRadius: BorderRadius.circular(20),
+                          borderSide: BorderSide(color: Colors.orange[900]),
+                        ),
+                      ),
+                      enabled: editMode,
+                      controller: _raisonSocialeControl,
+                      keyboardType: TextInputType.text,
+                    ),
+                  ),
+                  Padding(padding: EdgeInsets.fromLTRB(5, 5, 5, 5)),
+                  Container(
+                    padding: const EdgeInsets.all(3),
+                    decoration: editMode
+                        ? new BoxDecoration(
+                            border: Border.all(
+                              color: Colors.blueAccent,
+                            ),
+                            borderRadius: BorderRadius.circular(20.0),
+                          )
+                        : null,
+                    child: DropdownButtonHideUnderline(
+                      child: DropdownButton<String>(
+                          disabledHint: Text(_selectedStatut),
+                          value: _selectedStatut,
+                          items: _statutDropdownItems,
+                          onChanged: editMode
+                              ? (value) {
+                                  setState(() {
+                                    _selectedStatut = value;
+                                  });
+                                }
+                              : null),
+                    ),
+                  ),
+                ],
+              ),
+              TextField(
+                enabled: editMode,
+                controller: _qrCodeControl,
+                keyboardType: TextInputType.text,
+                decoration: InputDecoration(
+                  prefixIcon: Icon(
+                    MdiIcons.qrcode,
+                    color: Colors.blue[700],
+                  ),
+                  focusedBorder: OutlineInputBorder(
+                      borderSide: BorderSide(color: Colors.blue[700]),
+                      borderRadius: BorderRadius.circular(20)),
+                  labelText: "QR Code",
+                  enabledBorder: OutlineInputBorder(
+                    gapPadding: 3.3,
+                    borderRadius: BorderRadius.circular(20),
+                    borderSide: BorderSide(color: Colors.blue[700]),
+                  ),
+                ),
+              ),
+              TextField(
+                enabled: editMode,
+                controller: _adresseControl,
+                keyboardType: TextInputType.number,
+                decoration: InputDecoration(
+                  prefixIcon: Icon(
+                    MdiIcons.homeCityOutline,
+                    color: Colors.blue[700],
+                  ),
+                  focusedBorder: OutlineInputBorder(
+                      borderSide: BorderSide(color: Colors.blue[700]),
+                      borderRadius: BorderRadius.circular(20)),
+                  labelText: "Adresse",
+                  enabledBorder: OutlineInputBorder(
+                    gapPadding: 3.3,
+                    borderRadius: BorderRadius.circular(20),
+                    borderSide: BorderSide(color: Colors.blue[700]),
+                  ),
+                ),
+              ),
+              TextField(
+                enabled: editMode,
+                controller: _villeControl,
+                keyboardType: TextInputType.number,
+                decoration: InputDecoration(
+                  prefixIcon: Icon(
+                    Icons.add_location,
+                    color: Colors.blue[700],
+                  ),
+                  focusedBorder: OutlineInputBorder(
+                      borderSide: BorderSide(color: Colors.blue[700]),
+                      borderRadius: BorderRadius.circular(20)),
+                  labelText: "Ville",
+                  enabledBorder: OutlineInputBorder(
+                    gapPadding: 3.3,
+                    borderRadius: BorderRadius.circular(20),
+                    borderSide: BorderSide(color: Colors.blue[700]),
+                  ),
+                ),
+              ),
+              TextField(
+                enabled: editMode,
+                controller: _telephoneControl,
+                keyboardType: TextInputType.number,
+                decoration: InputDecoration(
+                  prefixIcon: Icon(
+                    Icons.phone,
+                    color: Colors.blue[700],
+                  ),
+                  focusedBorder: OutlineInputBorder(
+                      borderSide: BorderSide(color: Colors.blue[700]),
+                      borderRadius: BorderRadius.circular(20)),
+                  labelText: "Telephone",
+                  enabledBorder: OutlineInputBorder(
+                    gapPadding: 3.3,
+                    borderRadius: BorderRadius.circular(20),
+                    borderSide: BorderSide(color: Colors.blue[700]),
+                  ),
+                ),
+              ),
+              TextField(
+                enabled: editMode,
+                controller: _mobileControl,
+                keyboardType: TextInputType.number,
+                decoration: InputDecoration(
+                  prefixIcon: Icon(
+                    Icons.phone_android,
+                    color: Colors.blue[700],
+                  ),
+                  focusedBorder: OutlineInputBorder(
+                      borderSide: BorderSide(color: Colors.blue[700]),
+                      borderRadius: BorderRadius.circular(20)),
+                  labelText: "Mobile",
+                  enabledBorder: OutlineInputBorder(
+                    gapPadding: 3.3,
+                    borderRadius: BorderRadius.circular(20),
+                    borderSide: BorderSide(color: Colors.blue[700]),
+                  ),
+                ),
+              ),
+              TextField(
+                enabled: editMode,
+                controller: _faxControl,
+                keyboardType: TextInputType.number,
+                decoration: InputDecoration(
+                  prefixIcon: Icon(
+                    MdiIcons.fax,
+                    color: Colors.blue[700],
+                  ),
+                  focusedBorder: OutlineInputBorder(
+                      borderSide: BorderSide(color: Colors.blue[700]),
+                      borderRadius: BorderRadius.circular(20)),
+                  labelText: "Fax",
+                  enabledBorder: OutlineInputBorder(
+                    gapPadding: 3.3,
+                    borderRadius: BorderRadius.circular(20),
+                    borderSide: BorderSide(color: Colors.blue[700]),
+                  ),
+                ),
+              ),
+              TextField(
+                enabled: editMode,
+                controller: _emailControl,
+                keyboardType: TextInputType.number,
+                decoration: InputDecoration(
+                  prefixIcon: Icon(
+                    Icons.email,
+                    color: Colors.blue[700],
+                  ),
+                  focusedBorder: OutlineInputBorder(
+                      borderSide: BorderSide(color: Colors.blue[700]),
+                      borderRadius: BorderRadius.circular(20)),
+                  labelText: "Email",
+                  enabledBorder: OutlineInputBorder(
+                    gapPadding: 3.3,
+                    borderRadius: BorderRadius.circular(20),
+                    borderSide: BorderSide(color: Colors.blue[700]),
+                  ),
+                ),
+              ),
+              TextField(
+                enabled: editMode && !modification,
+                controller: _solde_departControl,
+                keyboardType: TextInputType.number,
+                decoration: InputDecoration(
+                  prefixIcon: Icon(
+                    Icons.monetization_on,
+                    color: Colors.blue[700],
+                  ),
+                  focusedBorder: OutlineInputBorder(
+                      borderSide: BorderSide(color: Colors.blue[700]),
+                      borderRadius: BorderRadius.circular(20)),
+                  labelText: "Solde Depart",
+                  enabledBorder: OutlineInputBorder(
+                    gapPadding: 3.3,
+                    borderRadius: BorderRadius.circular(20),
+                    borderSide: BorderSide(color: Colors.blue[700]),
+                  ),
+                ),
+              ),
+              TextField(
+                enabled: editMode && !modification,
+                controller: _chiffre_affairesControl,
+                keyboardType: TextInputType.number,
+                decoration: InputDecoration(
+                  prefixIcon: Icon(
+                    Icons.monetization_on,
+                    color: Colors.blue[700],
+                  ),
+                  focusedBorder: OutlineInputBorder(
+                      borderSide: BorderSide(color: Colors.blue[700]),
+                      borderRadius: BorderRadius.circular(20)),
+                  labelText: "Chiffre Affaires",
+                  enabledBorder: OutlineInputBorder(
+                    gapPadding: 3.3,
+                    borderRadius: BorderRadius.circular(20),
+                    borderSide: BorderSide(color: Colors.blue[700]),
+                  ),
+                ),
+              ),
+              TextField(
+                enabled: editMode && !modification,
+                controller: _reglerControl,
+                keyboardType: TextInputType.number,
+                decoration: InputDecoration(
+                  prefixIcon: Icon(
+                    Icons.monetization_on,
+                    color: Colors.blue[700],
+                  ),
+                  focusedBorder: OutlineInputBorder(
+                      borderSide: BorderSide(color: Colors.blue[700]),
+                      borderRadius: BorderRadius.circular(20)),
+                  labelText: "Regler ",
+                  enabledBorder: OutlineInputBorder(
+                    gapPadding: 3.3,
+                    borderRadius: BorderRadius.circular(20),
+                    borderSide: BorderSide(color: Colors.blue[700]),
+                  ),
+                ),
+              ),
+              Visibility(
+                visible: modification,
                 child: TextField(
+                  enabled: false,
+                  controller: _creditControl,
+                  keyboardType: TextInputType.number,
                   decoration: InputDecoration(
                     prefixIcon: Icon(
-                      MdiIcons.idCard,
-                      color: Colors.orange[900],
+                      Icons.account_balance_wallet,
+                      color: Colors.blue[700],
                     ),
                     focusedBorder: OutlineInputBorder(
-                        borderSide: BorderSide(color: Colors.orange[900]),
+                        borderSide: BorderSide(color: Colors.blue[700]),
                         borderRadius: BorderRadius.circular(20)),
-                    labelText: "Raison Sociale",
-                    errorText: _validateRaison ? 'Champ obligatoire' : null,
-                    labelStyle: TextStyle(color: Colors.orange[900]),
+                    labelText: "Credit",
                     enabledBorder: OutlineInputBorder(
                       gapPadding: 3.3,
                       borderRadius: BorderRadius.circular(20),
-                      borderSide: BorderSide(color: Colors.orange[900]),
+                      borderSide: BorderSide(color: Colors.blue[700]),
                     ),
                   ),
-                  enabled: editMode,
-                  controller: _raisonSocialeControl,
-                  keyboardType: TextInputType.text,
                 ),
               ),
-              Padding(padding: EdgeInsets.fromLTRB(5, 5, 5, 5)),
-              Container(
-                padding: const EdgeInsets.all(3),
-                decoration: editMode? new BoxDecoration(
-                  border: Border.all(color: Colors.blueAccent,),
-                  borderRadius: BorderRadius.circular(20.0),
-                ) : null,
-                child: DropdownButtonHideUnderline(
-                  child: DropdownButton<String>(
-                      disabledHint: Text(_selectedStatut),
-                      value: _selectedStatut,
-                      items: _statutDropdownItems,
-                      onChanged: editMode
-                          ? (value) {
-                        setState(() {
-                          _selectedStatut = value;
-                        });
-                      }
-                          : null),),
+              ListDropDown(
+                editMode: editMode,
+                value: _selectedFamille,
+                items: _familleDropdownItems,
+                onChanged: (value) {
+                  setState(() {
+                    _selectedFamille = value;
+                  });
+                },
+                onAddPressed: () async {
+                  await showDialog(
+                      context: context,
+                      builder: (BuildContext context) {
+                        return addFamilledialogue();
+                      }).then((val) {
+                    setState(() {});
+                  });
+                },
+              ),
+              ListDropDown(
+                libelle: "Tarification:  ",
+                editMode: editMode,
+                value: _selectedTarification,
+                items: _tarificationDropdownItems,
+                onChanged: (value) {
+                  setState(() {
+                    _selectedTarification = value;
+                  });
+                },
+              ),
+              Center(
+                child: IconButton(
+                  icon: Icon(
+                      editMode && modification ? Icons.cancel : Icons.add,
+                      size: 30),
+                  onPressed: () async {
+                    await showDialog(
+                        context: context,
+                        builder: (BuildContext context) {
+                          return addArticleDialog();
+                        }).then((val) {
+                      setState(() {});
+                    });
+                  },
+                ),
               ),
             ],
           ),
-          TextField(
-            enabled: editMode,
-            controller: _qrCodeControl,
-            keyboardType: TextInputType.text,
-            decoration: InputDecoration(
-              prefixIcon: Icon(
-                MdiIcons.qrcode,
-                color: Colors.blue[700],
-              ),
-              focusedBorder: OutlineInputBorder(
-                  borderSide: BorderSide(color: Colors.blue[700]),
-                  borderRadius: BorderRadius.circular(20)),
-              labelText: "QR Code",
-              enabledBorder: OutlineInputBorder(
-                gapPadding: 3.3,
-                borderRadius: BorderRadius.circular(20),
-                borderSide: BorderSide(color: Colors.blue[700]),
-              ),
-            ),
-          ),
-          TextField(
-            enabled: editMode,
-            controller: _adresseControl,
-            keyboardType: TextInputType.number,
-            decoration: InputDecoration(
-              prefixIcon: Icon(
-                MdiIcons.homeCityOutline,
-                color: Colors.blue[700],
-              ),
-              focusedBorder: OutlineInputBorder(
-                  borderSide: BorderSide(color: Colors.blue[700]),
-                  borderRadius: BorderRadius.circular(20)),
-              labelText: "Adresse",
-              enabledBorder: OutlineInputBorder(
-                gapPadding: 3.3,
-                borderRadius: BorderRadius.circular(20),
-                borderSide: BorderSide(color: Colors.blue[700]),
-              ),
-            ),
-          ),
-          TextField(
-            enabled: editMode,
-            controller: _villeControl,
-            keyboardType: TextInputType.number,
-            decoration: InputDecoration(
-              prefixIcon: Icon(
-                Icons.add_location,
-                color: Colors.blue[700],
-              ),
-              focusedBorder: OutlineInputBorder(
-                  borderSide: BorderSide(color: Colors.blue[700]),
-                  borderRadius: BorderRadius.circular(20)),
-              labelText: "Ville",
-              enabledBorder: OutlineInputBorder(
-                gapPadding: 3.3,
-                borderRadius: BorderRadius.circular(20),
-                borderSide: BorderSide(color: Colors.blue[700]),
-              ),
-            ),
-          ),
-          TextField(
-            enabled: editMode,
-            controller: _telephoneControl,
-            keyboardType: TextInputType.number,
-            decoration: InputDecoration(
-              prefixIcon: Icon(
-                Icons.phone,
-                color: Colors.blue[700],
-              ),
-              focusedBorder: OutlineInputBorder(
-                  borderSide: BorderSide(color: Colors.blue[700]),
-                  borderRadius: BorderRadius.circular(20)),
-              labelText: "Telephone",
-              enabledBorder: OutlineInputBorder(
-                gapPadding: 3.3,
-                borderRadius: BorderRadius.circular(20),
-                borderSide: BorderSide(color: Colors.blue[700]),
-              ),
-            ),
-          ),
-          TextField(
-            enabled: editMode,
-            controller: _mobileControl,
-            keyboardType: TextInputType.number,
-            decoration: InputDecoration(
-              prefixIcon: Icon(
-                Icons.phone_android,
-                color: Colors.blue[700],
-              ),
-              focusedBorder: OutlineInputBorder(
-                  borderSide: BorderSide(color: Colors.blue[700]),
-                  borderRadius: BorderRadius.circular(20)),
-              labelText: "Mobile",
-              enabledBorder: OutlineInputBorder(
-                gapPadding: 3.3,
-                borderRadius: BorderRadius.circular(20),
-                borderSide: BorderSide(color: Colors.blue[700]),
-              ),
-            ),
-          ),
-          TextField(
-            enabled: editMode,
-            controller: _faxControl,
-            keyboardType: TextInputType.number,
-            decoration: InputDecoration(
-              prefixIcon: Icon(
-                MdiIcons.fax,
-                color: Colors.blue[700],
-              ),
-              focusedBorder: OutlineInputBorder(
-                  borderSide: BorderSide(color: Colors.blue[700]),
-                  borderRadius: BorderRadius.circular(20)),
-              labelText: "Fax",
-              enabledBorder: OutlineInputBorder(
-                gapPadding: 3.3,
-                borderRadius: BorderRadius.circular(20),
-                borderSide: BorderSide(color: Colors.blue[700]),
-              ),
-            ),
-          ),
-          TextField(
-            enabled: editMode,
-            controller: _emailControl,
-            keyboardType: TextInputType.number,
-            decoration: InputDecoration(
-              prefixIcon: Icon(
-                Icons.email,
-                color: Colors.blue[700],
-              ),
-              focusedBorder: OutlineInputBorder(
-                  borderSide: BorderSide(color: Colors.blue[700]),
-                  borderRadius: BorderRadius.circular(20)),
-              labelText: "Email",
-              enabledBorder: OutlineInputBorder(
-                gapPadding: 3.3,
-                borderRadius: BorderRadius.circular(20),
-                borderSide: BorderSide(color: Colors.blue[700]),
-              ),
-            ),
-          ),
-          TextField(
-            enabled: editMode && !modification,
-            controller: _solde_departControl,
-            keyboardType: TextInputType.number,
-            decoration: InputDecoration(
-              prefixIcon: Icon(
-                Icons.monetization_on,
-                color: Colors.blue[700],
-              ),
-              focusedBorder: OutlineInputBorder(
-                  borderSide: BorderSide(color: Colors.blue[700]),
-                  borderRadius: BorderRadius.circular(20)),
-              labelText: "Solde Depart",
-              enabledBorder: OutlineInputBorder(
-                gapPadding: 3.3,
-                borderRadius: BorderRadius.circular(20),
-                borderSide: BorderSide(color: Colors.blue[700]),
-              ),
-            ),
-          ),
-          TextField(
-            enabled: editMode && !modification,
-            controller: _chiffre_affairesControl,
-            keyboardType: TextInputType.number,
-            decoration: InputDecoration(
-              prefixIcon: Icon(
-                Icons.monetization_on,
-                color: Colors.blue[700],
-              ),
-              focusedBorder: OutlineInputBorder(
-                  borderSide: BorderSide(color: Colors.blue[700]),
-                  borderRadius: BorderRadius.circular(20)),
-              labelText: "Chiffre Affaires",
-              enabledBorder: OutlineInputBorder(
-                gapPadding: 3.3,
-                borderRadius: BorderRadius.circular(20),
-                borderSide: BorderSide(color: Colors.blue[700]),
-              ),
-            ),
-          ),
-          TextField(
-            enabled: editMode && !modification,
-            controller: _reglerControl,
-            keyboardType: TextInputType.number,
-            decoration: InputDecoration(
-              prefixIcon: Icon(
-                Icons.monetization_on,
-                color: Colors.blue[700],
-              ),
-              focusedBorder: OutlineInputBorder(
-                  borderSide: BorderSide(color: Colors.blue[700]),
-                  borderRadius: BorderRadius.circular(20)),
-              labelText: "Regler ",
-              enabledBorder: OutlineInputBorder(
-                gapPadding: 3.3,
-                borderRadius: BorderRadius.circular(20),
-                borderSide: BorderSide(color: Colors.blue[700]),
-              ),
-            ),
-          ),
-          Visibility(
-            visible: modification,
-            child: TextField(
-              enabled: false,
-              controller: _creditControl,
-              keyboardType: TextInputType.number,
-              decoration: InputDecoration(
-                prefixIcon: Icon(
-                  Icons.account_balance_wallet,
-                  color: Colors.blue[700],
-                ),
-                focusedBorder: OutlineInputBorder(
-                    borderSide: BorderSide(color: Colors.blue[700]),
-                    borderRadius: BorderRadius.circular(20)),
-                labelText: "Credit",
-                enabledBorder: OutlineInputBorder(
-                  gapPadding: 3.3,
-                  borderRadius: BorderRadius.circular(20),
-                  borderSide: BorderSide(color: Colors.blue[700]),
-                ),
-              ),
-            ),
-          ),
-
-          ListDropDown(
-            editMode: editMode,
-            value: _selectedFamille,
-            items: _familleDropdownItems,
-            onChanged: (value) {
-              setState(() {
-                _selectedFamille = value;
-              });
-            },
-            onAddPressed: () async {
-              await showDialog(
-                  context: context,
-                  builder: (BuildContext context) {
-                    return addFamilledialogue();
-                  }).then((val) {
-                setState(() {});
-              });
-            },
-          ),
-          ListDropDown(
-            libelle: "Tarification:  ",
-            editMode: editMode,
-            value: _selectedTarification,
-            items: _tarificationDropdownItems,
-            onChanged: (value) {
-              setState(() {
-                _selectedTarification = value;
-              });
-            },),
-
-          Container(
-            decoration: editMode? new BoxDecoration(
-              border: Border.all(color: Colors.blueAccent,),
-              borderRadius: BorderRadius.circular(20.0),
-            ) : null,
-            child: CheckboxListTile(
-              title: Text("Client/fournisseur?"),
-              value: _clientFournBool,
-              onChanged: editMode? (bool value) {
-                setState(() {
-                  _clientFournBool = value;
-                });
-              } : null,
-            ),
-          ),
-        ],
-      ),
-    );
+              _selectedItems.length > 0
+                  ? new ListView.builder(
+                  physics: NeverScrollableScrollPhysics(),
+                  shrinkWrap: true,
+                      itemCount: _selectedItems.length,
+                      itemBuilder: (BuildContext ctxt, int index) {
+                        return new ArticleListItem(
+                            article: _selectedItems[index]);
+                      })
+                  : SizedBox(
+                height: 5,
+              )
+        ]));
   }
 
   Widget imageTab() {
     return SingleChildScrollView(
       child: ImagePickerWidget(
-          editMode: editMode, onImageChange: (File imageFile) =>
-      {
-        _itemImage = imageFile
-      }),
+          imageFile: _itemImage,
+          editMode: editMode,
+          onImageChange: (File imageFile) => {_itemImage = imageFile}),
     );
   }
 
-  Widget addArticleDialog(){
-    return ItemsSliverList(dataSource: _dataSource);
+  Widget addArticleDialog() {
+    return new ArticlesFragment(
+      onItemSelected: (selectedItem) {
+        if (_selectedItems.contains(selectedItem)) {
+          _selectedItems.remove(selectedItem);
+        } else {
+          _selectedItems.add(selectedItem);
+        }
+      },
+    );
   }
+
   Widget addFamilledialogue() {
     return StatefulBuilder(builder: (context, StateSetter setState) {
       return Builder(
@@ -725,8 +778,8 @@ class _AddPiecePageState extends State<AddPiecePage>
     if (familleIndex > -1) {
       _selectedFamille = _familleItems[familleIndex];
     } else {
-      int id = await _queryCtr
-          .addItemToTable(DbTablesNames.tiersFamille, famille);
+      int id =
+          await _queryCtr.addItemToTable(DbTablesNames.tiersFamille, famille);
       famille.id = id;
 
       _familleItems.add(famille);
@@ -767,5 +820,4 @@ class _AddPiecePageState extends State<AddPiecePage>
       return Future.value(-1);
     }
   }
-
 }

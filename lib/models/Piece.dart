@@ -13,11 +13,10 @@ class Piece{
   int _id;
   int _mov;
   String _num_piece;
-  String _tier_raisonSociale;
+  String raisonSociale;
   String _piece;
   DateTime _date;
 
-  int _tier_id;
   int _tarification;
   int _transformer;
   double _total_ht;
@@ -35,8 +34,8 @@ class Piece{
     this._num_piece = obj["Num_piece"].toString();
     this._piece = obj["Piece"].toString();
     this._date = DateTime.fromMillisecondsSinceEpoch(obj["Date"]);
-    this._tier_id = obj["Tier_id"];
-    this._tier_raisonSociale = obj["RaisonSociale"];
+    this.id = obj["Tier_id"];
+    this.raisonSociale = obj["RaisonSociale"];
     this._tarification = obj["Tarification"];
     this._transformer = obj["Transformer"];
     this._total_ht = obj["Total_ht"];
@@ -56,7 +55,7 @@ class Piece{
     map["Num_piece"] = this._num_piece;
     map["Piece"] = this._piece;
     map["Date"] = this._date.millisecondsSinceEpoch;
-    map["Tier_id"] = this._tier_id;
+    map["Tier_id"] = this.id;
     map["Tarification"] = this._tarification;
     map["Transformer"] = this._transformer;
     map["Total_ht"] = this._total_ht;
@@ -76,7 +75,7 @@ class Piece{
       this._mov,
       this._tarification,
       this._date,
-      this._tier_id,
+      this._id,
       this._transformer,
       this._total_ht,
       this._total_tva,
@@ -94,10 +93,10 @@ class Piece{
     _id = value;
   }
 
-  String get tier_raisonSociale => _tier_raisonSociale;
+  String get tier_raisonSociale => raisonSociale;
 
   set tier_raisonSociale(String value) {
-    _tier_raisonSociale = value;
+    raisonSociale = value;
   }
 
   String get piece => _piece;
@@ -124,10 +123,10 @@ class Piece{
     _date = value;
   }
 
-  int get tier_id => _tier_id;
+  int get tier_id => id;
 
   set tier_id(int value) {
-    _tier_id = value;
+    id = value;
   }
 
   int get tarification => _tarification;
@@ -187,7 +186,7 @@ class Piece{
 
   @override
   String toString() {
-    return 'Piece{_id: $_id, _mov: $_mov, _num_piece: $_num_piece, _tier_raisonSociale: $_tier_raisonSociale, _piece: $_piece, _date: $_date, _tier_id: $_tier_id, _tarification: $_tarification, _transformer: $_transformer, _total_ht: $_total_ht, _total_tva: $_total_tva, _total_ttc: $_total_ttc, _timbre: $_timbre, _net_a_payer: $_net_a_payer, _regler: $_regler, _reste: $_reste}';
+    return 'Piece{_id: $_id, _mov: $_mov, _num_piece: $_num_piece, raisonSociale: $raisonSociale, _piece: $_piece, _date: $_date, id: $id, _tarification: $_tarification, _transformer: $_transformer, _total_ht: $_total_ht, _total_tva: $_total_tva, _total_ttc: $_total_ttc, _timbre: $_timbre, _net_a_payer: $_net_a_payer, _regler: $_regler, _reste: $_reste}';
   }
 
   @override

@@ -30,7 +30,11 @@ class AddTierPage extends StatefulWidget {
 }
 
 class _AddTierPageState extends State<AddTierPage>
-    with TickerProviderStateMixin {
+    with TickerProviderStateMixin , AutomaticKeepAliveClientMixin {
+
+  @override
+  bool get wantKeepAlive => true;
+
   final _scaffoldKey = GlobalKey<ScaffoldState>();
   final GlobalKey<OSMFlutterState> osmKey = GlobalKey<OSMFlutterState>();
 
@@ -633,6 +637,7 @@ class _AddTierPageState extends State<AddTierPage>
   Widget imageTab() {
     return SingleChildScrollView(
       child: ImagePickerWidget(
+          imageFile: _itemImage,
           editMode: editMode, onImageChange: (File imageFile) => {
         _itemImage = imageFile
       }),

@@ -13,16 +13,18 @@ class BottomTabBar extends StatelessWidget{
   Widget build(BuildContext context) {
     return Container(
       color: Colors.white,
-      child: TabBar(
-          controller: controller,
-          labelColor: Colors.black,
-          labelStyle: TextStyle(color: Colors.transparent, fontSize: 14),
-          unselectedLabelStyle: TextStyle(color: Colors.black45, fontSize: 12),
-          indicator: CircleTabIndicator(color: Colors.black, radius: 4),
-          unselectedLabelColor: Colors.black45,
-          indicatorSize: TabBarIndicatorSize.tab,
-          indicatorColor: Colors.black,
-          tabs: tabs
+      child: SizedBox(height: 58,
+        child: TabBar(
+            controller: controller,
+            labelColor: Colors.blue,
+            labelStyle: TextStyle(color: Colors.transparent, fontSize: 14),
+            unselectedLabelStyle: TextStyle(color: Colors.black45, fontSize: 12),
+            indicator: CircleTabIndicator(color: Colors.blue[700], radius: 4),
+            unselectedLabelColor: Colors.black45,
+            indicatorSize: TabBarIndicatorSize.tab,
+            indicatorColor: Colors.black,
+            tabs: tabs
+        ),
       ),
     );
   }
