@@ -7,11 +7,11 @@ class SearchInputSliver extends StatefulWidget {
   const SearchInputSliver({
     Key key,
     this.onChanged,
-    this.debounceTime, this.initialText,
+    this.debounceTime, this.searchController,
   }) : super(key: key);
   final ValueChanged<String> onChanged;
   final Duration debounceTime;
-  final String initialText;
+  final TextEditingController searchController;
 
   @override
   _SearchInputSliverState createState() =>
@@ -42,7 +42,7 @@ class _SearchInputSliverState
 
   @override
   Widget build(BuildContext context) => TextFormField(
-    initialValue: widget.initialText,
+    controller: widget.searchController,
     style: TextStyle(color: Colors.white),
     autofocus: true,
     cursorColor: Colors.white,

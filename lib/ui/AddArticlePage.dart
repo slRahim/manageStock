@@ -804,7 +804,7 @@ class _AddArticlePageState extends State<AddArticlePage>  with AutomaticKeepAliv
               children: [
                 Center(
                     child: Padding(
-                  padding: const EdgeInsets.only(bottom: 15),
+                  padding: const EdgeInsets.only(bottom: 20),
                   child: Text(
                     "Ajouter une TVA",
                     style: TextStyle(

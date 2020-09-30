@@ -5,8 +5,10 @@ import 'package:gestmob/Helpers/QueryCtr.dart';
 import 'package:gestmob/cubit/home_cubit.dart';
 import 'package:gestmob/generated/l10n.dart';
 import 'package:gestmob/ui/home.dart';
+import 'package:get_it/get_it.dart';
 
 import 'Helpers/Statics.dart';
+import 'Helpers/TouchIdUtil.dart';
 import 'Helpers/route_generator.dart';
 
 
@@ -22,6 +24,10 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+
+    // GetIt locator = GetIt.instance;
+    // locator.registerSingleton<TouchIdUtil>(TouchIdUtil(context));
+
     return GestureDetector(
         onTap: () {
           FocusScopeNode currentFocus = FocusScope.of(context);

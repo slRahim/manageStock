@@ -1,3 +1,4 @@
+
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:gestmob/Helpers/Helpers.dart';
@@ -17,35 +18,37 @@ import 'sliver_list_data_source.dart';
 class ItemsSliverList extends StatefulWidget {
   final SliverListDataSource dataSource;
   final Function(Object) onItemSelected;
+  final bool canRefresh;
 
-  ItemsSliverList({Key key, @required this.dataSource, this.onItemSelected}) : super(key: key);
+  ItemsSliverList({Key key, @required this.dataSource, this.onItemSelected, this.canRefresh}) : super(key: key);
 
   @override
   _ItemsSliverListState createState() => _ItemsSliverListState();
 }
 
 class _ItemsSliverListState extends State<ItemsSliverList> {
-
-
   @override
-  Widget build(BuildContext context) => RefreshIndicator(
+  Widget build(BuildContext context) {
+    return widget.canRefresh? RefreshIndicator(
         onRefresh: () => Future.sync(
           widget.dataSource.refresh,
         ),
-        child: CustomScrollView(
-          slivers: <Widget>[
-            /*ArticleSearchInputSliver(
-              onChanged: widget.dataSource.updateSearchTerm,
-            ),*/
-            PagedSliverList<int, Object>(
-              dataSource: widget.dataSource,
-              builderDelegate: PagedChildBuilderDelegate<Object>(
-                itemBuilder: (context, _item, index) => createItemWidget(_item)
-              ),
-            ),
-          ],
+        child: scrollView()
+    ) : scrollView();
+  }
+
+  Widget scrollView(){
+    return new CustomScrollView(
+      slivers: <Widget>[
+        PagedSliverList<int, Object>(
+          dataSource: widget.dataSource,
+          builderDelegate: PagedChildBuilderDelegate<Object>(
+              itemBuilder: (context, _item, index) => createItemWidget(_item)
+          ),
         ),
-      );
+      ],
+    );
+  }
 
   Widget createItemWidget(item){
     if(item is Article){

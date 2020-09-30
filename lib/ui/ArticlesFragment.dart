@@ -1,9 +1,11 @@
+import 'package:barcode_scan/barcode_scan.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:gestmob/Helpers/Helpers.dart';
 import 'package:gestmob/Helpers/QueryCtr.dart';
 import 'package:gestmob/Helpers/Statics.dart';
 import 'package:gestmob/Widgets/CustomWidgets/search_bar.dart';
+import 'package:gestmob/Widgets/CustomWidgets/select_items_bar.dart';
 import 'package:gestmob/Widgets/article_list_item.dart';
 import 'package:gestmob/generated/l10n.dart';
 import 'package:gestmob/models/Article.dart';
@@ -22,15 +24,17 @@ class ArticlesFragment extends StatefulWidget {
   // final QueryCtr queryCtr;
   // const ArticlesFragment ({Key key, this.queryCtr}): super(key: key);
 
-  final Function(Object) onItemSelected;
+  final Function(List<Object>) onConfirmSelectedItems;
 
-  const ArticlesFragment({Key key, this.onItemSelected}) : super(key: key);
+  const ArticlesFragment({Key key, this.onConfirmSelectedItems}) : super(key: key);
   @override
   _ArticlesFragmentState createState() => _ArticlesFragmentState();
 }
 
 class _ArticlesFragmentState extends State<ArticlesFragment> {
   bool isFilterOn = false;
+  final TextEditingController searchController = new TextEditingController();
+  List<Object> _selectedItems = new List<Object>();
 
   var _filterMap = new Map<String, dynamic>();
   var _emptyFilterMap = new Map<String, dynamic>();
@@ -63,27 +67,63 @@ class _ArticlesFragmentState extends State<ArticlesFragment> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        floatingActionButton: widget.onItemSelected != null? null : FloatingActionButton(
+        floatingActionButton: FloatingActionButton(
           onPressed: () {
-             Navigator.of(context).pushNamed(RoutesKeys.addArticle,
+            widget.onConfirmSelectedItems != null? scanBarCode() : Navigator.of(context).pushNamed(RoutesKeys.addArticle,
                 arguments: new Article.init());
           },
-          child: Icon(Icons.add),
+          child: widget.onConfirmSelectedItems != null? Icon(MdiIcons.barcode) : Icon(Icons.add),
         ),
-        appBar: SearchBar(
-          mainContext: widget.onItemSelected != null? null : context,
-          title: S.of(context).articles,
-          isFilterOn: isFilterOn,
-          onSearchChanged: (String search) => _dataSource.updateSearchTerm(search),
-          onFilterPressed: () async {
-            showDialog(
-                context: context,
-                builder: (BuildContext context) {
-                  return addFilterdialogue();
-                });
-          },
-        ),
-        body: ItemsSliverList(dataSource: _dataSource, onItemSelected: widget.onItemSelected));
+        appBar: getAppBar(setState),
+        body: ItemsSliverList(dataSource: _dataSource, canRefresh: _selectedItems.length <= 0,
+            onItemSelected: (selectedItem) {
+          onItemSelected(setState, selectedItem);
+        }));
+  }
+
+  onItemSelected(setState, selectedItem){
+    setState(() {
+      if (_selectedItems.contains(selectedItem)) {
+        _selectedItems.remove(selectedItem);
+      } else {
+        _selectedItems.add(selectedItem);
+      }
+    });
+  }
+
+  Widget getAppBar(setState){
+    if(_selectedItems.length > 0){
+      return SelectItemsBar(
+        itemsCount: _selectedItems.length,
+        onConfirm: () => {
+          widget.onConfirmSelectedItems(_selectedItems),
+          Navigator.pop(context)
+        },
+        onCancel:  () => {
+          setState(() {
+            _selectedItems.forEach((item) {
+              (item as Article).selectedQuantite = -1;
+            });
+            _selectedItems = new List<Object>();
+          })
+        },
+      );
+    } else{
+      return SearchBar(
+        searchController: searchController,
+        mainContext: widget.onConfirmSelectedItems != null? null : context,
+        title: S.of(context).articles,
+        isFilterOn: isFilterOn,
+        onSearchChanged: (String search) => _dataSource.updateSearchTerm(search),
+        onFilterPressed: () async {
+          showDialog(
+              context: context,
+              builder: (BuildContext context) {
+                return addFilterdialogue();
+              });
+        },
+      );
+    }
   }
 
   Future<Widget> futureInitState() async {
@@ -161,6 +201,42 @@ class _ArticlesFragmentState extends State<ArticlesFragment> {
         ),
       ),
     ]);
+  }
+
+  Future scanBarCode() async {
+    try {
+      var options = ScanOptions(
+        strings: {
+          "cancel": "Cancel",
+          "flash_on": "Flash on",
+          "flash_off": "Flash off",
+        },
+      );
+
+      var result = await BarcodeScanner.scan(options: options);
+      if(result.rawContent.isNotEmpty){
+        setState(() {
+          searchController.text = result.rawContent;
+          _dataSource.updateSearchTerm(result.rawContent);
+          FocusScope.of(context).requestFocus(null);
+        });
+      }
+
+    } catch (e) {
+      var result = ScanResult(
+        type: ResultType.Error,
+        format: BarcodeFormat.unknown,
+      );
+
+      if (e.code == BarcodeScanner.cameraAccessDenied) {
+        setState(() {
+          result.rawContent = 'The user did not grant the camera permission!';
+        });
+      } else {
+        result.rawContent = 'Unknown error: $e';
+      }
+      Helpers.showToast(result.rawContent);
+    }
   }
 
   Widget addFilterdialogue() {

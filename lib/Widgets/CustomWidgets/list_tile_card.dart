@@ -62,7 +62,7 @@ class ListTileCard extends StatelessWidget {
 
   Widget listTile(){
     return Container(
-      color: itemSelected ? Colors.greenAccent : null, // if current item is selected show blue color
+      color: itemSelected ? Colors.greenAccent : null,
       child: ListTile(
         onTap: onTap?? onTap,
         leading: leading?? leading,

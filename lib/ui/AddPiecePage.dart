@@ -1,6 +1,7 @@
 import 'dart:io';
 import 'dart:typed_data';
 
+import 'package:expandable_bottom_bar/expandable_bottom_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_osm_plugin/flutter_osm_plugin.dart';
 import 'package:gestmob/Helpers/Helpers.dart';
@@ -61,7 +62,7 @@ class _AddPiecePageState extends State<AddPiecePage>
     "ETP."
   ];
 
-  List<Object> _selectedItems = new List<Object>();
+  List<Article> _selectedItems = new List<Article>();
 
   List<DropdownMenuItem<String>> _statutDropdownItems;
   String _selectedStatut;
@@ -97,8 +98,12 @@ class _AddPiecePageState extends State<AddPiecePage>
   SliverListDataSource _dataSource;
   QueryCtr _queryCtr;
 
+  BottomBarController controlador;
+
   void initState() {
     super.initState();
+    controlador = BottomBarController(vsync: this, dragLength: 450, snap: true);
+
     _dataSource = SliverListDataSource(
         ItemsListTypes.articlesList, new Map<String, dynamic>());
     _queryCtr = _dataSource.queryCtr;
@@ -157,84 +162,91 @@ class _AddPiecePageState extends State<AddPiecePage>
     if (!finishedLoading) {
       return Scaffold(body: Helpers.buildLoading());
     } else {
-      return DefaultTabController(
-          length: 2,
-          child: Scaffold(
-              key: _scaffoldKey,
-              backgroundColor: Color(0xFFF1F8FA),
-              appBar: AddEditBar(
-                editMode: editMode,
-                modification: modification,
-                title: appBarTitle,
-                onCancelPressed: () => {
-                  if (modification)
+      return Scaffold(
+          key: _scaffoldKey,
+          backgroundColor: Color(0xFFF1F8FA),
+          appBar: AddEditBar(
+            editMode: editMode,
+            modification: modification,
+            title: appBarTitle,
+            onCancelPressed: () => {
+              if (modification)
+                {
+                  if (editMode)
                     {
-                      if (editMode)
-                        {
-                          Navigator.of(context).pushReplacementNamed(
-                              RoutesKeys.addTier,
-                              arguments: widget.arguments)
-                        }
-                      else
-                        {Navigator.pop(context)}
+                      Navigator.of(context).pushReplacementNamed(
+                          RoutesKeys.addTier,
+                          arguments: widget.arguments)
                     }
                   else
-                    {
-                      Navigator.pop(context),
-                    }
-                },
-                onEditPressed: () {
+                    {Navigator.pop(context)}
+                }
+              else
+                {
+                  Navigator.pop(context),
+                }
+            },
+            onEditPressed: () {
+              setState(() {
+                editMode = true;
+              });
+            },
+            onSavePressed: () async {
+              if (_raisonSocialeControl.text.isNotEmpty) {
+                int id = await addItemToDb();
+                if (id > -1) {
                   setState(() {
-                    editMode = true;
+                    modification = true;
+                    editMode = false;
                   });
-                },
-                onSavePressed: () async {
-                  if (_raisonSocialeControl.text.isNotEmpty) {
-                    int id = await addItemToDb();
-                    if (id > -1) {
-                      setState(() {
-                        modification = true;
-                        editMode = false;
-                      });
-                    }
-                  } else {
-                    Helpers.showFlushBar(
-                        context, "Please enter Raison sociale");
+                }
+              } else {
+                Helpers.showFlushBar(
+                    context, "Please enter Raison sociale");
 
-                    setState(() {
-                      _validateRaison = true;
-                    });
-                  }
-                },
-              ),
-              bottomNavigationBar: BottomTabBar(
-                tabs: [
-                  Tab(
-                      child: Column(
-                    children: [
-                      Icon(Icons.insert_drive_file),
-                      SizedBox(height: 2),
-                      Text("Fiche"),
-                    ],
-                  )),
-                  Tab(
-                      child: Column(
-                    children: [
-                      Icon(Icons.image),
-                      SizedBox(height: 2),
-                      Text("Photo"),
-                    ],
-                  )),
+                setState(() {
+                  _validateRaison = true;
+                });
+              }
+            },
+          ),
+          bottomNavigationBar: BottomExpandableAppBar(
+            controller: controlador,
+            expandedHeight: 300,
+            horizontalMargin: 16,
+            shape: AutomaticNotchedShape(
+                RoundedRectangleBorder(), StadiumBorder(side: BorderSide())),
+            expandedBackColor: Colors.white,
+            expandedBody: Center(
+              child: Text("Hello world!"),
+            ),
+            bottomAppBarBody: Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Row(
+                mainAxisSize: MainAxisSize.max,
+                children: <Widget>[
+                  Expanded(
+                    child: Text(
+                      "Tets",
+                      textAlign: TextAlign.center,
+                    ),
+                  ),
+                  Spacer(
+                    flex: 2,
+                  ),
+                  Expanded(
+                    child: Text(
+                      "Stet",
+                      textAlign: TextAlign.center,
+                    ),
+                  ),
                 ],
               ),
-              body: Builder(
-                builder: (context) => TabBarView(
-                  children: [
-                    fichetab(),
-                    imageTab(),
-                  ],
-                ),
-              )));
+            ),
+          ),
+          body: Builder(
+            builder: (context) => fichetab(),
+          ));
     }
   }
 
@@ -561,6 +573,7 @@ class _AddPiecePageState extends State<AddPiecePage>
                       editMode && modification ? Icons.cancel : Icons.add,
                       size: 30),
                   onPressed: () async {
+                    // controlador.swap();
                     await showDialog(
                         context: context,
                         builder: (BuildContext context) {
@@ -599,12 +612,14 @@ class _AddPiecePageState extends State<AddPiecePage>
 
   Widget addArticleDialog() {
     return new ArticlesFragment(
-      onItemSelected: (selectedItem) {
-        if (_selectedItems.contains(selectedItem)) {
-          _selectedItems.remove(selectedItem);
-        } else {
-          _selectedItems.add(selectedItem);
-        }
+      onConfirmSelectedItems: (selectedItem) {
+        selectedItem.forEach((item) {
+          if (_selectedItems.contains(item)) {
+            _selectedItems[_selectedItems.indexOf(item)].selectedQuantite += (item as Article).selectedQuantite;
+          } else {
+            _selectedItems.add(item);
+          }
+        });
       },
     );
   }
@@ -624,7 +639,7 @@ class _AddPiecePageState extends State<AddPiecePage>
                         children: [
                           Center(
                               child: Padding(
-                            padding: const EdgeInsets.only(bottom: 15),
+                            padding: const EdgeInsets.only(bottom: 20),
                             child: Text(
                               "Ajouter une famille",
                               style: TextStyle(

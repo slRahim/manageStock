@@ -737,7 +737,7 @@ class _AddTierPageState extends State<AddTierPage>
                         children: [
                           Center(
                               child: Padding(
-                            padding: const EdgeInsets.only(bottom: 15),
+                            padding: const EdgeInsets.only(bottom: 20),
                             child: Text(
                               "Ajouter une famille",
                               style: TextStyle(

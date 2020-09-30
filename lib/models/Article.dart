@@ -39,6 +39,14 @@ class Article{
   double _prixVente1TTC, _prixVente1, _prixVente2TTC, _prixVente2,
          _prixVente3TTC, _prixVente3,_qteInit, _qte, _qteMin, _qteColis,
          _prixAchat, _pmpInit, _pmp, _tva;
+
+  double _selectedQuantite = -1;
+
+  set selectedQuantite(double value) {
+    _selectedQuantite = value;
+  }
+
+  double get selectedQuantite => _selectedQuantite;
   bool _bloquer;
   bool _stockable;
 

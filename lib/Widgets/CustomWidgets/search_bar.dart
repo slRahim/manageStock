@@ -13,8 +13,9 @@ class SearchBar extends StatefulWidget with PreferredSizeWidget{
   final bool isFilterOn;
   final VoidCallback onFilterPressed;
   final Function(String search) onSearchChanged;
+  final TextEditingController searchController;
 
-  const SearchBar({Key key, @required this.title, this.onFilterPressed, this.onSearchChanged, this.isFilterOn, this.mainContext}) : super(key: key);
+  const SearchBar({Key key, @required this.title, this.onFilterPressed, this.onSearchChanged, this.isFilterOn, this.mainContext, this.searchController}) : super(key: key);
 
   @override
   State<StatefulWidget> createState() {
@@ -28,10 +29,12 @@ class SearchBar extends StatefulWidget with PreferredSizeWidget{
 
 class SearchBarState extends State<SearchBar>{
   bool isSearching = false;
-  String initialText = "";
 
   @override
   Widget build(BuildContext context) {
+    if(widget.searchController != null && widget.searchController.text.isNotEmpty){
+      isSearching = true;
+    }
     return AppBar(
       leading: widget.mainContext != null? IconButton(
         icon: Icon(Icons.menu, size: 25), // change this size and style
@@ -45,28 +48,19 @@ class SearchBarState extends State<SearchBar>{
       title: !isSearching
           ? Text(widget.title)
           : SearchInputSliver(
-        initialText: initialText,
+        searchController: widget.searchController,
         onChanged: (String search) => widget.onSearchChanged(search),
       ),
       backgroundColor: Colors.blue,
       centerTitle: true,
       actions: [
-        widget.mainContext == null? IconButton(
-          icon: Icon(
-            MdiIcons.barcode,
-          ),
-          onPressed: () async {
-            scan();
-          },
-        ) : SizedBox(height: 5),
-
         widget.onSearchChanged != null? IconButton(
           icon: Icon(
             isSearching ? Icons.cancel : Icons.search,
           ),
           onPressed: () {
             setState(() {
-              initialText = "";
+              widget.searchController.text = "";
               widget.onSearchChanged("");
               this.isSearching = !this.isSearching;
             });
@@ -83,41 +77,4 @@ class SearchBarState extends State<SearchBar>{
     );
   }
 
-
-  Future scan() async {
-    try {
-      var options = ScanOptions(
-        strings: {
-          "cancel": "Cancel",
-          "flash_on": "Flash on",
-          "flash_off": "Flash off",
-        },
-      );
-
-      var result = await BarcodeScanner.scan(options: options);
-      if(result.rawContent.isNotEmpty){
-        setState(() {
-          initialText = result.rawContent;
-          widget.onSearchChanged(initialText);
-          this.isSearching = true;
-          FocusScope.of(context).requestFocus(null);
-        });
-      }
-
-    } catch (e) {
-      var result = ScanResult(
-        type: ResultType.Error,
-        format: BarcodeFormat.unknown,
-      );
-
-      if (e.code == BarcodeScanner.cameraAccessDenied) {
-        setState(() {
-          result.rawContent = 'The user did not grant the camera permission!';
-        });
-      } else {
-        result.rawContent = 'Unknown error: $e';
-      }
-      Helpers.showToast(result.rawContent);
-    }
-  }
 }
