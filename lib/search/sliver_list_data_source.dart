@@ -46,10 +46,10 @@ class SliverListDataSource
         return _queryCtr.getAllArticles(offset, _pageSize, searchTerm: _searchTerm, filters: filterMap);
         break;
       case ItemsListTypes.clientsList:
-        return _queryCtr.getAllTiers(offset, _pageSize, searchTerm: _searchTerm, filters: filterMap);
+        return _queryCtr.getAllTiers(offset: offset, limit:_pageSize, searchTerm: _searchTerm, filters: filterMap);
         break;
       case ItemsListTypes.fournisseursList:
-        return _queryCtr.getAllTiers(offset, _pageSize, searchTerm: _searchTerm, filters: filterMap);
+        return _queryCtr.getAllTiers(offset: offset, limit:_pageSize, searchTerm: _searchTerm, filters: filterMap);
         break;
       case ItemsListTypes.devisList:
         return _queryCtr.getAllPieces(offset, _pageSize, searchTerm: _searchTerm, filters: filterMap);

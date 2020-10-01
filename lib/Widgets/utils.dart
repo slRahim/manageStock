@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:gestmob/models/ArticleFamille.dart';
 import 'package:gestmob/models/ArticleMarque.dart';
 import 'package:gestmob/models/ArticleTva.dart';
+import 'package:gestmob/models/Tiers.dart';
 import 'package:gestmob/models/TiersFamille.dart';
 
 List<DropdownMenuItem<ArticleMarque>> buildMarqueDropDownMenuItems(
@@ -50,6 +51,19 @@ List<DropdownMenuItem<TiersFamille>> buildDropFamilleTier(List listItems) {
     items.add(
       DropdownMenuItem(
         child: Text(listItem.libelle),
+        value: listItem,
+      ),
+    );
+  }
+  return items;
+}
+
+List<DropdownMenuItem<Tiers>> buildDropClients(List listItems) {
+  List<DropdownMenuItem<Tiers>> items = List();
+  for (Tiers listItem in listItems) {
+    items.add(
+      DropdownMenuItem(
+        child: Text(listItem.raisonSociale),
         value: listItem,
       ),
     );

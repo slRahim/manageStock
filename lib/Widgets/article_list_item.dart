@@ -24,13 +24,22 @@ class ArticleListItem extends StatefulWidget {
 
 class _ArticleListItemState extends State<ArticleListItem> {
   TextEditingController _quntiteControler = new TextEditingController();
+  TextEditingController _priceControler = new TextEditingController();
   String _validateQteError;
+  String _validatePriceError;
 
   @override
   Widget build(BuildContext context) {
     return ListTileCard(
+      onLongPress: () {
+        if(widget.onItemSelected != null){
+          selectThisItem();
+        }
+      },
       onTap: () async {
-        if(widget.article.selectedQuantite >= 0){
+        if(widget.onItemSelected == null){
+          Navigator.of(context).pushNamed(RoutesKeys.addArticle, arguments: widget.article);
+        } else if(widget.article.selectedQuantite >= 0){
           await showDialog(
               context: context,
               builder: (BuildContext context) {
@@ -39,10 +48,7 @@ class _ArticleListItemState extends State<ArticleListItem> {
             setState(() {});
         });
         } else if(widget.onItemSelected != null){
-          widget.article.selectedQuantite = 1;
-          widget.onItemSelected(widget.article);
-        } else{
-          Navigator.of(context).pushNamed(RoutesKeys.addArticle, arguments: widget.article);
+          selectThisItem();
         }
       },
 
@@ -53,12 +59,21 @@ class _ArticleListItemState extends State<ArticleListItem> {
       ),
       title: Text(widget.article.designation),
       subtitle: Text("Ref: " + widget.article.ref),
-      trailingChildren: widget.article.selectedQuantite > 0? [Text(
+      trailingChildren: widget.article.selectedQuantite > 0? [
+        Text(
         widget.article.selectedQuantite.toString(),
         style: TextStyle(
             color: Colors.black,
             fontSize: 15.0),
-      )]: [
+      ),
+        SizedBox(height: 5),
+        Text(
+            (widget.article.selectedQuantite * widget.article.selectedPrice).toString(),
+          style: TextStyle(
+              color: Colors.black,
+              fontSize: 15.0),
+        )
+      ]: [
         Text(
           widget.article.prixVente1.toString(),
           style: TextStyle(fontSize: 16.0, fontWeight: FontWeight.bold),
@@ -80,10 +95,9 @@ class _ArticleListItemState extends State<ArticleListItem> {
     return StatefulBuilder(builder: (context, StateSetter setState) {
       Widget dialog = Dialog(
         //this right here
-        child: Container(
-          height: 300,
-          child: Padding(
-            padding: const EdgeInsets.all(6.0),
+        child: Wrap(
+          children: [Padding(
+            padding: const EdgeInsets.all(10),
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -92,7 +106,7 @@ class _ArticleListItemState extends State<ArticleListItem> {
                     child: Padding(
                       padding: const EdgeInsets.only(bottom: 20),
                       child: Text(
-                        "Change Quantité",
+                        "Edit",
                         style: TextStyle(
                           fontSize: 18,
                           fontWeight: FontWeight.w400,
@@ -165,6 +179,32 @@ class _ArticleListItemState extends State<ArticleListItem> {
                           ],
                         ),
                         SizedBox(height: 20),
+                        Padding(
+                          padding: EdgeInsets.only(left: 5, right: 5, bottom: 20),
+                          child: TextField(
+                            controller: _priceControler,
+                            keyboardType: TextInputType.number,
+                            decoration: InputDecoration(
+                              errorText: _validatePriceError?? null,
+                              prefixIcon: Icon(
+                                Icons.attach_money,
+                                color: Colors.orange[900],
+                              ),
+                              focusedBorder: OutlineInputBorder(
+                                  borderSide: BorderSide(color: Colors.orange[900]),
+                                  borderRadius: BorderRadius.circular(20)),
+                              contentPadding: EdgeInsets.only(left: 10),
+                              labelText: "Price",
+                              labelStyle: TextStyle(color: Colors.orange[900]),
+                              enabledBorder: OutlineInputBorder(
+                                gapPadding: 3.3,
+                                borderRadius: BorderRadius.circular(20),
+                                borderSide: BorderSide(color: Colors.orange[900]),
+                              ),
+                            ),
+                          ),
+                        ),
+                        SizedBox(height: 10),
                         Row(
                           mainAxisSize: MainAxisSize.max,
                           mainAxisAlignment: MainAxisAlignment.center,
@@ -187,18 +227,30 @@ class _ArticleListItemState extends State<ArticleListItem> {
                               onPressed: () async {
                                 try {
                                   double _qte = double.parse(_quntiteControler.text);
+                                  double _price = double.parse(_priceControler.text);
                                   if(_qte > 0){
-                                    widget.article.selectedQuantite = _qte;
                                     _validateQteError = null;
+                                  } else{
+                                    _validateQteError = "Qantité can\'t be less then 0";
+                                  }
+                                  if(_price > 0){
+                                    _validatePriceError = null;
+                                  } else{
+                                    _validatePriceError = "Price can\'t be less then 0";
+                                  }
+                                  if(_validateQteError == null && _validatePriceError == null){
+                                    widget.article.selectedQuantite = _qte;
+                                    widget.article.selectedPrice = _price;
+                                    widget.onItemSelected(null);
+
                                     Navigator.pop(context);
                                   } else{
                                     setState(() {
-                                      _validateQteError = "Qantité can\'t be less then 0";
                                     });
                                   }
                                 } catch (e) {
                                   setState(() {
-                                    _validateQteError = "Please enter valid number";
+                                    _validateQteError = "Please enter valid numbers";
                                   });
                                   print(e);
                                 }
@@ -218,10 +270,17 @@ class _ArticleListItemState extends State<ArticleListItem> {
               ],
             ),
           ),
-        ),
+        ]),
       );
       _quntiteControler.text = widget.article.selectedQuantite.toString();
+      _priceControler.text = widget.article.selectedPrice.toString();
       return dialog;
     });
+  }
+
+  void selectThisItem() {
+    widget.article.selectedQuantite = 1;
+    widget.article.selectedPrice = widget.article.prixVente1;
+    widget.onItemSelected(widget.article);
   }
 }

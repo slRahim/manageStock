@@ -7,8 +7,6 @@ import 'package:gestmob/generated/l10n.dart';
 import 'package:gestmob/models/Article.dart';
 import 'package:gestmob/models/HomeItem.dart';
 import 'package:gestmob/search/search_input_sliver.dart';
-import 'file:///E:/AndroidStudio/FlutterProjects/gestionstock/lib/search/items_sliver_list.dart';
-import 'file:///E:/AndroidStudio/FlutterProjects/gestionstock/lib/search/sliver_list_data_source.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 import 'package:settings_ui/settings_ui.dart';
 

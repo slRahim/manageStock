@@ -29,7 +29,7 @@ class ItemsSliverList extends StatefulWidget {
 class _ItemsSliverListState extends State<ItemsSliverList> {
   @override
   Widget build(BuildContext context) {
-    return widget.canRefresh? RefreshIndicator(
+    return (widget.canRefresh == null || widget.canRefresh)? RefreshIndicator(
         onRefresh: () => Future.sync(
           widget.dataSource.refresh,
         ),

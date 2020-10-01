@@ -40,7 +40,7 @@ class PieceListItem extends StatelessWidget {
       ),
     ),
     title: Text(piece.num_piece),
-    subtitle: Text("RS: " + piece.tier_raisonSociale),
+    subtitle: Text("RS: " + piece.raisonSociale),
     trailingChildren: [
       Text(piece.net_a_payer.toString(), style: TextStyle(fontSize: 16.0, fontWeight: FontWeight.bold),),
       SizedBox(height: 5),

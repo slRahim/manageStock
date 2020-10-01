@@ -8,6 +8,7 @@ import 'dart:typed_data';
 import 'package:flutter/cupertino.dart';
 import 'package:gestmob/Helpers/Helpers.dart';
 import 'package:gestmob/Widgets/article_list_item.dart';
+import 'package:gestmob/models/Article.dart';
 
 class Piece{
   int _id;
@@ -23,7 +24,7 @@ class Piece{
   double _total_tva;
   double _total_ttc;
   double _timbre;
-  double _net_a_payer;
+  double _net_a_payer = 0;
   double _regler;
   double _reste;
 
@@ -34,8 +35,7 @@ class Piece{
     this._num_piece = obj["Num_piece"].toString();
     this._piece = obj["Piece"].toString();
     this._date = DateTime.fromMillisecondsSinceEpoch(obj["Date"]);
-    this.id = obj["Tier_id"];
-    this.raisonSociale = obj["RaisonSociale"];
+    this._raisonSociale = obj["RaisonSociale"];
     this._tarification = obj["Tarification"];
     this._transformer = obj["Transformer"];
     this._total_ht = obj["Total_ht"];
@@ -45,7 +45,6 @@ class Piece{
     this._net_a_payer = obj["Net_a_payer"];
     this._regler = obj["Regler"];
     this._reste = obj["Reste"];
-
   }
 
   Map<String, dynamic> toMap() {
@@ -55,7 +54,7 @@ class Piece{
     map["Num_piece"] = this._num_piece;
     map["Piece"] = this._piece;
     map["Date"] = this._date.millisecondsSinceEpoch;
-    map["Tier_id"] = this.id;
+    map["Tier_id"] = this._id;
     map["Tarification"] = this._tarification;
     map["Transformer"] = this._transformer;
     map["Total_ht"] = this._total_ht;
@@ -93,9 +92,9 @@ class Piece{
     _id = value;
   }
 
-  String get tier_raisonSociale => raisonSociale;
+  String get _raisonSociale => raisonSociale;
 
-  set tier_raisonSociale(String value) {
+  set _raisonSociale(String value) {
     raisonSociale = value;
   }
 
@@ -196,4 +195,10 @@ class Piece{
 
   @override
   int get hashCode => _id.hashCode;
+
+  Piece.fromArticlesList(List<Article> list) {
+    list.forEach((item) {
+      this._net_a_payer = _net_a_payer + item.selectedQuantite * item.selectedPrice;
+    });
+  }
 }

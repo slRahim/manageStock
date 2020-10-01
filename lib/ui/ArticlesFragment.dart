@@ -24,7 +24,7 @@ class ArticlesFragment extends StatefulWidget {
   // final QueryCtr queryCtr;
   // const ArticlesFragment ({Key key, this.queryCtr}): super(key: key);
 
-  final Function(List<Object>) onConfirmSelectedItems;
+  final Function(List<dynamic>) onConfirmSelectedItems;
 
   const ArticlesFragment({Key key, this.onConfirmSelectedItems}) : super(key: key);
   @override
@@ -34,7 +34,7 @@ class ArticlesFragment extends StatefulWidget {
 class _ArticlesFragmentState extends State<ArticlesFragment> {
   bool isFilterOn = false;
   final TextEditingController searchController = new TextEditingController();
-  List<Object> _selectedItems = new List<Object>();
+  List<dynamic> _selectedItems = new List<Object>();
 
   var _filterMap = new Map<String, dynamic>();
   var _emptyFilterMap = new Map<String, dynamic>();
@@ -76,17 +76,20 @@ class _ArticlesFragmentState extends State<ArticlesFragment> {
         ),
         appBar: getAppBar(setState),
         body: ItemsSliverList(dataSource: _dataSource, canRefresh: _selectedItems.length <= 0,
-            onItemSelected: (selectedItem) {
+            onItemSelected: widget.onConfirmSelectedItems != null? (selectedItem) {
           onItemSelected(setState, selectedItem);
-        }));
+        } : null
+        ));
   }
 
   onItemSelected(setState, selectedItem){
     setState(() {
-      if (_selectedItems.contains(selectedItem)) {
-        _selectedItems.remove(selectedItem);
-      } else {
-        _selectedItems.add(selectedItem);
+      if(selectedItem != null){
+        if (_selectedItems.contains(selectedItem)) {
+          _selectedItems.remove(selectedItem);
+        } else {
+          _selectedItems.add(selectedItem);
+        }
       }
     });
   }
@@ -102,7 +105,7 @@ class _ArticlesFragmentState extends State<ArticlesFragment> {
         onCancel:  () => {
           setState(() {
             _selectedItems.forEach((item) {
-              (item as Article).selectedQuantite = -1;
+              item.selectedQuantite = -1.0;
             });
             _selectedItems = new List<Object>();
           })

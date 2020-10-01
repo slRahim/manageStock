@@ -46,8 +46,8 @@ class ListDropDownState extends State<ListDropDown> {
         mainAxisSize: MainAxisSize.max,
         children: [
           SizedBox(width: 6),
-          Icon(Icons.help, color: Colors.grey,),
-          /*widget.leftIcon != null? Icon(widget.leftIcon, size: 20) : SizedBox(height: 1),*/
+          // Icon(Icons.help, color: Colors.grey,),
+          widget.leftIcon != null? Icon(widget.leftIcon, size: 25) : SizedBox(height: 1),
           SizedBox(width: 13),
           widget.libelle != null
               ? new Text(widget.libelle,

@@ -16,9 +16,10 @@ class ListTileCard extends StatelessWidget {
   final Widget subtitle;
   final List<Widget> trailingChildren;
   final GestureTapCallback onTap;
+  final GestureLongPressCallback onLongPress;
   final ConfirmDismissCallback confirmDismiss;
 
-  const ListTileCard({Key key, this.id, this.leading, this.title, this.subtitle, this.trailingChildren, this.onTap, this.confirmDismiss, this.itemSelected}) : super(key: key);
+  const ListTileCard({Key key, this.id, this.leading, this.title, this.subtitle, this.trailingChildren, this.onTap, this.confirmDismiss, this.itemSelected, this.onLongPress}) : super(key: key);
 
   @override
   Widget build(BuildContext context) => Card(
@@ -62,9 +63,10 @@ class ListTileCard extends StatelessWidget {
 
   Widget listTile(){
     return Container(
-      color: itemSelected ? Colors.greenAccent : null,
+      color: (itemSelected != null && itemSelected) ? Colors.greenAccent : null,
       child: ListTile(
         onTap: onTap?? onTap,
+        onLongPress: onLongPress,
         leading: leading?? leading,
         title: title??title,
         subtitle: subtitle??subtitle,

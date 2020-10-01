@@ -41,6 +41,13 @@ class Article{
          _prixAchat, _pmpInit, _pmp, _tva;
 
   double _selectedQuantite = -1;
+  double _selectedPrice = 0;
+
+  double get selectedPrice => _selectedPrice;
+
+  set selectedPrice(double value) {
+    _selectedPrice = value;
+  }
 
   set selectedQuantite(double value) {
     _selectedQuantite = value;

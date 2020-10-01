@@ -67,26 +67,26 @@ class QueryCtr {
     return list;
   }
 
-  Future<List<Tiers>> getAllTiers(int offset, int limit, {String searchTerm, Map<String, dynamic> filters}) async {
+  Future<List<Tiers>> getAllTiers({int offset, int limit, String searchTerm, Map<String, dynamic> filters}) async {
     String query = 'SELECT * FROM ' + DbTablesNames.tiers;
+    query += " where RaisonSociale like '%${searchTerm??''}%'";
 
-    int clientFourn = filters["Clientfour"] != null? filters["Clientfour"] : -1;
-    int famille = filters["Id_Famille"] != null? filters["Id_Famille"] : -1;
-    bool hasCredit = filters["hasCredit"] != null? filters["hasCredit"] : false;
+    if(filters != null){
+      int clientFourn = filters["Clientfour"] != null? filters["Clientfour"] : -1;
+      int famille = filters["Id_Famille"] != null? filters["Id_Famille"] : -1;
+      bool hasCredit = filters["hasCredit"] != null? filters["hasCredit"] : false;
 
+      String clientFournFilter = clientFourn > -1 ? " AND (Clientfour = $clientFourn OR Clientfour = 1)" : "";
+      String familleFilter = famille > 0 ? " AND Id_Famille = $famille" : "";
+      String hasCreditFilter = hasCredit ? " AND Credit > 0 " : "";
 
-    String clientFournFilter = clientFourn > -1 ? " AND (Clientfour = $clientFourn OR Clientfour = 1)" : "";
-    String familleFilter = famille > 0 ? " AND Id_Famille = $famille" : "";
-    String hasCreditFilter = hasCredit ? " AND Credit > 0 " : "";
+      query += clientFournFilter;
+      query += familleFilter;
+      query += hasCreditFilter;
+    }
 
     Database dbClient = await _databaseHelper.db;
     var res;
-
-    query += " where RaisonSociale like '%${searchTerm??''}%'";
-
-    query += clientFournFilter;
-    query += familleFilter;
-    query += hasCreditFilter;
 
     query += ' ORDER BY id DESC';
 
@@ -202,7 +202,7 @@ class QueryCtr {
     File imageFile = File('$tempPath/article.png');
     await imageFile.writeAsBytes(bytes.buffer.asUint8List(bytes.offsetInBytes, bytes.lengthInBytes));*/
 
-    Article article = new Article(null, "_designation", "_ref", "code bar here", "Description from test article", 1, 2, 3, 2, 1, 2, 3, 2, 1, 2, 3, 2, 1, 3, 2, 1, 29, false, true);
+    Article article = new Article(null, "_designation", "_ref", "code bar here", "Description from test article", 1, 2, 3, 2, 3, 2, 3, 2, 1, 2, 3, 2, 1, 3, 2, 1, 29, false, true);
     // article.imageUint8List = bytes.buffer.asUint8List(bytes.offsetInBytes, bytes.lengthInBytes);
     return article;
   }
@@ -213,7 +213,7 @@ class QueryCtr {
   }
 
   Future<Piece> getTestPiece() async {
-    Piece piece = new Piece("FP", "05555", 0, 1, new DateTime.now(), 1, 1, 10, 10, 10, 10, 10, 10, 15);
+    Piece piece = new Piece("FP", "05555", 0, 1, new DateTime.now(), 1, 1, 10, 10, 10, 10, 0, 10, 15);
     return piece;
   }
 
