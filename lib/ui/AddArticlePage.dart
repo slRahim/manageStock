@@ -921,7 +921,10 @@ class _AddArticlePageState extends State<AddArticlePage>  with AutomaticKeepAliv
     _refControl.text = article.ref;
     _stockable = article.stockable;
     _codeBarControl.text = article.codeBar;
-    _pmpControl.text != null ?? (_pmpControl.text = article.pmp.toString());
+    if(_pmpControl.text != null){
+      _pmpControl.text = article.pmp.toString();
+    }
+
     _descriptionControl.text = article.description;
     _price1Control.text = article.prixVente1.toString();
     _price2Control.text = article.prixVente2.toString();

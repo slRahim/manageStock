@@ -217,7 +217,7 @@ class _ArticleListItemState extends State<ArticleListItem> {
                                 Navigator.pop(context);
                               },
                               child: Text(
-                                "Delete",
+                                "Annuler",
                                 style: TextStyle(color: Colors.white),
                               ),
                               color: Colors.redAccent,

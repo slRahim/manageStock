@@ -12,9 +12,10 @@ import 'package:gestmob/models/Article.dart';
 
 class Piece{
   int _id;
+  int _tier_id;
   int _mov;
   String _num_piece;
-  String raisonSociale;
+  String _raisonSociale;
   String _piece;
   DateTime _date;
 
@@ -31,6 +32,7 @@ class Piece{
   Piece.init();
   Piece.fromMap(dynamic obj) {
     this._id = obj["id"];
+    this._tier_id = obj["Tier_id"];
     this._mov = obj["Mov"];
     this._num_piece = obj["Num_piece"].toString();
     this._piece = obj["Piece"].toString();
@@ -54,7 +56,7 @@ class Piece{
     map["Num_piece"] = this._num_piece;
     map["Piece"] = this._piece;
     map["Date"] = this._date.millisecondsSinceEpoch;
-    map["Tier_id"] = this._id;
+    map["Tier_id"] = this._tier_id;
     map["Tarification"] = this._tarification;
     map["Transformer"] = this._transformer;
     map["Total_ht"] = this._total_ht;
@@ -75,6 +77,7 @@ class Piece{
       this._tarification,
       this._date,
       this._id,
+      this._tier_id,
       this._transformer,
       this._total_ht,
       this._total_tva,
@@ -92,10 +95,10 @@ class Piece{
     _id = value;
   }
 
-  String get _raisonSociale => raisonSociale;
+  String get raisonSociale => _raisonSociale;
 
-  set _raisonSociale(String value) {
-    raisonSociale = value;
+  set raisonSociale(String value) {
+    _raisonSociale = value;
   }
 
   String get piece => _piece;
@@ -122,10 +125,10 @@ class Piece{
     _date = value;
   }
 
-  int get tier_id => id;
+  int get tier_id => _tier_id;
 
   set tier_id(int value) {
-    id = value;
+    _tier_id = value;
   }
 
   int get tarification => _tarification;
@@ -196,9 +199,4 @@ class Piece{
   @override
   int get hashCode => _id.hashCode;
 
-  Piece.fromArticlesList(List<Article> list) {
-    list.forEach((item) {
-      this._net_a_payer = _net_a_payer + item.selectedQuantite * item.selectedPrice;
-    });
-  }
 }

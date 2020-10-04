@@ -27,10 +27,15 @@ class QueryCtr {
   Future<Profile> getProfileById(int id) async {
     Database dbClient = await _databaseHelper.db;
     var res = await dbClient.rawQuery('SELECT * FROM ' + DbTablesNames.profile + ' where id like $id');
-
     Profile profile = new Profile.fromMap(res[0]);
-
     return profile;
+  }
+
+  Future<Tiers> getTierById(int id) async {
+    Database dbClient = await _databaseHelper.db;
+    var res = await dbClient.rawQuery('SELECT * FROM ' + DbTablesNames.tiers + ' where id like $id');
+    Tiers tier = new Tiers.fromMap(res[0]);
+    return tier;
   }
 
   Future<List<Article>> getAllArticles(int offset, int limit, {String searchTerm, Map<String, dynamic> filters}) async {
@@ -213,7 +218,7 @@ class QueryCtr {
   }
 
   Future<Piece> getTestPiece() async {
-    Piece piece = new Piece("FP", "05555", 0, 1, new DateTime.now(), 1, 1, 10, 10, 10, 10, 0, 10, 15);
+    Piece piece = new Piece("FP", "05555", 0, 1, new DateTime.now(), 1, 1, 1, 10, 10, 10, 10, 0, 10, 15);
     return piece;
   }
 

@@ -112,6 +112,7 @@ class _AddTierPageState extends State<AddTierPage>
     super.dispose();
   }
 
+
   Future<bool> futureInitState() async {
     _familleItems = await widget._queryCtr.getAllTierFamilles();
     _familleDropdownItems = utils.buildDropFamilleTier(_familleItems);
@@ -137,7 +138,17 @@ class _AddTierPageState extends State<AddTierPage>
   }
 
   @override
+  void updateKeepAlive() {
+    super.updateKeepAlive();
+  }
+
+  @override
+  void deactivate() {
+    super.deactivate();
+  }
+  @override
   Widget build(BuildContext context) {
+    super.build(context);
     if (modification) {
       if (editMode) {
         appBarTitle = "Modification";
@@ -274,18 +285,9 @@ class _AddTierPageState extends State<AddTierPage>
                 selectedIndex: _tabSelectedIndex,
                 controller: _tabController,
                 tabs: [
-                  Tab(
-                    icon: Icon(Icons.insert_drive_file),
-                    text: 'Fiche',
-                  ),
-                  Tab(
-                    icon: Icon(Icons.image),
-                    text: 'Photo',
-                  ),
-                  Tab(
-                    icon: Icon(Icons.map),
-                    text: 'Map',
-                  ),
+                  Tab(child: Column( children: [ Icon(Icons.insert_drive_file),SizedBox(height: 2), Text("Fiche"), ], )),
+                  Tab(child: Column( children: [ Icon(Icons.image), SizedBox(height: 2), Text("Photo"), ], )),
+                  Tab(child: Column( children: [ Icon(Icons.map), SizedBox(height: 2), Text("Map"), ], )),
                 ],
               ),
               body: Builder(
@@ -938,4 +940,5 @@ class _AddTierPageState extends State<AddTierPage>
       return Future.value(-1);
     }
   }
+
 }

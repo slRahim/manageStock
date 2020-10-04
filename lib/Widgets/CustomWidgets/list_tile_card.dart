@@ -65,16 +65,16 @@ class ListTileCard extends StatelessWidget {
     return Container(
       color: (itemSelected != null && itemSelected) ? Colors.greenAccent : null,
       child: ListTile(
-        onTap: onTap?? onTap,
+        onTap: onTap,
         onLongPress: onLongPress,
-        leading: leading?? leading,
-        title: title??title,
-        subtitle: subtitle??subtitle,
+        leading: leading,
+        title: title,
+        subtitle: subtitle,
         trailing: Container(
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.end,
-              children: trailingChildren??trailingChildren,
+              children: trailingChildren,
             )),
       )
     );

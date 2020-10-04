@@ -14,11 +14,13 @@ import 'package:gestmob/Widgets/CustomWidgets/list_dropdown.dart';
 import 'package:gestmob/Widgets/article_list_item.dart';
 import 'package:gestmob/Widgets/total_devis.dart';
 import 'package:gestmob/models/Article.dart';
+import 'package:gestmob/models/Journaux.dart';
 import 'package:gestmob/models/Piece.dart';
 import 'package:gestmob/models/Tiers.dart';
 import 'package:gestmob/models/TiersFamille.dart';
 import 'package:gestmob/search/items_sliver_list.dart';
 import 'package:gestmob/search/sliver_list_data_source.dart';
+import 'package:gestmob/ui/ClientFourFragment.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:gestmob/Widgets/utils.dart' as utils;
 import 'package:map_launcher/map_launcher.dart';
@@ -35,10 +37,7 @@ class AddPiecePage extends StatefulWidget {
 }
 
 class _AddPiecePageState extends State<AddPiecePage>
-    with TickerProviderStateMixin, AutomaticKeepAliveClientMixin {
-  @override
-  bool get wantKeepAlive => true;
-
+    with TickerProviderStateMixin {
   final _scaffoldKey = GlobalKey<ScaffoldState>();
 
   Piece _piece = new Piece.init();
@@ -51,10 +50,7 @@ class _AddPiecePageState extends State<AddPiecePage>
   String appBarTitle = "Devis";
 
   List<Article> _selectedItems = new List<Article>();
-
-  List<DropdownMenuItem<Tiers>> _clientsDropdownItems;
-  Tiers _selectedClients;
-  List<Object> _clientsItems;
+  Tiers _selectedClient;
 
   bool _validateRaison = false;
 
@@ -89,10 +85,6 @@ class _AddPiecePageState extends State<AddPiecePage>
   }
 
   Future<bool> futureInitState() async {
-    _clientsItems = await _queryCtr.getAllTiers();
-    _clientsDropdownItems = utils.buildDropClients(_clientsItems);
-    _selectedClients = _clientsItems[0];
-
     if (widget.arguments.id != null && widget.arguments.id > -1) {
       editMode = false;
       modification = true;
@@ -132,19 +124,15 @@ class _AddPiecePageState extends State<AddPiecePage>
             modification: modification,
             title: appBarTitle,
             onCancelPressed: () => {
-              if (modification)
-                {
-                  if (editMode)
-                    {
+              if (modification){
+                  if (editMode){
                       Navigator.of(context).pushReplacementNamed(
-                          RoutesKeys.addTier,
+                          RoutesKeys.addPiece,
                           arguments: widget.arguments)
                     }
-                  else
-                    {Navigator.pop(context)}
+                  else {Navigator.pop(context)}
                 }
-              else
-                {
+              else{
                   Navigator.pop(context),
                 }
             },
@@ -161,7 +149,8 @@ class _AddPiecePageState extends State<AddPiecePage>
                       return addChoicesDialog();
                     });
               } else {
-                Helpers.showFlushBar(context, "Please select at least one article");
+                Helpers.showFlushBar(
+                    context, "Please select at least one article");
 
                 setState(() {
                   _validateRaison = true;
@@ -184,7 +173,7 @@ class _AddPiecePageState extends State<AddPiecePage>
                 children: <Widget>[
                   Expanded(
                     child: Text(
-                      "Net a payer = " + _piece.net_a_payer.toString(),
+                      _piece.net_a_payer.toString(),
                       textAlign: TextAlign.center,
                     ),
                   ),
@@ -211,17 +200,19 @@ class _AddPiecePageState extends State<AddPiecePage>
             child: FloatingActionButton.extended(
               label: Text("+ Add"),
               elevation: 2,
-              backgroundColor: Colors.blue,
+              backgroundColor: editMode ? Colors.blue : Colors.grey,
               foregroundColor: Colors.white,
 
               //Set onPressed event to swap state of bottom bar
-              onPressed: () async => await showDialog(
-                  context: context,
-                  builder: (BuildContext context) {
-                    return addArticleDialog();
-                  }).then((val) {
-                calculPiece(setState);
-              }),
+              onPressed: editMode
+                  ? () async => await showDialog(
+                          context: context,
+                          builder: (BuildContext context) {
+                            return addArticleDialog();
+                          }).then((val) {
+                        calculPiece(setState);
+                      })
+                  : null,
             ),
           ),
           body: Builder(
@@ -269,7 +260,11 @@ class _AddPiecePageState extends State<AddPiecePage>
                   Flexible(
                     flex: 8,
                     child: GestureDetector(
-                      onTap: () {callDatePicker();},
+                      onTap: editMode
+                          ? () {
+                              callDatePicker();
+                            }
+                          : null,
                       child: TextField(
                         decoration: InputDecoration(
                           prefixIcon: Icon(
@@ -295,19 +290,34 @@ class _AddPiecePageState extends State<AddPiecePage>
                   ),
                 ],
               ),
-              ListDropDown(
-                leftIcon: Icons.people,
-                editMode: editMode,
-                value: _selectedClients,
-                items: _clientsDropdownItems,
-                onChanged: (value) {
-                  setState(() {
-                    _selectedClients = value;
-                  });
-                },
-                onAddPressed: null,
+              GestureDetector(
+                onTap: editMode
+                    ? () {
+                        chooseClientDialog();
+                      }
+                    : null,
+                child: TextField(
+                  decoration: InputDecoration(
+                    prefixIcon: Icon(
+                      Icons.people,
+                      color: Colors.blue,
+                    ),
+                    focusedBorder: OutlineInputBorder(
+                        borderSide: BorderSide(color: Colors.blue),
+                        borderRadius: BorderRadius.circular(20)),
+                    labelText: "Client",
+                    labelStyle: TextStyle(color: Colors.blue),
+                    enabledBorder: OutlineInputBorder(
+                      gapPadding: 3.3,
+                      borderRadius: BorderRadius.circular(20),
+                      borderSide: BorderSide(color: Colors.blue),
+                    ),
+                  ),
+                  enabled: false,
+                  controller: _clientControl,
+                  keyboardType: TextInputType.text,
+                ),
               ),
-
             ],
           ),
           SizedBox(height: 15),
@@ -315,20 +325,9 @@ class _AddPiecePageState extends State<AddPiecePage>
             child: _selectedItems.length > 0
                 ? Container(
                     padding: EdgeInsets.all(10),
-                    decoration: new BoxDecoration(
-                      border: Border.all(
-                        color: Colors.blueAccent,
-                      ),
-                      borderRadius: BorderRadius.circular(20.0),
-                    ),
                     child: Column(
                       children: [
-                        Text(
-                          "Articles List",
-                          style: TextStyle(
-                              fontSize: 16, fontWeight: FontWeight.bold),
-                        ),
-                        SizedBox(height: 15),
+                        SizedBox(height: 10),
                         new ListView.builder(
                             physics: NeverScrollableScrollPhysics(),
                             shrinkWrap: true,
@@ -337,10 +336,10 @@ class _AddPiecePageState extends State<AddPiecePage>
                               return new ArticleListItem(
                                 article: _selectedItems[index],
                                 onItemSelected: (selectedItem) => ({
-                                    if(selectedItem != null){
-                                      if (_selectedItems.contains(selectedItem)) {
-                                        _selectedItems.remove(selectedItem)
-                                      }
+                                  if (selectedItem != null)
+                                    {
+                                      if (_selectedItems.contains(selectedItem))
+                                        {_selectedItems.remove(selectedItem)}
                                     },
                                   calculPiece(setState)
                                 }),
@@ -368,6 +367,23 @@ class _AddPiecePageState extends State<AddPiecePage>
         });
       },
     );
+  }
+
+  chooseClientDialog() {
+    showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return new ClientFourFragment(
+            clientFourn: 0,
+            onConfirmSelectedItem: (selectedItem) {
+              setState(() {
+                _selectedClient = selectedItem;
+                _piece.tier_id = _selectedClient.id;
+                _clientControl.text = _selectedClient.raisonSociale;
+              });
+            },
+          );
+        });
   }
 
   Future<Object> makeItem() async {
@@ -411,15 +427,22 @@ class _AddPiecePageState extends State<AddPiecePage>
     }
     return item;*/
 
-    return await _queryCtr.getTestPiece();
+    // _piece.num_piece = _numeroControl.text;
+    // _piece.date = d;
+    // _piece.tier_id = _selectedClient.id;
+
+    return _piece;
   }
 
   Future<void> setDataFromItem(item) async {
     _piece = item;
-    _numeroControl.text = item.num_piece;
-    _dateControl.text = Helpers.dateToText(item.date)?? Helpers.dateToText(new DateTime.now());
+    _numeroControl.text = _piece.num_piece;
+    DateTime time = _piece.date ?? new DateTime.now();
+    _piece.date = time;
+    _dateControl.text = Helpers.dateToText(time);
 
-    _selectedClients = _clientsItems[0];
+    _selectedClient = await _queryCtr.getTierById(_piece.tier_id);
+    _clientControl.text = _selectedClient.raisonSociale;
   }
 
   Future<int> addItemToDb() async {
@@ -429,6 +452,12 @@ class _AddPiecePageState extends State<AddPiecePage>
       if (widget.arguments.id != null) {
         var item = await makeItem();
         id = await _queryCtr.updateItemInDb(DbTablesNames.pieces, item);
+
+        _selectedItems.forEach((article) async {
+          Journaux journaux = Journaux.fromPiece(item, article);
+          await _queryCtr.updateItemInDb(DbTablesNames.journaux, journaux);
+        });
+
         if (id > -1) {
           widget.arguments = item;
           widget.arguments.id = id;
@@ -439,6 +468,12 @@ class _AddPiecePageState extends State<AddPiecePage>
       } else {
         var item = await makeItem();
         id = await _queryCtr.addItemToTable(DbTablesNames.pieces, item);
+
+        _selectedItems.forEach((article) async {
+          Journaux journaux = Journaux.fromPiece(item, article);
+          await _queryCtr.addItemToTable(DbTablesNames.journaux, journaux);
+        });
+
         if (id > -1) {
           widget.arguments = item;
           widget.arguments.id = id;
@@ -457,16 +492,20 @@ class _AddPiecePageState extends State<AddPiecePage>
 
   void calculPiece(setState) {
     setState(() {
-      _piece = Piece.fromArticlesList(_selectedItems);
+      _selectedItems.forEach((item) {
+        _piece.net_a_payer =
+            _piece.net_a_payer + item.selectedQuantite * item.selectedPrice;
+      });
     });
   }
 
   void callDatePicker() async {
     DateTime now = new DateTime.now();
 
-    DateTime order = await getDate(_piece.date?? now);
-    if(order != null){
-      DateTime time = new DateTime(order.year, order.month, order.day, now.hour, now.minute);
+    DateTime order = await getDate(_piece.date ?? now);
+    if (order != null) {
+      DateTime time = new DateTime(
+          order.year, order.month, order.day, now.hour, now.minute);
       _piece.date = time;
       setState(() {
         _dateControl.text = Helpers.dateToText(time);
@@ -491,7 +530,8 @@ class _AddPiecePageState extends State<AddPiecePage>
     );
   }
 
-  Future<Widget> saveItem() async {
+  saveItem(int move) async {
+    _piece.mov = move;
     int id = await addItemToDb();
     if (id > -1) {
       setState(() {
@@ -501,30 +541,23 @@ class _AddPiecePageState extends State<AddPiecePage>
     }
   }
 
-  Future<Widget> saveItemToTrash() async {
-    _piece.mov = -1;
-    saveItem();
+  saveItemToTrash() async {
+    saveItem(2);
   }
 
-  void printItem(item){
-
-  }
-
+  void printItem(item) {}
 
   Widget addChoicesDialog() {
     return StatefulBuilder(builder: (context, StateSetter setState) {
       return Builder(
           builder: (context) => Dialog(
-            //this right here
-            child: SingleChildScrollView(
-              child: Padding(
-                padding: const EdgeInsets.all(15),
-                child: Wrap(
-                    spacing: 13,
-                    runSpacing: 13,
-                    children: [
-                  Center(
-                      child: Padding(
+                //this right here
+                child: SingleChildScrollView(
+                  child: Padding(
+                    padding: const EdgeInsets.all(15),
+                    child: Wrap(spacing: 13, runSpacing: 13, children: [
+                      Center(
+                          child: Padding(
                         padding: const EdgeInsets.only(bottom: 20),
                         child: Text(
                           "Choose action",
@@ -534,62 +567,62 @@ class _AddPiecePageState extends State<AddPiecePage>
                           ),
                         ),
                       )),
-                  SizedBox(
-                    width: 320.0,
-                    child: Padding(
-                      padding: EdgeInsets.only(right: 0, left: 0),
-                      child: RaisedButton(
-                        onPressed: () async {
-                          await saveItem();
-                          printItem(_piece);
-                          Navigator.pop(context);
-                        },
-                        child: Text(
-                          "Save and print",
-                          style: TextStyle(color: Colors.white),
+                      SizedBox(
+                        width: 320.0,
+                        child: Padding(
+                          padding: EdgeInsets.only(right: 0, left: 0),
+                          child: RaisedButton(
+                            onPressed: () async {
+                              await saveItem(1);
+                              printItem(_piece);
+                              Navigator.pop(context);
+                            },
+                            child: Text(
+                              "Save and print",
+                              style: TextStyle(color: Colors.white),
+                            ),
+                            color: Colors.green,
+                          ),
                         ),
-                        color: Colors.green,
                       ),
-                    ),
-                  ),
-                  SizedBox(
-                    width: 320.0,
-                    child: Padding(
-                      padding: EdgeInsets.only(right: 0, left: 0),
-                      child: RaisedButton(
-                        onPressed: () async {
-                          await saveItem();
-                          Navigator.pop(context);
-                        },
-                        child: Text(
-                          "Save only",
-                          style: TextStyle(color: Colors.white),
+                      SizedBox(
+                        width: 320.0,
+                        child: Padding(
+                          padding: EdgeInsets.only(right: 0, left: 0),
+                          child: RaisedButton(
+                            onPressed: () async {
+                              await saveItem(1);
+                              Navigator.pop(context);
+                            },
+                            child: Text(
+                              "Save only",
+                              style: TextStyle(color: Colors.white),
+                            ),
+                            color: Colors.blue,
+                          ),
                         ),
-                        color: Colors.blue,
                       ),
-                    ),
-                  ),
-                  SizedBox(
-                    width: 320.0,
-                    child: Padding(
-                      padding: EdgeInsets.only(right: 0, left: 0),
-                      child: RaisedButton(
-                        onPressed: () async {
-                          await saveItemToTrash();
-                          Navigator.pop(context);
-                        },
-                        child: Text(
-                          "Save to Trash",
-                          style: TextStyle(color: Colors.white),
+                      SizedBox(
+                        width: 320.0,
+                        child: Padding(
+                          padding: EdgeInsets.only(right: 0, left: 0),
+                          child: RaisedButton(
+                            onPressed: () async {
+                              await saveItemToTrash();
+                              Navigator.pop(context);
+                            },
+                            child: Text(
+                              "Save to Trash",
+                              style: TextStyle(color: Colors.white),
+                            ),
+                            color: Colors.red,
+                          ),
                         ),
-                        color: Colors.red,
                       ),
-                    ),
+                    ]),
                   ),
-                ]),
-              ),
-            ),
-          ));
+                ),
+              ));
     });
   }
 }

@@ -11,11 +11,12 @@ import 'CustomWidgets/list_tile_card.dart';
 class TierListItem extends StatelessWidget {
   const TierListItem({
     @required this.tier,
-    Key key,
+    Key key, this.onItemSelected,
   })  : assert(tier != null),
         super(key: key);
 
   final Tiers tier;
+  final Function(Object) onItemSelected;
 
   @override
   Widget build(BuildContext context) => ListTileCard(
@@ -24,9 +25,12 @@ class TierListItem extends StatelessWidget {
       print("call: " + tier.mobile);
       return false;
     },
+    onLongPress:  () => onItemSelected != null? onItemSelected(tier) : null,
     onTap: () => {
-      Navigator.of(context)
-          .pushNamed(RoutesKeys.addTier, arguments: tier)
+      if(onItemSelected == null){
+        Navigator.of(context)
+            .pushNamed(RoutesKeys.addTier, arguments: tier)
+      }
     },
     leading: CircleAvatar(
       radius: 20,

@@ -55,7 +55,7 @@ class _ItemsSliverListState extends State<ItemsSliverList> {
       return ArticleListItem(article: item, onItemSelected: widget.onItemSelected,);
     } else if(item is Tiers){
       item.originClientOrFourn = widget.dataSource.listType == ItemsListTypes.clientsList? 0 : 2;
-      return TierListItem(tier: item);
+      return TierListItem(tier: item, onItemSelected: widget.onItemSelected,);
     } else if(item is Piece){
       return PieceListItem(piece: item);
     } else{

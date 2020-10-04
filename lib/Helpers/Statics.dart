@@ -53,6 +53,7 @@ class DbTablesNames {
   static const articlesTva = 'ArticlesTva';
   static const tiers = 'Tiers';
   static const pieces = 'Pieces';
+  static const journaux = 'Journaux';
   static const tiersFamille = 'TiersFamilles';
 }
 

@@ -22,7 +22,9 @@ import 'AddArticlePage.dart';
 
 class ClientFourFragment extends StatefulWidget {
   final int clientFourn;
-  const ClientFourFragment ({Key key, this.clientFourn}): super(key: key);
+  const ClientFourFragment ({Key key, this.clientFourn, this.onConfirmSelectedItem}): super(key: key);
+
+  final Function(dynamic) onConfirmSelectedItem;
 
   @override
   _ClientFourFragmentState createState() => _ClientFourFragmentState();
@@ -57,7 +59,7 @@ class _ClientFourFragmentState extends State<ClientFourFragment> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        floatingActionButton: FloatingActionButton(
+        floatingActionButton: widget.onConfirmSelectedItem != null? null :FloatingActionButton(
           onPressed: () {
              Navigator.of(context).pushNamed(RoutesKeys.addTier,
                 arguments: new Tiers.init(widget.clientFourn));
@@ -77,7 +79,12 @@ class _ClientFourFragmentState extends State<ClientFourFragment> {
                 });
           },
         ),
-        body: ItemsSliverList(dataSource: _dataSource));
+        body: ItemsSliverList(dataSource: _dataSource,
+            onItemSelected: widget.onConfirmSelectedItem != null? (selectedItem) {
+              widget.onConfirmSelectedItem(selectedItem);
+              Navigator.pop(context);
+            } : null
+        ));
   }
 
   Future<Widget> futureInitState() async {
