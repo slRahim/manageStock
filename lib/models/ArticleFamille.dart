@@ -9,7 +9,6 @@ class ArticleFamille {
   int _id;
   String _libelle;
   File _image;
-
   Uint8List _imageUint8List;
 
   Uint8List get imageUint8List => _imageUint8List;
@@ -35,7 +34,9 @@ class ArticleFamille {
   void setpic(File img) {
     this._image=img;
   }
+
   ArticleFamille.init();
+
   ArticleFamille(this._id, this._libelle);
 
   ArticleFamille.fromMap(dynamic obj) {

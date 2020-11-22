@@ -14,12 +14,10 @@ class SearchInputSliver extends StatefulWidget {
   final TextEditingController searchController;
 
   @override
-  _SearchInputSliverState createState() =>
-      _SearchInputSliverState();
+  _SearchInputSliverState createState() => _SearchInputSliverState();
 }
 
-class _SearchInputSliverState
-    extends State<SearchInputSliver> {
+class _SearchInputSliverState extends State<SearchInputSliver> {
   final StreamController<String> _textChangeStreamController =
       StreamController();
   StreamSubscription _textChangesSubscription;

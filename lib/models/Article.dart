@@ -91,7 +91,8 @@ class Article{
 
   File get image => _image;
   bool get bloquer => _bloquer;
-  
+
+  //section for setters
   void setId(int id) {
     this._id=id;
   }
@@ -184,7 +185,7 @@ class Article{
     this._imageUint8List= Helpers.getUint8ListFromFile(img);
   }
 
-
+  // constructor to convert map to object
   Article.fromMap(dynamic obj) {
     this._imageUint8List = Helpers.getUint8ListFromByteString(obj["BytesImageString"]);
 
@@ -213,6 +214,7 @@ class Article{
     this._description = obj["Description"];
   }
 
+  //convert an object to a map for persistance
   Map<String, dynamic> toMap() {
     var map = new Map<String, dynamic>();
 
@@ -250,32 +252,16 @@ class Article{
     return map;
   }
 
+  //constructor with all params
   Article(
-      this._image,
-      this._designation,
-      this._ref,
-      this._codeBar,
-      this._description,
-      this._idFamille,
-      this._idMarque,
-      this._colis,
-      this._prixVente1TTC,
-      this._prixVente1,
-      this._prixVente2TTC,
-      this._prixVente2,
-      this._prixVente3TTC,
-      this._prixVente3,
-      this._qteInit,
-      this._qte,
-      this._qteMin,
-      this._qteColis,
-      this._prixAchat,
-      this._pmpInit,
-      this._pmp,
-      this._tva,
-      this._bloquer,
-      this._stockable);
+      this._image, this._designation, this._ref, this._codeBar, this._description,
+      this._idFamille, this._idMarque, this._colis, this._prixVente1TTC,
+      this._prixVente1, this._prixVente2TTC, this._prixVente2, this._prixVente3TTC,
+      this._prixVente3, this._qteInit, this._qte,
+      this._qteMin, this._qteColis, this._prixAchat, this._pmpInit,
+      this._pmp, this._tva, this._bloquer, this._stockable);
 
+  //return article object in string format
   @override
   String toString() {
     return 'Article{_image: $_image, _imageUint8List: $_imageUint8List, _designation: $_designation, _ref: $_ref, _description: $_description, _codeBar: $_codeBar, _id: $_id, _idFamille: $_idFamille, _idMarque: $_idMarque, _colis: $_colis, _prixVente1TTC: $_prixVente1TTC, _prixVente1: $_prixVente1, _prixVente2TTC: $_prixVente2TTC, _prixVente2: $_prixVente2, _prixVente3TTC: $_prixVente3TTC, _prixVente3: $_prixVente3, _qteInit: $_qteInit, _qte: $_qte, _qteMin: $_qteMin, _qteColis: $_qteColis, _prixAchat: $_prixAchat, _pmpInit: $_pmpInit, _pmp: $_pmp, _tva: $_tva, _bloquer: $_bloquer, _stockable: $_stockable}';

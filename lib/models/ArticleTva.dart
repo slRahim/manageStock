@@ -1,7 +1,4 @@
 
-
-
-
 class ArticleTva {
   double _tva;
   

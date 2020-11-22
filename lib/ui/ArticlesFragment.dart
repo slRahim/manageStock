@@ -114,7 +114,7 @@ class _ArticlesFragmentState extends State<ArticlesFragment> {
     } else{
       return SearchBar(
         searchController: searchController,
-        mainContext: widget.onConfirmSelectedItems != null? null : context,
+        mainContext: widget.onConfirmSelectedItems != null ? null : context,
         title: S.of(context).articles,
         isFilterOn: isFilterOn,
         onSearchChanged: (String search) => _dataSource.updateSearchTerm(search),

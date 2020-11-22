@@ -3,8 +3,7 @@ import 'package:gestmob/Helpers/QueryCtr.dart';
 import 'package:gestmob/Helpers/Statics.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 
-class SliverListDataSource
-    extends PagedDataSource<int, Object> {
+class SliverListDataSource extends PagedDataSource<int, Object> {
 
   var filterMap;
 
