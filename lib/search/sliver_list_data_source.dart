@@ -50,7 +50,7 @@ class SliverListDataSource extends PagedDataSource<int, Object> {
       case ItemsListTypes.fournisseursList:
         return _queryCtr.getAllTiers(offset: offset, limit:_pageSize, searchTerm: _searchTerm, filters: filterMap);
         break;
-      case ItemsListTypes.devisList:
+      case ItemsListTypes.pieceList:
         return _queryCtr.getAllPieces(offset, _pageSize, searchTerm: _searchTerm, filters: filterMap);
         break;
       default:

@@ -75,8 +75,8 @@ class Journaux{
     this._piece_id = piece.id;
     this._piece_type = piece.piece ;
     this._article_id = article.id;
-    this._qte = article.quantite;
-    this._prix_ht = article.prixAchat;
+    this._qte = article.selectedQuantite;
+    this._prix_ht = article.selectedPrice;
     this._tva = article.tva;
   }
 

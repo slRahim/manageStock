@@ -141,13 +141,16 @@ class QueryCtr {
     return list;
   }
 
-  Future <int> getPieceByNum(String num_piece) async{
+  Future <List<Piece>> getPieceByNum(String num_piece) async{
     var dbClient = await _databaseHelper.db ;
     var res = await dbClient.query(DbTablesNames.pieces ,where: 'Num_piece LIKE ?', whereArgs: ['$num_piece']);
-    if(res.length > 0){
-      return 1 ;
+
+    List<Piece> list = new List<Piece>();
+    for (var i = 0, j = res.length; i < j; i++) {
+      Piece piece = Piece.fromMap(res[i]);
+      list.add(piece);
     }
-    return 0 ;
+    return list;
   }
 
   Future<List<ArticleMarque>> getAllArticleMarques() async {
@@ -202,10 +205,11 @@ class QueryCtr {
     return list;
   }
 
-  Future<int> addItemToTable(String tableName, item) async {
+  Future<dynamic> addItemToTable(String tableName, item) async {
     var dbClient = await _databaseHelper.db;
     int res = await dbClient.insert(tableName, item.toMap());
-
+    String query = 'SELECT last_insert_rowid();';
+    var result = await dbClient.rawQuery(query);
     return res;
   }
 
@@ -228,14 +232,16 @@ class QueryCtr {
     return list ;
   }
 
-  Future<List<Journaux>> getJournalPiece(Piece piece) async{
+  Future<List<Article>> getJournalPiece(Piece piece) async{
     var dbClient = await _databaseHelper.db ;
-    var res = await dbClient.query(DbTablesNames.journaux, where: 'Piece_id = ?' , whereArgs: [piece.id]);
+    String query = 'SELECT Journaux.*,Articles.Ref ,Articles.Designation ,Articles.BytesImageString'
+        ' FROM Journaux JOIN Articles ON Journaux.Article_id = Articles.id AND Journaux.Piece_id='+piece.id.toString();
+    var res = await dbClient.rawQuery(query);
 
-    List<Journaux> list = new List<Journaux>();
+    List<Article> list = new List<Article>();
     for(int i=0 ; i<res.length ; i++){
-      Journaux journaux = Journaux.fromMap(res[i]);
-      list.add(journaux);
+      Article article = Article.fromMapJournaux(res[i]);
+      list.add(article);
     }
     return list ;
   }

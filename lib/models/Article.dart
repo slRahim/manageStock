@@ -214,6 +214,19 @@ class Article{
     this._description = obj["Description"];
   }
 
+  //conver an object to map for persistance
+  Article.fromMapJournaux(dynamic obj) {
+    this._imageUint8List = Helpers.getUint8ListFromByteString(obj["BytesImageString"]);
+
+    this._id = obj["Article_id"];
+    this._designation = obj["Designation"];
+    this._ref = obj["Ref"].toString();
+    this._selectedQuantite = obj["Qte"];
+    this._selectedPrice = obj["Prix_ht"];
+    this._tva = obj["Tva"];
+
+  }
+
   //convert an object to a map for persistance
   Map<String, dynamic> toMap() {
     var map = new Map<String, dynamic>();

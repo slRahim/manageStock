@@ -43,6 +43,7 @@ class SqlLiteDatabaseHelper {
     await createJournauxTable(db, version);
     await createFormatPieceTable(db ,version);
     await createMyParamTable(db , version);
+    await createTriggers(db , version);
     await setInitialData(db, version);
 
   }
@@ -50,75 +51,43 @@ class SqlLiteDatabaseHelper {
   // les informations de la societe
   Future<void> createProfileTable(Database db, int version) async {
     await db.execute("""CREATE TABLE IF NOT EXISTS Profile (
-        
-        id INTEGER PRIMARY KEY,
-        BytesImageString TEXT,
-        Raison VARCHAR(100),
-        CodePin VARCHAR(4),
-        CodePinEnabled integer,
-        Statut integer,
-        Adresse VARCHAR(100),
-        AdresseWeb VARCHAR(100),
-        Ville VARCHAR(25),
-        Departement VARCHAR(25),
-        Pays VARCHAR(25),
-        Cp VARCHAR(5),
-        Telephone VARCHAR(25),
-        Telephone2 VARCHAR(25),
-        Fax VARCHAR(25),
-        Mobile VARCHAR(25),
-        Mobile2 VARCHAR(25),
-        Mail VARCHAR(65),
-        Site VARCHAR(65),
-        Rc VARCHAR(25),
-        Nif VARCHAR(25),
-        Ai VARCHAR(25),
-        Capital Double,
-        Activite TEXT,
-        Nis VARCHAR(25),
-        Codedouane VARCHAR(15),
-        Maposition VARCHAR(20)
-        
+        id INTEGER PRIMARY KEY AUTOINCREMENT, 
+        BytesImageString TEXT, 
+        Raison VARCHAR (100), 
+        CodePin VARCHAR (4), 
+        CodePinEnabled integer, 
+        Statut integer, 
+        Adresse VARCHAR (100), 
+        AdresseWeb VARCHAR (100), 
+        Ville VARCHAR (25), 
+        Departement VARCHAR (25), 
+        Pays VARCHAR (25), 
+        Cp VARCHAR (5), 
+        Telephone VARCHAR (25), 
+        Telephone2 VARCHAR (25), 
+        Fax VARCHAR (25), 
+        Mobile VARCHAR (25), 
+        Mobile2 VARCHAR (25), 
+        Mail VARCHAR (65), 
+        Site VARCHAR (65), 
+        Rc VARCHAR (25), 
+        Nif VARCHAR (25), 
+        Ai VARCHAR (25), 
+        Capital Double, 
+        Activite TEXT, 
+        Nis VARCHAR (25), 
+        Codedouane VARCHAR (15), 
+        Maposition VARCHAR (20)
         )""");
 
   }
 
   // table des artciles
   Future<void> createArticlesTable(Database db, int version) async {
-    await db.execute("""CREATE TABLE IF NOT EXISTS Articles (
-        
-        id INTEGER PRIMARY KEY,
-        Ref VARCHAR(20),
-        BytesImageString TEXT,
-        Designation VARCHAR(100),
-        CodeBar VARCHAR(40),
-        Id_Famille integer,
-        Id_Marque integer,
-        Qte_init Double,
-        Qte Double,
-        Qte_Min Double,
-        Qte_Colis Double,
-        Colis Integer,
-        PrixAchat Double,
-        PMP_init Double,
-        PMP Double,
-        TVA Float,
-        PrixVente1 Double,
-        PrixVente2 Double,
-        PrixVente3 Double,
-        PrixVente1TTC Double,
-        PrixVente2TTC Double,
-        PrixVente3TTC Double,
-        Bloquer integer,
-        Description TEXT,
-        Stockable integer
-
-        )""");
-
     //table des marques des articles
     await db.execute("""CREATE TABLE IF NOT EXISTS ArticlesMarques (
         
-        id INTEGER PRIMARY KEY,
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
         Libelle VARCHAR(20),
         BytesImageString TEXT
 
@@ -126,113 +95,144 @@ class SqlLiteDatabaseHelper {
 
     // table famille des articles
     await db.execute("""CREATE TABLE IF NOT EXISTS ArticlesFamilles (
-        
-        id INTEGER PRIMARY KEY,
-        Libelle VARCHAR(20),
+        id INTEGER PRIMARY KEY AUTOINCREMENT, 
+        Libelle VARCHAR (20), 
         BytesImageString TEXT
-
         )""");
 
     //table des tva de l'article
     await db.execute("""CREATE TABLE IF NOT EXISTS ArticlesTva (
-        
-        id INTEGER PRIMARY KEY,
+        id INTEGER PRIMARY KEY AUTOINCREMENT, 
         Tva Double
-
         )""");
+
+    await db.execute("""CREATE TABLE IF NOT EXISTS Articles (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        Ref VARCHAR (20), 
+        BytesImageString TEXT, 
+        Designation VARCHAR (100), 
+        CodeBar VARCHAR (40), 
+        Id_Famille integer REFERENCES ArticlesFamilles (id) ON DELETE SET NULL ON UPDATE CASCADE, 
+        Id_Marque integer REFERENCES ArticlesMarques (id) ON DELETE SET NULL ON UPDATE CASCADE, 
+        Qte_init Double, 
+        Qte Double, 
+        Qte_Min Double, 
+        Qte_Colis Double, 
+        Colis Integer, 
+        PrixAchat Double, 
+        PMP_init Double, 
+        PMP Double, TVA Float, 
+        PrixVente1 Double, 
+        PrixVente2 Double, 
+        PrixVente3 Double, 
+        PrixVente1TTC Double, 
+        PrixVente2TTC Double, 
+        PrixVente3TTC Double, 
+        Bloquer integer, 
+        Description TEXT, 
+        Stockable integer
+      )""");
+
   }
 
   //table des client et des fournisseur  ( Clientfour : 0=>cliant , 1=>client/fournisseur , 2=>fournisseur)
   Future<void> createTiersTable(Database db, int version) async {
-    await db.execute("""CREATE TABLE IF NOT EXISTS Tiers (
-        
-        id INTEGER PRIMARY KEY,
-        BytesImageString TEXT,
-        Clientfour integer,
-        RaisonSociale VARCHAR(20),
-        Latitude Double,
-        Longitude Double,
-        Id_Famille integer,
-        Statut integer,
-        Tarification integer,
-        Adresse VARCHAR(255),
-        Ville VARCHAR(20),
-        Telephone VARCHAR(20),
-        Mobile VARCHAR(20),
-        Fax VARCHAR(20),
-        Email VARCHAR(100),
-        Solde_depart Double,
-        Chiffre_affaires Double,
-        Regler Double,
-        Credit Double,
-        Bloquer integer
-
-        )""");
-
     // table famille de client ou fournisseur
     await db.execute("""CREATE TABLE IF NOT EXISTS TiersFamilles (
+    
+        id INTEGER PRIMARY KEY AUTOINCREMENT, 
+        Libelle VARCHAR (20)
         
-        id INTEGER PRIMARY KEY,
-        Libelle VARCHAR(20)
-
         )""");
+
+    await db.execute("""CREATE TABLE IF NOT EXISTS Tiers (
+        id INTEGER PRIMARY KEY AUTOINCREMENT, 
+        BytesImageString TEXT, 
+        Clientfour integer, 
+        RaisonSociale VARCHAR (20), 
+        Latitude Double, 
+        Longitude Double, 
+        Id_Famille integer REFERENCES TiersFamilles (id) ON DELETE SET NULL ON UPDATE CASCADE, 
+        Statut integer, 
+        Tarification integer, 
+        Adresse VARCHAR (255), 
+        Ville VARCHAR (20), 
+        Telephone VARCHAR (20), 
+        Mobile VARCHAR (20), 
+        Fax VARCHAR (20), 
+        Email VARCHAR (100), 
+        Solde_depart Double, 
+        Chiffre_affaires Double, 
+        Regler Double, 
+        Credit Double, 
+        Bloquer integer
+        )""");
+
   }
 
   //table des factures
   Future<void> createPiecesTable(Database db, int version) async {
     await db.execute("""CREATE TABLE IF NOT EXISTS Pieces (
-        
-        id INTEGER PRIMARY KEY,
-        Mov integer DEFAULT 1,
-        Transformer integer DEFAULT 0,
-        Piece VARCHAR(3),
-        Num_piece VARCHAR(15),
-        Date integer,
-        Tier_id integer,
-        Tarification integer,
-        Total_ht Double,
-        Total_tva Double,
-        Total_ttc Double,
+        id INTEGER PRIMARY KEY AUTOINCREMENT, 
+        Mov integer DEFAULT 1, 
+        Transformer integer DEFAULT 0, 
+        Piece VARCHAR (3), 
+        Num_piece VARCHAR (15), 
+        Date integer, 
+        Tier_id integer REFERENCES Tiers (id) ON DELETE SET NULL ON UPDATE CASCADE, 
+        Tarification integer, 
+        Total_ht Double, 
+        Total_tva Double, 
+        Total_ttc Double, 
         Timbre Double,
-        Net_a_payer Double,
-        Regler Double,
+        Net_a_payer Double, 
+        Regler Double, 
         Reste Double
-
         )""");
   }
 
   //table des articles ds une facture
   Future<void> createJournauxTable(Database db, int version) async {
     await db.execute("""CREATE TABLE IF NOT EXISTS Journaux (
-        
-        id INTEGER PRIMARY KEY,
-        Mov integer DEFAULT 1,
-        Date VARCHAR(50),
-        Piece_id integer,
-        Piece_type VARCHAR(4),
-        Article_id integer,
-        Qte Double,
-        Prix_ht Double,
+    
+        id INTEGER PRIMARY KEY AUTOINCREMENT, 
+        Mov integer DEFAULT 1, 
+        Date VARCHAR (50), 
+        Piece_id integer REFERENCES Pieces (id) ON DELETE SET NULL ON UPDATE CASCADE, 
+        Piece_type VARCHAR (4), 
+        Article_id integer REFERENCES Articles (id) ON DELETE SET NULL ON UPDATE CASCADE, 
+        Qte Double, 
+        Prix_ht Double, 
         Tva Double
-
+        
         )""");
   }
 
   // table des format et current index pour piece
   Future<void> createFormatPieceTable(Database db , int version) async {
     await db.execute("""CREATE TABLE IF NOT EXISTS FormatPiece (
-    
-        id INTEGER PRIMARY KEY,
-        Format VARCHAR(20),
-        Piece VARCHAR(4),
+        id INTEGER PRIMARY KEY AUTOINCREMENT, 
+        Format VARCHAR (20), 
+        Piece VARCHAR (4), 
         Current_index integer
-        
         )""");
   }
 
   //table speciale pour les paraméter de l'app
   Future<void> createMyParamTable (Database db , int version ) async{
 
+  }
+
+  createTriggers(Database db, int version) async {
+     await db.execute('''CREATE TRIGGER update_current_index 
+        AFTER INSERT ON Pieces 
+        FOR EACH ROW 
+        BEGIN 
+        UPDATE FormatPiece
+           SET Current_index = Current_index+1
+        WHERE  FormatPiece.Piece LIKE NEW.Piece ; 
+        END;
+      ''');
   }
 
   Future<void> setInitialData(Database db, int version) async {
@@ -290,6 +290,8 @@ class SqlLiteDatabaseHelper {
 
 
   }
+
+
 
 
 

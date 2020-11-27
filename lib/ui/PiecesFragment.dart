@@ -31,17 +31,16 @@ class PiecesFragment extends StatefulWidget {
 class _PiecesFragmentState extends State<PiecesFragment> {
   bool isSearching = false;
   bool isFilterOn = false;
+  final TextEditingController searchController = new TextEditingController();
 
   var _filterMap = new Map<String, dynamic>();
   var _emptyFilterMap = new Map<String, dynamic>();
 
-  List<Object> _familleItems;
-  List<DropdownMenuItem<Object>> _familleDropdownItems;
-  var _selectedFamille;
-  int _savedSelectedFamille = 0;
-
   bool _filterInHasCredit = false;
   bool _savedFilterHasCredit = false;
+
+  bool _filterIsDraft = false;
+  bool _savedFilterIsDraft = false;
 
   SliverListDataSource _dataSource;
 
@@ -51,53 +50,24 @@ class _PiecesFragmentState extends State<PiecesFragment> {
 
     fillFilter(_filterMap);
     fillFilter(_emptyFilterMap);
-    _dataSource = SliverListDataSource(ItemsListTypes.devisList, _filterMap);
+    _dataSource = SliverListDataSource(ItemsListTypes.pieceList, _filterMap);
   }
 
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-        floatingActionButton: FloatingActionButton(
-          onPressed: () {
-             Navigator.of(context).pushNamed(RoutesKeys.addPiece, arguments: new Piece.typePiece("FP"));
-          },
-          child: Icon(Icons.add),
-        ),
-        appBar: SearchBar(
-          mainContext: context,
-          title: "Devis",
-          isFilterOn: isFilterOn,
-          onSearchChanged: (String search) => _dataSource.updateSearchTerm(search),
-          onFilterPressed: () async {
-            showDialog(
-                context: context,
-                builder: (BuildContext context) {
-                  return addFilterdialogue();
-                });
-          },
-        ),
-        body: ItemsSliverList(dataSource: _dataSource));
+  //***************************************************partie speciale pour le filtre de recherche***************************************
+  void fillFilter(Map<String, dynamic> filter) {
+    filter["Piece"] = widget.peaceType ;
+    filter["Mov"] = 0;
   }
 
   Future<Widget> futureInitState() async {
-    _familleItems = await _dataSource.queryCtr.getAllArticleFamilles();
-    _familleDropdownItems = utils.buildDropFamilleArticle(_familleItems);
-    _selectedFamille = _familleItems[_savedSelectedFamille];
-
     _filterInHasCredit = _savedFilterHasCredit;
+    _filterIsDraft = _savedFilterIsDraft ;
 
     final tile = StatefulBuilder(builder: (context, StateSetter _setState) {
       return Builder(
         builder: (context) => Column(
           children: [
-            /*new ListTile(
-              title: new Text('Marque'),
-              trailing: marquesDropDown(_setState),
-            ),*/
-            new ListTile(
-              title: new Text('Famille'),
-              trailing: famillesDropDown(_setState),
-            ),
+            isDraftCheckBox(_setState),
             hasCreditCheckBox(_setState)
           ],
         ),
@@ -123,8 +93,7 @@ class _PiecesFragmentState extends State<PiecesFragment> {
                   onPressed: () async {
                     Navigator.pop(context);
                     setState(() {
-                      // _savedSelectedMarque = _marqueItems.indexOf(_selectedMarque);
-                      _savedSelectedFamille = _familleItems.indexOf(_selectedFamille);
+                      _savedFilterIsDraft = _filterIsDraft ;
                       _savedFilterHasCredit = _filterInHasCredit;
 
                       fillFilter(_filterMap);
@@ -158,11 +127,11 @@ class _PiecesFragmentState extends State<PiecesFragment> {
           if (!snapshot.hasData) {
             return Dialog(
               child: Container(
-                height: 100.0,
-                width: 100.0,
-                child: Center(
-                  child: CircularProgressIndicator(),
-                )
+                  height: 100.0,
+                  width: 100.0,
+                  child: Center(
+                    child: CircularProgressIndicator(),
+                  )
               ),
             );
           } else {
@@ -173,16 +142,15 @@ class _PiecesFragmentState extends State<PiecesFragment> {
         });
   }
 
-  Widget famillesDropDown(StateSetter _setState) {
-    return DropdownButtonHideUnderline(
-      child: DropdownButton<ArticleFamille>(
-          value: _selectedFamille,
-          items: _familleDropdownItems,
-          onChanged: (value) {
-            _setState(() {
-              _selectedFamille = value;
-            });
-          }),
+  Widget isDraftCheckBox(StateSetter _setState) {
+    return CheckboxListTile(
+      title: Text("Only Drafts"),
+      value: _filterIsDraft,
+      onChanged: (bool value){
+        _setState(() {
+          _filterIsDraft = value;
+        });
+      },
     );
   }
 
@@ -198,9 +166,38 @@ class _PiecesFragmentState extends State<PiecesFragment> {
     );
   }
 
-  void fillFilter(Map<String, dynamic> filter) {
-    filter["Piece"] = widget.peaceType ;
-    filter["Mov"] = 0;
+  //********************************************listing des pieces**********************************************************************
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+        floatingActionButton: FloatingActionButton(
+          onPressed: () {
+             Navigator.of(context).pushNamed(RoutesKeys.addPiece, arguments: new Piece.typePiece("FP"));
+          },
+          child: Icon(Icons.add),
+        ),
+        appBar: SearchBar(
+          searchController: searchController,
+          mainContext: context,
+          title: "Pieces",
+          isFilterOn: isFilterOn,
+          onSearchChanged: (String search) => _dataSource.updateSearchTerm(search),
+          onFilterPressed: () async {
+            showDialog(
+                context: context,
+                builder: (BuildContext context) {
+                  return addFilterdialogue();
+                });
+          },
+        ),
+        body: ItemsSliverList(
+            dataSource: _dataSource
+        )
+    );
   }
+
+
+
+
 
 }

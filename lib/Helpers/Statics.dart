@@ -40,7 +40,7 @@ class ItemsListTypes {
   static const articlesList = 'articlesList';
   static const clientsList = 'clientsList';
   static const fournisseursList = 'fournisseursList';
-  static const devisList = 'devisList';
+  static const pieceList = 'pieceList';
 }
 
 class DbTablesNames {

@@ -62,74 +62,7 @@ class _ArticlesFragmentState extends State<ArticlesFragment> {
     _dataSource = SliverListDataSource(ItemsListTypes.articlesList, _filterMap);
   }
 
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-        floatingActionButton: FloatingActionButton(
-          onPressed: () {
-            widget.onConfirmSelectedItems != null? scanBarCode() : Navigator.of(context).pushNamed(RoutesKeys.addArticle,
-                arguments: new Article.init());
-          },
-          child: widget.onConfirmSelectedItems != null? Icon(MdiIcons.barcode) : Icon(Icons.add),
-        ),
-        appBar: getAppBar(setState),
-        body: ItemsSliverList(
-            dataSource: _dataSource,
-            canRefresh: _selectedItems.length <= 0,
-            tarification: widget.tarification,
-            onItemSelected: widget.onConfirmSelectedItems != null ? (selectedItem) {
-              onItemSelected(setState, selectedItem);
-            } : null
-        ));
-  }
-
-  onItemSelected(setState, selectedItem){
-    setState(() {
-      if(selectedItem != null){
-        if (_selectedItems.contains(selectedItem)) {
-          _selectedItems.remove(selectedItem);
-        } else {
-          _selectedItems.add(selectedItem);
-        }
-      }
-    });
-  }
-
-  Widget getAppBar(setState){
-    if(_selectedItems.length > 0){
-      return SelectItemsBar(
-        itemsCount: _selectedItems.length,
-        onConfirm: () => {
-          widget.onConfirmSelectedItems(_selectedItems),
-          Navigator.pop(context)
-        },
-        onCancel:  () => {
-          setState(() {
-            _selectedItems.forEach((item) {
-              item.selectedQuantite = -1.0;
-            });
-            _selectedItems = new List<Object>();
-          })
-        },
-      );
-    } else{
-      return SearchBar(
-        searchController: searchController,
-        mainContext: widget.onConfirmSelectedItems != null ? null : context,
-        title: S.of(context).articles,
-        isFilterOn: isFilterOn,
-        onSearchChanged: (String search) => _dataSource.updateSearchTerm(search),
-        onFilterPressed: () async {
-          showDialog(
-              context: context,
-              builder: (BuildContext context) {
-                return addFilterdialogue();
-              });
-        },
-      );
-    }
-  }
-
+  //***************************************************partie speciale pour le filtre de recherche***************************************
   Future<Widget> futureInitState() async {
 
     _marqueItems = await _dataSource.queryCtr.getAllArticleMarques();
@@ -207,42 +140,6 @@ class _ArticlesFragmentState extends State<ArticlesFragment> {
     ]);
   }
 
-  Future scanBarCode() async {
-    try {
-      var options = ScanOptions(
-        strings: {
-          "cancel": "Cancel",
-          "flash_on": "Flash on",
-          "flash_off": "Flash off",
-        },
-      );
-
-      var result = await BarcodeScanner.scan(options: options);
-      if(result.rawContent.isNotEmpty){
-        setState(() {
-          searchController.text = result.rawContent;
-          _dataSource.updateSearchTerm(result.rawContent);
-          FocusScope.of(context).requestFocus(null);
-        });
-      }
-
-    } catch (e) {
-      var result = ScanResult(
-        type: ResultType.Error,
-        format: BarcodeFormat.unknown,
-      );
-
-      if (e.code == BarcodeScanner.cameraAccessDenied) {
-        setState(() {
-          result.rawContent = 'The user did not grant the camera permission!';
-        });
-      } else {
-        result.rawContent = 'Unknown error: $e';
-      }
-      Helpers.showToast(result.rawContent);
-    }
-  }
-
   Widget addFilterdialogue() {
     return FutureBuilder(
         future: futureInitState(),
@@ -250,11 +147,11 @@ class _ArticlesFragmentState extends State<ArticlesFragment> {
           if (!snapshot.hasData) {
             return Dialog(
               child: Container(
-                height: 100.0,
-                width: 100.0,
-                child: Center(
-                  child: CircularProgressIndicator(),
-                )
+                  height: 100.0,
+                  width: 100.0,
+                  child: Center(
+                    child: CircularProgressIndicator(),
+                  )
               ),
             );
           } else {
@@ -308,5 +205,111 @@ class _ArticlesFragmentState extends State<ArticlesFragment> {
     filter["Id_Famille"] = _savedSelectedFamille;
     filter["inStock"] = _savedFilterInStock;
   }
+
+  //********************************************listing des pieces**********************************************************************
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+        floatingActionButton: FloatingActionButton(
+          onPressed: () {
+            widget.onConfirmSelectedItems != null? scanBarCode() : Navigator.of(context).pushNamed(RoutesKeys.addArticle,
+                arguments: new Article.init());
+          },
+          child: widget.onConfirmSelectedItems != null? Icon(MdiIcons.barcode) : Icon(Icons.add),
+        ),
+        appBar: getAppBar(setState),
+        body: ItemsSliverList(
+            dataSource: _dataSource,
+            canRefresh: _selectedItems.length <= 0,
+            tarification: widget.tarification,
+            onItemSelected: widget.onConfirmSelectedItems != null ? (selectedItem) {
+              onItemSelected(setState, selectedItem);
+            } : null
+        ));
+  }
+
+  onItemSelected(setState, selectedItem){
+    setState(() {
+      if(selectedItem != null){
+        if (_selectedItems.contains(selectedItem)) {
+          _selectedItems.remove(selectedItem);
+        } else {
+          _selectedItems.add(selectedItem);
+        }
+      }
+    });
+  }
+
+  Widget getAppBar(setState){
+    if(_selectedItems.length > 0){
+      return SelectItemsBar(
+        itemsCount: _selectedItems.length,
+        onConfirm: () => {
+          widget.onConfirmSelectedItems(_selectedItems),
+          Navigator.pop(context)
+        },
+        onCancel:  () => {
+          setState(() {
+            _selectedItems.forEach((item) {
+              item.selectedQuantite = -1.0;
+            });
+            _selectedItems = new List<Object>();
+          })
+        },
+      );
+    } else{
+      return SearchBar(
+        searchController: searchController,
+        mainContext: widget.onConfirmSelectedItems != null ? null : context,
+        title: S.of(context).articles,
+        isFilterOn: isFilterOn,
+        onSearchChanged: (String search) => _dataSource.updateSearchTerm(search),
+        onFilterPressed: () async {
+          showDialog(
+              context: context,
+              builder: (BuildContext context) {
+                return addFilterdialogue();
+              });
+        },
+      );
+    }
+  }
+
+  Future scanBarCode() async {
+    try {
+      var options = ScanOptions(
+        strings: {
+          "cancel": "Cancel",
+          "flash_on": "Flash on",
+          "flash_off": "Flash off",
+        },
+      );
+
+      var result = await BarcodeScanner.scan(options: options);
+      if(result.rawContent.isNotEmpty){
+        setState(() {
+          searchController.text = result.rawContent;
+          _dataSource.updateSearchTerm(result.rawContent);
+          FocusScope.of(context).requestFocus(null);
+        });
+      }
+
+    } catch (e) {
+      var result = ScanResult(
+        type: ResultType.Error,
+        format: BarcodeFormat.unknown,
+      );
+
+      if (e.code == BarcodeScanner.cameraAccessDenied) {
+        setState(() {
+          result.rawContent = 'The user did not grant the camera permission!';
+        });
+      } else {
+        result.rawContent = 'Unknown error: $e';
+      }
+      Helpers.showToast(result.rawContent);
+    }
+  }
+
 
 }

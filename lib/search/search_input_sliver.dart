@@ -39,6 +39,13 @@ class _SearchInputSliverState extends State<SearchInputSliver> {
   }
 
   @override
+  void dispose() {
+    _textChangeStreamController.close();
+    _textChangesSubscription.cancel();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) => TextFormField(
     controller: widget.searchController,
     style: TextStyle(color: Colors.white),
@@ -56,10 +63,5 @@ class _SearchInputSliverState extends State<SearchInputSliver> {
     onChanged: _textChangeStreamController.add,
   );
 
-  @override
-  void dispose() {
-    _textChangeStreamController.close();
-    _textChangesSubscription.cancel();
-    super.dispose();
-  }
+
 }

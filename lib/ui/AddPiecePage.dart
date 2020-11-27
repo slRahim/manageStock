@@ -74,10 +74,8 @@ class _AddPiecePageState extends State<AddPiecePage> with TickerProviderStateMix
   void initState() {
     super.initState();
     bottomBarControler = BottomBarController(vsync: this, dragLength: 450, snap: true);
-
     _dataSource = SliverListDataSource(ItemsListTypes.articlesList, new Map<String, dynamic>());
     _queryCtr = _dataSource.queryCtr;
-
     futureInitState().then((val) {
       setState(() {
         finishedLoading = true;
@@ -117,6 +115,7 @@ class _AddPiecePageState extends State<AddPiecePage> with TickerProviderStateMix
       _selectedClient = await _queryCtr.getTierById(_piece.tier_id);
       _clientControl.text = _selectedClient.raisonSociale;
       _selectedTarification = _selectedClient.tarification;
+      _selectedItems= await _queryCtr.getJournalPiece(item);
     }else{
       _selectedClient = await _queryCtr.getTierById(1);
       _clientControl.text = _selectedClient.raisonSociale;
@@ -533,7 +532,6 @@ class _AddPiecePageState extends State<AddPiecePage> with TickerProviderStateMix
                             onPressed: () async {
                               await saveItem(1);
                               printItem(_piece);
-                              Navigator.pop(context);
                             },
                             child: Text(
                               "Save and print",
@@ -550,7 +548,6 @@ class _AddPiecePageState extends State<AddPiecePage> with TickerProviderStateMix
                           child: RaisedButton(
                             onPressed: () async {
                               await saveItem(1);
-                              Navigator.pop(context);
                             },
                             child: Text(
                               "Save only",
@@ -567,7 +564,6 @@ class _AddPiecePageState extends State<AddPiecePage> with TickerProviderStateMix
                           child: RaisedButton(
                             onPressed: () async {
                               await saveItemToTrash();
-                              Navigator.pop(context);
                             },
                             child: Text(
                               "Save to Trash",
@@ -609,7 +605,6 @@ class _AddPiecePageState extends State<AddPiecePage> with TickerProviderStateMix
       if (widget.arguments.id != null) {
         var item = await makePiece();
         id = await _queryCtr.updateItemInDb(DbTablesNames.pieces, item);
-
         _selectedItems.forEach((article) async {
           Journaux journaux = Journaux.fromPiece(item, article);
           await _queryCtr.updateItemInDb(DbTablesNames.journaux, journaux);
@@ -623,8 +618,10 @@ class _AddPiecePageState extends State<AddPiecePage> with TickerProviderStateMix
           message = "Error when updating Tier in db";
         }
       } else {
-        var piece = await makePiece();
+        Piece piece = await makePiece();
         id = await _queryCtr.addItemToTable(DbTablesNames.pieces, piece);
+        var res= await _queryCtr.getPieceByNum(piece.num_piece);
+        piece.id=res[0].id;
         _selectedItems.forEach((article) async {
           Journaux journaux = Journaux.fromPiece(piece, article);
           await _queryCtr.addItemToTable(DbTablesNames.journaux, journaux);
@@ -638,6 +635,7 @@ class _AddPiecePageState extends State<AddPiecePage> with TickerProviderStateMix
           message = "Error when adding Piece to db";
         }
       }
+      Navigator.pop(context);
       Helpers.showFlushBar(context, message);
       return Future.value(id);
     } catch (error) {
@@ -655,7 +653,7 @@ class _AddPiecePageState extends State<AddPiecePage> with TickerProviderStateMix
     _piece.transformer = 0 ;
 
     var res = await _queryCtr.getPieceByNum(_piece.num_piece);
-    if(res == 1){
+    if(res.length >= 1 && !modification){
       var message = "Num Piece is alearydy exist";
       Helpers.showFlushBar(context, message);
       await getNumPiece(_piece);
