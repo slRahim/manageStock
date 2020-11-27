@@ -6,6 +6,7 @@ import 'package:gestmob/models/Article.dart';
 import 'package:gestmob/models/Tiers.dart';
 import 'package:google_fonts/google_fonts.dart';
 
+// le style des list tiele utiliser ds l'app
 class ListTileCard extends StatelessWidget {
 
 

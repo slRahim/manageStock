@@ -42,7 +42,7 @@ class SliverListDataSource extends PagedDataSource<int, Object> {
   Future<List<Object>> getList(int offset, int limit, {String searchTerm, Map<String, dynamic> filters}){
     switch (listType){
       case ItemsListTypes.articlesList:
-        return _queryCtr.getAllArticles(offset, _pageSize, searchTerm: _searchTerm, filters: filterMap);
+        return _queryCtr.getAllArticles(offset : offset ,limit: _pageSize, searchTerm: _searchTerm, filters: filterMap);
         break;
       case ItemsListTypes.clientsList:
         return _queryCtr.getAllTiers(offset: offset, limit:_pageSize, searchTerm: _searchTerm, filters: filterMap);

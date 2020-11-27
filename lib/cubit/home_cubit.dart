@@ -64,7 +64,8 @@ class HomeCubit extends Cubit<HomeState> {
         break;
 
       case homeItemDevisId:
-        emit(new FragmentLoaded(PiecesFragment(clientFourn: 0,)));
+        //false param piece type (PF)
+        emit(new FragmentLoaded(PiecesFragment(clientFourn: 0,peaceType: 'FP')));
 
         break;
 

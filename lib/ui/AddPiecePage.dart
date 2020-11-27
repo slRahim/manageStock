@@ -1,8 +1,11 @@
+// import 'dart:html';
 import 'dart:io';
 import 'dart:typed_data';
+import 'dart:ui';
 
 import 'package:expandable_bottom_bar/expandable_bottom_bar.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_icons/flutter_icons.dart';
 import 'package:flutter_osm_plugin/flutter_osm_plugin.dart';
 import 'package:gestmob/Helpers/Helpers.dart';
 import 'package:gestmob/Helpers/QueryCtr.dart';
@@ -14,6 +17,7 @@ import 'package:gestmob/Widgets/CustomWidgets/list_dropdown.dart';
 import 'package:gestmob/Widgets/article_list_item.dart';
 import 'package:gestmob/Widgets/total_devis.dart';
 import 'package:gestmob/models/Article.dart';
+import 'package:gestmob/models/FormatPiece.dart';
 import 'package:gestmob/models/Journaux.dart';
 import 'package:gestmob/models/Piece.dart';
 import 'package:gestmob/models/Tiers.dart';
@@ -36,8 +40,7 @@ class AddPiecePage extends StatefulWidget {
   _AddPiecePageState createState() => _AddPiecePageState();
 }
 
-class _AddPiecePageState extends State<AddPiecePage>
-    with TickerProviderStateMixin {
+class _AddPiecePageState extends State<AddPiecePage> with TickerProviderStateMixin {
   final _scaffoldKey = GlobalKey<ScaffoldState>();
 
   Piece _piece = new Piece.init();
@@ -52,11 +55,16 @@ class _AddPiecePageState extends State<AddPiecePage>
   List<Article> _selectedItems = new List<Article>();
   Tiers _selectedClient;
 
+  List<int> _tarificationItems = Statics.tarificationItems ;
+  List<DropdownMenuItem<int>> _tarificationDropdownItems;
+  int _selectedTarification;
+
   bool _validateRaison = false;
 
   TextEditingController _numeroControl = new TextEditingController();
   TextEditingController _dateControl = new TextEditingController();
   TextEditingController _clientControl = new TextEditingController();
+  TextEditingController _verssementControl = new TextEditingController();
 
   SliverListDataSource _dataSource;
   QueryCtr _queryCtr;
@@ -65,11 +73,9 @@ class _AddPiecePageState extends State<AddPiecePage>
 
   void initState() {
     super.initState();
-    bottomBarControler =
-        BottomBarController(vsync: this, dragLength: 450, snap: true);
+    bottomBarControler = BottomBarController(vsync: this, dragLength: 450, snap: true);
 
-    _dataSource = SliverListDataSource(
-        ItemsListTypes.articlesList, new Map<String, dynamic>());
+    _dataSource = SliverListDataSource(ItemsListTypes.articlesList, new Map<String, dynamic>());
     _queryCtr = _dataSource.queryCtr;
 
     futureInitState().then((val) {
@@ -85,16 +91,46 @@ class _AddPiecePageState extends State<AddPiecePage>
   }
 
   Future<bool> futureInitState() async {
-    if (widget.arguments.id != null && widget.arguments.id > -1) {
+    _tarificationDropdownItems = utils.buildDropTarificationTier(_tarificationItems);
+    _selectedTarification = _tarificationItems[0];
+    if (widget.arguments is Piece && widget.arguments.id != null && widget.arguments.id > -1) {
       editMode = false;
       modification = true;
       await setDataFromItem(widget.arguments);
     } else {
-      await setDataFromItem(await _queryCtr.getTestPiece());
+      await setDataFromItem(null);
+      await getNumPiece(widget.arguments);
+      _piece.date = DateTime.now() ;
+      _dateControl.text = Helpers.dateToText(DateTime.now());
       editMode = true;
     }
-
     return Future<bool>.value(editMode);
+  }
+
+  Future<void> setDataFromItem(item) async {
+    if(item != null){
+      _piece = item;
+      _numeroControl.text = _piece.num_piece;
+      DateTime time = _piece.date ?? new DateTime.now();
+      _piece.date = time;
+      _dateControl.text = Helpers.dateToText(time);
+      _selectedClient = await _queryCtr.getTierById(_piece.tier_id);
+      _clientControl.text = _selectedClient.raisonSociale;
+      _selectedTarification = _selectedClient.tarification;
+    }else{
+      _selectedClient = await _queryCtr.getTierById(1);
+      _clientControl.text = _selectedClient.raisonSociale;
+      _selectedTarification = _selectedClient.tarification;
+    }
+
+  }
+
+  Future<void> getNumPiece(item) async{
+    _piece.piece = item.piece ;
+    List<FormatPiece> list = await _queryCtr.getFormatPiece(_piece.piece);
+    setState(() {
+      _numeroControl.text = Helpers.generateNumPiece(list.first);
+    });
   }
 
   @override
@@ -126,9 +162,7 @@ class _AddPiecePageState extends State<AddPiecePage>
             onCancelPressed: () => {
               if (modification){
                   if (editMode){
-                      Navigator.of(context).pushReplacementNamed(
-                          RoutesKeys.addPiece,
-                          arguments: widget.arguments)
+                      Navigator.of(context).pushReplacementNamed(RoutesKeys.addPiece, arguments: widget.arguments)
                     }
                   else {Navigator.pop(context)}
                 }
@@ -149,9 +183,7 @@ class _AddPiecePageState extends State<AddPiecePage>
                       return addChoicesDialog();
                     });
               } else {
-                Helpers.showFlushBar(
-                    context, "Please select at least one article");
-
+                Helpers.showFlushBar(context, "Please select at least one article");
                 setState(() {
                   _validateRaison = true;
                 });
@@ -173,26 +205,32 @@ class _AddPiecePageState extends State<AddPiecePage>
                 children: <Widget>[
                   Expanded(
                     child: Text(
-                      _piece.net_a_payer.toString(),
+                      'TTC : '+
+                      _piece.total_ttc.toString()+" DA",
                       textAlign: TextAlign.center,
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold
+                      ),
                     ),
                   ),
                   Spacer(
                     flex: 1,
                   ),
                   Container(
-                    padding: EdgeInsets.only(right: 30),
-                    child: Text(
-                      "Print",
-                      textAlign: TextAlign.center,
+                      padding: EdgeInsets.only(right: 30),
+                      child: Text(
+                        "Régler",
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                            fontWeight: FontWeight.bold
+                        ),
+                      ),
                     ),
-                  ),
                 ],
               ),
             ),
           ),
-          floatingActionButtonLocation:
-              FloatingActionButtonLocation.centerDocked,
+          floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
           floatingActionButton: GestureDetector(
             // Set onVerticalDrag event to drag handlers of controller for swipe effect
             onVerticalDragUpdate: bottomBarControler.onDrag,
@@ -202,16 +240,13 @@ class _AddPiecePageState extends State<AddPiecePage>
               elevation: 2,
               backgroundColor: editMode ? Colors.blue : Colors.grey,
               foregroundColor: Colors.white,
-
               //Set onPressed event to swap state of bottom bar
               onPressed: editMode
                   ? () async => await showDialog(
                           context: context,
                           builder: (BuildContext context) {
                             return addArticleDialog();
-                          }).then((val) {
-                        calculPiece(setState);
-                      })
+                          }).then((val) {calculPiece();})
                   : null,
             ),
           ),
@@ -233,7 +268,7 @@ class _AddPiecePageState extends State<AddPiecePage>
               Row(
                 children: [
                   Flexible(
-                    flex: 6,
+                    flex: 4,
                     child: TextField(
                       decoration: InputDecoration(
                         prefixIcon: Icon(
@@ -251,14 +286,14 @@ class _AddPiecePageState extends State<AddPiecePage>
                           borderSide: BorderSide(color: Colors.orange[900]),
                         ),
                       ),
-                      enabled: false,
+                      enabled: editMode,
                       controller: _numeroControl,
                       keyboardType: TextInputType.text,
                     ),
                   ),
                   Padding(padding: EdgeInsets.fromLTRB(5, 5, 5, 5)),
                   Flexible(
-                    flex: 8,
+                    flex: 6,
                     child: GestureDetector(
                       onTap: editMode
                           ? () {
@@ -290,33 +325,54 @@ class _AddPiecePageState extends State<AddPiecePage>
                   ),
                 ],
               ),
-              GestureDetector(
-                onTap: editMode
-                    ? () {
+              Row(
+                children: [
+                  Flexible(
+                    flex: 4,
+                    child: ListDropDown(
+                      libelle: "Tarif:  ",
+                      editMode: editMode,
+                      value: _selectedTarification,
+                      items: _tarificationDropdownItems,
+                      onChanged: (value) {
+                        setState(() {
+                          _selectedTarification = value;
+                        });
+                      },),
+                  ),
+                  Flexible(
+                    flex: 6,
+                    child: GestureDetector(
+                      onTap: editMode
+                          ? ()   {
                         chooseClientDialog();
                       }
-                    : null,
-                child: TextField(
-                  decoration: InputDecoration(
-                    prefixIcon: Icon(
-                      Icons.people,
-                      color: Colors.blue,
-                    ),
-                    focusedBorder: OutlineInputBorder(
-                        borderSide: BorderSide(color: Colors.blue),
-                        borderRadius: BorderRadius.circular(20)),
-                    labelText: "Client",
-                    labelStyle: TextStyle(color: Colors.blue),
-                    enabledBorder: OutlineInputBorder(
-                      gapPadding: 3.3,
-                      borderRadius: BorderRadius.circular(20),
-                      borderSide: BorderSide(color: Colors.blue),
+                          : null,
+                      child: TextField(
+                        decoration: InputDecoration(
+                          prefixIcon: Icon(
+                            Icons.people,
+                            color: Colors.blue,
+                          ),
+                          focusedBorder: OutlineInputBorder(
+                              borderSide: BorderSide(color: Colors.blue),
+                              borderRadius: BorderRadius.circular(20)),
+                          labelText: "Client",
+                          labelStyle: TextStyle(color: Colors.blue),
+                          enabledBorder: OutlineInputBorder(
+                            gapPadding: 3.3,
+                            borderRadius: BorderRadius.circular(20),
+                            borderSide: BorderSide(color: Colors.blue),
+                          ),
+                        ),
+                        enabled: false,
+                        controller: _clientControl,
+                        keyboardType: TextInputType.text,
+                      ),
                     ),
                   ),
-                  enabled: false,
-                  controller: _clientControl,
-                  keyboardType: TextInputType.text,
-                ),
+
+                ],
               ),
             ],
           ),
@@ -336,12 +392,12 @@ class _AddPiecePageState extends State<AddPiecePage>
                               return new ArticleListItem(
                                 article: _selectedItems[index],
                                 onItemSelected: (selectedItem) => ({
-                                  if (selectedItem != null)
-                                    {
-                                      if (_selectedItems.contains(selectedItem))
-                                        {_selectedItems.remove(selectedItem)}
-                                    },
-                                  calculPiece(setState)
+                                  if (selectedItem != null){
+                                      if (_selectedItems.contains(selectedItem)){
+                                        _selectedItems.remove(selectedItem)
+                                      }
+                                  },
+                                  calculPiece()
                                 }),
                               );
                             })
@@ -349,18 +405,21 @@ class _AddPiecePageState extends State<AddPiecePage>
                     ))
                 : SizedBox(
                     height: 5,
-                  ),
+                  )
           )
-        ]));
+        ])
+    );
   }
 
+
+  //afficher le fragment des artciles
   Widget addArticleDialog() {
     return new ArticlesFragment(
+      tarification: _selectedTarification,
       onConfirmSelectedItems: (selectedItem) {
         selectedItem.forEach((item) {
           if (_selectedItems.contains(item)) {
-            _selectedItems[_selectedItems.indexOf(item)].selectedQuantite +=
-                item.selectedQuantite;
+            _selectedItems.elementAt(_selectedItems.indexOf(item)).selectedQuantite += item.selectedQuantite;
           } else {
             _selectedItems.add(item);
           }
@@ -369,8 +428,9 @@ class _AddPiecePageState extends State<AddPiecePage>
     );
   }
 
+  //afficher le fragement des clients
   chooseClientDialog() {
-    showDialog(
+     showDialog(
         context: context,
         builder: (BuildContext context) {
           return new ClientFourFragment(
@@ -379,126 +439,37 @@ class _AddPiecePageState extends State<AddPiecePage>
               setState(() {
                 _selectedClient = selectedItem;
                 _piece.tier_id = _selectedClient.id;
+                _piece.raisonSociale= _selectedClient.raisonSociale ;
                 _clientControl.text = _selectedClient.raisonSociale;
+                _selectedTarification = _tarificationItems[_selectedClient.tarification];
               });
             },
           );
-        });
+        },
+
+    );
+     print(_selectedTarification);
   }
 
-  Future<Object> makeItem() async {
-    /*var item = new Tiers.empty();
-    item.id = widget.arguments.id;
-
-    if(_clientFournBool){
-      item.clientFour = 1;
-    } else if (widget.arguments.originClientOrFourn != null){
-      item.clientFour = widget.arguments.originClientOrFourn;
-    } else{
-      item.clientFour = _clientFourn;
-    }
-    item.raisonSociale = _raisonSocialeControl.text;
-    item.qrCode = _qrCodeControl.text;
-
-    item.adresse = _adresseControl.text;
-
-    item.latitude = _latitude;
-    item.longitude = _longitude;
-    item.ville = _villeControl.text;
-    item.telephone = _telephoneControl.text;
-    item.mobile = _mobileControl.text;
-    item.fax = _faxControl.text;
-    item.email = _emailControl.text;
-    item.solde_depart = double.tryParse(_solde_departControl.text);
-    item.chiffre_affaires = double.tryParse(_chiffre_affairesControl.text);
-    item.regler = double.tryParse(_reglerControl.text);
-
-    item.id_famille = _selectedFamille.id;
-    item.statut = _statutItems.indexOf(_selectedStatut);
-    item.tarification = _tarificationItems.indexOf(_selectedTarification);
-
-    item.bloquer = false;
-
-    if (_itemImage != null) {
-      item.imageUint8List = Helpers.getUint8ListFromFile(_itemImage);
-    } else {
-      Uint8List image = await Helpers.getDefaultImageUint8List();
-      item.imageUint8List = image;
-    }
-    return item;*/
-
-    // _piece.num_piece = _numeroControl.text;
-    // _piece.date = d;
-    // _piece.tier_id = _selectedClient.id;
-
-    return _piece;
-  }
-
-  Future<void> setDataFromItem(item) async {
-    _piece = item;
-    _numeroControl.text = _piece.num_piece;
-    DateTime time = _piece.date ?? new DateTime.now();
-    _piece.date = time;
-    _dateControl.text = Helpers.dateToText(time);
-
-    _selectedClient = await _queryCtr.getTierById(_piece.tier_id);
-    _clientControl.text = _selectedClient.raisonSociale;
-  }
-
-  Future<int> addItemToDb() async {
-    int id = -1;
-    String message;
-    try {
-      if (widget.arguments.id != null) {
-        var item = await makeItem();
-        id = await _queryCtr.updateItemInDb(DbTablesNames.pieces, item);
-
-        _selectedItems.forEach((article) async {
-          Journaux journaux = Journaux.fromPiece(item, article);
-          await _queryCtr.updateItemInDb(DbTablesNames.journaux, journaux);
-        });
-
-        if (id > -1) {
-          widget.arguments = item;
-          widget.arguments.id = id;
-          message = "Tier has been updated successfully";
-        } else {
-          message = "Error when updating Tier in db";
-        }
-      } else {
-        var item = await makeItem();
-        id = await _queryCtr.addItemToTable(DbTablesNames.pieces, item);
-
-        _selectedItems.forEach((article) async {
-          Journaux journaux = Journaux.fromPiece(item, article);
-          await _queryCtr.addItemToTable(DbTablesNames.journaux, journaux);
-        });
-
-        if (id > -1) {
-          widget.arguments = item;
-          widget.arguments.id = id;
-          message = "Tier has been added successfully";
-        } else {
-          message = "Error when adding Tier to db";
-        }
-      }
-      Helpers.showFlushBar(context, message);
-      return Future.value(id);
-    } catch (error) {
-      Helpers.showFlushBar(context, "Error: something went wrong");
-      return Future.value(-1);
-    }
-  }
-
-  void calculPiece(setState) {
-    setState(() {
+  //calcule le montant total
+  void calculPiece() {
+    double sum = 0;
+    double totalTva = 0;
+     setState(() {
       _selectedItems.forEach((item) {
-        _piece.net_a_payer =
-            _piece.net_a_payer + item.selectedQuantite * item.selectedPrice;
+        sum += item.selectedQuantite * item.selectedPrice;
+        totalTva += item.selectedQuantite * item.tva ;
       });
+      _piece.total_ht =sum ;
+      _piece.total_tva = totalTva ;
+      _piece.total_ttc = _piece.total_ht + _piece.total_tva ;
+      _verssementControl.text = _piece.total_ttc.toString() ;
+      _piece.regler = _piece.total_ttc ;
+      _piece.reste = _piece.total_ttc - _piece.regler ;
     });
   }
 
+  //********************************************************************** partie de date ****************************************************************************************
   void callDatePicker() async {
     DateTime now = new DateTime.now();
 
@@ -506,8 +477,8 @@ class _AddPiecePageState extends State<AddPiecePage>
     if (order != null) {
       DateTime time = new DateTime(
           order.year, order.month, order.day, now.hour, now.minute);
-      _piece.date = time;
       setState(() {
+        _piece.date = time;
         _dateControl.text = Helpers.dateToText(time);
       });
     }
@@ -530,6 +501,90 @@ class _AddPiecePageState extends State<AddPiecePage>
     );
   }
 
+  //*************************************************************************** partie de save ***********************************************************************************
+
+  //dialog de save
+  Widget addChoicesDialog() {
+    return StatefulBuilder(builder: (context, StateSetter setState) {
+      return Builder(
+          builder: (context) => Dialog(
+            //this right here
+            child: SingleChildScrollView(
+              child: Padding(
+                padding: const EdgeInsets.all(15),
+                child: Wrap(spacing: 13, runSpacing: 13,
+                    children: [
+                      Center(
+                          child: Padding(
+                            padding: const EdgeInsets.only(bottom: 20),
+                            child: Text(
+                              "Choose Action : ",
+                              style: TextStyle(
+                                fontSize: 22,
+                                fontWeight: FontWeight.w400,
+                              ),
+                            ),
+                          )),
+                      SizedBox(
+                        width: 320.0,
+                        child: Padding(
+                          padding: EdgeInsets.only(right: 0, left: 0),
+                          child: RaisedButton(
+                            onPressed: () async {
+                              await saveItem(1);
+                              printItem(_piece);
+                              Navigator.pop(context);
+                            },
+                            child: Text(
+                              "Save and print",
+                              style: TextStyle(color: Colors.white , fontSize: 16),
+                            ),
+                            color: Colors.green,
+                          ),
+                        ),
+                      ),
+                      SizedBox(
+                        width: 320.0,
+                        child: Padding(
+                          padding: EdgeInsets.only(right: 0, left: 0),
+                          child: RaisedButton(
+                            onPressed: () async {
+                              await saveItem(1);
+                              Navigator.pop(context);
+                            },
+                            child: Text(
+                              "Save only",
+                              style: TextStyle(color: Colors.white  , fontSize: 16),
+                            ),
+                            color: Colors.blue,
+                          ),
+                        ),
+                      ),
+                      SizedBox(
+                        width: 320.0,
+                        child: Padding(
+                          padding: EdgeInsets.only(right: 0, left: 0),
+                          child: RaisedButton(
+                            onPressed: () async {
+                              await saveItemToTrash();
+                              Navigator.pop(context);
+                            },
+                            child: Text(
+                              "Save to Trash",
+                              style: TextStyle(color: Colors.white  , fontSize: 16),
+                            ),
+                            color: Colors.red,
+                          ),
+                        ),
+                      ),
+                    ]
+                ),
+              ),
+            ),
+          ));
+    });
+  }
+
   saveItem(int move) async {
     _piece.mov = move;
     int id = await addItemToDb();
@@ -547,82 +602,71 @@ class _AddPiecePageState extends State<AddPiecePage>
 
   void printItem(item) {}
 
-  Widget addChoicesDialog() {
-    return StatefulBuilder(builder: (context, StateSetter setState) {
-      return Builder(
-          builder: (context) => Dialog(
-                //this right here
-                child: SingleChildScrollView(
-                  child: Padding(
-                    padding: const EdgeInsets.all(15),
-                    child: Wrap(spacing: 13, runSpacing: 13, children: [
-                      Center(
-                          child: Padding(
-                        padding: const EdgeInsets.only(bottom: 20),
-                        child: Text(
-                          "Choose action",
-                          style: TextStyle(
-                            fontSize: 18,
-                            fontWeight: FontWeight.w400,
-                          ),
-                        ),
-                      )),
-                      SizedBox(
-                        width: 320.0,
-                        child: Padding(
-                          padding: EdgeInsets.only(right: 0, left: 0),
-                          child: RaisedButton(
-                            onPressed: () async {
-                              await saveItem(1);
-                              printItem(_piece);
-                              Navigator.pop(context);
-                            },
-                            child: Text(
-                              "Save and print",
-                              style: TextStyle(color: Colors.white),
-                            ),
-                            color: Colors.green,
-                          ),
-                        ),
-                      ),
-                      SizedBox(
-                        width: 320.0,
-                        child: Padding(
-                          padding: EdgeInsets.only(right: 0, left: 0),
-                          child: RaisedButton(
-                            onPressed: () async {
-                              await saveItem(1);
-                              Navigator.pop(context);
-                            },
-                            child: Text(
-                              "Save only",
-                              style: TextStyle(color: Colors.white),
-                            ),
-                            color: Colors.blue,
-                          ),
-                        ),
-                      ),
-                      SizedBox(
-                        width: 320.0,
-                        child: Padding(
-                          padding: EdgeInsets.only(right: 0, left: 0),
-                          child: RaisedButton(
-                            onPressed: () async {
-                              await saveItemToTrash();
-                              Navigator.pop(context);
-                            },
-                            child: Text(
-                              "Save to Trash",
-                              style: TextStyle(color: Colors.white),
-                            ),
-                            color: Colors.red,
-                          ),
-                        ),
-                      ),
-                    ]),
-                  ),
-                ),
-              ));
-    });
+  Future<int> addItemToDb() async {
+    int id = -1;
+    String message;
+    try {
+      if (widget.arguments.id != null) {
+        var item = await makePiece();
+        id = await _queryCtr.updateItemInDb(DbTablesNames.pieces, item);
+
+        _selectedItems.forEach((article) async {
+          Journaux journaux = Journaux.fromPiece(item, article);
+          await _queryCtr.updateItemInDb(DbTablesNames.journaux, journaux);
+        });
+
+        if (id > -1) {
+          widget.arguments = item;
+          widget.arguments.id = id;
+          message = "Tier has been updated successfully";
+        } else {
+          message = "Error when updating Tier in db";
+        }
+      } else {
+        var piece = await makePiece();
+        id = await _queryCtr.addItemToTable(DbTablesNames.pieces, piece);
+        _selectedItems.forEach((article) async {
+          Journaux journaux = Journaux.fromPiece(piece, article);
+          await _queryCtr.addItemToTable(DbTablesNames.journaux, journaux);
+        });
+
+        if (id > -1) {
+          widget.arguments = piece;
+          widget.arguments.id = id;
+          message = "Piece has been added successfully";
+        } else {
+          message = "Error when adding Piece to db";
+        }
+      }
+      Helpers.showFlushBar(context, message);
+      return Future.value(id);
+    } catch (error) {
+      Helpers.showFlushBar(context, "Error: something went wrong");
+      return Future.value(-1);
+    }
   }
+
+  Future<Object> makePiece() async {
+    var tiers = _selectedClient ;
+    _piece.num_piece=_numeroControl.text ;
+    _piece.tier_id= tiers.id ;
+    _piece.raisonSociale = tiers.raisonSociale ;
+    _piece.tarification = _selectedTarification ;
+    _piece.transformer = 0 ;
+
+    var res = await _queryCtr.getPieceByNum(_piece.num_piece);
+    if(res == 1){
+      var message = "Num Piece is alearydy exist";
+      Helpers.showFlushBar(context, message);
+      await getNumPiece(_piece);
+      _piece.num_piece = _numeroControl.text ;
+    }
+
+    return _piece ;
+  }
+
+
+
+
+
 }

@@ -79,7 +79,8 @@ class _ClientFourFragmentState extends State<ClientFourFragment> {
                 });
           },
         ),
-        body: ItemsSliverList(dataSource: _dataSource,
+        body: ItemsSliverList(
+            dataSource: _dataSource,
             onItemSelected: widget.onConfirmSelectedItem != null? (selectedItem) {
               widget.onConfirmSelectedItem(selectedItem);
               Navigator.pop(context);

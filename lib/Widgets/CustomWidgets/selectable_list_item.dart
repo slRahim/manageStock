@@ -2,19 +2,20 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:gestmob/Helpers/Statics.dart';
 import 'package:gestmob/models/Article.dart';
-
 import 'list_tile_card.dart';
 
+//
 class SelectableListItem extends StatefulWidget {
+
+  final Article article;
+  final Function(Object) onItemSelected;
+
   const SelectableListItem({
     @required this.article,
     Key key,
     this.onItemSelected,
   })  : assert(article != null),
         super(key: key);
-
-  final Article article;
-  final Function(Object) onItemSelected;
 
   @override
   _SelectableListItemState createState() => _SelectableListItemState();

@@ -89,7 +89,6 @@ class _AddArticlePageState extends State<AddArticlePage>  with AutomaticKeepAliv
       await setDataFromArticle(widget.arguments);
     } else {
       await setDataFromArticle(await widget._queryCtr.getTestArticle());
-
       editMode = true;
     }
 
@@ -179,7 +178,6 @@ class _AddArticlePageState extends State<AddArticlePage>  with AutomaticKeepAliv
                     }
                   } else {
                     Helpers.showFlushBar(context, "Please enter désignation");
-
                     setState(() {
                       _validateDes = true;
                     });
@@ -606,7 +604,7 @@ class _AddArticlePageState extends State<AddArticlePage>  with AutomaticKeepAliv
   }
 
   //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
+  /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
   Widget addMarquedialogue() {
     return StatefulBuilder(builder: (context, StateSetter setState) {
       return Dialog(

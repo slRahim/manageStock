@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_icons/flutter_icons.dart';
@@ -7,16 +9,20 @@ import 'package:material_design_icons_flutter/material_design_icons_flutter.dart
 
 import 'CustomWidgets/list_tile_card.dart';
 
+// element à afficher lors de listing des articles
 class ArticleListItem extends StatefulWidget {
+
   ArticleListItem({
     @required this.article,
     Key key,
     this.onItemSelected,
+    this.tarification
   })  : assert(article != null),
         super(key: key);
 
   final Article article;
   final Function(Object) onItemSelected;
+  final int tarification ;
 
   @override
   _ArticleListItemState createState() => _ArticleListItemState();
@@ -45,6 +51,7 @@ class _ArticleListItemState extends State<ArticleListItem> {
               builder: (BuildContext context) {
             return addQtedialogue();
           }).then((val) {
+
             setState(() {});
         });
         } else if(widget.onItemSelected != null){
@@ -61,25 +68,29 @@ class _ArticleListItemState extends State<ArticleListItem> {
       subtitle: Text("Ref: " + widget.article.ref),
       trailingChildren: widget.article.selectedQuantite > 0? [
         Text(
-        widget.article.selectedQuantite.toString(),
+          "Prix : "+
+              (widget.article.selectedQuantite * widget.article.selectedPrice).toString(),
         style: TextStyle(
             color: Colors.black,
-            fontSize: 15.0),
+            fontSize: 15.0,
+          fontWeight: FontWeight.bold
+        ),
       ),
         SizedBox(height: 5),
         Text(
-            (widget.article.selectedQuantite * widget.article.selectedPrice).toString(),
+           "Qte : "+
+               widget.article.selectedQuantite.toString(),
           style: TextStyle(
               color: Colors.black,
               fontSize: 15.0),
         )
-      ]: [
-        Text(
-          widget.article.prixVente1.toString(),
-          style: TextStyle(fontSize: 16.0, fontWeight: FontWeight.bold),
-        ),
+      ]:
+      // listing des articles ds le fragement article
+      [
+        trailingChildrenOnArticleFragment(),
         SizedBox(height: 5),
         Text(
+          "Qte : "+
           widget.article.quantite.toString(),
           style: TextStyle(
               color: widget.article.quantite <= widget.article.quantiteMinimum
@@ -91,6 +102,45 @@ class _ArticleListItemState extends State<ArticleListItem> {
     );
   }
 
+  //afficher le prix de vente selon la tarification
+  Widget trailingChildrenOnArticleFragment(){
+    switch (widget.tarification){
+      case 1 :
+        return Text(
+          "Prix : "+
+          widget.article.prixVente1.toString(),
+          style: TextStyle(fontSize: 16.0, fontWeight: FontWeight.bold),
+        );
+        break ;
+
+      case 2:
+        return Text(
+          "Prix : "+
+          widget.article.prixVente2.toString(),
+          style: TextStyle(fontSize: 16.0, fontWeight: FontWeight.bold),
+        );
+        break ;
+
+      case 3 :
+        return Text(
+          "Prix : "+
+          widget.article.prixVente3.toString(),
+          style: TextStyle(fontSize: 16.0, fontWeight: FontWeight.bold),
+        );
+        break ;
+
+      default :
+        return Text(
+          "Prix : "+
+          widget.article.prixVente1.toString(),
+          style: TextStyle(fontSize: 16.0, fontWeight: FontWeight.bold),
+        );
+        break ;
+    }
+
+  }
+
+  //dialog pour modifier le prix et la quantité
   Widget addQtedialogue() {
     return StatefulBuilder(builder: (context, StateSetter setState) {
       Widget dialog = Dialog(
@@ -279,8 +329,21 @@ class _ArticleListItemState extends State<ArticleListItem> {
   }
 
   void selectThisItem() {
-    widget.article.selectedQuantite = 1;
-    widget.article.selectedPrice = widget.article.prixVente1;
+    widget.article.selectedQuantite = 1 ;
+    switch (widget.tarification) {
+      case 1 :
+        widget.article.selectedPrice = widget.article.prixVente1;
+        break;
+      case 2 :
+        widget.article.selectedPrice = widget.article.prixVente2;
+        break ;
+      case 3 :
+        widget.article.selectedPrice = widget.article.prixVente3;
+        break ;
+      default :
+        widget.article.selectedPrice = widget.article.prixVente1;
+        break;
+    }
     widget.onItemSelected(widget.article);
   }
 }

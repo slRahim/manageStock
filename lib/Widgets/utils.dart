@@ -5,6 +5,9 @@ import 'package:gestmob/models/ArticleTva.dart';
 import 'package:gestmob/models/Tiers.dart';
 import 'package:gestmob/models/TiersFamille.dart';
 
+// dropdown menus : marque , prix , famille article , famille tier , tiers  ,
+//    && statut tier , tarification tiers , tva article
+
 List<DropdownMenuItem<ArticleMarque>> buildMarqueDropDownMenuItems(
     List listItems) {
   List<DropdownMenuItem<ArticleMarque>> items = List();

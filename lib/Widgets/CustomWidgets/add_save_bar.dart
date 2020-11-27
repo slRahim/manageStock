@@ -5,6 +5,7 @@ import 'package:gestmob/generated/l10n.dart';
 import 'package:gestmob/search/search_input_sliver.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 
+// app bar de la partie detail et modification
 class AddEditBar extends StatefulWidget with PreferredSizeWidget{
   final bool editMode;
   final bool modification;

@@ -1,6 +1,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:flutter_icons/flutter_icons.dart';
 import 'package:gestmob/Helpers/Helpers.dart';
 import 'package:gestmob/Helpers/QueryCtr.dart';
 import 'package:gestmob/Helpers/Statics.dart';
@@ -19,8 +20,9 @@ class ItemsSliverList extends StatefulWidget {
   final SliverListDataSource dataSource;
   final Function(Object) onItemSelected;
   final bool canRefresh;
+  final int tarification ;
 
-  ItemsSliverList({Key key, @required this.dataSource, this.onItemSelected, this.canRefresh}) : super(key: key);
+  ItemsSliverList({Key key, @required this.dataSource, this.onItemSelected, this.canRefresh , this.tarification}) : super(key: key);
 
   @override
   _ItemsSliverListState createState() => _ItemsSliverListState();
@@ -52,7 +54,7 @@ class _ItemsSliverListState extends State<ItemsSliverList> {
 
   Widget createItemWidget(item){
     if(item is Article){
-      return ArticleListItem(article: item, onItemSelected: widget.onItemSelected,);
+      return ArticleListItem(article: item, onItemSelected: widget.onItemSelected,tarification: widget.tarification,);
     } else if(item is Tiers){
       item.originClientOrFourn = widget.dataSource.listType == ItemsListTypes.clientsList? 0 : 2;
       return TierListItem(tier: item, onItemSelected: widget.onItemSelected,);

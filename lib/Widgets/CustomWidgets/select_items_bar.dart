@@ -7,6 +7,7 @@ import 'package:gestmob/generated/l10n.dart';
 import 'package:gestmob/search/search_input_sliver.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 
+// app bar lors de selection de plusieurs items
 class SelectItemsBar extends StatefulWidget with PreferredSizeWidget{
   final int itemsCount;
   final VoidCallback onConfirm;

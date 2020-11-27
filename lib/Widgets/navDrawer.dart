@@ -12,8 +12,9 @@ import 'package:gestmob/models/HomeItem.dart';
 import 'package:gestmob/models/Profile.dart';
 import 'package:gestmob/ui/home.dart';
 
-import 'ItemsWidgets.dart';
+import 'HomeItemsWidgets.dart';
 
+// le nav drawer restyle
 class NavDrawer extends StatelessWidget {
   var drawerHeaderColor = 0xFF1E90FF;
 
@@ -78,45 +79,26 @@ class NavDrawer extends StatelessWidget {
           )
         });
 
-    /*homeItemWidgetList.add(
-      ListTile(
-        leading: Icon(
-          Icons.help,
-          size: 20,
-          color: Colors.white,
-        ),
-        title: Text(
-          S.of(context).aide,
-          style: TextStyle(color: Colors.white, fontSize: 15),
-        ),
-        onTap: () => {
-          Navigator.of(context).pop(),
-          Helpers.handleIdClick(context, drawerItemHelpId),
-        },
-        trailing: Icon(Icons.keyboard_arrow_right),
-      ),
-    );
-    homeItemWidgetList.add(
-      new Divider(),
-    );*/
-
-    /*homeItemWidgetList.add(
-      ListTile(
-        leading: Icon(
-          Icons.exit_to_app,
-          size: 20,
-          color: Colors.black,
-        ),
-        title: Text(
-          S.of(context).quitter,
-          style: TextStyle(fontSize: 15, color: Colors.red),
-        ),
-        onTap: () => exit(0),
-        trailing: Icon(Icons.keyboard_arrow_right),
-      ),
-    );*/
-
     return homeItemWidgetList;
+  }
+
+
+//the drawer item
+  Widget getDrawerItemWidget(_context, data) {
+    return ListTile(
+      dense: true,
+      leading: iconsSet(data.id, 20),
+      title: Text(
+        data.title,
+        style: TextStyle(color: Colors.white, fontSize: 15),
+      ),
+      onTap: () => {
+        print(data.title),
+        Navigator.of(_context).pop(),
+        Helpers.handleIdClick(_context, data.id),
+      },
+      trailing: Icon(Icons.keyboard_arrow_right),
+    );
   }
 
   @override

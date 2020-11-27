@@ -5,9 +5,9 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gestmob/Helpers/Helpers.dart';
-import 'package:gestmob/Widgets/ItemsWidgets.dart';
-import 'package:gestmob/Widgets/ItemsWidgets.dart';
-import 'package:gestmob/Widgets/ItemsWidgets.dart';
+import 'package:gestmob/Widgets/HomeItemsWidgets.dart';
+import 'package:gestmob/Widgets/HomeItemsWidgets.dart';
+import 'package:gestmob/Widgets/HomeItemsWidgets.dart';
 import 'package:gestmob/Widgets/navDrawer.dart';
 import 'package:gestmob/generated/l10n.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -48,7 +48,7 @@ class _GridHomeWidgetState extends State<GridHomeWidget> {
     homeItemRapports,
     homeItemParametres
   ];
-
+  //get items list +order +
   Future<List<DraggableItem>> asyncStart() async {
 
     for (var i = 0, j = homeItemList.length; i < j; i++) {
@@ -147,10 +147,6 @@ class _GridHomeWidgetState extends State<GridHomeWidget> {
                     key: _containerKey,
                     draggableMode: false,
                     autoReorder: true,
-                    // allWayUseLongPress: true,
-                    // slot decoration
-                    /*slotDecoration: BoxDecoration(
-                border: Border.all(width: 2, color: Colors.blue)),*/
                     // the decoration when dragging item
                     dragDecoration: BoxDecoration(boxShadow: [
                       BoxShadow(color: Colors.black, blurRadius: 10)
@@ -199,8 +195,7 @@ class _GridHomeWidgetState extends State<GridHomeWidget> {
     );
   }
 
-  DraggableItem getMissingItem(
-      BuildContext context, List<DraggableItem> items, int count) {
+  DraggableItem getMissingItem(BuildContext context, List<DraggableItem> items, int count) {
     for (DraggableItem item in originalHomeDraggableItemList) {
       if (!items.contains(item)) {
         return item;

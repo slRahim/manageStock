@@ -9,24 +9,7 @@ import 'package:gestmob/models/Article.dart';
 import 'package:gestmob/models/HomeItem.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-
-Widget getDrawerItemWidget(_context, data) {
-  return ListTile(
-    dense: true,
-    leading: iconsSet(data.id, 20),
-    title: Text(
-      data.title,
-      style: TextStyle(color: Colors.white, fontSize: 15),
-    ),
-    onTap: () => {
-      print(data.title),
-      Navigator.of(_context).pop(),
-      Helpers.handleIdClick(_context, data.id),
-    },
-    trailing: Icon(Icons.keyboard_arrow_right),
-  );
-}
-
+// element de menu de home
 class HomeDraggableItem extends DraggableItem {
   int index;
   final String key;
@@ -35,8 +18,7 @@ class HomeDraggableItem extends DraggableItem {
   Widget child, deleteButton;
   final Function onTap;
 
-  HomeDraggableItem(
-      {this.key = 'key', this.index, this.onTap, this.context, this.data}) {
+  HomeDraggableItem({this.key = 'key', this.index, this.onTap, this.context, this.data}) {
     String title = data == null ? "Add Button" : data.title;
     String id = data == null ? "addButtonHomeItemId" : data.id;
 

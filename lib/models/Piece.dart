@@ -21,15 +21,16 @@ class Piece{
 
   int _tarification;
   int _transformer;
-  double _total_ht;
-  double _total_tva;
-  double _total_ttc;
+  double _total_ht=0;
+  double _total_tva = 0;
+  double _total_ttc = 0;
   double _timbre;
   double _net_a_payer = 0;
   double _regler;
   double _reste;
 
   Piece.init();
+  Piece.typePiece(this._piece);
   Piece.fromMap(dynamic obj) {
     this._id = obj["id"];
     this._tier_id = obj["Tier_id"];

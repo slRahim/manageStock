@@ -2,6 +2,8 @@ import 'dart:async';
 import 'dart:io' as io;
 import 'dart:io';
 
+import 'package:gestmob/Helpers/Statics.dart';
+import 'package:gestmob/models/Tiers.dart';
 import 'package:path/path.dart';
 import 'package:gestmob/models/Article.dart';
 import 'package:sqflite/sqflite.dart';
@@ -28,23 +30,24 @@ class SqlLiteDatabaseHelper {
     String databasesPath = await getDatabasesPath();
     String dbPath = join(databasesPath, 'gestmob.db');
 
-    Database database = await openDatabase(dbPath, version: 1, onCreate: _onCreate);
+    Database database = await openDatabase(dbPath, version: 2, onCreate: _onCreate);
     return database;
   }
 
   void _onCreate(Database db, int version) async {
-
 
     await createProfileTable(db, version);
     await createArticlesTable(db, version);
     await createTiersTable(db, version);
     await createPiecesTable(db, version);
     await createJournauxTable(db, version);
-
+    await createFormatPieceTable(db ,version);
+    await createMyParamTable(db , version);
     await setInitialData(db, version);
 
   }
 
+  // les informations de la societe
   Future<void> createProfileTable(Database db, int version) async {
     await db.execute("""CREATE TABLE IF NOT EXISTS Profile (
         
@@ -80,6 +83,7 @@ class SqlLiteDatabaseHelper {
 
   }
 
+  // table des artciles
   Future<void> createArticlesTable(Database db, int version) async {
     await db.execute("""CREATE TABLE IF NOT EXISTS Articles (
         
@@ -111,7 +115,7 @@ class SqlLiteDatabaseHelper {
 
         )""");
 
-
+    //table des marques des articles
     await db.execute("""CREATE TABLE IF NOT EXISTS ArticlesMarques (
         
         id INTEGER PRIMARY KEY,
@@ -120,7 +124,7 @@ class SqlLiteDatabaseHelper {
 
         )""");
 
-
+    // table famille des articles
     await db.execute("""CREATE TABLE IF NOT EXISTS ArticlesFamilles (
         
         id INTEGER PRIMARY KEY,
@@ -129,7 +133,7 @@ class SqlLiteDatabaseHelper {
 
         )""");
 
-
+    //table des tva de l'article
     await db.execute("""CREATE TABLE IF NOT EXISTS ArticlesTva (
         
         id INTEGER PRIMARY KEY,
@@ -138,6 +142,7 @@ class SqlLiteDatabaseHelper {
         )""");
   }
 
+  //table des client et des fournisseur  ( Clientfour : 0=>cliant , 1=>client/fournisseur , 2=>fournisseur)
   Future<void> createTiersTable(Database db, int version) async {
     await db.execute("""CREATE TABLE IF NOT EXISTS Tiers (
         
@@ -164,7 +169,7 @@ class SqlLiteDatabaseHelper {
 
         )""");
 
-
+    // table famille de client ou fournisseur
     await db.execute("""CREATE TABLE IF NOT EXISTS TiersFamilles (
         
         id INTEGER PRIMARY KEY,
@@ -173,12 +178,13 @@ class SqlLiteDatabaseHelper {
         )""");
   }
 
+  //table des factures
   Future<void> createPiecesTable(Database db, int version) async {
     await db.execute("""CREATE TABLE IF NOT EXISTS Pieces (
         
         id INTEGER PRIMARY KEY,
         Mov integer DEFAULT 1,
-        Transformer integer DEFAULT 1,
+        Transformer integer DEFAULT 0,
         Piece VARCHAR(3),
         Num_piece VARCHAR(15),
         Date integer,
@@ -195,6 +201,7 @@ class SqlLiteDatabaseHelper {
         )""");
   }
 
+  //table des articles ds une facture
   Future<void> createJournauxTable(Database db, int version) async {
     await db.execute("""CREATE TABLE IF NOT EXISTS Journaux (
         
@@ -202,12 +209,30 @@ class SqlLiteDatabaseHelper {
         Mov integer DEFAULT 1,
         Date VARCHAR(50),
         Piece_id integer,
+        Piece_type VARCHAR(4),
         Article_id integer,
         Qte Double,
         Prix_ht Double,
         Tva Double
 
         )""");
+  }
+
+  // table des format et current index pour piece
+  Future<void> createFormatPieceTable(Database db , int version) async {
+    await db.execute("""CREATE TABLE IF NOT EXISTS FormatPiece (
+    
+        id INTEGER PRIMARY KEY,
+        Format VARCHAR(20),
+        Piece VARCHAR(4),
+        Current_index integer
+        
+        )""");
+  }
+
+  //table speciale pour les paraméter de l'app
+  Future<void> createMyParamTable (Database db , int version ) async{
+
   }
 
   Future<void> setInitialData(Database db, int version) async {
@@ -241,7 +266,28 @@ class SqlLiteDatabaseHelper {
     batch.rawInsert('INSERT INTO ArticlesTva(Tva) VALUES(19)');
     batch.rawInsert('INSERT INTO ArticlesTva(Tva) VALUES(29)');
 
+    batch.rawInsert('INSERT INTO FormatPiece(Format , Piece , Current_index) VALUES("XXXX/YYYY"  , "FP" , 0)');
+    batch.rawInsert('INSERT INTO FormatPiece(Format , Piece , Current_index) VALUES("XXXX/YYYY"  , "CC" , 0)');
+    batch.rawInsert('INSERT INTO FormatPiece(Format , Piece , Current_index) VALUES("XXXX/YYYY"  , "BL" , 0)');
+    batch.rawInsert('INSERT INTO FormatPiece(Format , Piece , Current_index) VALUES("XXXX/YYYY"  , "FC" , 0)');
+    batch.rawInsert('INSERT INTO FormatPiece(Format , Piece , Current_index) VALUES("XXXX/YYYY"  , "RC" , 0)');
+    batch.rawInsert('INSERT INTO FormatPiece(Format , Piece , Current_index) VALUES("XXXX/YYYY"  , "AF" , 0)');
+    batch.rawInsert('INSERT INTO FormatPiece(Format , Piece , Current_index) VALUES("XXXX/YYYY"  , "BC" , 0)');
+    batch.rawInsert('INSERT INTO FormatPiece(Format , Piece , Current_index) VALUES("XXXX/YYYY"  , "BR" , 0)');
+    batch.rawInsert('INSERT INTO FormatPiece(Format , Piece , Current_index) VALUES("XXXX/YYYY"  , "FF" , 0)');
+    batch.rawInsert('INSERT INTO FormatPiece(Format , Piece , Current_index) VALUES("XXXX/YYYY"  , "RF" , 0)');
+    batch.rawInsert('INSERT INTO FormatPiece(Format , Piece , Current_index) VALUES("XXXX/YYYY"  , "AC" , 0)');
+
+    Tiers tier0 = new Tiers(null, "Passagé", "qrcode", 0, 0, 1, "adresse", "ville", "telephone", "000000", "fax", "email", 0, 0, 0, false);
+    tier0.clientFour = 0 ;
+    batch.insert(DbTablesNames.tiers, tier0.toMap());
+
+    Tiers tier2 = new Tiers(null, "Passagé", "qrcode", 0, 0, 1, "adresse", "ville", "telephone", "000000", "fax", "email", 0, 0, 0, false);
+    tier2.clientFour = 2 ;
+    batch.insert(DbTablesNames.tiers, tier2.toMap());
+
     await batch.commit();
+
 
   }
 

@@ -28,8 +28,7 @@ class ProfilePage extends StatefulWidget {
   _ProfilePageState createState() => _ProfilePageState();
 }
 
-class _ProfilePageState extends State<ProfilePage>
-    with TickerProviderStateMixin {
+class _ProfilePageState extends State<ProfilePage> with TickerProviderStateMixin {
   
   var arguments;
 
@@ -37,7 +36,9 @@ class _ProfilePageState extends State<ProfilePage>
 
   final _scaffoldKey = GlobalKey<ScaffoldState>();
 
+  //le mode d'edition et activer ou non
   bool editMode = true;
+  // esq cette page accepte le mode modification ou non
   bool modification = false;
 
   bool finishedLoading = false;
@@ -625,53 +626,15 @@ class _ProfilePageState extends State<ProfilePage>
   Widget imageTab() {
     return SingleChildScrollView(
       child: ImagePickerWidget(
-        imageFile: _itemImage,
-          editMode: editMode, onImageChange: (File imageFile) =>
-      {
-        _itemImage = imageFile
-      }),
+          imageFile: _itemImage,
+          editMode: editMode,
+          onImageChange: (File imageFile) => {_itemImage = imageFile}
+          ),
     );
   }
 
   Widget securityTab() {
     return EnterPin(editMode?onCodePinChanged:null, arguments.codepin);
-  }
-
-  Future<Object> makeItem() async {
-    var item = new Profile.empty();
-    item.id = arguments.id;
-
-    item.codepin = arguments.codepin;
-    item.codePinEnabled = arguments.codePinEnabled;
-
-   item.raisonSociale = _raisonSocialeControl.text;
-   item.statut = Statics.statutItems.indexOf(_selectedStatut);
-   item.activite = _activiteControl.text;
-   item.adresse = _adresseControl.text;
-   item.ville = _villeControl.text;
-   item.pays = _paysControl.text;
-   item.telephone = _telephoneControl.text;
-   item.telephone2 = _telephone2Control.text;
-   item.mobile = _mobileControl.text;
-   item.mobile2 = _mobile2Control.text;
-   item.fax = _faxControl.text;
-   item.email = _emailControl.text;
-   item.addressWeb = _addresseWebControl.text;
-   item.rc = _rcControl.text;
-   item.ai = _aiControl.text;
-   item.nif = _nifControl.text;
-   item.nis = _nisControl.text;
-   item.capital = double.tryParse(_capitalsocialControl.text);
-
-    if (_itemImage != null) {
-      item.imageUint8List = Helpers.getUint8ListFromFile(_itemImage);
-    } else {
-      Uint8List image = await Helpers.getDefaultImageUint8List();
-      item.imageUint8List = image;
-    }
-    return item;
-
-    return await _queryCtr.getProfileById(1);
   }
 
   onCodePinChanged (String newCodePin){
@@ -736,5 +699,42 @@ class _ProfilePageState extends State<ProfilePage>
       Helpers.showFlushBar(context, "Error: something went wrong");
       return Future.value(-1);
     }
+  }
+
+  Future<Object> makeItem() async {
+    var item = new Profile.empty();
+    item.id = arguments.id;
+
+    item.codepin = arguments.codepin;
+    item.codePinEnabled = arguments.codePinEnabled;
+
+    item.raisonSociale = _raisonSocialeControl.text;
+    item.statut = Statics.statutItems.indexOf(_selectedStatut);
+    item.activite = _activiteControl.text;
+    item.adresse = _adresseControl.text;
+    item.ville = _villeControl.text;
+    item.pays = _paysControl.text;
+    item.telephone = _telephoneControl.text;
+    item.telephone2 = _telephone2Control.text;
+    item.mobile = _mobileControl.text;
+    item.mobile2 = _mobile2Control.text;
+    item.fax = _faxControl.text;
+    item.email = _emailControl.text;
+    item.addressWeb = _addresseWebControl.text;
+    item.rc = _rcControl.text;
+    item.ai = _aiControl.text;
+    item.nif = _nifControl.text;
+    item.nis = _nisControl.text;
+    item.capital = double.tryParse(_capitalsocialControl.text);
+
+    if (_itemImage != null) {
+      item.imageUint8List = Helpers.getUint8ListFromFile(_itemImage);
+    } else {
+      Uint8List image = await Helpers.getDefaultImageUint8List();
+      item.imageUint8List = image;
+    }
+    return item;
+
+    return await _queryCtr.getProfileById(1);
   }
 }

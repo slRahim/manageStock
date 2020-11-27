@@ -21,7 +21,8 @@ import 'AddArticlePage.dart';
 
 class PiecesFragment extends StatefulWidget {
   final int clientFourn;
-  const PiecesFragment ({Key key, this.clientFourn}): super(key: key);
+  final String peaceType ;
+  const PiecesFragment ({Key key, this.clientFourn , this.peaceType}): super(key: key);
 
   @override
   _PiecesFragmentState createState() => _PiecesFragmentState();
@@ -34,7 +35,6 @@ class _PiecesFragmentState extends State<PiecesFragment> {
   var _filterMap = new Map<String, dynamic>();
   var _emptyFilterMap = new Map<String, dynamic>();
 
-  List<String> peaceType = ["FP", "CC", "BL", "FC", "RC", "AF", "BC", "BR", "FF", "RF", "AF"];
   List<Object> _familleItems;
   List<DropdownMenuItem<Object>> _familleDropdownItems;
   var _selectedFamille;
@@ -59,8 +59,7 @@ class _PiecesFragmentState extends State<PiecesFragment> {
     return Scaffold(
         floatingActionButton: FloatingActionButton(
           onPressed: () {
-             Navigator.of(context).pushNamed(RoutesKeys.addPiece,
-                arguments: new Piece.init());
+             Navigator.of(context).pushNamed(RoutesKeys.addPiece, arguments: new Piece.typePiece("FP"));
           },
           child: Icon(Icons.add),
         ),
@@ -200,7 +199,7 @@ class _PiecesFragmentState extends State<PiecesFragment> {
   }
 
   void fillFilter(Map<String, dynamic> filter) {
-    filter["Piece"] = peaceType[0];
+    filter["Piece"] = widget.peaceType ;
     filter["Mov"] = 0;
   }
 

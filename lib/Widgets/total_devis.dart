@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:gestmob/models/Piece.dart';
 
+// montant de facture à afficher ds le bas de screen add piece
 class TotalDevis extends StatelessWidget{
   final Piece piece;
 
@@ -18,24 +19,28 @@ class TotalDevis extends StatelessWidget{
               Row(
                 mainAxisSize: MainAxisSize.max,
                 children: [
+                  Text("Total HT = "),
+                  Expanded(child: Text(".............................................................................................................",
+                    maxLines: 1,)),
+                  Text(piece.total_ht.toString() + " DA"),
+                ],
+              ),
+              Row(
+                mainAxisSize: MainAxisSize.max,
+                children: [
+                  Text("Total TVA = "),
+                  Expanded(child: Text(".............................................................................................................",
+                    maxLines: 1,)),
+                  Text(piece.total_tva.toString() + " DA"),
+                ],
+              ),
+              Row(
+                mainAxisSize: MainAxisSize.max,
+                children: [
                   Text("Net a payer = "),
                   Expanded(child: Text(".............................................................................................................",
                     maxLines: 1,)),
-                  Text(piece.net_a_payer.toString() + " DA"),
-                ],
-              ),
-              Row(
-                mainAxisSize: MainAxisSize.max,
-                children: [
-                  Expanded(child: Text("Net a payer")),
-                  Text(piece.net_a_payer.toString()),
-                ],
-              ),
-              Row(
-                mainAxisSize: MainAxisSize.max,
-                children: [
-                  Expanded(child: Text("Net a payer")),
-                  Text(piece.net_a_payer.toString()),
+                  Text(piece.total_ttc.toString() + " DA"),
                 ],
               ),
               SizedBox(height: 20),

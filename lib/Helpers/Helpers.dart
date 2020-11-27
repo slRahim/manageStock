@@ -9,6 +9,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:gestmob/cubit/home_cubit.dart';
 import 'package:gestmob/models/Article.dart';
+import 'package:gestmob/models/FormatPiece.dart';
 import 'package:gestmob/models/HomeItem.dart';
 import 'package:gestmob/models/Piece.dart';
 import 'package:map_launcher/map_launcher.dart';
@@ -104,8 +105,8 @@ class Helpers {
   }
 
   static void showFlushBar(BuildContext context, String message) {
-    showToast(message);
-    /*Flushbar(
+    // showToast(message);
+    Flushbar(
       isDismissible: false,
       message: message,
       icon: Icon(
@@ -117,7 +118,7 @@ class Helpers {
       leftBarIndicatorColor: Colors.blue[300],
       margin: EdgeInsets.all(8),
       borderRadius: 8,
-    )..show(context);*/
+    )..show(context);
   }
 
   static Future<Uint8List> getDefaultImageUint8List() async {
@@ -173,6 +174,32 @@ class Helpers {
 
   static void quitApp() {
     SystemChannels.platform.invokeMethod('SystemNavigator.pop');
+  }
+
+  static String generateNumPiece(FormatPiece piece){
+    switch (piece.format) {
+      case NumPieceFormat.format1:
+        var now = new DateTime.now();
+        String year = now.year.toString();
+         int index = piece.currentindex+1 ;
+        return "$index/$year" ;
+        break;
+
+      case NumPieceFormat.format2:
+        var now = new DateTime.now();
+        String year = now.year.toString();
+        String month= now.month.toString();
+        int index = piece.currentindex+1 ;
+        return "$index/$month/$year" ;
+        break;
+
+      default:
+        var now = new DateTime.now();
+        String year = now.year.toString();
+        int index = piece.currentindex+1;
+        return "$index/$year" ;
+        break;
+    }
   }
 
 }

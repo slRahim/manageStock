@@ -7,6 +7,7 @@ import 'package:gestmob/generated/l10n.dart';
 import 'package:gestmob/search/search_input_sliver.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 
+// la bar de recherche utiliser ds les fragements de listing
 class SearchBar extends StatefulWidget with PreferredSizeWidget{
   final String title;
   final BuildContext mainContext;

@@ -3,6 +3,7 @@ import 'package:gestmob/Helpers/Helpers.dart';
 import 'package:gestmob/Helpers/TouchIdUtil.dart';
 import 'package:vibration/vibration.dart';
 
+// special pour l'ajout et modification de pin d'auth ds le screen profile
 class EnterPin extends StatefulWidget {
   final Function(String newCodePin) onCodePinChanged;
   final String codePin;

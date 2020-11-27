@@ -3,8 +3,6 @@ import 'package:gestmob/models/Profile.dart';
 
 class Statics {
   static const RoutesKeys routes = const RoutesKeys();
-  static const addArticle = '/add_article';
-
   static List<String> statutItems = [
     "M.",
     "Mlle.",
@@ -17,6 +15,7 @@ class Statics {
     "EPIC.",
     "ETP."
   ];
+  static List<int> tarificationItems = [1, 2, 3];
 }
 
 class Profiles {
@@ -55,11 +54,34 @@ class DbTablesNames {
   static const pieces = 'Pieces';
   static const journaux = 'Journaux';
   static const tiersFamille = 'TiersFamilles';
+  static const formatPiece = "FormatPiece" ;
+  static const myparams = "MyParams" ;
+}
+
+class PieceType {
+  const PieceType();
+  static const devis = 'FP';
+  static const commandeClient= "CC";
+  static const bonLivraison = "BL";
+  static const factureClient="FC";
+  static const retourClient = "RC";
+  static const avoirFournisseur="AF";
+  static const avoirClient="AC";
+  static const bonCommande = "BC";
+  static const bonReception = "BR";
+  static const factureFournisseur="FF";
+  static const retourFournisseur= "RF";
 }
 
 class Prefs {
   const Prefs();
   static int PriceCount = 3;
+}
+
+class NumPieceFormat {
+  const NumPieceFormat() ;
+  static const format1 = "XXXX/YYYY";
+  static const format2 = "XXXX/MM/YYYY";
 }
 
 

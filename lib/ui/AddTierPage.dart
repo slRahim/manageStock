@@ -59,7 +59,7 @@ class _AddTierPageState extends State<AddTierPage>
   List<DropdownMenuItem<String>> _statutDropdownItems;
   String _selectedStatut;
 
-  List<int> _tarificationItems = [1, 2, 3];
+  List<int> _tarificationItems = Statics.tarificationItems ;
   List<DropdownMenuItem<int>> _tarificationDropdownItems;
   int _selectedTarification;
 

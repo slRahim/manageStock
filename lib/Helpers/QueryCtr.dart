@@ -5,6 +5,8 @@ import 'package:gestmob/models/Article.dart';
 import 'package:gestmob/models/ArticleFamille.dart';
 import 'package:gestmob/models/ArticleMarque.dart';
 import 'package:gestmob/models/ArticleTva.dart';
+import 'package:gestmob/models/FormatPiece.dart';
+import 'package:gestmob/models/Journaux.dart';
 import 'package:gestmob/models/Piece.dart';
 import 'package:gestmob/models/Profile.dart';
 import 'package:gestmob/models/Tiers.dart';
@@ -38,26 +40,29 @@ class QueryCtr {
     return tier;
   }
 
-  Future<List<Article>> getAllArticles(int offset, int limit, {String searchTerm, Map<String, dynamic> filters}) async {
+  Future<List<Article>> getAllArticles({int offset, int limit, String searchTerm, Map<String, dynamic> filters}) async {
     String query = 'SELECT * FROM ' + DbTablesNames.articles;
 
-    int marque = filters["Id_Marque"] != null? filters["Id_Marque"] : -1;
-    int famille = filters["Id_Famille"] != null? filters["Id_Famille"] : -1;
-    bool stock = filters["inStock"] != null? filters["inStock"] : false;
+    if(filters != null){
+      int marque = filters["Id_Marque"] != null? filters["Id_Marque"] : -1;
+      int famille = filters["Id_Famille"] != null? filters["Id_Famille"] : -1;
+      bool stock = filters["inStock"] != null? filters["inStock"] : false;
 
-    String marqueFilter = marque > 0 ? " AND Id_Marque = $marque" : "";
-    String familleFilter = famille > 0 ? " AND Id_Famille = $famille" : "";
-    String stockFilter = stock ? " AND Qte > 0 " : "";
+      String marqueFilter = marque > 0 ? " AND Id_Marque = $marque" : "";
+      String familleFilter = famille > 0 ? " AND Id_Famille = $famille" : "";
+      String stockFilter = stock ? " AND Qte > 0 " : "";
+
+
+      query += " where Designation like '%${searchTerm??''}%'";
+
+      query += marqueFilter;
+      query += familleFilter;
+      query += stockFilter;
+    }
+
 
     Database dbClient = await _databaseHelper.db;
     var res;
-
-    query += " where Designation like '%${searchTerm??''}%'";
-
-    query += marqueFilter;
-    query += familleFilter;
-    query += stockFilter;
-
 
     query += ' ORDER BY id DESC';
 
@@ -136,6 +141,15 @@ class QueryCtr {
     return list;
   }
 
+  Future <int> getPieceByNum(String num_piece) async{
+    var dbClient = await _databaseHelper.db ;
+    var res = await dbClient.query(DbTablesNames.pieces ,where: 'Num_piece LIKE ?', whereArgs: ['$num_piece']);
+    if(res.length > 0){
+      return 1 ;
+    }
+    return 0 ;
+  }
+
   Future<List<ArticleMarque>> getAllArticleMarques() async {
     Database dbClient = await _databaseHelper.db;
     var res = await dbClient.rawQuery('SELECT * FROM ' + DbTablesNames.articlesMarques);
@@ -201,6 +215,31 @@ class QueryCtr {
     return res;
   }
 
+  Future<List<FormatPiece>> getFormatPiece (String pieceType) async {
+    var dbClient = await _databaseHelper.db ;
+    var res = await dbClient.query(DbTablesNames.formatPiece ,where: 'Piece LIKE ?', whereArgs: ['$pieceType']);
+
+    List<FormatPiece> list = new List<FormatPiece>();
+    for(int i = 0 ; i<res.length ; i++){
+      FormatPiece  formatPiece = FormatPiece.fromMap(res[i]);
+      list.add(formatPiece);
+    }
+
+    return list ;
+  }
+
+  Future<List<Journaux>> getJournalPiece(Piece piece) async{
+    var dbClient = await _databaseHelper.db ;
+    var res = await dbClient.query(DbTablesNames.journaux, where: 'Piece_id = ?' , whereArgs: [piece.id]);
+
+    List<Journaux> list = new List<Journaux>();
+    for(int i=0 ; i<res.length ; i++){
+      Journaux journaux = Journaux.fromMap(res[i]);
+      list.add(journaux);
+    }
+    return list ;
+  }
+
   Future<Article> getTestArticle() async {
     // var bytes = await rootBundle.load('assets/article.png');
     /*String tempPath = (await getTemporaryDirectory()).path;
@@ -213,7 +252,7 @@ class QueryCtr {
   }
 
   Future<Tiers> getTestTier() async {
-    Tiers tier = new Tiers(null, "reasonSociale", "qrcode", 0, 0, 0, "adresse", "ville", "telephone", "0658228909", "fax", "email", 10, 15, 3, false);
+    Tiers tier = new Tiers(null, "Passagé", "qrcode", 0, 0, 1, "adresse", "ville", "telephone", "000000", "fax", "email", 0, 0, 0, false);
     return tier;
   }
 

@@ -4,6 +4,7 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 
+// represante la page de l'ajout ou representation de l'image (profile , article , tiers )
 class ImagePickerWidget extends StatefulWidget {
   final bool editMode;
   final int scallFactor;

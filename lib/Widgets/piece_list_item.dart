@@ -9,6 +9,7 @@ import 'package:intl/date_symbol_data_local.dart';
 
 import 'CustomWidgets/list_tile_card.dart';
 
+// element à afficher lors de listing des factures
 class PieceListItem extends StatelessWidget {
   const PieceListItem({
     @required this.piece,
@@ -42,7 +43,7 @@ class PieceListItem extends StatelessWidget {
     title: Text(piece.num_piece),
     subtitle: Text("RS: " + piece.raisonSociale),
     trailingChildren: [
-      Text(piece.net_a_payer.toString(), style: TextStyle(fontSize: 16.0, fontWeight: FontWeight.bold),),
+      Text(piece.total_ttc.toString(), style: TextStyle(fontSize: 16.0, fontWeight: FontWeight.bold),),
       SizedBox(height: 5),
       Text(Helpers.dateToText(piece.date), style: TextStyle(color: Colors.black, fontSize: 14.0),)
     ],

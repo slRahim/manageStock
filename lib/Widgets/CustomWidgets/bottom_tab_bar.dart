@@ -1,6 +1,7 @@
 import 'package:fancy_bottom_bar/fancy_bottom_bar.dart';
 import 'package:flutter/material.dart';
 
+// le tab bar au dessous des screens add/detail/modification
 class BottomTabBar extends StatelessWidget{
   final TabController controller;
   final tabs;

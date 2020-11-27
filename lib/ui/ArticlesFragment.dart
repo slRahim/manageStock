@@ -21,12 +21,10 @@ import 'package:material_design_icons_flutter/material_design_icons_flutter.dart
 import 'AddArticlePage.dart';
 
 class ArticlesFragment extends StatefulWidget {
-  // final QueryCtr queryCtr;
-  // const ArticlesFragment ({Key key, this.queryCtr}): super(key: key);
-
   final Function(List<dynamic>) onConfirmSelectedItems;
+  final int tarification ;
 
-  const ArticlesFragment({Key key, this.onConfirmSelectedItems}) : super(key: key);
+  const ArticlesFragment({Key key, this.onConfirmSelectedItems , this.tarification}) : super(key: key);
   @override
   _ArticlesFragmentState createState() => _ArticlesFragmentState();
 }
@@ -75,10 +73,13 @@ class _ArticlesFragmentState extends State<ArticlesFragment> {
           child: widget.onConfirmSelectedItems != null? Icon(MdiIcons.barcode) : Icon(Icons.add),
         ),
         appBar: getAppBar(setState),
-        body: ItemsSliverList(dataSource: _dataSource, canRefresh: _selectedItems.length <= 0,
-            onItemSelected: widget.onConfirmSelectedItems != null? (selectedItem) {
-          onItemSelected(setState, selectedItem);
-        } : null
+        body: ItemsSliverList(
+            dataSource: _dataSource,
+            canRefresh: _selectedItems.length <= 0,
+            tarification: widget.tarification,
+            onItemSelected: widget.onConfirmSelectedItems != null ? (selectedItem) {
+              onItemSelected(setState, selectedItem);
+            } : null
         ));
   }
 

@@ -8,6 +8,7 @@ import 'package:google_fonts/google_fonts.dart';
 
 import 'CustomWidgets/list_tile_card.dart';
 
+// element à afficher lors de listing des clients ou des fournisseurs
 class TierListItem extends StatelessWidget {
   const TierListItem({
     @required this.tier,
@@ -34,7 +35,7 @@ class TierListItem extends StatelessWidget {
     },
     leading: CircleAvatar(
       radius: 20,
-      backgroundImage: MemoryImage(tier.imageUint8List),
+      backgroundImage:(tier.imageUint8List == null) ? MemoryImage(tier.imageUint8List) : null,
     ),
     title: Text(tier.raisonSociale),
     subtitle: Text("Tel: " + tier.mobile),
@@ -42,7 +43,7 @@ class TierListItem extends StatelessWidget {
       Text(
         tier.credit.toString(),
         style: TextStyle(
-            color: tier.credit > 0 ? Colors.black : Colors.redAccent,
+            color: tier.credit > 0 ? Colors.redAccent : Colors.black,
             fontSize: 15.0),
       )
       // fournisseur reverse colors
