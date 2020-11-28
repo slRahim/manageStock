@@ -202,4 +202,42 @@ class Helpers {
     }
   }
 
+  static String getPieceTitle(String piece){
+    switch (piece){
+      case PieceType.devis :
+        return "Devis";
+        break;
+      case PieceType.avoirClient :
+        return "Avoir Client";
+        break;
+      case PieceType.avoirFournisseur :
+        return "Avoir Fournisseur";
+        break;
+      case PieceType.bonCommande :
+        return "Bon de Commande";
+        break;
+      case PieceType.bonLivraison :
+        return "Bon de Livraison";
+        break;
+      case PieceType.bonReception :
+        return "Bon de Reception";
+        break;
+      case PieceType.commandeClient :
+        return "Commande Client";
+        break;
+      case PieceType.factureClient :
+        return "Facture de Vente";
+        break;
+      case PieceType.factureFournisseur :
+        return "Facture d'Achat";
+        break;
+      case PieceType.retourClient :
+        return "Retour Client";
+        break;
+      case PieceType.retourFournisseur :
+        return "Retour Fournisseur";
+        break;
+    }
+  }
+
 }

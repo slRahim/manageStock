@@ -219,6 +219,12 @@ class QueryCtr {
     return res;
   }
 
+  Future<int> removeItemFromTable(String tableName , item)async {
+    var dbClient = await _databaseHelper.db ;
+    int res = await dbClient.delete(tableName , where: "id=?" , whereArgs: [item.id]);
+    return res ;
+  }
+
   Future<List<FormatPiece>> getFormatPiece (String pieceType) async {
     var dbClient = await _databaseHelper.db ;
     var res = await dbClient.query(DbTablesNames.formatPiece ,where: 'Piece LIKE ?', whereArgs: ['$pieceType']);
@@ -244,6 +250,20 @@ class QueryCtr {
       list.add(article);
     }
     return list ;
+  }
+
+  Future<int> updateJournaux(String tableName, item)async{
+    var dbClient = await _databaseHelper.db ;
+    var res = await dbClient.update(tableName, item.toMap(), where: "Piece_id = ? AND Article_id = ?" , whereArgs: [item.piece_id , item.article_id] );
+
+    return res ;
+  }
+
+  Future<int> deleteJournaux(String tableName, item)async{
+    var dbClient = await _databaseHelper.db ;
+    var res = await dbClient.delete(tableName, where: "Piece_id=? AND Article_id=?" , whereArgs: [item.piece_id , item.article_id] );
+
+    return res ;
   }
 
   Future<Article> getTestArticle() async {

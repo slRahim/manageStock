@@ -22,33 +22,14 @@ class HomeCubit extends Cubit<HomeState> {
     emit(new HomeLoading());
 
     switch (homeItemId) {
-      case homeItemRapportsId:
-        emit(new HomeLoading());
 
-        break;
-
-      case homeItemTresorerieId:
-        emit(new HomeLoading());
-
-        break;
-
-      case homeItemFactureDachatId:
-        emit(new HomeLoading());
-
-        break;
-
-      case homeItemBonDeReceptionId:
-        emit(new HomeLoading());
-
+      case homeItemAccueilId:
+        emit(new HomeLoaded(GridHomeWidget()));
         break;
 
       case homeItemTableauDeBordId:
         emit(new HomeLoading());
 
-        break;
-
-      case homeItemAccueilId:
-        emit(new HomeLoaded(GridHomeWidget()));
         break;
 
       case homeItemArticlesId:
@@ -64,22 +45,41 @@ class HomeCubit extends Cubit<HomeState> {
         break;
 
       case homeItemDevisId:
-        //false param piece type (PF)
         emit(new FragmentLoaded(PiecesFragment(clientFourn: 0,peaceType: 'FP')));
 
         break;
 
       case homeItemCommandeClientId:
-        emit(new HomeLoading());
+        emit(new FragmentLoaded(PiecesFragment(clientFourn: 0,peaceType: 'CC')));
 
         break;
 
       case homeItemBonDeLivraisonId:
-        emit(new HomeLoading());
+        emit(new FragmentLoaded(PiecesFragment(clientFourn: 0,peaceType: 'BL')));
+
+        break;
+
+      case homeItemBonDeReceptionId:
+        emit(new FragmentLoaded(PiecesFragment(clientFourn: 0,peaceType: 'BR')));
+
+        break;
+
+      case homeItemFactureDachatId:
+        emit(new FragmentLoaded(PiecesFragment(clientFourn: 0,peaceType: 'FF')));
 
         break;
 
       case homeItemFactureDeVenteId:
+        emit(new FragmentLoaded(PiecesFragment(clientFourn: 0,peaceType: 'FC')));
+
+        break;
+
+      case homeItemRapportsId:
+        emit(new HomeLoading());
+
+        break;
+
+      case homeItemTresorerieId:
         emit(new HomeLoading());
 
         break;

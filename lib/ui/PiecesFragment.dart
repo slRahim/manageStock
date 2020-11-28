@@ -29,7 +29,7 @@ class PiecesFragment extends StatefulWidget {
 }
 
 class _PiecesFragmentState extends State<PiecesFragment> {
-  bool isSearching = false;
+  // bool isSearching = false;
   bool isFilterOn = false;
   final TextEditingController searchController = new TextEditingController();
 
@@ -172,14 +172,14 @@ class _PiecesFragmentState extends State<PiecesFragment> {
     return Scaffold(
         floatingActionButton: FloatingActionButton(
           onPressed: () {
-             Navigator.of(context).pushNamed(RoutesKeys.addPiece, arguments: new Piece.typePiece("FP"));
+             Navigator.of(context).pushNamed(RoutesKeys.addPiece, arguments: new Piece.typePiece(widget.peaceType));
           },
           child: Icon(Icons.add),
         ),
         appBar: SearchBar(
           searchController: searchController,
           mainContext: context,
-          title: "Pieces",
+          title: Helpers.getPieceTitle(widget.peaceType),
           isFilterOn: isFilterOn,
           onSearchChanged: (String search) => _dataSource.updateSearchTerm(search),
           onFilterPressed: () async {

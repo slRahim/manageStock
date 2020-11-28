@@ -16,13 +16,15 @@ class ArticleListItem extends StatefulWidget {
     @required this.article,
     Key key,
     this.onItemSelected,
-    this.tarification
+    this.tarification,
+    this.fromListing=false
   })  : assert(article != null),
         super(key: key);
 
   final Article article;
   final Function(Object) onItemSelected;
   final int tarification ;
+  final bool fromListing ;
 
   @override
   _ArticleListItemState createState() => _ArticleListItemState();
@@ -43,19 +45,21 @@ class _ArticleListItemState extends State<ArticleListItem> {
         }
       },
       onTap: () async {
-        if(widget.onItemSelected == null){
-          Navigator.of(context).pushNamed(RoutesKeys.addArticle, arguments: widget.article);
-        } else if(widget.article.selectedQuantite >= 0){
-          await showDialog(
-              context: context,
-              builder: (BuildContext context) {
-            return addQtedialogue();
-          }).then((val) {
+        if(widget.fromListing == false){
+          if(widget.onItemSelected == null ){
+            Navigator.of(context).pushNamed(RoutesKeys.addArticle, arguments: widget.article);
+          } else if(widget.article.selectedQuantite >= 0){
+            await showDialog(
+                context: context,
+                builder: (BuildContext context) {
+                  return addQtedialogue();
+                }).then((val) {
 
-            setState(() {});
-        });
-        } else if(widget.onItemSelected != null){
-          selectThisItem();
+              setState(() {});
+            });
+          } else if(widget.onItemSelected != null){
+            selectThisItem();
+          }
         }
       },
 

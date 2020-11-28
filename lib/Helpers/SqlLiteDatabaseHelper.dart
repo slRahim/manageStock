@@ -223,7 +223,9 @@ class SqlLiteDatabaseHelper {
 
   }
 
+  //fonction speciale pour la creation des triggers de bd
   createTriggers(Database db, int version) async {
+    // update_current_index
      await db.execute('''CREATE TRIGGER update_current_index 
         AFTER INSERT ON Pieces 
         FOR EACH ROW 
@@ -233,6 +235,130 @@ class SqlLiteDatabaseHelper {
         WHERE  FormatPiece.Piece LIKE NEW.Piece ; 
         END;
       ''');
+
+     //update_articles_qte_insert on insert bon client ======== ok
+     await db.execute('''
+        CREATE TRIGGER IF NOT EXISTS update_articles_qte_onInsert_client
+        AFTER INSERT ON Journaux
+        FOR EACH ROW
+        WHEN (NEW.Piece_type = 'BR' OR NEW.Piece_type = 'FP') AND NEW.Mov = 1
+        BEGIN
+            UPDATE Articles
+               SET Qte = Qte - NEW.Qte,
+                   Colis = Qte / Qte_Colis
+             WHERE id = New.Article_id;
+        END;
+     ''');
+
+     //update_articles_qte_delete on delete bon client
+     await db.execute('''
+        CREATE TRIGGER IF NOT EXISTS update_articles_qte_onDelete_client
+        AFTER DELETE ON Journaux
+        FOR EACH ROW
+        WHEN (OLD.Piece_type = 'BR' OR OLD.Piece_type = 'FP') AND OLD.Mov = 1
+        BEGIN
+            UPDATE Articles
+               SET Qte = Qte + OLD.Qte,
+                   Colis = Qte / Qte_Colis
+             WHERE id = Old.Article_id ;
+        END;
+     ''');
+
+     //update_articles_qte_update on update bon client ====== ok
+     await db.execute('''
+        CREATE TRIGGER IF NOT EXISTS update_articles_qte_onUpdate_client
+        AFTER UPDATE ON Journaux
+        FOR EACH ROW
+        WHEN (NEW.Piece_type = 'BR' OR NEW.Piece_type = 'FP') AND NEW.Mov = 1
+        BEGIN
+            UPDATE Articles
+               SET Qte = Qte - (NEW.Qte - OLD.Qte),
+               Colis = Qte / Qte_Colis
+             WHERE id = NEW.Article_id ;
+        END;
+     ''');
+
+     //update_articles_qte_update on update le mov bon client
+     await db.execute('''
+        CREATE TRIGGER IF NOT EXISTS update_articles_qte_onUpdate_client_mov
+        AFTER UPDATE ON Journaux
+        FOR EACH ROW
+        WHEN (OLD.Piece_type = 'BR' OR OLD.Piece_type = 'FP') AND NEW.Mov = 0
+        BEGIN
+            UPDATE Articles
+               SET Qte = Qte + OLD.Qte ,
+                   Colis = Qte / Qte_Colis
+             WHERE id = New.Article_id;
+        END;
+     ''');
+
+     //update_articles_qte_insert on insert bon fournisseur
+     await db.execute('''
+        CREATE TRIGGER IF NOT EXISTS update_articles_qte_onInsert_fournisseur
+        AFTER INSERT ON Journaux
+        FOR EACH ROW
+        WHEN (NEW.Piece_type = 'BR' OR NEW.Piece_type = 'BC') AND NEW.Mov = 1
+        BEGIN
+            UPDATE Articles
+               SET Qte = Qte + NEW.Qte,
+                   Colis = Qte / Qte_Colis
+             WHERE id = New.Article_id;
+        END;
+     ''');
+
+     //update_articles_qte_delete on delete bon fournisseur
+     await db.execute('''
+        CREATE TRIGGER IF NOT EXISTS update_articles_qte_onDelete_fournisseur
+        AFTER DELETE ON Journaux
+        FOR EACH ROW
+        WHEN (NEW.Piece_type = 'BR' OR NEW.Piece_type = 'BC') AND NEW.Mov = 1
+        BEGIN
+            UPDATE Articles
+               SET Qte = Qte - NEW.Qte,
+                   Colis = Qte / Qte_Colis
+             WHERE id = New.Article_id;
+        END;
+     ''');
+
+     //update_articles_qte_update on update bon fournisseur
+     await db.execute('''
+        CREATE TRIGGER IF NOT EXISTS update_articles_qte_onUpdate_fournisseur
+        AFTER UPDATE ON Journaux
+        FOR EACH ROW
+        WHEN (NEW.Piece_type = 'BR' OR NEW.Piece_type = 'BC') AND NEW.Mov = 1
+        BEGIN
+            UPDATE Articles
+               SET Qte = Qte + (NEW.Qte-OLD.Qte),
+                   Colis = Qte / Qte_Colis
+             WHERE id = New.Article_id;
+        END;
+     ''');
+
+     //update_articles_qte_update on update le mov bon fournisseur
+     await db.execute('''
+        CREATE TRIGGER IF NOT EXISTS update_articles_qte_onUpdate_fournisseur_mov
+        AFTER UPDATE ON Journaux
+        FOR EACH ROW
+        WHEN (OLD.Piece_type = 'BR' OR OLD.Piece_type = 'BC') AND NEW.Mov = 0
+        BEGIN
+            UPDATE Articles
+               SET Qte = Qte - OLD.Qte,
+                   Colis = Qte / Qte_Colis
+             WHERE id = New.Article_id;
+        END;
+     ''');
+
+     //supp journale de la piece avant supp piece
+     await db.execute('''
+        CREATE TRIGGER IF NOT EXISTS delete_journaux
+        BEFORE DELETE ON Pieces
+        FOR EACH ROW
+        BEGIN
+            DELETE FROM Journaux
+                  WHERE Piece_id = OLD.id;
+        END;
+     ''');
+
   }
 
   Future<void> setInitialData(Database db, int version) async {

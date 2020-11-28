@@ -47,12 +47,14 @@ class _AddPiecePageState extends State<AddPiecePage> with TickerProviderStateMix
 
   bool editMode = true;
   bool modification = false;
+  bool _islisting = false ;
 
   bool finishedLoading = false;
 
   String appBarTitle = "Devis";
 
   List<Article> _selectedItems = new List<Article>();
+  List<Article> _desSelectedItems = new List<Article>();
   Tiers _selectedClient;
 
   List<int> _tarificationItems = Statics.tarificationItems ;
@@ -64,7 +66,9 @@ class _AddPiecePageState extends State<AddPiecePage> with TickerProviderStateMix
   TextEditingController _numeroControl = new TextEditingController();
   TextEditingController _dateControl = new TextEditingController();
   TextEditingController _clientControl = new TextEditingController();
-  TextEditingController _verssementControl = new TextEditingController();
+  TextEditingController _verssementControler = new TextEditingController();
+  TextEditingController _resteControler = new TextEditingController();
+  String _validateVerssemntError;
 
   SliverListDataSource _dataSource;
   QueryCtr _queryCtr;
@@ -105,7 +109,7 @@ class _AddPiecePageState extends State<AddPiecePage> with TickerProviderStateMix
     return Future<bool>.value(editMode);
   }
 
-  Future<void> setDataFromItem(item) async {
+  Future<void> setDataFromItem(Piece item) async {
     if(item != null){
       _piece = item;
       _numeroControl.text = _piece.num_piece;
@@ -117,6 +121,7 @@ class _AddPiecePageState extends State<AddPiecePage> with TickerProviderStateMix
       _selectedTarification = _selectedClient.tarification;
       _selectedItems= await _queryCtr.getJournalPiece(item);
     }else{
+      _piece.piece = widget.arguments.piece ;
       _selectedClient = await _queryCtr.getTierById(1);
       _clientControl.text = _selectedClient.raisonSociale;
       _selectedTarification = _selectedClient.tarification;
@@ -137,14 +142,18 @@ class _AddPiecePageState extends State<AddPiecePage> with TickerProviderStateMix
     if (modification) {
       if (editMode) {
         appBarTitle = "Modification";
+        _islisting = false ;
       } else {
-        appBarTitle = "Devis";
+        appBarTitle = Helpers.getPieceTitle(_piece.piece);
+        _islisting = true ;
       }
     } else {
       if (editMode) {
-        appBarTitle = "Ajouter un devis";
+        appBarTitle = "Ajouter "+Helpers.getPieceTitle(_piece.piece);
+        _islisting=false ;
       } else {
-        appBarTitle = "Devis";
+        appBarTitle = Helpers.getPieceTitle(_piece.piece);
+        _islisting = true ;
       }
     }
 
@@ -215,16 +224,25 @@ class _AddPiecePageState extends State<AddPiecePage> with TickerProviderStateMix
                   Spacer(
                     flex: 1,
                   ),
-                  Container(
-                      padding: EdgeInsets.only(right: 30),
-                      child: Text(
-                        "Régler",
-                        textAlign: TextAlign.center,
-                        style: TextStyle(
-                            fontWeight: FontWeight.bold
+                  InkWell(
+                    onTap: ()async{
+                      await showDialog(
+                          context: context,
+                          builder: (BuildContext context) {
+                            return addVerssementdialogue();
+                          });
+                    },
+                    child: Container(
+                        padding: EdgeInsets.only(right: 30),
+                        child: Text(
+                          "Reste : "+_piece.reste.toString(),
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                              fontWeight: FontWeight.bold
+                          ),
                         ),
                       ),
-                    ),
+                  ),
                 ],
               ),
             ),
@@ -388,17 +406,21 @@ class _AddPiecePageState extends State<AddPiecePage> with TickerProviderStateMix
                             shrinkWrap: true,
                             itemCount: _selectedItems.length,
                             itemBuilder: (BuildContext ctxt, int index) {
-                              return new ArticleListItem(
-                                article: _selectedItems[index],
-                                onItemSelected: (selectedItem) => ({
-                                  if (selectedItem != null){
-                                      if (_selectedItems.contains(selectedItem)){
-                                        _selectedItems.remove(selectedItem)
-                                      }
-                                  },
-                                  calculPiece()
-                                }),
-                              );
+                              if(editMode){
+                                return new ArticleListItem(
+                                  article: _selectedItems[index],
+                                  onItemSelected: (selectedItem) => ({
+                                    removeItemfromPiece(selectedItem),
+                                    calculPiece()
+                                  }),
+                                );
+                              }else{
+                                return new ArticleListItem(
+                                    article: _selectedItems[index],
+                                    fromListing: _islisting,
+                                );
+                              }
+
                             })
                       ],
                     ))
@@ -410,7 +432,6 @@ class _AddPiecePageState extends State<AddPiecePage> with TickerProviderStateMix
     );
   }
 
-
   //afficher le fragment des artciles
   Widget addArticleDialog() {
     return new ArticlesFragment(
@@ -421,6 +442,9 @@ class _AddPiecePageState extends State<AddPiecePage> with TickerProviderStateMix
             _selectedItems.elementAt(_selectedItems.indexOf(item)).selectedQuantite += item.selectedQuantite;
           } else {
             _selectedItems.add(item);
+            if(_desSelectedItems.contains(item)){
+              _desSelectedItems.remove(item);
+            }
           }
         });
       },
@@ -450,6 +474,199 @@ class _AddPiecePageState extends State<AddPiecePage> with TickerProviderStateMix
      print(_selectedTarification);
   }
 
+  //afficher un dialog pour versseemnt
+  Widget addVerssementdialogue() {
+    return StatefulBuilder(builder: (context, StateSetter setState) {
+      Widget dialog = Dialog(
+        //this right here
+        child: Wrap(
+            children: [Padding(
+              padding: const EdgeInsets.all(10),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Center(
+                      child: Padding(
+                        padding: const EdgeInsets.only(bottom: 20),
+                        child: Text(
+                          "Edit",
+                          style: TextStyle(
+                            fontSize: 18,
+                            fontWeight: FontWeight.w400,
+                          ),
+                        ),
+                      )),
+                  Padding(
+                    padding: EdgeInsets.only(left: 5, right: 5, bottom: 20),
+                    child: TextField(
+                      controller: _verssementControler,
+                      keyboardType: TextInputType.number,
+                      decoration: InputDecoration(
+                        errorText: _validateVerssemntError ?? null,
+                        prefixIcon: Icon(
+                          Icons.add_shopping_cart,
+                          color: Colors.orange[900],
+                        ),
+                        focusedBorder: OutlineInputBorder(
+                            borderSide: BorderSide(color: Colors.orange[900]),
+                            borderRadius: BorderRadius.circular(20)),
+                        contentPadding: EdgeInsets.only(left: 10),
+                        labelText: "Quantité",
+                        labelStyle: TextStyle(color: Colors.orange[900]),
+                        enabledBorder: OutlineInputBorder(
+                          gapPadding: 3.3,
+                          borderRadius: BorderRadius.circular(20),
+                          borderSide: BorderSide(color: Colors.orange[900]),
+                        ),
+                      ),
+                    ),
+                  ),
+                  SizedBox(
+                    width: 320.0,
+                    child: Padding(
+                      padding: EdgeInsets.only(right: 0, left: 0),
+                      child: Column(
+                        mainAxisSize: MainAxisSize.max,
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Row(
+                            mainAxisSize: MainAxisSize.max,
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              RawMaterialButton(
+                                onPressed: () async {
+                                  // double _qte = double.parse(_quntiteControler.text) - 1;
+                                  // _quntiteControler.text = _qte.toString();
+                                },
+                                elevation: 2.0,
+                                fillColor: Colors.redAccent,
+                                child: Icon(
+                                  Icons.remove,
+                                ),
+                                padding: EdgeInsets.all(15.0),
+                                shape: CircleBorder(),
+                              ),
+                              RawMaterialButton(
+                                onPressed: () async {
+                                  // double _qte = double.parse(_quntiteControler.text) + 1;
+                                  // _quntiteControler.text = _qte.toString();
+                                },
+                                elevation: 2.0,
+                                fillColor: Colors.greenAccent,
+                                child: Icon(
+                                  Icons.add,
+                                ),
+                                padding: EdgeInsets.all(15.0),
+                                shape: CircleBorder(),
+                              )
+                            ],
+                          ),
+                          SizedBox(height: 20),
+                          Padding(
+                            padding: EdgeInsets.only(left: 5, right: 5, bottom: 20),
+                            child: TextField(
+                              controller: _resteControler,
+                              keyboardType: TextInputType.number,
+                              decoration: InputDecoration(
+                                prefixIcon: Icon(
+                                  Icons.attach_money,
+                                  color: Colors.orange[900],
+                                ),
+                                focusedBorder: OutlineInputBorder(
+                                    borderSide: BorderSide(color: Colors.orange[900]),
+                                    borderRadius: BorderRadius.circular(20)),
+                                contentPadding: EdgeInsets.only(left: 10),
+                                labelText: "Reste",
+                                labelStyle: TextStyle(color: Colors.orange[900]),
+                                enabled: false ,
+                              ),
+                            ),
+                          ),
+                          SizedBox(height: 10),
+                          Row(
+                            mainAxisSize: MainAxisSize.max,
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              RaisedButton(
+                                onPressed: () async {
+                                  // _quntiteControler.text = "0";
+                                  // widget.article.selectedQuantite = -1;
+                                  // widget.onItemSelected(widget.article);
+                                  Navigator.pop(context);
+                                },
+                                child: Text(
+                                  "Annuler",
+                                  style: TextStyle(color: Colors.white),
+                                ),
+                                color: Colors.redAccent,
+                              ),
+                              SizedBox(width: 10),
+                              RaisedButton(
+                                onPressed: () async {
+                                  // try {
+                                  //   double _qte = double.parse(_quntiteControler.text);
+                                  //   double _price = double.parse(_priceControler.text);
+                                  //   if(_qte > 0){
+                                  //     _validateQteError = null;
+                                  //   } else{
+                                  //     _validateQteError = "Qantité can\'t be less then 0";
+                                  //   }
+                                  //   if(_price > 0){
+                                  //     _validatePriceError = null;
+                                  //   } else{
+                                  //     _validatePriceError = "Price can\'t be less then 0";
+                                  //   }
+                                  //   if(_validateQteError == null && _validatePriceError == null){
+                                  //     widget.article.selectedQuantite = _qte;
+                                  //     widget.article.selectedPrice = _price;
+                                  //     widget.onItemSelected(null);
+                                  //
+                                  //     Navigator.pop(context);
+                                  //   } else{
+                                  //     setState(() {
+                                  //     });
+                                  //   }
+                                  // } catch (e) {
+                                  //   setState(() {
+                                  //     _validateQteError = "Please enter valid numbers";
+                                  //   });
+                                  //   print(e);
+                                  // }
+                                },
+                                child: Text(
+                                  "Confirmé",
+                                  style: TextStyle(color: Colors.white),
+                                ),
+                                color: Colors.green,
+                              ),
+                            ],
+                          ),
+                        ],
+                      ),
+                    ),
+                  )
+                ],
+              ),
+            ),
+            ]),
+      );
+      // _quntiteControler.text = widget.article.selectedQuantite.toString();
+      // _priceControler.text = widget.article.selectedPrice.toString();
+      return dialog;
+    });
+  }
+
+  //remove item from piece in update mode
+  void removeItemfromPiece(selectedItem){
+    if (selectedItem != null){
+      if (_selectedItems.contains(selectedItem)){
+        _selectedItems.remove(selectedItem);
+        _desSelectedItems.add(selectedItem);
+      }
+    }
+  }
+
   //calcule le montant total
   void calculPiece() {
     double sum = 0;
@@ -462,11 +679,12 @@ class _AddPiecePageState extends State<AddPiecePage> with TickerProviderStateMix
       _piece.total_ht =sum ;
       _piece.total_tva = totalTva ;
       _piece.total_ttc = _piece.total_ht + _piece.total_tva ;
-      _verssementControl.text = _piece.total_ttc.toString() ;
+      _verssementControler.text = _piece.total_ttc.toString() ;
       _piece.regler = _piece.total_ttc ;
       _piece.reste = _piece.total_ttc - _piece.regler ;
     });
   }
+
 
   //********************************************************************** partie de date ****************************************************************************************
   void callDatePicker() async {
@@ -607,26 +825,30 @@ class _AddPiecePageState extends State<AddPiecePage> with TickerProviderStateMix
         id = await _queryCtr.updateItemInDb(DbTablesNames.pieces, item);
         _selectedItems.forEach((article) async {
           Journaux journaux = Journaux.fromPiece(item, article);
-          await _queryCtr.updateItemInDb(DbTablesNames.journaux, journaux);
+          await _queryCtr.updateJournaux(DbTablesNames.journaux, journaux);
+        });
+        print(_desSelectedItems.length);
+        _desSelectedItems.forEach((article) async {
+          Journaux journaux = Journaux.fromPiece(item, article);
+          await _queryCtr.deleteJournaux(DbTablesNames.journaux, journaux);
         });
 
         if (id > -1) {
           widget.arguments = item;
           widget.arguments.id = id;
-          message = "Tier has been updated successfully";
+          message = "Piece has been updated successfully";
         } else {
-          message = "Error when updating Tier in db";
+          message = "Error when updating Piece in db";
         }
       } else {
         Piece piece = await makePiece();
         id = await _queryCtr.addItemToTable(DbTablesNames.pieces, piece);
-        var res= await _queryCtr.getPieceByNum(piece.num_piece);
-        piece.id=res[0].id;
+        var res = await _queryCtr.getPieceByNum(piece.num_piece);
+        piece.id= res[0].id ;
         _selectedItems.forEach((article) async {
           Journaux journaux = Journaux.fromPiece(piece, article);
           await _queryCtr.addItemToTable(DbTablesNames.journaux, journaux);
         });
-
         if (id > -1) {
           widget.arguments = piece;
           widget.arguments.id = id;
@@ -662,6 +884,8 @@ class _AddPiecePageState extends State<AddPiecePage> with TickerProviderStateMix
 
     return _piece ;
   }
+
+
 
 
 
