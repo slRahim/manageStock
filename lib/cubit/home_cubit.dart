@@ -60,12 +60,12 @@ class HomeCubit extends Cubit<HomeState> {
         break;
 
       case homeItemBonDeReceptionId:
-        emit(new FragmentLoaded(PiecesFragment(clientFourn: 0,peaceType: 'BR')));
+        emit(new FragmentLoaded(PiecesFragment(clientFourn: 2,peaceType: 'BR')));
 
         break;
 
       case homeItemFactureDachatId:
-        emit(new FragmentLoaded(PiecesFragment(clientFourn: 0,peaceType: 'FF')));
+        emit(new FragmentLoaded(PiecesFragment(clientFourn: 2,peaceType: 'FF')));
 
         break;
 

@@ -748,7 +748,8 @@ class _AddPiecePageState extends State<AddPiecePage> with TickerProviderStateMix
                           padding: EdgeInsets.only(right: 0, left: 0),
                           child: RaisedButton(
                             onPressed: () async {
-                              await saveItem(1);
+                              int mov = getMovForPiece();
+                              await saveItem(mov);
                               printItem(_piece);
                             },
                             child: Text(
@@ -765,7 +766,8 @@ class _AddPiecePageState extends State<AddPiecePage> with TickerProviderStateMix
                           padding: EdgeInsets.only(right: 0, left: 0),
                           child: RaisedButton(
                             onPressed: () async {
-                              await saveItem(1);
+                              int mov = getMovForPiece();
+                              await saveItem(mov);
                             },
                             child: Text(
                               "Save only",
@@ -781,10 +783,10 @@ class _AddPiecePageState extends State<AddPiecePage> with TickerProviderStateMix
                           padding: EdgeInsets.only(right: 0, left: 0),
                           child: RaisedButton(
                             onPressed: () async {
-                              await saveItemToTrash();
+                              await saveItemAsDraft();
                             },
                             child: Text(
-                              "Save to Trash",
+                              "Save as Draft",
                               style: TextStyle(color: Colors.white  , fontSize: 16),
                             ),
                             color: Colors.red,
@@ -799,6 +801,35 @@ class _AddPiecePageState extends State<AddPiecePage> with TickerProviderStateMix
     });
   }
 
+
+  int getMovForPiece() {
+    switch(_piece.piece){
+      case(PieceType.devis):
+        return 0 ;
+        break;
+
+      case(PieceType.bonReception):
+        return 1 ;
+        break;
+
+      case(PieceType.bonLivraison):
+        return 1 ;
+        break;
+
+      case(PieceType.factureClient):
+        return 1 ;
+        break;
+
+      case(PieceType.factureFournisseur):
+        return 1 ;
+        break;
+
+      case(PieceType.commandeClient):
+        return 1 ;
+        break;
+    }
+  }
+
   saveItem(int move) async {
     _piece.mov = move;
     int id = await addItemToDb();
@@ -810,7 +841,7 @@ class _AddPiecePageState extends State<AddPiecePage> with TickerProviderStateMix
     }
   }
 
-  saveItemToTrash() async {
+  saveItemAsDraft() async {
     saveItem(2);
   }
 
@@ -827,10 +858,10 @@ class _AddPiecePageState extends State<AddPiecePage> with TickerProviderStateMix
           Journaux journaux = Journaux.fromPiece(item, article);
           await _queryCtr.updateJournaux(DbTablesNames.journaux, journaux);
         });
-        print(_desSelectedItems.length);
         _desSelectedItems.forEach((article) async {
           Journaux journaux = Journaux.fromPiece(item, article);
-          await _queryCtr.deleteJournaux(DbTablesNames.journaux, journaux);
+          journaux.mov=-2 ;
+          await _queryCtr.updateJournaux(DbTablesNames.journaux, journaux);
         });
 
         if (id > -1) {
@@ -843,7 +874,7 @@ class _AddPiecePageState extends State<AddPiecePage> with TickerProviderStateMix
       } else {
         Piece piece = await makePiece();
         id = await _queryCtr.addItemToTable(DbTablesNames.pieces, piece);
-        var res = await _queryCtr.getPieceByNum(piece.num_piece);
+        var res = await _queryCtr.getPieceByNum(piece.num_piece , piece.piece);
         piece.id= res[0].id ;
         _selectedItems.forEach((article) async {
           Journaux journaux = Journaux.fromPiece(piece, article);
@@ -874,7 +905,7 @@ class _AddPiecePageState extends State<AddPiecePage> with TickerProviderStateMix
     _piece.tarification = _selectedTarification ;
     _piece.transformer = 0 ;
 
-    var res = await _queryCtr.getPieceByNum(_piece.num_piece);
+    var res = await _queryCtr.getPieceByNum(_piece.num_piece , _piece.piece);
     if(res.length >= 1 && !modification){
       var message = "Num Piece is alearydy exist";
       Helpers.showFlushBar(context, message);
@@ -884,6 +915,7 @@ class _AddPiecePageState extends State<AddPiecePage> with TickerProviderStateMix
 
     return _piece ;
   }
+
 
 
 

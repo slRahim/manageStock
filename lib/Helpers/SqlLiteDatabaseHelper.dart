@@ -236,12 +236,14 @@ class SqlLiteDatabaseHelper {
         END;
       ''');
 
+     //----------------------------------------------------------------------------------------------------------------------------------------
+
      //update_articles_qte_insert on insert bon client ======== ok
      await db.execute('''
         CREATE TRIGGER IF NOT EXISTS update_articles_qte_onInsert_client
         AFTER INSERT ON Journaux
         FOR EACH ROW
-        WHEN (NEW.Piece_type = 'BR' OR NEW.Piece_type = 'FP') AND NEW.Mov = 1
+        WHEN  NEW.Mov = 1 AND (NEW.Piece_type = 'BL' OR NEW.Piece_type = 'FC')
         BEGIN
             UPDATE Articles
                SET Qte = Qte - NEW.Qte,
@@ -250,40 +252,42 @@ class SqlLiteDatabaseHelper {
         END;
      ''');
 
-     //update_articles_qte_delete on delete bon client
-     await db.execute('''
-        CREATE TRIGGER IF NOT EXISTS update_articles_qte_onDelete_client
-        AFTER DELETE ON Journaux
-        FOR EACH ROW
-        WHEN (OLD.Piece_type = 'BR' OR OLD.Piece_type = 'FP') AND OLD.Mov = 1
-        BEGIN
-            UPDATE Articles
-               SET Qte = Qte + OLD.Qte,
-                   Colis = Qte / Qte_Colis
-             WHERE id = Old.Article_id ;
-        END;
-     ''');
 
      //update_articles_qte_update on update bon client ====== ok
      await db.execute('''
         CREATE TRIGGER IF NOT EXISTS update_articles_qte_onUpdate_client
         AFTER UPDATE ON Journaux
         FOR EACH ROW
-        WHEN (NEW.Piece_type = 'BR' OR NEW.Piece_type = 'FP') AND NEW.Mov = 1
+        WHEN NEW.Mov = 1 AND (NEW.Piece_type = 'BL' OR NEW.Piece_type = 'FC')
         BEGIN
             UPDATE Articles
-               SET Qte = Qte - (NEW.Qte - OLD.Qte),
+               SET Qte = Qte - (NEW.Qte - OLD.Qte) ,
                Colis = Qte / Qte_Colis
              WHERE id = NEW.Article_id ;
         END;
      ''');
 
-     //update_articles_qte_update on update le mov bon client
+     //update_articles_qte_update on update bon client from mov 0/-1/2 to 1
+     await db.execute('''
+        CREATE TRIGGER IF NOT EXISTS update_articles_qte_onUpdate_client_mov1
+        AFTER UPDATE ON Journaux
+        FOR EACH ROW
+        WHEN (OLD.Mov <> NEW.Mov) AND NEW.Mov = 1 AND (NEW.Piece_type = 'BL' OR NEW.Piece_type = 'FC')
+        BEGIN
+            UPDATE Articles
+               SET Qte = Qte - NEW.Qte ,
+               Colis = Qte / Qte_Colis
+             WHERE id = NEW.Article_id ;
+        END;
+     ''');
+
+     //update_articles_qte_update on update le mov  bon client
      await db.execute('''
         CREATE TRIGGER IF NOT EXISTS update_articles_qte_onUpdate_client_mov
         AFTER UPDATE ON Journaux
         FOR EACH ROW
-        WHEN (OLD.Piece_type = 'BR' OR OLD.Piece_type = 'FP') AND NEW.Mov = 0
+        WHEN (OLD.Mov <> NEW.Mov) AND (OLD.Mov = 1) AND (NEW.Mov = 0 OR NEW.Mov = 2 OR NEW.Mov = -1 OR NEW.Mov = -2)
+              AND (NEW.Piece_type = 'BL' OR NEW.Piece_type = 'FC')      
         BEGIN
             UPDATE Articles
                SET Qte = Qte + OLD.Qte ,
@@ -292,30 +296,34 @@ class SqlLiteDatabaseHelper {
         END;
      ''');
 
+     //update_articles_qte_delete on delete piece client
+     await db.execute('''
+        CREATE TRIGGER IF NOT EXISTS update_articles_qte_onDelete_client
+        AFTER DELETE ON Journaux
+        FOR EACH ROW
+        WHEN (OLD.Piece_type = 'BL' OR OLD.Piece_type = 'FC') AND OLD.Mov = 1
+        BEGIN
+            UPDATE Articles
+               SET Qte = Qte + OLD.Qte,
+                   Colis = Qte / Qte_Colis
+             WHERE id = OLD.Article.id;
+        END;
+     ''');
+
+     //-----------------------------------------------------------------------------------------------------------------------------
+
      //update_articles_qte_insert on insert bon fournisseur
      await db.execute('''
         CREATE TRIGGER IF NOT EXISTS update_articles_qte_onInsert_fournisseur
         AFTER INSERT ON Journaux
         FOR EACH ROW
-        WHEN (NEW.Piece_type = 'BR' OR NEW.Piece_type = 'BC') AND NEW.Mov = 1
+        WHEN NEW.Mov = 1 AND (NEW.Piece_type = 'BR' OR NEW.Piece_type = 'FF')
         BEGIN
             UPDATE Articles
-               SET Qte = Qte + NEW.Qte,
-                   Colis = Qte / Qte_Colis
-             WHERE id = New.Article_id;
-        END;
-     ''');
-
-     //update_articles_qte_delete on delete bon fournisseur
-     await db.execute('''
-        CREATE TRIGGER IF NOT EXISTS update_articles_qte_onDelete_fournisseur
-        AFTER DELETE ON Journaux
-        FOR EACH ROW
-        WHEN (NEW.Piece_type = 'BR' OR NEW.Piece_type = 'BC') AND NEW.Mov = 1
-        BEGIN
-            UPDATE Articles
-               SET Qte = Qte - NEW.Qte,
-                   Colis = Qte / Qte_Colis
+               SET PMP = ((Qte * PMP)+(NEW.Qte * NEW.Prix_ht))/(Qte + NEW.Qte) , 
+                   Qte = Qte + NEW.Qte,
+                   Colis = Qte / Qte_Colis,
+                   PrixAchat = NEW.Prix_ht
              WHERE id = New.Article_id;
         END;
      ''');
@@ -325,10 +333,24 @@ class SqlLiteDatabaseHelper {
         CREATE TRIGGER IF NOT EXISTS update_articles_qte_onUpdate_fournisseur
         AFTER UPDATE ON Journaux
         FOR EACH ROW
-        WHEN (NEW.Piece_type = 'BR' OR NEW.Piece_type = 'BC') AND NEW.Mov = 1
+        WHEN NEW.Mov = 1 AND (NEW.Piece_type = 'BR' OR NEW.Piece_type = 'FF')
         BEGIN
             UPDATE Articles
                SET Qte = Qte + (NEW.Qte-OLD.Qte),
+                   Colis = Qte / Qte_Colis
+             WHERE id = New.Article_id;
+        END;
+     ''');
+
+     //update_articles_qte_update on update bon fournisseur from -1/0/2 to 1
+     await db.execute('''
+        CREATE TRIGGER IF NOT EXISTS update_articles_qte_onUpdate_fournisseur_mov1
+        AFTER UPDATE ON Journaux
+        FOR EACH ROW
+        WHEN (OLD.Mov <> NEW.Mov) AND NEW.Mov = 1 AND (NEW.Piece_type = 'BR' OR NEW.Piece_type = 'FF')
+        BEGIN
+            UPDATE Articles
+               SET Qte = Qte + NEW.Qte,
                    Colis = Qte / Qte_Colis
              WHERE id = New.Article_id;
         END;
@@ -339,12 +361,27 @@ class SqlLiteDatabaseHelper {
         CREATE TRIGGER IF NOT EXISTS update_articles_qte_onUpdate_fournisseur_mov
         AFTER UPDATE ON Journaux
         FOR EACH ROW
-        WHEN (OLD.Piece_type = 'BR' OR OLD.Piece_type = 'BC') AND NEW.Mov = 0
+        WHEN  (OLD.Mov <> NEW.Mov) AND (OLD.Mov = 1) AND (NEW.Mov = 0 OR NEW.Mov = 2 OR NEW.Mov = -1 OR NEW.Mov = -2)
+              AND (NEW.Piece_type = 'BR' OR NEW.Piece_type = 'FF') 
         BEGIN
             UPDATE Articles
                SET Qte = Qte - OLD.Qte,
                    Colis = Qte / Qte_Colis
              WHERE id = New.Article_id;
+        END;
+     ''');
+
+     //update_articles_qte_delete on delete piece fournisseur
+     await db.execute('''
+        CREATE TRIGGER IF NOT EXISTS update_articles_qte_onDelete_fournisseur
+        AFTER DELETE ON Journaux
+        FOR EACH ROW
+        WHEN (NEW.Piece_type = 'BR' OR NEW.Piece_type = 'FF') AND OLD.Mov = 1
+        BEGIN
+            UPDATE Articles
+               SET Qte = Qte - OLD.Qte,
+                   Colis = Qte / Qte_Colis
+             WHERE id = OLD.Article.id;
         END;
      ''');
 

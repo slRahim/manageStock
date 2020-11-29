@@ -141,9 +141,9 @@ class QueryCtr {
     return list;
   }
 
-  Future <List<Piece>> getPieceByNum(String num_piece) async{
+  Future <List<Piece>> getPieceByNum(String num_piece , String type_piece) async{
     var dbClient = await _databaseHelper.db ;
-    var res = await dbClient.query(DbTablesNames.pieces ,where: 'Num_piece LIKE ?', whereArgs: ['$num_piece']);
+    var res = await dbClient.query(DbTablesNames.pieces ,where: 'Num_piece LIKE ? AND Piece LIKE ?', whereArgs: ['$num_piece','$type_piece']);
 
     List<Piece> list = new List<Piece>();
     for (var i = 0, j = res.length; i < j; i++) {
@@ -241,7 +241,7 @@ class QueryCtr {
   Future<List<Article>> getJournalPiece(Piece piece) async{
     var dbClient = await _databaseHelper.db ;
     String query = 'SELECT Journaux.*,Articles.Ref ,Articles.Designation ,Articles.BytesImageString'
-        ' FROM Journaux JOIN Articles ON Journaux.Article_id = Articles.id AND Journaux.Piece_id='+piece.id.toString();
+        ' FROM Journaux JOIN Articles ON Journaux.Article_id = Articles.id AND Journaux.Mov <> -2 AND Journaux.Piece_id='+piece.id.toString();
     var res = await dbClient.rawQuery(query);
 
     List<Article> list = new List<Article>();
@@ -259,12 +259,6 @@ class QueryCtr {
     return res ;
   }
 
-  Future<int> deleteJournaux(String tableName, item)async{
-    var dbClient = await _databaseHelper.db ;
-    var res = await dbClient.delete(tableName, where: "Piece_id=? AND Article_id=?" , whereArgs: [item.piece_id , item.article_id] );
-
-    return res ;
-  }
 
   Future<Article> getTestArticle() async {
     // var bytes = await rootBundle.load('assets/article.png');
