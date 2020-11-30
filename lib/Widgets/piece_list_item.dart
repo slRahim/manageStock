@@ -43,9 +43,29 @@ class PieceListItem extends StatelessWidget {
     title: Text(piece.num_piece),
     subtitle: Text("RS: " + piece.raisonSociale),
     trailingChildren: [
-      Text(piece.total_ttc.toString(), style: TextStyle(fontSize: 16.0, fontWeight: FontWeight.bold),),
+      (piece.reste > 0) ? Text('TTC : '+piece.total_ttc.toString(), style: TextStyle(fontSize: 16.0, fontWeight: FontWeight.bold ,color: Colors.redAccent),)
+      : Text('TTC : '+piece.total_ttc.toString(), style: TextStyle(fontSize: 16.0, fontWeight: FontWeight.bold ),) ,
       SizedBox(height: 5),
-      Text(Helpers.dateToText(piece.date), style: TextStyle(color: Colors.black, fontSize: 14.0),)
+      Text(Helpers.dateToText(piece.date), style: TextStyle(color: Colors.black, fontSize: 14.0),),
+      SizedBox(height: 5),
+      getIcon(),
+
     ],
   );
+
+  Widget getIcon() {
+    switch (piece.mov){
+      case 1 :
+        return Icon(Icons.check_circle , color: Colors.blue);
+        break;
+      case 2 :
+        return Icon(Icons.broken_image , color: Colors.black45);
+        break;
+      case 0 :
+        return Icon(Icons.check_circle_outline , color: Colors.black45);
+        break;
+    }
+  }
+
+
 }

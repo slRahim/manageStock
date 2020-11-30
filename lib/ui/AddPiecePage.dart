@@ -1,3 +1,4 @@
+
 // import 'dart:html';
 import 'dart:io';
 import 'dart:typed_data';
@@ -69,6 +70,8 @@ class _AddPiecePageState extends State<AddPiecePage> with TickerProviderStateMix
   TextEditingController _verssementControler = new TextEditingController();
   TextEditingController _resteControler = new TextEditingController();
   String _validateVerssemntError;
+  double _restepiece ;
+  double _verssementpiece ;
 
   SliverListDataSource _dataSource;
   QueryCtr _queryCtr;
@@ -120,11 +123,19 @@ class _AddPiecePageState extends State<AddPiecePage> with TickerProviderStateMix
       _clientControl.text = _selectedClient.raisonSociale;
       _selectedTarification = _selectedClient.tarification;
       _selectedItems= await _queryCtr.getJournalPiece(item);
+      _verssementControler.text = _piece.regler.toString();
+      _resteControler.text = _piece.reste.toString();
+      _restepiece=_piece.reste ;
+      _verssementpiece=_piece.regler;
     }else{
       _piece.piece = widget.arguments.piece ;
       _selectedClient = await _queryCtr.getTierById(1);
       _clientControl.text = _selectedClient.raisonSociale;
       _selectedTarification = _selectedClient.tarification;
+      _verssementControler.text = "0.0";
+      _resteControler.text ="0.0";
+      _restepiece = 0 ;
+      _verssementpiece = 0 ;
     }
 
   }
@@ -226,21 +237,23 @@ class _AddPiecePageState extends State<AddPiecePage> with TickerProviderStateMix
                   ),
                   InkWell(
                     onTap: ()async{
-                      await showDialog(
-                          context: context,
-                          builder: (BuildContext context) {
-                            return addVerssementdialogue();
-                          });
+                      if(editMode){
+                        if(_piece.piece != PieceType.devis){
+                          await showDialog(
+                              context: context,
+                              builder: (BuildContext context) {
+                                return addVerssementdialogue();
+                              });
+                        }
+                      }
                     },
                     child: Container(
                         padding: EdgeInsets.only(right: 30),
-                        child: Text(
-                          "Reste : "+_piece.reste.toString(),
-                          textAlign: TextAlign.center,
+                        child:Text("Reste : "+_restepiece.toString(), textAlign: TextAlign.center,
                           style: TextStyle(
                               fontWeight: FontWeight.bold
                           ),
-                        ),
+                        )
                       ),
                   ),
                 ],
@@ -476,12 +489,11 @@ class _AddPiecePageState extends State<AddPiecePage> with TickerProviderStateMix
 
   //afficher un dialog pour versseemnt
   Widget addVerssementdialogue() {
-    return StatefulBuilder(builder: (context, StateSetter setState) {
-      Widget dialog = Dialog(
+      return Dialog(
         //this right here
         child: Wrap(
             children: [Padding(
-              padding: const EdgeInsets.all(10),
+              padding: const EdgeInsets.all(15),
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -490,7 +502,7 @@ class _AddPiecePageState extends State<AddPiecePage> with TickerProviderStateMix
                       child: Padding(
                         padding: const EdgeInsets.only(bottom: 20),
                         child: Text(
-                          "Edit",
+                          "Edit Verssement",
                           style: TextStyle(
                             fontSize: 18,
                             fontWeight: FontWeight.w400,
@@ -505,19 +517,19 @@ class _AddPiecePageState extends State<AddPiecePage> with TickerProviderStateMix
                       decoration: InputDecoration(
                         errorText: _validateVerssemntError ?? null,
                         prefixIcon: Icon(
-                          Icons.add_shopping_cart,
-                          color: Colors.orange[900],
+                          Icons.monetization_on,
+                          color: Colors.green,
                         ),
                         focusedBorder: OutlineInputBorder(
-                            borderSide: BorderSide(color: Colors.orange[900]),
+                            borderSide: BorderSide(color: Colors.greenAccent),
                             borderRadius: BorderRadius.circular(20)),
                         contentPadding: EdgeInsets.only(left: 10),
-                        labelText: "Quantité",
-                        labelStyle: TextStyle(color: Colors.orange[900]),
+                        labelText: "Total Verssemnet",
+                        labelStyle: TextStyle(color: Colors.green),
                         enabledBorder: OutlineInputBorder(
                           gapPadding: 3.3,
                           borderRadius: BorderRadius.circular(20),
-                          borderSide: BorderSide(color: Colors.orange[900]),
+                          borderSide: BorderSide(color: Colors.green),
                         ),
                       ),
                     ),
@@ -536,8 +548,14 @@ class _AddPiecePageState extends State<AddPiecePage> with TickerProviderStateMix
                             children: [
                               RawMaterialButton(
                                 onPressed: () async {
-                                  // double _qte = double.parse(_quntiteControler.text) - 1;
-                                  // _quntiteControler.text = _qte.toString();
+                                  double _verssement = double.parse(_verssementControler.text);
+                                  double _reste = double.parse(_resteControler.text);
+                                  if(_verssement > 0){
+                                    _verssement = double.parse(_verssementControler.text) - 1;
+                                    _reste = double.parse(_resteControler.text) + 1;
+                                  }
+                                  _verssementControler.text = _verssement.toString();
+                                  _resteControler.text = _reste.toString();
                                 },
                                 elevation: 2.0,
                                 fillColor: Colors.redAccent,
@@ -549,8 +567,14 @@ class _AddPiecePageState extends State<AddPiecePage> with TickerProviderStateMix
                               ),
                               RawMaterialButton(
                                 onPressed: () async {
-                                  // double _qte = double.parse(_quntiteControler.text) + 1;
-                                  // _quntiteControler.text = _qte.toString();
+                                  double _verssement = double.parse(_verssementControler.text);
+                                  double _reste = double.parse(_resteControler.text);
+                                  if(_verssement < _piece.total_ttc){
+                                    _verssement = double.parse(_verssementControler.text) + 1;
+                                    _reste = double.parse(_resteControler.text) - 1;
+                                  }
+                                  _verssementControler.text = _verssement.toString();
+                                  _resteControler.text = _reste.toString();
                                 },
                                 elevation: 2.0,
                                 fillColor: Colors.greenAccent,
@@ -570,10 +594,10 @@ class _AddPiecePageState extends State<AddPiecePage> with TickerProviderStateMix
                               keyboardType: TextInputType.number,
                               decoration: InputDecoration(
                                 prefixIcon: Icon(
-                                  Icons.attach_money,
+                                  Icons.money,
                                   color: Colors.orange[900],
                                 ),
-                                focusedBorder: OutlineInputBorder(
+                               disabledBorder: OutlineInputBorder(
                                     borderSide: BorderSide(color: Colors.orange[900]),
                                     borderRadius: BorderRadius.circular(20)),
                                 contentPadding: EdgeInsets.only(left: 10),
@@ -590,9 +614,8 @@ class _AddPiecePageState extends State<AddPiecePage> with TickerProviderStateMix
                             children: [
                               RaisedButton(
                                 onPressed: () async {
-                                  // _quntiteControler.text = "0";
-                                  // widget.article.selectedQuantite = -1;
-                                  // widget.onItemSelected(widget.article);
+                                  _verssementControler.text = _piece.regler.toString();
+                                  _resteControler.text = _piece.reste.toString();
                                   Navigator.pop(context);
                                 },
                                 child: Text(
@@ -603,36 +626,12 @@ class _AddPiecePageState extends State<AddPiecePage> with TickerProviderStateMix
                               ),
                               SizedBox(width: 10),
                               RaisedButton(
-                                onPressed: () async {
-                                  // try {
-                                  //   double _qte = double.parse(_quntiteControler.text);
-                                  //   double _price = double.parse(_priceControler.text);
-                                  //   if(_qte > 0){
-                                  //     _validateQteError = null;
-                                  //   } else{
-                                  //     _validateQteError = "Qantité can\'t be less then 0";
-                                  //   }
-                                  //   if(_price > 0){
-                                  //     _validatePriceError = null;
-                                  //   } else{
-                                  //     _validatePriceError = "Price can\'t be less then 0";
-                                  //   }
-                                  //   if(_validateQteError == null && _validatePriceError == null){
-                                  //     widget.article.selectedQuantite = _qte;
-                                  //     widget.article.selectedPrice = _price;
-                                  //     widget.onItemSelected(null);
-                                  //
-                                  //     Navigator.pop(context);
-                                  //   } else{
-                                  //     setState(() {
-                                  //     });
-                                  //   }
-                                  // } catch (e) {
-                                  //   setState(() {
-                                  //     _validateQteError = "Please enter valid numbers";
-                                  //   });
-                                  //   print(e);
-                                  // }
+                                onPressed: () {
+                                   Navigator.pop(context);
+                                   setState(() {
+                                     _restepiece=double.parse(_resteControler.text);
+                                     _verssementpiece=double.parse(_verssementControler.text);
+                                   });
                                 },
                                 child: Text(
                                   "Confirmé",
@@ -651,10 +650,6 @@ class _AddPiecePageState extends State<AddPiecePage> with TickerProviderStateMix
             ),
             ]),
       );
-      // _quntiteControler.text = widget.article.selectedQuantite.toString();
-      // _priceControler.text = widget.article.selectedPrice.toString();
-      return dialog;
-    });
   }
 
   //remove item from piece in update mode
@@ -904,6 +899,8 @@ class _AddPiecePageState extends State<AddPiecePage> with TickerProviderStateMix
     _piece.raisonSociale = tiers.raisonSociale ;
     _piece.tarification = _selectedTarification ;
     _piece.transformer = 0 ;
+    _piece.regler=_verssementpiece ;
+    _piece.reste=_restepiece;
 
     var res = await _queryCtr.getPieceByNum(_piece.num_piece , _piece.piece);
     if(res.length >= 1 && !modification){

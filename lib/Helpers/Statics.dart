@@ -75,7 +75,7 @@ class PieceType {
 
 class Prefs {
   const Prefs();
-  static int PriceCount = 3;
+  static int PriceCount = 2;
 }
 
 class NumPieceFormat {

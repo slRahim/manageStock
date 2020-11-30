@@ -7,6 +7,7 @@ import 'package:gestmob/models/ArticleMarque.dart';
 import 'package:gestmob/models/ArticleTva.dart';
 import 'package:gestmob/models/FormatPiece.dart';
 import 'package:gestmob/models/Journaux.dart';
+import 'package:gestmob/models/MyParams.dart';
 import 'package:gestmob/models/Piece.dart';
 import 'package:gestmob/models/Profile.dart';
 import 'package:gestmob/models/Tiers.dart';
@@ -120,6 +121,18 @@ class QueryCtr {
     String _pieceFilter = _piece != null? " AND Piece like '$_piece'" : "";
     String _movFilter = " AND Mov >= $_mov";
 
+    if(filters["Draft"]){
+      _movFilter = " AND Mov >= 2";
+    }
+
+    String _creditFilter =" AND Reste >= 0"  ;
+    if(filters["Credit"]){
+      _creditFilter =" AND Reste > 0"  ;
+    }
+
+    print (_movFilter);
+    print (_creditFilter);
+
     Database dbClient = await _databaseHelper.db;
     var res;
 
@@ -127,8 +140,11 @@ class QueryCtr {
 
     query += _pieceFilter;
     query += _movFilter;
+    query += _creditFilter ;
 
     query += ' ORDER BY id DESC';
+
+    print(query);
 
     res = await dbClient.rawQuery(query);
 
@@ -205,11 +221,17 @@ class QueryCtr {
     return list;
   }
 
+  Future<MyParams> getAllParams() async {
+    Database dbClient = await _databaseHelper.db;
+    var res = await dbClient.query(DbTablesNames.myparams);
+
+    return new MyParams.frommMap(res[0]);
+  }
+
   Future<dynamic> addItemToTable(String tableName, item) async {
     var dbClient = await _databaseHelper.db;
     int res = await dbClient.insert(tableName, item.toMap());
-    String query = 'SELECT last_insert_rowid();';
-    var result = await dbClient.rawQuery(query);
+
     return res;
   }
 
@@ -280,6 +302,8 @@ class QueryCtr {
     Piece piece = new Piece("FP", "05555", 0, 1, new DateTime.now(), 1, 1, 1, 10, 10, 10, 10, 0, 10, 15);
     return piece;
   }
+
+
 
 
 

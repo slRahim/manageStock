@@ -57,6 +57,8 @@ class _PiecesFragmentState extends State<PiecesFragment> {
   void fillFilter(Map<String, dynamic> filter) {
     filter["Piece"] = widget.peaceType ;
     filter["Mov"] = 0;
+    filter["Credit"] = _savedFilterHasCredit ;
+    filter["Draft"] = _savedFilterIsDraft ;
   }
 
   Future<Widget> futureInitState() async {

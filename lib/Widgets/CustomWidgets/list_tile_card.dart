@@ -72,9 +72,11 @@ class ListTileCard extends StatelessWidget {
         title: title,
         subtitle: subtitle,
         trailing: Container(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.end,
+            child: Wrap(
+              direction: Axis.vertical,
+              alignment: WrapAlignment.center,
+              runSpacing: 10.0,
+              crossAxisAlignment:  WrapCrossAlignment.end,
               children: trailingChildren,
             )),
       )

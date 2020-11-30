@@ -433,51 +433,51 @@ class _AddArticlePageState extends State<AddArticlePage>  with AutomaticKeepAliv
           !price2 && !price3
               ? dropdowns()
               : !price2
-                  ? Padding(padding: EdgeInsets.zero)
-                  : TextField(
-                      enabled: editMode,
-                      controller: _price2Control,
-                      keyboardType: TextInputType.number,
-                      decoration: InputDecoration(
-                        prefixIcon: Icon(
-                          Icons.monetization_on,
-                          color: Colors.blueGrey[700],
-                        ),
-                        focusedBorder: OutlineInputBorder(
-                            borderSide: BorderSide(color: Colors.blue[700]),
-                            borderRadius: BorderRadius.circular(20)),
-                        labelText: "Prix de vente 2",
-                        labelStyle: TextStyle(color: Colors.blue[700]),
-                        enabledBorder: OutlineInputBorder(
-                          gapPadding: 3.3,
-                          borderRadius: BorderRadius.circular(20),
-                          borderSide: BorderSide(color: Colors.blue[700]),
-                        ),
-                      ),
-                    ),
+              ? Padding(padding: EdgeInsets.zero)
+              : TextField(
+            enabled: editMode,
+            controller: _price2Control,
+            keyboardType: TextInputType.number,
+            decoration: InputDecoration(
+              prefixIcon: Icon(
+                Icons.monetization_on,
+                color: Colors.blueGrey[700],
+              ),
+              focusedBorder: OutlineInputBorder(
+                  borderSide: BorderSide(color: Colors.blue[700]),
+                  borderRadius: BorderRadius.circular(20)),
+              labelText: "Prix de vente 2",
+              labelStyle: TextStyle(color: Colors.blue[700]),
+              enabledBorder: OutlineInputBorder(
+                gapPadding: 3.3,
+                borderRadius: BorderRadius.circular(20),
+                borderSide: BorderSide(color: Colors.blue[700]),
+              ),
+            ),
+          ),
           !price3
               ? Padding(padding: EdgeInsets.zero)
               : TextField(
-                  enabled: editMode,
-                  controller: _price3Control,
-                  keyboardType: TextInputType.number,
-                  decoration: InputDecoration(
-                    prefixIcon: Icon(
-                      Icons.monetization_on,
-                      color: Colors.blueGrey[500],
-                    ),
-                    focusedBorder: OutlineInputBorder(
-                        borderSide: BorderSide(color: Colors.blue[700]),
-                        borderRadius: BorderRadius.circular(20)),
-                    labelText: "Prix de vente 3",
-                    labelStyle: TextStyle(color: Colors.blue[700]),
-                    enabledBorder: OutlineInputBorder(
-                      gapPadding: 3.3,
-                      borderRadius: BorderRadius.circular(20),
-                      borderSide: BorderSide(color: Colors.blue[700]),
-                    ),
-                  ),
-                ),
+            enabled: editMode,
+            controller: _price3Control,
+            keyboardType: TextInputType.number,
+            decoration: InputDecoration(
+              prefixIcon: Icon(
+                Icons.monetization_on,
+                color: Colors.blueGrey[500],
+              ),
+              focusedBorder: OutlineInputBorder(
+                  borderSide: BorderSide(color: Colors.blue[700]),
+                  borderRadius: BorderRadius.circular(20)),
+              labelText: "Prix de vente 3",
+              labelStyle: TextStyle(color: Colors.blue[700]),
+              enabledBorder: OutlineInputBorder(
+                gapPadding: 3.3,
+                borderRadius: BorderRadius.circular(20),
+                borderSide: BorderSide(color: Colors.blue[700]),
+              ),
+            ),
+          ),
           !price2 && !price3 ? Padding(padding: EdgeInsets.zero) : dropdowns(),
         ],
       ),
@@ -489,7 +489,7 @@ class _AddArticlePageState extends State<AddArticlePage>  with AutomaticKeepAliv
   Widget imageTab() {
     return SingleChildScrollView(
       child: ImagePickerWidget(
-        imageFile: _articleImage,
+          imageFile: _articleImage,
           editMode: editMode, onImageChange: (File imageFile) => {
         _articleImage = imageFile
       }),
@@ -501,33 +501,33 @@ class _AddArticlePageState extends State<AddArticlePage>  with AutomaticKeepAliv
   Widget descriptionTab() {
     return SingleChildScrollView(
         child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
-      Padding(
-        padding: EdgeInsets.all(20),
-        child: Center(
-            child: TextField(
-          enabled: editMode,
-          maxLines: 20,
-          controller: _descriptionControl,
-          keyboardType: TextInputType.multiline,
-          decoration: InputDecoration(
-            focusedBorder: OutlineInputBorder(
-                borderSide: BorderSide(color: Colors.blue[700]),
-                borderRadius: BorderRadius.circular(20)),
-            contentPadding: EdgeInsets.only(left: 20, top: 20, bottom: 20),
-            labelText: "Description",
-            labelStyle: TextStyle(color: Colors.blue[700]),
-            alignLabelWithHint: true,
-            hintText: "Entrez une description d'article ajouté",
-            enabledBorder: OutlineInputBorder(
-              gapPadding: 3.3,
-              borderRadius: BorderRadius.circular(20),
-              borderSide: BorderSide(color: Colors.blue[700]),
-            ),
+          Padding(
+            padding: EdgeInsets.all(20),
+            child: Center(
+                child: TextField(
+                  enabled: editMode,
+                  maxLines: 20,
+                  controller: _descriptionControl,
+                  keyboardType: TextInputType.multiline,
+                  decoration: InputDecoration(
+                    focusedBorder: OutlineInputBorder(
+                        borderSide: BorderSide(color: Colors.blue[700]),
+                        borderRadius: BorderRadius.circular(20)),
+                    contentPadding: EdgeInsets.only(left: 20, top: 20, bottom: 20),
+                    labelText: "Description",
+                    labelStyle: TextStyle(color: Colors.blue[700]),
+                    alignLabelWithHint: true,
+                    hintText: "Entrez une description d'article ajouté",
+                    enabledBorder: OutlineInputBorder(
+                      gapPadding: 3.3,
+                      borderRadius: BorderRadius.circular(20),
+                      borderSide: BorderSide(color: Colors.blue[700]),
+                    ),
+                  ),
+                )),
           ),
-        )),
-      ),
-      Padding(padding: EdgeInsets.all(10)),
-    ]));
+          Padding(padding: EdgeInsets.all(10)),
+        ]));
   }
 
   //////////////////////////////////////////////////////////////////////////////////
@@ -608,86 +608,86 @@ class _AddArticlePageState extends State<AddArticlePage>  with AutomaticKeepAliv
   Widget addMarquedialogue() {
     return StatefulBuilder(builder: (context, StateSetter setState) {
       return Dialog(
-          //this right here
+        //this right here
           child: SingleChildScrollView(
-        child: Container(
-          height: 500,
-          child: Padding(
-            padding: const EdgeInsets.all(6.0),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                ImagePickerWidget(editMode: editMode, scallFactor: 1, onImageChange: (File imageFile) => {
-                _marque.setpic(imageFile)
-                }),
+            child: Container(
+              height: 500,
+              child: Padding(
+                padding: const EdgeInsets.all(6.0),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    ImagePickerWidget(editMode: editMode, scallFactor: 1, onImageChange: (File imageFile) => {
+                      _marque.setpic(imageFile)
+                    }),
 
-                Padding(
-                  padding: EdgeInsets.only(left: 5, right: 5, bottom: 20),
-                  child: TextField(
-                    controller: _libelleMarqueControl,
-                    keyboardType: TextInputType.text,
-                    decoration: InputDecoration(
-                      prefixIcon: Icon(
-                        Icons.label,
-                        color: Colors.orange[900],
-                      ),
-                      focusedBorder: OutlineInputBorder(
-                          borderSide: BorderSide(color: Colors.orange[900]),
-                          borderRadius: BorderRadius.circular(20)),
-                      contentPadding: EdgeInsets.only(left: 10),
-                      labelText: "Marque",
-                      labelStyle: TextStyle(color: Colors.orange[900]),
-                      enabledBorder: OutlineInputBorder(
-                        gapPadding: 3.3,
-                        borderRadius: BorderRadius.circular(20),
-                        borderSide: BorderSide(color: Colors.orange[900]),
+                    Padding(
+                      padding: EdgeInsets.only(left: 5, right: 5, bottom: 20),
+                      child: TextField(
+                        controller: _libelleMarqueControl,
+                        keyboardType: TextInputType.text,
+                        decoration: InputDecoration(
+                          prefixIcon: Icon(
+                            Icons.label,
+                            color: Colors.orange[900],
+                          ),
+                          focusedBorder: OutlineInputBorder(
+                              borderSide: BorderSide(color: Colors.orange[900]),
+                              borderRadius: BorderRadius.circular(20)),
+                          contentPadding: EdgeInsets.only(left: 10),
+                          labelText: "Marque",
+                          labelStyle: TextStyle(color: Colors.orange[900]),
+                          enabledBorder: OutlineInputBorder(
+                            gapPadding: 3.3,
+                            borderRadius: BorderRadius.circular(20),
+                            borderSide: BorderSide(color: Colors.orange[900]),
+                          ),
+                        ),
                       ),
                     ),
-                  ),
+                    SizedBox(
+                      width: 320.0,
+                      child: Padding(
+                        padding: EdgeInsets.only(right: 0, left: 0),
+                        child: RaisedButton(
+                          onPressed: () async {
+                            setState(() {
+                              _marque.setLibelle(_libelleMarqueControl.text);
+                              _libelleMarqueControl.text = "";
+                            });
+
+                            await addMarqueIfNotExist(_marque);
+
+                            Navigator.pop(context);
+                            final snackBar = SnackBar(
+                              content: Text(
+                                'Marque Ajoutée',
+                                style: TextStyle(
+                                    color: Colors.white,
+                                    fontSize: 15,
+                                    fontWeight: FontWeight.w500),
+                              ),
+                              backgroundColor: Colors.blue,
+                              duration: Duration(seconds: 1),
+                            );
+                            _scaffoldKey.currentState.showSnackBar(snackBar);
+                            print(_marque.libelle);
+                          }
+                          ,
+                          child: Text(
+                            "Ajouter",
+                            style: TextStyle(color: Colors.white),
+                          ),
+                          color: Colors.blue,
+                        ),
+                      ),
+                    )
+                  ],
                 ),
-                SizedBox(
-                  width: 320.0,
-                  child: Padding(
-                    padding: EdgeInsets.only(right: 0, left: 0),
-                    child: RaisedButton(
-                      onPressed: () async {
-                          setState(() {
-                            _marque.setLibelle(_libelleMarqueControl.text);
-                            _libelleMarqueControl.text = "";
-                          });
-
-                          await addMarqueIfNotExist(_marque);
-
-                          Navigator.pop(context);
-                          final snackBar = SnackBar(
-                            content: Text(
-                              'Marque Ajoutée',
-                              style: TextStyle(
-                                  color: Colors.white,
-                                  fontSize: 15,
-                                  fontWeight: FontWeight.w500),
-                            ),
-                            backgroundColor: Colors.blue,
-                            duration: Duration(seconds: 1),
-                          );
-                          _scaffoldKey.currentState.showSnackBar(snackBar);
-                          print(_marque.libelle);
-                        }
-                      ,
-                      child: Text(
-                        "Ajouter",
-                        style: TextStyle(color: Colors.white),
-                      ),
-                      color: Colors.blue,
-                    ),
-                  ),
-                )
-              ],
+              ),
             ),
-          ),
-        ),
-      ));
+          ));
     });
   }
 
@@ -697,92 +697,92 @@ class _AddArticlePageState extends State<AddArticlePage>  with AutomaticKeepAliv
     return StatefulBuilder(builder: (context, StateSetter setState) {
       return Builder(
           builder: (context) => Dialog(
-                //this right here
-                child: SingleChildScrollView(
-                  child: Container(
-                    height: 500,
-                    child: Padding(
-                      padding: const EdgeInsets.all(6.0),
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          ImagePickerWidget(editMode: editMode, scallFactor: 1, onImageChange: (File imageFile) => {
-                            _famille.setpic(imageFile)
-                          }),
-                          Padding(
-                            padding: EdgeInsets.only(
-                                left: 5, right: 5, bottom: 20, top: 20),
-                            child: TextField(
-                              controller: _libelleFamilleControl,
-                              keyboardType: TextInputType.text,
-                              decoration: InputDecoration(
-                                prefixIcon: Icon(
-                                  Icons.view_agenda,
-                                  color: Colors.orange[900],
-                                ),
-                                focusedBorder: OutlineInputBorder(
-                                    borderSide:
-                                        BorderSide(color: Colors.orange[900]),
-                                    borderRadius: BorderRadius.circular(20)),
-                                contentPadding: EdgeInsets.only(left: 10),
-                                labelText: "Famille",
-                                labelStyle:
-                                    TextStyle(color: Colors.orange[900]),
-                                enabledBorder: OutlineInputBorder(
-                                  gapPadding: 3.3,
-                                  borderRadius: BorderRadius.circular(20),
-                                  borderSide:
-                                      BorderSide(color: Colors.orange[900]),
-                                ),
-                              ),
+            //this right here
+            child: SingleChildScrollView(
+              child: Container(
+                height: 500,
+                child: Padding(
+                  padding: const EdgeInsets.all(6.0),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      ImagePickerWidget(editMode: editMode, scallFactor: 1, onImageChange: (File imageFile) => {
+                        _famille.setpic(imageFile)
+                      }),
+                      Padding(
+                        padding: EdgeInsets.only(
+                            left: 5, right: 5, bottom: 20, top: 20),
+                        child: TextField(
+                          controller: _libelleFamilleControl,
+                          keyboardType: TextInputType.text,
+                          decoration: InputDecoration(
+                            prefixIcon: Icon(
+                              Icons.view_agenda,
+                              color: Colors.orange[900],
+                            ),
+                            focusedBorder: OutlineInputBorder(
+                                borderSide:
+                                BorderSide(color: Colors.orange[900]),
+                                borderRadius: BorderRadius.circular(20)),
+                            contentPadding: EdgeInsets.only(left: 10),
+                            labelText: "Famille",
+                            labelStyle:
+                            TextStyle(color: Colors.orange[900]),
+                            enabledBorder: OutlineInputBorder(
+                              gapPadding: 3.3,
+                              borderRadius: BorderRadius.circular(20),
+                              borderSide:
+                              BorderSide(color: Colors.orange[900]),
                             ),
                           ),
-                          SizedBox(
-                            width: 320.0,
-                            child: Padding(
-                              padding: EdgeInsets.only(right: 0, left: 0),
-                              child: RaisedButton(
-                                onPressed: () async {
-                                    setState(() {
-                                      _famille.setLibelle(
-                                          _libelleFamilleControl.text);
-                                      _libelleFamilleControl.text = "";
-                                    });
-
-                                    await addFamilleIfNotExist(_famille);
-
-                                    Navigator.pop(context);
-                                    final snackBar = SnackBar(
-                                      content: Text(
-                                        'Famille Ajoutée',
-                                        style: TextStyle(
-                                            color: Colors.white,
-                                            fontSize: 15,
-                                            fontWeight: FontWeight.w500),
-                                      ),
-                                      backgroundColor: Colors.red,
-                                      duration: Duration(seconds: 1),
-                                    );
-                                    _scaffoldKey.currentState
-                                        .showSnackBar(snackBar);
-                                    print(_famille.libelle);
-                                  }
-                                ,
-                                child: Text(
-                                  "Ajouter",
-                                  style: TextStyle(color: Colors.white),
-                                ),
-                                color: Colors.red,
-                              ),
-                            ),
-                          )
-                        ],
+                        ),
                       ),
-                    ),
+                      SizedBox(
+                        width: 320.0,
+                        child: Padding(
+                          padding: EdgeInsets.only(right: 0, left: 0),
+                          child: RaisedButton(
+                            onPressed: () async {
+                              setState(() {
+                                _famille.setLibelle(
+                                    _libelleFamilleControl.text);
+                                _libelleFamilleControl.text = "";
+                              });
+
+                              await addFamilleIfNotExist(_famille);
+
+                              Navigator.pop(context);
+                              final snackBar = SnackBar(
+                                content: Text(
+                                  'Famille Ajoutée',
+                                  style: TextStyle(
+                                      color: Colors.white,
+                                      fontSize: 15,
+                                      fontWeight: FontWeight.w500),
+                                ),
+                                backgroundColor: Colors.red,
+                                duration: Duration(seconds: 1),
+                              );
+                              _scaffoldKey.currentState
+                                  .showSnackBar(snackBar);
+                              print(_famille.libelle);
+                            }
+                            ,
+                            child: Text(
+                              "Ajouter",
+                              style: TextStyle(color: Colors.white),
+                            ),
+                            color: Colors.red,
+                          ),
+                        ),
+                      )
+                    ],
                   ),
                 ),
-              ));
+              ),
+            ),
+          ));
     });
   }
 
@@ -802,15 +802,15 @@ class _AddArticlePageState extends State<AddArticlePage>  with AutomaticKeepAliv
               children: [
                 Center(
                     child: Padding(
-                  padding: const EdgeInsets.only(bottom: 20),
-                  child: Text(
-                    "Ajouter une TVA",
-                    style: TextStyle(
-                      fontSize: 18,
-                      fontWeight: FontWeight.w400,
-                    ),
-                  ),
-                )),
+                      padding: const EdgeInsets.only(bottom: 20),
+                      child: Text(
+                        "Ajouter une TVA",
+                        style: TextStyle(
+                          fontSize: 18,
+                          fontWeight: FontWeight.w400,
+                        ),
+                      ),
+                    )),
                 Padding(
                   padding: EdgeInsets.only(left: 5, right: 5, bottom: 20),
                   child: TextField(
@@ -841,24 +841,24 @@ class _AddArticlePageState extends State<AddArticlePage>  with AutomaticKeepAliv
                     padding: EdgeInsets.only(right: 0, left: 0),
                     child: RaisedButton(
                       onPressed: () async {
-                          double _taux = double.parse(_tauxTVAControl.text);
-                          _tauxTVAControl.text = "";
-                          await addTvaIfNotExist(_taux);
+                        double _taux = double.parse(_tauxTVAControl.text);
+                        _tauxTVAControl.text = "";
+                        await addTvaIfNotExist(_taux);
 
-                          Navigator.pop(context);
-                          final snackBar = SnackBar(
-                            content: Text(
-                              'TVA ' + _taux.toString() + '% Ajoutée',
-                              style: TextStyle(
-                                  color: Colors.white,
-                                  fontSize: 15,
-                                  fontWeight: FontWeight.w500),
-                            ),
-                            backgroundColor: Colors.green[900],
-                            duration: Duration(seconds: 1),
-                          );
-                          _scaffoldKey.currentState.showSnackBar(snackBar);
-                        }
+                        Navigator.pop(context);
+                        final snackBar = SnackBar(
+                          content: Text(
+                            'TVA ' + _taux.toString() + '% Ajoutée',
+                            style: TextStyle(
+                                color: Colors.white,
+                                fontSize: 15,
+                                fontWeight: FontWeight.w500),
+                          ),
+                          backgroundColor: Colors.green[900],
+                          duration: Duration(seconds: 1),
+                        );
+                        _scaffoldKey.currentState.showSnackBar(snackBar);
+                      }
                       ,
                       child: Text(
                         "Ajouter",

@@ -220,7 +220,11 @@ class SqlLiteDatabaseHelper {
 
   //table speciale pour les paraméter de l'app
   Future<void> createMyParamTable (Database db , int version ) async{
-
+    await db.execute("""CREATE TABLE IF NOT EXISTS MyParams (
+        id INTEGER PRIMARY KEY AUTOINCREMENT, 
+        Tarification integer DEFAULT 1, 
+        Tva integer DEFAULT 0
+        )""");
   }
 
   //fonction speciale pour la creation des triggers de bd
@@ -385,6 +389,8 @@ class SqlLiteDatabaseHelper {
         END;
      ''');
 
+     //---------------------------------------------------------------------------------------------------------------------
+
      //supp journale de la piece avant supp piece
      await db.execute('''
         CREATE TRIGGER IF NOT EXISTS delete_journaux
@@ -393,8 +399,58 @@ class SqlLiteDatabaseHelper {
         BEGIN
             DELETE FROM Journaux
                   WHERE Piece_id = OLD.id;
+                  
+            UPDATE Tiers
+               SET Chiffre_affaires = Chiffre_affaires - OLD.Total_ttc,
+                   Rgler = Regler  - OLD.Regler,
+                   Credit = Credit - OLD.Reste
+              WHERE id = OLD.Tier_id;
         END;
      ''');
+
+     //update_tiers_chiffre_affaires on insert piece
+     await db.execute('''
+        CREATE TRIGGER IF NOT EXISTS update_tiers_chiffre_affaires
+        AFTER INSERT ON Pieces
+        FOR EACH ROW
+        WHEN NEW.Mov = 1 
+        BEGIN
+             UPDATE Tiers
+               SET Chiffre_affaires = Chiffre_affaires + NEW.Total_ttc
+              WHERE id = New.Tier_id;
+        END;
+     ''');
+
+     //update_tiers_chiffre_affaires on update mov piece
+     await db.execute('''
+        CREATE TRIGGER IF NOT EXISTS update_tiers_chiffre_affaires
+        AFTER UPDATE ON Pieces
+        FOR EACH ROW
+        WHEN NEW.Mov = 1 
+        BEGIN
+             UPDATE Tiers
+               SET Chiffre_affaires = Chiffre_affaires + (NEW.Total_ttc-OLD.Total_ttc),
+                   Rgler = Regler + (NEW.Regler - OLD.Regler),
+                   Credit = Credit + (NEW.Reste-OLD.Reste)
+              WHERE id = New.Tier_id;
+        END;
+     ''');
+
+     //update_tiers_chiffre_affaires on update mov != 1 piece
+     await db.execute('''
+        CREATE TRIGGER IF NOT EXISTS update_tiers_chiffre_affaires
+        AFTER UPDATE ON Pieces
+        FOR EACH ROW
+        WHEN NEW.Mov <> 1 AND (OLD.Mov <> NEW.Mov) 
+        BEGIN
+             UPDATE Tiers
+               SET Chiffre_affaires = Chiffre_affaires - OLD.Total_ttc,
+                   Rgler = Regler  - OLD.Regler,
+                   Credit = Credit - OLD.Reste
+              WHERE id = New.Tier_id;
+        END;
+     ''');
+
 
   }
 
@@ -440,6 +496,8 @@ class SqlLiteDatabaseHelper {
     batch.rawInsert('INSERT INTO FormatPiece(Format , Piece , Current_index) VALUES("XXXX/YYYY"  , "FF" , 0)');
     batch.rawInsert('INSERT INTO FormatPiece(Format , Piece , Current_index) VALUES("XXXX/YYYY"  , "RF" , 0)');
     batch.rawInsert('INSERT INTO FormatPiece(Format , Piece , Current_index) VALUES("XXXX/YYYY"  , "AC" , 0)');
+
+    batch.rawInsert("INSERT INTO MyParams(Tarification , Tva) VALUES(2,0)");
 
     Tiers tier0 = new Tiers(null, "Passagé", "qrcode", 0, 0, 1, "adresse", "ville", "telephone", "000000", "fax", "email", 0, 0, 0, false);
     tier0.clientFour = 0 ;
