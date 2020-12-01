@@ -5,12 +5,13 @@ import 'package:gestmob/Helpers/Statics.dart';
 import 'package:gestmob/models/Article.dart';
 import 'package:gestmob/models/Tiers.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 
 // le style des list tiele utiliser ds l'app
 class ListTileCard extends StatelessWidget {
 
-
   final int id;
+  final from ;
   final bool itemSelected;
   final Widget leading;
   final Widget title;
@@ -20,23 +21,19 @@ class ListTileCard extends StatelessWidget {
   final GestureLongPressCallback onLongPress;
   final ConfirmDismissCallback confirmDismiss;
 
-  const ListTileCard({Key key, this.id, this.leading, this.title, this.subtitle, this.trailingChildren, this.onTap, this.confirmDismiss, this.itemSelected, this.onLongPress}) : super(key: key);
+  const ListTileCard({Key key, this.id, this.from ,this.leading, this.title, this.subtitle, this.trailingChildren, this.onTap, this.confirmDismiss, this.itemSelected, this.onLongPress}) : super(key: key);
 
   @override
   Widget build(BuildContext context) => Card(
     margin: EdgeInsets.all(2),
     color: Colors.grey[200],
     elevation: 2,
-    child: id != null && confirmDismiss != null? Dismissible(
-      background: Container(
+    child: id != null && confirmDismiss != null ? Dismissible(
+      background: (from is Tiers ) ? Container(
         width: double.maxFinite,
         height: double.maxFinite,
         decoration: BoxDecoration(
           color: Colors.green[700],
-          /*gradient: LinearGradient(
-                  colors: [Colors.white, Colors.green],
-                  begin: Alignment.centerLeft,
-                  end: Alignment.centerRight),*/
         ),
         child: Padding(
           padding: const EdgeInsets.fromLTRB(50, 5, 5, 5),
@@ -50,6 +47,29 @@ class ListTileCard extends StatelessWidget {
                   height: 2.0,
                 ),
                 Text("Appeler", style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),),
+              ],
+            ),
+          ),
+        ),
+      )
+      : Container(
+        width: double.maxFinite,
+        height: double.maxFinite,
+        decoration: BoxDecoration(
+          color: Colors.red[700],
+        ),
+        child: Padding(
+          padding: const EdgeInsets.fromLTRB(50, 5, 5, 5),
+          child: Align(
+            alignment: Alignment.centerLeft, // Align however you like (i.e .centerRight, centerLeft)
+            child: Row(
+              children: [
+                Icon(MdiIcons.trashCan, color: Colors.white,),
+                SizedBox(
+                  width: 20.0,
+                  height: 2.0,
+                ),
+                Text("Suprimmer", style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),),
               ],
             ),
           ),

@@ -1,6 +1,7 @@
 import 'dart:io';
 import 'dart:typed_data';
 
+import 'package:barcode_scan/barcode_scan.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_icons/flutter_icons.dart';
 import 'package:gestmob/Helpers/Helpers.dart';
@@ -14,6 +15,7 @@ import 'package:gestmob/models/Article.dart';
 import 'package:gestmob/models/ArticleFamille.dart';
 import 'package:gestmob/models/ArticleMarque.dart';
 import 'package:gestmob/models/ArticleTva.dart';
+import 'package:gestmob/models/MyParams.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:gestmob/Widgets/utils.dart' as utils;
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
@@ -62,6 +64,35 @@ class _AddArticlePageState extends State<AddArticlePage>  with AutomaticKeepAliv
   List<DropdownMenuItem<ArticleTva>> _tvaDropdownItems;
   ArticleTva _selectedTva;
 
+  bool price2 = false ;
+  bool price3 = false ;
+  bool tva=false ;
+  bool _validateDes = false;
+
+  TextEditingController _designationControl = new TextEditingController();
+  TextEditingController _stockInitialControl = new TextEditingController();
+  TextEditingController _stockMinimumControl = new TextEditingController();
+  TextEditingController _prixAchatControl = new TextEditingController();
+  TextEditingController _refControl = new TextEditingController();
+  TextEditingController _codeBarControl = new TextEditingController();
+  TextEditingController _pmpControl = new TextEditingController(text: "0.0");
+  TextEditingController _descriptionControl = new TextEditingController();
+  TextEditingController _price1Control = new TextEditingController(text: "0.0");
+  TextEditingController _price2Control = new TextEditingController(text: "0.0");
+  TextEditingController _price3Control = new TextEditingController(text: "0.0");
+  TextEditingController _libelleFamilleControl = new TextEditingController();
+  TextEditingController _libelleMarqueControl = new TextEditingController();
+  TextEditingController _tauxTVAControl = new TextEditingController(text: "0.0");
+  TextEditingController _colisControl = new TextEditingController();
+  TextEditingController _qteColisCotrol = new TextEditingController();
+
+  ArticleFamille _famille = new ArticleFamille.init();
+  ArticleMarque _marque = new ArticleMarque.init();
+  File _articleImage;
+
+  MyParams _myParams ;
+  QueryCtr _queryCtr = new QueryCtr();
+
   void initState() {
     super.initState();
 
@@ -75,23 +106,22 @@ class _AddArticlePageState extends State<AddArticlePage>  with AutomaticKeepAliv
   Future<bool> futureInitState() async {
     _marqueItems = await widget._queryCtr.getAllArticleMarques();
     _familleItems = await widget._queryCtr.getAllArticleFamilles();
+
     _tvaItems = await widget._queryCtr.getAllArticleTva();
 
     _selectedMarque = _marqueItems[0];
     _selectedFamille = _familleItems[0];
     _selectedTva = new ArticleTva(0);
 
-    if (widget.arguments is Article &&
-        widget.arguments.id != null &&
-        widget.arguments.id > -1) {
+    if (widget.arguments is Article && widget.arguments.id != null && widget.arguments.id > -1) {
       editMode = false;
       modification = true;
       await setDataFromArticle(widget.arguments);
     } else {
-      await setDataFromArticle(await widget._queryCtr.getTestArticle());
       editMode = true;
     }
 
+    await getParams();
     _marqueDropdownItems = utils.buildMarqueDropDownMenuItems(_marqueItems);
     _familleDropdownItems = utils.buildDropFamilleArticle(_familleItems);
     _tvaDropdownItems = utils.buildDropTvaDownMenuItems(_tvaItems);
@@ -99,28 +129,54 @@ class _AddArticlePageState extends State<AddArticlePage>  with AutomaticKeepAliv
     return Future<bool>.value(editMode);
   }
 
-  bool price2 = Prefs.PriceCount > 1;
-  bool price3 = Prefs.PriceCount > 2;
-  bool _validateDes = false;
+  Future<void> setDataFromArticle(Article article) async {
+    _designationControl.text = article.designation;
+    _stockInitialControl.text = article.quantite.toString();
+    _stockMinimumControl.text = article.quantiteMinimum.toString();
+    _prixAchatControl.text = article.prixAchat.toString();
+    _refControl.text = article.ref;
+    _stockable = article.stockable;
+    _codeBarControl.text = article.codeBar;
+    _qteColisCotrol.text=article.quantiteColis.toString();
+    _colisControl.text=article.colis.toString();
 
-  TextEditingController _designationControl = new TextEditingController();
-  TextEditingController _stockInitialControl = new TextEditingController();
-  TextEditingController _stockMinimumControl = new TextEditingController();
-  TextEditingController _prixAchatControl = new TextEditingController();
-  TextEditingController _refControl = new TextEditingController();
-  TextEditingController _codeBarControl = new TextEditingController();
-  TextEditingController _pmpControl = new TextEditingController();
-  TextEditingController _descriptionControl = new TextEditingController();
-  TextEditingController _price1Control = new TextEditingController();
-  TextEditingController _price2Control = new TextEditingController();
-  TextEditingController _price3Control = new TextEditingController();
-  TextEditingController _libelleFamilleControl = new TextEditingController();
-  TextEditingController _libelleMarqueControl = new TextEditingController();
-  TextEditingController _tauxTVAControl = new TextEditingController();
+    if(_pmpControl.text != null){
+      _pmpControl.text = article.pmp.toString();
+    }
 
-  ArticleFamille _famille = new ArticleFamille.init();
-  ArticleMarque _marque = new ArticleMarque.init();
-  File _articleImage;
+    _descriptionControl.text = article.description;
+    _price1Control.text = article.prixVente1.toString();
+    _price2Control.text = article.prixVente2.toString();
+    _price3Control.text = article.prixVente3.toString();
+    _articleImage = await Helpers.getFileFromUint8List(article.imageUint8List);
+
+    _selectedMarque = _marqueItems[article.idMarque];
+    _selectedFamille = _familleItems[article.idFamille];
+    _selectedTva = new ArticleTva(article.tva);
+  }
+
+  void getParams() async {
+    _myParams = await _queryCtr.getAllParams();
+    switch(_myParams.tarification){
+      case 1 :
+        price2 = false ;
+        price3 = false ;
+        break;
+      case 2 :
+        price2 = true ;
+        price3 = false ;
+        break;
+      case 2 :
+        price2 = true ;
+        price3 = true ;
+        break;
+    }
+    if(_myParams.tva >= 1){
+      tva = true ;
+    }else{
+      tva = false ;
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -254,25 +310,29 @@ class _AddArticlePageState extends State<AddArticlePage>  with AutomaticKeepAliv
               ),
             ),
           ),
-
-          TextField(
-            enabled: editMode,
-            controller: _codeBarControl,
-            keyboardType: TextInputType.text,
-            decoration: InputDecoration(
-              prefixIcon: Icon(
-                MdiIcons.barcode,
-                color: Colors.blue[700],
-              ),
-              focusedBorder: OutlineInputBorder(
+          InkWell(
+            onDoubleTap: () async {
+              await scanBarCode();
+            },
+            child: TextField(
+              enabled: editMode,
+              controller: _codeBarControl,
+              keyboardType: TextInputType.text,
+              decoration: InputDecoration(
+                prefixIcon: Icon(
+                  MdiIcons.barcode,
+                  color: Colors.blue[700],
+                ),
+                focusedBorder: OutlineInputBorder(
+                    borderSide: BorderSide(color: Colors.blue[700]),
+                    borderRadius: BorderRadius.circular(20)),
+                labelText: "Double Tap to scan barcode",
+                labelStyle: TextStyle(color: Colors.blue[700]),
+                enabledBorder: OutlineInputBorder(
+                  gapPadding: 3.3,
+                  borderRadius: BorderRadius.circular(20),
                   borderSide: BorderSide(color: Colors.blue[700]),
-                  borderRadius: BorderRadius.circular(20)),
-              labelText: "Code à barres",
-              labelStyle: TextStyle(color: Colors.blue[700]),
-              enabledBorder: OutlineInputBorder(
-                gapPadding: 3.3,
-                borderRadius: BorderRadius.circular(20),
-                borderSide: BorderSide(color: Colors.blue[700]),
+                ),
               ),
             ),
           ),
@@ -281,7 +341,7 @@ class _AddArticlePageState extends State<AddArticlePage>  with AutomaticKeepAliv
               Visibility(
                 visible: _stockable,
                 child: Flexible(
-                  flex: 10,
+                  flex: 5,
                   child: TextField(
                     enabled: editMode && _stockable,
                     controller: _prixAchatControl,
@@ -307,7 +367,7 @@ class _AddArticlePageState extends State<AddArticlePage>  with AutomaticKeepAliv
               ),
               Padding(padding: EdgeInsets.fromLTRB(_stockable?8:0, 0, 0, 0)),
               Flexible(
-                flex: 10,
+                flex: 5,
                 child: Container(
                   decoration: editMode? new BoxDecoration(
                     border: Border.all(color: Colors.blueAccent,),
@@ -331,11 +391,11 @@ class _AddArticlePageState extends State<AddArticlePage>  with AutomaticKeepAliv
           ),
 
           Visibility(
-            visible: modification && _stockable,
+            visible: _stockable,
             child: TextField(
-              enabled: false,
+              enabled: editMode,
               controller: _pmpControl,
-              keyboardType: TextInputType.text,
+              keyboardType: TextInputType.number,
               decoration: InputDecoration(
                 prefixIcon: Icon(
                   Icons.archive,
@@ -344,7 +404,7 @@ class _AddArticlePageState extends State<AddArticlePage>  with AutomaticKeepAliv
                 focusedBorder: OutlineInputBorder(
                     borderSide: BorderSide(color: Colors.blue[700]),
                     borderRadius: BorderRadius.circular(20)),
-                labelText: "PMP",
+                labelText: (modification) ? "PMP" : "PMP Init",
                 labelStyle: TextStyle(color: Colors.blue[700]),
                 enabledBorder: OutlineInputBorder(
                   gapPadding: 3.3,
@@ -381,22 +441,50 @@ class _AddArticlePageState extends State<AddArticlePage>  with AutomaticKeepAliv
                 ),
               ),
               Padding(padding: EdgeInsets.all(4)),
-              Visibility(
-                visible: !modification,
-                child: Flexible(
+              Flexible(
+                child: TextField(
+                  enabled: editMode,
+                  controller: _stockMinimumControl,
+                  keyboardType: TextInputType.number,
+                  decoration: InputDecoration(
+                    prefixIcon: Icon(
+                      Icons.apps,
+                      color: Colors.blue[700],
+                    ),
+                    focusedBorder: OutlineInputBorder(
+                        borderSide: BorderSide(color: Colors.blue[700]),
+                        borderRadius: BorderRadius.circular(20)),
+                    labelText: "Stock min",
+                    labelStyle: TextStyle(color: Colors.blue[700]),
+                    enabledBorder: OutlineInputBorder(
+                      gapPadding: 3.3,
+                      borderRadius: BorderRadius.circular(20),
+                      borderSide: BorderSide(color: Colors.blue[700]),
+                    ),
+                  ),
+                ),
+              ),
+            ],
+          ),
+
+          Row(
+            children: [
+              Flexible(
+                flex: 5,
+                child: Visibility(
                   child: TextField(
                     enabled: editMode,
-                    controller: _stockMinimumControl,
+                    controller: _qteColisCotrol,
                     keyboardType: TextInputType.number,
                     decoration: InputDecoration(
                       prefixIcon: Icon(
-                        Icons.apps,
+                        Icons.shopping_bag_rounded,
                         color: Colors.blue[700],
                       ),
                       focusedBorder: OutlineInputBorder(
                           borderSide: BorderSide(color: Colors.blue[700]),
                           borderRadius: BorderRadius.circular(20)),
-                      labelText: "Stock minimum",
+                      labelText: "Qte par Colis",
                       labelStyle: TextStyle(color: Colors.blue[700]),
                       enabledBorder: OutlineInputBorder(
                         gapPadding: 3.3,
@@ -407,8 +495,37 @@ class _AddArticlePageState extends State<AddArticlePage>  with AutomaticKeepAliv
                   ),
                 ),
               ),
+              Padding(padding: EdgeInsets.all(4)),
+              Flexible(
+                flex: 5,
+                child: Visibility(
+                  visible: modification && !editMode,
+                  child: TextField(
+                    enabled: false,
+                    controller: _colisControl,
+                    keyboardType: TextInputType.number,
+                    decoration: InputDecoration(
+                      prefixIcon: Icon(
+                        Icons.archive,
+                        color: Colors.blue[700],
+                      ),
+                      focusedBorder: OutlineInputBorder(
+                          borderSide: BorderSide(color: Colors.blue[700]),
+                          borderRadius: BorderRadius.circular(20)),
+                      labelText: "Colis",
+                      labelStyle: TextStyle(color: Colors.blue[700]),
+                      enabledBorder:OutlineInputBorder(
+                        gapPadding: 3.3,
+                        borderRadius: BorderRadius.circular(20),
+                        borderSide: BorderSide(color: Colors.blue[700]),
+                      ),
+                    ),
+                  ),
+                ),
+              ),
             ],
           ),
+
           TextField(
             enabled: editMode,
             controller: _price1Control,
@@ -430,55 +547,55 @@ class _AddArticlePageState extends State<AddArticlePage>  with AutomaticKeepAliv
               ),
             ),
           ),
-          !price2 && !price3
-              ? dropdowns()
-              : !price2
-              ? Padding(padding: EdgeInsets.zero)
-              : TextField(
-            enabled: editMode,
-            controller: _price2Control,
-            keyboardType: TextInputType.number,
-            decoration: InputDecoration(
-              prefixIcon: Icon(
-                Icons.monetization_on,
-                color: Colors.blueGrey[700],
-              ),
-              focusedBorder: OutlineInputBorder(
+          Visibility(
+            visible: price2 ,
+            child: TextField(
+              enabled: editMode,
+              controller: _price2Control,
+              keyboardType: TextInputType.number,
+              decoration: InputDecoration(
+                prefixIcon: Icon(
+                  Icons.monetization_on,
+                  color: Colors.blueGrey[700],
+                ),
+                focusedBorder: OutlineInputBorder(
+                    borderSide: BorderSide(color: Colors.blue[700]),
+                    borderRadius: BorderRadius.circular(20)),
+                labelText: "Prix de vente 2",
+                labelStyle: TextStyle(color: Colors.blue[700]),
+                enabledBorder: OutlineInputBorder(
+                  gapPadding: 3.3,
+                  borderRadius: BorderRadius.circular(20),
                   borderSide: BorderSide(color: Colors.blue[700]),
-                  borderRadius: BorderRadius.circular(20)),
-              labelText: "Prix de vente 2",
-              labelStyle: TextStyle(color: Colors.blue[700]),
-              enabledBorder: OutlineInputBorder(
-                gapPadding: 3.3,
-                borderRadius: BorderRadius.circular(20),
-                borderSide: BorderSide(color: Colors.blue[700]),
+                ),
               ),
             ),
           ),
-          !price3
-              ? Padding(padding: EdgeInsets.zero)
-              : TextField(
-            enabled: editMode,
-            controller: _price3Control,
-            keyboardType: TextInputType.number,
-            decoration: InputDecoration(
-              prefixIcon: Icon(
-                Icons.monetization_on,
-                color: Colors.blueGrey[500],
-              ),
-              focusedBorder: OutlineInputBorder(
+          Visibility(
+            visible:price3,
+            child: TextField(
+              enabled: editMode,
+              controller: _price3Control,
+              keyboardType: TextInputType.number,
+              decoration: InputDecoration(
+                prefixIcon: Icon(
+                  Icons.monetization_on,
+                  color: Colors.blueGrey[500],
+                ),
+                focusedBorder: OutlineInputBorder(
+                    borderSide: BorderSide(color: Colors.blue[700]),
+                    borderRadius: BorderRadius.circular(20)),
+                labelText: "Prix de vente 3",
+                labelStyle: TextStyle(color: Colors.blue[700]),
+                enabledBorder: OutlineInputBorder(
+                  gapPadding: 3.3,
+                  borderRadius: BorderRadius.circular(20),
                   borderSide: BorderSide(color: Colors.blue[700]),
-                  borderRadius: BorderRadius.circular(20)),
-              labelText: "Prix de vente 3",
-              labelStyle: TextStyle(color: Colors.blue[700]),
-              enabledBorder: OutlineInputBorder(
-                gapPadding: 3.3,
-                borderRadius: BorderRadius.circular(20),
-                borderSide: BorderSide(color: Colors.blue[700]),
+                ),
               ),
             ),
           ),
-          !price2 && !price3 ? Padding(padding: EdgeInsets.zero) : dropdowns(),
+          dropdowns(),
         ],
       ),
     );
@@ -539,26 +656,29 @@ class _AddArticlePageState extends State<AddArticlePage>  with AutomaticKeepAliv
         runSpacing: 10,
         direction: Axis.horizontal,
         children: [
-          ListDropDown(
-            leftIcon: Icons.attach_money,
-            editMode: editMode,
-            libelle: "TVA  ",
-            value: _selectedTva,
-            items: _tvaDropdownItems,
-            onChanged: (value) {
-              setState(() {
-                _selectedTva = value;
-              });
-            },
-            onAddPressed: () async {
-              await showDialog(
-                  context: context,
-                  builder: (BuildContext context) {
-                    return addTVAdialogue();
-                  }).then((val) {
-                setState(() {});
-              });
-            },
+          Visibility(
+            visible: tva,
+            child: ListDropDown(
+              leftIcon: Icons.attach_money,
+              editMode: editMode,
+              libelle: "TVA  ",
+              value: _selectedTva,
+              items: _tvaDropdownItems,
+              onChanged: (value) {
+                setState(() {
+                  _selectedTva = value;
+                });
+              },
+              onAddPressed: () async {
+                await showDialog(
+                    context: context,
+                    builder: (BuildContext context) {
+                      return addTVAdialogue();
+                    }).then((val) {
+                  setState(() {});
+                });
+              },
+            ),
           ),
           ListDropDown(
             editMode: editMode,
@@ -876,69 +996,6 @@ class _AddArticlePageState extends State<AddArticlePage>  with AutomaticKeepAliv
     });
   }
 
-  Future<Article> makeArticle() async {
-    Article article = new Article.init();
-    article.setId(widget.arguments.id);
-    article.setdesignation(_designationControl.text);
-    article.setQteInit(double.parse(_stockInitialControl.text));
-    article.setquantite(double.parse(_stockInitialControl.text));
-    article.setQteMin(double.parse(_stockMinimumControl.text));
-    if(_stockable){
-      article.setprixAchat(double.parse(_prixAchatControl.text));
-    }
-
-    article.setref(_refControl.text);
-    article.setCodeBar(_codeBarControl.text);
-    article.setDescription(_descriptionControl.text);
-    article.setprixVente1(double.parse(_price1Control.text));
-    article.setprixVente2(double.parse(_price2Control.text));
-    article.setprixVente3(double.parse(_price3Control.text));
-    // article.setIdFamille(int.parse(_libelleFamilleControl.text));
-    // article.setIdMarque(int.parse(_libelleMarqueControl.text));
-    article.setIdFamille(_familleItems.indexOf(_selectedFamille));
-    article.setIdMarque(_marqueItems.indexOf(_selectedMarque));
-    article.setTva(_selectedTva.tva);
-
-    article.setbloquer(false);
-    article.setStockable(_stockable);
-
-    if (_articleImage != null) {
-      article.setImageUint8List(Helpers.getUint8ListFromFile(_articleImage));
-    } else{
-      Uint8List image = await Helpers.getDefaultImageUint8List();
-      article.setImageUint8List(image);
-    }
-    return article;
-  }
-
-  Future<void> setDataFromArticle(Article article) async {
-    _designationControl.text = article.designation;
-    _stockInitialControl.text = article.quantiteInit.toString();
-    _stockMinimumControl.text = article.quantite.toString();
-    _prixAchatControl.text = article.prixAchat.toString();
-    _refControl.text = article.ref;
-    _stockable = article.stockable;
-    _codeBarControl.text = article.codeBar;
-    if(_pmpControl.text != null){
-      _pmpControl.text = article.pmp.toString();
-    }
-
-    _descriptionControl.text = article.description;
-    _price1Control.text = article.prixVente1.toString();
-    _price2Control.text = article.prixVente2.toString();
-    _price3Control.text = article.prixVente3.toString();
-    // _tauxTVAControl.text = article.tva.toString();
-    _articleImage = await Helpers.getFileFromUint8List(article.imageUint8List);
-
-    _selectedMarque = _marqueItems[article.idMarque];
-    _selectedFamille = _familleItems[article.idFamille];
-    _selectedTva = new ArticleTva(article.tva);
-
-    // addTvaIfNotExist(article.tva);
-
-    // article = new Article(_image, "_designation", "_ref", 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, false);
-  }
-
   Future<void> addTvaIfNotExist(double tvaDouble) async {
     ArticleTva tvaItem = new ArticleTva(tvaDouble);
     int tvaIndex = _tvaItems.indexOf(tvaItem);
@@ -1012,8 +1069,93 @@ class _AddArticlePageState extends State<AddArticlePage>  with AutomaticKeepAliv
       return Future.value(-1);
     }
 
-    // widget._queryCtr.saveTestArticle();
   }
 
+
+  Future<Article> makeArticle() async {
+    Article article = new Article.init();
+    article.setId(widget.arguments.id);
+
+    article.setdesignation(_designationControl.text);
+    article.setref(_refControl.text);
+    article.setCodeBar(_codeBarControl.text);
+    if(_stockable){
+      article.setprixAchat(double.parse(_prixAchatControl.text));
+    }
+    article.setQteInit(double.parse(_stockInitialControl.text));
+    article.setquantite(double.parse(_stockInitialControl.text));
+    article.setQteMin(double.parse(_stockMinimumControl.text));
+    article.setPmp(double.parse(_pmpControl.text));
+    if(!modification && editMode){
+      article.setPmpInit(double.parse(_pmpControl.text));
+    }
+
+    article.setQteColis(double.parse(_qteColisCotrol.text));
+    double colis= double.parse(_stockInitialControl.text) / double.parse(_qteColisCotrol.text) ;
+    article.setColis(colis.toInt());
+
+    article.setprixVente1(double.parse(_price1Control.text));
+    article.setprixVente2(double.parse(_price2Control.text));
+    article.setprixVente3(double.parse(_price3Control.text));
+
+    article.setIdFamille(_familleItems.indexOf(_selectedFamille));
+    article.setIdMarque(_marqueItems.indexOf(_selectedMarque));
+    article.setTva(_selectedTva.tva);
+
+    double ttc1 = (double.parse(_price1Control.text)*_selectedTva.tva)/100 + double.parse(_price1Control.text) ;
+    double ttc2 = (double.parse(_price2Control.text)*_selectedTva.tva)/100 + double.parse(_price2Control.text) ;
+    double ttc3 = (double.parse(_price3Control.text)*_selectedTva.tva)/100 + double.parse(_price3Control.text);
+    article.setprixVente1TTC(ttc1);
+    article.setprixVente2TTC(ttc2);
+    article.setprixVente3TTC(ttc3);
+
+    article.setDescription(_descriptionControl.text);
+    article.setbloquer(false);
+    article.setStockable(_stockable);
+
+    if (_articleImage != null) {
+      article.setImageUint8List(Helpers.getUint8ListFromFile(_articleImage));
+    } else{
+      Uint8List image = await Helpers.getDefaultImageUint8List();
+      article.setImageUint8List(image);
+    }
+
+    return article;
+  }
+
+
+  Future scanBarCode() async {
+    try {
+      var options = ScanOptions(
+        strings: {
+          "cancel": "Cancel",
+          "flash_on": "Flash on",
+          "flash_off": "Flash off",
+        },
+      );
+
+      var result = await BarcodeScanner.scan(options: options);
+      if(result.rawContent.isNotEmpty){
+        setState(() {
+          _codeBarControl.text = result.rawContent;
+          FocusScope.of(context).requestFocus(null);
+        });
+      }
+
+    } catch (e) {
+      var result = ScanResult(
+        type: ResultType.Error,
+        format: BarcodeFormat.unknown,
+      );
+      if (e.code == BarcodeScanner.cameraAccessDenied) {
+        setState(() {
+          result.rawContent = 'The user did not grant the camera permission!';
+        });
+      } else {
+        result.rawContent = 'Unknown error: $e';
+      }
+      Helpers.showToast(result.rawContent);
+    }
+  }
 
 }

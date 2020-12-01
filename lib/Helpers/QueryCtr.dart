@@ -54,7 +54,7 @@ class QueryCtr {
       String stockFilter = stock ? " AND Qte > 0 " : "";
 
 
-      query += " where Designation like '%${searchTerm??''}%'";
+      query += " where (Designation like '%${searchTerm??''}%' OR CodeBar like '%${searchTerm??''}%' OR Ref like '%${searchTerm??''}%')";
 
       query += marqueFilter;
       query += familleFilter;
@@ -80,7 +80,7 @@ class QueryCtr {
 
   Future<List<Tiers>> getAllTiers({int offset, int limit, String searchTerm, Map<String, dynamic> filters}) async {
     String query = 'SELECT * FROM ' + DbTablesNames.tiers;
-    query += " where RaisonSociale like '%${searchTerm??''}%'";
+    query += " where (RaisonSociale like '%${searchTerm??''}%' OR QRcode like '%${searchTerm??''}%')";
 
     if(filters != null){
       int clientFourn = filters["Clientfour"] != null? filters["Clientfour"] : -1;
@@ -294,7 +294,7 @@ class QueryCtr {
   }
 
   Future<Tiers> getTestTier() async {
-    Tiers tier = new Tiers(null, "Passagé", "qrcode", 0, 0, 1, "adresse", "ville", "telephone", "000000", "fax", "email", 0, 0, 0, false);
+    Tiers tier = new Tiers(null, null,"Passagé", "qrcode", 0, 0, 1, "adresse", "ville", "telephone", "000000", "fax", "email", 0, 0, 0, false);
     return tier;
   }
 

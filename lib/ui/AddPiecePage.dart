@@ -121,7 +121,7 @@ class _AddPiecePageState extends State<AddPiecePage> with TickerProviderStateMix
       _dateControl.text = Helpers.dateToText(time);
       _selectedClient = await _queryCtr.getTierById(_piece.tier_id);
       _clientControl.text = _selectedClient.raisonSociale;
-      _selectedTarification = _selectedClient.tarification;
+      _selectedTarification =  _tarificationItems[_selectedClient.tarification];
       _selectedItems= await _queryCtr.getJournalPiece(item);
       _verssementControler.text = _piece.regler.toString();
       _resteControler.text = _piece.reste.toString();
@@ -131,7 +131,7 @@ class _AddPiecePageState extends State<AddPiecePage> with TickerProviderStateMix
       _piece.piece = widget.arguments.piece ;
       _selectedClient = await _queryCtr.getTierById(1);
       _clientControl.text = _selectedClient.raisonSociale;
-      _selectedTarification = _selectedClient.tarification;
+      _selectedTarification = _tarificationItems[_selectedClient.tarification];
       _verssementControler.text = "0.0";
       _resteControler.text ="0.0";
       _restepiece = 0 ;
@@ -359,7 +359,7 @@ class _AddPiecePageState extends State<AddPiecePage> with TickerProviderStateMix
                 children: [
                   Flexible(
                     flex: 4,
-                    child: ListDropDown(
+                    child :ListDropDown(
                       libelle: "Tarif:  ",
                       editMode: editMode,
                       value: _selectedTarification,

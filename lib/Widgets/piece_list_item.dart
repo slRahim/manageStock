@@ -21,6 +21,16 @@ class PieceListItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => ListTileCard(
+    id: piece.id,
+    from: piece,
+    confirmDismiss: (DismissDirection dismissDirection) async {
+      print("Mov: " + piece.mov.toString());
+      await showDialog(
+          context: context,
+          builder: (BuildContext context) {
+            return dellDialog();
+          });;
+    },
     onTap: () => {
       Navigator.of(context).pushNamed(
           RoutesKeys.addPiece,
@@ -65,6 +75,10 @@ class PieceListItem extends StatelessWidget {
         return Icon(Icons.check_circle_outline , color: Colors.black45);
         break;
     }
+  }
+
+  Widget dellDialog() {
+
   }
 
 

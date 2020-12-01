@@ -1,4 +1,5 @@
 import 'package:barcode_scan/barcode_scan.dart';
+import 'package:flutter_speed_dial/flutter_speed_dial.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:gestmob/Helpers/Helpers.dart';
@@ -210,12 +211,37 @@ class _ArticlesFragmentState extends State<ArticlesFragment> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        floatingActionButton: FloatingActionButton(
-          onPressed: () {
-            widget.onConfirmSelectedItems != null? scanBarCode() : Navigator.of(context).pushNamed(RoutesKeys.addArticle,
-                arguments: new Article.init());
-          },
-          child: widget.onConfirmSelectedItems != null? Icon(MdiIcons.barcode) : Icon(Icons.add),
+        floatingActionButton: SpeedDial(
+          marginRight: 18,
+          marginBottom: 20,
+          animatedIcon: AnimatedIcons.menu_close,
+          animatedIconTheme: IconThemeData(size: 22.0),
+          closeManually: false,
+          curve: Curves.bounceIn,
+          overlayColor: Colors.black,
+          overlayOpacity: 0.5,
+          backgroundColor: Colors.red,
+          foregroundColor: Colors.white,
+          elevation: 8.0,
+          shape: CircleBorder(),
+          children: [
+            SpeedDialChild(
+                child: Icon(Icons.add),
+                backgroundColor: Colors.green,
+                label: 'Add',
+                labelStyle: TextStyle(fontSize: 18.0),
+                onTap: () {
+                  Navigator.of(context).pushNamed(RoutesKeys.addArticle,arguments: new Article.init());
+                }
+            ),
+            SpeedDialChild(
+              child: Icon(MdiIcons.barcode),
+              backgroundColor: Colors.blue,
+              label: 'Scan bar code',
+              labelStyle: TextStyle(fontSize: 18.0),
+              onTap: () => scanBarCode(),
+            ),
+          ],
         ),
         appBar: getAppBar(setState),
         body: ItemsSliverList(

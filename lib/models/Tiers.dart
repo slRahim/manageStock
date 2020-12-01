@@ -10,6 +10,7 @@ class Tiers{
 
   Tiers(
       this._imageUint8List,
+      this._qrImageUint8List,
       this._raisonSociale,
       this._qrCode,
       this._id_famille,
@@ -47,6 +48,7 @@ class Tiers{
 
   String _qrCode;
   Uint8List _imageUint8List;
+  Uint8List _qrImageUint8List;
   int _id_famille;
   int _statut;
   int _tarification;
@@ -72,12 +74,14 @@ class Tiers{
   Tiers.fromMap(dynamic obj) {
     this._id = obj["id"];
     this._imageUint8List = Helpers.getUint8ListFromByteString(obj["BytesImageString"].toString());
+    this._qrImageUint8List = Helpers.getUint8ListFromByteString(obj["BytesQRcodeString"].toString());
     this._clientFour = obj["Clientfour"];
     this._raisonSociale = obj["RaisonSociale"];
     this._latitude = obj["Latitude"];
     this._longitude = obj["Longitude"];
     this._id_famille = obj["Id_Famille"];
     this._statut = obj["Statut"];
+    this._qrCode =obj["QRcode"];
     this._tarification = obj["Tarification"];
     this._adresse = obj["Adresse"];
     this._ville = obj["Ville"];
@@ -98,6 +102,9 @@ class Tiers{
     if(_imageUint8List != null && _imageUint8List.isNotEmpty){
       map["BytesImageString"] = base64Encode(_imageUint8List);
     }
+    if(_qrImageUint8List != null && _qrImageUint8List.isNotEmpty){
+      map["BytesQRcodeString"] = base64Encode(_qrImageUint8List);
+    }
 
     map["id"] = this._id;
     map["Clientfour"] = this._clientFour;
@@ -106,6 +113,7 @@ class Tiers{
     map["Longitude"] = this._longitude;
     map["Id_Famille"] = this._id_famille;
     map["Statut"] = this._statut;
+    map["QRcode"]=this._qrCode;
     map["Tarification"] = this._tarification;
     map["Adresse"] = this._adresse;
     map["Ville"] = this._ville;
@@ -138,6 +146,12 @@ class Tiers{
 
   set imageUint8List(Uint8List value) {
     _imageUint8List = value;
+  }
+
+  Uint8List get qrImageUint8List => _qrImageUint8List;
+
+  set qrImageUint8List(Uint8List value) {
+    _qrImageUint8List = value;
   }
 
   int get clientFour => _clientFour;

@@ -238,6 +238,7 @@ class Article{
     }
     map["Designation"] = this._designation;
     map["Ref"] = this._ref;
+    map["CodeBar"] = this.codeBar;
     map["Id_Famille"] = this._idFamille;
     map["Id_Marque"] = this._idMarque;
     map["Colis"] = this._colis;

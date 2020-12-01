@@ -1,5 +1,7 @@
+import 'package:barcode_scan/barcode_scan.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:flutter_speed_dial/flutter_speed_dial.dart';
 import 'package:gestmob/Helpers/Helpers.dart';
 import 'package:gestmob/Helpers/QueryCtr.dart';
 import 'package:gestmob/Helpers/Statics.dart';
@@ -31,7 +33,6 @@ class ClientFourFragment extends StatefulWidget {
 }
 
 class _ClientFourFragmentState extends State<ClientFourFragment> {
-  bool isSearching = false;
   bool isFilterOn = false;
 
   var _filterMap = new Map<String, dynamic>();
@@ -44,6 +45,7 @@ class _ClientFourFragmentState extends State<ClientFourFragment> {
 
   bool _filterInHasCredit = false;
   bool _savedFilterHasCredit = false;
+  TextEditingController searchController = new TextEditingController();
 
   SliverListDataSource _dataSource;
 
@@ -56,36 +58,10 @@ class _ClientFourFragmentState extends State<ClientFourFragment> {
     _dataSource = SliverListDataSource(widget.clientFourn == 0? ItemsListTypes.clientsList : ItemsListTypes.fournisseursList, _filterMap);
   }
 
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-        floatingActionButton: widget.onConfirmSelectedItem != null? null :FloatingActionButton(
-          onPressed: () {
-             Navigator.of(context).pushNamed(RoutesKeys.addTier,
-                arguments: new Tiers.init(widget.clientFourn));
-          },
-          child: Icon(Icons.add),
-        ),
-        appBar: SearchBar(
-          mainContext: context,
-          title: widget.clientFourn == 0? "Clients" : "Fournisseurs",
-          isFilterOn: isFilterOn,
-          onSearchChanged: (String search) => _dataSource.updateSearchTerm(search),
-          onFilterPressed: () async {
-            showDialog(
-                context: context,
-                builder: (BuildContext context) {
-                  return addFilterdialogue();
-                });
-          },
-        ),
-        body: ItemsSliverList(
-            dataSource: _dataSource,
-            onItemSelected: widget.onConfirmSelectedItem != null? (selectedItem) {
-              widget.onConfirmSelectedItem(selectedItem);
-              Navigator.pop(context);
-            } : null
-        ));
+  void fillFilter(Map<String, dynamic> filter) {
+    filter["Id_Famille"] = _savedSelectedFamille;
+    filter["hasCredit"] = _savedFilterHasCredit;
+    filter["Clientfour"] = widget.clientFourn;
   }
 
   Future<Widget> futureInitState() async {
@@ -99,10 +75,6 @@ class _ClientFourFragmentState extends State<ClientFourFragment> {
       return Builder(
         builder: (context) => Column(
           children: [
-            /*new ListTile(
-              title: new Text('Marque'),
-              trailing: marquesDropDown(_setState),
-            ),*/
             new ListTile(
               title: new Text('Famille'),
               trailing: famillesDropDown(_setState),
@@ -132,7 +104,6 @@ class _ClientFourFragmentState extends State<ClientFourFragment> {
                   onPressed: () async {
                     Navigator.pop(context);
                     setState(() {
-                      // _savedSelectedMarque = _marqueItems.indexOf(_selectedMarque);
                       _savedSelectedFamille = _familleItems.indexOf(_selectedFamille);
                       _savedFilterHasCredit = _filterInHasCredit;
 
@@ -159,6 +130,65 @@ class _ClientFourFragmentState extends State<ClientFourFragment> {
       ),
     ]);
   }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+        floatingActionButton: SpeedDial(
+          marginRight: 18,
+          marginBottom: 20,
+          animatedIcon: AnimatedIcons.menu_close,
+          animatedIconTheme: IconThemeData(size: 22.0),
+          closeManually: false,
+          curve: Curves.bounceIn,
+          overlayColor: Colors.black,
+          overlayOpacity: 0.5,
+          backgroundColor: Colors.red,
+          foregroundColor: Colors.white,
+          elevation: 8.0,
+          shape: CircleBorder(),
+          children: [
+            SpeedDialChild(
+                child: Icon(Icons.add),
+                backgroundColor: Colors.green,
+                label: 'Add',
+                labelStyle: TextStyle(fontSize: 18.0),
+                onTap: () {
+                  Navigator.of(context).pushNamed(RoutesKeys.addTier,arguments: new Tiers.init(widget.clientFourn));
+                }
+            ),
+            SpeedDialChild(
+              child: Icon(MdiIcons.qrcode),
+              backgroundColor: Colors.blue,
+              label: 'Scan QRcode',
+              labelStyle: TextStyle(fontSize: 18.0),
+              onTap: () => scanQRCode(),
+            ),
+          ],
+        ),
+        appBar: SearchBar(
+          searchController: searchController,
+          mainContext: context,
+          title: widget.clientFourn == 0? "Clients" : "Fournisseurs",
+          isFilterOn: isFilterOn,
+          onSearchChanged: (String search) => _dataSource.updateSearchTerm(search),
+          onFilterPressed: () async {
+            showDialog(
+                context: context,
+                builder: (BuildContext context) {
+                  return addFilterdialogue();
+                });
+          },
+        ),
+        body: ItemsSliverList(
+            dataSource: _dataSource,
+            onItemSelected: widget.onConfirmSelectedItem != null? (selectedItem) {
+              widget.onConfirmSelectedItem(selectedItem);
+              Navigator.pop(context);
+            } : null
+        ));
+  }
+
 
   Widget addFilterdialogue() {
     return FutureBuilder(
@@ -207,11 +237,40 @@ class _ClientFourFragmentState extends State<ClientFourFragment> {
     );
   }
 
-  void fillFilter(Map<String, dynamic> filter) {
-    // filter["Id_Marque"] = _savedSelectedMarque;
-    filter["Id_Famille"] = _savedSelectedFamille;
-    filter["hasCredit"] = _savedFilterHasCredit;
-    filter["Clientfour"] = widget.clientFourn;
+  Future scanQRCode() async {
+    try {
+      var options = ScanOptions(
+        strings: {
+          "cancel": "Cancel",
+          "flash_on": "Flash on",
+          "flash_off": "Flash off",
+        },
+      );
+
+      var result = await BarcodeScanner.scan(options: options);
+      if(result.rawContent.isNotEmpty){
+        setState(() {
+          searchController.text = result.rawContent;
+          _dataSource.updateSearchTerm(result.rawContent);
+          FocusScope.of(context).requestFocus(null);
+        });
+      }
+
+    } catch (e) {
+      var result = ScanResult(
+        type: ResultType.Error,
+        format: BarcodeFormat.unknown,
+      );
+
+      if (e.code == BarcodeScanner.cameraAccessDenied) {
+        setState(() {
+          result.rawContent = 'The user did not grant the camera permission!';
+        });
+      } else {
+        result.rawContent = 'Unknown error: $e';
+      }
+      Helpers.showToast(result.rawContent);
+    }
   }
 
 }

@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:io' as io;
 import 'dart:io';
+import 'dart:typed_data';
 
 import 'package:gestmob/Helpers/Statics.dart';
 import 'package:gestmob/models/Tiers.dart';
@@ -148,12 +149,14 @@ class SqlLiteDatabaseHelper {
     await db.execute("""CREATE TABLE IF NOT EXISTS Tiers (
         id INTEGER PRIMARY KEY AUTOINCREMENT, 
         BytesImageString TEXT, 
+        BytesQRcodeString TEXT,
         Clientfour integer, 
         RaisonSociale VARCHAR (20), 
         Latitude Double, 
         Longitude Double, 
         Id_Famille integer REFERENCES TiersFamilles (id) ON DELETE SET NULL ON UPDATE CASCADE, 
         Statut integer, 
+        QRcode VARCHAR (255),
         Tarification integer, 
         Adresse VARCHAR (255), 
         Ville VARCHAR (20), 
@@ -499,11 +502,12 @@ class SqlLiteDatabaseHelper {
 
     batch.rawInsert("INSERT INTO MyParams(Tarification , Tva) VALUES(2,0)");
 
-    Tiers tier0 = new Tiers(null, "Passagé", "qrcode", 0, 0, 1, "adresse", "ville", "telephone", "000000", "fax", "email", 0, 0, 0, false);
+    Uint8List image = await Helpers.getDefaultImageUint8List();
+    Tiers tier0 = new Tiers(image ,image ,"Passagé", null, 0, 0, 0, "adresse", "ville", "telephone", "000000", "fax", "email", 0, 0, 0, false);
     tier0.clientFour = 0 ;
     batch.insert(DbTablesNames.tiers, tier0.toMap());
 
-    Tiers tier2 = new Tiers(null, "Passagé", "qrcode", 0, 0, 1, "adresse", "ville", "telephone", "000000", "fax", "email", 0, 0, 0, false);
+    Tiers tier2 = new Tiers(image,image,"Passagé", null, 0, 0, 0, "adresse", "ville", "telephone", "000000", "fax", "email", 0, 0, 0, false);
     tier2.clientFour = 2 ;
     batch.insert(DbTablesNames.tiers, tier2.toMap());
 

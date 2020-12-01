@@ -1,6 +1,7 @@
 import 'dart:io';
 import 'dart:typed_data';
-
+import 'package:barcode/barcode.dart';
+import 'package:barcode_scan/barcode_scan.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_osm_plugin/flutter_osm_plugin.dart';
 import 'package:gestmob/Helpers/Helpers.dart';
@@ -11,6 +12,7 @@ import 'package:gestmob/Widgets/CustomWidgets/bottom_tab_bar.dart';
 import 'package:gestmob/Widgets/CustomWidgets/image_picker_widget.dart';
 import 'package:gestmob/Widgets/CustomWidgets/list_dropdown.dart';
 import 'package:gestmob/models/Article.dart';
+import 'package:gestmob/models/MyParams.dart';
 import 'package:gestmob/models/Tiers.dart';
 import 'package:gestmob/models/TiersFamille.dart';
 import 'package:image_picker/image_picker.dart';
@@ -86,6 +88,16 @@ class _AddTierPageState extends State<AddTierPage>
   var _famille = new TiersFamille.init();
 
   File _itemImage;
+  File _itemQRcode ;
+
+  QueryCtr _queryCtr = new QueryCtr() ;
+  MyParams _myParams ;
+
+  @override
+  void dispose() {
+    _tabController.dispose();
+    super.dispose();
+  }
 
   void initState() {
     super.initState();
@@ -96,7 +108,7 @@ class _AddTierPageState extends State<AddTierPage>
       });
     });
 
-    _tabController = TabController(length: 3, vsync: this);
+    _tabController = TabController(length: 4, vsync: this);
 
     _tabController.addListener(() {
       setState(() {
@@ -106,17 +118,11 @@ class _AddTierPageState extends State<AddTierPage>
     });
   }
 
-  @override
-  void dispose() {
-    _tabController.dispose();
-    super.dispose();
-  }
-
-
   Future<bool> futureInitState() async {
     _familleItems = await widget._queryCtr.getAllTierFamilles();
     _familleDropdownItems = utils.buildDropFamilleTier(_familleItems);
     _statutDropdownItems = utils.buildDropStatutTier(Statics.statutItems);
+    await getParams() ;
     _tarificationDropdownItems = utils.buildDropTarificationTier(_tarificationItems);
 
     _selectedStatut = Statics.statutItems[0];
@@ -130,22 +136,62 @@ class _AddTierPageState extends State<AddTierPage>
       modification = true;
       await setDataFromItem(widget.arguments);
     } else {
-      await setDataFromItem(await widget._queryCtr.getTestTier());
       editMode = true;
     }
 
     return Future<bool>.value(editMode);
   }
 
-  @override
-  void updateKeepAlive() {
-    super.updateKeepAlive();
+  Future<void> setDataFromItem(item) async {
+    _raisonSocialeControl.text = item.raisonSociale;
+    _qrCodeControl.text = item.qrCode;
+
+    _adresseControl.text = item.adresse;
+
+    _clientFournBool = _clientFourn == 1;
+
+    if(item.latitude != null && item.longitude != null){
+      _latitude = item.latitude;
+      _longitude = item.longitude;
+    }
+
+    _villeControl.text = item.ville;
+    _telephoneControl.text = item.telephone;
+    _mobileControl.text = item.mobile;
+    _faxControl.text = item.fax;
+    _emailControl.text = item.email;
+    _solde_departControl.text = item.solde_depart.toString();
+    _chiffre_affairesControl.text = item.chiffre_affaires.toString();
+    _reglerControl.text = item.regler.toString();
+    _creditControl.text = item.credit.toString();
+
+    _itemImage = await Helpers.getFileFromUint8List(item.imageUint8List);
+    _itemQRcode = await Helpers.getFileFromUint8List(item.qrImageUint8List);
+
+    _selectedFamille = _familleItems[item.id_famille];
+    _selectedStatut = Statics.statutItems[item.statut];
+    _selectedTarification = _tarificationItems[item.tarification];
   }
 
-  @override
-  void deactivate() {
-    super.deactivate();
+  void getParams () async {
+      _myParams = await _queryCtr.getAllParams() ;
+      switch(_myParams.tarification){
+        case 1 :
+          _tarificationItems = _tarificationItems.sublist(0,1);
+          break;
+        case 2 :
+          _tarificationItems = _tarificationItems.sublist(0,2);
+          break;
+        case 3 :
+          _tarificationItems = _tarificationItems.sublist(0,3);
+          break;
+        default:
+          _tarificationItems = _tarificationItems.sublist(0,1);
+          break;
+      }
+
   }
+
   @override
   Widget build(BuildContext context) {
     super.build(context);
@@ -183,7 +229,7 @@ class _AddTierPageState extends State<AddTierPage>
       return Scaffold(body: Helpers.buildLoading());
     } else {
       return DefaultTabController(
-          length: 3,
+          length: 4,
           child: Scaffold(
               floatingActionButton: Padding(
                 padding: const EdgeInsets.fromLTRB(40, 10, 10, 10),
@@ -288,6 +334,7 @@ class _AddTierPageState extends State<AddTierPage>
                   Tab(child: Column( children: [ Icon(Icons.insert_drive_file),SizedBox(height: 2), Text("Fiche"), ], )),
                   Tab(child: Column( children: [ Icon(Icons.image), SizedBox(height: 2), Text("Photo"), ], )),
                   Tab(child: Column( children: [ Icon(Icons.map), SizedBox(height: 2), Text("Map"), ], )),
+                  Tab(child: Column( children: [ Icon(MdiIcons.qrcode), SizedBox(height: 2), Text("QRcode"), ], )),
                 ],
               ),
               body: Builder(
@@ -300,6 +347,7 @@ class _AddTierPageState extends State<AddTierPage>
                     fichetab(),
                     imageTab(),
                     mapTab(),
+                    qrCodeTab(),
                   ],
                 ),
               )));
@@ -361,30 +409,39 @@ class _AddTierPageState extends State<AddTierPage>
               ),
             ],
           ),
-          TextField(
-            enabled: editMode,
-            controller: _qrCodeControl,
-            keyboardType: TextInputType.text,
-            decoration: InputDecoration(
-              prefixIcon: Icon(
-                MdiIcons.qrcode,
-                color: Colors.blue[700],
-              ),
-              focusedBorder: OutlineInputBorder(
-                  borderSide: BorderSide(color: Colors.blue[700]),
-                  borderRadius: BorderRadius.circular(20)),
-              labelText: "QR Code",
-              enabledBorder: OutlineInputBorder(
-                gapPadding: 3.3,
-                borderRadius: BorderRadius.circular(20),
-                borderSide: BorderSide(color: Colors.blue[700]),
+          InkWell(
+            onDoubleTap: ()async{
+              await scanQRCode() ;
+            },
+            child: Visibility(
+              visible: editMode,
+              child: TextField(
+                enabled: false,
+                readOnly: true,
+                controller: _qrCodeControl,
+                keyboardType: TextInputType.text,
+                decoration: InputDecoration(
+                  prefixIcon: Icon(
+                    MdiIcons.qrcode,
+                    color: Colors.blue[700],
+                  ),
+                  focusedBorder: OutlineInputBorder(
+                      borderSide: BorderSide(color: Colors.blue[700]),
+                      borderRadius: BorderRadius.circular(20)),
+                  labelText: "Double tap to scan QR Code",
+                  disabledBorder: OutlineInputBorder(
+                    gapPadding: 3.3,
+                    borderRadius: BorderRadius.circular(20),
+                    borderSide: BorderSide(color: Colors.blue[700]),
+                  ),
+                ),
               ),
             ),
           ),
           TextField(
             enabled: editMode,
             controller: _adresseControl,
-            keyboardType: TextInputType.number,
+            keyboardType: TextInputType.text,
             decoration: InputDecoration(
               prefixIcon: Icon(
                 MdiIcons.homeCityOutline,
@@ -404,7 +461,7 @@ class _AddTierPageState extends State<AddTierPage>
           TextField(
             enabled: editMode,
             controller: _villeControl,
-            keyboardType: TextInputType.number,
+            keyboardType: TextInputType.text,
             decoration: InputDecoration(
               prefixIcon: Icon(
                 Icons.add_location,
@@ -424,7 +481,7 @@ class _AddTierPageState extends State<AddTierPage>
           TextField(
             enabled: editMode,
             controller: _telephoneControl,
-            keyboardType: TextInputType.number,
+            keyboardType: TextInputType.phone,
             decoration: InputDecoration(
               prefixIcon: Icon(
                 Icons.phone,
@@ -444,7 +501,7 @@ class _AddTierPageState extends State<AddTierPage>
           TextField(
             enabled: editMode,
             controller: _mobileControl,
-            keyboardType: TextInputType.number,
+            keyboardType: TextInputType.phone,
             decoration: InputDecoration(
               prefixIcon: Icon(
                 Icons.phone_android,
@@ -464,7 +521,7 @@ class _AddTierPageState extends State<AddTierPage>
           TextField(
             enabled: editMode,
             controller: _faxControl,
-            keyboardType: TextInputType.number,
+            keyboardType: TextInputType.phone,
             decoration: InputDecoration(
               prefixIcon: Icon(
                 MdiIcons.fax,
@@ -484,7 +541,7 @@ class _AddTierPageState extends State<AddTierPage>
           TextField(
             enabled: editMode,
             controller: _emailControl,
-            keyboardType: TextInputType.number,
+            keyboardType: TextInputType.emailAddress,
             decoration: InputDecoration(
               prefixIcon: Icon(
                 Icons.email,
@@ -584,38 +641,7 @@ class _AddTierPageState extends State<AddTierPage>
               ),
             ),
           ),
-
-          ListDropDown(
-            editMode: editMode,
-            value: _selectedFamille,
-            items: _familleDropdownItems,
-            onChanged: (value) {
-              setState(() {
-                _selectedFamille = value;
-              });
-            },
-            onAddPressed: () async {
-              await showDialog(
-                  context: context,
-                  builder: (BuildContext context) {
-                    return addFamilledialogue();
-                  }).then((val) {
-                setState(() {});
-              });
-            },
-          ),
-
-          ListDropDown(
-            libelle: "Tarification:  ",
-            editMode: editMode,
-            value: _selectedTarification,
-            items: _tarificationDropdownItems,
-            onChanged: (value) {
-              setState(() {
-                _selectedTarification = value;
-              });
-            },),
-
+          dropdowns() ,
           Container(
             decoration: editMode? new BoxDecoration(
               border: Border.all(color: Colors.blueAccent,),
@@ -643,6 +669,14 @@ class _AddTierPageState extends State<AddTierPage>
           editMode: editMode, onImageChange: (File imageFile) => {
         _itemImage = imageFile
       }),
+    );
+  }
+
+  Widget qrCodeTab() {
+    return (
+      Center(
+        child: Text('qrcode'),
+      )
     );
   }
 
@@ -709,7 +743,7 @@ class _AddTierPageState extends State<AddTierPage>
             });
           },
         ),
-
+        Padding(padding: EdgeInsets.fromLTRB(10, 10, 10, 10),),
         ListDropDown(
           libelle: "Tarification:  ",
           editMode: editMode,
@@ -821,78 +855,6 @@ class _AddTierPageState extends State<AddTierPage>
     });
   }
 
-  Future<Object> makeItem() async {
-    var item = new Tiers.empty();
-    item.id = widget.arguments.id;
-
-    if(_clientFournBool){
-      item.clientFour = 1;
-    } else if (widget.arguments.originClientOrFourn != null){
-      item.clientFour = widget.arguments.originClientOrFourn;
-    } else{
-      item.clientFour = _clientFourn;
-    }
-    item.raisonSociale = _raisonSocialeControl.text;
-    item.qrCode = _qrCodeControl.text;
-
-    item.adresse = _adresseControl.text;
-
-    item.latitude = _latitude;
-    item.longitude = _longitude;
-    item.ville = _villeControl.text;
-    item.telephone = _telephoneControl.text;
-    item.mobile = _mobileControl.text;
-    item.fax = _faxControl.text;
-    item.email = _emailControl.text;
-    item.solde_depart = double.tryParse(_solde_departControl.text);
-    item.chiffre_affaires = double.tryParse(_chiffre_affairesControl.text);
-    item.regler = double.tryParse(_reglerControl.text);
-
-    item.id_famille = _selectedFamille.id;
-    item.statut = Statics.statutItems.indexOf(_selectedStatut);
-    item.tarification = _tarificationItems.indexOf(_selectedTarification);
-
-    item.bloquer = false;
-
-    if (_itemImage != null) {
-      item.imageUint8List = Helpers.getUint8ListFromFile(_itemImage);
-    } else {
-      Uint8List image = await Helpers.getDefaultImageUint8List();
-      item.imageUint8List = image;
-    }
-    return item;
-  }
-
-  Future<void> setDataFromItem(item) async {
-    _raisonSocialeControl.text = item.raisonSociale;
-    _qrCodeControl.text = item.qrCode;
-
-    _adresseControl.text = item.adresse;
-
-    _clientFournBool = _clientFourn == 1;
-
-    if(item.latitude != null && item.longitude != null){
-      _latitude = item.latitude;
-      _longitude = item.longitude;
-    }
-
-    _villeControl.text = item.ville;
-    _telephoneControl.text = item.telephone;
-    _mobileControl.text = item.mobile;
-    _faxControl.text = item.fax;
-    _emailControl.text = item.email;
-    _solde_departControl.text = item.solde_depart.toString();
-    _chiffre_affairesControl.text = item.chiffre_affaires.toString();
-    _reglerControl.text = item.regler.toString();
-    _creditControl.text = item.credit.toString();
-
-    _itemImage = await Helpers.getFileFromUint8List(item.imageUint8List);
-
-    _selectedFamille = _familleItems[item.id_famille];
-    _selectedStatut = Statics.statutItems[item.statut];
-    _selectedTarification = _tarificationItems[item.tarification];
-  }
-
   Future<void> addFamilleIfNotExist(famille) async {
     int familleIndex = _familleItems.indexOf(famille);
     if (familleIndex > -1) {
@@ -939,6 +901,103 @@ class _AddTierPageState extends State<AddTierPage>
       Helpers.showFlushBar(context, "Error: something went wrong");
       return Future.value(-1);
     }
+  }
+
+
+  Future<Object> makeItem() async {
+    var item = new Tiers.empty();
+    item.id = widget.arguments.id;
+
+    if(_clientFournBool){
+      item.clientFour = 1;
+    } else if (widget.arguments.originClientOrFourn != null){
+      item.clientFour = widget.arguments.originClientOrFourn;
+    } else{
+      item.clientFour = _clientFourn;
+    }
+
+    item.raisonSociale = _raisonSocialeControl.text;
+    if(_qrCodeControl.text != null){
+      item.qrCode = _qrCodeControl.text;
+    }else{
+      item.qrCode = "TR://"+_raisonSocialeControl.text +"/"+_selectedStatut+"::"+_telephoneControl.text;
+    }
+
+    item.adresse = _adresseControl.text;
+
+    item.latitude = _latitude;
+    item.longitude = _longitude;
+    item.ville = _villeControl.text;
+    item.telephone = _telephoneControl.text;
+    item.mobile = _mobileControl.text;
+    item.fax = _faxControl.text;
+    item.email = _emailControl.text;
+    item.solde_depart = double.tryParse(_solde_departControl.text);
+    item.chiffre_affaires = double.tryParse(_chiffre_affairesControl.text);
+    item.regler = double.tryParse(_reglerControl.text);
+
+    item.id_famille = _selectedFamille.id;
+    item.statut = Statics.statutItems.indexOf(_selectedStatut);
+    item.tarification = _tarificationItems.indexOf(_selectedTarification);
+
+    item.bloquer = false;
+
+    await generateQrSVG(Barcode.qrCode(),item.qrCode);
+
+    if (_itemImage != null) {
+      item.imageUint8List = Helpers.getUint8ListFromFile(_itemImage);
+    } else {
+      Uint8List image = await Helpers.getDefaultImageUint8List();
+      item.imageUint8List = image;
+    }
+
+    if(_itemQRcode != null){
+      item.qrImageUint8List=await Helpers.getUint8ListFromFile(_itemQRcode);
+    } else {
+      Uint8List image = await Helpers.getDefaultImageUint8List();
+      item.qrImageUint8List = image;
+    }
+
+    return item;
+  }
+
+  Future scanQRCode() async {
+    try {
+      var options = ScanOptions(
+        strings: {
+          "cancel": "Cancel",
+          "flash_on": "Flash on",
+          "flash_off": "Flash off",
+        },
+      );
+
+      var result = await BarcodeScanner.scan(options: options);
+      if(result.rawContent.isNotEmpty){
+        setState(() {
+          _qrCodeControl.text = result.rawContent;
+          FocusScope.of(context).requestFocus(null);
+        });
+      }
+
+    } catch (e) {
+      var result = ScanResult(
+        type: ResultType.Error,
+        format: BarcodeFormat.unknown,
+      );
+
+      if (e.code == BarcodeScanner.cameraAccessDenied) {
+        setState(() {
+          result.rawContent = 'The user did not grant the camera permission!';
+        });
+      } else {
+        result.rawContent = 'Unknown error: $e';
+      }
+      Helpers.showToast(result.rawContent);
+    }
+  }
+
+  generateQrSVG(Barcode bc, String data, {String filename, double width, double height, double fontHeight,})async {
+
   }
 
 }
