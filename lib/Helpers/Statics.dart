@@ -31,6 +31,7 @@ class RoutesKeys {
   static const addArticle = '/add_article';
   static const addTier = '/add_tier';
   static const addPiece = '/add_piece';
+  static const addTresorie = '/add_tresorie';
   static const settingsPage = '/settingsPage';
   static const helpPage = '/helpPage';
 }
@@ -41,6 +42,7 @@ class ItemsListTypes {
   static const clientsList = 'clientsList';
   static const fournisseursList = 'fournisseursList';
   static const pieceList = 'pieceList';
+  static const tresorieList ="tresorieList";
 }
 
 class DbTablesNames {
@@ -54,6 +56,8 @@ class DbTablesNames {
   static const pieces = 'Pieces';
   static const journaux = 'Journaux';
   static const tiersFamille = 'TiersFamilles';
+  static const tresorie='Tresories';
+  static const categorieTresorie = "TresorieCategories";
   static const formatPiece = "FormatPiece" ;
   static const myparams = "MyParams" ;
 }
@@ -71,6 +75,7 @@ class PieceType {
   static const bonReception = "BR";
   static const factureFournisseur="FF";
   static const retourFournisseur= "RF";
+  static const tresorie = "TR" ;
 }
 
 class Prefs {

@@ -4,6 +4,7 @@ import 'package:gestmob/models/ArticleMarque.dart';
 import 'package:gestmob/models/ArticleTva.dart';
 import 'package:gestmob/models/Tiers.dart';
 import 'package:gestmob/models/TiersFamille.dart';
+import 'package:gestmob/models/TresorieCategories.dart';
 
 // dropdown menus : marque , prix , famille article , famille tier , tiers  ,
 //    && statut tier , tarification tiers , tva article
@@ -119,6 +120,19 @@ List<DropdownMenuItem<String>> buildDropStatutDownMenuItems(List listItems) {
     items.add(
       DropdownMenuItem(
         child: Text(listItem),
+        value: listItem,
+      ),
+    );
+  }
+  return items;
+}
+
+List<DropdownMenuItem<TresorieCategories>> buildDropTresorieCategoriesDownMenuItems(List listItems) {
+  List<DropdownMenuItem<TresorieCategories>> items = List();
+  for (TresorieCategories listItem in listItems) {
+    items.add(
+      DropdownMenuItem(
+        child: Text(listItem.libelle.toString()),
         value: listItem,
       ),
     );

@@ -42,6 +42,7 @@ class SqlLiteDatabaseHelper {
     await createTiersTable(db, version);
     await createPiecesTable(db, version);
     await createJournauxTable(db, version);
+    await createTresorieTable(db , version);
     await createFormatPieceTable(db ,version);
     await createMyParamTable(db , version);
     await createTriggers(db , version);
@@ -149,7 +150,6 @@ class SqlLiteDatabaseHelper {
     await db.execute("""CREATE TABLE IF NOT EXISTS Tiers (
         id INTEGER PRIMARY KEY AUTOINCREMENT, 
         BytesImageString TEXT, 
-        BytesQRcodeString TEXT,
         Clientfour integer, 
         RaisonSociale VARCHAR (20), 
         Latitude Double, 
@@ -209,6 +209,31 @@ class SqlLiteDatabaseHelper {
         Tva Double
         
         )""");
+  }
+
+  //table tresorie
+  Future<void> createTresorieTable (Database db , int version) async {
+    //table des categories des tresories
+    await db.execute("""CREATE TABLE IF NOT EXISTS TresorieCategories (
+       
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        Libelle VARCHAR(20)
+
+        )""");
+
+    await db.execute("""
+      CREATE TABLE Tresories (
+          id INTEGER PRIMARY KEY AUTOINCREMENT,
+          Num_tresorie VARCHAR(50),
+          Tier_id INTEGER REFERENCES Tiers (id) ON DELETE SET NULL ON UPDATE CASCADE,
+          Tier_rs VARCHAR (255),
+          Piece_id INTEGER REFERENCES Pieces (id) ON DELETE SET NULL ON UPDATE CASCADE,
+          Objet VARCHAR (255),
+          Montant DOUBLE,
+          Modalite VARCHAR (255),
+          Categorie_id INTEGER REFERENCES TresorieCategories (id) ON DELETE SET NULL ON UPDATE CASCADE,
+          Date VARCHAR(50)
+      )""");
   }
 
   // table des format et current index pour piece
@@ -488,6 +513,14 @@ class SqlLiteDatabaseHelper {
     batch.rawInsert('INSERT INTO ArticlesTva(Tva) VALUES(19)');
     batch.rawInsert('INSERT INTO ArticlesTva(Tva) VALUES(29)');
 
+    batch.rawInsert('INSERT INTO TresorieCategories(Libelle) VALUES("Categorie")');
+    batch.rawInsert('INSERT INTO TresorieCategories(Libelle) VALUES("Reglement Client")');
+    batch.rawInsert('INSERT INTO TresorieCategories(Libelle) VALUES("Reglement Fournisseur")');
+    batch.rawInsert('INSERT INTO TresorieCategories(Libelle) VALUES("Encaissement")');
+    batch.rawInsert('INSERT INTO TresorieCategories(Libelle) VALUES("Charge")');
+    batch.rawInsert('INSERT INTO TresorieCategories(Libelle) VALUES("Remboursement Client")');
+    batch.rawInsert('INSERT INTO TresorieCategories(Libelle) VALUES("Remboursement Fournisseur")');
+
     batch.rawInsert('INSERT INTO FormatPiece(Format , Piece , Current_index) VALUES("XXXX/YYYY"  , "FP" , 0)');
     batch.rawInsert('INSERT INTO FormatPiece(Format , Piece , Current_index) VALUES("XXXX/YYYY"  , "CC" , 0)');
     batch.rawInsert('INSERT INTO FormatPiece(Format , Piece , Current_index) VALUES("XXXX/YYYY"  , "BL" , 0)');
@@ -499,15 +532,16 @@ class SqlLiteDatabaseHelper {
     batch.rawInsert('INSERT INTO FormatPiece(Format , Piece , Current_index) VALUES("XXXX/YYYY"  , "FF" , 0)');
     batch.rawInsert('INSERT INTO FormatPiece(Format , Piece , Current_index) VALUES("XXXX/YYYY"  , "RF" , 0)');
     batch.rawInsert('INSERT INTO FormatPiece(Format , Piece , Current_index) VALUES("XXXX/YYYY"  , "AC" , 0)');
+    batch.rawInsert('INSERT INTO FormatPiece(Format , Piece , Current_index) VALUES("XXXX/YYYY"  , "TR" , 0)');
 
     batch.rawInsert("INSERT INTO MyParams(Tarification , Tva) VALUES(2,0)");
 
     Uint8List image = await Helpers.getDefaultImageUint8List();
-    Tiers tier0 = new Tiers(image ,image ,"Passagé", null, 0, 0, 0, "adresse", "ville", "telephone", "000000", "fax", "email", 0, 0, 0, false);
+    Tiers tier0 = new Tiers(image ,"Passagé", null, 0, 0, 0, "adresse", "ville", "telephone", "000000", "fax", "email", 0, 0, 0, false);
     tier0.clientFour = 0 ;
     batch.insert(DbTablesNames.tiers, tier0.toMap());
 
-    Tiers tier2 = new Tiers(image,image,"Passagé", null, 0, 0, 0, "adresse", "ville", "telephone", "000000", "fax", "email", 0, 0, 0, false);
+    Tiers tier2 = new Tiers(image,"Passagé", null, 0, 0, 0, "adresse", "ville", "telephone", "000000", "fax", "email", 0, 0, 0, false);
     tier2.clientFour = 2 ;
     batch.insert(DbTablesNames.tiers, tier2.toMap());
 

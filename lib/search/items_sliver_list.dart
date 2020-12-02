@@ -8,9 +8,11 @@ import 'package:gestmob/Helpers/Statics.dart';
 import 'package:gestmob/Widgets/article_list_item.dart';
 import 'package:gestmob/Widgets/piece_list_item.dart';
 import 'package:gestmob/Widgets/tier_list_item.dart';
+import 'package:gestmob/Widgets/tresorie_list_item.dart';
 import 'package:gestmob/models/Article.dart';
 import 'package:gestmob/models/Piece.dart';
 import 'package:gestmob/models/Tiers.dart';
+import 'package:gestmob/models/Tresorie.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 
 import 'search_input_sliver.dart';
@@ -60,6 +62,8 @@ class _ItemsSliverListState extends State<ItemsSliverList> {
       return TierListItem(tier: item, onItemSelected: widget.onItemSelected,);
     } else if(item is Piece){
       return PieceListItem(piece: item);
+    }else if (item is Tresorie){
+      return TresorieListItem(tresorie : item );
     } else{
       return null;
     }

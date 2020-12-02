@@ -10,6 +10,8 @@ import 'package:gestmob/models/Article.dart';
 import 'package:gestmob/models/ArticleFamille.dart';
 import 'package:gestmob/models/ArticleMarque.dart';
 import 'package:gestmob/models/Piece.dart';
+import 'package:gestmob/models/Tresorie.dart';
+import 'package:gestmob/models/TresorieCategories.dart';
 import 'package:gestmob/search/items_sliver_list.dart';
 import 'package:gestmob/search/search_input_sliver.dart';
 import 'package:gestmob/search/sliver_list_data_source.dart';
@@ -19,31 +21,23 @@ import 'package:material_design_icons_flutter/material_design_icons_flutter.dart
 
 import 'AddArticlePage.dart';
 
-class PiecesFragment extends StatefulWidget {
-  final int clientFourn;
-  final String peaceType ;
-  final int tierId ;
-  final Function(dynamic) onConfirmSelectedItem;
-
-  const PiecesFragment ({Key key, this.clientFourn , this.peaceType,this.tierId,this.onConfirmSelectedItem}): super(key: key);
+class TresorieFragment extends StatefulWidget {
 
   @override
-  _PiecesFragmentState createState() => _PiecesFragmentState();
+  _TresorieFragmentState createState() => _TresorieFragmentState();
 }
 
-class _PiecesFragmentState extends State<PiecesFragment> {
-  // bool isSearching = false;
+class _TresorieFragmentState extends State<TresorieFragment> {
   bool isFilterOn = false;
   final TextEditingController searchController = new TextEditingController();
 
   var _filterMap = new Map<String, dynamic>();
   var _emptyFilterMap = new Map<String, dynamic>();
 
-  bool _filterInHasCredit = false;
-  bool _savedFilterHasCredit = false;
-
-  bool _filterIsDraft = false;
-  bool _savedFilterIsDraft = false;
+  List<TresorieCategories> _categorieItems;
+  List<DropdownMenuItem<TresorieCategories>> _categorieDropdownItems;
+  TresorieCategories  _selectedCategorie;
+  int _savedSelectedCategorie = 0;
 
   SliverListDataSource _dataSource;
 
@@ -53,30 +47,27 @@ class _PiecesFragmentState extends State<PiecesFragment> {
 
     fillFilter(_filterMap);
     fillFilter(_emptyFilterMap);
-    _dataSource = SliverListDataSource(ItemsListTypes.pieceList, _filterMap);
+    _dataSource = SliverListDataSource(ItemsListTypes.tresorieList, _filterMap);
   }
 
   //***************************************************partie speciale pour le filtre de recherche***************************************
   void fillFilter(Map<String, dynamic> filter) {
-    filter["Piece"] = widget.peaceType ;
-    filter["Mov"] = 0;
-    filter["Credit"] = _savedFilterHasCredit ;
-    filter["Draft"] = _savedFilterIsDraft ;
-    if(widget.tierId != null){
-      filter["Tier_id"] = widget.tierId;
-    }
+    filter["Categorie"] = _selectedCategorie ;
   }
 
   Future<Widget> futureInitState() async {
-    _filterInHasCredit = _savedFilterHasCredit;
-    _filterIsDraft = _savedFilterIsDraft ;
+    _categorieItems = await _dataSource.queryCtr.getAllTresorieCategorie();
+    _categorieDropdownItems= utils.buildDropTresorieCategoriesDownMenuItems(_categorieItems);
+    _selectedCategorie = _categorieItems[_savedSelectedCategorie];
 
     final tile = StatefulBuilder(builder: (context, StateSetter _setState) {
       return Builder(
         builder: (context) => Column(
           children: [
-            isDraftCheckBox(_setState),
-            hasCreditCheckBox(_setState)
+            new ListTile(
+              trailing: categorieDropDown(_setState),
+            ),
+
           ],
         ),
       );
@@ -101,9 +92,7 @@ class _PiecesFragmentState extends State<PiecesFragment> {
                   onPressed: () async {
                     Navigator.pop(context);
                     setState(() {
-                      _savedFilterIsDraft = _filterIsDraft ;
-                      _savedFilterHasCredit = _filterInHasCredit;
-
+                      _savedSelectedCategorie = _categorieItems.indexOf(_selectedCategorie) ;
                       fillFilter(_filterMap);
 
                       if( _filterMap.toString() == _emptyFilterMap.toString()){
@@ -150,29 +139,19 @@ class _PiecesFragmentState extends State<PiecesFragment> {
         });
   }
 
-  Widget isDraftCheckBox(StateSetter _setState) {
-    return CheckboxListTile(
-      title: Text("Only Drafts"),
-      value: _filterIsDraft,
-      onChanged: (bool value){
-        _setState(() {
-          _filterIsDraft = value;
-        });
-      },
+  Widget categorieDropDown(StateSetter _setState) {
+    return DropdownButtonHideUnderline(
+      child: DropdownButton<TresorieCategories>(
+          value: _selectedCategorie,
+          items: _categorieDropdownItems,
+          onChanged: (value) {
+            _setState(() {
+              _selectedCategorie = value;
+            });
+          }),
     );
   }
 
-  Widget hasCreditCheckBox(StateSetter _setState) {
-    return CheckboxListTile(
-      title: Text("Has credit"),
-      value: _filterInHasCredit,
-      onChanged: (bool value){
-        _setState(() {
-          _filterInHasCredit = value;
-        });
-      },
-    );
-  }
 
   //********************************************listing des pieces**********************************************************************
   @override
@@ -180,36 +159,26 @@ class _PiecesFragmentState extends State<PiecesFragment> {
     return Scaffold(
         floatingActionButton: FloatingActionButton(
           onPressed: () {
-             Navigator.of(context).pushNamed(RoutesKeys.addPiece, arguments: new Piece.typePiece(widget.peaceType));
+            Navigator.of(context).pushNamed(RoutesKeys.addTresorie, arguments: new Tresorie.init());
           },
           child: Icon(Icons.add),
         ),
         appBar: SearchBar(
           searchController: searchController,
           mainContext: context,
-          title: Helpers.getPieceTitle(widget.peaceType),
+          title: "Tresorie",
           isFilterOn: isFilterOn,
           onSearchChanged: (String search) => _dataSource.updateSearchTerm(search),
           onFilterPressed: () async {
-            if(widget.tierId == null){
-              showDialog(
-                  context: context,
-                  builder: (BuildContext context) {
-                    return addFilterdialogue();
-                  });
-            }else{
-              var message = "Filter is not avalaible !";
-              Helpers.showFlushBar(context, message);
-            }
-
+            showDialog(
+                context: context,
+                builder: (BuildContext context) {
+                  return addFilterdialogue();
+                });
           },
         ),
         body: ItemsSliverList(
             dataSource: _dataSource,
-            onItemSelected: widget.onConfirmSelectedItem != null? (selectedItem) {
-              widget.onConfirmSelectedItem(selectedItem);
-              Navigator.pop(context);
-            } : null
         )
     );
   }

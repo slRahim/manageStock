@@ -4,8 +4,10 @@ import 'package:gestmob/cubit/home_cubit.dart';
 import 'package:gestmob/models/Article.dart';
 import 'package:gestmob/models/Piece.dart';
 import 'package:gestmob/models/Tiers.dart';
+import 'package:gestmob/models/Tresorie.dart';
 import 'package:gestmob/ui/AddPiecePage.dart';
 import 'package:gestmob/ui/AddTierPage.dart';
+import 'package:gestmob/ui/AddTresoriePage.dart';
 import 'package:gestmob/ui/ProfilePage.dart';
 import 'package:gestmob/ui/HelpPage.dart';
 import 'package:gestmob/ui/LoginPage.dart';
@@ -57,6 +59,13 @@ class RouteGenerator {
           );
         }
        break;
+      case RoutesKeys.addTresorie:
+        if (args is Tresorie){
+          return MaterialPageRoute(
+            builder: (_) => AddTresoriePage(arguments: args,),
+          );
+        }
+        break;
       case RoutesKeys.settingsPage:
         return MaterialPageRoute(
           builder: (_) => SettingsPage(),

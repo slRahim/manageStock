@@ -88,7 +88,6 @@ class _AddTierPageState extends State<AddTierPage>
   var _famille = new TiersFamille.init();
 
   File _itemImage;
-  File _itemQRcode ;
 
   QueryCtr _queryCtr = new QueryCtr() ;
   MyParams _myParams ;
@@ -166,7 +165,6 @@ class _AddTierPageState extends State<AddTierPage>
     _creditControl.text = item.credit.toString();
 
     _itemImage = await Helpers.getFileFromUint8List(item.imageUint8List);
-    _itemQRcode = await Helpers.getFileFromUint8List(item.qrImageUint8List);
 
     _selectedFamille = _familleItems[item.id_famille];
     _selectedStatut = Statics.statutItems[item.statut];
@@ -942,20 +940,11 @@ class _AddTierPageState extends State<AddTierPage>
 
     item.bloquer = false;
 
-    await generateQrSVG(Barcode.qrCode(),item.qrCode);
-
     if (_itemImage != null) {
       item.imageUint8List = Helpers.getUint8ListFromFile(_itemImage);
     } else {
       Uint8List image = await Helpers.getDefaultImageUint8List();
       item.imageUint8List = image;
-    }
-
-    if(_itemQRcode != null){
-      item.qrImageUint8List=await Helpers.getUint8ListFromFile(_itemQRcode);
-    } else {
-      Uint8List image = await Helpers.getDefaultImageUint8List();
-      item.qrImageUint8List = image;
     }
 
     return item;
@@ -996,8 +985,5 @@ class _AddTierPageState extends State<AddTierPage>
     }
   }
 
-  generateQrSVG(Barcode bc, String data, {String filename, double width, double height, double fontHeight,})async {
-
-  }
 
 }

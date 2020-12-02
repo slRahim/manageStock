@@ -12,6 +12,8 @@ import 'package:gestmob/models/Piece.dart';
 import 'package:gestmob/models/Profile.dart';
 import 'package:gestmob/models/Tiers.dart';
 import 'package:gestmob/models/TiersFamille.dart';
+import 'package:gestmob/models/Tresorie.dart';
+import 'package:gestmob/models/TresorieCategories.dart';
 import 'package:gestmob/ui/AddArticlePage.dart';
 import 'package:sqflite/sqflite.dart';
 
@@ -121,12 +123,20 @@ class QueryCtr {
     String _pieceFilter = _piece != null? " AND Piece like '$_piece'" : "";
     String _movFilter = " AND Mov >= $_mov";
 
+
     if(filters["Draft"]){
       _movFilter = " AND Mov >= 2";
     }
 
+
     String _creditFilter =" AND Reste >= 0"  ;
     if(filters["Credit"]){
+      _creditFilter =" AND Reste > 0"  ;
+    }
+
+    String _tierFilter= " AND Tier_id > 0 " ;
+    if(filters["Tier_id"] != null){
+      _tierFilter= " AND Tier_id = "+filters["Tier_id"];
       _creditFilter =" AND Reste > 0"  ;
     }
 
@@ -141,6 +151,7 @@ class QueryCtr {
     query += _pieceFilter;
     query += _movFilter;
     query += _creditFilter ;
+    query+=_tierFilter ;
 
     query += ' ORDER BY id DESC';
 
@@ -152,6 +163,35 @@ class QueryCtr {
     for (var i = 0, j = res.length; i < j; i++) {
       Piece piece = Piece.fromMap(res[i]);
       list.add(piece);
+    }
+
+    return list;
+  }
+
+  Future<List<Tresorie>> getAllTresorie(int offset, int limit, {String searchTerm, Map<String, dynamic> filters}) async {
+    String query = 'SELECT Tresories.*,Tiers.RaisonSociale FROM Tresories JOIN Tiers ON Tresories.Tier_id = Tiers.id';
+
+    if(filters != null){
+      int categorie = filters["Categorie"] != null? filters["Categorie"] : -1;
+      String categorieFilter = categorie > 0 ? " AND Categorie_id = $categorie" : "";
+
+      query += " where Num_tresorie like '%${searchTerm??''}%'";
+      query += categorieFilter;;
+    }
+
+    Database dbClient = await _databaseHelper.db;
+    var res;
+
+    query += ' ORDER BY id DESC';
+
+    print(query);
+
+    res = await dbClient.rawQuery(query);
+
+    List<Tresorie> list = new List<Tresorie>();
+    for (var i = 0, j = res.length; i < j; i++) {
+      Tresorie tresorie = Tresorie.fromMap(res[i]);
+      list.add(tresorie);
     }
 
     return list;
@@ -216,6 +256,19 @@ class QueryCtr {
     for (var i = 0, j = res.length; i < j; i++) {
       TiersFamille famille = TiersFamille.fromMap(res[i]);
       list.add(famille);
+    }
+
+    return list;
+  }
+
+  Future<List<TresorieCategories>> getAllTresorieCategorie() async {
+    Database dbClient = await _databaseHelper.db;
+    var res = await dbClient.rawQuery('SELECT * FROM ' + DbTablesNames.categorieTresorie);
+
+    List<TresorieCategories> list = new List<TresorieCategories>();
+    for (var i = 0, j = res.length; i < j; i++) {
+      TresorieCategories categories = TresorieCategories.fromMap(res[i]);
+      list.add(categories);
     }
 
     return list;
@@ -294,7 +347,7 @@ class QueryCtr {
   }
 
   Future<Tiers> getTestTier() async {
-    Tiers tier = new Tiers(null, null,"Passagé", "qrcode", 0, 0, 1, "adresse", "ville", "telephone", "000000", "fax", "email", 0, 0, 0, false);
+    Tiers tier = new Tiers(null,"Passagé", "qrcode", 0, 0, 1, "adresse", "ville", "telephone", "000000", "fax", "email", 0, 0, 0, false);
     return tier;
   }
 

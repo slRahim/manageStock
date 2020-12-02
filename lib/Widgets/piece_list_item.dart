@@ -13,11 +13,12 @@ import 'CustomWidgets/list_tile_card.dart';
 class PieceListItem extends StatelessWidget {
   const PieceListItem({
     @required this.piece,
-    Key key,
+    Key key, this.onItemSelected
   })  : assert(piece != null),
         super(key: key);
 
   final Piece piece;
+  final Function(Object) onItemSelected;
 
   @override
   Widget build(BuildContext context) => ListTileCard(
@@ -31,11 +32,12 @@ class PieceListItem extends StatelessWidget {
             return dellDialog();
           });;
     },
+    onLongPress:  () => onItemSelected != null? onItemSelected(piece) : null,
     onTap: () => {
-      Navigator.of(context).pushNamed(
-          RoutesKeys.addPiece,
-          arguments: piece
-      )
+      if(onItemSelected == null){
+        Navigator.of(context).pushNamed(RoutesKeys.addPiece, arguments: piece)
+      }
+
     },
     leading: Container(
       child: Center(child: Text(piece.piece),),

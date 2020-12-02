@@ -6,6 +6,7 @@ import 'package:gestmob/ui/ClientFourFragment.dart';
 import 'package:gestmob/ui/GridHomeFragment.dart';
 import 'package:gestmob/ui/PiecesFragment.dart';
 import 'package:gestmob/ui/SettingsPage.dart';
+import 'package:gestmob/ui/TresorieFragment.dart';
 import 'package:meta/meta.dart';
 import 'package:gestmob/models/HomeItem.dart';
 import 'package:gestmob/ui/AddArticlePage.dart';
@@ -80,7 +81,7 @@ class HomeCubit extends Cubit<HomeState> {
         break;
 
       case homeItemTresorerieId:
-        emit(new HomeLoading());
+        emit(new FragmentLoaded(TresorieFragment()));
 
         break;
 
