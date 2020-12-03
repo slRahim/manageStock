@@ -227,7 +227,7 @@ class SqlLiteDatabaseHelper {
           Num_tresorie VARCHAR(50),
           Tier_id INTEGER REFERENCES Tiers (id) ON DELETE SET NULL ON UPDATE CASCADE,
           Tier_rs VARCHAR (255),
-          Piece_id INTEGER REFERENCES Pieces (id) ON DELETE SET NULL ON UPDATE CASCADE,
+          Piece_id ,
           Objet VARCHAR (255),
           Montant DOUBLE,
           Modalite VARCHAR (255),
@@ -537,11 +537,11 @@ class SqlLiteDatabaseHelper {
     batch.rawInsert("INSERT INTO MyParams(Tarification , Tva) VALUES(2,0)");
 
     Uint8List image = await Helpers.getDefaultImageUint8List();
-    Tiers tier0 = new Tiers(image ,"Passagé", null, 0, 0, 0, "adresse", "ville", "telephone", "000000", "fax", "email", 0, 0, 0, false);
+    Tiers tier0 = new Tiers(image ,"Client Passagé", null, 0, 0, 0, "adresse", "ville", "telephone", "000000", "fax", "email", 0, 0, 0, false);
     tier0.clientFour = 0 ;
     batch.insert(DbTablesNames.tiers, tier0.toMap());
 
-    Tiers tier2 = new Tiers(image,"Passagé", null, 0, 0, 0, "adresse", "ville", "telephone", "000000", "fax", "email", 0, 0, 0, false);
+    Tiers tier2 = new Tiers(image,"Fournisseur Passagé", null, 0, 0, 0, "adresse", "ville", "telephone", "000000", "fax", "email", 0, 0, 0, false);
     tier2.clientFour = 2 ;
     batch.insert(DbTablesNames.tiers, tier2.toMap());
 

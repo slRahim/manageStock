@@ -1,5 +1,4 @@
 
-// import 'dart:html';
 import 'dart:io';
 import 'dart:typed_data';
 import 'dart:ui';
@@ -13,13 +12,16 @@ import 'package:gestmob/Helpers/Statics.dart';
 import 'package:gestmob/Widgets/CustomWidgets/add_save_bar.dart';
 import 'package:gestmob/Widgets/CustomWidgets/bottom_tab_bar.dart';
 import 'package:gestmob/Widgets/CustomWidgets/list_dropdown.dart';
+import 'package:gestmob/Widgets/CustomWidgets/list_tile_card.dart';
 import 'package:gestmob/Widgets/article_list_item.dart';
+import 'package:gestmob/Widgets/piece_list_item.dart';
 import 'package:gestmob/Widgets/total_devis.dart';
 import 'package:gestmob/models/Article.dart';
 import 'package:gestmob/models/FormatPiece.dart';
 import 'package:gestmob/models/Piece.dart';
 import 'package:gestmob/models/Tiers.dart';
 import 'package:gestmob/models/Tresorie.dart';
+import 'package:gestmob/models/TresorieCategories.dart';
 import 'package:gestmob/search/items_sliver_list.dart';
 import 'package:gestmob/search/sliver_list_data_source.dart';
 import 'package:gestmob/ui/ClientFourFragment.dart';
@@ -51,7 +53,7 @@ class _AddTresoriePageState extends State<AddTresoriePage> with TickerProviderSt
 
   String appBarTitle = "Tresorie";
 
-  Piece _selectedPiece;
+  List <Piece> _selectedPieces ;
 
   Tiers _selectedClient ;
 
@@ -60,11 +62,20 @@ class _AddTresoriePageState extends State<AddTresoriePage> with TickerProviderSt
   TextEditingController _numeroControl = new TextEditingController();
   TextEditingController _dateControl = new TextEditingController();
   TextEditingController _clientControl = new TextEditingController();
-  TextEditingController _verssementControler = new TextEditingController();
-  TextEditingController _resteControler = new TextEditingController();
-  String _validateVerssemntError;
-  double _restepiece ;
+  TextEditingController _objetControl = new TextEditingController();
+  TextEditingController _modaliteControl = new TextEditingController();
+  TextEditingController _montantControl = new TextEditingController();
+
+  double _restepiece = 0.0 ;
   double _verssementpiece ;
+
+
+  List<DropdownMenuItem<String>> _tiersDropdownItems;
+  String _selectedTypeTiers;
+
+  List<TresorieCategories> _categorieItems;
+  List<DropdownMenuItem<TresorieCategories>> _categorieDropdownItems;
+  TresorieCategories _selectedCategorie;
 
   QueryCtr _queryCtr = new QueryCtr();
 
@@ -86,49 +97,62 @@ class _AddTresoriePageState extends State<AddTresoriePage> with TickerProviderSt
   }
 
   Future<bool> futureInitState() async {
+    _tiersDropdownItems = utils.buildDropTypeTier(Statics.tiersItems);
+    _selectedTypeTiers = Statics.tiersItems[0];
+
+    _categorieItems = await _queryCtr.getAllTresorieCategorie();
+    _categorieDropdownItems = utils.buildDropTresorieCategoriesDownMenuItems(_categorieItems);
+    _selectedCategorie= _categorieItems[0];
+
     if (widget.arguments is Tresorie && widget.arguments.id != null && widget.arguments.id > -1) {
       editMode = false;
       modification = true;
       await setDataFromItem(widget.arguments);
     } else {
-      await getNumPiece(widget.arguments);
+      await setDataFromItem(null);
+      await getNumPiece();
       _tresorie.date = DateTime.now() ;
       _dateControl.text = Helpers.dateToText(DateTime.now());
+      _selectedPieces = new List<Piece>();
       editMode = true;
     }
     return Future<bool>.value(editMode);
   }
 
   Future<void> setDataFromItem( item) async {
-    // if(item != null){
-    //   _piece = item;
-    //   _numeroControl.text = _piece.num_piece;
-    //   DateTime time = _piece.date ?? new DateTime.now();
-    //   _piece.date = time;
-    //   _dateControl.text = Helpers.dateToText(time);
-    //   _selectedClient = await _queryCtr.getTierById(_piece.tier_id);
-    //   _clientControl.text = _selectedClient.raisonSociale;
-    //   _selectedTarification =  _tarificationItems[_selectedClient.tarification];
-    //   _selectedItems= await _queryCtr.getJournalPiece(item);
-    //   _verssementControler.text = _piece.regler.toString();
-    //   _resteControler.text = _piece.reste.toString();
-    //   _restepiece=_piece.reste ;
-    //   _verssementpiece=_piece.regler;
-    // }else{
-    //   _piece.piece = widget.arguments.piece ;
-    //   _selectedClient = await _queryCtr.getTierById(1);
-    //   _clientControl.text = _selectedClient.raisonSociale;
-    //   _selectedTarification = _tarificationItems[_selectedClient.tarification];
-    //   _verssementControler.text = "0.0";
-    //   _resteControler.text ="0.0";
-    //   _restepiece = 0 ;
-    //   _verssementpiece = 0 ;
-    // }
+    if(item != null){
+      _tresorie = item;
+      _numeroControl.text = _tresorie.numTresorie;
+      DateTime time = _tresorie.date ?? new DateTime.now();
+      _tresorie.date = time;
+      _dateControl.text = Helpers.dateToText(time);
+      _selectedClient = await _queryCtr.getTierById(_tresorie.tierId);
+      _clientControl.text = _selectedClient.raisonSociale;
+      _selectedTypeTiers =  Statics.tiersItems[_selectedClient.clientFour];
+      _selectedCategorie = _categorieItems[item.pieceId];
+
+      if(_tresorie.pieceId != null){
+        var res = await _queryCtr.getPieceById(_tresorie.pieceId);
+        _selectedPieces.add(res);
+      }
+      if(_selectedPieces.length >0){
+        _restepiece=_selectedPieces.first.reste;
+        _verssementpiece=_selectedPieces.first.regler;
+      }
+      _objetControl.text = _tresorie.objet;
+      _modaliteControl.text= _tresorie.modalite ;
+      _montantControl.text = _tresorie.montant.toString() ;
+
+
+    }else{
+      _selectedClient = await _queryCtr.getTierById(1);
+      _clientControl.text = _selectedClient.raisonSociale;
+      _selectedTypeTiers =  Statics.tiersItems[_selectedClient.clientFour];
+    }
 
   }
 
-  Future<void> getNumPiece(item) async{
-    _tresorie.numTresorie = item.numTresorie ;
+  Future<void> getNumPiece() async{
     List<FormatPiece> list = await _queryCtr.getFormatPiece(PieceType.tresorie);
     setState(() {
       _numeroControl.text = Helpers.generateNumPiece(list.first);
@@ -178,22 +202,22 @@ class _AddTresoriePageState extends State<AddTresoriePage> with TickerProviderSt
               });
             },
             onSavePressed: () async {
-              // if (_raisonSocialeControl.text.isNotEmpty) {
-              //   int id = await addItemToDb();
-              //   if (id > -1) {
-              //     setState(() {
-              //       modification = true;
-              //       editMode = false;
-              //     });
-              //   }
-              // } else {
-              //   Helpers.showFlushBar(
-              //       context, "Please enter Raison sociale");
-              //
-              //   setState(() {
-              //     _validateRaison = true;
-              //   });
-              // }
+              if (_selectedClient !=null) {
+                int id = await addItemToDb();
+                if (id > -1) {
+                  setState(() {
+                    modification = true;
+                    editMode = false;
+                  });
+                }
+              } else {
+                Helpers.showFlushBar(
+                    context, "Please a Tiers");
+
+                setState(() {
+                  _validateRaison = true;
+                });
+              }
             },
           ),
           // extendBody: true,
@@ -203,7 +227,7 @@ class _AddTresoriePageState extends State<AddTresoriePage> with TickerProviderSt
             shape: AutomaticNotchedShape(
                 RoundedRectangleBorder(), StadiumBorder(side: BorderSide())),
             expandedBackColor: Colors.lightBlueAccent,
-            // expandedBody: TotalDevis(piece: _piece),
+            expandedBody: TotalDevis(),
             bottomAppBarBody: Padding(
               padding: const EdgeInsets.all(8.0),
               child: Row(
@@ -211,8 +235,7 @@ class _AddTresoriePageState extends State<AddTresoriePage> with TickerProviderSt
                 children: <Widget>[
                   Expanded(
                     child: Text(
-                      'TTC : '+
-                          _tresorie.montant.toString()+" DA",
+                      'Cred : '+_selectedClient.credit.toString()+" DA",
                       textAlign: TextAlign.center,
                       style: TextStyle(
                           fontWeight: FontWeight.bold
@@ -240,14 +263,20 @@ class _AddTresoriePageState extends State<AddTresoriePage> with TickerProviderSt
               elevation: 2,
               backgroundColor: editMode ? Colors.blue : Colors.grey,
               foregroundColor: Colors.white,
-              //Set onPressed event to swap state of bottom bar
-              onPressed: editMode
-                  ? () async => await showDialog(
-                  context: context,
-                  builder: (BuildContext context) {
-                    return choosePieceDialog();
-                  }).then((val) {calculPiece();})
-                  : null,
+              onPressed: () async {
+                  if(editMode){
+                    if(_selectedClient !=null){
+                      await showDialog(
+                          context: context,
+                          builder: (BuildContext context) {
+                            return choosePieceDialog();
+                          }).then((val) {calculPiece();});
+                    }else{
+                      var message = "Please select tiers";
+                       Helpers.showFlushBar(context, message);
+                    }
+                  }
+              },
             ),
           body: Builder(
             builder: (context) => fichetab(),
@@ -328,27 +357,16 @@ class _AddTresoriePageState extends State<AddTresoriePage> with TickerProviderSt
                 children: [
                   Flexible(
                     flex: 4,
-                    child :TextField(
-                      decoration: InputDecoration(
-                        prefixIcon: Icon(
-                          Icons.money_outlined,
-                          color: Colors.blue,
-                        ),
-                        focusedBorder: OutlineInputBorder(
-                            borderSide: BorderSide(color: Colors.blue),
-                            borderRadius: BorderRadius.circular(20)),
-                        labelText: "Credit",
-                        labelStyle: TextStyle(color: Colors.blue),
-                        enabledBorder: OutlineInputBorder(
-                          gapPadding: 3.3,
-                          borderRadius: BorderRadius.circular(20),
-                          borderSide: BorderSide(color: Colors.blue),
-                        ),
-                      ),
-                      enabled: false,
-                      controller: _clientControl,
-                      keyboardType: TextInputType.text,
-                    ),
+                    child :ListDropDown(
+                      editMode: editMode,
+                      value: _selectedTypeTiers,
+                      items: _tiersDropdownItems,
+                      onChanged: (value) {
+                        setState(() {
+                          _selectedTypeTiers = value;
+
+                        });
+                      },),
                   ),
                   Flexible(
                     flex: 6,
@@ -367,7 +385,7 @@ class _AddTresoriePageState extends State<AddTresoriePage> with TickerProviderSt
                           focusedBorder: OutlineInputBorder(
                               borderSide: BorderSide(color: Colors.blue),
                               borderRadius: BorderRadius.circular(20)),
-                          labelText: "Client",
+                          labelText: "Select Tiers",
                           labelStyle: TextStyle(color: Colors.blue),
                           enabledBorder: OutlineInputBorder(
                             gapPadding: 3.3,
@@ -387,12 +405,160 @@ class _AddTresoriePageState extends State<AddTresoriePage> with TickerProviderSt
             ],
           ),
           SizedBox(height: 15),
-          // PieceListItem(
-          //   piece: _selectedPiece,
-          // ),
+          Center(
+              child: _selectedPieces.length > 0
+                  ? Container(
+                  padding: EdgeInsets.all(15),
+                  child: Column(
+                    children: [
+                      SizedBox(height: 10),
+                      new ListView.builder(
+                          physics: NeverScrollableScrollPhysics(),
+                          shrinkWrap: true,
+                          itemCount: _selectedPieces.length,
+                          itemBuilder: (BuildContext ctxt, int index) {
+                            if(editMode){
+                              return new PieceListItem(
+                                piece: _selectedPieces[index],
+                                onItemSelected: (selectedItem){
+                                  if(_selectedPieces.contains(selectedItem)){
+                                    setState(() {
+                                      _selectedPieces.remove(selectedItem);
+                                    });
+                                  }
+                                }
+                              );
+                            }else{
+                              return new PieceListItem(
+                                  piece: _selectedPieces[index],
+                              );
+                            }
+                            })
+                    ],
+                  ))
+                  :Container(
+                    margin: EdgeInsets.symmetric(vertical: 20 , horizontal: 20),
+                    padding: EdgeInsets.symmetric(vertical: 10 , horizontal: 10),
+                    decoration: BoxDecoration(
+                      color: Colors.green[200],
+                      borderRadius: BorderRadius.circular(10)
+                    ),
+                    child: ListTile(
+                        title: Text(
+                           "Appliquer sur le credit totals",
+                           style: TextStyle(
+                             fontSize: 16 ,
+                           ),
+                        ),
+                      leading: Container(
+                        child: Center(child: Text("TR"),),
+                        height: 50,
+                        width: 50,
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(50),
+                          border: Border.all(
+                            width: 3,
+                            color: Colors.blue,
+                          ),
+                          color: Colors.white,
+                        ),
+                      ),
+                    ),
+                  )
+          ),
+          SingleChildScrollView(
+            padding: const EdgeInsets.fromLTRB(15, 10, 15, 15),
+            child: Wrap(
+              spacing: 13,
+              runSpacing: 13,
+              children: [
+                ListDropDown(
+                  editMode: editMode,
+                  value: _selectedCategorie,
+                  items: _categorieDropdownItems,
+                  onChanged: (value) {
+                    setState(() {
+                      _selectedCategorie = value;
+                    });
+                  },
+                  onAddPressed: () async {
+                    await showDialog(
+                        context: context,
+                        builder: (BuildContext context) {
+                          return addTresoreCategorie();
+                        }).then((val) {
+                      setState(() {});
+                    });
+                  },
+                ),
+                TextField(
+                  enabled: editMode,
+                  controller: _objetControl,
+                  keyboardType: TextInputType.text,
+                  decoration: InputDecoration(
+                    prefixIcon: Icon(
+                      Icons.subject,
+                      color: Colors.blue[700],
+                    ),
+                    focusedBorder: OutlineInputBorder(
+                        borderSide: BorderSide(color: Colors.blue[700]),
+                        borderRadius: BorderRadius.circular(20)),
+                    labelText: "Objet",
+                    enabledBorder: OutlineInputBorder(
+                      gapPadding: 3.3,
+                      borderRadius: BorderRadius.circular(20),
+                      borderSide: BorderSide(color: Colors.blue[700]),
+                    ),
+                  ),
+                ),
+                TextField(
+                  enabled: editMode,
+                  controller: _modaliteControl,
+                  keyboardType: TextInputType.text,
+                  decoration: InputDecoration(
+                    prefixIcon: Icon(
+                      Icons.merge_type,
+                      color: Colors.blue[700],
+                    ),
+                    focusedBorder: OutlineInputBorder(
+                        borderSide: BorderSide(color: Colors.blue[700]),
+                        borderRadius: BorderRadius.circular(20)),
+                    labelText: "Modalite",
+                    enabledBorder: OutlineInputBorder(
+                      gapPadding: 3.3,
+                      borderRadius: BorderRadius.circular(20),
+                      borderSide: BorderSide(color: Colors.blue[700]),
+                    ),
+                  ),
+                ),
+                TextField(
+                  enabled: editMode,
+                  controller: _montantControl,
+                  keyboardType: TextInputType.number,
+                  decoration: InputDecoration(
+                    prefixIcon: Icon(
+                      Icons.monetization_on,
+                      color: Colors.blue[700],
+                    ),
+                    focusedBorder: OutlineInputBorder(
+                        borderSide: BorderSide(color: Colors.blue[700]),
+                        borderRadius: BorderRadius.circular(20)),
+                    labelText: "Montant",
+                    enabledBorder: OutlineInputBorder(
+                      gapPadding: 3.3,
+                      borderRadius: BorderRadius.circular(20),
+                      borderSide: BorderSide(color: Colors.blue[700]),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          )
         ])
     );
   }
+
+
 
   //afficher le fragement des clients
   chooseClientDialog() {
@@ -400,6 +566,7 @@ class _AddTresoriePageState extends State<AddTresoriePage> with TickerProviderSt
       context: context,
       builder: (BuildContext context) {
         return new ClientFourFragment(
+          clientFourn: Statics.tiersItems.indexOf(_selectedTypeTiers),
           onConfirmSelectedItem: (selectedItem) {
             setState(() {
               _selectedClient = selectedItem;
@@ -416,22 +583,16 @@ class _AddTresoriePageState extends State<AddTresoriePage> with TickerProviderSt
 
   //afficher le fragement des clients
   choosePieceDialog() {
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return new PiecesFragment(
-          // tierId: _selectedClient.id,
-          // onConfirmSelectedItem: (selectedItem) {
-          //   setState(() {
-          //     _selectedPiece= selectedItem;
-          //   });
-          // },
-        );
+    return PiecesFragment(
+      tierId: _selectedClient.id,
+      onConfirmSelectedItem: (selectedItem) {
+        setState(() {
+          _selectedPieces.add(selectedItem);
+        });
       },
-
     );
-  }
 
+  }
 
   //calcule le montant total
   void calculPiece() {
@@ -484,78 +645,78 @@ class _AddTresoriePageState extends State<AddTresoriePage> with TickerProviderSt
     );
   }
 
+  //************************************************************************partie de l'ajout d'une nouvelle categorie************************************************************
+
+  Widget addTresoreCategorie() {
+
+  }
+
+  Future<void> addTresoreCategorieIfNotExist()async{
+
+  }
+
   //*************************************************************************** partie de save ***********************************************************************************
 
   Future<int> addItemToDb() async {
-    // int id = -1;
-    // String message;
-    // try {
-    //   if (widget.arguments.id != null) {
-    //     var item = await makePiece();
-    //     id = await _queryCtr.updateItemInDb(DbTablesNames.pieces, item);
-    //     _selectedItems.forEach((article) async {
-    //       Journaux journaux = Journaux.fromPiece(item, article);
-    //       await _queryCtr.updateJournaux(DbTablesNames.journaux, journaux);
-    //     });
-    //     _desSelectedItems.forEach((article) async {
-    //       Journaux journaux = Journaux.fromPiece(item, article);
-    //       journaux.mov=-2 ;
-    //       await _queryCtr.updateJournaux(DbTablesNames.journaux, journaux);
-    //     });
-    //
-    //     if (id > -1) {
-    //       widget.arguments = item;
-    //       widget.arguments.id = id;
-    //       message = "Piece has been updated successfully";
-    //     } else {
-    //       message = "Error when updating Piece in db";
-    //     }
-    //   } else {
-    //     Piece piece = await makePiece();
-    //     id = await _queryCtr.addItemToTable(DbTablesNames.pieces, piece);
-    //     var res = await _queryCtr.getPieceByNum(piece.num_piece , piece.piece);
-    //     piece.id= res[0].id ;
-    //     _selectedItems.forEach((article) async {
-    //       Journaux journaux = Journaux.fromPiece(piece, article);
-    //       await _queryCtr.addItemToTable(DbTablesNames.journaux, journaux);
-    //     });
-    //     if (id > -1) {
-    //       widget.arguments = piece;
-    //       widget.arguments.id = id;
-    //       message = "Piece has been added successfully";
-    //     } else {
-    //       message = "Error when adding Piece to db";
-    //     }
-    //   }
-    //   Navigator.pop(context);
-    //   Helpers.showFlushBar(context, message);
-    //   return Future.value(id);
-    // } catch (error) {
-    //   Helpers.showFlushBar(context, "Error: something went wrong");
-    //   return Future.value(-1);
-    // }
+    int id = -1;
+    String message;
+    try {
+      if (widget.arguments.id != null) {
+        var item = await makeItem();
+        id = await _queryCtr.updateItemInDb(DbTablesNames.tresorie, item);
+
+        if (id > -1) {
+          widget.arguments = item;
+          widget.arguments.id = id;
+          message = "Piece has been updated successfully";
+        } else {
+          message = "Error when updating Piece in db";
+        }
+      } else {
+        Tresorie tresorie = await makeItem();
+        id = await _queryCtr.addItemToTable(DbTablesNames.tresorie, tresorie);
+        if (id > -1) {
+          widget.arguments = tresorie;
+          widget.arguments.id = id;
+          message = "Tresorie has been added successfully";
+        } else {
+          message = "Error when adding Tresorie to db";
+        }
+      }
+      Navigator.pop(context);
+      Helpers.showFlushBar(context, message);
+      return Future.value(id);
+    } catch (error) {
+      Helpers.showFlushBar(context, "Error: something went wrong");
+      return Future.value(-1);
+    }
   }
 
-  Future<Object> makePiece() async {
-    // var tiers = _selectedClient ;
-    // _piece.num_piece=_numeroControl.text ;
-    // _piece.tier_id= tiers.id ;
-    // _piece.raisonSociale = tiers.raisonSociale ;
-    // _piece.tarification = _selectedTarification ;
-    // _piece.transformer = 0 ;
-    // _piece.regler=_verssementpiece ;
-    // _piece.reste=_restepiece;
-    //
-    // var res = await _queryCtr.getPieceByNum(_piece.num_piece , _piece.piece);
-    // if(res.length >= 1 && !modification){
-    //   var message = "Num Piece is alearydy exist";
-    //   Helpers.showFlushBar(context, message);
-    //   await getNumPiece(_piece);
-    //   _piece.num_piece = _numeroControl.text ;
-    // }
-    //
-    // return _piece ;
+  Future<Object> makeItem() async {
+    var tiers = _selectedClient ;
+    _tresorie.numTresorie=_numeroControl.text ;
+    _tresorie.tierId= tiers.id ;
+    _tresorie.tierRS = tiers.raisonSociale ;
+    _tresorie.categorie = _selectedCategorie.id ;
+    _tresorie.objet = _objetControl.text;
+    _tresorie.modalite=_modaliteControl.text;
+    _tresorie.montant= double.parse(_montantControl.text);
+    if(_selectedPieces.isNotEmpty){
+      _tresorie.pieceId = _selectedPieces.first.id ;
+    }
+
+    var res = await _queryCtr.getTresorieByNum(_numeroControl.text);
+    if(res.length >= 1 && !modification){
+      var message = "Num tresorie is alearydy exist";
+      Helpers.showFlushBar(context, message);
+      await getNumPiece();
+      _tresorie.numTresorie = _numeroControl.text ;
+    }
+
+    return _tresorie ;
   }
+
+
 
 
 

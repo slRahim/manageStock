@@ -58,7 +58,6 @@ dependencies:
   barcode_scan: any
   expandable_bottom_bar: any
 
-  barcode: any
 
   get_it: ^5.0.1
 

@@ -36,12 +36,6 @@ class QueryCtr {
     return profile;
   }
 
-  Future<Tiers> getTierById(int id) async {
-    Database dbClient = await _databaseHelper.db;
-    var res = await dbClient.rawQuery('SELECT * FROM ' + DbTablesNames.tiers + ' where id like $id');
-    Tiers tier = new Tiers.fromMap(res[0]);
-    return tier;
-  }
 
   Future<List<Article>> getAllArticles({int offset, int limit, String searchTerm, Map<String, dynamic> filters}) async {
     String query = 'SELECT * FROM ' + DbTablesNames.articles;
@@ -114,11 +108,20 @@ class QueryCtr {
     return list;
   }
 
+  Future<Tiers> getTierById(int id) async {
+    Database dbClient = await _databaseHelper.db;
+    var res = await dbClient.rawQuery('SELECT * FROM ' + DbTablesNames.tiers + ' where id like $id');
+    Tiers tier = new Tiers.fromMap(res[0]);
+    return tier;
+  }
+
+
   Future<List<Piece>> getAllPieces(int offset, int limit, {String searchTerm, Map<String, dynamic> filters}) async {
     String query = 'SELECT Pieces.*,Tiers.RaisonSociale FROM Pieces JOIN Tiers ON Pieces.Tier_id = Tiers.id';
 
     String _piece = filters["Piece"];
     int _mov = filters["Mov"] != null? filters["Mov"] : 0;
+    int _tier_id = filters["Tierid"] != null ? filters["Tierid"] : null ;
 
     String _pieceFilter = _piece != null? " AND Piece like '$_piece'" : "";
     String _movFilter = " AND Mov >= $_mov";
@@ -134,14 +137,12 @@ class QueryCtr {
       _creditFilter =" AND Reste > 0"  ;
     }
 
-    String _tierFilter= " AND Tier_id > 0 " ;
-    if(filters["Tier_id"] != null){
-      _tierFilter= " AND Tier_id = "+filters["Tier_id"];
+    String _tierFilter= "" ;
+    if(_tier_id != null){
+      _tierFilter= " AND Tier_id = $_tier_id";
       _creditFilter =" AND Reste > 0"  ;
     }
 
-    print (_movFilter);
-    print (_creditFilter);
 
     Database dbClient = await _databaseHelper.db;
     var res;
@@ -150,8 +151,9 @@ class QueryCtr {
 
     query += _pieceFilter;
     query += _movFilter;
-    query += _creditFilter ;
     query+=_tierFilter ;
+    query += _creditFilter ;
+
 
     query += ' ORDER BY id DESC';
 
@@ -167,6 +169,49 @@ class QueryCtr {
 
     return list;
   }
+
+  Future <List<Piece>> getPieceByNum(String num_piece , String type_piece) async{
+    var dbClient = await _databaseHelper.db ;
+    var res = await dbClient.query(DbTablesNames.pieces ,where: 'Num_piece LIKE ? AND Piece LIKE ?', whereArgs: ['$num_piece','$type_piece']);
+
+    List<Piece> list = new List<Piece>();
+    for (var i = 0, j = res.length; i < j; i++) {
+      Piece piece = Piece.fromMap(res[i]);
+      list.add(piece);
+    }
+    return list;
+  }
+
+  Future<Piece> getPieceById(int id) async{
+    var dbClient = await _databaseHelper.db ;
+    var res = await dbClient.query(DbTablesNames.pieces ,where: 'id = ?', whereArgs: [id]);
+
+    Piece piece = Piece.fromMap(res.first);
+
+    return piece;
+  }
+
+  Future<List<Article>> getJournalPiece(Piece piece) async{
+    var dbClient = await _databaseHelper.db ;
+    String query = 'SELECT Journaux.*,Articles.Ref ,Articles.Designation ,Articles.BytesImageString'
+        ' FROM Journaux JOIN Articles ON Journaux.Article_id = Articles.id AND Journaux.Mov <> -2 AND Journaux.Piece_id='+piece.id.toString();
+    var res = await dbClient.rawQuery(query);
+
+    List<Article> list = new List<Article>();
+    for(int i=0 ; i<res.length ; i++){
+      Article article = Article.fromMapJournaux(res[i]);
+      list.add(article);
+    }
+    return list ;
+  }
+
+  Future<int> updateJournaux(String tableName, item)async{
+    var dbClient = await _databaseHelper.db ;
+    var res = await dbClient.update(tableName, item.toMap(), where: "Piece_id = ? AND Article_id = ?" , whereArgs: [item.piece_id , item.article_id] );
+
+    return res ;
+  }
+
 
   Future<List<Tresorie>> getAllTresorie(int offset, int limit, {String searchTerm, Map<String, dynamic> filters}) async {
     String query = 'SELECT Tresories.*,Tiers.RaisonSociale FROM Tresories JOIN Tiers ON Tresories.Tier_id = Tiers.id';
@@ -197,17 +242,20 @@ class QueryCtr {
     return list;
   }
 
-  Future <List<Piece>> getPieceByNum(String num_piece , String type_piece) async{
-    var dbClient = await _databaseHelper.db ;
-    var res = await dbClient.query(DbTablesNames.pieces ,where: 'Num_piece LIKE ? AND Piece LIKE ?', whereArgs: ['$num_piece','$type_piece']);
+  Future<List<Tresorie>> getTresorieByNum(String num) async {
+      var dbClient = await _databaseHelper.db ;
 
-    List<Piece> list = new List<Piece>();
-    for (var i = 0, j = res.length; i < j; i++) {
-      Piece piece = Piece.fromMap(res[i]);
-      list.add(piece);
-    }
-    return list;
+      var res =  await dbClient.query(DbTablesNames.tresorie , where: "Num_tresorie LIKE ?" , whereArgs: ['$num']);
+
+      List<Tresorie> list = new List<Tresorie>();
+      for (var i = 0; i<res.length; i++) {
+        Tresorie tresorie = Tresorie.fromMap(res[i]);
+        list.add(tresorie);
+      }
+
+      return list;
   }
+
 
   Future<List<ArticleMarque>> getAllArticleMarques() async {
     Database dbClient = await _databaseHelper.db;
@@ -281,6 +329,8 @@ class QueryCtr {
     return new MyParams.frommMap(res[0]);
   }
 
+
+
   Future<dynamic> addItemToTable(String tableName, item) async {
     var dbClient = await _databaseHelper.db;
     int res = await dbClient.insert(tableName, item.toMap());
@@ -313,26 +363,7 @@ class QueryCtr {
     return list ;
   }
 
-  Future<List<Article>> getJournalPiece(Piece piece) async{
-    var dbClient = await _databaseHelper.db ;
-    String query = 'SELECT Journaux.*,Articles.Ref ,Articles.Designation ,Articles.BytesImageString'
-        ' FROM Journaux JOIN Articles ON Journaux.Article_id = Articles.id AND Journaux.Mov <> -2 AND Journaux.Piece_id='+piece.id.toString();
-    var res = await dbClient.rawQuery(query);
 
-    List<Article> list = new List<Article>();
-    for(int i=0 ; i<res.length ; i++){
-      Article article = Article.fromMapJournaux(res[i]);
-      list.add(article);
-    }
-    return list ;
-  }
-
-  Future<int> updateJournaux(String tableName, item)async{
-    var dbClient = await _databaseHelper.db ;
-    var res = await dbClient.update(tableName, item.toMap(), where: "Piece_id = ? AND Article_id = ?" , whereArgs: [item.piece_id , item.article_id] );
-
-    return res ;
-  }
 
 
   Future<Article> getTestArticle() async {

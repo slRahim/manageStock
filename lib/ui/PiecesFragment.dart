@@ -32,12 +32,12 @@ class PiecesFragment extends StatefulWidget {
 }
 
 class _PiecesFragmentState extends State<PiecesFragment> {
-  // bool isSearching = false;
   bool isFilterOn = false;
   final TextEditingController searchController = new TextEditingController();
 
   var _filterMap = new Map<String, dynamic>();
   var _emptyFilterMap = new Map<String, dynamic>();
+  var _tier_id ;
 
   bool _filterInHasCredit = false;
   bool _savedFilterHasCredit = false;
@@ -50,7 +50,7 @@ class _PiecesFragmentState extends State<PiecesFragment> {
   @override
   Future<void> initState() {
     super.initState();
-
+    _tier_id = widget.tierId ;
     fillFilter(_filterMap);
     fillFilter(_emptyFilterMap);
     _dataSource = SliverListDataSource(ItemsListTypes.pieceList, _filterMap);
@@ -62,9 +62,7 @@ class _PiecesFragmentState extends State<PiecesFragment> {
     filter["Mov"] = 0;
     filter["Credit"] = _savedFilterHasCredit ;
     filter["Draft"] = _savedFilterIsDraft ;
-    if(widget.tierId != null){
-      filter["Tier_id"] = widget.tierId;
-    }
+    filter["Tierid"] = _tier_id ;
   }
 
   Future<Widget> futureInitState() async {
@@ -187,19 +185,20 @@ class _PiecesFragmentState extends State<PiecesFragment> {
         appBar: SearchBar(
           searchController: searchController,
           mainContext: context,
-          title: Helpers.getPieceTitle(widget.peaceType),
+          title: (widget.peaceType !=null) ? Helpers.getPieceTitle(widget.peaceType) : "Pieces",
           isFilterOn: isFilterOn,
           onSearchChanged: (String search) => _dataSource.updateSearchTerm(search),
           onFilterPressed: () async {
-            if(widget.tierId == null){
+            if(widget.tierId != null){
+              var message = "Filter is not avalaible !";
+              Helpers.showFlushBar(context, message);
+            }else{
               showDialog(
                   context: context,
                   builder: (BuildContext context) {
                     return addFilterdialogue();
                   });
-            }else{
-              var message = "Filter is not avalaible !";
-              Helpers.showFlushBar(context, message);
+
             }
 
           },

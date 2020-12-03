@@ -16,6 +16,7 @@ class Statics {
     "ETP."
   ];
   static List<int> tarificationItems = [1, 2, 3];
+  static List<String> tiersItems = ["Clients","Cl/Fourr" ,"Fournisseurs"];
 }
 
 class Profiles {

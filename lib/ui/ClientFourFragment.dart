@@ -34,6 +34,7 @@ class ClientFourFragment extends StatefulWidget {
 
 class _ClientFourFragmentState extends State<ClientFourFragment> {
   bool isFilterOn = false;
+  TextEditingController searchController = new TextEditingController();
 
   var _filterMap = new Map<String, dynamic>();
   var _emptyFilterMap = new Map<String, dynamic>();
@@ -45,7 +46,7 @@ class _ClientFourFragmentState extends State<ClientFourFragment> {
 
   bool _filterInHasCredit = false;
   bool _savedFilterHasCredit = false;
-  TextEditingController searchController = new TextEditingController();
+
 
   SliverListDataSource _dataSource;
 

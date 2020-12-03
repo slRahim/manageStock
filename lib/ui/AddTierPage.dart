@@ -1,6 +1,5 @@
 import 'dart:io';
 import 'dart:typed_data';
-import 'package:barcode/barcode.dart';
 import 'package:barcode_scan/barcode_scan.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_osm_plugin/flutter_osm_plugin.dart';
@@ -407,12 +406,8 @@ class _AddTierPageState extends State<AddTierPage>
               ),
             ],
           ),
-          InkWell(
-            onDoubleTap: ()async{
-              await scanQRCode() ;
-            },
-            child: Visibility(
-              visible: editMode,
+         Visibility(
+              visible: false,
               child: TextField(
                 enabled: false,
                 readOnly: true,
@@ -435,7 +430,6 @@ class _AddTierPageState extends State<AddTierPage>
                 ),
               ),
             ),
-          ),
           TextField(
             enabled: editMode,
             controller: _adresseControl,
@@ -915,10 +909,9 @@ class _AddTierPageState extends State<AddTierPage>
     }
 
     item.raisonSociale = _raisonSocialeControl.text;
+
     if(_qrCodeControl.text != null){
       item.qrCode = _qrCodeControl.text;
-    }else{
-      item.qrCode = "TR://"+_raisonSocialeControl.text +"/"+_selectedStatut+"::"+_telephoneControl.text;
     }
 
     item.adresse = _adresseControl.text;
