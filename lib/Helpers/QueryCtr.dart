@@ -170,6 +170,21 @@ class QueryCtr {
     return list;
   }
 
+  Future<List<Piece>> getAllPiecesByTierId(int tier_id) async{
+    Database dbClient = await _databaseHelper.db;
+    var res;
+
+    res = await dbClient.query(DbTablesNames.pieces , where: "Reste > 0 AND Tier_id = ?" , whereArgs: [tier_id]);
+
+    List<Piece> list = new List<Piece>();
+    for (var i = 0, j = res.length; i < j; i++) {
+      Piece piece = Piece.fromMap(res[i]);
+      list.add(piece);
+    }
+
+    return list ;
+  }
+
   Future <List<Piece>> getPieceByNum(String num_piece , String type_piece) async{
     var dbClient = await _databaseHelper.db ;
     var res = await dbClient.query(DbTablesNames.pieces ,where: 'Num_piece LIKE ? AND Piece LIKE ?', whereArgs: ['$num_piece','$type_piece']);
@@ -213,29 +228,27 @@ class QueryCtr {
   }
 
 
-  Future<List<Tresorie>> getAllTresorie(int offset, int limit, {String searchTerm, Map<String, dynamic> filters}) async {
-    String query = 'SELECT Tresories.*,Tiers.RaisonSociale FROM Tresories JOIN Tiers ON Tresories.Tier_id = Tiers.id';
+  Future<List<Tresorie>> getAllTresories(int offset, int limit, {String searchTerm, Map<String, dynamic> filters}) async {
+    String query = 'SELECT * FROM Tresories';
 
     if(filters != null){
       int categorie = filters["Categorie"] != null? filters["Categorie"] : -1;
       String categorieFilter = categorie > 0 ? " AND Categorie_id = $categorie" : "";
 
-      query += " where Num_tresorie like '%${searchTerm??''}%'";
-      query += categorieFilter;;
+      query += " WHERE Num_tresorie LIKE '%${searchTerm??''}%'";
+      query += categorieFilter;
     }
+    query += ' ORDER BY id DESC';
 
     Database dbClient = await _databaseHelper.db;
-    var res;
 
-    query += ' ORDER BY id DESC';
+    var res = await dbClient.rawQuery(query);
 
     print(query);
 
-    res = await dbClient.rawQuery(query);
-
     List<Tresorie> list = new List<Tresorie>();
-    for (var i = 0, j = res.length; i < j; i++) {
-      Tresorie tresorie = Tresorie.fromMap(res[i]);
+    for (var i = 0; i<res.length; i++) {
+      Tresorie tresorie = new Tresorie.fromMap(res[i]);
       list.add(tresorie);
     }
 

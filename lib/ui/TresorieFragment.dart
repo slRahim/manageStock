@@ -44,15 +44,15 @@ class _TresorieFragmentState extends State<TresorieFragment> {
   @override
   Future<void> initState() {
     super.initState();
-
-    fillFilter(_filterMap);
-    fillFilter(_emptyFilterMap);
+    //
+    // fillFilter(_filterMap);
+    // fillFilter(_emptyFilterMap);
     _dataSource = SliverListDataSource(ItemsListTypes.tresorieList, _filterMap);
   }
 
   //***************************************************partie speciale pour le filtre de recherche***************************************
   void fillFilter(Map<String, dynamic> filter) {
-    filter["Categorie"] = _selectedCategorie ;
+    filter["Categorie"] = _selectedCategorie.id ;
   }
 
   Future<Widget> futureInitState() async {

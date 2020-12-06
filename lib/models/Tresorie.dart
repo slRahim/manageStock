@@ -1,11 +1,23 @@
 
-class Tresorie {
+import 'dart:convert';
+import 'dart:io';
 
+import 'dart:typed_data';
+
+import 'package:flutter/cupertino.dart';
+import 'package:gestmob/Helpers/Helpers.dart';
+
+class Tresorie {
   int _id ;
-  int _tierId , _pieceId , _categorie;
-  String _numTresorie,_tierRS , _modalite , _objet ;
+  int _tierId ;
+  int _pieceId ;
+  int _categorie;
+  String _numTresorie ;
+  String _tierRS ;
+  String _modalite ;
+  String _objet ;
   double _montant ;
-  DateTime _date ;
+  DateTime _date;
 
   Tresorie.init();
 
@@ -32,7 +44,7 @@ class Tresorie {
     this._objet= obj["Objet"];
     this._categorie= obj["Categorie_id"];
     this._montant= obj["Montant"];
-    this._date=DateTime.fromMillisecondsSinceEpoch(obj["Date"]);
+    this._date = new DateTime.now();
   }
 
   Map<String , dynamic> toMap(){
@@ -40,6 +52,7 @@ class Tresorie {
 
     map["Num_tresorie"]=this._numTresorie;
     map["Piece_id"]=this._pieceId;
+    map["Tier_id"]=this._tierId;
     map["Tier_rs"]=this._tierRS;
     map["Modalite"]=this._modalite;
     map["Objet"]=this._objet;

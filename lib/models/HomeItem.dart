@@ -100,7 +100,7 @@ HomeItem homeItemFactureDachat = new HomeItem(
 
 HomeItem homeItemTresorerie = new HomeItem(
     id: homeItemTresorerieId,
-    title: "Trésorerie",
+    title: "Trésorie",
     img: "assets/Tresorerie.png",
     active: true
 );

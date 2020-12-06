@@ -126,28 +126,27 @@ class _AddTresoriePageState extends State<AddTresoriePage> with TickerProviderSt
       DateTime time = _tresorie.date ?? new DateTime.now();
       _tresorie.date = time;
       _dateControl.text = Helpers.dateToText(time);
-      _selectedClient = await _queryCtr.getTierById(_tresorie.tierId);
-      _clientControl.text = _selectedClient.raisonSociale;
-      _selectedTypeTiers =  Statics.tiersItems[_selectedClient.clientFour];
-      _selectedCategorie = _categorieItems[item.pieceId];
-
+      if(_tresorie.tierId != null){
+        _selectedClient = await _queryCtr.getTierById(_tresorie.tierId);
+        _clientControl.text = _selectedClient.raisonSociale;
+        _selectedTypeTiers =  Statics.tiersItems[_selectedClient.clientFour];
+      }
       if(_tresorie.pieceId != null){
         var res = await _queryCtr.getPieceById(_tresorie.pieceId);
         _selectedPieces.add(res);
-      }
-      if(_selectedPieces.length >0){
         _restepiece=_selectedPieces.first.reste;
         _verssementpiece=_selectedPieces.first.regler;
+      }else{
+        _selectedPieces = new List<Piece> ();
       }
+      _selectedCategorie = _categorieItems[item.categorie];
       _objetControl.text = _tresorie.objet;
       _modaliteControl.text= _tresorie.modalite ;
       _montantControl.text = _tresorie.montant.toString() ;
 
 
     }else{
-      _selectedClient = await _queryCtr.getTierById(1);
-      _clientControl.text = _selectedClient.raisonSociale;
-      _selectedTypeTiers =  Statics.tiersItems[_selectedClient.clientFour];
+      _selectedTypeTiers =  Statics.tiersItems[0];
     }
 
   }
@@ -202,7 +201,25 @@ class _AddTresoriePageState extends State<AddTresoriePage> with TickerProviderSt
               });
             },
             onSavePressed: () async {
-              if (_selectedClient !=null) {
+              if ( (_selectedCategorie.id == 2 ||_selectedCategorie.id == 3 ||
+                  _selectedCategorie.id == 6 || _selectedCategorie.id == 7)  ) {
+                if(_selectedClient !=null ){
+                  int id = await addItemToDb();
+                  if (id > -1) {
+                    setState(() {
+                      modification = true;
+                      editMode = false;
+                    });
+                  }
+                }else{
+                  Helpers.showFlushBar(
+                      context, "Please select Tiers");
+
+                  setState(() {
+                    _validateRaison = true;
+                  });
+                }
+              } else {
                 int id = await addItemToDb();
                 if (id > -1) {
                   setState(() {
@@ -210,13 +227,6 @@ class _AddTresoriePageState extends State<AddTresoriePage> with TickerProviderSt
                     editMode = false;
                   });
                 }
-              } else {
-                Helpers.showFlushBar(
-                    context, "Please a Tiers");
-
-                setState(() {
-                  _validateRaison = true;
-                });
               }
             },
           ),
@@ -227,15 +237,22 @@ class _AddTresoriePageState extends State<AddTresoriePage> with TickerProviderSt
             shape: AutomaticNotchedShape(
                 RoundedRectangleBorder(), StadiumBorder(side: BorderSide())),
             expandedBackColor: Colors.lightBlueAccent,
-            expandedBody: TotalDevis(),
+            expandedBody: Container(),
             bottomAppBarBody: Padding(
               padding: const EdgeInsets.all(8.0),
               child: Row(
                 mainAxisSize: MainAxisSize.max,
                 children: <Widget>[
                   Expanded(
-                    child: Text(
+                    child: (_selectedClient !=null)? Text(
                       'Cred : '+_selectedClient.credit.toString()+" DA",
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                          fontWeight: FontWeight.bold
+                      ),
+                    ):
+                    Text(
+                      'Cred : 0.0 DA',
                       textAlign: TextAlign.center,
                       style: TextStyle(
                           fontWeight: FontWeight.bold
@@ -261,16 +278,16 @@ class _AddTresoriePageState extends State<AddTresoriePage> with TickerProviderSt
           floatingActionButton:FloatingActionButton.extended(
               label: Text("+ Add"),
               elevation: 2,
-              backgroundColor: editMode ? Colors.blue : Colors.grey,
+              backgroundColor: (editMode && !modification) ? Colors.blue : Colors.grey,
               foregroundColor: Colors.white,
               onPressed: () async {
-                  if(editMode){
+                  if(editMode && !modification){
                     if(_selectedClient !=null){
                       await showDialog(
                           context: context,
                           builder: (BuildContext context) {
                             return choosePieceDialog();
-                          }).then((val) {calculPiece();});
+                          });
                     }else{
                       var message = "Please select tiers";
                        Helpers.showFlushBar(context, message);
@@ -314,7 +331,7 @@ class _AddTresoriePageState extends State<AddTresoriePage> with TickerProviderSt
                           borderSide: BorderSide(color: Colors.orange[900]),
                         ),
                       ),
-                      enabled: editMode,
+                      enabled: editMode && !modification,
                       controller: _numeroControl,
                       keyboardType: TextInputType.text,
                     ),
@@ -323,7 +340,7 @@ class _AddTresoriePageState extends State<AddTresoriePage> with TickerProviderSt
                   Flexible(
                     flex: 6,
                     child: GestureDetector(
-                      onTap: editMode
+                      onTap: editMode && !modification
                           ? () {
                         callDatePicker();
                       }
@@ -358,7 +375,7 @@ class _AddTresoriePageState extends State<AddTresoriePage> with TickerProviderSt
                   Flexible(
                     flex: 4,
                     child :ListDropDown(
-                      editMode: editMode,
+                      editMode: editMode && !modification,
                       value: _selectedTypeTiers,
                       items: _tiersDropdownItems,
                       onChanged: (value) {
@@ -371,7 +388,7 @@ class _AddTresoriePageState extends State<AddTresoriePage> with TickerProviderSt
                   Flexible(
                     flex: 6,
                     child: GestureDetector(
-                      onTap: editMode
+                      onTap: editMode && !modification
                           ? ()   {
                         chooseClientDialog();
                       }
@@ -406,7 +423,7 @@ class _AddTresoriePageState extends State<AddTresoriePage> with TickerProviderSt
           ),
           SizedBox(height: 15),
           Center(
-              child: _selectedPieces.length > 0
+              child: _selectedPieces.isNotEmpty
                   ? Container(
                   padding: EdgeInsets.all(15),
                   child: Column(
@@ -417,7 +434,7 @@ class _AddTresoriePageState extends State<AddTresoriePage> with TickerProviderSt
                           shrinkWrap: true,
                           itemCount: _selectedPieces.length,
                           itemBuilder: (BuildContext ctxt, int index) {
-                            if(editMode){
+                            if(editMode && !modification){
                               return new PieceListItem(
                                 piece: _selectedPieces[index],
                                 onItemSelected: (selectedItem){
@@ -472,24 +489,27 @@ class _AddTresoriePageState extends State<AddTresoriePage> with TickerProviderSt
               spacing: 13,
               runSpacing: 13,
               children: [
-                ListDropDown(
-                  editMode: editMode,
-                  value: _selectedCategorie,
-                  items: _categorieDropdownItems,
-                  onChanged: (value) {
-                    setState(() {
-                      _selectedCategorie = value;
-                    });
-                  },
-                  onAddPressed: () async {
-                    await showDialog(
-                        context: context,
-                        builder: (BuildContext context) {
-                          return addTresoreCategorie();
-                        }).then((val) {
-                      setState(() {});
-                    });
-                  },
+                Visibility(
+                  visible: editMode && !modification ,
+                  child: ListDropDown(
+                    editMode: editMode ,
+                    value: _selectedCategorie,
+                    items: _categorieDropdownItems,
+                    onChanged: (value) {
+                      setState(() {
+                        _selectedCategorie = value;
+                      });
+                    },
+                    onAddPressed: () async {
+                      await showDialog(
+                          context: context,
+                          builder: (BuildContext context) {
+                            return addTresoreCategorie();
+                          }).then((val) {
+                        setState(() {});
+                      });
+                    },
+                  ),
                 ),
                 TextField(
                   enabled: editMode,
@@ -558,8 +578,6 @@ class _AddTresoriePageState extends State<AddTresoriePage> with TickerProviderSt
     );
   }
 
-
-
   //afficher le fragement des clients
   chooseClientDialog() {
     showDialog(
@@ -588,29 +606,13 @@ class _AddTresoriePageState extends State<AddTresoriePage> with TickerProviderSt
       onConfirmSelectedItem: (selectedItem) {
         setState(() {
           _selectedPieces.add(selectedItem);
+          _restepiece=_selectedPieces.first.reste;
         });
       },
     );
 
   }
 
-  //calcule le montant total
-  void calculPiece() {
-    // double sum = 0;
-    // double totalTva = 0;
-    // setState(() {
-    //   _selectedItems.forEach((item) {
-    //     sum += item.selectedQuantite * item.selectedPrice;
-    //     totalTva += item.selectedQuantite * item.tva ;
-    //   });
-    //   _piece.total_ht =sum ;
-    //   _piece.total_tva = totalTva ;
-    //   _piece.total_ttc = _piece.total_ht + _piece.total_tva ;
-    //   _verssementControler.text = _piece.total_ttc.toString() ;
-    //   _piece.regler = _piece.total_ttc ;
-    //   _piece.reste = _piece.total_ttc - _piece.regler ;
-    // });
-  }
 
 
   //********************************************************************** partie de date ****************************************************************************************
@@ -662,22 +664,73 @@ class _AddTresoriePageState extends State<AddTresoriePage> with TickerProviderSt
     String message;
     try {
       if (widget.arguments.id != null) {
-        var item = await makeItem();
-        id = await _queryCtr.updateItemInDb(DbTablesNames.tresorie, item);
-
+        Tresorie tresorie = await makeItem();
+        id = await _queryCtr.updateItemInDb(DbTablesNames.tresorie, tresorie);
+        if(_selectedCategorie.id == 2 || _selectedCategorie.id == 3){
+          if(_selectedPieces.isEmpty){
+            _selectedPieces = await _queryCtr.getAllPiecesByTierId(_selectedClient.id);
+          }
+          double _montant = tresorie.montant ;
+          _selectedPieces.forEach((piece) async{
+            if(_montant >= piece.reste){
+              piece.regler = piece.regler + piece.reste;
+              _montant = _montant - piece.reste ;
+              piece.reste = piece.total_ttc - piece.regler ;
+            }else if(_montant != 0){
+              piece.regler = piece.regler + _montant;
+              piece.reste = piece.total_ttc - piece.regler ;
+            }else{
+              return ;
+            }
+            await _queryCtr.updateItemInDb(DbTablesNames.pieces, piece);
+          });
+          if(_selectedPieces.length > 1){
+            setState(() {
+              _selectedPieces= new List<Piece> ();
+            });
+          }
+        }
         if (id > -1) {
-          widget.arguments = item;
+          widget.arguments = tresorie;
           widget.arguments.id = id;
-          message = "Piece has been updated successfully";
+          message = "Tresorie has been updated successfully";
         } else {
-          message = "Error when updating Piece in db";
+          message = "Error when updating Tresorie in db";
         }
       } else {
         Tresorie tresorie = await makeItem();
         id = await _queryCtr.addItemToTable(DbTablesNames.tresorie, tresorie);
+        if(_selectedCategorie.id == 2 || _selectedCategorie.id == 3){
+          if(_selectedPieces.isEmpty){
+            _selectedPieces = await _queryCtr.getAllPiecesByTierId(_selectedClient.id);
+          }
+          double _montant = tresorie.montant ;
+          _selectedPieces.forEach((piece) async{
+            if(_montant >= piece.reste){
+              piece.regler = piece.regler + piece.reste;
+              _montant = _montant - piece.reste ;
+              piece.reste = piece.total_ttc - piece.regler ;
+            }else if(_montant != 0){
+              piece.regler = piece.regler + _montant;
+              piece.reste = piece.total_ttc - piece.regler ;
+            }else{
+              return ;
+            }
+            await _queryCtr.updateItemInDb(DbTablesNames.pieces, piece);
+          });
+          if(_selectedPieces.length > 1){
+            setState(() {
+              _selectedPieces= new List<Piece> ();
+            });
+          }
+        }
         if (id > -1) {
           widget.arguments = tresorie;
           widget.arguments.id = id;
+          setState(() {
+            modification = true;
+            editMode = false;
+          });
           message = "Tresorie has been added successfully";
         } else {
           message = "Error when adding Tresorie to db";
@@ -694,9 +747,12 @@ class _AddTresoriePageState extends State<AddTresoriePage> with TickerProviderSt
 
   Future<Object> makeItem() async {
     var tiers = _selectedClient ;
+    if(tiers != null){
+      print(tiers.id);
+      _tresorie.tierId= tiers.id ;
+      _tresorie.tierRS = tiers.raisonSociale ;
+    }
     _tresorie.numTresorie=_numeroControl.text ;
-    _tresorie.tierId= tiers.id ;
-    _tresorie.tierRS = tiers.raisonSociale ;
     _tresorie.categorie = _selectedCategorie.id ;
     _tresorie.objet = _objetControl.text;
     _tresorie.modalite=_modaliteControl.text;

@@ -45,7 +45,8 @@ class SqlLiteDatabaseHelper {
     await createTresorieTable(db , version);
     await createFormatPieceTable(db ,version);
     await createMyParamTable(db , version);
-    await createTriggers(db , version);
+    await createTriggersJournaux(db , version);
+    await createTriggersPiece(db , version);
     await setInitialData(db, version);
 
   }
@@ -225,7 +226,7 @@ class SqlLiteDatabaseHelper {
       CREATE TABLE Tresories (
           id INTEGER PRIMARY KEY AUTOINCREMENT,
           Num_tresorie VARCHAR(50),
-          Tier_id INTEGER REFERENCES Tiers (id) ON DELETE SET NULL ON UPDATE CASCADE,
+          Tier_id ,
           Tier_rs VARCHAR (255),
           Piece_id ,
           Objet VARCHAR (255),
@@ -255,23 +256,14 @@ class SqlLiteDatabaseHelper {
         )""");
   }
 
-  //fonction speciale pour la creation des triggers de bd
-  createTriggers(Database db, int version) async {
-    // update_current_index
-     await db.execute('''CREATE TRIGGER update_current_index 
-        AFTER INSERT ON Pieces 
-        FOR EACH ROW 
-        BEGIN 
-        UPDATE FormatPiece
-           SET Current_index = Current_index+1
-        WHERE  FormatPiece.Piece LIKE NEW.Piece ; 
-        END;
-      ''');
 
-     //----------------------------------------------------------------------------------------------------------------------------------------
+//fonction speciale pour la creation des triggers de bd table article
+  createTriggersJournaux(Database db , int version) async {
 
-     //update_articles_qte_insert on insert bon client ======== ok
-     await db.execute('''
+    //----------------------------------------------------------------------------------------------------------------------------------------
+
+    //update_articles_qte_insert on insert bon client ======== ok
+    await db.execute('''
         CREATE TRIGGER IF NOT EXISTS update_articles_qte_onInsert_client
         AFTER INSERT ON Journaux
         FOR EACH ROW
@@ -285,8 +277,8 @@ class SqlLiteDatabaseHelper {
      ''');
 
 
-     //update_articles_qte_update on update bon client ====== ok
-     await db.execute('''
+    //update_articles_qte_update on update bon client ====== ok
+    await db.execute('''
         CREATE TRIGGER IF NOT EXISTS update_articles_qte_onUpdate_client
         AFTER UPDATE ON Journaux
         FOR EACH ROW
@@ -299,8 +291,8 @@ class SqlLiteDatabaseHelper {
         END;
      ''');
 
-     //update_articles_qte_update on update bon client from mov 0/-1/2 to 1
-     await db.execute('''
+    //update_articles_qte_update on update bon client from mov 0/-1/2 to 1
+    await db.execute('''
         CREATE TRIGGER IF NOT EXISTS update_articles_qte_onUpdate_client_mov1
         AFTER UPDATE ON Journaux
         FOR EACH ROW
@@ -313,8 +305,8 @@ class SqlLiteDatabaseHelper {
         END;
      ''');
 
-     //update_articles_qte_update on update le mov  bon client
-     await db.execute('''
+    //update_articles_qte_update on update le mov  bon client
+    await db.execute('''
         CREATE TRIGGER IF NOT EXISTS update_articles_qte_onUpdate_client_mov
         AFTER UPDATE ON Journaux
         FOR EACH ROW
@@ -328,8 +320,8 @@ class SqlLiteDatabaseHelper {
         END;
      ''');
 
-     //update_articles_qte_delete on delete piece client
-     await db.execute('''
+    //update_articles_qte_delete on delete piece client
+    await db.execute('''
         CREATE TRIGGER IF NOT EXISTS update_articles_qte_onDelete_client
         AFTER DELETE ON Journaux
         FOR EACH ROW
@@ -342,10 +334,11 @@ class SqlLiteDatabaseHelper {
         END;
      ''');
 
-     //-----------------------------------------------------------------------------------------------------------------------------
 
-     //update_articles_qte_insert on insert bon fournisseur
-     await db.execute('''
+    //-----------------------------------------------------------------------------------------------------------------------------
+
+    //update_articles_qte_insert on insert bon fournisseur
+    await db.execute('''
         CREATE TRIGGER IF NOT EXISTS update_articles_qte_onInsert_fournisseur
         AFTER INSERT ON Journaux
         FOR EACH ROW
@@ -360,8 +353,8 @@ class SqlLiteDatabaseHelper {
         END;
      ''');
 
-     //update_articles_qte_update on update bon fournisseur
-     await db.execute('''
+    //update_articles_qte_update on update bon fournisseur
+    await db.execute('''
         CREATE TRIGGER IF NOT EXISTS update_articles_qte_onUpdate_fournisseur
         AFTER UPDATE ON Journaux
         FOR EACH ROW
@@ -374,8 +367,8 @@ class SqlLiteDatabaseHelper {
         END;
      ''');
 
-     //update_articles_qte_update on update bon fournisseur from -1/0/2 to 1
-     await db.execute('''
+    //update_articles_qte_update on update bon fournisseur from -1/0/2 to 1
+    await db.execute('''
         CREATE TRIGGER IF NOT EXISTS update_articles_qte_onUpdate_fournisseur_mov1
         AFTER UPDATE ON Journaux
         FOR EACH ROW
@@ -388,8 +381,8 @@ class SqlLiteDatabaseHelper {
         END;
      ''');
 
-     //update_articles_qte_update on update le mov bon fournisseur
-     await db.execute('''
+    //update_articles_qte_update on update le mov bon fournisseur
+    await db.execute('''
         CREATE TRIGGER IF NOT EXISTS update_articles_qte_onUpdate_fournisseur_mov
         AFTER UPDATE ON Journaux
         FOR EACH ROW
@@ -403,8 +396,8 @@ class SqlLiteDatabaseHelper {
         END;
      ''');
 
-     //update_articles_qte_delete on delete piece fournisseur
-     await db.execute('''
+    //update_articles_qte_delete on delete piece fournisseur
+    await db.execute('''
         CREATE TRIGGER IF NOT EXISTS update_articles_qte_onDelete_fournisseur
         AFTER DELETE ON Journaux
         FOR EACH ROW
@@ -416,6 +409,30 @@ class SqlLiteDatabaseHelper {
              WHERE id = OLD.Article.id;
         END;
      ''');
+  }
+
+  //fonction speciale pour la creation des triggers de bd table piece et format
+  createTriggersPiece(Database db, int version) async {
+    // update_current_index
+     await db.execute('''CREATE TRIGGER update_current_index 
+        AFTER INSERT ON Pieces 
+        FOR EACH ROW 
+        BEGIN 
+        UPDATE FormatPiece
+           SET Current_index = Current_index+1
+        WHERE  FormatPiece.Piece LIKE NEW.Piece ; 
+        END;
+      ''');
+
+     await db.execute('''CREATE TRIGGER update_current_index_tr 
+        AFTER INSERT ON Tresories 
+        FOR EACH ROW 
+        BEGIN 
+            UPDATE FormatPiece
+               SET Current_index = Current_index+1
+            WHERE  FormatPiece.Piece LIKE "TR" ; 
+        END;
+      ''');
 
      //---------------------------------------------------------------------------------------------------------------------
 
@@ -430,9 +447,12 @@ class SqlLiteDatabaseHelper {
                   
             UPDATE Tiers
                SET Chiffre_affaires = Chiffre_affaires - OLD.Total_ttc,
-                   Rgler = Regler  - OLD.Regler,
-                   Credit = Credit - OLD.Reste
+                   Regler = Regler  - OLD.Regler
               WHERE id = OLD.Tier_id;
+              
+           UPDATE Tiers
+            SET  Credit = (Solde_depart + Chiffre_affaires) - Regler 
+           WHERE id = OLD.Tier_id;
         END;
      ''');
 
@@ -444,8 +464,13 @@ class SqlLiteDatabaseHelper {
         WHEN NEW.Mov = 1 
         BEGIN
              UPDATE Tiers
-               SET Chiffre_affaires = Chiffre_affaires + NEW.Total_ttc
+               SET Chiffre_affaires = Chiffre_affaires + NEW.Total_ttc ,
+                    Regler = Regler  + NEW.Regler
               WHERE id = New.Tier_id;
+              
+               UPDATE Tiers
+                SET  Credit = (Solde_depart + Chiffre_affaires) - Regler 
+                WHERE id = New.Tier_id;
         END;
      ''');
 
@@ -458,9 +483,12 @@ class SqlLiteDatabaseHelper {
         BEGIN
              UPDATE Tiers
                SET Chiffre_affaires = Chiffre_affaires + (NEW.Total_ttc-OLD.Total_ttc),
-                   Rgler = Regler + (NEW.Regler - OLD.Regler),
-                   Credit = Credit + (NEW.Reste-OLD.Reste)
+                   Regler = Regler + (NEW.Regler - OLD.Regler)
               WHERE id = New.Tier_id;
+              
+             UPDATE Tiers
+                SET  Credit = (Solde_depart + Chiffre_affaires) - Regler 
+             WHERE id = New.Tier_id;
         END;
      ''');
 
@@ -473,12 +501,14 @@ class SqlLiteDatabaseHelper {
         BEGIN
              UPDATE Tiers
                SET Chiffre_affaires = Chiffre_affaires - OLD.Total_ttc,
-                   Rgler = Regler  - OLD.Regler,
-                   Credit = Credit - OLD.Reste
+                   Regler = Regler  - OLD.Regler
+              WHERE id = New.Tier_id;
+              
+             UPDATE Tiers
+                SET  Credit = (Solde_depart + Chiffre_affaires) - Regler 
               WHERE id = New.Tier_id;
         END;
      ''');
-
 
   }
 

@@ -63,7 +63,7 @@ class _ItemsSliverListState extends State<ItemsSliverList> {
     } else if(item is Piece){
       return PieceListItem(piece: item , onItemSelected: widget.onItemSelected,);
     }else if (item is Tresorie){
-      return TresorieListItem(tresorie : item );
+      return TresorieListItem(tresorie : item);
     } else{
       return null;
     }
