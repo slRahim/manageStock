@@ -20,15 +20,15 @@ class TresorieListItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => ListTileCard(
-    // id: tresorie.id,
-    // from: tresorie,
-    // confirmDismiss: (DismissDirection dismissDirection) async {
-    //   // await showDialog(
-    //   //     context: context,
-    //   //     builder: (BuildContext context) {
-    //   //       return dellDialog();
-    //   //     });
-    // },
+    id: tresorie.id,
+    from: tresorie,
+    confirmDismiss: (DismissDirection dismissDirection) async {
+      await showDialog(
+          context: context,
+          builder: (BuildContext context) {
+            return dellDialog();
+          });
+    },
     onTap: () => {
       Navigator.of(context).pushNamed(RoutesKeys.addTresorie, arguments: tresorie)
     },

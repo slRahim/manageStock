@@ -46,7 +46,7 @@ class MyApp extends StatelessWidget {
 
           title: "GestMob",
           theme: ThemeData(
-            primarySwatch: Colors.red,
+            primarySwatch: Colors.blue,
           ),
 
           initialRoute: RoutesKeys.loginPage,

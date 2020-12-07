@@ -470,7 +470,7 @@ class _AddPiecePageState extends State<AddPiecePage> with TickerProviderStateMix
         context: context,
         builder: (BuildContext context) {
           return new ClientFourFragment(
-            clientFourn: 0,
+            clientFourn: (_piece.piece == "CC" || _piece.piece == "FC" || _piece.piece == "BL") ? 0 : 2,
             onConfirmSelectedItem: (selectedItem) {
               setState(() {
                 _selectedClient = selectedItem;
@@ -514,6 +514,10 @@ class _AddPiecePageState extends State<AddPiecePage> with TickerProviderStateMix
                     child: TextField(
                       controller: _verssementControler,
                       keyboardType: TextInputType.number,
+                      onChanged: (value){
+                        double _reste = _piece.total_ttc-double.parse(value) ;
+                        _resteControler.text = _reste.toString();
+                      },
                       decoration: InputDecoration(
                         errorText: _validateVerssemntError ?? null,
                         prefixIcon: Icon(
@@ -627,11 +631,11 @@ class _AddPiecePageState extends State<AddPiecePage> with TickerProviderStateMix
                               SizedBox(width: 10),
                               RaisedButton(
                                 onPressed: () {
+                                  setState(() {
+                                    _restepiece=double.parse(_resteControler.text);
+                                    _verssementpiece=double.parse(_verssementControler.text);
+                                  });
                                    Navigator.pop(context);
-                                   setState(() {
-                                     _restepiece=double.parse(_resteControler.text);
-                                     _verssementpiece=double.parse(_verssementControler.text);
-                                   });
                                 },
                                 child: Text(
                                   "Confirmé",

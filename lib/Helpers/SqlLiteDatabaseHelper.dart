@@ -233,7 +233,7 @@ class SqlLiteDatabaseHelper {
           Montant DOUBLE,
           Modalite VARCHAR (255),
           Categorie_id INTEGER REFERENCES TresorieCategories (id) ON DELETE SET NULL ON UPDATE CASCADE,
-          Date VARCHAR(50)
+          Date integer
       )""");
   }
 
@@ -458,7 +458,7 @@ class SqlLiteDatabaseHelper {
 
      //update_tiers_chiffre_affaires on insert piece
      await db.execute('''
-        CREATE TRIGGER IF NOT EXISTS update_tiers_chiffre_affaires
+        CREATE TRIGGER IF NOT EXISTS update_tiers_chiffre_affaires1
         AFTER INSERT ON Pieces
         FOR EACH ROW
         WHEN NEW.Mov = 1 
@@ -476,7 +476,7 @@ class SqlLiteDatabaseHelper {
 
      //update_tiers_chiffre_affaires on update mov piece
      await db.execute('''
-        CREATE TRIGGER IF NOT EXISTS update_tiers_chiffre_affaires
+        CREATE TRIGGER IF NOT EXISTS update_tiers_chiffre_affaires2
         AFTER UPDATE ON Pieces
         FOR EACH ROW
         WHEN NEW.Mov = 1 
@@ -484,17 +484,17 @@ class SqlLiteDatabaseHelper {
              UPDATE Tiers
                SET Chiffre_affaires = Chiffre_affaires + (NEW.Total_ttc-OLD.Total_ttc),
                    Regler = Regler + (NEW.Regler - OLD.Regler)
-              WHERE id = New.Tier_id;
+              WHERE id = OLD.Tier_id;
               
              UPDATE Tiers
                 SET  Credit = (Solde_depart + Chiffre_affaires) - Regler 
-             WHERE id = New.Tier_id;
+             WHERE id = OLD.Tier_id;
         END;
      ''');
 
      //update_tiers_chiffre_affaires on update mov != 1 piece
      await db.execute('''
-        CREATE TRIGGER IF NOT EXISTS update_tiers_chiffre_affaires
+        CREATE TRIGGER IF NOT EXISTS update_tiers_chiffre_affaires3
         AFTER UPDATE ON Pieces
         FOR EACH ROW
         WHEN NEW.Mov <> 1 AND (OLD.Mov <> NEW.Mov) 
@@ -502,11 +502,11 @@ class SqlLiteDatabaseHelper {
              UPDATE Tiers
                SET Chiffre_affaires = Chiffre_affaires - OLD.Total_ttc,
                    Regler = Regler  - OLD.Regler
-              WHERE id = New.Tier_id;
+              WHERE id = OLD.Tier_id;
               
              UPDATE Tiers
                 SET  Credit = (Solde_depart + Chiffre_affaires) - Regler 
-              WHERE id = New.Tier_id;
+              WHERE id = OLD.Tier_id;
         END;
      ''');
 

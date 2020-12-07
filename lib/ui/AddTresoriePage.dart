@@ -53,7 +53,7 @@ class _AddTresoriePageState extends State<AddTresoriePage> with TickerProviderSt
 
   String appBarTitle = "Tresorie";
 
-  List <Piece> _selectedPieces ;
+  List <Piece> _selectedPieces = new List<Piece>() ;
 
   Tiers _selectedClient ;
 
@@ -66,6 +66,7 @@ class _AddTresoriePageState extends State<AddTresoriePage> with TickerProviderSt
   TextEditingController _modaliteControl = new TextEditingController();
   TextEditingController _montantControl = new TextEditingController();
 
+
   double _restepiece = 0.0 ;
   double _verssementpiece ;
 
@@ -76,6 +77,7 @@ class _AddTresoriePageState extends State<AddTresoriePage> with TickerProviderSt
   List<TresorieCategories> _categorieItems;
   List<DropdownMenuItem<TresorieCategories>> _categorieDropdownItems;
   TresorieCategories _selectedCategorie;
+
 
   QueryCtr _queryCtr = new QueryCtr();
 
@@ -132,14 +134,14 @@ class _AddTresoriePageState extends State<AddTresoriePage> with TickerProviderSt
         _selectedTypeTiers =  Statics.tiersItems[_selectedClient.clientFour];
       }
       if(_tresorie.pieceId != null){
-        var res = await _queryCtr.getPieceById(_tresorie.pieceId);
+        Piece res = await _queryCtr.getPieceById(_tresorie.pieceId);
         _selectedPieces.add(res);
-        _restepiece=_selectedPieces.first.reste;
-        _verssementpiece=_selectedPieces.first.regler;
+        _restepiece=res.reste;
+        _verssementpiece=res.regler;
       }else{
         _selectedPieces = new List<Piece> ();
       }
-      _selectedCategorie = _categorieItems[item.categorie];
+      _selectedCategorie = _categorieItems[_tresorie.categorie];
       _objetControl.text = _tresorie.objet;
       _modaliteControl.text= _tresorie.modalite ;
       _montantControl.text = _tresorie.montant.toString() ;
@@ -434,22 +436,7 @@ class _AddTresoriePageState extends State<AddTresoriePage> with TickerProviderSt
                           shrinkWrap: true,
                           itemCount: _selectedPieces.length,
                           itemBuilder: (BuildContext ctxt, int index) {
-                            if(editMode && !modification){
-                              return new PieceListItem(
-                                piece: _selectedPieces[index],
-                                onItemSelected: (selectedItem){
-                                  if(_selectedPieces.contains(selectedItem)){
-                                    setState(() {
-                                      _selectedPieces.remove(selectedItem);
-                                    });
-                                  }
-                                }
-                              );
-                            }else{
-                              return new PieceListItem(
-                                  piece: _selectedPieces[index],
-                              );
-                            }
+                           return PieceListItem(piece: _selectedPieces[index]);
                             })
                     ],
                   ))
@@ -490,9 +477,9 @@ class _AddTresoriePageState extends State<AddTresoriePage> with TickerProviderSt
               runSpacing: 13,
               children: [
                 Visibility(
-                  visible: editMode && !modification ,
+                  visible: editMode && !modification,
                   child: ListDropDown(
-                    editMode: editMode ,
+                    editMode: editMode  ,
                     value: _selectedCategorie,
                     items: _categorieDropdownItems,
                     onChanged: (value) {
@@ -607,6 +594,7 @@ class _AddTresoriePageState extends State<AddTresoriePage> with TickerProviderSt
         setState(() {
           _selectedPieces.add(selectedItem);
           _restepiece=_selectedPieces.first.reste;
+          _montantControl.text= _restepiece.toString() ;
         });
       },
     );
@@ -650,11 +638,112 @@ class _AddTresoriePageState extends State<AddTresoriePage> with TickerProviderSt
   //************************************************************************partie de l'ajout d'une nouvelle categorie************************************************************
 
   Widget addTresoreCategorie() {
-
+    TextEditingController _libelleCategorieControl = new TextEditingController();
+    TresorieCategories _categorieTresorie=new TresorieCategories.init();
+    return StatefulBuilder(builder: (context, StateSetter setState) {
+      return Builder(
+          builder: (context) => Dialog(
+            //this right here
+            child: SingleChildScrollView(
+              child: Container(
+                height: 250,
+                child: Padding(
+                  padding: const EdgeInsets.all(6.0),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      Padding(
+                        padding: EdgeInsets.only(
+                            left: 5, right: 5, bottom: 20, top: 20),
+                        child : Text("Add New Categorie :"  , style: TextStyle(fontSize: 20 , color: Colors.redAccent),),
+                      ),
+                      Padding(
+                        padding: EdgeInsets.only(
+                            left: 5, right: 5, bottom: 20, top: 20),
+                        child: TextField(
+                          controller: _libelleCategorieControl,
+                          keyboardType: TextInputType.text,
+                          decoration: InputDecoration(
+                            prefixIcon: Icon(
+                              Icons.view_agenda,
+                              color: Colors.orange[900],
+                            ),
+                            focusedBorder: OutlineInputBorder(
+                                borderSide:
+                                BorderSide(color: Colors.orange[900]),
+                                borderRadius: BorderRadius.circular(20)),
+                            contentPadding: EdgeInsets.only(left: 10),
+                            labelText: "Categorie",
+                            labelStyle:
+                            TextStyle(color: Colors.orange[900]),
+                            enabledBorder: OutlineInputBorder(
+                              gapPadding: 3.3,
+                              borderRadius: BorderRadius.circular(20),
+                              borderSide:
+                              BorderSide(color: Colors.orange[900]),
+                            ),
+                          ),
+                        ),
+                      ),
+                      SizedBox(
+                        width: 320.0,
+                        child: Padding(
+                          padding: EdgeInsets.only(right: 0, left: 0),
+                          child: RaisedButton(
+                            onPressed: () async {
+                              setState(() {
+                                _categorieTresorie.libelle= _libelleCategorieControl.text;
+                                _libelleCategorieControl.text = "";
+                              });
+                              await addTresoreCategorieIfNotExist(_categorieTresorie);
+                              Navigator.pop(context);
+                              // final snackBar = SnackBar(
+                              //   content: Text(
+                              //     'Categorie Ajoutée',
+                              //     style: TextStyle(
+                              //         color: Colors.white,
+                              //         fontSize: 15,
+                              //         fontWeight: FontWeight.w500),
+                              //   ),
+                              //   backgroundColor: Colors.red,
+                              //   duration: Duration(seconds: 1),
+                              // );
+                              // _scaffoldKey.currentState
+                              //     .showSnackBar(snackBar);
+                              print(_categorieTresorie.libelle);
+                            }
+                            ,
+                            child: Text(
+                              "Ajouter",
+                              style: TextStyle(color: Colors.white),
+                            ),
+                            color: Colors.red,
+                          ),
+                        ),
+                      )
+                    ],
+                  ),
+                ),
+              ),
+            ),
+          ));
+    });
   }
 
-  Future<void> addTresoreCategorieIfNotExist()async{
+  Future<void> addTresoreCategorieIfNotExist(TresorieCategories item)async{
+    int categorieIndex = _categorieItems.indexOf(item);
+    if (categorieIndex > -1) {
+      _selectedCategorie = _categorieItems[categorieIndex];
+    } else {
+      int id = await _queryCtr.addItemToTable(DbTablesNames.categorieTresorie, item);
+      item.id = id;
 
+      _categorieItems.add(item);
+      _categorieDropdownItems =
+          utils.buildDropTresorieCategoriesDownMenuItems(_categorieItems);
+      _selectedCategorie = _categorieItems[_categorieItems.length];
+    }
   }
 
   //*************************************************************************** partie de save ***********************************************************************************
@@ -667,6 +756,7 @@ class _AddTresoriePageState extends State<AddTresoriePage> with TickerProviderSt
         Tresorie tresorie = await makeItem();
         id = await _queryCtr.updateItemInDb(DbTablesNames.tresorie, tresorie);
         if(_selectedCategorie.id == 2 || _selectedCategorie.id == 3){
+          bool _haspiece = true ;
           if(_selectedPieces.isEmpty){
             _selectedPieces = await _queryCtr.getAllPiecesByTierId(_selectedClient.id);
           }
@@ -684,7 +774,7 @@ class _AddTresoriePageState extends State<AddTresoriePage> with TickerProviderSt
             }
             await _queryCtr.updateItemInDb(DbTablesNames.pieces, piece);
           });
-          if(_selectedPieces.length > 1){
+          if(_haspiece == false){
             setState(() {
               _selectedPieces= new List<Piece> ();
             });
@@ -700,8 +790,11 @@ class _AddTresoriePageState extends State<AddTresoriePage> with TickerProviderSt
       } else {
         Tresorie tresorie = await makeItem();
         id = await _queryCtr.addItemToTable(DbTablesNames.tresorie, tresorie);
+
         if(_selectedCategorie.id == 2 || _selectedCategorie.id == 3){
+          bool _haspiece = true ;
           if(_selectedPieces.isEmpty){
+            _haspiece =false ;
             _selectedPieces = await _queryCtr.getAllPiecesByTierId(_selectedClient.id);
           }
           double _montant = tresorie.montant ;
@@ -718,7 +811,7 @@ class _AddTresoriePageState extends State<AddTresoriePage> with TickerProviderSt
             }
             await _queryCtr.updateItemInDb(DbTablesNames.pieces, piece);
           });
-          if(_selectedPieces.length > 1){
+          if(_haspiece == false){
             setState(() {
               _selectedPieces= new List<Piece> ();
             });
@@ -736,7 +829,6 @@ class _AddTresoriePageState extends State<AddTresoriePage> with TickerProviderSt
           message = "Error when adding Tresorie to db";
         }
       }
-      Navigator.pop(context);
       Helpers.showFlushBar(context, message);
       return Future.value(id);
     } catch (error) {

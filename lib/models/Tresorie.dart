@@ -44,7 +44,7 @@ class Tresorie {
     this._objet= obj["Objet"];
     this._categorie= obj["Categorie_id"];
     this._montant= obj["Montant"];
-    this._date = new DateTime.now();
+    this._date = new DateTime.fromMillisecondsSinceEpoch(obj["Date"]);
   }
 
   Map<String , dynamic> toMap(){

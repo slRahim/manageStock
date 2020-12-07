@@ -36,7 +36,7 @@ class _TresorieFragmentState extends State<TresorieFragment> {
 
   List<TresorieCategories> _categorieItems;
   List<DropdownMenuItem<TresorieCategories>> _categorieDropdownItems;
-  TresorieCategories  _selectedCategorie;
+  TresorieCategories  _selectedCategorie=null;
   int _savedSelectedCategorie = 0;
 
   SliverListDataSource _dataSource;
@@ -44,9 +44,6 @@ class _TresorieFragmentState extends State<TresorieFragment> {
   @override
   Future<void> initState() {
     super.initState();
-    //
-    // fillFilter(_filterMap);
-    // fillFilter(_emptyFilterMap);
     _dataSource = SliverListDataSource(ItemsListTypes.tresorieList, _filterMap);
   }
 

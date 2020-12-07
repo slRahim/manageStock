@@ -49,11 +49,12 @@ class _ClientFourFragmentState extends State<ClientFourFragment> {
 
 
   SliverListDataSource _dataSource;
+  int _clientFour;
 
   @override
   Future<void> initState() {
     super.initState();
-
+    _clientFour = widget.clientFourn ;
     fillFilter(_filterMap);
     fillFilter(_emptyFilterMap);
     _dataSource = SliverListDataSource(widget.clientFourn == 0? ItemsListTypes.clientsList : ItemsListTypes.fournisseursList, _filterMap);
@@ -62,7 +63,7 @@ class _ClientFourFragmentState extends State<ClientFourFragment> {
   void fillFilter(Map<String, dynamic> filter) {
     filter["Id_Famille"] = _savedSelectedFamille;
     filter["hasCredit"] = _savedFilterHasCredit;
-    filter["Clientfour"] = widget.clientFourn;
+    filter["Clientfour"] = _clientFour;
   }
 
   Future<Widget> futureInitState() async {

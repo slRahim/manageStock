@@ -13,7 +13,7 @@ import 'CustomWidgets/list_tile_card.dart';
 class PieceListItem extends StatelessWidget {
   const PieceListItem({
     @required this.piece,
-    Key key, this.onItemSelected
+    Key key, this.onItemSelected ,
   })  : assert(piece != null),
         super(key: key);
 
@@ -24,20 +24,19 @@ class PieceListItem extends StatelessWidget {
   Widget build(BuildContext context) => ListTileCard(
     id: piece.id,
     from: piece,
-    confirmDismiss: (DismissDirection dismissDirection) async {
+    confirmDismiss:(DismissDirection dismissDirection) async {
       print("Mov: " + piece.mov.toString());
       await showDialog(
           context: context,
           builder: (BuildContext context) {
             return dellDialog();
           });;
-    },
+    } ,
     onLongPress:  () => onItemSelected != null? onItemSelected(piece) : null,
     onTap: () => {
       if(onItemSelected == null){
         Navigator.of(context).pushNamed(RoutesKeys.addPiece, arguments: piece)
       }
-
     },
     leading: Container(
       child: Center(child: Text(piece.piece),),
@@ -53,7 +52,7 @@ class PieceListItem extends StatelessWidget {
       ),
     ),
     title: Text(piece.num_piece),
-    subtitle: Text("RS: " + piece.raisonSociale),
+    subtitle:(piece.raisonSociale != null) ? Text("RS: " + piece.raisonSociale) : null,
     trailingChildren: [
       (piece.reste > 0) ? Text('TTC : '+piece.total_ttc.toString(), style: TextStyle(fontSize: 16.0, fontWeight: FontWeight.bold ,color: Colors.redAccent),)
       : Text('TTC : '+piece.total_ttc.toString(), style: TextStyle(fontSize: 16.0, fontWeight: FontWeight.bold ),) ,

@@ -57,7 +57,8 @@ dependencies:
 
   barcode_scan: any
   expandable_bottom_bar: any
-
+  qr_flutter:
+  share: ^0.6.4+3
 
   get_it: ^5.0.1
 

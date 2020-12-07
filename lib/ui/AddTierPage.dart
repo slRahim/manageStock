@@ -1,5 +1,6 @@
 import 'dart:io';
 import 'dart:typed_data';
+import 'dart:ui';
 import 'package:barcode_scan/barcode_scan.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_osm_plugin/flutter_osm_plugin.dart';
@@ -18,6 +19,10 @@ import 'package:image_picker/image_picker.dart';
 import 'package:gestmob/Widgets/utils.dart' as utils;
 import 'package:map_launcher/map_launcher.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
+import 'package:path_provider/path_provider.dart';
+import 'package:qr_flutter/qr_flutter.dart';
+import 'package:flutter/rendering.dart';
+import 'package:share/share.dart';
 
 class AddTierPage extends StatefulWidget {
 
@@ -90,6 +95,9 @@ class _AddTierPageState extends State<AddTierPage>
 
   QueryCtr _queryCtr = new QueryCtr() ;
   MyParams _myParams ;
+
+  GlobalKey globalKey = new GlobalKey();
+  String _dataString = "Hello from this QR";
 
   @override
   void dispose() {
@@ -226,128 +234,129 @@ class _AddTierPageState extends State<AddTierPage>
       return Scaffold(body: Helpers.buildLoading());
     } else {
       return DefaultTabController(
-          length: 4,
-          child: Scaffold(
-              floatingActionButton: Padding(
-                padding: const EdgeInsets.fromLTRB(40, 10, 10, 10),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.end,
-                  mainAxisSize: MainAxisSize.max,
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  children: [
-                    Visibility(
-                      visible: _tabSelectedIndex == 2 && editMode,
-                      child: FloatingActionButton(
-                        backgroundColor: Colors.green,
-                        onPressed: () async {
-                          GeoPoint geoPoint = await osmKey.currentState.selectPosition();
-                          if(geoPoint != null){
-                            // await osmKey.currentState.setStaticPosition([GeoPoint(latitude: 47.4333594, longitude: 8.4680184)], "Location");
-                            _latitude = geoPoint.latitude;
-                            _longitude = geoPoint.longitude;
-                          }
-                        },
-                        child: Icon(Icons.add_location),
+            length: 4,
+            child: Scaffold(
+                floatingActionButton: Padding(
+                  padding: const EdgeInsets.fromLTRB(40, 10, 10, 10),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.end,
+                    mainAxisSize: MainAxisSize.max,
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: [
+                      Visibility(
+                        visible: _tabSelectedIndex == 2 && editMode,
+                        child: FloatingActionButton(
+                          backgroundColor: Colors.green,
+                          onPressed: () async {
+                            GeoPoint geoPoint = await osmKey.currentState.selectPosition();
+                            if(geoPoint != null){
+                              // await osmKey.currentState.setStaticPosition([GeoPoint(latitude: 47.4333594, longitude: 8.4680184)], "Location");
+                              _latitude = geoPoint.latitude;
+                              _longitude = geoPoint.longitude;
+                            }
+                          },
+                          child: Icon(Icons.add_location),
+                        ),
                       ),
-                    ),
-                    SizedBox(
-                      height: 15,
-                    ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Visibility(
-                          visible: _tabSelectedIndex == 2 && !editMode,
-                          child: FloatingActionButton(
-                            backgroundColor: Colors.blueAccent,
-                            onPressed: () async {
-                              Helpers.openMapsSheet(context, new Coords(_latitude, _longitude));
-                            },
-                            child: Icon(Icons.directions),
+                      SizedBox(
+                        height: 15,
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Visibility(
+                            visible: _tabSelectedIndex == 2 && !editMode,
+                            child: FloatingActionButton(
+                              backgroundColor: Colors.blueAccent,
+                              onPressed: () async {
+                                Helpers.openMapsSheet(context, new Coords(_latitude, _longitude));
+                              },
+                              child: Icon(Icons.directions),
+                            ),
                           ),
-                        ),
-                        Visibility(
-                          visible: _tabSelectedIndex == 2 && editMode,
-                          child: FloatingActionButton(
-                            onPressed: () async {
-                              // GeoPoint geoPoint = await osmKey.currentState.myLocation();
-                              await osmKey.currentState.currentLocation();
-                              // await osmKey.currentState.enableTracking();
-                            },
-                            child: Icon(Icons.my_location),
+                          Visibility(
+                            visible: _tabSelectedIndex == 2 && editMode,
+                            child: FloatingActionButton(
+                              onPressed: () async {
+                                // GeoPoint geoPoint = await osmKey.currentState.myLocation();
+                                await osmKey.currentState.currentLocation();
+                                // await osmKey.currentState.enableTracking();
+                              },
+                              child: Icon(Icons.my_location),
+                            ),
                           ),
-                        ),
-                      ],
-                    ),
-                  ],
+                        ],
+                      ),
+                    ],
+                  ),
                 ),
-              ),
-              key: _scaffoldKey,
-              backgroundColor: Color(0xFFF1F8FA),
-              appBar: AddEditBar(
-                editMode: editMode,
-                modification: modification,
-                title: appBarTitle,
-                onCancelPressed: () => {
-                  if(modification){
-                    if(editMode){
-                      Navigator.of(context)
-                          .pushReplacementNamed(RoutesKeys.addTier, arguments: widget.arguments)
+                key: _scaffoldKey,
+                backgroundColor: Color(0xFFF1F8FA),
+                appBar: AddEditBar(
+                  editMode: editMode,
+                  modification: modification,
+                  title: appBarTitle,
+                  onCancelPressed: () => {
+                    if(modification){
+                      if(editMode){
+                        Navigator.of(context)
+                            .pushReplacementNamed(RoutesKeys.addTier, arguments: widget.arguments)
+                      } else{
+                        Navigator.pop(context)
+                      }
                     } else{
-                      Navigator.pop(context)
+                      Navigator.pop(context),
                     }
-                  } else{
-                    Navigator.pop(context),
-                  }
-                },
-                onEditPressed: () {
-                  setState(() {
-                    editMode = true;
-                  });
-                },
-                onSavePressed: () async {
-                  if (_raisonSocialeControl.text.isNotEmpty) {
-                    int id = await addItemToDb();
-                    if (id > -1) {
+                  },
+                  onEditPressed: () {
+                    setState(() {
+                      editMode = true;
+                    });
+                  },
+                  onSavePressed: () async {
+                    if (_raisonSocialeControl.text.isNotEmpty) {
+                      int id = await addItemToDb();
+                      if (id > -1) {
+                        setState(() {
+                          modification = true;
+                          editMode = false;
+                        });
+                      }
+                    } else {
+                      Helpers.showFlushBar(
+                          context, "Please enter Raison sociale");
+
                       setState(() {
-                        modification = true;
-                        editMode = false;
+                        _validateRaison = true;
                       });
                     }
-                  } else {
-                    Helpers.showFlushBar(
-                        context, "Please enter Raison sociale");
-
-                    setState(() {
-                      _validateRaison = true;
-                    });
-                  }
-                },
-              ),
-              bottomNavigationBar: BottomTabBar(
-                selectedIndex: _tabSelectedIndex,
-                controller: _tabController,
-                tabs: [
-                  Tab(child: Column( children: [ Icon(Icons.insert_drive_file),SizedBox(height: 2), Text("Fiche"), ], )),
-                  Tab(child: Column( children: [ Icon(Icons.image), SizedBox(height: 2), Text("Photo"), ], )),
-                  Tab(child: Column( children: [ Icon(Icons.map), SizedBox(height: 2), Text("Map"), ], )),
-                  Tab(child: Column( children: [ Icon(MdiIcons.qrcode), SizedBox(height: 2), Text("QRcode"), ], )),
-                ],
-              ),
-              body: Builder(
-                builder: (context) => TabBarView(
+                  },
+                ),
+                bottomNavigationBar: BottomTabBar(
+                  selectedIndex: _tabSelectedIndex,
                   controller: _tabController,
-                  physics: _tabSelectedIndex == 2
-                      ? NeverScrollableScrollPhysics()
-                      : ClampingScrollPhysics(),
-                  children: [
-                    fichetab(),
-                    imageTab(),
-                    mapTab(),
-                    qrCodeTab(),
+                  tabs: [
+                    Tab(child: Column( children: [ Icon(Icons.insert_drive_file),SizedBox(height: 2), Text("Fiche"), ], )),
+                    Tab(child: Column( children: [ Icon(Icons.image), SizedBox(height: 2), Text("Photo"), ], )),
+                    Tab(child: Column( children: [ Icon(Icons.map), SizedBox(height: 2), Text("Map"), ], )),
+                    Tab(child: Column( children: [ Icon(MdiIcons.qrcode), SizedBox(height: 2), Text("QRcode"), ], )),
                   ],
                 ),
-              )));
+                body: Builder(
+                  builder: (context) => TabBarView(
+                    controller: _tabController,
+                    physics: _tabSelectedIndex == 2
+                        ? NeverScrollableScrollPhysics()
+                        : ClampingScrollPhysics(),
+                    children: [
+                      fichetab(),
+                      imageTab(),
+                      mapTab(),
+                      qrCodeTab(),
+                    ],
+                  ),
+                )),
+      );
     }
   }
 
@@ -665,11 +674,133 @@ class _AddTierPageState extends State<AddTierPage>
   }
 
   Widget qrCodeTab() {
-    return (
-      Center(
-        child: Text('qrcode'),
-      )
-    );
+    final bodyHeight = MediaQuery.of(context).size.height - MediaQuery.of(context).viewInsets.bottom;
+    return Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            RepaintBoundary(
+              key : globalKey,
+              child: Container(
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.grey.withOpacity(0.5),
+                      spreadRadius: 1,
+                      blurRadius: 2,
+                      offset:
+                      Offset(0, 2), // changes position of shadow
+                    ),
+                  ],
+                ),
+                width: 300,
+                height: 300,
+                child: QrImage(
+                  data: _qrCodeControl.text,
+                    size: 0.5 * bodyHeight,
+                  ),
+
+              ),
+            ),
+            SizedBox(height: 25,),
+            (editMode) ? Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                Container(
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(50.0),
+                    color: Colors.white,
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.grey.withOpacity(0.5),
+                        spreadRadius: 1,
+                        blurRadius: 2,
+                        offset:
+                        Offset(0, 2), // changes position of shadow
+                      ),
+                    ],
+                  ),
+                  child: new IconButton(
+                    color: Colors.black,
+                    icon: new Icon(
+                      MdiIcons.qrcodeScan,
+                      size: 30,
+                      color: Colors.blue[700],
+                    ),
+                    onPressed: editMode
+                        ? () async{
+                            await scanQRCode();
+                    }
+                        : null,
+                  ),
+                ),
+                Container(
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(50.0),
+                    color: Colors.white,
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.grey.withOpacity(0.5),
+                        spreadRadius: 1,
+                        blurRadius: 2,
+                        offset:
+                        Offset(0, 2), // changes position of shadow
+                      ),
+                    ],
+                  ),
+                  child: new IconButton(
+                    color: Colors.black,
+                    icon: new Icon(
+                      Icons.autorenew_outlined,
+                      size: 30,
+                      color: Colors.blueGrey,
+                    ),
+                    onPressed: editMode
+                        ? () {
+                        setState(() {
+                          _qrCodeControl.text = "Tier://"+_raisonSocialeControl.text+"/"+_mobileControl.text;
+                        });
+                    }
+                        : null,
+                  ),
+                ),
+              ],
+            )
+            : Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                Container(
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(50.0),
+                    color: Colors.white,
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.grey.withOpacity(0.5),
+                        spreadRadius: 1,
+                        blurRadius: 2,
+                        offset:
+                        Offset(0, 2), // changes position of shadow
+                      ),
+                    ],
+                  ),
+                  child: new IconButton(
+                    color: Colors.black,
+                    icon: new Icon(
+                      Icons.save_alt,
+                      size: 30,
+                      color: Colors.blue[700],
+                    ),
+                    onPressed: () async{
+                      await _captureAndSharePng();
+                    }
+                  ),
+                ),
+              ],
+            )
+          ],
+      );
+
   }
 
   Widget mapTab() {
@@ -977,6 +1108,33 @@ class _AddTierPageState extends State<AddTierPage>
       Helpers.showToast(result.rawContent);
     }
   }
+
+  Future<void> _captureAndSharePng() async {
+    print('ani hna');
+    try {
+      RenderRepaintBoundary boundary = globalKey.currentContext.findRenderObject();
+      var image = await boundary.toImage();
+      ByteData byteData = await image.toByteData(format: ImageByteFormat.png);
+      Uint8List pngBytes = byteData.buffer.asUint8List();
+
+      final tempDir = await getTemporaryDirectory();
+      final file = await new File('${tempDir.path}/image.png').create();
+      await file.writeAsBytes(pngBytes);
+
+      final RenderBox box = context.findRenderObject();
+      List<String> paths =new List<String>();
+      paths.add('${tempDir.path}/image.png');
+      await Share.shareFiles(paths,
+          subject: 'Share',
+          text: 'Hey, check it out the sharefiles repo!',
+          sharePositionOrigin: box.localToGlobal(Offset.zero) & box.size ,
+      );
+    } catch(e) {
+      print(e.toString());
+    }
+  }
+
+
 
 
 }
