@@ -59,6 +59,7 @@ class DbTablesNames {
   static const tiersFamille = 'TiersFamilles';
   static const tresorie='Tresories';
   static const categorieTresorie = "TresorieCategories";
+  static const reglementTresorie = "ReglementTresorie";
   static const formatPiece = "FormatPiece" ;
   static const myparams = "MyParams" ;
 }

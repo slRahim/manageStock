@@ -1,3 +1,4 @@
+
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_icons/flutter_icons.dart';
@@ -5,7 +6,7 @@ import 'package:gestmob/Helpers/Statics.dart';
 import 'package:gestmob/models/Article.dart';
 import 'package:gestmob/models/Tiers.dart';
 import 'package:google_fonts/google_fonts.dart';
-
+import 'package:url_launcher/url_launcher.dart';
 import 'CustomWidgets/list_tile_card.dart';
 
 // element à afficher lors de listing des clients ou des fournisseurs
@@ -25,7 +26,7 @@ class TierListItem extends StatelessWidget {
     from: tier,
     confirmDismiss: (DismissDirection dismissDirection) async {
       print("call: " + tier.mobile);
-      return false;
+      await _makePhoneCall("tel:${tier.mobile}");
     },
     onLongPress:  () => onItemSelected != null? onItemSelected(tier) : null,
     onTap: () => {
@@ -50,4 +51,12 @@ class TierListItem extends StatelessWidget {
       // fournisseur reverse colors
     ],
   );
+
+  Future<void> _makePhoneCall(String phone) async {
+    if (await canLaunch(phone)) {
+      await launch(phone);
+    } else {
+      throw 'Could not launch $phone';
+    }
+  }
 }

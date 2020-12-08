@@ -19,7 +19,6 @@ import 'package:gestmob/search/sliver_list_data_source.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 import 'package:gestmob/Widgets/utils.dart' as utils;
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
-
 import 'AddArticlePage.dart';
 
 class ClientFourFragment extends StatefulWidget {
@@ -191,7 +190,6 @@ class _ClientFourFragmentState extends State<ClientFourFragment> {
         ));
   }
 
-
   Widget addFilterdialogue() {
     return FutureBuilder(
         future: futureInitState(),
@@ -274,5 +272,7 @@ class _ClientFourFragmentState extends State<ClientFourFragment> {
       Helpers.showToast(result.rawContent);
     }
   }
+
+
 
 }

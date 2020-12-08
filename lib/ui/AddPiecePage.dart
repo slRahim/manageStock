@@ -873,8 +873,9 @@ class _AddPiecePageState extends State<AddPiecePage> with TickerProviderStateMix
       } else {
         Piece piece = await makePiece();
         id = await _queryCtr.addItemToTable(DbTablesNames.pieces, piece);
-        var res = await _queryCtr.getPieceByNum(piece.num_piece , piece.piece);
-        piece.id= res[0].id ;
+        if(id > -1){
+          piece.id = await _queryCtr.getLastId(DbTablesNames.pieces);
+        }
         _selectedItems.forEach((article) async {
           Journaux journaux = Journaux.fromPiece(piece, article);
           await _queryCtr.addItemToTable(DbTablesNames.journaux, journaux);

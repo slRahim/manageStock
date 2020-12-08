@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:gestmob/Helpers/Helpers.dart';
+import 'package:gestmob/Helpers/QueryCtr.dart';
 import 'package:gestmob/Helpers/Statics.dart';
 import 'package:gestmob/models/Tresorie.dart';
 import 'package:intl/intl.dart';
@@ -10,13 +11,15 @@ import 'CustomWidgets/list_tile_card.dart';
 
 // element à afficher lors de listing des tresorie
 class TresorieListItem extends StatelessWidget {
-  const TresorieListItem({
+  TresorieListItem({
     @required this.tresorie,
     Key key,
   })  : assert(tresorie != null),
         super(key: key);
 
   final Tresorie tresorie;
+  QueryCtr _queryCtr = new QueryCtr() ;
+  bool _confirmDell = false ;
 
   @override
   Widget build(BuildContext context) => ListTileCard(
@@ -26,8 +29,9 @@ class TresorieListItem extends StatelessWidget {
       await showDialog(
           context: context,
           builder: (BuildContext context) {
-            return dellDialog();
+            return dellDialog(context);
           });
+      return _confirmDell ;
     },
     onTap: () => {
       Navigator.of(context).pushNamed(RoutesKeys.addTresorie, arguments: tresorie)
@@ -57,8 +61,35 @@ class TresorieListItem extends StatelessWidget {
   );
 
 
-  Widget dellDialog() {
-
+  Widget dellDialog(BuildContext context) {
+      return AlertDialog(
+        title:  Text('Delete ?'),
+        content: Text('do you wont to delete the item'),
+        actions: [
+          FlatButton(
+            child: Text('No'),
+            onPressed: (){
+              Navigator.pop(context);
+            },
+          ),
+          FlatButton(
+            child: Text('YES'),
+            onPressed: ()async {
+              int res = await _queryCtr.removeItemFromTable(DbTablesNames.tresorie, tresorie);
+              var message = "" ;
+              if(res > 0){
+                message ="Piece deleted successfully";
+                _confirmDell =true ;
+                Navigator.pop(context);
+              }else{
+                message ="Error has occured";
+                Navigator.pop(context);
+              }
+              Helpers.showFlushBar(context, message);
+            }
+          ),
+        ],
+      );
   }
 
 

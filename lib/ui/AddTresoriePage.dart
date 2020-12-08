@@ -19,6 +19,7 @@ import 'package:gestmob/Widgets/total_devis.dart';
 import 'package:gestmob/models/Article.dart';
 import 'package:gestmob/models/FormatPiece.dart';
 import 'package:gestmob/models/Piece.dart';
+import 'package:gestmob/models/ReglementTresorie.dart';
 import 'package:gestmob/models/Tiers.dart';
 import 'package:gestmob/models/Tresorie.dart';
 import 'package:gestmob/models/TresorieCategories.dart';
@@ -762,6 +763,11 @@ class _AddTresoriePageState extends State<AddTresoriePage> with TickerProviderSt
           }
           double _montant = tresorie.montant ;
           _selectedPieces.forEach((piece) async{
+
+            ReglementTresorie item= new ReglementTresorie.init();
+            item.piece_id = piece.id ;
+            item.tresorie_id = widget.arguments.id ;
+
             if(_montant >= piece.reste){
               piece.regler = piece.regler + piece.reste;
               _montant = _montant - piece.reste ;
@@ -772,6 +778,7 @@ class _AddTresoriePageState extends State<AddTresoriePage> with TickerProviderSt
             }else{
               return ;
             }
+            await _queryCtr.updateItemInDb(DbTablesNames.reglementTresorie, item);
             await _queryCtr.updateItemInDb(DbTablesNames.pieces, piece);
           });
           if(_haspiece == false){
@@ -790,7 +797,9 @@ class _AddTresoriePageState extends State<AddTresoriePage> with TickerProviderSt
       } else {
         Tresorie tresorie = await makeItem();
         id = await _queryCtr.addItemToTable(DbTablesNames.tresorie, tresorie);
-
+        if(id > -1){
+          tresorie.id = await _queryCtr.getLastId(DbTablesNames.tresorie);
+        }
         if(_selectedCategorie.id == 2 || _selectedCategorie.id == 3){
           bool _haspiece = true ;
           if(_selectedPieces.isEmpty){
@@ -799,16 +808,24 @@ class _AddTresoriePageState extends State<AddTresoriePage> with TickerProviderSt
           }
           double _montant = tresorie.montant ;
           _selectedPieces.forEach((piece) async{
+
+            ReglementTresorie item= new ReglementTresorie.init();
+            item.piece_id = piece.id ;
+            item.tresorie_id = tresorie.id ;
+
             if(_montant >= piece.reste){
+              item.regler = piece.reste ;
               piece.regler = piece.regler + piece.reste;
               _montant = _montant - piece.reste ;
               piece.reste = piece.total_ttc - piece.regler ;
             }else if(_montant != 0){
+              item.regler = _montant ;
               piece.regler = piece.regler + _montant;
               piece.reste = piece.total_ttc - piece.regler ;
             }else{
               return ;
             }
+            await _queryCtr.addItemToTable(DbTablesNames.reglementTresorie, item);
             await _queryCtr.updateItemInDb(DbTablesNames.pieces, piece);
           });
           if(_haspiece == false){

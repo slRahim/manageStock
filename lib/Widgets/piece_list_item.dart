@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:gestmob/Helpers/Helpers.dart';
+import 'package:gestmob/Helpers/QueryCtr.dart';
 import 'package:gestmob/Helpers/Statics.dart';
 import 'package:gestmob/models/Article.dart';
 import 'package:gestmob/models/Piece.dart';
@@ -11,7 +12,7 @@ import 'CustomWidgets/list_tile_card.dart';
 
 // element à afficher lors de listing des factures
 class PieceListItem extends StatelessWidget {
-  const PieceListItem({
+   PieceListItem({
     @required this.piece,
     Key key, this.onItemSelected ,
   })  : assert(piece != null),
@@ -20,18 +21,21 @@ class PieceListItem extends StatelessWidget {
   final Piece piece;
   final Function(Object) onItemSelected;
 
+  QueryCtr _queryCtr = new QueryCtr() ;
+  bool _confirmDell = false ;
+
   @override
   Widget build(BuildContext context) => ListTileCard(
     id: piece.id,
     from: piece,
     confirmDismiss:(DismissDirection dismissDirection) async {
-      print("Mov: " + piece.mov.toString());
-      await showDialog(
-          context: context,
-          builder: (BuildContext context) {
-            return dellDialog();
-          });;
-    } ,
+          await showDialog(
+            context: context,
+            builder: (BuildContext context) {
+              return dellDialog(context);
+          });
+          return _confirmDell ;
+    },
     onLongPress:  () => onItemSelected != null? onItemSelected(piece) : null,
     onTap: () => {
       if(onItemSelected == null){
@@ -78,8 +82,35 @@ class PieceListItem extends StatelessWidget {
     }
   }
 
-  Widget dellDialog() {
-
+  Widget dellDialog(BuildContext context) {
+    return AlertDialog(
+      title:  Text('Delete ?'),
+      content: Text('do you wont to delete the item'),
+      actions: [
+        FlatButton(
+          child: Text('No'),
+          onPressed: (){
+            Navigator.pop(context);
+          },
+        ),
+        FlatButton(
+          child: Text('YES'),
+          onPressed: ()async{
+            int res = await _queryCtr.removeItemFromTable(DbTablesNames.pieces, piece);
+            var message = "" ;
+            if(res > 0){
+               message ="Piece deleted successfult";
+              _confirmDell =true ;
+               Navigator.pop(context);
+            }else{
+              message ="Error has occured";
+              Navigator.pop(context);
+            }
+            Helpers.showFlushBar(context, message);
+          },
+        ),
+      ],
+    );
   }
 
 

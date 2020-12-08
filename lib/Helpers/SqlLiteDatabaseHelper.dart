@@ -47,6 +47,7 @@ class SqlLiteDatabaseHelper {
     await createMyParamTable(db , version);
     await createTriggersJournaux(db , version);
     await createTriggersPiece(db , version);
+    await createTriggersTresorie (db,version);
     await setInitialData(db, version);
 
   }
@@ -235,6 +236,14 @@ class SqlLiteDatabaseHelper {
           Categorie_id INTEGER REFERENCES TresorieCategories (id) ON DELETE SET NULL ON UPDATE CASCADE,
           Date integer
       )""");
+
+    await db.execute("""
+      CREATE TABLE ReglementTresorie (
+          id INTEGER PRIMARY KEY AUTOINCREMENT,
+          Tresorie_id INTEGER REFERENCES Tresories(id) ON DELETE SET NULL ON UPDATE CASCADE,
+          Piece_id INTEGER REFERENCES Pieces (id) ON DELETE SET NULL ON UPDATE CASCADE,
+          Regler DOUBLE
+      )""");
   }
 
   // table des format et current index pour piece
@@ -320,20 +329,6 @@ class SqlLiteDatabaseHelper {
         END;
      ''');
 
-    //update_articles_qte_delete on delete piece client
-    await db.execute('''
-        CREATE TRIGGER IF NOT EXISTS update_articles_qte_onDelete_client
-        AFTER DELETE ON Journaux
-        FOR EACH ROW
-        WHEN (OLD.Piece_type = 'BL' OR OLD.Piece_type = 'FC') AND OLD.Mov = 1
-        BEGIN
-            UPDATE Articles
-               SET Qte = Qte + OLD.Qte,
-                   Colis = Qte / Qte_Colis
-             WHERE id = OLD.Article.id;
-        END;
-     ''');
-
 
     //-----------------------------------------------------------------------------------------------------------------------------
 
@@ -348,7 +343,7 @@ class SqlLiteDatabaseHelper {
                SET PMP = ((Qte * PMP)+(NEW.Qte * NEW.Prix_ht))/(Qte + NEW.Qte) , 
                    Qte = Qte + NEW.Qte,
                    Colis = Qte / Qte_Colis,
-                   PrixAchat = NEW.Prix_ht
+                   PrixAchat = NEW.Prix_ht 
              WHERE id = New.Article_id;
         END;
      ''');
@@ -396,19 +391,6 @@ class SqlLiteDatabaseHelper {
         END;
      ''');
 
-    //update_articles_qte_delete on delete piece fournisseur
-    await db.execute('''
-        CREATE TRIGGER IF NOT EXISTS update_articles_qte_onDelete_fournisseur
-        AFTER DELETE ON Journaux
-        FOR EACH ROW
-        WHEN (NEW.Piece_type = 'BR' OR NEW.Piece_type = 'FF') AND OLD.Mov = 1
-        BEGIN
-            UPDATE Articles
-               SET Qte = Qte - OLD.Qte,
-                   Colis = Qte / Qte_Colis
-             WHERE id = OLD.Article.id;
-        END;
-     ''');
   }
 
   //fonction speciale pour la creation des triggers de bd table piece et format
@@ -424,27 +406,19 @@ class SqlLiteDatabaseHelper {
         END;
       ''');
 
-     await db.execute('''CREATE TRIGGER update_current_index_tr 
-        AFTER INSERT ON Tresories 
-        FOR EACH ROW 
-        BEGIN 
-            UPDATE FormatPiece
-               SET Current_index = Current_index+1
-            WHERE  FormatPiece.Piece LIKE "TR" ; 
-        END;
-      ''');
-
      //---------------------------------------------------------------------------------------------------------------------
 
-     //supp journale de la piece avant supp piece
+     //supp journale et update le tier de la piece avant supp piece mov== 1
      await db.execute('''
         CREATE TRIGGER IF NOT EXISTS delete_journaux
         BEFORE DELETE ON Pieces
         FOR EACH ROW
+        WHEN (OLD.Mov = 1)
         BEGIN
-            DELETE FROM Journaux
-                  WHERE Piece_id = OLD.id;
-                  
+           Update Journaux 
+            Set Mov = -2
+            WHERE Piece_id = id;
+            
             UPDATE Tiers
                SET Chiffre_affaires = Chiffre_affaires - OLD.Total_ttc,
                    Regler = Regler  - OLD.Regler
@@ -453,6 +427,18 @@ class SqlLiteDatabaseHelper {
            UPDATE Tiers
             SET  Credit = (Solde_depart + Chiffre_affaires) - Regler 
            WHERE id = OLD.Tier_id;
+        END;
+     ''');
+     //supp journale de la piece avant supp piece mov != 1
+     await db.execute('''
+        CREATE TRIGGER IF NOT EXISTS delete_journaux1
+        BEFORE DELETE ON Pieces
+        FOR EACH ROW
+        WHEN OLD.Mov <> 1 
+        BEGIN
+            Update Journaux 
+            Set Mov = -2
+            WHERE Piece_id = id;         
         END;
      ''');
 
@@ -509,6 +495,49 @@ class SqlLiteDatabaseHelper {
               WHERE id = OLD.Tier_id;
         END;
      ''');
+
+
+  }
+
+  createTriggersTresorie(Database db, int version) async{
+    await db.execute('''CREATE TRIGGER update_current_index_tr 
+        AFTER INSERT ON Tresories 
+        FOR EACH ROW 
+        BEGIN 
+            UPDATE FormatPiece
+               SET Current_index = Current_index+1
+            WHERE  FormatPiece.Piece LIKE "TR" ; 
+        END;
+      ''');
+    //   **************************************************************************************************
+    //    await db.execute('''
+    //       CREATE TRIGGER IF NOT EXISTS delete_tresorie
+    //       BEFORE DELETE ON Tresories
+    //       FOR EACH ROW
+    //       BEGIN
+    //
+    //       END;
+    //    ''');
+
+    await db.execute('''CREATE TRIGGER dell_tresorie 
+        BEFORE DELETE ON Tresories 
+        FOR EACH ROW 
+        BEGIN 
+           DELETE FROM ReglementTresorie WHERE Tresorie_id = id ; 
+        END;
+      ''');
+
+    await db.execute('''CREATE TRIGGER dell_regelement_tresorie 
+        BEFORE DELETE ON ReglementTresorie 
+        FOR EACH ROW 
+        BEGIN 
+           UPDATE Pieces 
+           SET Regler = Regler - OLD.Regler,
+               Reste = Reste + OLD.Regler 
+           WHERE id = OLD.Piece_id ;
+        END;
+      ''');
+
 
   }
 

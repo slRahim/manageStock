@@ -360,7 +360,17 @@ class QueryCtr {
   Future<int> removeItemFromTable(String tableName , item)async {
     var dbClient = await _databaseHelper.db ;
     int res = await dbClient.delete(tableName , where: "id=?" , whereArgs: [item.id]);
+
     return res ;
+  }
+
+  Future<int> getLastId(String tableName)async{
+    var dbClient = await _databaseHelper.db ;
+    String query = "Select Max(id) From $tableName ;" ;
+
+    var res = await dbClient.rawQuery(query);
+
+    return res.first["Max(id)"] ;
   }
 
   Future<List<FormatPiece>> getFormatPiece (String pieceType) async {
