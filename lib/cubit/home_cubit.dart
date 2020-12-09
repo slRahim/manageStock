@@ -16,9 +16,6 @@ part 'home_state.dart';
 class HomeCubit extends Cubit<HomeState> {
   HomeCubit() : super(HomeInitial());
 
-  // final QueryCtr _queryCtr;
-  // HomeCubit(this._queryCtr) : super(HomeInitial());
-
   Future<void> getHomeData(String homeItemId) async{
     emit(new HomeLoading());
 

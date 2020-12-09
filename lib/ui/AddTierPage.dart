@@ -696,10 +696,13 @@ class _AddTierPageState extends State<AddTierPage>
                 ),
                 width: 300,
                 height: 300,
-                child: QrImage(
+                child:(_qrCodeControl.text != "")? QrImage(
                   data: _qrCodeControl.text,
                     size: 0.5 * bodyHeight,
-                  ),
+                  )
+                : Center(
+                  child: Text("No QrCode was associate to the tier " ,style: TextStyle(fontSize: 16 )),
+                ),
 
               ),
             ),
@@ -758,9 +761,14 @@ class _AddTierPageState extends State<AddTierPage>
                     ),
                     onPressed: editMode
                         ? () {
-                        setState(() {
-                          _qrCodeControl.text = "Tier://"+_raisonSocialeControl.text+"/"+_mobileControl.text;
-                        });
+                        if(_raisonSocialeControl.text != "" && _mobileControl.text != ""){
+                          setState(() {
+                            _qrCodeControl.text = "Tier://"+_raisonSocialeControl.text+"/"+_mobileControl.text;
+                          });
+                        }else{
+                          var message = "please add at least raison social et mobile";
+                          Helpers.showFlushBar(context, message);
+                        }
                     }
                         : null,
                   ),
@@ -794,6 +802,32 @@ class _AddTierPageState extends State<AddTierPage>
                     onPressed: () async{
                       await _captureAndSharePng();
                     }
+                  ),
+                ),
+                Container(
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(50.0),
+                    color: Colors.white,
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.grey.withOpacity(0.5),
+                        spreadRadius: 1,
+                        blurRadius: 2,
+                        offset:
+                        Offset(0, 2), // changes position of shadow
+                      ),
+                    ],
+                  ),
+                  child: new IconButton(
+                      color: Colors.black,
+                      icon: new Icon(
+                        Icons.print,
+                        size: 30,
+                        color: Colors.blue[700],
+                      ),
+                      onPressed: () async{
+                      //  print qr code with thermel printer
+                      }
                   ),
                 ),
               ],

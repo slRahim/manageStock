@@ -78,7 +78,7 @@ class TresorieListItem extends StatelessWidget {
               int res = await _queryCtr.removeItemFromTable(DbTablesNames.tresorie, tresorie);
               var message = "" ;
               if(res > 0){
-                message ="Piece deleted successfully";
+                message ="Tresorie deleted successfully";
                 _confirmDell =true ;
                 Navigator.pop(context);
               }else{

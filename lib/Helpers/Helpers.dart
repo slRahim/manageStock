@@ -114,9 +114,9 @@ class Helpers {
         size: 28.0,
         color: Colors.blue[300],
       ),
-      duration: Duration(seconds: 2),
+      duration: Duration(seconds: 5),
       leftBarIndicatorColor: Colors.blue[300],
-      margin: EdgeInsets.all(8),
+      margin: EdgeInsets.all(0),
       borderRadius: 8,
     )..show(context);
   }

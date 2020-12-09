@@ -29,30 +29,7 @@ class ListTileCard extends StatelessWidget {
     color: Colors.grey[200],
     elevation: 2,
     child: id != null && confirmDismiss != null ? Dismissible(
-      background: (from is Tiers ) ? Container(
-        width: double.maxFinite,
-        height: double.maxFinite,
-        decoration: BoxDecoration(
-          color: Colors.green[700],
-        ),
-        child: Padding(
-          padding: const EdgeInsets.fromLTRB(50, 5, 5, 5),
-          child: Align(
-            alignment: Alignment.centerLeft, // Align however you like (i.e .centerRight, centerLeft)
-            child: Row(
-              children: [
-                Icon(Icons.call, color: Colors.white,),
-                SizedBox(
-                  width: 20.0,
-                  height: 2.0,
-                ),
-                Text("Appeler", style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),),
-              ],
-            ),
-          ),
-        ),
-      )
-      : Container(
+      background: Container(
         width: double.maxFinite,
         height: double.maxFinite,
         decoration: BoxDecoration(
@@ -75,8 +52,31 @@ class ListTileCard extends StatelessWidget {
           ),
         ),
       ),
+      secondaryBackground: (from is Tiers)?Container(
+        width: double.maxFinite,
+        height: double.maxFinite,
+        decoration: BoxDecoration(
+          color: Colors.green[700],
+        ),
+        child: Padding(
+          padding: const EdgeInsets.fromLTRB(50, 5, 5, 5),
+          child: Align(
+            alignment: Alignment.centerLeft, // Align however you like (i.e .centerRight, centerLeft)
+            child: Row(
+              children: [
+                Icon(Icons.call, color: Colors.white,),
+                SizedBox(
+                  width: 20.0,
+                  height: 2.0,
+                ),
+                Text("Appeler", style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),),
+              ],
+            ),
+          ),
+        ),
+      ):null,
       key: Key(id.toString()),
-      direction: DismissDirection.startToEnd,
+      // direction: DismissDirection.startToEnd,
       confirmDismiss: confirmDismiss,
       child: listTile(),
     ) : listTile()
