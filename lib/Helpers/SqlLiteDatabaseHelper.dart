@@ -194,6 +194,14 @@ class SqlLiteDatabaseHelper {
         Regler Double, 
         Reste Double
         )""");
+
+    await db.execute("""CREATE TABLE IF NOT EXISTS Transformers (
+        id INTEGER PRIMARY KEY AUTOINCREMENT, 
+        Old_Mov integer, 
+        Old_Piece_id integer REFERENCES Pieces (id) ON DELETE SET NULL ON UPDATE CASCADE, 
+        New_Piece_id integer REFERENCES Pieces (id) ON DELETE SET NULL ON UPDATE CASCADE
+        )""");
+
   }
 
   //table des articles ds une facture
@@ -413,7 +421,7 @@ class SqlLiteDatabaseHelper {
         CREATE TRIGGER IF NOT EXISTS delete_journaux
         BEFORE DELETE ON Pieces
         FOR EACH ROW
-        WHEN (OLD.Mov = 1)
+        WHEN (OLD.Mov = 1 AND Transformer = 0)
         BEGIN
            Update Journaux 
             Set Mov = -2
@@ -429,16 +437,28 @@ class SqlLiteDatabaseHelper {
            WHERE id = OLD.Tier_id;
         END;
      ''');
-     //supp journale de la piece avant supp piece mov != 1
+
+     //supp journale et update le tier de la piece avant supp piece mov== 1
      await db.execute('''
-        CREATE TRIGGER IF NOT EXISTS delete_journaux1
+        CREATE TRIGGER IF NOT EXISTS delete_piece_transformer
         BEFORE DELETE ON Pieces
         FOR EACH ROW
-        WHEN OLD.Mov <> 1 
+        WHEN (OLD.Mov = 1 AND Transformer = 1)
         BEGIN
-            Update Journaux 
+           Update Journaux 
             Set Mov = -2
-            WHERE Piece_id = id;         
+            WHERE Piece_id = id;
+            
+            UPDATE Tiers
+               SET Chiffre_affaires = Chiffre_affaires - OLD.Total_ttc,
+                   Regler = Regler  - OLD.Regler
+              WHERE id = OLD.Tier_id;
+              
+           UPDATE Tiers
+            SET  Credit = (Solde_depart + Chiffre_affaires) - Regler 
+           WHERE id = OLD.Tier_id;
+           
+           DELETE FROM Transformers WHERE New_Piece_id = OLD.id;
         END;
      ''');
 
@@ -538,6 +558,41 @@ class SqlLiteDatabaseHelper {
         END;
       ''');
 
+    await db.execute('''CREATE TRIGGER update_reglemntTresorie_tresorie 
+        AFTER INSERT ON Transformers 
+        FOR EACH ROW 
+        BEGIN 
+           UPDATE Tresories 
+           SET Piece_id = NEW.New_Piece_id 
+           WHERE Piece_id = NEW.Old_Piece_id ;
+           
+           UPDATE ReglementTresorie 
+           SET Piece_id = NEW.New_Piece_id 
+           WHERE Piece_id = NEW.Old_Piece_id ;
+        END;
+      ''');
+
+    await db.execute('''CREATE TRIGGER update_reglemntTresorie_tresorie1 
+        BEFORE DELETE ON Transformers 
+        FOR EACH ROW 
+        BEGIN 
+           UPDATE Tresories 
+           SET Piece_id = OLD.Old_Piece_id 
+           WHERE Piece_id = OLD.New_Piece_id ;
+           
+           UPDATE ReglementTresorie 
+           SET Piece_id = OLD.Old_Piece_id 
+           WHERE Piece_id = OLD.New_Piece_id ;
+           
+           UPDATE Pieces 
+           SET Mov = OLD.Old_Mov
+           WHERE id = OLD.Old_Piece_id ;
+           
+           UPDATE Journaux
+           SET Mov = OLD.Old_Mov 
+           WHERE Piece_id = OLD.Old_Piece_id ;
+        END;
+      ''');
 
   }
 

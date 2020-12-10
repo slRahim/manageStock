@@ -23,6 +23,7 @@ import 'package:gestmob/models/Journaux.dart';
 import 'package:gestmob/models/Piece.dart';
 import 'package:gestmob/models/Tiers.dart';
 import 'package:gestmob/models/TiersFamille.dart';
+import 'package:gestmob/models/Transformer.dart';
 import 'package:gestmob/search/items_sliver_list.dart';
 import 'package:gestmob/search/sliver_list_data_source.dart';
 import 'package:gestmob/ui/ClientFourFragment.dart';
@@ -208,6 +209,9 @@ class _AddPiecePageState extends State<AddPiecePage> with TickerProviderStateMix
                 });
               }
             },
+            onTrensferPressed: ()async{
+              await transfererPiece() ;
+            },
           ),
           // extendBody: true,
           bottomNavigationBar: BottomExpandableAppBar(
@@ -266,9 +270,9 @@ class _AddPiecePageState extends State<AddPiecePage> with TickerProviderStateMix
             onVerticalDragUpdate: bottomBarControler.onDrag,
             onVerticalDragEnd: bottomBarControler.onDragEnd,
             child: FloatingActionButton.extended(
-              label: Text("+ Add"),
+              label:(editMode)? Text("+ Add") : Icon(Icons.print , color: Colors.white,),
               elevation: 2,
-              backgroundColor: editMode ? Colors.blue : Colors.grey,
+              backgroundColor: editMode ? Colors.blue : Colors.redAccent,
               foregroundColor: Colors.white,
               //Set onPressed event to swap state of bottom bar
               onPressed: editMode
@@ -277,7 +281,7 @@ class _AddPiecePageState extends State<AddPiecePage> with TickerProviderStateMix
                           builder: (BuildContext context) {
                             return addArticleDialog();
                           }).then((val) {calculPiece();})
-                  : null,
+                  : ()=> printItem(_piece),
             ),
           ),
           body: Builder(
@@ -800,7 +804,6 @@ class _AddPiecePageState extends State<AddPiecePage> with TickerProviderStateMix
     });
   }
 
-
   int getMovForPiece() {
     switch(_piece.piece){
       case(PieceType.devis):
@@ -844,7 +847,9 @@ class _AddPiecePageState extends State<AddPiecePage> with TickerProviderStateMix
     saveItem(2);
   }
 
-  void printItem(item) {}
+  void printItem(Piece item) {
+
+  }
 
   Future<int> addItemToDb() async {
     int id = -1;
@@ -903,7 +908,9 @@ class _AddPiecePageState extends State<AddPiecePage> with TickerProviderStateMix
     _piece.tier_id= tiers.id ;
     _piece.raisonSociale = tiers.raisonSociale ;
     _piece.tarification = _selectedTarification ;
-    _piece.transformer = 0 ;
+    if(_piece.transformer == null){
+      _piece.transformer = 0 ;
+    }
     _piece.regler=_verssementpiece ;
     _piece.reste=_restepiece;
 
@@ -918,6 +925,60 @@ class _AddPiecePageState extends State<AddPiecePage> with TickerProviderStateMix
     return _piece ;
   }
 
+  Future<void> transfererPiece ()async{
+    try{
+      int id = -1 ;
+      Piece _newPiece=await makePiece() ;
+      _newPiece.piece = typePieceTransformer(_newPiece.piece);
+      _newPiece.mov = 1 ;
+      _newPiece.transformer = 1 ;
+      var res = await _queryCtr.getFormatPiece(_newPiece.piece) ;
+      _newPiece.num_piece =Helpers.generateNumPiece(res.first);
+
+      int _oldMov = _piece.mov ;
+      saveItem(0);
+
+      id = await _queryCtr.addItemToTable(DbTablesNames.pieces, _newPiece);
+      if(id > -1){
+        _newPiece.id = await _queryCtr.getLastId(DbTablesNames.pieces);
+      }
+      _selectedItems.forEach((article) async {
+        Journaux journaux = Journaux.fromPiece(_newPiece, article);
+        await _queryCtr.addItemToTable(DbTablesNames.journaux, journaux);
+      });
+
+      //  add la transformation à la table transformer (oldPiece_id newPiece_id , oldMov)
+      Transformer transformer = new Transformer.init();
+      transformer.oldMov = _oldMov;
+      transformer.newPieceId = _newPiece.id ;
+      transformer.oldPieceId = _piece.id ;
+      await _queryCtr.addItemToTable(DbTablesNames.transformer, transformer);
+
+      var message = "Piece a bien été transferer";
+      Helpers.showFlushBar(context, message);
+    }catch(e){
+      var message = "Error in transfer Piece";
+      Helpers.showFlushBar(context, message);
+    }
+
+  }
+
+  String typePieceTransformer(pi) {
+    switch(pi){
+      case "FP" :
+        return "CC" ;
+        break ;
+      case "CC" :
+        return "BL" ;
+        break ;
+      case "BL" :
+        return "FC" ;
+        break ;
+      case "BR" :
+        return "FF" ;
+        break ;
+    }
+  }
 
 
 

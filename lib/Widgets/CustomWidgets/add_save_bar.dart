@@ -15,8 +15,9 @@ class AddEditBar extends StatefulWidget with PreferredSizeWidget{
   final VoidCallback onEditPressed;
   final VoidCallback onSavePressed;
   final VoidCallback onCancelPressed;
+  final VoidCallback onTrensferPressed ;
 
-  const AddEditBar({Key key, this.editMode, this.modification, this.title, this.bottom, this.onEditPressed, this.onSavePressed, this.onCancelPressed}) : super(key: key);
+  const AddEditBar({Key key, this.editMode, this.modification, this.title, this.bottom, this.onEditPressed, this.onSavePressed, this.onCancelPressed,this.onTrensferPressed}) : super(key: key);
 
 
   @override
@@ -43,13 +44,19 @@ class AddEditBarState extends State<AddEditBar>{
       centerTitle: true,
       bottom: widget.bottom,
       actions: [
+        (widget.onTrensferPressed != null && !widget.editMode)
+            ?IconButton(
+            icon: Icon(MdiIcons.transfer),
+            onPressed: widget.onTrensferPressed)
+            : SizedBox() ,
         widget.editMode
             ? IconButton(
             icon: Icon(Icons.save),
             onPressed: widget.onSavePressed)
             : IconButton(
             icon: Icon(Icons.mode_edit),
-            onPressed: widget.onEditPressed)
+            onPressed: widget.onEditPressed),
+
       ],
     );
   }

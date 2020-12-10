@@ -99,17 +99,24 @@ class TierListItem extends StatelessWidget {
                 var message ="You can't dell a default tier";
                 Helpers.showFlushBar(context, message);
               }else{
-               int res = await _queryCtr.removeItemFromTable(DbTablesNames.tiers, tier);
-               var message = "" ;
-               if(res > 0){
-                 message ="Tier deleted successfully";
-                 _confirmDell =true ;
-                 Navigator.pop(context);
-               }else{
-                 message ="Error has occured";
-                 Navigator.pop(context);
-               }
-               Helpers.showFlushBar(context, message);
+                bool hasItems = await _queryCtr.checkTierItems(tier);
+                if(!hasItems){
+                  int res = await _queryCtr.removeItemFromTable(DbTablesNames.tiers, tier);
+                  var message = "" ;
+                  if(res > 0){
+                    message ="Tier deleted successfully";
+                    _confirmDell =true ;
+                    Navigator.pop(context);
+                  }else{
+                    message ="Error you can't dell tier";
+                    Navigator.pop(context);
+                  }
+                  Helpers.showFlushBar(context, message);
+                }else{
+                  Navigator.pop(context);
+                  var message ="You can't dell tier";
+                  Helpers.showFlushBar(context, message);
+                }
               }
             }
         ),

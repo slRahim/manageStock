@@ -60,6 +60,7 @@ class DbTablesNames {
   static const tresorie='Tresories';
   static const categorieTresorie = "TresorieCategories";
   static const reglementTresorie = "ReglementTresorie";
+  static const transformer = "Transformers";
   static const formatPiece = "FormatPiece" ;
   static const myparams = "MyParams" ;
 }

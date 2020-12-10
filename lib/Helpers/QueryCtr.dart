@@ -115,6 +115,23 @@ class QueryCtr {
     return tier;
   }
 
+  Future<bool> checkTierItems (Tiers item)async{
+    Database dbClient = await _databaseHelper.db;
+    String tableName = DbTablesNames.pieces;
+    String query = "SELECT COUNT(*) FROM $tableName WHERE Tier_id = ${item.id}" ;
+    var res = await dbClient.rawQuery(query);
+    if(res.isNotEmpty){
+      return true ;
+    }
+
+    tableName = DbTablesNames.tresorie;
+    res = await dbClient.rawQuery(query);
+    if(res.isNotEmpty){
+      return true ;
+    }
+
+    return false ;
+  }
 
   Future<List<Piece>> getAllPieces(int offset, int limit, {String searchTerm, Map<String, dynamic> filters}) async {
     String query = 'SELECT Pieces.*,Tiers.RaisonSociale FROM Pieces JOIN Tiers ON Pieces.Tier_id = Tiers.id';
