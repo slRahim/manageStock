@@ -1,5 +1,3 @@
-
-// import 'dart:html';
 import 'dart:io';
 import 'dart:typed_data';
 import 'dart:ui';
@@ -27,11 +25,13 @@ import 'package:gestmob/models/Transformer.dart';
 import 'package:gestmob/search/items_sliver_list.dart';
 import 'package:gestmob/search/sliver_list_data_source.dart';
 import 'package:gestmob/ui/ClientFourFragment.dart';
+import 'package:gestmob/ui/preview_piece.dart';
+import 'package:gestmob/ui/printer_screen.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:gestmob/Widgets/utils.dart' as utils;
 import 'package:map_launcher/map_launcher.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
-
+import 'package:esc_pos_utils/esc_pos_utils.dart';
 import 'ArticlesFragment.dart';
 
 class AddPiecePage extends StatefulWidget {
@@ -78,6 +78,8 @@ class _AddPiecePageState extends State<AddPiecePage> with TickerProviderStateMix
   QueryCtr _queryCtr;
 
   BottomBarController bottomBarControler;
+
+  Ticket _ticket ;
 
   void initState() {
     super.initState();
@@ -281,7 +283,20 @@ class _AddPiecePageState extends State<AddPiecePage> with TickerProviderStateMix
                           builder: (BuildContext context) {
                             return addArticleDialog();
                           }).then((val) {calculPiece();})
-                  : ()=> printItem(_piece),
+                  : ()async {
+                      await showDialog(
+                        context: context,
+                        builder: (BuildContext context) {
+                          return previewItem(_piece);
+                        }
+                      );
+                      if(_ticket != null){
+                        await printItem(_ticket);
+                        setState(() {
+                          _ticket = null ;
+                        });
+                      }
+                  }
             ),
           ),
           body: Builder(
@@ -688,7 +703,6 @@ class _AddPiecePageState extends State<AddPiecePage> with TickerProviderStateMix
     });
   }
 
-
   //********************************************************************** partie de date ****************************************************************************************
   void callDatePicker() async {
     DateTime now = new DateTime.now();
@@ -847,8 +861,24 @@ class _AddPiecePageState extends State<AddPiecePage> with TickerProviderStateMix
     saveItem(2);
   }
 
-  void printItem(Piece item) {
+  previewItem(item){
+      return PreviewPiece(
+        piece: item,
+        ticket: (ticket){
+          setState(() {
+            _ticket = ticket ;
+          });
+        },
+      );
+  }
 
+  printItem(ticket) async{
+    await showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return  Print(ticket);
+      },
+    );
   }
 
   Future<int> addItemToDb() async {

@@ -92,6 +92,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "2.1.5"
+  csslib:
+    dependency: transitive
+    description:
+      name: csslib
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.16.2"
   data_connection_checker:
     dependency: "direct main"
     description:
@@ -106,6 +113,20 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "0.1.8+5"
+  esc_pos_bluetooth:
+    dependency: "direct main"
+    description:
+      name: esc_pos_bluetooth
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.2.8"
+  esc_pos_utils:
+    dependency: transitive
+    description:
+      name: esc_pos_utils
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.3.6"
   expandable_bottom_bar:
     dependency: "direct main"
     description:
@@ -167,6 +188,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "6.1.1"
+  flutter_bluetooth_basic:
+    dependency: "direct main"
+    description:
+      name: flutter_bluetooth_basic
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.1.5"
   flutter_icons:
     dependency: "direct main"
     description:
@@ -231,6 +259,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "7.1.5"
+  gbk_codec:
+    dependency: transitive
+    description:
+      name: gbk_codec
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.3.2"
   get_it:
     dependency: "direct main"
     description:
@@ -245,6 +280,20 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "0.2.0"
+  hex:
+    dependency: transitive
+    description:
+      name: hex
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.1.2"
+  html:
+    dependency: transitive
+    description:
+      name: html
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.14.0+4"
   http:
     dependency: "direct main"
     description:
@@ -260,7 +309,7 @@ packages:
     source: hosted
     version: "3.1.4"
   image:
-    dependency: transitive
+    dependency: "direct main"
     description:
       name: image
       url: "https://pub.dartlang.org"
@@ -294,6 +343,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "0.16.1"
+  json_annotation:
+    dependency: transitive
+    description:
+      name: json_annotation
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "3.1.1"
   local_auth:
     dependency: "direct main"
     description:
@@ -482,7 +538,7 @@ packages:
       name: rxdart
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.24.1"
+    version: "0.23.1"
   settings_ui:
     dependency: "direct main"
     description:
