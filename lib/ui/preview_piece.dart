@@ -1,22 +1,40 @@
 
+import 'dart:io';
 import 'dart:ui';
-
 import 'package:flutter/material.dart';
 import 'package:gestmob/Helpers/Helpers.dart';
+import 'package:gestmob/models/Article.dart';
+import 'package:gestmob/models/FormatPrint.dart';
 import 'package:gestmob/models/Piece.dart';
 import 'package:esc_pos_utils/esc_pos_utils.dart';
+import 'package:gestmob/models/Tiers.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
+
+enum Format {format80, format58}
+enum Display {referance, designation}
 
 class PreviewPiece extends StatefulWidget {
   final Piece piece ;
   final  ValueChanged ticket ;
-  PreviewPiece({Key key, @required this.piece , this.ticket}) : super(key: key);
+  final List<Article> articles ;
+  final Tiers tier ;
+  PreviewPiece({Key key, @required this.piece , this.articles ,this.tier,this.ticket ,}) : super(key: key);
 
   @override
   _PreviewPieceState createState() => _PreviewPieceState();
 }
 
 class _PreviewPieceState extends State<PreviewPiece> {
+  PaperSize default_format = PaperSize.mm80 ;
+  String default_display = "Referance" ;
+  Format _format = Format.format80 ;
+  Display _item = Display.referance ;
+
+  bool _controlTotalHT = true ;
+  bool _controlTotalTva =true ;
+  bool _controlReste =true ;
+  bool _controlCredit =true ;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -34,7 +52,8 @@ class _PreviewPieceState extends State<PreviewPiece> {
           IconButton(
             icon: Icon(Icons.print),
             onPressed: () async{
-              Ticket ticket = await _ticket(PaperSize.mm80) ;
+              Ticket ticket = await _ticket(default_format) ;
+              // FormatPrint formaPrint = new FormatPrint();
               widget.ticket(ticket);
               Navigator.pop(context);
             },
@@ -46,7 +65,7 @@ class _PreviewPieceState extends State<PreviewPiece> {
         child: ListView(
           children: [
             Container(
-                height: MediaQuery.of(context).size.height / 1.6,
+                height: MediaQuery.of(context).size.height /2,
                 padding:EdgeInsets.symmetric(horizontal: 5),
                 decoration: BoxDecoration(
                   color: Colors.white,
@@ -62,54 +81,52 @@ class _PreviewPieceState extends State<PreviewPiece> {
                 ),
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: (default_format == PaperSize.mm80)?CrossAxisAlignment.center : CrossAxisAlignment.start,
                   children: [
-                    Image.asset(
-                      'assets/logos/cirtait_logo.png',
-                      height: 60.0,
-                      fit: BoxFit.cover,
-                    ),
-                    SizedBox(height: 5,),
-                    Text("Piece Type :${widget.piece.piece}"),
+                    Text("N° ${widget.piece.piece} : ${widget.piece.num_piece}"),
                     Text("Date :${Helpers.dateToText(widget.piece.date)}"),
-                    Text("Tier :${widget.piece.raisonSociale}"),
+                    Text("Tier : Client01"),
                     Text("----------------------------------------------------------------------------------------------"),
                     Table(
                       columnWidths: {0:FractionColumnWidth(.4)},
                       children: [
                         TableRow(
                           children: [
-                            Text("Referance",style: TextStyle(fontWeight: FontWeight.bold),),
+                            Text("Item",style: TextStyle(fontWeight: FontWeight.bold),),
                             Text("QTE",style: TextStyle(fontWeight: FontWeight.bold),),
-                            Text("Prix \n UN \n",style: TextStyle(fontWeight: FontWeight.bold),),
+                            Text("Prix",style: TextStyle(fontWeight: FontWeight.bold),),
                             Text("Monatant",style: TextStyle(fontWeight: FontWeight.bold),),
                           ]
                         ),
                         TableRow(
                             children: [
-                              Text("Article1"),
-                              Text("22"),
-                              Text("155"),
-                              Text("155"),
+                              (default_display != "Referance")?Text("Article1"):Text("Ref01"),
+                              Text("XXX"),
+                              Text("XXX"),
+                              Text("XXX"),
                             ]
                         ),
                         TableRow(
                             children: [
-                              Text("Article2"),
-                              Text("22"),
-                              Text("222"),
-                              Text("155"),
+                              (default_display != "Referance")?Text("Article2"):Text("Ref02"),
+                              Text("XXX"),
+                              Text("XXX"),
+                              Text("XXX"),
                             ]
                         ),
                       ],
                     ),
                     Text("----------------------------------------------------------------------------------------------"),
-                    Text("\n Total HT:${widget.piece.total_ht}"),
-                    Text("Total TVA :${widget.piece.total_tva}"),
-                    Text("Total TTC :${widget.piece.total_ttc}"),
+                    (_controlTotalHT)?Text("\n Total HT:${widget.piece.total_ht}"):SizedBox(),
+                    (_controlTotalTva)?Text("Total TVA :${widget.piece.total_tva}"):SizedBox(),
                     Text("Regler :${widget.piece.regler}"),
-                    Text("Reste :${widget.piece.reste} \n"),
-                    Text("------------------------------------------(FIN)-------------------------------------------"),
-                    Icon(MdiIcons.qrcode , color: Colors.black, size: 100,),
+                    (_controlReste)?Text("Reste :${widget.piece.reste}"):SizedBox(),
+                    (_controlCredit)?Text("Total Credit :${widget.tier.credit} \n"):SizedBox(),
+                    Text("=============================================="),
+                    Text("Total TTC :${widget.piece.total_ttc}",style: TextStyle(fontSize: 20),),
+                    Text("=============================================="),
+                    SizedBox(height: 20,),
+                    Text("***BY CIRTA IT***",style: TextStyle(fontWeight: FontWeight.bold),),
                   ],
                 ),
             ),
@@ -119,7 +136,98 @@ class _PreviewPieceState extends State<PreviewPiece> {
               decoration: BoxDecoration(
                 color: Colors.white,
               ),
-              child: Text('Ticket'),
+              child: ListView(
+                children: [
+                  Column(
+                    children: [
+                      RadioListTile<Format>(
+                        title: const Text('Format 80Cm'),
+                        value: Format.format80,
+                        groupValue: _format,
+                        onChanged: (Format value) {
+                          setState(() {
+                            _format = value;
+                            default_format = PaperSize.mm80 ;
+                          });
+                        },
+                      ),
+                      RadioListTile<Format>(
+                        title: const Text('Format 58Cm'),
+                        value: Format.format58,
+                        groupValue: _format,
+                        onChanged: (Format value) {
+                          setState(() {
+                            _format = value;
+                            default_format = PaperSize.mm58 ;
+                          });
+                        },
+                      ),
+                    ]
+                  ),
+                  Column(
+                      children: [
+                        RadioListTile<Display>(
+                          title: const Text('Par Referance'),
+                          value: Display.referance,
+                          groupValue: _item,
+                          onChanged: (Display value) {
+                            setState(() {
+                              _item = value;
+                              default_display = "Referance" ;
+                            });
+                          },
+                        ),
+                        RadioListTile<Display>(
+                          title: const Text('Par Designation'),
+                          value: Display.designation,
+                          groupValue: _item,
+                          onChanged: (Display value) {
+                            setState(() {
+                              _item = value;
+                              default_display = "Designation" ;
+                            });
+                          },
+                        ),
+                      ]
+                  ),
+                  CheckboxListTile(
+                    title: Text("Total HT", maxLines: 1,),
+                    value: _controlTotalHT,
+                    onChanged: (bool value) {
+                      setState(() {
+                          _controlTotalHT = value ;
+                      });
+                    },
+                  ),
+                  CheckboxListTile(
+                    title: Text("Total TVA", maxLines: 1,),
+                    value: _controlTotalTva,
+                    onChanged: (bool value) {
+                      setState(() {
+                          _controlTotalTva = value ;
+                      });
+                    },
+                  ),
+                  CheckboxListTile(
+                    title: Text("Reste", maxLines: 1,),
+                    value: _controlReste,
+                    onChanged: (bool value) {
+                      setState(() {
+                        _controlReste =value ;
+                      });
+                    },
+                  ),
+                  CheckboxListTile(
+                    title: Text("Total Credit", maxLines: 1,),
+                    value: _controlCredit,
+                    onChanged: (bool value) {
+                      setState(() {
+                          _controlCredit =value ;
+                      });
+                    },
+                  ),
+                ],
+              ),
            ),
           ],
         ),
@@ -129,17 +237,79 @@ class _PreviewPieceState extends State<PreviewPiece> {
 
 Future<Ticket> _ticket(PaperSize paper) async {
   final ticket = Ticket(paper);
-  int total = 0;
 
-  ticket.text("demo teste");
-
-  ticket.feed(1);
+  ticket.text("N° ${widget.piece.piece}: ${widget.piece.num_piece}",
+      styles:PosStyles(
+          align:(default_format == PaperSize.mm80)? PosAlign.center : PosAlign.left
+      ));
+  ticket.text("Date : ${Helpers.dateToText(widget.piece.date)}",
+      styles:PosStyles(
+          align:(default_format == PaperSize.mm80)? PosAlign.center : PosAlign.left
+      ));
+  ticket.text("Tier : ${widget.piece.raisonSociale}",
+      styles:PosStyles(
+          align:(default_format == PaperSize.mm80)? PosAlign.center : PosAlign.left
+      ));
+  ticket.hr(ch: '-');
   ticket.row([
-    PosColumn(text: 'Total', width: 6, styles: PosStyles(bold: true)),
-    PosColumn(text: 'Rp $total', width: 6, styles: PosStyles(bold: true)),
+    PosColumn(text: 'Item', width: 6, styles: PosStyles(bold: true)),
+    PosColumn(text: 'QTE', width: 2, styles: PosStyles(bold: true)),
+    PosColumn(text: 'Prix', width: 2, styles: PosStyles(bold: true)),
+    PosColumn(text: 'Montant', width: 2, styles: PosStyles(bold: true)),
   ]);
-  ticket.feed(2);
-  ticket.text('Thank You',styles: PosStyles(align: PosAlign.center, bold: true));
+  widget.articles.forEach((element) {
+    ticket.row([
+      (default_display == "Referance")?PosColumn(text: '${element.ref}', width: 6):PosColumn(text: '${element.designation}', width: 6),
+      PosColumn(text: '${element.selectedQuantite}', width: 2),
+      PosColumn(text: '${element.selectedPrice}', width: 2),
+      PosColumn(text: '${element.selectedPrice * element.selectedQuantite}', width: 2),
+    ]);
+  });
+  ticket.hr(ch: '-');
+  if(_controlTotalHT){
+    ticket.text("Total HT : ${widget.piece.total_ht}",
+        styles:PosStyles(
+            align:(default_format == PaperSize.mm80)? PosAlign.center : PosAlign.left
+        ));
+  }
+  if(_controlTotalTva){
+    ticket.text("Total TVA : ${widget.piece.total_tva}",
+        styles:PosStyles(
+            align:(default_format == PaperSize.mm80)? PosAlign.center : PosAlign.left
+        ));
+  }
+
+  ticket.text("Regler : ${widget.piece.regler}",
+      styles:PosStyles(
+          align:(default_format == PaperSize.mm80)? PosAlign.center : PosAlign.left
+      ));
+
+  if(_controlReste){
+    ticket.text("Reste : ${widget.piece.reste}",
+        styles:PosStyles(
+            align:(default_format == PaperSize.mm80)? PosAlign.center : PosAlign.left
+        ));
+  }
+  if(_controlCredit){
+    ticket.text("Total Credit : ${widget.tier.credit}",
+        styles:PosStyles(
+            align:(default_format == PaperSize.mm80)? PosAlign.center : PosAlign.left
+        ));
+  }
+  ticket.hr(ch: '=');
+  ticket.text("TOTAL TTC : ${widget.piece.total_ttc}",
+      styles:PosStyles(
+        align:(default_format == PaperSize.mm80)? PosAlign.center : PosAlign.left,
+        height: PosTextSize.size2,
+        width: PosTextSize.size2,));
+  ticket.hr(ch: '=');
+  ticket.feed(1);
+  ticket.text('***BY CIRTA IT***',
+      styles: PosStyles(
+          align:(default_format == PaperSize.mm80)? PosAlign.center : PosAlign.left ,
+          bold: true
+      ));
+  ticket.feed(1);
   ticket.cut();
 
   return ticket;

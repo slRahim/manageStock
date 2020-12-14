@@ -1,9 +1,12 @@
+
 import 'dart:io';
 import 'dart:typed_data';
 import 'dart:ui';
 
+import 'package:esc_pos_bluetooth/esc_pos_bluetooth.dart';
 import 'package:expandable_bottom_bar/expandable_bottom_bar.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bluetooth_basic/flutter_bluetooth_basic.dart';
 import 'package:flutter_icons/flutter_icons.dart';
 import 'package:flutter_osm_plugin/flutter_osm_plugin.dart';
 import 'package:gestmob/Helpers/Helpers.dart';
@@ -767,7 +770,32 @@ class _AddPiecePageState extends State<AddPiecePage> with TickerProviderStateMix
                             onPressed: () async {
                               int mov = getMovForPiece();
                               await saveItem(mov);
-                              printItem(_piece);
+                              Navigator.pop(context);
+                              await  quikPrintTicket();
+                            },
+                            child: Text(
+                              "Quick print",
+                              style: TextStyle(color: Colors.white , fontSize: 16),
+                            ),
+                            color: Colors.blueAccent,
+                          ),
+                        ),
+                      ),
+                      SizedBox(
+                        width: 320.0,
+                        child: Padding(
+                          padding: EdgeInsets.only(right: 0, left: 0),
+                          child: RaisedButton(
+                            onPressed: () async {
+                              int mov = getMovForPiece();
+                              await saveItem(mov);
+                              Navigator.pop(context);
+                              await showDialog(
+                                  context: context,
+                                  builder: (BuildContext context) {
+                                    return previewItem(_piece);
+                                  }
+                              );
                             },
                             child: Text(
                               "Save and print",
@@ -790,7 +818,7 @@ class _AddPiecePageState extends State<AddPiecePage> with TickerProviderStateMix
                               "Save only",
                               style: TextStyle(color: Colors.white  , fontSize: 16),
                             ),
-                            color: Colors.blue,
+                            color: Colors.deepOrange,
                           ),
                         ),
                       ),
@@ -864,6 +892,8 @@ class _AddPiecePageState extends State<AddPiecePage> with TickerProviderStateMix
   previewItem(item){
       return PreviewPiece(
         piece: item,
+        articles: _selectedItems,
+        tier : _selectedClient ,
         ticket: (ticket){
           setState(() {
             _ticket = ticket ;
@@ -1010,7 +1040,38 @@ class _AddPiecePageState extends State<AddPiecePage> with TickerProviderStateMix
     }
   }
 
+  quikPrintTicket() async {
+    PrinterBluetoothManager _printerManager = PrinterBluetoothManager();
 
+    BluetoothDevice device  =new BluetoothDevice();
+    device.name = "Printer001" ;
+    device.type=3 ;
+    device.address="DC:0D:30:91:DD:58";
+    device.connected=true ;
+
+    PrinterBluetooth _device =new  PrinterBluetooth(device) ;
+
+    _printerManager.selectPrinter(_device);
+    Ticket ticket=new Ticket(PaperSize.mm80);
+    print(_device.name);
+    print(_device.address);
+    _printerManager.printTicket(ticket).then((result) {
+      showDialog(
+        context: context,
+        builder: (_) => AlertDialog(
+          content: Text(result.msg),
+        ),
+      );
+      dispose();
+    }).catchError((error){
+      showDialog(
+        context: context,
+        builder: (_) => AlertDialog(
+          content: Text(error.toString()),
+        ),
+      );
+    });
+  }
 
 
 
