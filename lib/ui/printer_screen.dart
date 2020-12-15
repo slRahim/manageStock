@@ -4,6 +4,9 @@ import 'package:esc_pos_bluetooth/esc_pos_bluetooth.dart';
 import 'package:esc_pos_utils/esc_pos_utils.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bluetooth_basic/flutter_bluetooth_basic.dart';
+import 'package:gestmob/Helpers/QueryCtr.dart';
+import 'package:gestmob/Helpers/Statics.dart';
+import 'package:gestmob/models/DefaultPrinter.dart';
 import 'dart:io' show Platform;
 import 'package:image/image.dart';
 
@@ -20,6 +23,9 @@ class _PrintState extends State<Print> {
   List<PrinterBluetooth> _devices = [];
   String _devicesMsg;
   BluetoothManager bluetoothManager = BluetoothManager.instance;
+
+  QueryCtr _queryCtr = new QueryCtr() ;
+  DefaultPrinter defaultPrinter = new DefaultPrinter.init();
 
   @override
   void initState() {
@@ -60,6 +66,12 @@ class _PrintState extends State<Print> {
   printTicket(context , device) async {
     _printerManager.selectPrinter(device);
     Ticket ticket=widget.data ;
+
+    defaultPrinter.name = device.name ;
+    defaultPrinter.adress = device.address ;
+    defaultPrinter.type = device.type ;
+    await _queryCtr.addItemToTable(DbTablesNames.defaultPrinter, defaultPrinter);
+
     _printerManager.printTicket(ticket).then((result) {
       showDialog(
         context: context,

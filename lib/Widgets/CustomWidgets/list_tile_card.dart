@@ -59,10 +59,11 @@ class ListTileCard extends StatelessWidget {
           color: Colors.green[700],
         ),
         child: Padding(
-          padding: const EdgeInsets.fromLTRB(50, 5, 5, 5),
+          padding: const EdgeInsets.fromLTRB(5, 5, 50, 5),
           child: Align(
             alignment: Alignment.centerLeft, // Align however you like (i.e .centerRight, centerLeft)
             child: Row(
+              mainAxisAlignment: MainAxisAlignment.end,
               children: [
                 Icon(Icons.call, color: Colors.white,),
                 SizedBox(

@@ -186,6 +186,7 @@ class SqlLiteDatabaseHelper {
         Date integer, 
         Tier_id integer REFERENCES Tiers (id) ON DELETE SET NULL ON UPDATE CASCADE, 
         Tarification integer, 
+        Etat integer DEFAULT 0,
         Total_ht Double, 
         Total_tva Double, 
         Total_ttc Double, 
@@ -271,6 +272,23 @@ class SqlLiteDatabaseHelper {
         Tarification integer DEFAULT 1, 
         Tva integer DEFAULT 0
         )""");
+
+    await db.execute('''CREATE TABLE IF NOT EXISTS FormatPrints (
+        id INTEGER PRIMARY KEY AUTOINCREMENT, 
+        Default_format VARCHAR(4),
+        Default_display VARCHAR(25),
+        Total_ht integer , 
+        Total_tva integer , 
+        Reste integer , 
+        Credit integer  
+        )''');
+
+    await db.execute('''CREATE TABLE IF NOT EXISTS DefaultPrinters (
+        id INTEGER PRIMARY KEY AUTOINCREMENT, 
+        Adress VARCHAR(25),
+        Name VARCHAR(25),
+        Type integer
+        )''');
   }
 
 
@@ -421,7 +439,7 @@ class SqlLiteDatabaseHelper {
         CREATE TRIGGER IF NOT EXISTS delete_journaux
         BEFORE DELETE ON Pieces
         FOR EACH ROW
-        WHEN (OLD.Mov = 1 AND Transformer = 0)
+        WHEN (OLD.Mov = 1 AND OLD.Transformer = 0)
         BEGIN
            Update Journaux 
             Set Mov = -2
@@ -443,7 +461,7 @@ class SqlLiteDatabaseHelper {
         CREATE TRIGGER IF NOT EXISTS delete_piece_transformer
         BEFORE DELETE ON Pieces
         FOR EACH ROW
-        WHEN (OLD.Mov = 1 AND Transformer = 1)
+        WHEN (OLD.Mov = 1 AND OLD.Transformer = 1)
         BEGIN
            Update Journaux 
             Set Mov = -2

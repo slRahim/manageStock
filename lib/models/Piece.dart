@@ -21,6 +21,7 @@ class Piece{
 
   int _tarification;
   int _transformer;
+  int _etat ;
   double _total_ht=0;
   double _total_tva = 0;
   double _total_ttc = 0;
@@ -40,6 +41,7 @@ class Piece{
     this._date = DateTime.fromMillisecondsSinceEpoch(obj["Date"]);
     this._raisonSociale = obj["RaisonSociale"];
     this._tarification = obj["Tarification"];
+    this._etat = obj["Etat"];
     this._transformer = obj["Transformer"];
     this._total_ht = obj["Total_ht"];
     this._total_tva = obj["Total_tva"];
@@ -60,6 +62,7 @@ class Piece{
     map["Tier_id"] = this._tier_id;
     map["Tarification"] = this._tarification;
     map["Transformer"] = this._transformer;
+    map["Etat"] = this._etat ;
     map["Total_ht"] = this._total_ht;
     map["Total_tva"] = this._total_tva;
     map["Total_ttc"] = this._total_ttc;
@@ -80,6 +83,7 @@ class Piece{
       this._id,
       this._tier_id,
       this._transformer,
+      this._etat,
       this._total_ht,
       this._total_tva,
       this._total_ttc,
@@ -186,6 +190,12 @@ class Piece{
     _reste = value;
   }
 
+
+  int get etat => _etat;
+
+  set etat(int value) {
+    _etat = value;
+  }
 
   @override
   String toString() {

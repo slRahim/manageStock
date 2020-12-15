@@ -88,6 +88,7 @@ class _AddTierPageState extends State<AddTierPage>
   TextEditingController _chiffre_affairesControl = new TextEditingController();
   TextEditingController _reglerControl = new TextEditingController();
   TextEditingController _creditControl = new TextEditingController();
+  bool _controlBloquer = false ;
 
   var _famille = new TiersFamille.init();
 
@@ -97,7 +98,7 @@ class _AddTierPageState extends State<AddTierPage>
   MyParams _myParams ;
 
   GlobalKey globalKey = new GlobalKey();
-  String _dataString = "Hello from this QR";
+
 
   @override
   void dispose() {
@@ -176,6 +177,7 @@ class _AddTierPageState extends State<AddTierPage>
     _selectedFamille = _familleItems[item.id_famille];
     _selectedStatut = Statics.statutItems[item.statut];
     _selectedTarification = _tarificationItems[item.tarification];
+    _controlBloquer = item.bloquer ;
   }
 
   void getParams () async {
@@ -658,6 +660,30 @@ class _AddTierPageState extends State<AddTierPage>
               } : null,
             ),
           ),
+           Container(
+              decoration: editMode? new BoxDecoration(
+                border: Border.all(color: Colors.blueAccent,),
+                borderRadius: BorderRadius.circular(20.0),
+              ) : null,
+              child: SwitchListTile(
+                title: Text("Bloquer"),
+                value: _controlBloquer,
+                onChanged: (bool value){
+                  setState(() {
+                    if(widget.arguments.id != null){
+                      if(widget.arguments.id < 2){
+                        _controlBloquer =false ;
+                      }else{
+                        _controlBloquer = value ;
+                      }
+                    }else{
+                      _controlBloquer = value ;
+                    }
+
+                  });
+                },
+              )
+          ),
         ],
       ),
     );
@@ -1096,7 +1122,7 @@ class _AddTierPageState extends State<AddTierPage>
     item.statut = Statics.statutItems.indexOf(_selectedStatut);
     item.tarification = _tarificationItems.indexOf(_selectedTarification);
 
-    item.bloquer = false;
+    item.bloquer = _controlBloquer;
 
     if (_itemImage != null) {
       item.imageUint8List = Helpers.getUint8ListFromFile(_itemImage);

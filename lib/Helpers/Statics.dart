@@ -63,6 +63,8 @@ class DbTablesNames {
   static const transformer = "Transformers";
   static const formatPiece = "FormatPiece" ;
   static const myparams = "MyParams" ;
+  static const formatPrint = "FormatPrints" ;
+  static const defaultPrinter = "DefaultPrinters";
 }
 
 class PieceType {

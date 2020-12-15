@@ -20,6 +20,7 @@ import 'package:gestmob/Widgets/article_list_item.dart';
 import 'package:gestmob/Widgets/total_devis.dart';
 import 'package:gestmob/models/Article.dart';
 import 'package:gestmob/models/FormatPiece.dart';
+import 'package:gestmob/models/FormatPrint.dart';
 import 'package:gestmob/models/Journaux.dart';
 import 'package:gestmob/models/Piece.dart';
 import 'package:gestmob/models/Tiers.dart';
@@ -214,9 +215,9 @@ class _AddPiecePageState extends State<AddPiecePage> with TickerProviderStateMix
                 });
               }
             },
-            onTrensferPressed: ()async{
-              await transfererPiece() ;
-            },
+            onTrensferPressed:(_piece.etat == 0 ) ? ()async{
+              await transfererPiece(context) ;
+            } : null,
           ),
           // extendBody: true,
           bottomNavigationBar: BottomExpandableAppBar(
@@ -770,7 +771,6 @@ class _AddPiecePageState extends State<AddPiecePage> with TickerProviderStateMix
                             onPressed: () async {
                               int mov = getMovForPiece();
                               await saveItem(mov);
-                              Navigator.pop(context);
                               await  quikPrintTicket();
                             },
                             child: Text(
@@ -796,6 +796,12 @@ class _AddPiecePageState extends State<AddPiecePage> with TickerProviderStateMix
                                     return previewItem(_piece);
                                   }
                               );
+                              if(_ticket != null){
+                                await printItem(_ticket);
+                                setState(() {
+                                  _ticket = null ;
+                                });
+                              }
                             },
                             child: Text(
                               "Save and print",
@@ -937,6 +943,7 @@ class _AddPiecePageState extends State<AddPiecePage> with TickerProviderStateMix
         }
       } else {
         Piece piece = await makePiece();
+        piece.etat = 0 ;
         id = await _queryCtr.addItemToTable(DbTablesNames.pieces, piece);
         if(id > -1){
           piece.id = await _queryCtr.getLastId(DbTablesNames.pieces);
@@ -953,6 +960,7 @@ class _AddPiecePageState extends State<AddPiecePage> with TickerProviderStateMix
           message = "Error when adding Piece to db";
         }
       }
+
       Navigator.pop(context);
       Helpers.showFlushBar(context, message);
       return Future.value(id);
@@ -985,18 +993,28 @@ class _AddPiecePageState extends State<AddPiecePage> with TickerProviderStateMix
     return _piece ;
   }
 
-  Future<void> transfererPiece ()async{
+  Future<void> transfererPiece (context)async{
     try{
       int id = -1 ;
-      Piece _newPiece=await makePiece() ;
-      _newPiece.piece = typePieceTransformer(_newPiece.piece);
+      Piece _newPiece= new Piece.init();
+      _newPiece.tier_id = _piece.tier_id;
+      _newPiece.raisonSociale = _piece.raisonSociale ;
+      _newPiece.piece = typePieceTransformer(_piece.piece);
       _newPiece.mov = 1 ;
       _newPiece.transformer = 1 ;
+      _newPiece.etat = 0 ;
+      _newPiece.tarification = _piece.tarification ;
       var res = await _queryCtr.getFormatPiece(_newPiece.piece) ;
       _newPiece.num_piece =Helpers.generateNumPiece(res.first);
+      _newPiece.total_ttc = _piece.total_ttc ;
+      _newPiece.total_tva = _piece.total_tva ;
+      _newPiece.total_ht = _piece.total_ht ;
+      _newPiece.date = _piece.date ;
+      _newPiece.net_a_payer = _piece.net_a_payer ;
+      _newPiece.reste = _piece.reste ;
+      _newPiece.regler = _piece.regler ;
 
       int _oldMov = _piece.mov ;
-      saveItem(0);
 
       id = await _queryCtr.addItemToTable(DbTablesNames.pieces, _newPiece);
       if(id > -1){
@@ -1016,6 +1034,10 @@ class _AddPiecePageState extends State<AddPiecePage> with TickerProviderStateMix
 
       var message = "Piece a bien été transferer";
       Helpers.showFlushBar(context, message);
+
+      _piece.etat = 1 ;
+      await saveItem(0);
+
     }catch(e){
       var message = "Error in transfer Piece";
       Helpers.showFlushBar(context, message);
@@ -1026,7 +1048,7 @@ class _AddPiecePageState extends State<AddPiecePage> with TickerProviderStateMix
   String typePieceTransformer(pi) {
     switch(pi){
       case "FP" :
-        return "CC" ;
+        return "BL" ;
         break ;
       case "CC" :
         return "BL" ;
@@ -1041,36 +1063,122 @@ class _AddPiecePageState extends State<AddPiecePage> with TickerProviderStateMix
   }
 
   quikPrintTicket() async {
-    PrinterBluetoothManager _printerManager = PrinterBluetoothManager();
+    var defaultPrinter = await _queryCtr.getPrinter() ;
 
-    BluetoothDevice device  =new BluetoothDevice();
-    device.name = "Printer001" ;
-    device.type=3 ;
-    device.address="DC:0D:30:91:DD:58";
-    device.connected=true ;
+    if(defaultPrinter != null){
+      PrinterBluetoothManager _printerManager = PrinterBluetoothManager();
+      BluetoothDevice device  =new BluetoothDevice();
+      device.name = defaultPrinter.name ;
+      device.type= defaultPrinter.type;
+      device.address= defaultPrinter.adress;
+      device.connected=true ;
 
-    PrinterBluetooth _device =new  PrinterBluetooth(device) ;
+      PrinterBluetooth _device =new  PrinterBluetooth(device) ;
 
-    _printerManager.selectPrinter(_device);
-    Ticket ticket=new Ticket(PaperSize.mm80);
-    print(_device.name);
-    print(_device.address);
-    _printerManager.printTicket(ticket).then((result) {
-      showDialog(
-        context: context,
-        builder: (_) => AlertDialog(
-          content: Text(result.msg),
-        ),
-      );
-      dispose();
-    }).catchError((error){
-      showDialog(
-        context: context,
-        builder: (_) => AlertDialog(
-          content: Text(error.toString()),
-        ),
-      );
+      _printerManager.selectPrinter(_device);
+      var formatPrint = await _queryCtr.getFormatPrint();
+      Ticket ticket= await _maketicket(formatPrint);
+      _printerManager.printTicket(ticket).then((result) {
+        showDialog(
+          context: context,
+          builder: (_) => AlertDialog(
+            content: Text(result.msg),
+          ),
+        );
+        dispose();
+      }).catchError((error){
+        showDialog(
+          context: context,
+          builder: (_) => AlertDialog(
+            content: Text(error.toString()),
+          ),
+        );
+      });
+    }else{
+      var message = "No default Printer !" ;
+      Helpers.showFlushBar(context, message);
+    }
+
+  }
+
+  Future<Ticket> _maketicket(FormatPrint formatPrint) async {
+    final ticket = Ticket(formatPrint.default_format);
+
+    ticket.text("N° ${_piece.piece}: ${_piece.num_piece}",
+        styles:PosStyles(
+            align:(formatPrint.default_format == PaperSize.mm80)? PosAlign.center : PosAlign.left
+        ));
+    ticket.text("Date : ${Helpers.dateToText(_piece.date)}",
+        styles:PosStyles(
+            align:(formatPrint.default_format == PaperSize.mm80)? PosAlign.center : PosAlign.left
+        ));
+    ticket.text("Tier : ${_piece.raisonSociale}",
+        styles:PosStyles(
+            align:(formatPrint.default_format == PaperSize.mm80)? PosAlign.center : PosAlign.left
+        ));
+    ticket.hr(ch: '-');
+    ticket.row([
+      PosColumn(text: 'Item', width: 6, styles: PosStyles(bold: true)),
+      PosColumn(text: 'QTE', width: 2, styles: PosStyles(bold: true)),
+      PosColumn(text: 'Prix', width: 2, styles: PosStyles(bold: true)),
+      PosColumn(text: 'Montant', width: 2, styles: PosStyles(bold: true)),
+    ]);
+    _selectedItems.forEach((element) {
+      ticket.row([
+        (formatPrint.default_display == "Referance")?PosColumn(text: '${element.ref}', width: 6):PosColumn(text: '${element.designation}', width: 6),
+        PosColumn(text: '${element.selectedQuantite}', width: 2),
+        PosColumn(text: '${element.selectedPrice}', width: 2),
+        PosColumn(text: '${element.selectedPrice * element.selectedQuantite}', width: 2),
+      ]);
     });
+    ticket.hr(ch: '-');
+    if(formatPrint.totalHt == 1){
+      ticket.text("Total HT : ${_piece.total_ht}",
+          styles:PosStyles(
+              align:(formatPrint.default_format == PaperSize.mm80)? PosAlign.center : PosAlign.left
+          ));
+    }
+    if(formatPrint.totalTva == 1){
+      ticket.text("Total TVA : ${_piece.total_tva}",
+          styles:PosStyles(
+              align:(formatPrint.default_format == PaperSize.mm80)? PosAlign.center : PosAlign.left
+          ));
+    }
+
+    ticket.text("Regler : ${_piece.regler}",
+        styles:PosStyles(
+            align:(formatPrint.default_format == PaperSize.mm80)? PosAlign.center : PosAlign.left
+        ));
+
+    if(formatPrint.reste == 1){
+      ticket.text("Reste : ${_piece.reste}",
+          styles:PosStyles(
+              align:(formatPrint.default_format == PaperSize.mm80)? PosAlign.center : PosAlign.left
+          ));
+    }
+    if(formatPrint.credit == 1){
+      ticket.text("Total Credit : ${_selectedClient.credit}",
+          styles:PosStyles(
+              align:(formatPrint.default_format == PaperSize.mm80)? PosAlign.center : PosAlign.left
+          ));
+    }
+    ticket.hr(ch: '=');
+    ticket.text("TOTAL TTC : ${_piece.total_ttc}",
+        styles:PosStyles(
+          align:(formatPrint.default_format == PaperSize.mm80)? PosAlign.center : PosAlign.left,
+          height: PosTextSize.size2,
+          width: PosTextSize.size2,));
+    ticket.hr(ch: '=');
+    ticket.feed(1);
+    ticket.text('***BY CIRTA IT***',
+        styles: PosStyles(
+            align:(formatPrint.default_format == PaperSize.mm80)? PosAlign.center : PosAlign.left ,
+            bold: true
+        ));
+    ticket.feed(1);
+    ticket.cut();
+
+    return ticket;
   }
 
 

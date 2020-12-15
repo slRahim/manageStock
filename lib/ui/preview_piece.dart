@@ -3,6 +3,8 @@ import 'dart:io';
 import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:gestmob/Helpers/Helpers.dart';
+import 'package:gestmob/Helpers/QueryCtr.dart';
+import 'package:gestmob/Helpers/Statics.dart';
 import 'package:gestmob/models/Article.dart';
 import 'package:gestmob/models/FormatPrint.dart';
 import 'package:gestmob/models/Piece.dart';
@@ -35,6 +37,9 @@ class _PreviewPieceState extends State<PreviewPiece> {
   bool _controlReste =true ;
   bool _controlCredit =true ;
 
+  QueryCtr _queryCtr = new QueryCtr() ;
+  FormatPrint formaPrint = new FormatPrint.init();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -53,7 +58,15 @@ class _PreviewPieceState extends State<PreviewPiece> {
             icon: Icon(Icons.print),
             onPressed: () async{
               Ticket ticket = await _ticket(default_format) ;
-              // FormatPrint formaPrint = new FormatPrint();
+
+              formaPrint.default_format = default_format ;
+              formaPrint.default_display = default_display ;
+              formaPrint.totalHt = (_controlTotalHT)? 1 : 0 ;
+              formaPrint.totalTva = (_controlTotalTva)? 1 : 0 ;
+              formaPrint.reste = (_controlReste) ? 1 :0 ;
+              formaPrint.credit = (_controlCredit)? 1 : 0;
+              await _queryCtr.addItemToTable(DbTablesNames.formatPrint, formaPrint);
+
               widget.ticket(ticket);
               Navigator.pop(context);
             },
@@ -133,9 +146,6 @@ class _PreviewPieceState extends State<PreviewPiece> {
             SizedBox(height: 10),
             Container(
               height: MediaQuery.of(context).size.height / 3,
-              decoration: BoxDecoration(
-                color: Colors.white,
-              ),
               child: ListView(
                 children: [
                   Column(

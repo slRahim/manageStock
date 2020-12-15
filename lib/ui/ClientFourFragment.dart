@@ -46,6 +46,8 @@ class _ClientFourFragmentState extends State<ClientFourFragment> {
   bool _filterInHasCredit = false;
   bool _savedFilterHasCredit = false;
 
+  bool _filterTierBloquer = false ;
+  bool _savedFilterTierBloquer = false ;
 
   SliverListDataSource _dataSource;
   int _clientFour;
@@ -63,6 +65,7 @@ class _ClientFourFragmentState extends State<ClientFourFragment> {
     filter["Id_Famille"] = _savedSelectedFamille;
     filter["hasCredit"] = _savedFilterHasCredit;
     filter["Clientfour"] = _clientFour;
+    filter["tierBloquer"] = _savedFilterTierBloquer ;
   }
 
   Future<Widget> futureInitState() async {
@@ -71,6 +74,7 @@ class _ClientFourFragmentState extends State<ClientFourFragment> {
     _selectedFamille = _familleItems[_savedSelectedFamille];
 
     _filterInHasCredit = _savedFilterHasCredit;
+    _filterTierBloquer = _savedFilterTierBloquer ;
 
     final tile = StatefulBuilder(builder: (context, StateSetter _setState) {
       return Builder(
@@ -80,7 +84,8 @@ class _ClientFourFragmentState extends State<ClientFourFragment> {
               title: new Text('Famille'),
               trailing: famillesDropDown(_setState),
             ),
-            hasCreditCheckBox(_setState)
+            hasCreditCheckBox(_setState),
+            tierBloquer(_setState),
           ],
         ),
       );
@@ -107,6 +112,7 @@ class _ClientFourFragmentState extends State<ClientFourFragment> {
                     setState(() {
                       _savedSelectedFamille = _familleItems.indexOf(_selectedFamille);
                       _savedFilterHasCredit = _filterInHasCredit;
+                      _savedFilterTierBloquer = _filterTierBloquer ;
 
                       fillFilter(_filterMap);
 
@@ -236,6 +242,19 @@ class _ClientFourFragmentState extends State<ClientFourFragment> {
       },
     );
   }
+
+  Widget tierBloquer(StateSetter _setState) {
+    return CheckboxListTile(
+      title: Text("Show Bloqued"),
+      value: _filterTierBloquer,
+      onChanged: (bool value){
+        _setState(() {
+          _filterTierBloquer = value;
+        });
+      },
+    );
+  }
+
 
   Future scanQRCode() async {
     try {

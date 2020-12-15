@@ -5,7 +5,9 @@ import 'package:gestmob/models/Article.dart';
 import 'package:gestmob/models/ArticleFamille.dart';
 import 'package:gestmob/models/ArticleMarque.dart';
 import 'package:gestmob/models/ArticleTva.dart';
+import 'package:gestmob/models/DefaultPrinter.dart';
 import 'package:gestmob/models/FormatPiece.dart';
+import 'package:gestmob/models/FormatPrint.dart';
 import 'package:gestmob/models/Journaux.dart';
 import 'package:gestmob/models/MyParams.dart';
 import 'package:gestmob/models/Piece.dart';
@@ -82,14 +84,17 @@ class QueryCtr {
       int clientFourn = filters["Clientfour"] != null? filters["Clientfour"] : -1;
       int famille = filters["Id_Famille"] != null? filters["Id_Famille"] : -1;
       bool hasCredit = filters["hasCredit"] != null? filters["hasCredit"] : false;
+      bool showBloquer = filters["tierBloquer"] != null? filters["tierBloquer"] : false;
 
       String clientFournFilter = clientFourn > -1 ? " AND (Clientfour = $clientFourn OR Clientfour = 1)" : "";
       String familleFilter = famille > 0 ? " AND Id_Famille = $famille" : "";
       String hasCreditFilter = hasCredit ? " AND Credit > 0 " : "";
+      String showBloquerFilter = showBloquer ? " AND Bloquer > 0 " : "AND Bloquer = 0";
 
       query += clientFournFilter;
       query += familleFilter;
       query += hasCreditFilter;
+      query += showBloquerFilter ;
     }
 
     Database dbClient = await _databaseHelper.db;
@@ -120,13 +125,14 @@ class QueryCtr {
     String tableName = DbTablesNames.pieces;
     String query = "SELECT COUNT(*) FROM $tableName WHERE Tier_id = ${item.id}" ;
     var res = await dbClient.rawQuery(query);
-    if(res.isNotEmpty){
+
+    if(res.first["COUNT(*)"] > 0){
       return true ;
     }
 
     tableName = DbTablesNames.tresorie;
     res = await dbClient.rawQuery(query);
-    if(res.isNotEmpty){
+    if(res.first["COUNT(*)"]>0){
       return true ;
     }
 
@@ -359,6 +365,23 @@ class QueryCtr {
     return new MyParams.frommMap(res[0]);
   }
 
+  Future<DefaultPrinter> getPrinter () async {
+    Database dbClient = await _databaseHelper.db;
+    var res = await dbClient.query(DbTablesNames.defaultPrinter);
+
+    if(res.isNotEmpty){
+      return new DefaultPrinter.fromMap(res.last);
+    }
+
+    return null ;
+  }
+
+  Future<FormatPrint> getFormatPrint() async {
+    Database dbClient = await _databaseHelper.db;
+    var res = await dbClient.query(DbTablesNames.formatPrint);
+
+    return new FormatPrint.fromMap(res.last);
+  }
 
 
   Future<dynamic> addItemToTable(String tableName, item) async {
@@ -422,10 +445,10 @@ class QueryCtr {
     return tier;
   }
 
-  Future<Piece> getTestPiece() async {
-    Piece piece = new Piece("FP", "05555", 0, 1, new DateTime.now(), 1, 1, 1, 10, 10, 10, 10, 0, 10, 15);
-    return piece;
-  }
+  // Future<Piece> getTestPiece() async {
+  //   Piece piece = new Piece("FP", "05555", 0, 1, new DateTime.now(), 1, 1, 1, 10, 10, 10, 10, 0, 10, 15);
+  //   return piece;
+  // }
 
 
 

@@ -30,7 +30,6 @@ class TierListItem extends StatelessWidget {
     id: tier.id,
     from: tier,
     confirmDismiss: (DismissDirection dismissDirection) async {
-      print("call: " + tier.mobile);
       if(dismissDirection == DismissDirection.endToStart){
         await _makePhoneCall("tel:${tier.mobile}");
       }else{
@@ -100,7 +99,7 @@ class TierListItem extends StatelessWidget {
                 Helpers.showFlushBar(context, message);
               }else{
                 bool hasItems = await _queryCtr.checkTierItems(tier);
-                if(!hasItems){
+                if(hasItems == false){
                   int res = await _queryCtr.removeItemFromTable(DbTablesNames.tiers, tier);
                   var message = "" ;
                   if(res > 0){
@@ -114,7 +113,7 @@ class TierListItem extends StatelessWidget {
                   Helpers.showFlushBar(context, message);
                 }else{
                   Navigator.pop(context);
-                  var message ="You can't dell tier";
+                  var message ="You can't dell tier has items";
                   Helpers.showFlushBar(context, message);
                 }
               }

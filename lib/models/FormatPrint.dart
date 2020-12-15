@@ -15,22 +15,22 @@ class FormatPrint {
 
   FormatPrint.fromMap(dynamic obj){
     this._id = obj['id'];
-    this._default_format = obj["Default_format"];
+    this._default_format = (obj["Default_format"] == "80")?PaperSize.mm80 : PaperSize.mm58 ;
     this._default_display = obj["Default_display"];
     this._totalHt = obj["Total_ht"];
     this._totalTva = obj["Total_tva"];
-    this._reste = obj["reste"];
-    this._credit = obj["credit"];
+    this._reste = obj["Reste"];
+    this._credit = obj["Credit"];
   }
 
   Map<String , dynamic> toMap(){
     Map<String , dynamic> obj = new Map<String , dynamic>();
-    obj["Default_format"]=this._default_format ;
+    obj["Default_format"]=(this._default_format == PaperSize.mm80) ? "80" : "58" ;
     obj["Default_display"] =this._default_display ;
     obj["Total_ht"]=this._totalHt ;
     obj["Total_tva"]=this._totalTva;
-    obj["reste"]=this._reste;
-    obj["credit"]=this._credit ;
+    obj["Reste"]=this._reste;
+    obj["Credit"]=this._credit ;
 
     return obj ;
   }

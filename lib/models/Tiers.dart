@@ -90,7 +90,7 @@ class Tiers{
     this._chiffre_affaires = obj["Chiffre_affaires"];
     this._regler = obj["Regler"];
     this._credit = obj["Credit"];
-    this._bloquer = obj["Bloquer"] == 1? true : false;;
+    this._bloquer =( obj["Bloquer"] == 1)? true : false;
   }
 
   Map<String, dynamic> toMap() {
@@ -118,7 +118,7 @@ class Tiers{
     map["Chiffre_affaires"] = this._chiffre_affaires;
     map["Regler"] = this._regler;
     map["Credit"] = this._solde_depart + this._chiffre_affaires - this._regler;
-    map["Bloquer"] = this._bloquer? 1 : 0;
+    map["Bloquer"] = (this._bloquer ) ? 1 : 0;
 
     return map;
   }
