@@ -102,6 +102,7 @@ class _AddPiecePageState extends State<AddPiecePage> with TickerProviderStateMix
     super.dispose();
   }
 
+  //*********************************************** init le screen **********************************************************************
   Future<bool> futureInitState() async {
     _tarificationDropdownItems = utils.buildDropTarificationTier(_tarificationItems);
     _selectedTarification = _tarificationItems[0];
@@ -155,6 +156,7 @@ class _AddPiecePageState extends State<AddPiecePage> with TickerProviderStateMix
     });
   }
 
+  // ***************************************** partie affichage et build *********************************************************
   @override
   Widget build(BuildContext context) {
     if (modification) {
@@ -215,7 +217,8 @@ class _AddPiecePageState extends State<AddPiecePage> with TickerProviderStateMix
                 });
               }
             },
-            onTrensferPressed:(_piece.etat == 0 ) ? ()async{
+            onTrensferPressed:(_piece.etat == 0 && _piece.piece != PieceType.factureClient
+                && _piece.piece != PieceType.factureFournisseur ) ? ()async{
               await transfererPiece(context) ;
             } : null,
           ),
@@ -702,12 +705,12 @@ class _AddPiecePageState extends State<AddPiecePage> with TickerProviderStateMix
       _piece.total_tva = totalTva ;
       _piece.total_ttc = _piece.total_ht + _piece.total_tva ;
       _verssementControler.text = _piece.total_ttc.toString() ;
-      _piece.regler = _piece.total_ttc ;
-      _piece.reste = _piece.total_ttc - _piece.regler ;
+      _verssementpiece = _piece.total_ttc ;
+      _restepiece = _piece.total_ttc - _verssementpiece ;
     });
   }
 
-  //********************************************************************** partie de date ****************************************************************************************
+  //********************************************************************** partie de la date ****************************************************************************************
   void callDatePicker() async {
     DateTime now = new DateTime.now();
 
@@ -739,7 +742,7 @@ class _AddPiecePageState extends State<AddPiecePage> with TickerProviderStateMix
     );
   }
 
-  //*************************************************************************** partie de save ***********************************************************************************
+  //*************************************************************************** partie de save dialog et options ***********************************************************************************
 
   //dialog de save
   Widget addChoicesDialog() {
@@ -917,6 +920,8 @@ class _AddPiecePageState extends State<AddPiecePage> with TickerProviderStateMix
     );
   }
 
+
+  //************************************************add or update item *************************************************************************
   Future<int> addItemToDb() async {
     int id = -1;
     String message;
@@ -993,6 +998,7 @@ class _AddPiecePageState extends State<AddPiecePage> with TickerProviderStateMix
     return _piece ;
   }
 
+  //***********************************special pour la transformation de la piece*************************************************************
   Future<void> transfererPiece (context)async{
     try{
       int id = -1 ;
@@ -1039,7 +1045,7 @@ class _AddPiecePageState extends State<AddPiecePage> with TickerProviderStateMix
       await saveItem(0);
 
     }catch(e){
-      var message = "Error in transfer Piece";
+      var message = "Error in transferer Piece";
       Helpers.showFlushBar(context, message);
     }
 
@@ -1047,21 +1053,22 @@ class _AddPiecePageState extends State<AddPiecePage> with TickerProviderStateMix
 
   String typePieceTransformer(pi) {
     switch(pi){
-      case "FP" :
-        return "BL" ;
+      case PieceType.devis :
+        return PieceType.bonLivraison ;
         break ;
-      case "CC" :
-        return "BL" ;
+      case PieceType.commandeClient :
+        return PieceType.bonLivraison ;
         break ;
-      case "BL" :
-        return "FC" ;
+      case PieceType.bonLivraison :
+        return PieceType.factureClient ;
         break ;
-      case "BR" :
-        return "FF" ;
+      case PieceType.bonReception :
+        return PieceType.factureFournisseur ;
         break ;
     }
   }
 
+  //****************************************quik print****************************************************************************
   quikPrintTicket() async {
     var defaultPrinter = await _queryCtr.getPrinter() ;
 

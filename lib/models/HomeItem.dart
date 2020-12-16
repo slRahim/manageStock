@@ -29,8 +29,6 @@ class HomeItem {
   HomeItem({this.id, this.title, this.img,this.active});
 }
 
-
-
 HomeItem homeItemAccueil = new HomeItem(
     id: homeItemAccueilId,
     title: "Accueil",
@@ -45,7 +43,7 @@ HomeItem homeItemTableauDeBord = new HomeItem(
 
 HomeItem homeItemArticles = new HomeItem(
     id: homeItemArticlesId,
-    title: "Articles",
+    title: S.current.articles,
     img: "assets/article.png",
     active: true
 );
@@ -115,7 +113,7 @@ HomeItem homeItemRapports = new HomeItem(
 
 HomeItem homeItemParametres = new HomeItem(
     id: homeItemParametresId,
-    title: "Paramètres",
+    title: S.current.settings,
     img: "assets/setting.png",
     active: true
 );

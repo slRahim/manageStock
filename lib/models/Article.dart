@@ -34,9 +34,9 @@ class Article{
     _description = value;
   }
 
-  int _id, _idFamille,_idMarque,_colis;
+  int _id, _idFamille,_idMarque;
 
-  double _prixVente1TTC, _prixVente1, _prixVente2TTC, _prixVente2,
+  double _colis ,  _prixVente1TTC, _prixVente1, _prixVente2TTC, _prixVente2,
          _prixVente3TTC, _prixVente3,_qteInit, _qte, _qteMin, _qteColis,
          _prixAchat, _pmpInit, _pmp, _tva;
 
@@ -70,7 +70,7 @@ class Article{
   int get id => _id;
   int get idFamille => _idFamille;
   int get idMarque => _idMarque;
-  int get colis => _colis;
+  double get colis => _colis;
 
   double get quantite => _qte;
   double get quantiteMinimum => _qteMin;
@@ -120,7 +120,7 @@ class Article{
     this._idMarque =id;
   }
 
-  void setColis(int colis){
+  void setColis(double colis){
     this._colis=colis;
   }
 

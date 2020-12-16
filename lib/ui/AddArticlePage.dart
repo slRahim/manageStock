@@ -1092,7 +1092,7 @@ class _AddArticlePageState extends State<AddArticlePage>  with AutomaticKeepAliv
 
     article.setQteColis(double.parse(_qteColisCotrol.text));
     double colis= double.parse(_stockInitialControl.text) / double.parse(_qteColisCotrol.text) ;
-    article.setColis(colis.toInt());
+    article.setColis(colis);
 
     article.setprixVente1(double.parse(_price1Control.text));
     article.setprixVente2(double.parse(_price2Control.text));

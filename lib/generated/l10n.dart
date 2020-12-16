@@ -45,31 +45,41 @@ class S {
     );
   }
 
-  /// `Quitter`
+  /// `Exit`
   String get quitter {
     return Intl.message(
-      'Quitter',
+      'Exit',
       name: 'quitter',
       desc: '',
       args: [],
     );
   }
 
-  /// `Aide`
+  /// `Help`
   String get aide {
     return Intl.message(
-      'Aide',
+      'Help',
       name: 'aide',
       desc: '',
       args: [],
     );
   }
 
-  /// `Articles`
+  /// `Items`
   String get articles {
     return Intl.message(
-      'Articles',
+      'Items',
       name: 'articles',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Settings`
+  String get settings {
+    return Intl.message(
+      'Settings',
+      name: 'settings',
       desc: '',
       args: [],
     );

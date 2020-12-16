@@ -25,9 +25,6 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
 
-    // GetIt locator = GetIt.instance;
-    // locator.registerSingleton<TouchIdUtil>(TouchIdUtil(context));
-
     return GestureDetector(
         onTap: () {
           FocusScopeNode currentFocus = FocusScope.of(context);
@@ -40,7 +37,6 @@ class MyApp extends StatelessWidget {
 
           localizationsDelegates: [S.delegate],
           supportedLocales: S.delegate.supportedLocales,
-          // localeResolutionCallback: S.delegate.resolution(fallback: Locale('en')),
 
           locale: localeList[index],
 
@@ -51,10 +47,6 @@ class MyApp extends StatelessWidget {
 
           initialRoute: RoutesKeys.loginPage,
           onGenerateRoute: RouteGenerator.generateRoute,
-
-          /* home: BlocProvider(
-          create: (context) => HomeCubit(),
-          child: new home())*/
         )
     );
   }

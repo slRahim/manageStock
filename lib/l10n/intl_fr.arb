@@ -3,5 +3,6 @@
   "app_name": "gestionstock FR",
   "quitter": "Quitter",
   "aide": "Aide",
-  "articles": "Articles"
+  "articles": "Articles",
+  "settings": "Paramétres"
 }

@@ -8,6 +8,7 @@ import 'package:gestmob/models/Article.dart';
 import 'package:gestmob/models/HomeItem.dart';
 import 'package:gestmob/search/search_input_sliver.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
+import 'package:intl/intl.dart';
 import 'package:settings_ui/settings_ui.dart';
 
 import 'AddArticlePage.dart';
@@ -19,11 +20,13 @@ class SettingsPage extends StatefulWidget {
 
 class _SettingsPageState extends State<SettingsPage> {
 
+  List<String> languages = ["English (ENG)" , "French (FR)" , "Arabic (AR)"];
+  String language  ;
+
   @override
   Future<void> initState() {
     super.initState();
-
-
+    language= languages[0];
   }
 
   @override
@@ -34,7 +37,7 @@ class _SettingsPageState extends State<SettingsPage> {
           icon: Icon(Icons.arrow_back, size: 25),
           onPressed: () => Navigator.pop(context),
         ),
-        title: Text("Settings"),
+        title: Text(S.current.settings),
         backgroundColor: Colors.blue,
         centerTitle: true,
         actions: [
@@ -55,9 +58,33 @@ class _SettingsPageState extends State<SettingsPage> {
             tiles: [
               SettingsTile(
                 title: 'Language',
-                subtitle: 'English',
+                subtitle: language ,
                 leading: Icon(Icons.language),
-                onTap: () {},
+                onTap: () async{
+                  await showDialog(
+                    context: context,
+                    builder: (BuildContext context) {
+                      return  languageDialog();
+                    },
+                  ).then((value) {
+                    setState(() {
+                      language ;
+                      switch(language){
+                        case ("English (ENG)"):
+                          S.load(Locale("en"));
+                          break ;
+
+                        case ("French (FR)"):
+                          S.load(Locale("fr"));
+                          break ;
+
+                        case ("Arabic (AR)"):
+                          S.load(Locale("ar"));
+                          break ;
+                      }
+                    });
+                  });
+                },
               ),
               SettingsTile.switchTile(
                 title: 'Use 3 prices',
@@ -72,18 +99,52 @@ class _SettingsPageState extends State<SettingsPage> {
     );
   }
 
+   languageDialog() {
+      return StatefulBuilder(
+        builder: (context, setState) {
+          return AlertDialog(
+            title: Text("Choose a language"),
+            content: Container(
+              height: 180,
+              child: Column(
+                children: [
+                  RadioListTile(
+                    value: languages[0],
+                    groupValue: language,
+                    title: Text('Anglais (ENG)'),
+                    onChanged: (value){
+                      setState(() {
+                        language= value ;
+                      });
+                    },
+                  ),
+                  RadioListTile(
+                    value: languages[1],
+                    groupValue: language,
+                    title: Text('Français (FR)'),
+                    onChanged: (value){
+                      setState(() {
+                        language= value ;
+                      });
+                    },
+                  ),
+                  RadioListTile(
+                    value: languages[2],
+                    groupValue: language,
+                    title: Text('Arabe (AR)'),
+                    onChanged: (value){
+                      setState(() {
+                        language= value ;
+                      });
+                    },
+                  )
+                ],
+              ),
+            ),
+          );
+        },
+      );
+  }
 
-  /*Column(
-  children: [
-  DropdownButton<int>(
-  hint: Text("Price count", style: TextStyle(color: Colors.blue[700])),
-  value: selectedPriceNumber,
-  items: utils.buildPriceDropDownMenuItems([1, 2, 3]),
-  onChanged: (value) {
-  setState(() {
-  selectedPriceNumber = value;
-  });
-  }),
-  ],
-  )*/
 }
+

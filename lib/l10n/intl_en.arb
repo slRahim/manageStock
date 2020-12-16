@@ -1,7 +1,8 @@
 {
   "@@locale": "en",
   "app_name": "GestMob",
-  "quitter": "Quitter",
-  "aide": "Aide",
-  "articles": "Articles"
+  "quitter": "Exit",
+  "aide": "Help",
+  "articles": "Items",
+  "settings": "Settings"
 }

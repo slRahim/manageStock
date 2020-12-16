@@ -24,6 +24,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "aide" : MessageLookupByLibrary.simpleMessage("Aide"),
     "app_name" : MessageLookupByLibrary.simpleMessage("gestionstock FR"),
     "articles" : MessageLookupByLibrary.simpleMessage("Articles"),
-    "quitter" : MessageLookupByLibrary.simpleMessage("Quitter")
+    "quitter" : MessageLookupByLibrary.simpleMessage("Quitter"),
+    "settings" : MessageLookupByLibrary.simpleMessage("Paramétres")
   };
 }

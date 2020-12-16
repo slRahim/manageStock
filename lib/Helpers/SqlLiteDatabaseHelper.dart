@@ -122,7 +122,7 @@ class SqlLiteDatabaseHelper {
         Qte Double, 
         Qte_Min Double, 
         Qte_Colis Double, 
-        Colis Integer, 
+        Colis Double, 
         PrixAchat Double, 
         PMP_init Double, 
         PMP Double, TVA Float, 
@@ -465,17 +465,8 @@ class SqlLiteDatabaseHelper {
         BEGIN
            Update Journaux 
             Set Mov = -2
-            WHERE Piece_id = id;
+            WHERE Piece_id = OLD.id;
             
-            UPDATE Tiers
-               SET Chiffre_affaires = Chiffre_affaires - OLD.Total_ttc,
-                   Regler = Regler  - OLD.Regler
-              WHERE id = OLD.Tier_id;
-              
-           UPDATE Tiers
-            SET  Credit = (Solde_depart + Chiffre_affaires) - Regler 
-           WHERE id = OLD.Tier_id;
-           
            DELETE FROM Transformers WHERE New_Piece_id = OLD.id;
         END;
      ''');
@@ -548,14 +539,6 @@ class SqlLiteDatabaseHelper {
         END;
       ''');
     //   **************************************************************************************************
-    //    await db.execute('''
-    //       CREATE TRIGGER IF NOT EXISTS delete_tresorie
-    //       BEFORE DELETE ON Tresories
-    //       FOR EACH ROW
-    //       BEGIN
-    //
-    //       END;
-    //    ''');
 
     await db.execute('''CREATE TRIGGER dell_tresorie 
         BEFORE DELETE ON Tresories 
@@ -603,12 +586,14 @@ class SqlLiteDatabaseHelper {
            WHERE Piece_id = OLD.New_Piece_id ;
            
            UPDATE Pieces 
-           SET Mov = OLD.Old_Mov
+           SET Mov = OLD.Old_Mov,
+               Etat = 0
            WHERE id = OLD.Old_Piece_id ;
            
            UPDATE Journaux
            SET Mov = OLD.Old_Mov 
            WHERE Piece_id = OLD.Old_Piece_id ;
+           
         END;
       ''');
 

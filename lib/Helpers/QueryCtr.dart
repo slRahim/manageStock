@@ -73,6 +73,7 @@ class QueryCtr {
       list.add(article);
     }
 
+
     return list;
   }
 
