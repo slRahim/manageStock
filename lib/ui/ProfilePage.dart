@@ -11,6 +11,7 @@ import 'package:gestmob/Widgets/CustomWidgets/bottom_tab_bar.dart';
 import 'package:gestmob/Widgets/CustomWidgets/enterPin.dart';
 import 'package:gestmob/Widgets/CustomWidgets/image_picker_widget.dart';
 import 'package:gestmob/Widgets/CustomWidgets/list_dropdown.dart';
+import 'package:gestmob/generated/l10n.dart';
 import 'package:gestmob/models/Article.dart';
 import 'package:gestmob/models/Piece.dart';
 import 'package:gestmob/models/Profile.dart';
@@ -110,15 +111,15 @@ class _ProfilePageState extends State<ProfilePage> with TickerProviderStateMixin
   Widget build(BuildContext context) {
     if (modification) {
       if (editMode) {
-        appBarTitle = "Modification";
+        appBarTitle =  S.current.modification_titre;
       } else {
-        appBarTitle = "Profile";
+        appBarTitle =  S.current.profile_titre;
       }
     } else {
       if (editMode) {
-        appBarTitle = "Ajouter une profile";
+        appBarTitle =  S.current.profile_ajouter;
       } else {
-        appBarTitle = "Profile";
+        appBarTitle =  S.current.profile_titre;
       }
     }
 
@@ -162,7 +163,7 @@ class _ProfilePageState extends State<ProfilePage> with TickerProviderStateMixin
                     }
                   } else {
                     Helpers.showFlushBar(
-                        context, "Please enter Raison sociale");
+                        context,  S.current.msg_entre_rs);
 
                     setState(() {
                       _validateRaison = true;
@@ -173,9 +174,9 @@ class _ProfilePageState extends State<ProfilePage> with TickerProviderStateMixin
               bottomNavigationBar: BottomTabBar(
                 controller: _tabController,
                 tabs: [
-                  Tab(child: Column( children: [ Icon(Icons.insert_drive_file),SizedBox(height: 2), Text("Fiche"), ], )),
-                  Tab(child: Column( children: [ Icon(Icons.image), SizedBox(height: 2), Text("Logo"), ], )),
-                  Tab(child: Column( children: [ Icon(Icons.fingerprint), SizedBox(height: 2), Text("Security"), ], )),
+                  Tab(child: Column( children: [ Icon(Icons.insert_drive_file),SizedBox(height: 2), Text( S.current.fiche), ], )),
+                  Tab(child: Column( children: [ Icon(Icons.image), SizedBox(height: 2), Text( S.current.logo), ], )),
+                  Tab(child: Column( children: [ Icon(Icons.fingerprint), SizedBox(height: 2), Text( S.current.securite), ], )),
                 ],
               ),
               body: Builder(
@@ -210,7 +211,7 @@ class _ProfilePageState extends State<ProfilePage> with TickerProviderStateMixin
                     focusedBorder: OutlineInputBorder(
                         borderSide: BorderSide(color: Colors.orange[900]),
                         borderRadius: BorderRadius.circular(20)),
-                    labelText: "Raison Sociale",
+                    labelText:  S.current.rs,
                     errorText: _validateRaison ? 'Champ obligatoire' : null,
                     labelStyle: TextStyle(color: Colors.orange[900]),
                     enabledBorder: OutlineInputBorder(
@@ -258,7 +259,7 @@ class _ProfilePageState extends State<ProfilePage> with TickerProviderStateMixin
               focusedBorder: OutlineInputBorder(
                   borderSide: BorderSide(color: Colors.blue[700]),
                   borderRadius: BorderRadius.circular(20)),
-              labelText: "Activité",
+              labelText:  S.current.activite,
               enabledBorder: OutlineInputBorder(
                 gapPadding: 3.3,
                 borderRadius: BorderRadius.circular(20),
@@ -278,7 +279,7 @@ class _ProfilePageState extends State<ProfilePage> with TickerProviderStateMixin
               focusedBorder: OutlineInputBorder(
                   borderSide: BorderSide(color: Colors.blue[700]),
                   borderRadius: BorderRadius.circular(20)),
-              labelText: "Adresse",
+              labelText:  S.current.adresse,
               enabledBorder: OutlineInputBorder(
                 gapPadding: 3.3,
                 borderRadius: BorderRadius.circular(20),
@@ -298,7 +299,7 @@ class _ProfilePageState extends State<ProfilePage> with TickerProviderStateMixin
               focusedBorder: OutlineInputBorder(
                   borderSide: BorderSide(color: Colors.blue[700]),
                   borderRadius: BorderRadius.circular(20)),
-              labelText: "Ville",
+              labelText:  S.current.ville,
               enabledBorder: OutlineInputBorder(
                 gapPadding: 3.3,
                 borderRadius: BorderRadius.circular(20),
@@ -318,7 +319,7 @@ class _ProfilePageState extends State<ProfilePage> with TickerProviderStateMixin
               focusedBorder: OutlineInputBorder(
                   borderSide: BorderSide(color: Colors.blue[700]),
                   borderRadius: BorderRadius.circular(20)),
-              labelText: "Pays",
+              labelText:  S.current.pays,
               enabledBorder: OutlineInputBorder(
                 gapPadding: 3.3,
                 borderRadius: BorderRadius.circular(20),
@@ -338,7 +339,7 @@ class _ProfilePageState extends State<ProfilePage> with TickerProviderStateMixin
               focusedBorder: OutlineInputBorder(
                   borderSide: BorderSide(color: Colors.blue[700]),
                   borderRadius: BorderRadius.circular(20)),
-              labelText: "Telephone",
+              labelText:  S.current.telephone,
               enabledBorder: OutlineInputBorder(
                 gapPadding: 3.3,
                 borderRadius: BorderRadius.circular(20),
@@ -358,7 +359,7 @@ class _ProfilePageState extends State<ProfilePage> with TickerProviderStateMixin
               focusedBorder: OutlineInputBorder(
                   borderSide: BorderSide(color: Colors.blue[700]),
                   borderRadius: BorderRadius.circular(20)),
-              labelText: "Telephone 2",
+              labelText:  S.current.telephone2,
               enabledBorder: OutlineInputBorder(
                 gapPadding: 3.3,
                 borderRadius: BorderRadius.circular(20),
@@ -378,7 +379,7 @@ class _ProfilePageState extends State<ProfilePage> with TickerProviderStateMixin
               focusedBorder: OutlineInputBorder(
                   borderSide: BorderSide(color: Colors.blue[700]),
                   borderRadius: BorderRadius.circular(20)),
-              labelText: "Mobile",
+              labelText:  S.current.mobile,
               enabledBorder: OutlineInputBorder(
                 gapPadding: 3.3,
                 borderRadius: BorderRadius.circular(20),
@@ -398,7 +399,7 @@ class _ProfilePageState extends State<ProfilePage> with TickerProviderStateMixin
               focusedBorder: OutlineInputBorder(
                   borderSide: BorderSide(color: Colors.blue[700]),
                   borderRadius: BorderRadius.circular(20)),
-              labelText: "Mobile 2",
+              labelText:  S.current.mobile2,
               enabledBorder: OutlineInputBorder(
                 gapPadding: 3.3,
                 borderRadius: BorderRadius.circular(20),
@@ -418,7 +419,7 @@ class _ProfilePageState extends State<ProfilePage> with TickerProviderStateMixin
               focusedBorder: OutlineInputBorder(
                   borderSide: BorderSide(color: Colors.blue[700]),
                   borderRadius: BorderRadius.circular(20)),
-              labelText: "Fax",
+              labelText:  S.current.fax,
               enabledBorder: OutlineInputBorder(
                 gapPadding: 3.3,
                 borderRadius: BorderRadius.circular(20),
@@ -438,7 +439,7 @@ class _ProfilePageState extends State<ProfilePage> with TickerProviderStateMixin
               focusedBorder: OutlineInputBorder(
                   borderSide: BorderSide(color: Colors.blue[700]),
                   borderRadius: BorderRadius.circular(20)),
-              labelText: "Email",
+              labelText:  S.current.mail,
               enabledBorder: OutlineInputBorder(
                 gapPadding: 3.3,
                 borderRadius: BorderRadius.circular(20),
@@ -458,7 +459,7 @@ class _ProfilePageState extends State<ProfilePage> with TickerProviderStateMixin
               focusedBorder: OutlineInputBorder(
                   borderSide: BorderSide(color: Colors.blue[700]),
                   borderRadius: BorderRadius.circular(20)),
-              labelText: "Adresse web",
+              labelText:  S.current.adresse_web,
               enabledBorder: OutlineInputBorder(
                 gapPadding: 3.3,
                 borderRadius: BorderRadius.circular(20),
@@ -478,7 +479,7 @@ class _ProfilePageState extends State<ProfilePage> with TickerProviderStateMixin
               focusedBorder: OutlineInputBorder(
                   borderSide: BorderSide(color: Colors.blue[700]),
                   borderRadius: BorderRadius.circular(20)),
-              labelText: "N° RC",
+              labelText:  S.current.n_rc,
               enabledBorder: OutlineInputBorder(
                 gapPadding: 3.3,
                 borderRadius: BorderRadius.circular(20),
@@ -498,7 +499,7 @@ class _ProfilePageState extends State<ProfilePage> with TickerProviderStateMixin
               focusedBorder: OutlineInputBorder(
                   borderSide: BorderSide(color: Colors.blue[700]),
                   borderRadius: BorderRadius.circular(20)),
-              labelText: "ART.IMP",
+              labelText:  S.current.art_imp,
               enabledBorder: OutlineInputBorder(
                 gapPadding: 3.3,
                 borderRadius: BorderRadius.circular(20),
@@ -518,7 +519,7 @@ class _ProfilePageState extends State<ProfilePage> with TickerProviderStateMixin
               focusedBorder: OutlineInputBorder(
                   borderSide: BorderSide(color: Colors.blue[700]),
                   borderRadius: BorderRadius.circular(20)),
-              labelText: "NIF",
+              labelText:  S.current.nif,
               enabledBorder: OutlineInputBorder(
                 gapPadding: 3.3,
                 borderRadius: BorderRadius.circular(20),
@@ -538,7 +539,7 @@ class _ProfilePageState extends State<ProfilePage> with TickerProviderStateMixin
               focusedBorder: OutlineInputBorder(
                   borderSide: BorderSide(color: Colors.blue[700]),
                   borderRadius: BorderRadius.circular(20)),
-              labelText: "NIS",
+              labelText:  S.current.nis,
               enabledBorder: OutlineInputBorder(
                 gapPadding: 3.3,
                 borderRadius: BorderRadius.circular(20),
@@ -558,7 +559,7 @@ class _ProfilePageState extends State<ProfilePage> with TickerProviderStateMixin
               focusedBorder: OutlineInputBorder(
                   borderSide: BorderSide(color: Colors.blue[700]),
                   borderRadius: BorderRadius.circular(20)),
-              labelText: "Capital social",
+              labelText:  S.current.capitale_sociale,
               enabledBorder: OutlineInputBorder(
                 gapPadding: 3.3,
                 borderRadius: BorderRadius.circular(20),
@@ -590,7 +591,7 @@ class _ProfilePageState extends State<ProfilePage> with TickerProviderStateMixin
                     onTap: () {
                       arguments.codePinEnabled = !arguments.codePinEnabled;
                     },
-                    child: new Text("Enable pin code",
+                    child: new Text( S.current.code_pin,
                       style: TextStyle(
                           fontSize: 16,
                           color:

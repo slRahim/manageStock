@@ -10,8 +10,10 @@ import 'package:gestmob/search/search_input_sliver.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 import 'package:intl/intl.dart';
 import 'package:settings_ui/settings_ui.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import 'AddArticlePage.dart';
+import 'home.dart';
 
 class SettingsPage extends StatefulWidget {
   @override
@@ -19,7 +21,7 @@ class SettingsPage extends StatefulWidget {
 }
 
 class _SettingsPageState extends State<SettingsPage> {
-
+  SharedPreferences prefs ;
   List<String> languages = ["English (ENG)" , "French (FR)" , "Arabic (AR)"];
   String language  ;
 
@@ -27,6 +29,33 @@ class _SettingsPageState extends State<SettingsPage> {
   Future<void> initState() {
     super.initState();
     language= languages[0];
+    futureInit ();
+  }
+
+  Future<void> futureInit()async{
+    prefs = await SharedPreferences.getInstance();
+    switch(prefs.getString("myLocale")){
+      case ("en") :
+        setState(() {
+          language = languages[0] ;
+        });
+        break ;
+      case ("fr") :
+        setState(() {
+          language = languages[1] ;
+        });
+        break ;
+      case ("ar") :
+        setState(() {
+          language = languages[2] ;
+        });
+        break ;
+      default:
+        setState(() {
+          language = languages[0] ;
+        });
+        break ;
+    }
   }
 
   @override
@@ -35,7 +64,7 @@ class _SettingsPageState extends State<SettingsPage> {
       appBar: AppBar(
         leading: IconButton(
           icon: Icon(Icons.arrow_back, size: 25),
-          onPressed: () => Navigator.pop(context),
+          onPressed: () =>Navigator.pop(context),
         ),
         title: Text(S.current.settings),
         backgroundColor: Colors.blue,
@@ -66,14 +95,14 @@ class _SettingsPageState extends State<SettingsPage> {
                     builder: (BuildContext context) {
                       return  languageDialog();
                     },
-                  ).then((value) {
+                  ).then((value)async {
+                    await _savelocale();
                     setState(() {
                       language ;
                       switch(language){
                         case ("English (ENG)"):
                           S.load(Locale("en"));
                           break ;
-
                         case ("French (FR)"):
                           S.load(Locale("fr"));
                           break ;
@@ -144,6 +173,22 @@ class _SettingsPageState extends State<SettingsPage> {
           );
         },
       );
+  }
+
+  _savelocale() async{
+    switch(language){
+      case ("English (ENG)"):
+        prefs.setString("myLocale", "en");
+        break ;
+      case ("French (FR)"):
+        prefs.setString("myLocale", "fr");
+        break ;
+
+      case ("Arabic (AR)"):
+        prefs.setString("myLocale", "ar");
+        break ;
+    }
+
   }
 
 }

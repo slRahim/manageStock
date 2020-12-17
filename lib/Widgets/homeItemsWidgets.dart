@@ -28,7 +28,7 @@ class HomeDraggableItem extends DraggableItem {
           onTap();
         } else if (context != null) {
           print(title);
-          Helpers.handleIdClick(context, data.id);
+          Helpers.handleIdClick(context, data.id );
         }
       },
       child: Container(

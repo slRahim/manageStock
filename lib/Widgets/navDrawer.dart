@@ -12,6 +12,7 @@ import 'package:gestmob/models/HomeItem.dart';
 import 'package:gestmob/models/Profile.dart';
 import 'package:gestmob/ui/home.dart';
 
+
 import 'HomeItemsWidgets.dart';
 
 // le nav drawer restyle
@@ -38,6 +39,7 @@ class NavDrawer extends StatelessWidget {
     drawerItemExit
   ];
 
+
   List<Widget> getNavDrawerWidgetList(context) {
     homeItemWidgetList = <Widget>[
       DrawerHeader(
@@ -49,16 +51,16 @@ class NavDrawer extends StatelessWidget {
             },
             child: new Container(
               width: 500.0,
-              padding: new EdgeInsets.fromLTRB(20.0, 40.0, 20.0, 40.0),
+              padding: new EdgeInsetsDirectional.fromSTEB(20.0, 40.0, 20.0, 40.0),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Padding(
-                    padding: const EdgeInsets.fromLTRB(20,0,0,60),
+                    padding: const EdgeInsetsDirectional.fromSTEB(20,0,0,60),
                     child: Image(image: AssetImage('assets/logos/profile_logo.png')),
                   ),
                   Padding(
-                    padding: const EdgeInsets.fromLTRB(40,0,0,0),
+                    padding: const EdgeInsetsDirectional.fromSTEB(40,0,0,0),
                     child: Image(image: AssetImage('assets/logos/profile_logo.png')),
                   ),
                 ],
@@ -70,10 +72,7 @@ class NavDrawer extends StatelessWidget {
     ];
 
     homeItemList.forEach((data) => {
-          //chartBars list with info
-          // add your ChartBar widget to the list with appropiate info
           homeItemWidgetList.add(getDrawerItemWidget(context, data)),
-
           homeItemWidgetList.add(
             new Divider(),
           )
@@ -82,23 +81,23 @@ class NavDrawer extends StatelessWidget {
     return homeItemWidgetList;
   }
 
-
 //the drawer item
-  Widget getDrawerItemWidget(_context, data) {
+  Widget getDrawerItemWidget(context, data) {
     return ListTile(
-      dense: true,
-      leading: iconsSet(data.id, 20),
-      title: Text(
-        data.title,
-        style: TextStyle(color: Colors.white, fontSize: 15),
-      ),
-      onTap: () => {
-        print(data.title),
-        Navigator.of(_context).pop(),
-        Helpers.handleIdClick(_context, data.id),
-      },
-      trailing: Icon(Icons.keyboard_arrow_right),
-    );
+        dense: true,
+        leading: iconsSet(data.id, 20),
+        title: Text(
+          data.title,
+          style: TextStyle(color: Colors.white, fontSize: 15),
+        ),
+        onTap: () => {
+          print(data.title),
+          Navigator.of(context).pop(),
+          Helpers.handleIdClick(context, data.id),
+        },
+        trailing:(Helpers.isDirectionRTL(context))? Icon(Icons.keyboard_arrow_left)
+            :Icon(Icons.keyboard_arrow_right),
+      );
   }
 
   @override

@@ -29,15 +29,17 @@ class HomeItem {
   HomeItem({this.id, this.title, this.img,this.active});
 }
 
+
+
 HomeItem homeItemAccueil = new HomeItem(
     id: homeItemAccueilId,
-    title: "Accueil",
+    title: S.current.accueil,
     img: "assets/dashboard.png",
     active: true);
 
 HomeItem homeItemTableauDeBord = new HomeItem(
     id: homeItemTableauDeBordId,
-    title: "Tableau de bord",
+    title: S.current.tableau_bord,
     img: "assets/dashboard.png",
     active: true);
 
@@ -49,63 +51,63 @@ HomeItem homeItemArticles = new HomeItem(
 );
 HomeItem homeItemClients = new HomeItem(
     id: homeItemClientsId,
-    title: "Clients",
+    title: S.current.client,
     img: "assets/client.png",
     active: true
 );
 HomeItem homeItemDevis = new HomeItem(
     id: homeItemDevisId,
-    title: "Devis",
+    title: S.current.devis,
     img: "assets/devis.png",
     active: true
 );
 HomeItem homeItemCommandeClient = new HomeItem(
     id: homeItemCommandeClientId,
-    title: "Commande Client",
+    title: S.current.commande_client,
     img: "assets/commandeClient.png",
     active: true
 );
 HomeItem homeItemBonDeLivraison = new HomeItem(
     id: homeItemBonDeLivraisonId,
-    title: "Bon de Livraison",
+    title: S.current.bon_livraison,
     img: "assets/bonLivraison.png",
     active: true
 );
 HomeItem homeItemFactureDeVente = new HomeItem(
     id: homeItemFactureDeVenteId,
-    title: "Facture de Vente",
+    title: S.current.facture_vente,
     img: "assets/invoice.png",
     active: true
 );
 HomeItem homeItemFournisseurs = new HomeItem(
     id: homeItemFournisseursId,
-    title: "Fournisseurs",
+    title: S.current.fournisseur,
     img: "assets/fournisseurs.png",
     active: true
 );
 HomeItem homeItemBonDeReception = new HomeItem(
     id: homeItemBonDeReceptionId,
-    title: "Bon de Reception",
+    title: S.current.bon_reception,
     img: "assets/BonReception.png",
     active: true
 );
 HomeItem homeItemFactureDachat = new HomeItem(
     id: homeItemFactureDachatId,
-    title: "Facture d'achat",
+    title: S.current.facture_achat,
     img: "assets/factureAchat.png",
     active: true
 );
 
 HomeItem homeItemTresorerie = new HomeItem(
     id: homeItemTresorerieId,
-    title: "Trésorie",
+    title: S.current.tresories,
     img: "assets/Tresorerie.png",
     active: true
 );
 
 HomeItem homeItemRapports = new HomeItem(
     id: homeItemRapportsId,
-    title: "Rapports",
+    title: S.current.rapports,
     img: "assets/rapport.png",
     active: true
 );

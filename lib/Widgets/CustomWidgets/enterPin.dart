@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:gestmob/Helpers/Helpers.dart';
 import 'package:gestmob/Helpers/TouchIdUtil.dart';
+import 'package:gestmob/generated/l10n.dart';
 import 'package:vibration/vibration.dart';
 
 // special pour l'ajout et modification de pin d'auth ds le screen profile
@@ -56,8 +57,8 @@ class _EnterPinState extends State<EnterPin> {
             SizedBox(height: 20),
             Text(
               widget.codePin.isEmpty
-                  ? "You didn't set password yet"
-                  : "Your password is ***" + widget.codePin.substring(3, 4),
+                  ?  S.current.msg_no_pass
+                  :  S.current.msg_pass + widget.codePin.substring(3, 4),
               style: TextStyle(
                 color: Colors.white70,
                 fontSize: 21.0,
@@ -68,8 +69,8 @@ class _EnterPinState extends State<EnterPin> {
               height: 10,
             ),
             Text(widget.codePin.isEmpty
-                ? "Click edit to set your password"
-                : "Click edit to change your password",
+                ?  S.current.msg_edit_pass
+                :  S.current.msg_edit_pass1,
               style: TextStyle(
                 color: Colors.white70,
                 fontSize: 12.0,
@@ -275,9 +276,9 @@ class _OtpSceernState extends State<OtpSceern> {
         String message;
         if (fisrt == strPin) {
           widget.onCodePinChanged(strPin);
-          message = "Click save to store your password";
+          message =  S.current.msg_save_pass;
         } else {
-          message = "CodePINIncorrect";
+          message =  S.current.msg_pass_incorrecte;
           Vibration.vibrate(duration: 200);
         }
         Helpers.showToast(message);
@@ -353,8 +354,8 @@ class _OtpSceernState extends State<OtpSceern> {
       children: <Widget>[
         Text(
           fisrt == ""
-              ? "ChoisissezVotreCodePIN"
-              : "ConfirmezVotreCodePIN",
+              ?  S.current.msg_choix_pin
+              :  S.current.msg_confirm_pin,
           style: TextStyle(
             color: Colors.white70,
             fontSize: 21.0,
@@ -366,8 +367,8 @@ class _OtpSceernState extends State<OtpSceern> {
         ),
         Text(
           fisrt == ""
-              ? 'EntrezVotreCodePINPourProtegerVosDonnees'
-              : "ConfirmezVotreCodePINPourProtegerVosDonnees",
+              ? S.current.msg_entre_pin
+              : S.current.msg_confirm_pin1,
           style: TextStyle(
             color: Colors.white70,
             fontSize: 12.0,

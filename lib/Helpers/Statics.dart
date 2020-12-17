@@ -1,19 +1,20 @@
 
+import 'package:gestmob/generated/l10n.dart';
 import 'package:gestmob/models/Profile.dart';
 
 class Statics {
   static const RoutesKeys routes = const RoutesKeys();
   static List<String> statutItems = [
-    "M.",
-    "Mlle.",
-    "Mme.",
-    "Dr.",
-    "Pr.",
-    "EURL.",
-    "SARL.",
-    "SPA.",
-    "EPIC.",
-    "ETP."
+    S.current.statut_m,
+    S.current.statut_mlle,
+    S.current.statut_mme,
+    S.current.statut_dr,
+    S.current.statut_pr,
+    S.current.statut_eurl,
+    S.current.statut_sarl,
+    S.current.statut_spa,
+    S.current.statut_epic,
+    S.current.statut_etp
   ];
   static List<int> tarificationItems = [1, 2, 3];
   static List<String> tiersItems = ["Clients","Cl/Fourr" ,"Fournisseurs"];

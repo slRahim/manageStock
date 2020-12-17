@@ -33,6 +33,9 @@ class _GridHomeWidgetState extends State<GridHomeWidget> {
   DraggableItem _addButton;
   int _count = 0;
 
+  String _appBarTitle ;
+  Locale _userLocale ;
+
   List<HomeItem> homeItemList = [
     homeItemTableauDeBord,
     homeItemArticles,
@@ -48,37 +51,10 @@ class _GridHomeWidgetState extends State<GridHomeWidget> {
     homeItemRapports,
     homeItemParametres
   ];
-  //get items list +order +
-  Future<List<DraggableItem>> asyncStart() async {
-
-    for (var i = 0, j = homeItemList.length; i < j; i++) {
-      HomeDraggableItem item = new HomeDraggableItem(index: i, context: context, data: homeItemList[i]);
-      originalHomeDraggableItemList.add(item);
-    }
-
-    List<int> savedItemsOrder = await getSavedItemsOrder();
-
-    if (savedItemsOrder == null || savedItemsOrder.isEmpty) {
-      homeDraggableItemList = originalHomeDraggableItemList;
-    } else {
-      for (var i = 0, j = savedItemsOrder.length; i < j; i++) {
-        if(savedItemsOrder[i] > -1){
-          HomeDraggableItem item = originalHomeDraggableItemList[savedItemsOrder[i]];
-          item.index = savedItemsOrder[i];
-          homeDraggableItemList.add(item);
-        }
-      }
-      for (var i = 0, j = (homeItemList.length - homeDraggableItemList.length); i < j; i++) {
-        homeDraggableItemList.add(null);
-      }
-    }
-    return homeDraggableItemList;
-  }
 
   @override
   Future<void> initState() {
     super.initState();
-
     _addButton = DraggableItem(
       fixed: true,
       deletable: false,
@@ -109,8 +85,34 @@ class _GridHomeWidgetState extends State<GridHomeWidget> {
               icon: Icon(Icons.add_box, size: 20),
               label: Text('Add', style: TextStyle(fontSize: 12)))),
     );
+  }
 
-    // homeDraggableItemList.add(_addButton);
+  @override
+  void didChangeDependencies() async{
+    final newLocale = Localizations.localeOf(context);
+
+    if(newLocale != _userLocale){
+       homeItemList[0].title = S.current.tableau_bord ;
+       homeItemList[1].title = S.current.articles  ;
+       homeItemList[2].title  = S.current.client ;
+       homeItemList[3].title = S.current.devis   ;
+       homeItemList[4].title = S.current.commande_client  ;
+       homeItemList[5].title = S.current.bon_livraison  ;
+       homeItemList[6].title = S.current.facture_vente  ;
+       homeItemList[7].title = S.current.fournisseur  ;
+       homeItemList[8].title = S.current.bon_reception  ;
+       homeItemList[9].title = S.current.facture_achat  ;
+       homeItemList[10].title = S.current.tresories  ;
+       homeItemList[11].title = S.current.rapports  ;
+       homeItemList[12].title = S.current.settings  ;
+
+       homeItemAccueil.title = S.current.accueil ;
+       drawerItemHelp.title = S.current.aide ;
+       drawerItemExit.title = S.current.quitter ;
+
+      _appBarTitle = S.current.app_name ;
+    }
+    super.didChangeDependencies();
   }
 
   void showSnackBar(String text) {
@@ -128,7 +130,7 @@ class _GridHomeWidgetState extends State<GridHomeWidget> {
           icon: Icon(Icons.menu, size: 25), // change this size and style
           onPressed: () => Scaffold.of(context).openDrawer(),
         ),
-        title: Text(S.current.app_name),
+        title: Text(_appBarTitle),
         backgroundColor: Colors.blue,
         centerTitle: true,
       ),
@@ -193,6 +195,34 @@ class _GridHomeWidgetState extends State<GridHomeWidget> {
                 );
               }})),
     );
+  }
+
+  //get items list +order +
+  Future<List<DraggableItem>> asyncStart() async {
+
+    for (var i = 0, j = homeItemList.length; i < j; i++) {
+      HomeDraggableItem item = new HomeDraggableItem(index: i, context: context, data: homeItemList[i]);
+
+      originalHomeDraggableItemList.add(item);
+    }
+
+    List<int> savedItemsOrder = await getSavedItemsOrder();
+
+    if (savedItemsOrder == null || savedItemsOrder.isEmpty) {
+      homeDraggableItemList = originalHomeDraggableItemList;
+    } else {
+      for (var i = 0, j = savedItemsOrder.length; i < j; i++) {
+        if(savedItemsOrder[i] > -1){
+          HomeDraggableItem item = originalHomeDraggableItemList[savedItemsOrder[i]];
+          item.index = savedItemsOrder[i];
+          homeDraggableItemList.add(item);
+        }
+      }
+      for (var i = 0, j = (homeItemList.length - homeDraggableItemList.length); i < j; i++) {
+        homeDraggableItemList.add(null);
+      }
+    }
+    return homeDraggableItemList;
   }
 
   DraggableItem getMissingItem(BuildContext context, List<DraggableItem> items, int count) {

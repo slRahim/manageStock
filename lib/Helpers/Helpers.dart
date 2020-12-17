@@ -7,11 +7,13 @@ import 'package:data_connection_checker/data_connection_checker.dart';
 import 'package:flushbar/flushbar.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:gestmob/Helpers/route_generator.dart';
 import 'package:gestmob/cubit/home_cubit.dart';
 import 'package:gestmob/models/Article.dart';
 import 'package:gestmob/models/FormatPiece.dart';
 import 'package:gestmob/models/HomeItem.dart';
 import 'package:gestmob/models/Piece.dart';
+import 'package:gestmob/ui/home.dart';
 import 'package:map_launcher/map_launcher.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -20,6 +22,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 
 import 'Statics.dart';
+import 'package:intl/intl.dart' as intl;
 
 class Helpers {
 
@@ -238,6 +241,14 @@ class Helpers {
         return "Retour Fournisseur";
         break;
     }
+  }
+
+  static bool isDirectionRTL(context){
+    if( Localizations.localeOf(context).languageCode == "ar"){
+      return true ;
+    }
+    return false ;
+
   }
 
 }
