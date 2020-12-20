@@ -101,7 +101,7 @@ class _TresorieFragmentState extends State<TresorieFragment> {
                     });
                   },
                   child: Text(
-                    "Filter",
+                    S.current.filtrer_btn,
                     style: TextStyle(color: Colors.white),
                   ),
                   color: Colors.green[900],

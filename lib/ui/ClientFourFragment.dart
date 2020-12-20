@@ -81,7 +81,7 @@ class _ClientFourFragmentState extends State<ClientFourFragment> {
         builder: (context) => Column(
           children: [
             new ListTile(
-              title: new Text('Famille'),
+              title: new Text(S.current.famile),
               trailing: famillesDropDown(_setState),
             ),
             hasCreditCheckBox(_setState),
@@ -125,7 +125,7 @@ class _ClientFourFragmentState extends State<ClientFourFragment> {
                     });
                   },
                   child: Text(
-                    "Filter",
+                    S.current.filtrer_btn,
                     style: TextStyle(color: Colors.white),
                   ),
                   color: Colors.green[900],
@@ -149,7 +149,7 @@ class _ClientFourFragmentState extends State<ClientFourFragment> {
           closeManually: false,
           curve: Curves.bounceIn,
           overlayColor: Colors.black,
-          overlayOpacity: 0.5,
+          overlayOpacity: 0.1,
           backgroundColor: Colors.red,
           foregroundColor: Colors.white,
           elevation: 8.0,
@@ -158,8 +158,7 @@ class _ClientFourFragmentState extends State<ClientFourFragment> {
             SpeedDialChild(
                 child: Icon(Icons.add),
                 backgroundColor: Colors.green,
-                label: 'Add',
-                labelStyle: TextStyle(fontSize: 18.0),
+                label: S.current.ajouter,
                 onTap: () {
                   Navigator.of(context).pushNamed(RoutesKeys.addTier,arguments: new Tiers.init(widget.clientFourn));
                 }
@@ -167,8 +166,7 @@ class _ClientFourFragmentState extends State<ClientFourFragment> {
             SpeedDialChild(
               child: Icon(MdiIcons.qrcode),
               backgroundColor: Colors.blue,
-              label: 'Scan QRcode',
-              labelStyle: TextStyle(fontSize: 18.0),
+              label: S.current.scan_qr,
               onTap: () => scanQRCode(),
             ),
           ],
@@ -176,7 +174,7 @@ class _ClientFourFragmentState extends State<ClientFourFragment> {
         appBar: SearchBar(
           searchController: searchController,
           mainContext: context,
-          title: widget.clientFourn == 0? "Clients" : "Fournisseurs",
+          title: widget.clientFourn == 0? S.current.client_titre : S.current.fournisseur_titre,
           isFilterOn: isFilterOn,
           onSearchChanged: (String search) => _dataSource.updateSearchTerm(search),
           onFilterPressed: () async {
@@ -233,7 +231,7 @@ class _ClientFourFragmentState extends State<ClientFourFragment> {
 
   Widget hasCreditCheckBox(StateSetter _setState) {
     return CheckboxListTile(
-      title: Text("Has credit"),
+      title: Text(S.current.a_credit),
       value: _filterInHasCredit,
       onChanged: (bool value){
         _setState(() {
@@ -245,7 +243,7 @@ class _ClientFourFragmentState extends State<ClientFourFragment> {
 
   Widget tierBloquer(StateSetter _setState) {
     return CheckboxListTile(
-      title: Text("Show Bloqued"),
+      title: Text(S.current.aff_bloquer),
       value: _filterTierBloquer,
       onChanged: (bool value){
         _setState(() {
@@ -260,9 +258,9 @@ class _ClientFourFragmentState extends State<ClientFourFragment> {
     try {
       var options = ScanOptions(
         strings: {
-          "cancel": "Cancel",
-          "flash_on": "Flash on",
-          "flash_off": "Flash off",
+          "cancel": S.current.annuler,
+          "flash_on": S.current.flash_on,
+          "flash_off": S.current.flash_off,
         },
       );
 
@@ -283,10 +281,10 @@ class _ClientFourFragmentState extends State<ClientFourFragment> {
 
       if (e.code == BarcodeScanner.cameraAccessDenied) {
         setState(() {
-          result.rawContent = 'The user did not grant the camera permission!';
+          result.rawContent = S.current.msg_cam_permission;
         });
       } else {
-        result.rawContent = 'Unknown error: $e';
+        result.rawContent = '${S.current.msg_ereure}($e)';
       }
       Helpers.showToast(result.rawContent);
     }

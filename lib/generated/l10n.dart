@@ -215,10 +215,10 @@ class S {
     );
   }
 
-  /// `Edit`
+  /// `Edit `
   String get modification_titre {
     return Intl.message(
-      'Edit',
+      'Edit ',
       name: 'modification_titre',
       desc: '',
       args: [],
@@ -435,10 +435,10 @@ class S {
     );
   }
 
-  /// `Capitale Sociale`
+  /// `Social Capital`
   String get capitale_sociale {
     return Intl.message(
-      'Capitale Sociale',
+      'Social Capital',
       name: 'capitale_sociale',
       desc: '',
       args: [],
@@ -650,6 +650,456 @@ class S {
     return Intl.message(
       'Etp.',
       name: 'statut_etp',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Familly`
+  String get famile {
+    return Intl.message(
+      'Familly',
+      name: 'famile',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Filer`
+  String get filtrer_btn {
+    return Intl.message(
+      'Filer',
+      name: 'filtrer_btn',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Add `
+  String get ajouter {
+    return Intl.message(
+      'Add ',
+      name: 'ajouter',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Scan QR`
+  String get scan_qr {
+    return Intl.message(
+      'Scan QR',
+      name: 'scan_qr',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Customer (s)`
+  String get client_titre {
+    return Intl.message(
+      'Customer (s)',
+      name: 'client_titre',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Provider (s)`
+  String get fournisseur_titre {
+    return Intl.message(
+      'Provider (s)',
+      name: 'fournisseur_titre',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Has Credit`
+  String get a_credit {
+    return Intl.message(
+      'Has Credit',
+      name: 'a_credit',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Show Bloqued`
+  String get aff_bloquer {
+    return Intl.message(
+      'Show Bloqued',
+      name: 'aff_bloquer',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Cancel`
+  String get annuler {
+    return Intl.message(
+      'Cancel',
+      name: 'annuler',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Flash ON`
+  String get flash_on {
+    return Intl.message(
+      'Flash ON',
+      name: 'flash_on',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Flash Off`
+  String get flash_off {
+    return Intl.message(
+      'Flash Off',
+      name: 'flash_off',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `The user did not grant the camera permission!`
+  String get msg_cam_permission {
+    return Intl.message(
+      'The user did not grant the camera permission!',
+      name: 'msg_cam_permission',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Error : Unknown Error`
+  String get msg_ereure {
+    return Intl.message(
+      'Error : Unknown Error',
+      name: 'msg_ereure',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Photo`
+  String get photo {
+    return Intl.message(
+      'Photo',
+      name: 'photo',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Map`
+  String get map {
+    return Intl.message(
+      'Map',
+      name: 'map',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `QRCode`
+  String get qr_code {
+    return Intl.message(
+      'QRCode',
+      name: 'qr_code',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Required Field`
+  String get msg_champ_oblg {
+    return Intl.message(
+      'Required Field',
+      name: 'msg_champ_oblg',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Double tap to scan qr`
+  String get msg_scan_qr {
+    return Intl.message(
+      'Double tap to scan qr',
+      name: 'msg_scan_qr',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Starting Balance`
+  String get solde_depart {
+    return Intl.message(
+      'Starting Balance',
+      name: 'solde_depart',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Sales Number `
+  String get chifre_affaire {
+    return Intl.message(
+      'Sales Number ',
+      name: 'chifre_affaire',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Pay`
+  String get regler {
+    return Intl.message(
+      'Pay',
+      name: 'regler',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Crédit`
+  String get credit {
+    return Intl.message(
+      'Crédit',
+      name: 'credit',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Customer/Provider`
+  String get client_four {
+    return Intl.message(
+      'Customer/Provider',
+      name: 'client_four',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Bloqued`
+  String get bloquer {
+    return Intl.message(
+      'Bloqued',
+      name: 'bloquer',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `No QrCode was associate to the tier `
+  String get msg_no_qr {
+    return Intl.message(
+      'No QrCode was associate to the tier ',
+      name: 'msg_no_qr',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Please add at least raison social et mobile`
+  String get msg_gen_qr {
+    return Intl.message(
+      'Please add at least raison social et mobile',
+      name: 'msg_gen_qr',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Hide`
+  String get masquer {
+    return Intl.message(
+      'Hide',
+      name: 'masquer',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Pricing: `
+  String get tarification {
+    return Intl.message(
+      'Pricing: ',
+      name: 'tarification',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Familly added`
+  String get msg_fam_ajout {
+    return Intl.message(
+      'Familly added',
+      name: 'msg_fam_ajout',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Element has been added successfully`
+  String get msg_ajout_item {
+    return Intl.message(
+      'Element has been added successfully',
+      name: 'msg_ajout_item',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Element has been updated successfully`
+  String get msg_update_item {
+    return Intl.message(
+      'Element has been updated successfully',
+      name: 'msg_update_item',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Error when adding element to db`
+  String get msg_ajout_err {
+    return Intl.message(
+      'Error when adding element to db',
+      name: 'msg_ajout_err',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Error when updating element`
+  String get msg_update_err {
+    return Intl.message(
+      'Error when updating element',
+      name: 'msg_update_err',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Delete ?`
+  String get supp {
+    return Intl.message(
+      'Delete ?',
+      name: 'supp',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Do you wont to delete the element'`
+  String get msg_supp {
+    return Intl.message(
+      'Do you wont to delete the element\'',
+      name: 'msg_supp',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Yes`
+  String get oui {
+    return Intl.message(
+      'Yes',
+      name: 'oui',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `No`
+  String get non {
+    return Intl.message(
+      'No',
+      name: 'non',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `You can't dell a default element`
+  String get msg_supp_err1 {
+    return Intl.message(
+      'You can\'t dell a default element',
+      name: 'msg_supp_err1',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Element has been deleted successfully`
+  String get msg_supp_ok {
+    return Intl.message(
+      'Element has been deleted successfully',
+      name: 'msg_supp_ok',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `You can't dell element. others items are associated`
+  String get msg_supp_err2 {
+    return Intl.message(
+      'You can\'t dell element. others items are associated',
+      name: 'msg_supp_err2',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Call`
+  String get appeler {
+    return Intl.message(
+      'Call',
+      name: 'appeler',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Add image`
+  String get ajout_image {
+    return Intl.message(
+      'Add image',
+      name: 'ajout_image',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Filter is not available`
+  String get filtre_non_dispo {
+    return Intl.message(
+      'Filter is not available',
+      name: 'filtre_non_dispo',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Invoice (s)`
+  String get piece_titre {
+    return Intl.message(
+      'Invoice (s)',
+      name: 'piece_titre',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Only Draft`
+  String get aff_draft {
+    return Intl.message(
+      'Only Draft',
+      name: 'aff_draft',
       desc: '',
       args: [],
     );

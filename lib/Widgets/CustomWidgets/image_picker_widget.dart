@@ -2,6 +2,7 @@ import 'dart:io';
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
+import 'package:gestmob/generated/l10n.dart';
 import 'package:image_picker/image_picker.dart';
 
 // represante la page de l'ajout ou representation de l'image (profile , article , tiers )
@@ -50,7 +51,7 @@ class ImagePickerWidgetState extends State<ImagePickerWidget> {
                 ],
               ),
               child: _imageFile == null
-                  ? Center(child: Text("Ajouter une Image"))
+                  ? Center(child: Text(S.current.ajout_image))
                   : new CircleAvatar(
                       backgroundImage: new FileImage(_imageFile),
                       radius: 200.0,

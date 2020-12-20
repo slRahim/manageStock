@@ -19,7 +19,7 @@
   "accueil" : "Acceuil",
 
   "profile_titre" : "Profile",
-  "modification_titre": "Modification",
+  "modification_titre": "Modification ",
   "profile_ajouter": "Ajouter Profile",
   "msg_entre_rs" : "Veulliez entrez un raison social",
   "fiche": "Ma Fiche",
@@ -62,7 +62,62 @@
   "statut_sarl": "Sarl.",
   "statut_spa" : "Spa.",
   "statut_epic": "Epic.",
-  "statut_etp" : "Etp."
+  "statut_etp" : "Etp.",
+
+  "famile": "Famille",
+  "filtrer_btn" : "Filter",
+  "ajouter": "Ajouter ",
+  "scan_qr": "Scanner QR",
+  "client_titre" : "Client (s)",
+  "fournisseur_titre" : "Fournisseur (s)",
+  "a_credit" : "Avec Credit" ,
+  "aff_bloquer" : "Afficher Bloquer",
+  "annuler" : "Annuler",
+  "flash_on" : "Flash ON",
+  "flash_off": "Flash Off",
+  "msg_cam_permission" : "Camera non autoriser !",
+  "msg_ereure" : "Erreure : Ereure indeterminer",
+  "photo" : "Photo",
+  "map": "Map",
+  "qr_code" : "QRCode",
+  "msg_champ_oblg" : "Chapms Obligatoire",
+  "msg_scan_qr" : "Double tap pour scanner le qr",
+  "solde_depart" : "Solde de depart",
+  "chifre_affaire" : "Chiffre d'affaires ",
+  "regler" : "Régler",
+  "credit": "Crédit",
+  "client_four" : "Client/Fournisseur",
+  "bloquer" : "Bloquer",
+  "msg_no_qr" : "Pas de QRCode associer au tier",
+  "msg_gen_qr" : "Veulliez determiner au moins RS et mobile",
+  "masquer" : "Masquer",
+  "tarification" : "Tarification: ",
+  "msg_fam_ajout": "Famille ajoutée",
+  "msg_ajout_item" : "Element a bien été ajouter",
+  "msg_update_item" : "Element a bien été modifier",
+  "msg_ajout_err" : "Ereure à l'ajout de l'élément",
+  "msg_update_err" : "Ereure à la modification de l'élément",
+  "supp" : "Supprimer ?",
+  "msg_supp" : "Voullez-vous supprimer l'élément",
+  "oui" : "Oui",
+  "non" : "Non",
+  "msg_supp_err1" : "Vous ne pouvez pas supprimer l'élément par defaut",
+  "msg_supp_ok" : "L'élément a bien été supprimer",
+  "msg_supp_err2": "L'élément est associée à d'autres table.Vous ne pouver pas le supprimmer ",
+  "appeler": "Appeler",
+  "ajout_image" : "Ajouter une image",
+
+  "filtre_non_dispo" : "Filtre est indisponoble",
+  "piece_titre" : "Piece (s)",
+  "aff_draft" : "Broullions"
+
+
+
+
+
+
+
+
 
 
 }

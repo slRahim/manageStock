@@ -5,6 +5,7 @@ import 'package:flutter_icons/flutter_icons.dart';
 import 'package:gestmob/Helpers/Helpers.dart';
 import 'package:gestmob/Helpers/QueryCtr.dart';
 import 'package:gestmob/Helpers/Statics.dart';
+import 'package:gestmob/generated/l10n.dart';
 import 'package:gestmob/models/Article.dart';
 import 'package:gestmob/models/Tiers.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -81,21 +82,21 @@ class TierListItem extends StatelessWidget {
 
   Widget dellDialog(BuildContext context) {
     return AlertDialog(
-      title:  Text('Delete ?'),
-      content: Text('do you wont to delete the item'),
+      title:  Text(S.current.supp),
+      content: Text(S.current.msg_supp),
       actions: [
         FlatButton(
-          child: Text('No'),
+          child: Text(S.current.non),
           onPressed: (){
             Navigator.pop(context);
           },
         ),
         FlatButton(
-            child: Text('YES'),
+            child: Text(S.current.oui),
             onPressed: ()async {
               if(tier.id == 1 || tier.id == 2){
                 Navigator.pop(context);
-                var message ="You can't dell a default tier";
+                var message =S.current.msg_supp_err1;
                 Helpers.showFlushBar(context, message);
               }else{
                 bool hasItems = await _queryCtr.checkTierItems(tier);
@@ -103,17 +104,17 @@ class TierListItem extends StatelessWidget {
                   int res = await _queryCtr.removeItemFromTable(DbTablesNames.tiers, tier);
                   var message = "" ;
                   if(res > 0){
-                    message ="Tier deleted successfully";
+                    message =S.current.msg_supp_ok;
                     _confirmDell =true ;
                     Navigator.pop(context);
                   }else{
-                    message ="Error you can't dell tier";
+                    message =S.current.msg_ereure;
                     Navigator.pop(context);
                   }
                   Helpers.showFlushBar(context, message);
                 }else{
                   Navigator.pop(context);
-                  var message ="You can't dell tier has items";
+                  var message =S.current.msg_supp_err2;
                   Helpers.showFlushBar(context, message);
                 }
               }

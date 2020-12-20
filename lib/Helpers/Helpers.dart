@@ -6,6 +6,7 @@ import 'package:flutter/services.dart';
 import 'package:data_connection_checker/data_connection_checker.dart';
 import 'package:flushbar/flushbar.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_phoenix/flutter_phoenix.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:gestmob/Helpers/route_generator.dart';
 import 'package:gestmob/cubit/home_cubit.dart';
@@ -92,7 +93,7 @@ class Helpers {
       case homeItemParametresId:
         Navigator.of(context).pushNamed(
           RoutesKeys.settingsPage,
-        );
+        ).then((value) => Phoenix.rebirth(context));
         break;
 
       case drawerItemHelpId:

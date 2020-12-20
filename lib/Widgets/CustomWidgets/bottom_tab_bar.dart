@@ -29,78 +29,7 @@ class BottomTabBar extends StatelessWidget{
       ),
     );
   }
-/*
-  @override
-  Widget build(BuildContext context) {
-    return FancyBottomBar(
-        selectedPosition: controller.index,
-        onItemSelected: (index) => ({
-          controller.index = index
-        }),
-        items: [
-          FancyBottomItem(
-            icon: Icon(Icons.event),
-            title: Text('Events'),
-          ),
-          FancyBottomItem(
-            icon: Icon(Icons.search),
-            title: Text('Search'),
-          ),
-          FancyBottomItem(
-            icon: Icon(Icons.highlight),
-            title: Text('Highlights'),
-          ),
-        ]);
-  }*/
 
-  /*@override
-  Widget build(BuildContext context) {
-    return Container(
-      color: Colors.blue,
-      child: TabBar(
-        controller: controller,
-        labelColor: Colors.white,
-        unselectedLabelColor: Colors.white70,
-        indicatorSize: TabBarIndicatorSize.tab,
-        indicatorPadding: EdgeInsets.all(5.0),
-        indicatorColor: Colors.blue,
-        tabs: tabs
-      ),
-    );
-  }*/
-
-
-  /*@override
-  Widget build(BuildContext context) {
-    return FlashyTabBar(
-        selectedIndex: 0,
-        showElevation: true,
-        onItemSelected: (index) => ({
-          index = index + 1
-        }),
-        items: [
-          FlashyTabBarItem(
-            icon: Icon(Icons.event),
-            title: Text('Events'),
-          ),
-          FlashyTabBarItem(
-            icon: Icon(Icons.search),
-            title: Text('Search'),
-          ),
-          FlashyTabBarItem(
-            icon: Icon(Icons.highlight),
-            title: Text('Highlights'),
-          ),
-          FlashyTabBarItem(
-            icon: Icon(Icons.settings),
-            title: Text('Settings'),
-          ),
-          FlashyTabBarItem(
-            icon: Icon(Icons.settings),
-            title: Text('한국어'),
-          ),
-        ]);
-  }*/
 
 }
 

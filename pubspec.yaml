@@ -75,6 +75,8 @@ dependencies:
   flutter_bluetooth_basic:
   image:
 
+  flutter_phoenix:
+
   #  flutter_plugin_android_lifecycle: ^1.0.8
   #  location_permissions: ^3.0.0
   #  after_layout: ^1.0.7+2

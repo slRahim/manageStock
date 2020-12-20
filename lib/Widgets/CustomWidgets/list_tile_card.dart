@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_icons/flutter_icons.dart';
 import 'package:gestmob/Helpers/Statics.dart';
+import 'package:gestmob/generated/l10n.dart';
 import 'package:gestmob/models/Article.dart';
 import 'package:gestmob/models/Tiers.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -36,7 +37,7 @@ class ListTileCard extends StatelessWidget {
           color: Colors.red[700],
         ),
         child: Padding(
-          padding: const EdgeInsets.fromLTRB(50, 5, 5, 5),
+          padding: const EdgeInsetsDirectional.fromSTEB(50, 5, 5, 5),
           child: Align(
             alignment: Alignment.centerLeft, // Align however you like (i.e .centerRight, centerLeft)
             child: Row(
@@ -46,7 +47,7 @@ class ListTileCard extends StatelessWidget {
                   width: 20.0,
                   height: 2.0,
                 ),
-                Text("Suprimmer", style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),),
+                Text(S.current.supp, style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),),
               ],
             ),
           ),
@@ -59,7 +60,7 @@ class ListTileCard extends StatelessWidget {
           color: Colors.green[700],
         ),
         child: Padding(
-          padding: const EdgeInsets.fromLTRB(5, 5, 50, 5),
+          padding: const EdgeInsetsDirectional.fromSTEB(5, 5, 50, 5),
           child: Align(
             alignment: Alignment.centerLeft, // Align however you like (i.e .centerRight, centerLeft)
             child: Row(
@@ -70,7 +71,7 @@ class ListTileCard extends StatelessWidget {
                   width: 20.0,
                   height: 2.0,
                 ),
-                Text("Appeler", style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),),
+                Text(S.current.appeler, style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),),
               ],
             ),
           ),

@@ -16,6 +16,7 @@ import 'package:gestmob/Widgets/CustomWidgets/list_tile_card.dart';
 import 'package:gestmob/Widgets/article_list_item.dart';
 import 'package:gestmob/Widgets/piece_list_item.dart';
 import 'package:gestmob/Widgets/total_devis.dart';
+import 'package:gestmob/generated/l10n.dart';
 import 'package:gestmob/models/Article.dart';
 import 'package:gestmob/models/FormatPiece.dart';
 import 'package:gestmob/models/Piece.dart';
@@ -165,13 +166,13 @@ class _AddTresoriePageState extends State<AddTresoriePage> with TickerProviderSt
   Widget build(BuildContext context) {
     if (modification) {
       if (editMode) {
-        appBarTitle = "Modification";
+        appBarTitle = S.current.modification_titre;
       } else {
         appBarTitle = "Verssement";
       }
     } else {
       if (editMode) {
-        appBarTitle = "Ajouter Verssement";
+        appBarTitle = "${S.current.ajouter} Verssement";
       } else {
         appBarTitle = "Verssement";
       }
@@ -279,7 +280,7 @@ class _AddTresoriePageState extends State<AddTresoriePage> with TickerProviderSt
           ),
           floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
           floatingActionButton:FloatingActionButton.extended(
-              label: Text("+ Add"),
+              label: Text("+ ${S.current.ajouter}"),
               elevation: 2,
               backgroundColor: (editMode && !modification) ? Colors.blue : Colors.grey,
               foregroundColor: Colors.white,
@@ -716,7 +717,7 @@ class _AddTresoriePageState extends State<AddTresoriePage> with TickerProviderSt
                             }
                             ,
                             child: Text(
-                              "Ajouter",
+                              S.current.ajouter,
                               style: TextStyle(color: Colors.white),
                             ),
                             color: Colors.red,
@@ -790,9 +791,9 @@ class _AddTresoriePageState extends State<AddTresoriePage> with TickerProviderSt
         if (id > -1) {
           widget.arguments = tresorie;
           widget.arguments.id = id;
-          message = "Tresorie has been updated successfully";
+          message = S.current.msg_update_item;
         } else {
-          message = "Error when updating Tresorie in db";
+          message = S.current.msg_update_err;
         }
       } else {
         Tresorie tresorie = await makeItem();
@@ -841,15 +842,15 @@ class _AddTresoriePageState extends State<AddTresoriePage> with TickerProviderSt
             modification = true;
             editMode = false;
           });
-          message = "Tresorie has been added successfully";
+          message = S.current.msg_ajout_item;
         } else {
-          message = "Error when adding Tresorie to db";
+          message = S.current.msg_ajout_err;
         }
       }
       Helpers.showFlushBar(context, message);
       return Future.value(id);
     } catch (error) {
-      Helpers.showFlushBar(context, "Error: something went wrong");
+      Helpers.showFlushBar(context, S.current.msg_ereure);
       return Future.value(-1);
     }
   }

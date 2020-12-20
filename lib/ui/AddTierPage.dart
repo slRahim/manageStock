@@ -11,6 +11,7 @@ import 'package:gestmob/Widgets/CustomWidgets/add_save_bar.dart';
 import 'package:gestmob/Widgets/CustomWidgets/bottom_tab_bar.dart';
 import 'package:gestmob/Widgets/CustomWidgets/image_picker_widget.dart';
 import 'package:gestmob/Widgets/CustomWidgets/list_dropdown.dart';
+import 'package:gestmob/generated/l10n.dart';
 import 'package:gestmob/models/Article.dart';
 import 'package:gestmob/models/MyParams.dart';
 import 'package:gestmob/models/Tiers.dart';
@@ -121,7 +122,7 @@ class _AddTierPageState extends State<AddTierPage>
       setState(() {
         _tabSelectedIndex = _tabController.index;
       });
-      print("Selected Index: " + _tabController.index.toString());
+      // print("Selected Index: " + _tabController.index.toString());
     });
   }
 
@@ -204,30 +205,30 @@ class _AddTierPageState extends State<AddTierPage>
     super.build(context);
     if (modification) {
       if (editMode) {
-        appBarTitle = "Modification";
+        appBarTitle = S.current.modification_titre;
       } else {
         if(_clientFourn == 0){
-          appBarTitle = "Client";
+          appBarTitle = S.current.client_titre;
         } else if(_clientFourn == 1){
           appBarTitle = "Client fournisseur";
         } else{
-          appBarTitle = "Fournisseur";
+          appBarTitle = S.current.fournisseur_titre;
         }
       }
     } else {
       if (editMode) {
         if(_clientFourn == 0){
-          appBarTitle = "Ajouter un client";
+          appBarTitle = "${S.current.ajouter} ${S.current.client_titre}";
         } else{
-          appBarTitle = "Ajouter un fournisseur";
+          appBarTitle ="${S.current.ajouter} ${S.current.fournisseur_titre}";
         }
       } else {
         if(_clientFourn == 0){
-          appBarTitle = "Client";
+          appBarTitle = S.current.client_titre;
         } else if(_clientFourn == 1){
           appBarTitle = "Client fournisseur";
         } else{
-          appBarTitle = "Fournisseur";
+          appBarTitle = S.current.client_titre;
         }
       }
     }
@@ -239,7 +240,7 @@ class _AddTierPageState extends State<AddTierPage>
             length: 4,
             child: Scaffold(
                 floatingActionButton: Padding(
-                  padding: const EdgeInsets.fromLTRB(40, 10, 10, 10),
+                  padding: const EdgeInsetsDirectional.fromSTEB(40, 10, 10, 10),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.end,
                     mainAxisSize: MainAxisSize.max,
@@ -326,7 +327,7 @@ class _AddTierPageState extends State<AddTierPage>
                       }
                     } else {
                       Helpers.showFlushBar(
-                          context, "Please enter Raison sociale");
+                          context, S.current.msg_entre_rs);
 
                       setState(() {
                         _validateRaison = true;
@@ -338,10 +339,10 @@ class _AddTierPageState extends State<AddTierPage>
                   selectedIndex: _tabSelectedIndex,
                   controller: _tabController,
                   tabs: [
-                    Tab(child: Column( children: [ Icon(Icons.insert_drive_file),SizedBox(height: 2), Text("Fiche"), ], )),
-                    Tab(child: Column( children: [ Icon(Icons.image), SizedBox(height: 2), Text("Photo"), ], )),
-                    Tab(child: Column( children: [ Icon(Icons.map), SizedBox(height: 2), Text("Map"), ], )),
-                    Tab(child: Column( children: [ Icon(MdiIcons.qrcode), SizedBox(height: 2), Text("QRcode"), ], )),
+                    Tab(child: Column( children: [ Icon(Icons.insert_drive_file),SizedBox(height: 1), Text(S.current.fiche), ], )),
+                    Tab(child: Column( children: [ Icon(Icons.image), SizedBox(height: 1), Text(S.current.photo), ], )),
+                    Tab(child: Column( children: [ Icon(Icons.map), SizedBox(height: 1), Text(S.current.map), ], )),
+                    Tab(child: Column( children: [ Icon(MdiIcons.qrcode), SizedBox(height: 1), Text(S.current.qr_code), ], )),
                   ],
                 ),
                 body: Builder(
@@ -364,7 +365,7 @@ class _AddTierPageState extends State<AddTierPage>
 
   Widget fichetab() {
     return SingleChildScrollView(
-      padding: const EdgeInsets.fromLTRB(15, 25, 15, 15),
+      padding: const EdgeInsetsDirectional.fromSTEB(15, 25, 15, 15),
       child: Wrap(
         spacing: 13,
         runSpacing: 13,
@@ -381,8 +382,8 @@ class _AddTierPageState extends State<AddTierPage>
                     focusedBorder: OutlineInputBorder(
                         borderSide: BorderSide(color: Colors.orange[900]),
                         borderRadius: BorderRadius.circular(20)),
-                    labelText: "Raison Sociale",
-                    errorText: _validateRaison ? 'Champ obligatoire' : null,
+                    labelText: S.current.rs,
+                    errorText: _validateRaison ? S.current.msg_champ_oblg : null,
                     labelStyle: TextStyle(color: Colors.orange[900]),
                     enabledBorder: OutlineInputBorder(
                       gapPadding: 3.3,
@@ -395,7 +396,7 @@ class _AddTierPageState extends State<AddTierPage>
                   keyboardType: TextInputType.text,
                 ),
               ),
-              Padding(padding: EdgeInsets.fromLTRB(5, 5, 5, 5)),
+              Padding(padding: EdgeInsetsDirectional.fromSTEB(5, 5, 5, 5)),
               Container(
                 padding: const EdgeInsets.all(3),
                 decoration: editMode? new BoxDecoration(
@@ -432,7 +433,7 @@ class _AddTierPageState extends State<AddTierPage>
                   focusedBorder: OutlineInputBorder(
                       borderSide: BorderSide(color: Colors.blue[700]),
                       borderRadius: BorderRadius.circular(20)),
-                  labelText: "Double tap to scan QR Code",
+                  labelText: S.current.msg_scan_qr,
                   disabledBorder: OutlineInputBorder(
                     gapPadding: 3.3,
                     borderRadius: BorderRadius.circular(20),
@@ -453,7 +454,7 @@ class _AddTierPageState extends State<AddTierPage>
               focusedBorder: OutlineInputBorder(
                   borderSide: BorderSide(color: Colors.blue[700]),
                   borderRadius: BorderRadius.circular(20)),
-              labelText: "Adresse",
+              labelText: S.current.adresse,
               enabledBorder: OutlineInputBorder(
                 gapPadding: 3.3,
                 borderRadius: BorderRadius.circular(20),
@@ -473,7 +474,7 @@ class _AddTierPageState extends State<AddTierPage>
               focusedBorder: OutlineInputBorder(
                   borderSide: BorderSide(color: Colors.blue[700]),
                   borderRadius: BorderRadius.circular(20)),
-              labelText: "Ville",
+              labelText: S.current.ville,
               enabledBorder: OutlineInputBorder(
                 gapPadding: 3.3,
                 borderRadius: BorderRadius.circular(20),
@@ -493,7 +494,7 @@ class _AddTierPageState extends State<AddTierPage>
               focusedBorder: OutlineInputBorder(
                   borderSide: BorderSide(color: Colors.blue[700]),
                   borderRadius: BorderRadius.circular(20)),
-              labelText: "Telephone",
+              labelText: S.current.telephone,
               enabledBorder: OutlineInputBorder(
                 gapPadding: 3.3,
                 borderRadius: BorderRadius.circular(20),
@@ -513,7 +514,7 @@ class _AddTierPageState extends State<AddTierPage>
               focusedBorder: OutlineInputBorder(
                   borderSide: BorderSide(color: Colors.blue[700]),
                   borderRadius: BorderRadius.circular(20)),
-              labelText: "Mobile",
+              labelText: S.current.mobile,
               enabledBorder: OutlineInputBorder(
                 gapPadding: 3.3,
                 borderRadius: BorderRadius.circular(20),
@@ -533,7 +534,7 @@ class _AddTierPageState extends State<AddTierPage>
               focusedBorder: OutlineInputBorder(
                   borderSide: BorderSide(color: Colors.blue[700]),
                   borderRadius: BorderRadius.circular(20)),
-              labelText: "Fax",
+              labelText: S.current.fax,
               enabledBorder: OutlineInputBorder(
                 gapPadding: 3.3,
                 borderRadius: BorderRadius.circular(20),
@@ -553,7 +554,7 @@ class _AddTierPageState extends State<AddTierPage>
               focusedBorder: OutlineInputBorder(
                   borderSide: BorderSide(color: Colors.blue[700]),
                   borderRadius: BorderRadius.circular(20)),
-              labelText: "Email",
+              labelText: S.current.mail,
               enabledBorder: OutlineInputBorder(
                 gapPadding: 3.3,
                 borderRadius: BorderRadius.circular(20),
@@ -593,7 +594,7 @@ class _AddTierPageState extends State<AddTierPage>
               focusedBorder: OutlineInputBorder(
                   borderSide: BorderSide(color: Colors.blue[700]),
                   borderRadius: BorderRadius.circular(20)),
-              labelText: "Chiffre Affaires",
+              labelText: S.current.chifre_affaire,
               enabledBorder: OutlineInputBorder(
                 gapPadding: 3.3,
                 borderRadius: BorderRadius.circular(20),
@@ -613,7 +614,7 @@ class _AddTierPageState extends State<AddTierPage>
               focusedBorder: OutlineInputBorder(
                   borderSide: BorderSide(color: Colors.blue[700]),
                   borderRadius: BorderRadius.circular(20)),
-              labelText: "Regler ",
+              labelText: S.current.regler,
               enabledBorder: OutlineInputBorder(
                 gapPadding: 3.3,
                 borderRadius: BorderRadius.circular(20),
@@ -635,7 +636,7 @@ class _AddTierPageState extends State<AddTierPage>
                 focusedBorder: OutlineInputBorder(
                     borderSide: BorderSide(color: Colors.blue[700]),
                     borderRadius: BorderRadius.circular(20)),
-                labelText: "Credit",
+                labelText: S.current.credit,
                 enabledBorder: OutlineInputBorder(
                   gapPadding: 3.3,
                   borderRadius: BorderRadius.circular(20),
@@ -651,7 +652,7 @@ class _AddTierPageState extends State<AddTierPage>
               borderRadius: BorderRadius.circular(20.0),
             ) : null,
             child: CheckboxListTile(
-              title: Text("Client/fournisseur?"),
+              title: Text(S.current.client_four),
               value: _clientFournBool,
               onChanged: editMode? (bool value) {
                 setState(() {
@@ -666,7 +667,7 @@ class _AddTierPageState extends State<AddTierPage>
                 borderRadius: BorderRadius.circular(20.0),
               ) : null,
               child: SwitchListTile(
-                title: Text("Bloquer"),
+                title: Text(S.current.bloquer),
                 value: _controlBloquer,
                 onChanged: (bool value){
                   setState(() {
@@ -727,7 +728,7 @@ class _AddTierPageState extends State<AddTierPage>
                     size: 0.5 * bodyHeight,
                   )
                 : Center(
-                  child: Text("No QrCode was associate to the tier " ,style: TextStyle(fontSize: 16 )),
+                  child: Text(S.current.msg_no_qr ,style: TextStyle(fontSize: 16 )),
                 ),
 
               ),
@@ -792,7 +793,7 @@ class _AddTierPageState extends State<AddTierPage>
                             _qrCodeControl.text = "Tier://"+_raisonSocialeControl.text+"/"+_mobileControl.text;
                           });
                         }else{
-                          var message = "please add at least raison social et mobile";
+                          var message = S.current.msg_gen_qr;
                           Helpers.showFlushBar(context, message);
                         }
                     }
@@ -876,7 +877,7 @@ class _AddTierPageState extends State<AddTierPage>
               action: SnackBarAction(
                 onPressed: () =>
                     _scaffoldKey.currentState.hideCurrentSnackBar(),
-                label: "hide",
+                label: S.current.masquer,
               ),
             ),
           );
@@ -926,9 +927,9 @@ class _AddTierPageState extends State<AddTierPage>
             });
           },
         ),
-        Padding(padding: EdgeInsets.fromLTRB(10, 10, 10, 10),),
+        Padding(padding: EdgeInsetsDirectional.fromSTEB(10, 10, 10, 10),),
         ListDropDown(
-          libelle: "Tarification:  ",
+          libelle: S.current.tarification,
           editMode: editMode,
           value: _selectedTarification,
           items: _tarificationDropdownItems,
@@ -958,7 +959,7 @@ class _AddTierPageState extends State<AddTierPage>
                               child: Padding(
                             padding: const EdgeInsets.only(bottom: 20),
                             child: Text(
-                              "Ajouter une famille",
+                              "${S.current.ajouter} ${S.current.famile}",
                               style: TextStyle(
                                 fontSize: 18,
                                 fontWeight: FontWeight.w400,
@@ -966,8 +967,7 @@ class _AddTierPageState extends State<AddTierPage>
                             ),
                           )),
                           Padding(
-                            padding: EdgeInsets.only(
-                                left: 5, right: 5, bottom: 20, top: 20),
+                            padding: EdgeInsetsDirectional.fromSTEB(5, 20, 5, 20),
                             child: TextField(
                               controller: _libelleFamilleControl,
                               keyboardType: TextInputType.text,
@@ -995,7 +995,7 @@ class _AddTierPageState extends State<AddTierPage>
                           SizedBox(
                             width: 320.0,
                             child: Padding(
-                              padding: EdgeInsets.only(right: 0, left: 0),
+                              padding: EdgeInsetsDirectional.only(start: 0, end: 0),
                               child: RaisedButton(
                                 onPressed: () async {
                                   setState(() {
@@ -1008,7 +1008,7 @@ class _AddTierPageState extends State<AddTierPage>
                                   Navigator.pop(context);
                                   final snackBar = SnackBar(
                                     content: Text(
-                                      'Famille Ajoutée',
+                                      S.current.msg_fam_ajout,
                                       style: TextStyle(
                                           color: Colors.white,
                                           fontSize: 15,
@@ -1063,9 +1063,9 @@ class _AddTierPageState extends State<AddTierPage>
         if (id > -1) {
           widget.arguments = item;
           widget.arguments.id = id;
-          message = "Tier has been updated successfully";
+          message = S.current.msg_update_item;
         } else {
-          message = "Error when updating Tier in db";
+          message = S.current.msg_update_err;
         }
       } else {
         var item = await makeItem();
@@ -1073,15 +1073,15 @@ class _AddTierPageState extends State<AddTierPage>
         if (id > -1) {
           widget.arguments = item;
           widget.arguments.id = id;
-          message = "Tier has been added successfully";
+          message = S.current.msg_ajout_item;
         } else {
-          message = "Error when adding Tier to db";
+          message = S.current.msg_ajout_err;
         }
       }
       Helpers.showFlushBar(context, message);
       return Future.value(id);
     } catch (e) {
-      Helpers.showFlushBar(context, "Error: something went wrong");
+      Helpers.showFlushBar(context, S.current.msg_ereure);
       return Future.value(-1);
     }
   }
@@ -1138,9 +1138,9 @@ class _AddTierPageState extends State<AddTierPage>
     try {
       var options = ScanOptions(
         strings: {
-          "cancel": "Cancel",
-          "flash_on": "Flash on",
-          "flash_off": "Flash off",
+          "cancel": S.current.annuler,
+          "flash_on": S.current.flash_on,
+          "flash_off": S.current.flash_off,
         },
       );
 
@@ -1160,17 +1160,16 @@ class _AddTierPageState extends State<AddTierPage>
 
       if (e.code == BarcodeScanner.cameraAccessDenied) {
         setState(() {
-          result.rawContent = 'The user did not grant the camera permission!';
+          result.rawContent = S.current.msg_cam_permission;
         });
       } else {
-        result.rawContent = 'Unknown error: $e';
+        result.rawContent = '${S.current.msg_ereure}($e)';
       }
       Helpers.showToast(result.rawContent);
     }
   }
 
   Future<void> _captureAndSharePng() async {
-    print('ani hna');
     try {
       RenderRepaintBoundary boundary = globalKey.currentContext.findRenderObject();
       var image = await boundary.toImage();

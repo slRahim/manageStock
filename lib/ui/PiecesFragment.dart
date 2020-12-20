@@ -113,7 +113,7 @@ class _PiecesFragmentState extends State<PiecesFragment> {
                     });
                   },
                   child: Text(
-                    "Filter",
+                    S.current.filtrer_btn,
                     style: TextStyle(color: Colors.white),
                   ),
                   color: Colors.green[900],
@@ -150,7 +150,7 @@ class _PiecesFragmentState extends State<PiecesFragment> {
 
   Widget isDraftCheckBox(StateSetter _setState) {
     return CheckboxListTile(
-      title: Text("Only Drafts"),
+      title: Text(S.current.aff_draft),
       value: _filterIsDraft,
       onChanged: (bool value){
         _setState(() {
@@ -162,7 +162,7 @@ class _PiecesFragmentState extends State<PiecesFragment> {
 
   Widget hasCreditCheckBox(StateSetter _setState) {
     return CheckboxListTile(
-      title: Text("Has credit"),
+      title: Text(S.current.a_credit),
       value: _filterInHasCredit,
       onChanged: (bool value){
         _setState(() {
@@ -185,12 +185,12 @@ class _PiecesFragmentState extends State<PiecesFragment> {
         appBar: SearchBar(
           searchController: searchController,
           mainContext: context,
-          title: (widget.peaceType !=null) ? Helpers.getPieceTitle(widget.peaceType) : "Pieces",
+          title: (widget.peaceType !=null) ? Helpers.getPieceTitle(widget.peaceType) : S.current.piece_titre,
           isFilterOn: isFilterOn,
           onSearchChanged: (String search) => _dataSource.updateSearchTerm(search),
           onFilterPressed: () async {
             if(widget.tierId != null){
-              var message = "Filter is not avalaible !";
+              var message = S.current.filtre_non_dispo;
               Helpers.showFlushBar(context, message);
             }else{
               showDialog(

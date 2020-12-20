@@ -3,6 +3,7 @@ import 'package:flutter/widgets.dart';
 import 'package:gestmob/Helpers/Helpers.dart';
 import 'package:gestmob/Helpers/QueryCtr.dart';
 import 'package:gestmob/Helpers/Statics.dart';
+import 'package:gestmob/generated/l10n.dart';
 import 'package:gestmob/models/Article.dart';
 import 'package:gestmob/models/Piece.dart';
 import 'package:intl/intl.dart';
@@ -84,26 +85,26 @@ class PieceListItem extends StatelessWidget {
 
   Widget dellDialog(BuildContext context) {
     return AlertDialog(
-      title:  Text('Delete ?'),
-      content: Text('do you wont to delete the item'),
+      title:  Text(S.current.supp),
+      content: Text(S.current.msg_supp),
       actions: [
         FlatButton(
-          child: Text('No'),
+          child: Text(S.current.non),
           onPressed: (){
             Navigator.pop(context);
           },
         ),
         FlatButton(
-          child: Text('YES'),
+          child: Text(S.current.oui),
           onPressed: ()async{
             int res = await _queryCtr.removeItemFromTable(DbTablesNames.pieces, piece);
             var message = "" ;
             if(res > 0){
-               message ="Piece deleted successfult";
+               message =S.current.msg_supp_ok;
               _confirmDell =true ;
                Navigator.pop(context);
             }else{
-              message ="Error has occured";
+              message =S.current.msg_ereure;
               Navigator.pop(context);
             }
             Helpers.showFlushBar(context, message);

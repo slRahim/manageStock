@@ -4,7 +4,7 @@ import 'package:gestmob/Helpers/Statics.dart';
 import 'package:gestmob/models/Article.dart';
 import 'list_tile_card.dart';
 
-//
+// article selectionné ds une piece
 class SelectableListItem extends StatefulWidget {
 
   final Article article;

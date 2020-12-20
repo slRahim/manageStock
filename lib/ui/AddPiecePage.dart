@@ -18,6 +18,7 @@ import 'package:gestmob/Widgets/CustomWidgets/image_picker_widget.dart';
 import 'package:gestmob/Widgets/CustomWidgets/list_dropdown.dart';
 import 'package:gestmob/Widgets/article_list_item.dart';
 import 'package:gestmob/Widgets/total_devis.dart';
+import 'package:gestmob/generated/l10n.dart';
 import 'package:gestmob/models/Article.dart';
 import 'package:gestmob/models/FormatPiece.dart';
 import 'package:gestmob/models/FormatPrint.dart';
@@ -161,7 +162,7 @@ class _AddPiecePageState extends State<AddPiecePage> with TickerProviderStateMix
   Widget build(BuildContext context) {
     if (modification) {
       if (editMode) {
-        appBarTitle = "Modification";
+        appBarTitle = S.current.modification_titre;
         _islisting = false ;
       } else {
         appBarTitle = Helpers.getPieceTitle(_piece.piece);
@@ -169,7 +170,7 @@ class _AddPiecePageState extends State<AddPiecePage> with TickerProviderStateMix
       }
     } else {
       if (editMode) {
-        appBarTitle = "Ajouter "+Helpers.getPieceTitle(_piece.piece);
+        appBarTitle = S.current.ajouter+Helpers.getPieceTitle(_piece.piece);
         _islisting=false ;
       } else {
         appBarTitle = Helpers.getPieceTitle(_piece.piece);
@@ -279,7 +280,7 @@ class _AddPiecePageState extends State<AddPiecePage> with TickerProviderStateMix
             onVerticalDragUpdate: bottomBarControler.onDrag,
             onVerticalDragEnd: bottomBarControler.onDragEnd,
             child: FloatingActionButton.extended(
-              label:(editMode)? Text("+ Add") : Icon(Icons.print , color: Colors.white,),
+              label:(editMode)? Text("+ ${S.current.ajouter}") : Icon(Icons.print , color: Colors.white,),
               elevation: 2,
               backgroundColor: editMode ? Colors.blue : Colors.redAccent,
               foregroundColor: Colors.white,
@@ -413,7 +414,7 @@ class _AddPiecePageState extends State<AddPiecePage> with TickerProviderStateMix
                           focusedBorder: OutlineInputBorder(
                               borderSide: BorderSide(color: Colors.blue),
                               borderRadius: BorderRadius.circular(20)),
-                          labelText: "Client",
+                          labelText: S.current.client_titre,
                           labelStyle: TextStyle(color: Colors.blue),
                           enabledBorder: OutlineInputBorder(
                             gapPadding: 3.3,
@@ -510,7 +511,6 @@ class _AddPiecePageState extends State<AddPiecePage> with TickerProviderStateMix
         },
 
     );
-     print(_selectedTarification);
   }
 
   //afficher un dialog pour versseemnt
@@ -649,7 +649,7 @@ class _AddPiecePageState extends State<AddPiecePage> with TickerProviderStateMix
                                   Navigator.pop(context);
                                 },
                                 child: Text(
-                                  "Annuler",
+                                  S.current.annuler,
                                   style: TextStyle(color: Colors.white),
                                 ),
                                 color: Colors.redAccent,
@@ -942,9 +942,9 @@ class _AddPiecePageState extends State<AddPiecePage> with TickerProviderStateMix
         if (id > -1) {
           widget.arguments = item;
           widget.arguments.id = id;
-          message = "Piece has been updated successfully";
+          message = S.current.msg_update_item;
         } else {
-          message = "Error when updating Piece in db";
+          message = S.current.msg_update_err;
         }
       } else {
         Piece piece = await makePiece();
@@ -960,9 +960,9 @@ class _AddPiecePageState extends State<AddPiecePage> with TickerProviderStateMix
         if (id > -1) {
           widget.arguments = piece;
           widget.arguments.id = id;
-          message = "Piece has been added successfully";
+          message = S.current.msg_ajout_item;
         } else {
-          message = "Error when adding Piece to db";
+          message = S.current.msg_ajout_err;
         }
       }
 
@@ -970,7 +970,7 @@ class _AddPiecePageState extends State<AddPiecePage> with TickerProviderStateMix
       Helpers.showFlushBar(context, message);
       return Future.value(id);
     } catch (error) {
-      Helpers.showFlushBar(context, "Error: something went wrong");
+      Helpers.showFlushBar(context, S.current.msg_ereure);
       return Future.value(-1);
     }
   }
