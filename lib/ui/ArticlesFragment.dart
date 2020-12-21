@@ -1,4 +1,5 @@
 import 'package:barcode_scan/barcode_scan.dart';
+import 'package:fab_circular_menu/fab_circular_menu.dart';
 import 'package:flutter_speed_dial/flutter_speed_dial.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
@@ -81,11 +82,11 @@ class _ArticlesFragmentState extends State<ArticlesFragment> {
         builder: (context) => Column(
           children: [
             new ListTile(
-              title: new Text('Marque'),
+              title: new Text(S.current.marque),
               trailing: marquesDropDown(_setState),
             ),
             new ListTile(
-              title: new Text('Famille'),
+              title: new Text(S.current.famile),
               trailing: famillesDropDown(_setState),
             ),
             stockCheckBox(_setState)
@@ -102,7 +103,7 @@ class _ArticlesFragmentState extends State<ArticlesFragment> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Padding(
-              padding: EdgeInsets.only(left: 5, right: 5, bottom: 20),
+              padding: EdgeInsetsDirectional.only(start: 5, end: 5, bottom: 20),
               child: tile,
             ),
             SizedBox(
@@ -128,7 +129,7 @@ class _ArticlesFragmentState extends State<ArticlesFragment> {
                     });
                   },
                   child: Text(
-                    "Filter",
+                    S.current.filtrer_btn,
                     style: TextStyle(color: Colors.white),
                   ),
                   color: Colors.green[900],
@@ -191,7 +192,7 @@ class _ArticlesFragmentState extends State<ArticlesFragment> {
 
   Widget stockCheckBox(StateSetter _setState) {
     return CheckboxListTile(
-      title: Text("In stock"),
+      title: Text(S.current.stockable),
       value: _filterInStock,
       onChanged: (bool value){
         _setState(() {
@@ -211,37 +212,44 @@ class _ArticlesFragmentState extends State<ArticlesFragment> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        floatingActionButton: SpeedDial(
-          marginRight: 18,
-          marginBottom: 20,
-          animatedIcon: AnimatedIcons.menu_close,
-          animatedIconTheme: IconThemeData(size: 22.0),
-          closeManually: false,
-          curve: Curves.bounceIn,
-          overlayColor: Colors.black,
-          overlayOpacity: 0.5,
-          backgroundColor: Colors.red,
-          foregroundColor: Colors.white,
-          elevation: 8.0,
-          shape: CircleBorder(),
-          children: [
-            SpeedDialChild(
-                child: Icon(Icons.add),
-                backgroundColor: Colors.green,
-                label: 'Add',
-                labelStyle: TextStyle(fontSize: 18.0),
-                onTap: () {
-                  Navigator.of(context).pushNamed(RoutesKeys.addArticle,arguments: new Article.init());
-                }
-            ),
-            SpeedDialChild(
-              child: Icon(MdiIcons.barcode),
-              backgroundColor: Colors.blue,
-              label: 'Scan bar code',
-              labelStyle: TextStyle(fontSize: 18.0),
-              onTap: () => scanBarCode(),
-            ),
-          ],
+        floatingActionButton: FabCircularMenu(
+            alignment: (Helpers.isDirectionRTL(context))?Alignment.bottomLeft:Alignment.bottomRight,
+            fabSize: 60,
+            fabMargin: EdgeInsets.all(12),
+            ringColor: Colors.black12,
+            fabOpenIcon: Icon(Icons.menu,color: Colors.white),
+            fabCloseIcon: Icon(Icons.close,color: Colors.white,),
+            fabElevation: 3,
+            children: <Widget>[
+              Container(
+                decoration: BoxDecoration(
+                    color: Colors.green,
+                    shape: BoxShape.circle
+                ),
+                child: IconButton(
+                    icon: Icon(Icons.add),
+                    color: Colors.white,
+                    tooltip: S.current.ajouter,
+                    onPressed: () {
+                      Navigator.of(context).pushNamed(RoutesKeys.addArticle,arguments: new Article.init());
+                    }
+                ),
+              ),
+              Container(
+                decoration: BoxDecoration(
+                    color: Colors.blue,
+                    shape: BoxShape.circle
+                ),
+                child: IconButton(
+                    icon: Icon(MdiIcons.barcode),
+                    color: Colors.white,
+                    tooltip: S.current.scan_qr,
+                    onPressed: () {
+                      scanBarCode() ;
+                    }
+                ),
+              )
+            ]
         ),
         appBar: getAppBar(setState),
         body: ItemsSliverList(
@@ -305,9 +313,9 @@ class _ArticlesFragmentState extends State<ArticlesFragment> {
     try {
       var options = ScanOptions(
         strings: {
-          "cancel": "Cancel",
-          "flash_on": "Flash on",
-          "flash_off": "Flash off",
+          "cancel": S.current.annuler,
+          "flash_on": S.current.flash_on,
+          "flash_off": S.current.flash_off,
         },
       );
 
@@ -328,10 +336,10 @@ class _ArticlesFragmentState extends State<ArticlesFragment> {
 
       if (e.code == BarcodeScanner.cameraAccessDenied) {
         setState(() {
-          result.rawContent = 'The user did not grant the camera permission!';
+          result.rawContent = S.current.msg_cam_permission;
         });
       } else {
-        result.rawContent = 'Unknown error: $e';
+        result.rawContent = '${S.current.msg_ereure}: ($e)';
       }
       Helpers.showToast(result.rawContent);
     }

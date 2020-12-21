@@ -1104,6 +1104,626 @@ class S {
       args: [],
     );
   }
+
+  /// `Total HT`
+  String get total_ht {
+    return Intl.message(
+      'Total HT',
+      name: 'total_ht',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `DA`
+  String get da {
+    return Intl.message(
+      'DA',
+      name: 'da',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Total TVA`
+  String get total_tva {
+    return Intl.message(
+      'Total TVA',
+      name: 'total_tva',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Net to pay`
+  String get net_payer {
+    return Intl.message(
+      'Net to pay',
+      name: 'net_payer',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Veuillez séléctionner au moins un article`
+  String get msg_select_art {
+    return Intl.message(
+      'Veuillez séléctionner au moins un article',
+      name: 'msg_select_art',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Left`
+  String get reste {
+    return Intl.message(
+      'Left',
+      name: 'reste',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Date`
+  String get date {
+    return Intl.message(
+      'Date',
+      name: 'date',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Price: `
+  String get tarif {
+    return Intl.message(
+      'Price: ',
+      name: 'tarif',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Deposit`
+  String get verssement {
+    return Intl.message(
+      'Deposit',
+      name: 'verssement',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Total`
+  String get total {
+    return Intl.message(
+      'Total',
+      name: 'total',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Confirm`
+  String get confirme {
+    return Intl.message(
+      'Confirm',
+      name: 'confirme',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Choose Action`
+  String get choisir_action {
+    return Intl.message(
+      'Choose Action',
+      name: 'choisir_action',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Quick print`
+  String get imp_rapide_btn {
+    return Intl.message(
+      'Quick print',
+      name: 'imp_rapide_btn',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Save & print`
+  String get save_imp_btn {
+    return Intl.message(
+      'Save & print',
+      name: 'save_imp_btn',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Save only`
+  String get save_btn {
+    return Intl.message(
+      'Save only',
+      name: 'save_btn',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Save as draft`
+  String get broullion_btn {
+    return Intl.message(
+      'Save as draft',
+      name: 'broullion_btn',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Num is already exist!`
+  String get msg_num_existe {
+    return Intl.message(
+      'Num is already exist!',
+      name: 'msg_num_existe',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Piece has been transferred`
+  String get msg_piece_transfere {
+    return Intl.message(
+      'Piece has been transferred',
+      name: 'msg_piece_transfere',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Error when transforming piece`
+  String get msg_transfere_err {
+    return Intl.message(
+      'Error when transforming piece',
+      name: 'msg_transfere_err',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `No default printer`
+  String get msg_imp_err {
+    return Intl.message(
+      'No default printer',
+      name: 'msg_imp_err',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Treasury (ies)`
+  String get tresorie_titre {
+    return Intl.message(
+      'Treasury (ies)',
+      name: 'tresorie_titre',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Please select a tier`
+  String get msg_select_tier {
+    return Intl.message(
+      'Please select a tier',
+      name: 'msg_select_tier',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Select Tier`
+  String get select_tier {
+    return Intl.message(
+      'Select Tier',
+      name: 'select_tier',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Apply to total credit`
+  String get msg_credit_total {
+    return Intl.message(
+      'Apply to total credit',
+      name: 'msg_credit_total',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Object`
+  String get objet {
+    return Intl.message(
+      'Object',
+      name: 'objet',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Modality`
+  String get modalite {
+    return Intl.message(
+      'Modality',
+      name: 'modalite',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Amount`
+  String get montant {
+    return Intl.message(
+      'Amount',
+      name: 'montant',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Category`
+  String get categorie {
+    return Intl.message(
+      'Category',
+      name: 'categorie',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Item (s)`
+  String get article_titre {
+    return Intl.message(
+      'Item (s)',
+      name: 'article_titre',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Please enter designation`
+  String get msg_designation {
+    return Intl.message(
+      'Please enter designation',
+      name: 'msg_designation',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Description`
+  String get description {
+    return Intl.message(
+      'Description',
+      name: 'description',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Enter designation`
+  String get msg_entre_design {
+    return Intl.message(
+      'Enter designation',
+      name: 'msg_entre_design',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Designation`
+  String get designation {
+    return Intl.message(
+      'Designation',
+      name: 'designation',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Reference`
+  String get referance {
+    return Intl.message(
+      'Reference',
+      name: 'referance',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Double tap to scan barcode`
+  String get msg_scan_barcode {
+    return Intl.message(
+      'Double tap to scan barcode',
+      name: 'msg_scan_barcode',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Buying price`
+  String get prix_achat {
+    return Intl.message(
+      'Buying price',
+      name: 'prix_achat',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `In Stock`
+  String get stockable {
+    return Intl.message(
+      'In Stock',
+      name: 'stockable',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `PMP`
+  String get pmp {
+    return Intl.message(
+      'PMP',
+      name: 'pmp',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Init`
+  String get init {
+    return Intl.message(
+      'Init',
+      name: 'init',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Quantity`
+  String get quantit {
+    return Intl.message(
+      'Quantity',
+      name: 'quantit',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Init Stock`
+  String get stock_init {
+    return Intl.message(
+      'Init Stock',
+      name: 'stock_init',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Stock min`
+  String get stock_min {
+    return Intl.message(
+      'Stock min',
+      name: 'stock_min',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Qte in package`
+  String get qte_colis {
+    return Intl.message(
+      'Qte in package',
+      name: 'qte_colis',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Package`
+  String get colis {
+    return Intl.message(
+      'Package',
+      name: 'colis',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Price 1`
+  String get prix_v1 {
+    return Intl.message(
+      'Price 1',
+      name: 'prix_v1',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Price 2`
+  String get prix_v2 {
+    return Intl.message(
+      'Price 2',
+      name: 'prix_v2',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Price 3`
+  String get prix_v3 {
+    return Intl.message(
+      'Price 3',
+      name: 'prix_v3',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Enter a description for item`
+  String get msg_description {
+    return Intl.message(
+      'Enter a description for item',
+      name: 'msg_description',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Brand`
+  String get marque {
+    return Intl.message(
+      'Brand',
+      name: 'marque',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Tva rate`
+  String get taux_tva {
+    return Intl.message(
+      'Tva rate',
+      name: 'taux_tva',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Enter PinCode`
+  String get msg_login_pin {
+    return Intl.message(
+      'Enter PinCode',
+      name: 'msg_login_pin',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Enter text`
+  String get msg_search {
+    return Intl.message(
+      'Enter text',
+      name: 'msg_search',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Your blutoothe is OFF`
+  String get blue_off {
+    return Intl.message(
+      'Your blutoothe is OFF',
+      name: 'blue_off',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `No Printer is find`
+  String get no_device {
+    return Intl.message(
+      'No Printer is find',
+      name: 'no_device',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Printer (s)`
+  String get printer_titre {
+    return Intl.message(
+      'Printer (s)',
+      name: 'printer_titre',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Format 58Cm`
+  String get format_58 {
+    return Intl.message(
+      'Format 58Cm',
+      name: 'format_58',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Format 80Cm`
+  String get format_80 {
+    return Intl.message(
+      'Format 80Cm',
+      name: 'format_80',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `By Reference`
+  String get par_ref {
+    return Intl.message(
+      'By Reference',
+      name: 'par_ref',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `By Designation`
+  String get par_desgn {
+    return Intl.message(
+      'By Designation',
+      name: 'par_desgn',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Piece Preciew`
+  String get preview_titre {
+    return Intl.message(
+      'Piece Preciew',
+      name: 'preview_titre',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Price`
+  String get prix {
+    return Intl.message(
+      'Price',
+      name: 'prix',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `QTE`
+  String get qte {
+    return Intl.message(
+      'QTE',
+      name: 'qte',
+      desc: '',
+      args: [],
+    );
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<S> {

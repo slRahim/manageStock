@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flushbar/flushbar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -65,12 +67,10 @@ class _homeState extends State<home> {
       if (currentBackPressTime == null ||
           now.difference(currentBackPressTime) > Duration(seconds: 2)) {
         currentBackPressTime = now;
-        // Fluttertoast.showToast(msg: "Press back again to exit");
-
         Helpers.showFlushBar(context, "Press back again to exit");
         return Future.value(false);
       }
-      return Future.value(true);
+      exit(0);
     }
   }
 

@@ -10,6 +10,7 @@ import 'package:flutter_phoenix/flutter_phoenix.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:gestmob/Helpers/route_generator.dart';
 import 'package:gestmob/cubit/home_cubit.dart';
+import 'package:gestmob/generated/l10n.dart';
 import 'package:gestmob/models/Article.dart';
 import 'package:gestmob/models/FormatPiece.dart';
 import 'package:gestmob/models/HomeItem.dart';
@@ -209,7 +210,7 @@ class Helpers {
   static String getPieceTitle(String piece){
     switch (piece){
       case PieceType.devis :
-        return "Devis";
+        return S.current.devis;
         break;
       case PieceType.avoirClient :
         return "Avoir Client";
@@ -221,19 +222,19 @@ class Helpers {
         return "Bon de Commande";
         break;
       case PieceType.bonLivraison :
-        return "Bon de Livraison";
+        return S.current.bon_livraison;
         break;
       case PieceType.bonReception :
-        return "Bon de Reception";
+        return S.current.bon_reception;
         break;
       case PieceType.commandeClient :
-        return "Commande Client";
+        return S.current.commande_client;
         break;
       case PieceType.factureClient :
-        return "Facture de Vente";
+        return S.current.facture_vente;
         break;
       case PieceType.factureFournisseur :
-        return "Facture d'Achat";
+        return S.current.facture_achat;
         break;
       case PieceType.retourClient :
         return "Retour Client";

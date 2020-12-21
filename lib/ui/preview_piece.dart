@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:gestmob/Helpers/Helpers.dart';
 import 'package:gestmob/Helpers/QueryCtr.dart';
 import 'package:gestmob/Helpers/Statics.dart';
+import 'package:gestmob/generated/l10n.dart';
 import 'package:gestmob/models/Article.dart';
 import 'package:gestmob/models/FormatPrint.dart';
 import 'package:gestmob/models/Piece.dart';
@@ -51,7 +52,7 @@ class _PreviewPieceState extends State<PreviewPiece> {
             Navigator.pop(context);
           },
         ),
-        title: Text('Piece Preview'),
+        title: Text(S.current.preview_titre),
         centerTitle: true,
         actions: [
           IconButton(
@@ -99,7 +100,7 @@ class _PreviewPieceState extends State<PreviewPiece> {
                     Text("N° ${widget.piece.piece} : ${widget.piece.num_piece}"),
                     Text("Date :${Helpers.dateToText(widget.piece.date)}"),
                     Text("Tier : Client01"),
-                    Text("----------------------------------------------------------------------------------------------"),
+                    Text("----------------------------------------------------------------------------------------"),
                     Table(
                       columnWidths: {0:FractionColumnWidth(.4)},
                       children: [
@@ -129,21 +130,21 @@ class _PreviewPieceState extends State<PreviewPiece> {
                         ),
                       ],
                     ),
-                    Text("----------------------------------------------------------------------------------------------"),
+                    Text("---------------------------------------------------------------------------------------"),
                     (_controlTotalHT)?Text("\n Total HT:${widget.piece.total_ht}"):SizedBox(),
                     (_controlTotalTva)?Text("Total TVA :${widget.piece.total_tva}"):SizedBox(),
                     Text("Regler :${widget.piece.regler}"),
                     (_controlReste)?Text("Reste :${widget.piece.reste}"):SizedBox(),
                     (_controlCredit)?Text("Total Credit :${widget.tier.credit} \n"):SizedBox(),
-                    Text("=============================================="),
+                    Text("============================================"),
                     Text("Total TTC :${widget.piece.total_ttc}",style: TextStyle(fontSize: 20),),
-                    Text("=============================================="),
-                    SizedBox(height: 20,),
+                    Text("============================================"),
+                    SizedBox(height: 17,),
                     Text("***BY CIRTA IT***",style: TextStyle(fontWeight: FontWeight.bold),),
                   ],
                 ),
             ),
-            SizedBox(height: 10),
+            SizedBox(height: 20),
             Container(
               height: MediaQuery.of(context).size.height / 3,
               child: ListView(
@@ -151,7 +152,7 @@ class _PreviewPieceState extends State<PreviewPiece> {
                   Column(
                     children: [
                       RadioListTile<Format>(
-                        title: const Text('Format 80Cm'),
+                        title:Text(S.current.format_80),
                         value: Format.format80,
                         groupValue: _format,
                         onChanged: (Format value) {
@@ -162,7 +163,7 @@ class _PreviewPieceState extends State<PreviewPiece> {
                         },
                       ),
                       RadioListTile<Format>(
-                        title: const Text('Format 58Cm'),
+                        title: Text(S.current.format_58),
                         value: Format.format58,
                         groupValue: _format,
                         onChanged: (Format value) {
@@ -177,7 +178,7 @@ class _PreviewPieceState extends State<PreviewPiece> {
                   Column(
                       children: [
                         RadioListTile<Display>(
-                          title: const Text('Par Referance'),
+                          title:  Text(S.current.par_ref),
                           value: Display.referance,
                           groupValue: _item,
                           onChanged: (Display value) {
@@ -188,7 +189,7 @@ class _PreviewPieceState extends State<PreviewPiece> {
                           },
                         ),
                         RadioListTile<Display>(
-                          title: const Text('Par Designation'),
+                          title:  Text(S.current.par_desgn),
                           value: Display.designation,
                           groupValue: _item,
                           onChanged: (Display value) {
@@ -201,7 +202,7 @@ class _PreviewPieceState extends State<PreviewPiece> {
                       ]
                   ),
                   CheckboxListTile(
-                    title: Text("Total HT", maxLines: 1,),
+                    title: Text(S.current.total_ht, maxLines: 1,),
                     value: _controlTotalHT,
                     onChanged: (bool value) {
                       setState(() {
@@ -210,7 +211,7 @@ class _PreviewPieceState extends State<PreviewPiece> {
                     },
                   ),
                   CheckboxListTile(
-                    title: Text("Total TVA", maxLines: 1,),
+                    title: Text(S.current.total_tva, maxLines: 1,),
                     value: _controlTotalTva,
                     onChanged: (bool value) {
                       setState(() {
@@ -219,7 +220,7 @@ class _PreviewPieceState extends State<PreviewPiece> {
                     },
                   ),
                   CheckboxListTile(
-                    title: Text("Reste", maxLines: 1,),
+                    title: Text(S.current.reste, maxLines: 1,),
                     value: _controlReste,
                     onChanged: (bool value) {
                       setState(() {
@@ -228,7 +229,7 @@ class _PreviewPieceState extends State<PreviewPiece> {
                     },
                   ),
                   CheckboxListTile(
-                    title: Text("Total Credit", maxLines: 1,),
+                    title: Text("${S.current.total} ${S.current.credit}", maxLines: 1,),
                     value: _controlCredit,
                     onChanged: (bool value) {
                       setState(() {

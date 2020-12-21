@@ -6,6 +6,7 @@ import 'package:gestmob/Helpers/Helpers.dart';
 import 'package:gestmob/Helpers/QueryCtr.dart';
 import 'package:gestmob/Helpers/Statics.dart';
 import 'package:gestmob/Helpers/TouchIdUtil.dart';
+import 'package:gestmob/generated/l10n.dart';
 import 'package:gestmob/models/Profile.dart';
 import 'package:intl/intl.dart';
 import 'package:vibration/vibration.dart';
@@ -286,7 +287,7 @@ class _OtpSceernState extends State<OtpSceern> {
         widget.startTime();
       } else {
         Vibration.vibrate(duration: 200);
-        Helpers.showToast("CodePINIncorrect");
+        Helpers.showToast(S.current.msg_pass_incorrecte);
         // Toast.show("CodePINIncorrect", context,
         //     backgroundColor:Theme.of(context).errorColor, gravity: Toast.CENTER);
         pinIndex = 0;
@@ -355,7 +356,7 @@ class _OtpSceernState extends State<OtpSceern> {
 
   buildSecuritytext() {
     return Text(
-      "LoginAvecPIN",
+      S.current.msg_login_pin,
       style: TextStyle(
         color: Colors.white70,
         fontSize: 21.0,

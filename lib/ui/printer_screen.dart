@@ -6,6 +6,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_bluetooth_basic/flutter_bluetooth_basic.dart';
 import 'package:gestmob/Helpers/QueryCtr.dart';
 import 'package:gestmob/Helpers/Statics.dart';
+import 'package:gestmob/generated/l10n.dart';
 import 'package:gestmob/models/DefaultPrinter.dart';
 import 'dart:io' show Platform;
 import 'package:image/image.dart';
@@ -38,7 +39,7 @@ class _PrintState extends State<Print> {
           initPrinter();
         } else if (val == 10) {
           print('off');
-          setState(() => _devicesMsg = 'Bluetooth Disconnect!');
+          setState(() => _devicesMsg = S.current.blue_off);
         }
       });
     } else {
@@ -53,7 +54,7 @@ class _PrintState extends State<Print> {
     _printerManager.scanResults.listen((val) {
       if (!mounted) return;
       setState(() => _devices = val);
-      if (_devices.isEmpty) setState(() => _devicesMsg = 'No Devices');
+      if (_devices.isEmpty) setState(() => _devicesMsg = S.current.no_device);
     });
   }
 
@@ -94,7 +95,7 @@ class _PrintState extends State<Print> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Printers'),
+        title: Text(S.current.printer_titre),
         centerTitle: true,
         backgroundColor: Colors.green,
       ),

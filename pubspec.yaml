@@ -76,6 +76,7 @@ dependencies:
   image:
 
   flutter_phoenix:
+  fab_circular_menu:
 
   #  flutter_plugin_android_lifecycle: ^1.0.8
   #  location_permissions: ^3.0.0

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:gestmob/generated/l10n.dart';
 import 'package:gestmob/models/Piece.dart';
 
 // montant de facture à afficher ds le bas de screen add piece
@@ -19,28 +20,28 @@ class TotalDevis extends StatelessWidget{
               Row(
                 mainAxisSize: MainAxisSize.max,
                 children: [
-                  Text("Total HT = "),
+                  Text("${S.current.total_ht}= "),
                   Expanded(child: Text(".............................................................................................................",
                     maxLines: 1,)),
-                  Text(piece.total_ht.toString() + " DA"),
+                  Text(piece.total_ht.toString() + " ${S.current.da}"),
                 ],
               ),
               Row(
                 mainAxisSize: MainAxisSize.max,
                 children: [
-                  Text("Total TVA = "),
+                  Text("${S.current.total_tva}= "),
                   Expanded(child: Text(".............................................................................................................",
                     maxLines: 1,)),
-                  Text(piece.total_tva.toString() + " DA"),
+                  Text(piece.total_tva.toString() + " ${S.current.da}"),
                 ],
               ),
               Row(
                 mainAxisSize: MainAxisSize.max,
                 children: [
-                  Text("Net a payer = "),
+                  Text("${S.current.net_payer}= "),
                   Expanded(child: Text(".............................................................................................................",
                     maxLines: 1,)),
-                  Text(piece.total_ttc.toString() + " DA"),
+                  Text(piece.total_ttc.toString() + " ${S.current.da}"),
                 ],
               ),
               SizedBox(height: 20),

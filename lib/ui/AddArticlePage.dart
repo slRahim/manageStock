@@ -11,6 +11,7 @@ import 'package:gestmob/Widgets/CustomWidgets/add_save_bar.dart';
 import 'package:gestmob/Widgets/CustomWidgets/bottom_tab_bar.dart';
 import 'package:gestmob/Widgets/CustomWidgets/image_picker_widget.dart';
 import 'package:gestmob/Widgets/CustomWidgets/list_dropdown.dart';
+import 'package:gestmob/generated/l10n.dart';
 import 'package:gestmob/models/Article.dart';
 import 'package:gestmob/models/ArticleFamille.dart';
 import 'package:gestmob/models/ArticleMarque.dart';
@@ -49,7 +50,7 @@ class _AddArticlePageState extends State<AddArticlePage>  with AutomaticKeepAliv
 
   bool finishedLoading = false;
 
-  String appBarTitle = "Article";
+  String appBarTitle = S.current.article_titre;
 
   List<ArticleMarque> _marqueItems;
   List<ArticleFamille> _familleItems;
@@ -182,15 +183,15 @@ class _AddArticlePageState extends State<AddArticlePage>  with AutomaticKeepAliv
   Widget build(BuildContext context) {
     if (modification) {
       if (editMode) {
-        appBarTitle = "Modification";
+        appBarTitle = S.current.modification_titre;
       } else {
-        appBarTitle = "Article";
+        appBarTitle = S.current.article_titre;
       }
     } else {
       if (editMode) {
-        appBarTitle = "Ajouter un article";
+        appBarTitle = "${S.current.ajouter} ${S.current.article_titre}";
       } else {
-        appBarTitle = "Article";
+        appBarTitle = S.current.article_titre;
       }
     }
 
@@ -233,7 +234,7 @@ class _AddArticlePageState extends State<AddArticlePage>  with AutomaticKeepAliv
                       });
                     }
                   } else {
-                    Helpers.showFlushBar(context, "Please enter désignation");
+                    Helpers.showFlushBar(context, S.current.msg_designation);
                     setState(() {
                       _validateDes = true;
                     });
@@ -242,9 +243,9 @@ class _AddArticlePageState extends State<AddArticlePage>  with AutomaticKeepAliv
               ),
               bottomNavigationBar: BottomTabBar(
                 tabs: [
-                  Tab(child: Column( children: [ Icon(Icons.insert_drive_file),SizedBox(height: 2), Text("Fiche d\'article"), ], )),
-                  Tab(child: Column( children: [ Icon(Icons.image), SizedBox(height: 2), Text("Photo"), ], )),
-                  Tab(child: Column( children: [ Icon(Icons.description), SizedBox(height: 2), Text("Description"), ], )),
+                  Tab(child: Column( children: [ Icon(Icons.insert_drive_file),SizedBox(height: 1), Text("${S.current.fiche} ${S.current.articles}"), ], )),
+                  Tab(child: Column( children: [ Icon(Icons.image), SizedBox(height: 1), Text(S.current.photo), ], )),
+                  Tab(child: Column( children: [ Icon(Icons.description), SizedBox(height: 1), Text(S.current.description), ], )),
                 ],
               ),
               body: Builder(
@@ -271,7 +272,7 @@ class _AddArticlePageState extends State<AddArticlePage>  with AutomaticKeepAliv
             controller: _designationControl,
             keyboardType: TextInputType.text,
             decoration: InputDecoration(
-              hintText: 'Entrez la désignation ',
+              hintText: S.current.msg_entre_design,
               prefixIcon: Icon(
                 Icons.assignment,
                 color: Colors.orange[900],
@@ -279,9 +280,9 @@ class _AddArticlePageState extends State<AddArticlePage>  with AutomaticKeepAliv
               focusedBorder: OutlineInputBorder(
                   borderSide: BorderSide(color: Colors.orange[900]),
                   borderRadius: BorderRadius.circular(20)),
-              labelText: "Désignation",
+              labelText: S.current.designation,
               labelStyle: TextStyle(color: Colors.orange[900]),
-              errorText: _validateDes ? 'Champ obligatoire' : null,
+              errorText: _validateDes ? S.current.msg_champ_oblg : null,
               enabledBorder: OutlineInputBorder(
                 gapPadding: 3.3,
                 borderRadius: BorderRadius.circular(20),
@@ -301,7 +302,7 @@ class _AddArticlePageState extends State<AddArticlePage>  with AutomaticKeepAliv
               focusedBorder: OutlineInputBorder(
                   borderSide: BorderSide(color: Colors.blue[700]),
                   borderRadius: BorderRadius.circular(20)),
-              labelText: "Référence",
+              labelText: S.current.referance,
               labelStyle: TextStyle(color: Colors.blue[700]),
               enabledBorder: OutlineInputBorder(
                 gapPadding: 3.3,
@@ -326,7 +327,7 @@ class _AddArticlePageState extends State<AddArticlePage>  with AutomaticKeepAliv
                 focusedBorder: OutlineInputBorder(
                     borderSide: BorderSide(color: Colors.blue[700]),
                     borderRadius: BorderRadius.circular(20)),
-                labelText: "Double Tap to scan barcode",
+                labelText: S.current.msg_scan_barcode,
                 labelStyle: TextStyle(color: Colors.blue[700]),
                 enabledBorder: OutlineInputBorder(
                   gapPadding: 3.3,
@@ -354,7 +355,7 @@ class _AddArticlePageState extends State<AddArticlePage>  with AutomaticKeepAliv
                       focusedBorder: OutlineInputBorder(
                           borderSide: BorderSide(color: Colors.blue[700]),
                           borderRadius: BorderRadius.circular(20)),
-                      labelText: "Prix d'achat",
+                      labelText: S.current.prix_achat,
                       labelStyle: TextStyle(color: Colors.blue[700]),
                       enabledBorder: OutlineInputBorder(
                         gapPadding: 3.3,
@@ -374,7 +375,7 @@ class _AddArticlePageState extends State<AddArticlePage>  with AutomaticKeepAliv
                     borderRadius: BorderRadius.circular(20.0),
                   ) : null,
                   child: CheckboxListTile(
-                    title: Text("Stockable", maxLines: 1,),
+                    title: Text(S.current.stockable, maxLines: 1,),
                     value: _stockable,
                     onChanged: editMode? (bool value) {
                       setState(() {
@@ -404,7 +405,7 @@ class _AddArticlePageState extends State<AddArticlePage>  with AutomaticKeepAliv
                 focusedBorder: OutlineInputBorder(
                     borderSide: BorderSide(color: Colors.blue[700]),
                     borderRadius: BorderRadius.circular(20)),
-                labelText: (modification) ? "PMP" : "PMP Init",
+                labelText: (modification) ? S.current.pmp : "${S.current.pmp} ${S.current.init}",
                 labelStyle: TextStyle(color: Colors.blue[700]),
                 enabledBorder: OutlineInputBorder(
                   gapPadding: 3.3,
@@ -430,7 +431,7 @@ class _AddArticlePageState extends State<AddArticlePage>  with AutomaticKeepAliv
                     focusedBorder: OutlineInputBorder(
                         borderSide: BorderSide(color: Colors.blue[700]),
                         borderRadius: BorderRadius.circular(20)),
-                    labelText: modification? "Quantité":"Stock initial",
+                    labelText: modification? S.current.quantit:S.current.stock_init,
                     labelStyle: TextStyle(color: Colors.blue[700]),
                     enabledBorder: OutlineInputBorder(
                       gapPadding: 3.3,
@@ -454,7 +455,7 @@ class _AddArticlePageState extends State<AddArticlePage>  with AutomaticKeepAliv
                     focusedBorder: OutlineInputBorder(
                         borderSide: BorderSide(color: Colors.blue[700]),
                         borderRadius: BorderRadius.circular(20)),
-                    labelText: "Stock min",
+                    labelText: S.current.stock_min,
                     labelStyle: TextStyle(color: Colors.blue[700]),
                     enabledBorder: OutlineInputBorder(
                       gapPadding: 3.3,
@@ -484,7 +485,7 @@ class _AddArticlePageState extends State<AddArticlePage>  with AutomaticKeepAliv
                       focusedBorder: OutlineInputBorder(
                           borderSide: BorderSide(color: Colors.blue[700]),
                           borderRadius: BorderRadius.circular(20)),
-                      labelText: "Qte par Colis",
+                      labelText: S.current.qte_colis,
                       labelStyle: TextStyle(color: Colors.blue[700]),
                       enabledBorder: OutlineInputBorder(
                         gapPadding: 3.3,
@@ -512,7 +513,7 @@ class _AddArticlePageState extends State<AddArticlePage>  with AutomaticKeepAliv
                       focusedBorder: OutlineInputBorder(
                           borderSide: BorderSide(color: Colors.blue[700]),
                           borderRadius: BorderRadius.circular(20)),
-                      labelText: "Colis",
+                      labelText: S.current.colis,
                       labelStyle: TextStyle(color: Colors.blue[700]),
                       enabledBorder:OutlineInputBorder(
                         gapPadding: 3.3,
@@ -538,7 +539,7 @@ class _AddArticlePageState extends State<AddArticlePage>  with AutomaticKeepAliv
               focusedBorder: OutlineInputBorder(
                   borderSide: BorderSide(color: Colors.blue[700]),
                   borderRadius: BorderRadius.circular(20)),
-              labelText: "Prix de vente 1",
+              labelText: S.current.prix_v1,
               labelStyle: TextStyle(color: Colors.blue[700]),
               enabledBorder: OutlineInputBorder(
                 gapPadding: 3.3,
@@ -561,7 +562,7 @@ class _AddArticlePageState extends State<AddArticlePage>  with AutomaticKeepAliv
                 focusedBorder: OutlineInputBorder(
                     borderSide: BorderSide(color: Colors.blue[700]),
                     borderRadius: BorderRadius.circular(20)),
-                labelText: "Prix de vente 2",
+                labelText: S.current.prix_v2,
                 labelStyle: TextStyle(color: Colors.blue[700]),
                 enabledBorder: OutlineInputBorder(
                   gapPadding: 3.3,
@@ -585,7 +586,7 @@ class _AddArticlePageState extends State<AddArticlePage>  with AutomaticKeepAliv
                 focusedBorder: OutlineInputBorder(
                     borderSide: BorderSide(color: Colors.blue[700]),
                     borderRadius: BorderRadius.circular(20)),
-                labelText: "Prix de vente 3",
+                labelText: S.current.prix_v3,
                 labelStyle: TextStyle(color: Colors.blue[700]),
                 enabledBorder: OutlineInputBorder(
                   gapPadding: 3.3,
@@ -631,10 +632,10 @@ class _AddArticlePageState extends State<AddArticlePage>  with AutomaticKeepAliv
                         borderSide: BorderSide(color: Colors.blue[700]),
                         borderRadius: BorderRadius.circular(20)),
                     contentPadding: EdgeInsets.only(left: 20, top: 20, bottom: 20),
-                    labelText: "Description",
+                    labelText: S.current.description,
                     labelStyle: TextStyle(color: Colors.blue[700]),
                     alignLabelWithHint: true,
-                    hintText: "Entrez une description d'article ajouté",
+                    hintText: S.current.msg_description,
                     enabledBorder: OutlineInputBorder(
                       gapPadding: 3.3,
                       borderRadius: BorderRadius.circular(20),
@@ -661,7 +662,7 @@ class _AddArticlePageState extends State<AddArticlePage>  with AutomaticKeepAliv
             child: ListDropDown(
               leftIcon: Icons.attach_money,
               editMode: editMode,
-              libelle: "TVA  ",
+              libelle: S.current.taux_tva,
               value: _selectedTva,
               items: _tvaDropdownItems,
               onChanged: (value) {
@@ -756,7 +757,7 @@ class _AddArticlePageState extends State<AddArticlePage>  with AutomaticKeepAliv
                               borderSide: BorderSide(color: Colors.orange[900]),
                               borderRadius: BorderRadius.circular(20)),
                           contentPadding: EdgeInsets.only(left: 10),
-                          labelText: "Marque",
+                          labelText: S.current.marque,
                           labelStyle: TextStyle(color: Colors.orange[900]),
                           enabledBorder: OutlineInputBorder(
                             gapPadding: 3.3,
@@ -782,7 +783,7 @@ class _AddArticlePageState extends State<AddArticlePage>  with AutomaticKeepAliv
                             Navigator.pop(context);
                             final snackBar = SnackBar(
                               content: Text(
-                                'Marque Ajoutée',
+                                S.current.msg_ajout_item,
                                 style: TextStyle(
                                     color: Colors.white,
                                     fontSize: 15,
@@ -796,7 +797,7 @@ class _AddArticlePageState extends State<AddArticlePage>  with AutomaticKeepAliv
                           }
                           ,
                           child: Text(
-                            "Ajouter",
+                            S.current.ajouter,
                             style: TextStyle(color: Colors.white),
                           ),
                           color: Colors.blue,
@@ -846,7 +847,7 @@ class _AddArticlePageState extends State<AddArticlePage>  with AutomaticKeepAliv
                                 BorderSide(color: Colors.orange[900]),
                                 borderRadius: BorderRadius.circular(20)),
                             contentPadding: EdgeInsets.only(left: 10),
-                            labelText: "Famille",
+                            labelText: S.current.famile,
                             labelStyle:
                             TextStyle(color: Colors.orange[900]),
                             enabledBorder: OutlineInputBorder(
@@ -875,7 +876,7 @@ class _AddArticlePageState extends State<AddArticlePage>  with AutomaticKeepAliv
                               Navigator.pop(context);
                               final snackBar = SnackBar(
                                 content: Text(
-                                  'Famille Ajoutée',
+                                  S.current.msg_ajout_item,
                                   style: TextStyle(
                                       color: Colors.white,
                                       fontSize: 15,
@@ -890,7 +891,7 @@ class _AddArticlePageState extends State<AddArticlePage>  with AutomaticKeepAliv
                             }
                             ,
                             child: Text(
-                              "Ajouter",
+                              S.current.ajouter,
                               style: TextStyle(color: Colors.white),
                             ),
                             color: Colors.red,
@@ -924,7 +925,7 @@ class _AddArticlePageState extends State<AddArticlePage>  with AutomaticKeepAliv
                     child: Padding(
                       padding: const EdgeInsets.only(bottom: 20),
                       child: Text(
-                        "Ajouter une TVA",
+                        "${S.current.ajouter} TVA",
                         style: TextStyle(
                           fontSize: 18,
                           fontWeight: FontWeight.w400,
@@ -945,7 +946,7 @@ class _AddArticlePageState extends State<AddArticlePage>  with AutomaticKeepAliv
                           borderSide: BorderSide(color: Colors.orange[900]),
                           borderRadius: BorderRadius.circular(20)),
                       contentPadding: EdgeInsets.only(left: 10),
-                      labelText: "Taux TVA",
+                      labelText: S.current.taux_tva,
                       labelStyle: TextStyle(color: Colors.orange[900]),
                       enabledBorder: OutlineInputBorder(
                         gapPadding: 3.3,
@@ -968,7 +969,7 @@ class _AddArticlePageState extends State<AddArticlePage>  with AutomaticKeepAliv
                         Navigator.pop(context);
                         final snackBar = SnackBar(
                           content: Text(
-                            'TVA ' + _taux.toString() + '% Ajoutée',
+                            'TVA ' + _taux.toString() + '%',
                             style: TextStyle(
                                 color: Colors.white,
                                 fontSize: 15,
@@ -981,7 +982,7 @@ class _AddArticlePageState extends State<AddArticlePage>  with AutomaticKeepAliv
                       }
                       ,
                       child: Text(
-                        "Ajouter",
+                        S.current.ajouter,
                         style: TextStyle(color: Colors.white),
                       ),
                       color: Colors.green[900],
@@ -1047,9 +1048,9 @@ class _AddArticlePageState extends State<AddArticlePage>  with AutomaticKeepAliv
       if (widget.arguments.id != null) {
         id = await widget._queryCtr.updateItemInDb(DbTablesNames.articles, await makeArticle());
         if (id > -1) {
-          message = "Article has been updated successfully";
+          message = S.current.msg_update_item;
         } else {
-          message = "Error when updating article in db";
+          message = S.current.msg_update_err;
         }
       } else {
         Article article = await makeArticle();
@@ -1057,15 +1058,15 @@ class _AddArticlePageState extends State<AddArticlePage>  with AutomaticKeepAliv
         if (id > -1) {
           widget.arguments = article;
           widget.arguments.setId(id);
-          message = "Article has been added successfully";
+          message = S.current.msg_ajout_item;
         } else {
-          message = "Error when adding article to db";
+          message = S.current.msg_ajout_err;
         }
       }
       Helpers.showFlushBar(context, message);
       return Future.value(id);
     } catch (e) {
-      Helpers.showFlushBar(context, "Error: something went wrong");
+      Helpers.showFlushBar(context, S.current.msg_ereure);
       return Future.value(-1);
     }
 
@@ -1128,9 +1129,9 @@ class _AddArticlePageState extends State<AddArticlePage>  with AutomaticKeepAliv
     try {
       var options = ScanOptions(
         strings: {
-          "cancel": "Cancel",
-          "flash_on": "Flash on",
-          "flash_off": "Flash off",
+          "cancel": S.current.annuler,
+          "flash_on": S.current.flash_on,
+          "flash_off": S.current.flash_off,
         },
       );
 
@@ -1149,10 +1150,10 @@ class _AddArticlePageState extends State<AddArticlePage>  with AutomaticKeepAliv
       );
       if (e.code == BarcodeScanner.cameraAccessDenied) {
         setState(() {
-          result.rawContent = 'The user did not grant the camera permission!';
+          result.rawContent = S.current.msg_cam_permission;
         });
       } else {
-        result.rawContent = 'Unknown error: $e';
+        result.rawContent = '${S.current.msg_ereure}: ($e)';
       }
       Helpers.showToast(result.rawContent);
     }

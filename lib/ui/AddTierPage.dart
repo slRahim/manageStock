@@ -107,6 +107,21 @@ class _AddTierPageState extends State<AddTierPage>
     super.dispose();
   }
 
+
+  @override
+  void didChangeDependencies() {
+    Statics.statutItems[0] = S.current.statut_m ;
+    Statics.statutItems[1] = S.current.statut_mlle ;
+    Statics.statutItems[2] = S.current.statut_mme;
+    Statics.statutItems[3] = S.current.statut_dr ;
+    Statics.statutItems[4] = S.current.statut_pr ;
+    Statics.statutItems[5] = S.current.statut_eurl ;
+    Statics.statutItems[6] = S.current.statut_sarl ;
+    Statics.statutItems[7] = S.current.statut_spa ;
+    Statics.statutItems[8] = S.current.statut_epic ;
+    Statics.statutItems[9] = S.current.statut_etp ;
+  }
+
   void initState() {
     super.initState();
 

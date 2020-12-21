@@ -58,7 +58,7 @@ class _AddPiecePageState extends State<AddPiecePage> with TickerProviderStateMix
 
   bool finishedLoading = false;
 
-  String appBarTitle = "Devis";
+  String appBarTitle = S.current.devis;
 
   List<Article> _selectedItems = new List<Article>();
   List<Article> _desSelectedItems = new List<Article>();
@@ -212,7 +212,7 @@ class _AddPiecePageState extends State<AddPiecePage> with TickerProviderStateMix
                       return addChoicesDialog();
                     });
               } else {
-                Helpers.showFlushBar(context, "Please select at least one article");
+                Helpers.showFlushBar(context, S.current.msg_select_art);
                 setState(() {
                   _validateRaison = true;
                 });
@@ -239,7 +239,7 @@ class _AddPiecePageState extends State<AddPiecePage> with TickerProviderStateMix
                   Expanded(
                     child: Text(
                       'TTC : '+
-                      _piece.total_ttc.toString()+" DA",
+                      _piece.total_ttc.toString()+" ${S.current.da}",
                       textAlign: TextAlign.center,
                       style: TextStyle(
                         fontWeight: FontWeight.bold
@@ -263,7 +263,7 @@ class _AddPiecePageState extends State<AddPiecePage> with TickerProviderStateMix
                     },
                     child: Container(
                         padding: EdgeInsets.only(right: 30),
-                        child:Text("Reste : "+_restepiece.toString(), textAlign: TextAlign.center,
+                        child:Text("${S.current.reste} : "+_restepiece.toString(), textAlign: TextAlign.center,
                           style: TextStyle(
                               fontWeight: FontWeight.bold
                           ),
@@ -316,7 +316,7 @@ class _AddPiecePageState extends State<AddPiecePage> with TickerProviderStateMix
   Widget fichetab() {
     return SingleChildScrollView(
         physics: ScrollPhysics(),
-        padding: const EdgeInsets.fromLTRB(15, 25, 15, 40),
+        padding: const EdgeInsetsDirectional.fromSTEB(15, 25, 15, 40),
         child: Column(mainAxisSize: MainAxisSize.max, children: [
           Wrap(
             spacing: 13,
@@ -366,7 +366,7 @@ class _AddPiecePageState extends State<AddPiecePage> with TickerProviderStateMix
                           focusedBorder: OutlineInputBorder(
                               borderSide: BorderSide(color: Colors.blue),
                               borderRadius: BorderRadius.circular(20)),
-                          labelText: "Date",
+                          labelText: S.current.date,
                           labelStyle: TextStyle(color: Colors.blue),
                           enabledBorder: OutlineInputBorder(
                             gapPadding: 3.3,
@@ -387,7 +387,7 @@ class _AddPiecePageState extends State<AddPiecePage> with TickerProviderStateMix
                   Flexible(
                     flex: 4,
                     child :ListDropDown(
-                      libelle: "Tarif:  ",
+                      libelle: S.current.tarif,
                       editMode: editMode,
                       value: _selectedTarification,
                       items: _tarificationDropdownItems,
@@ -528,7 +528,7 @@ class _AddPiecePageState extends State<AddPiecePage> with TickerProviderStateMix
                       child: Padding(
                         padding: const EdgeInsets.only(bottom: 20),
                         child: Text(
-                          "Edit Verssement",
+                          "${S.current.modification_titre} ${S.current.verssement}",
                           style: TextStyle(
                             fontSize: 18,
                             fontWeight: FontWeight.w400,
@@ -554,7 +554,7 @@ class _AddPiecePageState extends State<AddPiecePage> with TickerProviderStateMix
                             borderSide: BorderSide(color: Colors.greenAccent),
                             borderRadius: BorderRadius.circular(20)),
                         contentPadding: EdgeInsets.only(left: 10),
-                        labelText: "Total Verssemnet",
+                        labelText: "${S.current.total} ${S.current.verssement}",
                         labelStyle: TextStyle(color: Colors.green),
                         enabledBorder: OutlineInputBorder(
                           gapPadding: 3.3,
@@ -618,7 +618,7 @@ class _AddPiecePageState extends State<AddPiecePage> with TickerProviderStateMix
                           ),
                           SizedBox(height: 20),
                           Padding(
-                            padding: EdgeInsets.only(left: 5, right: 5, bottom: 20),
+                            padding: EdgeInsetsDirectional.only(start: 5, end: 5, bottom: 20),
                             child: TextField(
                               controller: _resteControler,
                               keyboardType: TextInputType.number,
@@ -630,8 +630,8 @@ class _AddPiecePageState extends State<AddPiecePage> with TickerProviderStateMix
                                disabledBorder: OutlineInputBorder(
                                     borderSide: BorderSide(color: Colors.orange[900]),
                                     borderRadius: BorderRadius.circular(20)),
-                                contentPadding: EdgeInsets.only(left: 10),
-                                labelText: "Reste",
+                                contentPadding: EdgeInsetsDirectional.only(start: 10),
+                                labelText: S.current.reste,
                                 labelStyle: TextStyle(color: Colors.orange[900]),
                                 enabled: false ,
                               ),
@@ -664,7 +664,7 @@ class _AddPiecePageState extends State<AddPiecePage> with TickerProviderStateMix
                                    Navigator.pop(context);
                                 },
                                 child: Text(
-                                  "Confirmé",
+                                  S.current.confirme,
                                   style: TextStyle(color: Colors.white),
                                 ),
                                 color: Colors.green,
@@ -759,7 +759,7 @@ class _AddPiecePageState extends State<AddPiecePage> with TickerProviderStateMix
                           child: Padding(
                             padding: const EdgeInsets.only(bottom: 20),
                             child: Text(
-                              "Choose Action : ",
+                              "${S.current.choisir_action}: ",
                               style: TextStyle(
                                 fontSize: 22,
                                 fontWeight: FontWeight.w400,
@@ -777,7 +777,7 @@ class _AddPiecePageState extends State<AddPiecePage> with TickerProviderStateMix
                               await  quikPrintTicket();
                             },
                             child: Text(
-                              "Quick print",
+                              S.current.imp_rapide_btn,
                               style: TextStyle(color: Colors.white , fontSize: 16),
                             ),
                             color: Colors.blueAccent,
@@ -807,7 +807,7 @@ class _AddPiecePageState extends State<AddPiecePage> with TickerProviderStateMix
                               }
                             },
                             child: Text(
-                              "Save and print",
+                              S.current.save_imp_btn,
                               style: TextStyle(color: Colors.white , fontSize: 16),
                             ),
                             color: Colors.green,
@@ -824,7 +824,7 @@ class _AddPiecePageState extends State<AddPiecePage> with TickerProviderStateMix
                               await saveItem(mov);
                             },
                             child: Text(
-                              "Save only",
+                              S.current.save_btn,
                               style: TextStyle(color: Colors.white  , fontSize: 16),
                             ),
                             color: Colors.deepOrange,
@@ -840,7 +840,7 @@ class _AddPiecePageState extends State<AddPiecePage> with TickerProviderStateMix
                               await saveItemAsDraft();
                             },
                             child: Text(
-                              "Save as Draft",
+                              S.current.broullion_btn,
                               style: TextStyle(color: Colors.white  , fontSize: 16),
                             ),
                             color: Colors.red,
@@ -989,7 +989,7 @@ class _AddPiecePageState extends State<AddPiecePage> with TickerProviderStateMix
 
     var res = await _queryCtr.getPieceByNum(_piece.num_piece , _piece.piece);
     if(res.length >= 1 && !modification){
-      var message = "Num Piece is alearydy exist";
+      var message = S.current.msg_num_existe;
       Helpers.showFlushBar(context, message);
       await getNumPiece(_piece);
       _piece.num_piece = _numeroControl.text ;
@@ -1038,14 +1038,14 @@ class _AddPiecePageState extends State<AddPiecePage> with TickerProviderStateMix
       transformer.oldPieceId = _piece.id ;
       await _queryCtr.addItemToTable(DbTablesNames.transformer, transformer);
 
-      var message = "Piece a bien été transferer";
+      var message = S.current.msg_piece_transfere;
       Helpers.showFlushBar(context, message);
 
       _piece.etat = 1 ;
       await saveItem(0);
 
     }catch(e){
-      var message = "Error in transferer Piece";
+      var message = S.current.msg_transfere_err;
       Helpers.showFlushBar(context, message);
     }
 
@@ -1102,7 +1102,7 @@ class _AddPiecePageState extends State<AddPiecePage> with TickerProviderStateMix
         );
       });
     }else{
-      var message = "No default Printer !" ;
+      var message = S.current.msg_imp_err;
       Helpers.showFlushBar(context, message);
     }
 

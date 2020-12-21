@@ -174,9 +174,9 @@ class _ProfilePageState extends State<ProfilePage> with TickerProviderStateMixin
               bottomNavigationBar: BottomTabBar(
                 controller: _tabController,
                 tabs: [
-                  Tab(child: Column( children: [ Icon(Icons.insert_drive_file),SizedBox(height: 2), Text( S.current.fiche), ], )),
-                  Tab(child: Column( children: [ Icon(Icons.image), SizedBox(height: 2), Text( S.current.logo), ], )),
-                  Tab(child: Column( children: [ Icon(Icons.fingerprint), SizedBox(height: 2), Text( S.current.securite), ], )),
+                  Tab(child: Column( children: [ Icon(Icons.insert_drive_file),SizedBox(height: 1), Text( S.current.fiche), ], )),
+                  Tab(child: Column( children: [ Icon(Icons.image), SizedBox(height: 1), Text( S.current.logo), ], )),
+                  Tab(child: Column( children: [ Icon(Icons.fingerprint), SizedBox(height: 1), Text( S.current.securite), ], )),
                 ],
               ),
               body: Builder(
@@ -212,7 +212,7 @@ class _ProfilePageState extends State<ProfilePage> with TickerProviderStateMixin
                         borderSide: BorderSide(color: Colors.orange[900]),
                         borderRadius: BorderRadius.circular(20)),
                     labelText:  S.current.rs,
-                    errorText: _validateRaison ? 'Champ obligatoire' : null,
+                    errorText: _validateRaison ? S.current.msg_champ_oblg : null,
                     labelStyle: TextStyle(color: Colors.orange[900]),
                     enabledBorder: OutlineInputBorder(
                       gapPadding: 3.3,
@@ -679,9 +679,9 @@ class _ProfilePageState extends State<ProfilePage> with TickerProviderStateMixin
         if (id > -1) {
           arguments = item;
           arguments.id = id;
-          message = "Profile has been updated successfully";
+          message = S.current.msg_update_item;
         } else {
-          message = "Error when updating Profile in db";
+          message = S.current.msg_update_err;
         }
       } else {
         var item = await makeItem();
@@ -689,15 +689,15 @@ class _ProfilePageState extends State<ProfilePage> with TickerProviderStateMixin
         if (id > -1) {
           arguments = item;
           arguments.id = id;
-          message = "Profile has been added successfully";
+          message = S.current.msg_ajout_item;
         } else {
-          message = "Error when adding Profile to db";
+          message = S.current.msg_ajout_err;
         }
       }
       Helpers.showFlushBar(context, message);
       return Future.value(id);
     } catch (error) {
-      Helpers.showFlushBar(context, "Error: something went wrong");
+      Helpers.showFlushBar(context, S.current.msg_ereure);
       return Future.value(-1);
     }
   }

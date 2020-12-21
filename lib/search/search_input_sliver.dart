@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:gestmob/generated/l10n.dart';
 import 'package:rxdart/rxdart.dart';
 
 class SearchInputSliver extends StatefulWidget {
@@ -58,8 +59,9 @@ class _SearchInputSliverState extends State<SearchInputSliver> {
         errorBorder: InputBorder.none,
         disabledBorder: InputBorder.none,
         contentPadding:
-        EdgeInsets.only(left: 15, bottom: 11, top: 11, right: 15),
-        hintText: "Enter your search"),
+        EdgeInsetsDirectional.only(start: 15, bottom: 11, top: 11, end: 15),
+        hintText: S.current.msg_search
+    ),
     onChanged: _textChangeStreamController.add,
   );
 

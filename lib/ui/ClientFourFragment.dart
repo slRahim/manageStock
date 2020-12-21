@@ -1,4 +1,5 @@
 import 'package:barcode_scan/barcode_scan.dart';
+import 'package:fab_circular_menu/fab_circular_menu.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_speed_dial/flutter_speed_dial.dart';
@@ -16,6 +17,7 @@ import 'package:gestmob/models/TiersFamille.dart';
 import 'package:gestmob/search/items_sliver_list.dart';
 import 'package:gestmob/search/search_input_sliver.dart';
 import 'package:gestmob/search/sliver_list_data_source.dart';
+import 'package:image/image.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 import 'package:gestmob/Widgets/utils.dart' as utils;
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
@@ -141,35 +143,44 @@ class _ClientFourFragmentState extends State<ClientFourFragment> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        floatingActionButton: SpeedDial(
-          marginRight: 18,
-          marginBottom: 20,
-          animatedIcon: AnimatedIcons.menu_close,
-          animatedIconTheme: IconThemeData(size: 22.0),
-          closeManually: false,
-          curve: Curves.bounceIn,
-          overlayColor: Colors.black,
-          overlayOpacity: 0.1,
-          backgroundColor: Colors.red,
-          foregroundColor: Colors.white,
-          elevation: 8.0,
-          shape: CircleBorder(),
-          children: [
-            SpeedDialChild(
-                child: Icon(Icons.add),
-                backgroundColor: Colors.green,
-                label: S.current.ajouter,
-                onTap: () {
-                  Navigator.of(context).pushNamed(RoutesKeys.addTier,arguments: new Tiers.init(widget.clientFourn));
-                }
-            ),
-            SpeedDialChild(
-              child: Icon(MdiIcons.qrcode),
-              backgroundColor: Colors.blue,
-              label: S.current.scan_qr,
-              onTap: () => scanQRCode(),
-            ),
-          ],
+        floatingActionButton: FabCircularMenu(
+            alignment: (Helpers.isDirectionRTL(context))?Alignment.bottomLeft:Alignment.bottomRight,
+            fabSize: 60,
+            fabMargin: EdgeInsets.all(12),
+            ringColor: Colors.black12,
+            fabOpenIcon: Icon(Icons.menu,color: Colors.white),
+            fabCloseIcon: Icon(Icons.close,color: Colors.white,),
+            fabElevation: 3,
+            children: <Widget>[
+              Container(
+                decoration: BoxDecoration(
+                    color: Colors.green,
+                    shape: BoxShape.circle
+                ),
+                child: IconButton(
+                    icon: Icon(Icons.add),
+                    color: Colors.white,
+                    tooltip: S.current.ajouter,
+                    onPressed: () {
+                      Navigator.of(context).pushNamed(RoutesKeys.addTier,arguments: new Tiers.init(widget.clientFourn));
+                    }
+                ),
+              ),
+              Container(
+                decoration: BoxDecoration(
+                  color: Colors.blue,
+                  shape: BoxShape.circle
+                ),
+                child: IconButton(
+                    icon: Icon(MdiIcons.qrcode),
+                    color: Colors.white,
+                    tooltip: S.current.scan_qr,
+                    onPressed: () {
+                      scanQRCode() ;
+                    }
+                ),
+              )
+            ]
         ),
         appBar: SearchBar(
           searchController: searchController,

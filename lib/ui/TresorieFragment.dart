@@ -163,7 +163,7 @@ class _TresorieFragmentState extends State<TresorieFragment> {
         appBar: SearchBar(
           searchController: searchController,
           mainContext: context,
-          title: "Tresorie",
+          title: S.current.tresorie_titre,
           isFilterOn: isFilterOn,
           onSearchChanged: (String search) => _dataSource.updateSearchTerm(search),
           onFilterPressed: () async {

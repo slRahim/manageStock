@@ -53,7 +53,7 @@ class TresorieListItem extends StatelessWidget {
     title: Text(tresorie.numTresorie),
     subtitle: Text("RS: " + tresorie.tierRS),
     trailingChildren: [
-      Text('Montant : '+tresorie.montant.toString(), style: TextStyle(fontSize: 16.0, fontWeight: FontWeight.bold ),) ,
+      Text('${S.current.montant} : '+tresorie.montant.toString(), style: TextStyle(fontSize: 16.0, fontWeight: FontWeight.bold ),) ,
       SizedBox(height: 5),
       Text(Helpers.dateToText(tresorie.date), style: TextStyle(color: Colors.black, fontSize: 14.0),),
       SizedBox(height: 5),

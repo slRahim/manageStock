@@ -53,7 +53,7 @@ class _AddTresoriePageState extends State<AddTresoriePage> with TickerProviderSt
 
   bool finishedLoading = false;
 
-  String appBarTitle = "Tresorie";
+  String appBarTitle = S.current.tresorie_titre;
 
   List <Piece> _selectedPieces = new List<Piece>() ;
 
@@ -168,13 +168,13 @@ class _AddTresoriePageState extends State<AddTresoriePage> with TickerProviderSt
       if (editMode) {
         appBarTitle = S.current.modification_titre;
       } else {
-        appBarTitle = "Verssement";
+        appBarTitle = S.current.verssement;
       }
     } else {
       if (editMode) {
-        appBarTitle = "${S.current.ajouter} Verssement";
+        appBarTitle = "${S.current.ajouter} ${S.current.verssement}";
       } else {
-        appBarTitle = "Verssement";
+        appBarTitle = S.current.verssement;
       }
     }
 
@@ -217,7 +217,7 @@ class _AddTresoriePageState extends State<AddTresoriePage> with TickerProviderSt
                   }
                 }else{
                   Helpers.showFlushBar(
-                      context, "Please select Tiers");
+                      context, S.current.msg_select_tier);
 
                   setState(() {
                     _validateRaison = true;
@@ -249,14 +249,14 @@ class _AddTresoriePageState extends State<AddTresoriePage> with TickerProviderSt
                 children: <Widget>[
                   Expanded(
                     child: (_selectedClient !=null)? Text(
-                      'Cred : '+_selectedClient.credit.toString()+" DA",
+                      'Cred : '+_selectedClient.credit.toString()+" ${S.current.da}",
                       textAlign: TextAlign.center,
                       style: TextStyle(
                           fontWeight: FontWeight.bold
                       ),
                     ):
                     Text(
-                      'Cred : 0.0 DA',
+                      'Cred : 0.0 ${S.current.da}',
                       textAlign: TextAlign.center,
                       style: TextStyle(
                           fontWeight: FontWeight.bold
@@ -268,7 +268,7 @@ class _AddTresoriePageState extends State<AddTresoriePage> with TickerProviderSt
                   ),
                    Container(
                         padding: EdgeInsets.only(right: 30),
-                        child:Text("Reste : "+_restepiece.toString(), textAlign: TextAlign.center,
+                        child:Text("Reste : "+_restepiece.toString()+" ${S.current.da}", textAlign: TextAlign.center,
                           style: TextStyle(
                               fontWeight: FontWeight.bold
                           ),
@@ -293,7 +293,7 @@ class _AddTresoriePageState extends State<AddTresoriePage> with TickerProviderSt
                             return choosePieceDialog();
                           });
                     }else{
-                      var message = "Please select tiers";
+                      var message = S.current.msg_select_tier;
                        Helpers.showFlushBar(context, message);
                     }
                   }
@@ -358,7 +358,7 @@ class _AddTresoriePageState extends State<AddTresoriePage> with TickerProviderSt
                           focusedBorder: OutlineInputBorder(
                               borderSide: BorderSide(color: Colors.blue),
                               borderRadius: BorderRadius.circular(20)),
-                          labelText: "Date",
+                          labelText: S.current.date,
                           labelStyle: TextStyle(color: Colors.blue),
                           enabledBorder: OutlineInputBorder(
                             gapPadding: 3.3,
@@ -406,7 +406,7 @@ class _AddTresoriePageState extends State<AddTresoriePage> with TickerProviderSt
                           focusedBorder: OutlineInputBorder(
                               borderSide: BorderSide(color: Colors.blue),
                               borderRadius: BorderRadius.circular(20)),
-                          labelText: "Select Tiers",
+                          labelText: S.current.select_tier,
                           labelStyle: TextStyle(color: Colors.blue),
                           enabledBorder: OutlineInputBorder(
                             gapPadding: 3.3,
@@ -451,7 +451,7 @@ class _AddTresoriePageState extends State<AddTresoriePage> with TickerProviderSt
                     ),
                     child: ListTile(
                         title: Text(
-                           "Appliquer sur le credit totals",
+                           S.current.msg_credit_total,
                            style: TextStyle(
                              fontSize: 16 ,
                            ),
@@ -512,7 +512,7 @@ class _AddTresoriePageState extends State<AddTresoriePage> with TickerProviderSt
                     focusedBorder: OutlineInputBorder(
                         borderSide: BorderSide(color: Colors.blue[700]),
                         borderRadius: BorderRadius.circular(20)),
-                    labelText: "Objet",
+                    labelText: S.current.objet,
                     enabledBorder: OutlineInputBorder(
                       gapPadding: 3.3,
                       borderRadius: BorderRadius.circular(20),
@@ -532,7 +532,7 @@ class _AddTresoriePageState extends State<AddTresoriePage> with TickerProviderSt
                     focusedBorder: OutlineInputBorder(
                         borderSide: BorderSide(color: Colors.blue[700]),
                         borderRadius: BorderRadius.circular(20)),
-                    labelText: "Modalite",
+                    labelText: S.current.modalite,
                     enabledBorder: OutlineInputBorder(
                       gapPadding: 3.3,
                       borderRadius: BorderRadius.circular(20),
@@ -552,7 +552,7 @@ class _AddTresoriePageState extends State<AddTresoriePage> with TickerProviderSt
                     focusedBorder: OutlineInputBorder(
                         borderSide: BorderSide(color: Colors.blue[700]),
                         borderRadius: BorderRadius.circular(20)),
-                    labelText: "Montant",
+                    labelText: S.current.montant,
                     enabledBorder: OutlineInputBorder(
                       gapPadding: 3.3,
                       borderRadius: BorderRadius.circular(20),
@@ -658,7 +658,7 @@ class _AddTresoriePageState extends State<AddTresoriePage> with TickerProviderSt
                       Padding(
                         padding: EdgeInsets.only(
                             left: 5, right: 5, bottom: 20, top: 20),
-                        child : Text("Add New Categorie :"  , style: TextStyle(fontSize: 20 , color: Colors.redAccent),),
+                        child : Text("${S.current.ajouter} ${S.current.categorie}:"  , style: TextStyle(fontSize: 20 , color: Colors.redAccent),),
                       ),
                       Padding(
                         padding: EdgeInsets.only(
@@ -676,7 +676,7 @@ class _AddTresoriePageState extends State<AddTresoriePage> with TickerProviderSt
                                 BorderSide(color: Colors.orange[900]),
                                 borderRadius: BorderRadius.circular(20)),
                             contentPadding: EdgeInsets.only(left: 10),
-                            labelText: "Categorie",
+                            labelText: S.current.categorie,
                             labelStyle:
                             TextStyle(color: Colors.orange[900]),
                             enabledBorder: OutlineInputBorder(
@@ -700,19 +700,6 @@ class _AddTresoriePageState extends State<AddTresoriePage> with TickerProviderSt
                               });
                               await addTresoreCategorieIfNotExist(_categorieTresorie);
                               Navigator.pop(context);
-                              // final snackBar = SnackBar(
-                              //   content: Text(
-                              //     'Categorie Ajoutée',
-                              //     style: TextStyle(
-                              //         color: Colors.white,
-                              //         fontSize: 15,
-                              //         fontWeight: FontWeight.w500),
-                              //   ),
-                              //   backgroundColor: Colors.red,
-                              //   duration: Duration(seconds: 1),
-                              // );
-                              // _scaffoldKey.currentState
-                              //     .showSnackBar(snackBar);
                               print(_categorieTresorie.libelle);
                             }
                             ,
@@ -873,7 +860,7 @@ class _AddTresoriePageState extends State<AddTresoriePage> with TickerProviderSt
 
     var res = await _queryCtr.getTresorieByNum(_numeroControl.text);
     if(res.length >= 1 && !modification){
-      var message = "Num tresorie is alearydy exist";
+      var message = S.current.msg_num_existe;
       Helpers.showFlushBar(context, message);
       await getNumPiece();
       _tresorie.numTresorie = _numeroControl.text ;

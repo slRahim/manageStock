@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_icons/flutter_icons.dart';
 import 'package:gestmob/Helpers/Statics.dart';
+import 'package:gestmob/generated/l10n.dart';
 import 'package:gestmob/models/Article.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 
@@ -72,8 +73,8 @@ class _ArticleListItemState extends State<ArticleListItem> {
       subtitle: Text("Ref: " + widget.article.ref),
       trailingChildren: widget.article.selectedQuantite > 0? [
         Text(
-          "Prix : "+
-              (widget.article.selectedQuantite * widget.article.selectedPrice).toString(),
+          "${S.current.prix} : "+
+              (widget.article.selectedQuantite * widget.article.selectedPrice).toString()+" ${S.current.da}",
         style: TextStyle(
             color: Colors.black,
             fontSize: 15.0,
@@ -82,7 +83,7 @@ class _ArticleListItemState extends State<ArticleListItem> {
       ),
         SizedBox(height: 5),
         Text(
-           "Qte : "+
+           "${S.current.qte} : "+
                widget.article.selectedQuantite.toString(),
           style: TextStyle(
               color: Colors.black,
@@ -94,7 +95,7 @@ class _ArticleListItemState extends State<ArticleListItem> {
         trailingChildrenOnArticleFragment(),
         SizedBox(height: 5),
         Text(
-          "Qte : "+
+          "${S.current.qte} : "+
           widget.article.quantite.toString(),
           style: TextStyle(
               color: widget.article.quantite <= widget.article.quantiteMinimum
@@ -111,32 +112,32 @@ class _ArticleListItemState extends State<ArticleListItem> {
     switch (widget.tarification){
       case 1 :
         return Text(
-          "Prix : "+
-          widget.article.prixVente1.toString(),
+          "${S.current.prix} : "+
+          widget.article.prixVente1.toString()+" ${S.current.da}",
           style: TextStyle(fontSize: 16.0, fontWeight: FontWeight.bold),
         );
         break ;
 
       case 2:
         return Text(
-          "Prix : "+
-          widget.article.prixVente2.toString(),
+          "${S.current.prix}  : "+
+          widget.article.prixVente2.toString()+" ${S.current.da}",
           style: TextStyle(fontSize: 16.0, fontWeight: FontWeight.bold),
         );
         break ;
 
       case 3 :
         return Text(
-          "Prix : "+
-          widget.article.prixVente3.toString(),
+          "${S.current.prix}  : "+
+          widget.article.prixVente3.toString()+" ${S.current.da}",
           style: TextStyle(fontSize: 16.0, fontWeight: FontWeight.bold),
         );
         break ;
 
       default :
         return Text(
-          "Prix : "+
-          widget.article.prixVente1.toString(),
+          "${S.current.prix}  : "+
+          widget.article.prixVente1.toString()+" ${S.current.da}",
           style: TextStyle(fontSize: 16.0, fontWeight: FontWeight.bold),
         );
         break ;
@@ -160,7 +161,7 @@ class _ArticleListItemState extends State<ArticleListItem> {
                     child: Padding(
                       padding: const EdgeInsets.only(bottom: 20),
                       child: Text(
-                        "Edit",
+                        S.current.modification_titre,
                         style: TextStyle(
                           fontSize: 18,
                           fontWeight: FontWeight.w400,
@@ -182,7 +183,7 @@ class _ArticleListItemState extends State<ArticleListItem> {
                           borderSide: BorderSide(color: Colors.orange[900]),
                           borderRadius: BorderRadius.circular(20)),
                       contentPadding: EdgeInsets.only(left: 10),
-                      labelText: "Quantité",
+                      labelText: S.current.quantit,
                       labelStyle: TextStyle(color: Colors.orange[900]),
                       enabledBorder: OutlineInputBorder(
                         gapPadding: 3.3,
@@ -248,7 +249,7 @@ class _ArticleListItemState extends State<ArticleListItem> {
                                   borderSide: BorderSide(color: Colors.orange[900]),
                                   borderRadius: BorderRadius.circular(20)),
                               contentPadding: EdgeInsets.only(left: 10),
-                              labelText: "Price",
+                              labelText: S.current.prix,
                               labelStyle: TextStyle(color: Colors.orange[900]),
                               enabledBorder: OutlineInputBorder(
                                 gapPadding: 3.3,
@@ -271,7 +272,7 @@ class _ArticleListItemState extends State<ArticleListItem> {
                                 Navigator.pop(context);
                               },
                               child: Text(
-                                "Annuler",
+                                S.current.annuler,
                                 style: TextStyle(color: Colors.white),
                               ),
                               color: Colors.redAccent,
@@ -310,7 +311,7 @@ class _ArticleListItemState extends State<ArticleListItem> {
                                 }
                               },
                               child: Text(
-                                "Confirmé",
+                                S.current.confirme,
                                 style: TextStyle(color: Colors.white),
                               ),
                               color: Colors.green,
