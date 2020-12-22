@@ -18,6 +18,12 @@
   "tableau_bord" : "Dashbord",
   "accueil" : "Home",
 
+  "avoir_client" : "Avoir client",
+  "avoir_fournisseur": "Avoir fournisseur",
+  "retour_client": "Retour client",
+  "retour_fourn": "Retour fournisseur",
+  "bon_commande": "Purchase order",
+
   "profile_titre" : "Profile",
   "modification_titre": "Edit ",
   "profile_ajouter": "New Profile",

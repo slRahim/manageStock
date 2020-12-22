@@ -205,6 +205,56 @@ class S {
     );
   }
 
+  /// `Avoir client`
+  String get avoir_client {
+    return Intl.message(
+      'Avoir client',
+      name: 'avoir_client',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Avoir fournisseur`
+  String get avoir_fournisseur {
+    return Intl.message(
+      'Avoir fournisseur',
+      name: 'avoir_fournisseur',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Retour client`
+  String get retour_client {
+    return Intl.message(
+      'Retour client',
+      name: 'retour_client',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Retour fournisseur`
+  String get retour_fourn {
+    return Intl.message(
+      'Retour fournisseur',
+      name: 'retour_fourn',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Purchase order`
+  String get bon_commande {
+    return Intl.message(
+      'Purchase order',
+      name: 'bon_commande',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `Profile`
   String get profile_titre {
     return Intl.message(

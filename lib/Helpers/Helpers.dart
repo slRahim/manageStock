@@ -213,13 +213,13 @@ class Helpers {
         return S.current.devis;
         break;
       case PieceType.avoirClient :
-        return "Avoir Client";
+        return  S.current.avoir_client;
         break;
       case PieceType.avoirFournisseur :
-        return "Avoir Fournisseur";
+        return  S.current.avoir_fournisseur;
         break;
       case PieceType.bonCommande :
-        return "Bon de Commande";
+        return  S.current.bon_commande;
         break;
       case PieceType.bonLivraison :
         return S.current.bon_livraison;
@@ -237,10 +237,10 @@ class Helpers {
         return S.current.facture_achat;
         break;
       case PieceType.retourClient :
-        return "Retour Client";
+        return  S.current.retour_client;
         break;
       case PieceType.retourFournisseur :
-        return "Retour Fournisseur";
+        return  S.current.retour_fourn;
         break;
     }
   }

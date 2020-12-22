@@ -603,8 +603,6 @@ class _AddTresoriePageState extends State<AddTresoriePage> with TickerProviderSt
 
   }
 
-
-
   //********************************************************************** partie de date ****************************************************************************************
   void callDatePicker() async {
     DateTime now = new DateTime.now();

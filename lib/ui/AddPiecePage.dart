@@ -183,7 +183,7 @@ class _AddPiecePageState extends State<AddPiecePage> with TickerProviderStateMix
     } else {
       return Scaffold(
           key: _scaffoldKey,
-          backgroundColor: Color(0xFFF1F8FA),
+          backgroundColor: Theme.of(context).backgroundColor,
           appBar: AddEditBar(
             editMode: editMode,
             modification: modification,

@@ -18,6 +18,12 @@
   "tableau_bord" : "لوحة القيادة",
   "accueil" : "الرئيسة",
 
+  "avoir_client" : "فاتورة عودة لزبون",
+  "avoir_fournisseur": "فاتورة عودة لمورد",
+  "retour_client": "وسل عودة لزبون",
+  "retour_fourn": "وسل عودة لمورد",
+  "bon_commande": "أمر شراء",
+
   "profile_titre" : "الملف الشخصي",
   "modification_titre": "تعديل ",
   "profile_ajouter": "إضافة ملف",

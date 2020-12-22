@@ -309,7 +309,7 @@ class _AddTierPageState extends State<AddTierPage>
                   ),
                 ),
                 key: _scaffoldKey,
-                backgroundColor: Color(0xFFF1F8FA),
+                backgroundColor: Theme.of(context).backgroundColor,
                 appBar: AddEditBar(
                   editMode: editMode,
                   modification: modification,

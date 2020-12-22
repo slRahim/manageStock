@@ -18,6 +18,12 @@
   "tableau_bord" : "Tableau de Bord",
   "accueil" : "Acceuil",
 
+  "avoir_client" : "Avoir client",
+  "avoir_fournisseur": "Avoir fournisseur",
+  "retour_client": "Retour client",
+  "retour_fourn": "Retour fournisseur",
+  "bon_commande": "Bon de commande",
+
   "profile_titre" : "Profile",
   "modification_titre": "Modification ",
   "profile_ajouter": "Ajouter Profile",

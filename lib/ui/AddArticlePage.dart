@@ -202,7 +202,7 @@ class _AddArticlePageState extends State<AddArticlePage>  with AutomaticKeepAliv
           length: 3,
           child: Scaffold(
               key: _scaffoldKey,
-              backgroundColor: Color(0xFFF1F8FA),
+              backgroundColor: Theme.of(context).backgroundColor,
               appBar: AddEditBar(
                 editMode: editMode,
                 modification: modification,

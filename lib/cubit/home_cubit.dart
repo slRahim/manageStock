@@ -44,27 +44,22 @@ class HomeCubit extends Cubit<HomeState> {
 
       case homeItemDevisId:
         emit(new FragmentLoaded(PiecesFragment(clientFourn: 0,peaceType: 'FP')));
-
         break;
 
       case homeItemCommandeClientId:
         emit(new FragmentLoaded(PiecesFragment(clientFourn: 0,peaceType: 'CC')));
-
         break;
 
       case homeItemBonDeLivraisonId:
         emit(new FragmentLoaded(PiecesFragment(clientFourn: 0,peaceType: 'BL')));
-
         break;
 
       case homeItemBonDeReceptionId:
         emit(new FragmentLoaded(PiecesFragment(clientFourn: 2,peaceType: 'BR')));
-
         break;
 
       case homeItemFactureDachatId:
         emit(new FragmentLoaded(PiecesFragment(clientFourn: 2,peaceType: 'FF')));
-
         break;
 
       case homeItemFactureDeVenteId:
@@ -72,14 +67,35 @@ class HomeCubit extends Cubit<HomeState> {
 
         break;
 
+      case drawerItemAvoirClientId:
+        emit(new FragmentLoaded(PiecesFragment(clientFourn: 0,peaceType: 'AC')));
+
+        break;
+
+      case drawerItemAvoirFournisseurId:
+        emit(new FragmentLoaded(PiecesFragment(clientFourn: 2,peaceType: 'AF')));
+
+        break;
+
+      case drawerItemBonDeCommandeId:
+        emit(new FragmentLoaded(PiecesFragment(clientFourn: 2,peaceType: 'BC')));
+
+        break;
+
+      case drawerItemRetourClientId:
+        emit(new FragmentLoaded(PiecesFragment(clientFourn: 0,peaceType: 'RC')));
+        break;
+
+      case drawerItemRetourFournisseurId:
+        emit(new FragmentLoaded(PiecesFragment(clientFourn: 2,peaceType: 'RF')));
+        break;
+
       case homeItemRapportsId:
         emit(new HomeLoading());
-
         break;
 
       case homeItemTresorerieId:
         emit(new FragmentLoaded(TresorieFragment()));
-
         break;
 
     }

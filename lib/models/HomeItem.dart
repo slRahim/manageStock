@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_icons/flutter_icons.dart';
 import 'package:gestmob/generated/l10n.dart';
+import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 
 const String homeItemAccueilId = "homeItemAccueilId";
 const String homeItemTableauDeBordId = "homeItemTableauDeBordId";
@@ -18,6 +19,11 @@ const String homeItemFactureDachatId = "homeItemFactureDachatId";
 const String homeItemTresorerieId = "homeItemTresorerieId";
 const String homeItemRapportsId = "homeItemRapportsId";
 const String homeItemParametresId = "homeItemParametresId";
+const String drawerItemRetourClientId = "drawerItemRetourClientId";
+const String drawerItemRetourFournisseurId = "drawerItemRetourFournisseurId";
+const String drawerItemAvoirClientId = "drawerItemAvoirClientId";
+const String drawerItemAvoirFournisseurId = "drawerItemAvoirFournisseurId";
+const String drawerItemBonDeCommandeId = "drawerItemBonDeCommandeId";
 const String drawerItemHelpId = "drawerItemHelpId";
 const String drawerItemExitId = "drawerItemExitId";
 
@@ -120,6 +126,42 @@ HomeItem homeItemParametres = new HomeItem(
     active: true
 );
 
+
+HomeItem drawerItemRetourClient = new HomeItem(
+    id: drawerItemRetourClientId,
+    title:"Retour Client",
+    img: "assets/setting.png",
+    active: true
+);
+
+HomeItem drawerItemRetourFournisseur = new HomeItem(
+    id: drawerItemRetourFournisseurId,
+    title: "Retour Fournisseur",
+    img: "assets/setting.png",
+    active: true
+);
+
+HomeItem drawerItemAvoirClient = new HomeItem(
+    id: drawerItemAvoirClientId,
+    title: "Avoir Client",
+    img: "assets/setting.png",
+    active: true
+);
+
+HomeItem drawerItemAvoirFournisseur = new HomeItem(
+    id: drawerItemAvoirFournisseurId,
+    title: "Avoir Fournisseur",
+    img: "assets/setting.png",
+    active: true
+);
+
+HomeItem drawerItemBonDeCommande = new HomeItem(
+    id: drawerItemBonDeCommandeId,
+    title: "Bon de Commande",
+    img: "assets/setting.png",
+    active: true
+);
+
 HomeItem drawerItemHelp = new HomeItem(
     id: drawerItemHelpId,
     title: S.current.aide,
@@ -192,6 +234,26 @@ Widget iconsSet(String itemId, double iconSize){
 
     case homeItemFournisseursId:
       return Icon(Foundation.torso_business,size: iconSize,color: Colors.white,);
+      break;
+
+    case drawerItemBonDeCommandeId:
+      return Icon(AntDesign.solution1,size: iconSize,color: Colors.white,);
+      break;
+
+    case drawerItemRetourClientId:
+      return Icon(Icons.assignment_return_outlined,size: iconSize,color: Colors.white,);
+      break;
+
+    case drawerItemRetourFournisseurId:
+      return Icon(Icons.assignment_return_outlined,size: iconSize,color: Colors.white,);
+      break;
+
+    case drawerItemAvoirClientId:
+      return Icon(Icons.assignment_returned_outlined,size: iconSize,color: Colors.white,);
+      break;
+
+    case drawerItemAvoirFournisseurId:
+      return Icon(Icons.assignment_returned_outlined,size: iconSize,color: Colors.white,);
       break;
 
     case drawerItemHelpId:

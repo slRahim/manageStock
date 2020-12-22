@@ -72,8 +72,19 @@ class _MyAppState extends State<MyApp> {
             FocusManager.instance.primaryFocus.unfocus();
           }
         },
-        child: new MaterialApp(
+        child: MaterialApp(
+          theme: ThemeData(
+            brightness: Brightness.light,
+            primarySwatch: Colors.red,
+            backgroundColor: Color(0xFFF1F8FA),
 
+          ),
+          darkTheme: ThemeData(
+            brightness: Brightness.dark,
+            primarySwatch: Colors.red,
+            primaryColorDark: Colors.white10
+          ),
+          themeMode: ThemeMode.light,
           localizationsDelegates: [
             S.delegate,
             GlobalMaterialLocalizations.delegate,
@@ -81,14 +92,8 @@ class _MyAppState extends State<MyApp> {
             GlobalCupertinoLocalizations.delegate,
           ],
           supportedLocales: S.delegate.supportedLocales,
-
           locale: localeList[index],
-
           title: "GestMob",
-          theme: ThemeData(
-            primarySwatch: Colors.red,
-          ),
-
           initialRoute: RoutesKeys.loginPage,
           onGenerateRoute: RouteGenerator.generateRoute,
         )
@@ -96,6 +101,7 @@ class _MyAppState extends State<MyApp> {
 
   }
 }
+
 
 
 
