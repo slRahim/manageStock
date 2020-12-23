@@ -426,9 +426,9 @@ class SqlLiteDatabaseHelper {
         AFTER INSERT ON Pieces 
         FOR EACH ROW 
         BEGIN 
-        UPDATE FormatPiece
-           SET Current_index = Current_index+1
-        WHERE  FormatPiece.Piece LIKE NEW.Piece ; 
+            UPDATE FormatPiece
+               SET Current_index = Current_index+1
+            WHERE  FormatPiece.Piece LIKE NEW.Piece ; 
         END;
       ''');
 
@@ -443,7 +443,7 @@ class SqlLiteDatabaseHelper {
         BEGIN
            Update Journaux 
             Set Mov = -2
-            WHERE Piece_id = id;
+            WHERE Piece_id = Old.id;
             
             UPDATE Tiers
                SET Chiffre_affaires = Chiffre_affaires - OLD.Total_ttc,
@@ -479,13 +479,8 @@ class SqlLiteDatabaseHelper {
         WHEN NEW.Mov = 1 
         BEGIN
              UPDATE Tiers
-               SET Chiffre_affaires = Chiffre_affaires + NEW.Total_ttc ,
-                    Regler = Regler  + NEW.Regler
-              WHERE id = New.Tier_id;
-              
-               UPDATE Tiers
-                SET  Credit = (Solde_depart + Chiffre_affaires) - Regler 
-                WHERE id = New.Tier_id;
+               SET Chiffre_affaires = Chiffre_affaires + NEW.Total_ttc
+             WHERE id = New.Tier_id; 
         END;
      ''');
 
@@ -497,33 +492,31 @@ class SqlLiteDatabaseHelper {
         WHEN NEW.Mov = 1 
         BEGIN
              UPDATE Tiers
-               SET Chiffre_affaires = Chiffre_affaires + (NEW.Total_ttc-OLD.Total_ttc),
-                   Regler = Regler + (NEW.Regler - OLD.Regler)
-              WHERE id = OLD.Tier_id;
-              
-             UPDATE Tiers
-                SET  Credit = (Solde_depart + Chiffre_affaires) - Regler 
+               SET Chiffre_affaires = Chiffre_affaires + (NEW.Total_ttc-OLD.Total_ttc)
              WHERE id = OLD.Tier_id;
+             
+             
         END;
      ''');
 
      //update_tiers_chiffre_affaires on update mov != 1 piece
-     await db.execute('''
-        CREATE TRIGGER IF NOT EXISTS update_tiers_chiffre_affaires3
-        AFTER UPDATE ON Pieces
-        FOR EACH ROW
-        WHEN NEW.Mov <> 1 AND (OLD.Mov <> NEW.Mov) 
-        BEGIN
-             UPDATE Tiers
-               SET Chiffre_affaires = Chiffre_affaires - OLD.Total_ttc,
-                   Regler = Regler  - OLD.Regler
-              WHERE id = OLD.Tier_id;
-              
-             UPDATE Tiers
-                SET  Credit = (Solde_depart + Chiffre_affaires) - Regler 
-              WHERE id = OLD.Tier_id;
-        END;
-     ''');
+     // await db.execute('''
+     //    CREATE TRIGGER IF NOT EXISTS update_tiers_chiffre_affaires3
+     //    AFTER UPDATE ON Pieces
+     //    FOR EACH ROW
+     //    WHEN NEW.Mov <> 1 AND (OLD.Mov <> NEW.Mov)
+     //    BEGIN
+     //         UPDATE Tiers
+     //           SET Chiffre_affaires = Chiffre_affaires - OLD.Total_ttc,
+     //               Regler = Regler  - OLD.Regler
+     //         WHERE id = OLD.Tier_id;
+     //
+     //         UPDATE Tiers
+     //            SET  Credit = (Solde_depart + Chiffre_affaires) - Regler
+     //         WHERE id = OLD.Tier_id;
+     //
+     //    END;
+     // ''');
 
 
   }
@@ -536,6 +529,25 @@ class SqlLiteDatabaseHelper {
             UPDATE FormatPiece
                SET Current_index = Current_index+1
             WHERE  FormatPiece.Piece LIKE "TR" ; 
+            
+        END;
+      ''');
+
+    await db.execute('''CREATE TRIGGER update_tier_reglement_credit 
+        AFTER INSERT ON Tresories 
+        FOR EACH ROW 
+        when (New.Categorie_id = 2 OR New.Categorie_id = 3 OR New.Categorie_id = 6 OR New.Categorie_id = 7)
+        BEGIN 
+            INSERT INTO ReglementTresorie (Tresorie_id , Piece_id , Regler) Values (New.id , New.Piece_id , New.Montant) ;
+            
+            UPDATE Tiers
+              SET Regler = (SELECT SUM(Montant) FROM Tresories WHERE Tier_id = New.Tier_id)
+            WHERE id = NEW.Tier_id ;
+             
+             UPDATE Tiers
+               SET  Credit = (Solde_depart + Chiffre_affaires) - Regler 
+             WHERE id = New.Tier_id;
+           
         END;
       ''');
     //   **************************************************************************************************
@@ -559,6 +571,7 @@ class SqlLiteDatabaseHelper {
         END;
       ''');
 
+    //*********************************special transformation*****************************************************************************
     await db.execute('''CREATE TRIGGER update_reglemntTresorie_tresorie 
         AFTER INSERT ON Transformers 
         FOR EACH ROW 
@@ -568,7 +581,7 @@ class SqlLiteDatabaseHelper {
            WHERE Piece_id = NEW.Old_Piece_id ;
            
            UPDATE ReglementTresorie 
-           SET Piece_id = NEW.New_Piece_id 
+              SET Piece_id = NEW.New_Piece_id 
            WHERE Piece_id = NEW.Old_Piece_id ;
         END;
       ''');

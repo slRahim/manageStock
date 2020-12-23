@@ -156,7 +156,7 @@ class QueryCtr {
     }
 
 
-    String _creditFilter =" AND Reste >= 0"  ;
+    String _creditFilter =""  ;
     if(filters["Credit"]){
       _creditFilter =" AND Reste > 0"  ;
     }

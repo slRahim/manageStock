@@ -38,7 +38,10 @@ class TresorieListItem extends StatelessWidget {
       Navigator.of(context).pushNamed(RoutesKeys.addTresorie, arguments: tresorie)
     },
     leading: Container(
-      child: Center(child: Text("TR"),),
+      child: Center(
+        child: (tresorie.categorie == 2 || tresorie.categorie ==7) ? Icon(Icons.arrow_upward_outlined , color: Colors.green,)
+            :Icon(Icons.arrow_downward_outlined , color: Colors.red,),
+      ),
       height: 50,
       width: 50,
       decoration: BoxDecoration(

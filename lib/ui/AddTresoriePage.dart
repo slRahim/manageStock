@@ -151,11 +151,12 @@ class _AddTresoriePageState extends State<AddTresoriePage> with TickerProviderSt
 
     }else{
       _selectedTypeTiers =  Statics.tiersItems[0];
+      _selectedCategorie = _categorieItems[1];
     }
 
   }
 
-  Future<void> getNumPiece() async{
+  Future<void> getNumPiece() async {
     List<FormatPiece> list = await _queryCtr.getFormatPiece(PieceType.tresorie);
     setState(() {
       _numeroControl.text = Helpers.generateNumPiece(list.first);
@@ -843,7 +844,6 @@ class _AddTresoriePageState extends State<AddTresoriePage> with TickerProviderSt
   Future<Object> makeItem() async {
     var tiers = _selectedClient ;
     if(tiers != null){
-      print(tiers.id);
       _tresorie.tierId= tiers.id ;
       _tresorie.tierRS = tiers.raisonSociale ;
     }
