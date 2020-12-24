@@ -77,8 +77,12 @@ class _AddPiecePageState extends State<AddPiecePage> with TickerProviderStateMix
   TextEditingController _verssementControler = new TextEditingController();
   TextEditingController _resteControler = new TextEditingController();
   String _validateVerssemntError;
+
   double _restepiece ;
   double _verssementpiece ;
+  double _total_ht ;
+  double _total_tva ;
+  double _total_ttc ;
 
   SliverListDataSource _dataSource;
   QueryCtr _queryCtr;
@@ -135,8 +139,13 @@ class _AddPiecePageState extends State<AddPiecePage> with TickerProviderStateMix
       _selectedItems= await _queryCtr.getJournalPiece(item);
       _verssementControler.text = _piece.regler.toString();
       _resteControler.text = _piece.reste.toString();
+
       _restepiece=_piece.reste ;
       _verssementpiece=_piece.regler;
+      _total_ht =_piece.total_ht ;
+      _total_tva =_piece.total_tva ;
+      _total_ttc =_piece.total_ttc ;
+
     }else{
       _piece.piece = widget.arguments.piece ;
       _selectedClient = await _queryCtr.getTierById(1);
@@ -144,8 +153,13 @@ class _AddPiecePageState extends State<AddPiecePage> with TickerProviderStateMix
       _selectedTarification = _tarificationItems[_selectedClient.tarification];
       _verssementControler.text = "0.0";
       _resteControler.text ="0.0";
+
       _restepiece = 0 ;
       _verssementpiece = 0 ;
+       _total_ht =0 ;
+       _total_tva =0 ;
+       _total_ttc =0 ;
+
     }
 
   }
@@ -234,7 +248,7 @@ class _AddPiecePageState extends State<AddPiecePage> with TickerProviderStateMix
             shape: AutomaticNotchedShape(
                 RoundedRectangleBorder(), StadiumBorder(side: BorderSide())),
             expandedBackColor: Colors.lightBlueAccent,
-            expandedBody: TotalDevis(piece: _piece),
+            expandedBody: TotalDevis(total_ht: _total_ht , total_tva: _total_tva, total_ttc: _total_ttc),
             bottomAppBarBody: Padding(
               padding: const EdgeInsets.all(8.0),
               child: Row(
@@ -243,7 +257,7 @@ class _AddPiecePageState extends State<AddPiecePage> with TickerProviderStateMix
                   Expanded(
                     child: Text(
                       'TTC : '+
-                      _piece.total_ttc.toString()+" ${S.current.da}",
+                      _total_ttc.toString()+" ${S.current.da}",
                       textAlign: TextAlign.center,
                       style: TextStyle(
                         fontWeight: FontWeight.bold
@@ -256,7 +270,7 @@ class _AddPiecePageState extends State<AddPiecePage> with TickerProviderStateMix
                   InkWell(
                     onTap: ()async{
                       if(editMode){
-                        if(_piece.piece != PieceType.devis){
+                        if(_piece.piece != PieceType.devis && _piece.piece != PieceType.bonCommande){
                           await showDialog(
                               context: context,
                               builder: (BuildContext context) {
@@ -266,7 +280,7 @@ class _AddPiecePageState extends State<AddPiecePage> with TickerProviderStateMix
                       }
                     },
                     child: Container(
-                        padding: EdgeInsets.only(right: 30),
+                        padding: EdgeInsetsDirectional.only(end: 30),
                         child:Text("${S.current.reste} : "+_restepiece.toString(), textAlign: TextAlign.center,
                           style: TextStyle(
                               fontWeight: FontWeight.bold
@@ -540,13 +554,19 @@ class _AddPiecePageState extends State<AddPiecePage> with TickerProviderStateMix
                         ),
                       )),
                   Padding(
-                    padding: EdgeInsets.only(left: 5, right: 5, bottom: 20),
+                    padding: EdgeInsetsDirectional.only(start: 5, end: 5, bottom: 20),
                     child: TextField(
                       controller: _verssementControler,
                       keyboardType: TextInputType.number,
                       onChanged: (value){
-                        double _reste = _piece.total_ttc-double.parse(value) ;
-                        _resteControler.text = _reste.toString();
+                        if(_piece.id != null){
+                          double _reste = _piece.regler-double.parse(value) ;
+                          _resteControler.text = _reste.toString();
+                        }else{
+                          double _reste = _total_ttc-double.parse(value) ;
+                          _resteControler.text = _reste.toString();
+                        }
+
                       },
                       decoration: InputDecoration(
                         errorText: _validateVerssemntError ?? null,
@@ -571,7 +591,7 @@ class _AddPiecePageState extends State<AddPiecePage> with TickerProviderStateMix
                   SizedBox(
                     width: 320.0,
                     child: Padding(
-                      padding: EdgeInsets.only(right: 0, left: 0),
+                      padding: EdgeInsetsDirectional.only(end: 0, start: 0),
                       child: Column(
                         mainAxisSize: MainAxisSize.max,
                         mainAxisAlignment: MainAxisAlignment.center,
@@ -585,8 +605,8 @@ class _AddPiecePageState extends State<AddPiecePage> with TickerProviderStateMix
                                   double _verssement = double.parse(_verssementControler.text);
                                   double _reste = double.parse(_resteControler.text);
                                   if(_verssement > 0){
-                                    _verssement = double.parse(_verssementControler.text) - 1;
-                                    _reste = double.parse(_resteControler.text) + 1;
+                                    _verssement = double.parse(_verssementControler.text) - 1000;
+                                    _reste = double.parse(_resteControler.text) + 1000;
                                   }
                                   _verssementControler.text = _verssement.toString();
                                   _resteControler.text = _reste.toString();
@@ -604,8 +624,8 @@ class _AddPiecePageState extends State<AddPiecePage> with TickerProviderStateMix
                                   double _verssement = double.parse(_verssementControler.text);
                                   double _reste = double.parse(_resteControler.text);
                                   if(_verssement < _piece.total_ttc){
-                                    _verssement = double.parse(_verssementControler.text) + 1;
-                                    _reste = double.parse(_resteControler.text) - 1;
+                                    _verssement = double.parse(_verssementControler.text) + 1000;
+                                    _reste = double.parse(_resteControler.text) - 1000;
                                   }
                                   _verssementControler.text = _verssement.toString();
                                   _resteControler.text = _reste.toString();
@@ -648,8 +668,6 @@ class _AddPiecePageState extends State<AddPiecePage> with TickerProviderStateMix
                             children: [
                               RaisedButton(
                                 onPressed: () async {
-                                  _verssementControler.text = _piece.regler.toString();
-                                  _resteControler.text = _piece.reste.toString();
                                   Navigator.pop(context);
                                 },
                                 child: Text(
@@ -705,17 +723,26 @@ class _AddPiecePageState extends State<AddPiecePage> with TickerProviderStateMix
         sum += item.selectedQuantite * item.selectedPrice;
         totalTva += item.selectedQuantite * item.tva ;
       });
-      _piece.total_ht =sum ;
-      _piece.total_tva = totalTva ;
-      _piece.total_ttc = _piece.total_ht + _piece.total_tva ;
+      _total_ht =sum ;
+      _total_tva = totalTva ;
+      _total_ttc = _total_ht + _total_tva ;
 
-
-      _verssementControler.text = _piece.total_ttc.toString() ;
-      _verssementpiece = _piece.total_ttc ;
       if(_piece.id != null){
-        _restepiece = _piece.total_ttc - _piece.regler ;
+        if(_total_ttc < _piece.total_ttc){
+          _verssementpiece = 0.0;
+          _verssementControler.text = _verssementpiece.toString() ;
+          _restepiece = _total_ttc - _piece.regler ;
+          _resteControler.text = _restepiece.toString();
+        }else{
+          _verssementpiece = _total_ttc - _piece.regler;
+          _verssementControler.text = _verssementpiece.toString() ;
+          _restepiece = _total_ttc - _piece.regler ;
+          _resteControler.text = _restepiece.toString();
+        }
       }else{
-        _restepiece = _piece.total_ttc - _verssementpiece ;
+        _verssementpiece = _total_ttc;
+        _verssementControler.text = _verssementpiece.toString() ;
+        _restepiece = _total_ttc - _verssementpiece ;
       }
 
     });
@@ -957,7 +984,9 @@ class _AddPiecePageState extends State<AddPiecePage> with TickerProviderStateMix
           await _queryCtr.updateJournaux(DbTablesNames.journaux, journaux);
         });
 
-        await addTresorie();
+        if(_piece.mov == 1){
+          await addTresorie();
+        }
 
         if (id > -1) {
           widget.arguments = item;
@@ -978,8 +1007,9 @@ class _AddPiecePageState extends State<AddPiecePage> with TickerProviderStateMix
           await _queryCtr.addItemToTable(DbTablesNames.journaux, journaux);
         });
 
-        await addTresorie();
-
+        if(_piece.mov == 1){
+          await addTresorie();
+        }
         if (id > -1) {
           widget.arguments = piece;
           widget.arguments.id = id;
@@ -1004,11 +1034,22 @@ class _AddPiecePageState extends State<AddPiecePage> with TickerProviderStateMix
     _piece.tier_id= tiers.id ;
     _piece.raisonSociale = tiers.raisonSociale ;
     _piece.tarification = _selectedTarification ;
+
+    _piece.total_ht = _total_ht ;
+    _piece.total_tva = _total_tva;
+    _piece.total_ttc = _total_ttc ;
+
     if(_piece.transformer == null){
       _piece.transformer = 0 ;
     }
-    _piece.regler=_verssementpiece ;
-    _piece.reste=_restepiece;
+
+    if(_piece.id == null ){
+      _piece.regler =_verssementpiece;
+    }else{
+      _piece.regler= _piece.regler+_verssementpiece;
+    }
+    _piece.reste=_piece.total_ttc - _piece.regler;
+
 
     var res = await _queryCtr.getPieceByNum(_piece.num_piece , _piece.piece);
     if(res.length >= 1 && !modification){
@@ -1023,9 +1064,8 @@ class _AddPiecePageState extends State<AddPiecePage> with TickerProviderStateMix
 
   Future<void> addTresorie() async {
     Tresorie tresorie = new Tresorie.init();
-    if(_piece.mov == 1){
-      tresorie.montant = _piece.regler ;
-    }
+
+    tresorie.montant = _verssementpiece ;
     tresorie.objet = "reglement piece ${_piece.piece} ${_piece.num_piece}";
     tresorie.modalite = "espece";
     tresorie.tierId  = _piece.tier_id ;
@@ -1037,6 +1077,14 @@ class _AddPiecePageState extends State<AddPiecePage> with TickerProviderStateMix
     }else{
       if(_piece.piece == PieceType.bonReception ||_piece.piece == PieceType.factureFournisseur){
         tresorie.categorie= 3;
+      }else{
+        if(_piece.piece == PieceType.retourClient ||_piece.piece == PieceType.avoirClient ){
+          tresorie.categorie = 6 ;
+        }else{
+          if(_piece.piece == PieceType.retourFournisseur ||_piece.piece == PieceType.avoirFournisseur ){
+            tresorie.categorie = 7 ;
+          }
+        }
       }
     }
     List<FormatPiece> list = await _queryCtr.getFormatPiece(PieceType.tresorie);

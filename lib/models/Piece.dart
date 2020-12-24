@@ -29,6 +29,7 @@ class Piece{
   double _net_a_payer = 0;
   double _regler;
   double _reste;
+  double _marge ;
 
   Piece.init();
   Piece.typePiece(this._piece);
@@ -50,6 +51,7 @@ class Piece{
     this._net_a_payer = obj["Net_a_payer"];
     this._regler = obj["Regler"];
     this._reste = obj["Reste"];
+    this._marge = obj["Marge"];
   }
 
   Map<String, dynamic> toMap() {
@@ -70,6 +72,7 @@ class Piece{
     map["Net_a_payer"] = this._net_a_payer;
     map["Regler"] = this._regler;
     map["Reste"] = this._reste;
+    map["Marge"] = this._marge ;
 
     return map;
   }
@@ -90,8 +93,8 @@ class Piece{
       this._timbre,
       this._net_a_payer,
       this._regler,
-      this._reste
-
+      this._reste,
+      this._marge
       );
 
   int get id => _id;
@@ -195,6 +198,12 @@ class Piece{
 
   set etat(int value) {
     _etat = value;
+  }
+
+  double get marge => _marge;
+
+  set marge(double value) {
+    _marge = value;
   }
 
   @override

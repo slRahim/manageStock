@@ -3,6 +3,7 @@ import 'package:gestmob/models/Piece.dart';
 import 'Article.dart';
 
 class Journaux{
+
   int _id;
   int _mov;
   DateTime _date;
@@ -11,6 +12,7 @@ class Journaux{
   int _article_id;
   double _qte;
   double _prix_ht;
+  double _prix_revient;
 
   int get id => _id;
 
@@ -69,6 +71,13 @@ class Journaux{
     _piece_type = value;
   }
 
+
+  double get prix_revient => _prix_revient;
+
+  set prix_revient(double value) {
+    _prix_revient = value;
+  }
+
   Journaux.fromPiece(Piece piece, Article article){
     this._mov = piece.mov;
     this._date = piece.date;
@@ -78,10 +87,11 @@ class Journaux{
     this._qte = article.selectedQuantite;
     this._prix_ht = article.selectedPrice;
     this._tva = article.tva;
+    this._prix_revient = article.pmp ;
   }
 
   Journaux(this._mov, this._date, this._piece_id,this._piece_type, this._article_id,
-      this._qte, this._prix_ht, this._tva);
+      this._qte, this._prix_ht, this._tva , this._prix_revient);
 
   Journaux.init();
   Journaux.fromMap(dynamic obj) {
@@ -94,6 +104,7 @@ class Journaux{
     this._qte = obj["Qte"];
     this._prix_ht = obj["Prix_ht"];
     this._tva = obj["Tva"];
+    this._prix_revient = obj["Prix_revient"];
   }
 
   Map<String, dynamic> toMap() {
@@ -107,6 +118,7 @@ class Journaux{
     map["Qte"] = this._qte;
     map["Prix_ht"] = this._prix_ht;
     map["Tva"] = this._tva;
+    map["Prix_revient"] = this._prix_revient;
 
     return map;
   }
