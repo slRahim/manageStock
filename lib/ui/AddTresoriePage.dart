@@ -143,10 +143,10 @@ class _AddTresoriePageState extends State<AddTresoriePage> with TickerProviderSt
       }else{
         _selectedPieces = new List<Piece> ();
       }
-      _selectedCategorie = _categorieItems[_tresorie.categorie];
+      _selectedCategorie = _categorieItems[_tresorie.categorie-1];
       _objetControl.text = _tresorie.objet;
       _modaliteControl.text= _tresorie.modalite ;
-      _montantControl.text = _tresorie.montant.toString() ;
+      _montantControl.text =(_tresorie.montant<0) ?(_tresorie.montant*-1).toString() : _tresorie.montant.toString() ;
 
 
     }else{
@@ -741,12 +741,18 @@ class _AddTresoriePageState extends State<AddTresoriePage> with TickerProviderSt
     String message;
     try {
       if (widget.arguments.id != null) {
+        //update tresorie
         Tresorie tresorie = await makeItem();
         id = await _queryCtr.updateItemInDb(DbTablesNames.tresorie, tresorie);
-        if(_selectedCategorie.id == 2 || _selectedCategorie.id == 3){
+
+        if(tresorie.categorie == 2 || tresorie.categorie == 3){
           bool _haspiece = true ;
-          if(_selectedPieces.isEmpty){
+          if(tresorie.pieceId == null){
             _selectedPieces = await _queryCtr.getAllPiecesByTierId(_selectedClient.id);
+          }else{
+            var piece = await _queryCtr.getPieceById(_selectedClient.id);
+            _selectedPieces=new List<Piece> ();
+            _selectedPieces.add(piece);
           }
           double _montant = tresorie.montant ;
           _selectedPieces.forEach((piece) async{
@@ -756,17 +762,14 @@ class _AddTresoriePageState extends State<AddTresoriePage> with TickerProviderSt
             item.tresorie_id = widget.arguments.id ;
 
             if(_montant >= piece.reste){
-              piece.regler = piece.regler + piece.reste;
+              item.regler = piece.reste ;
               _montant = _montant - piece.reste ;
-              piece.reste = piece.total_ttc - piece.regler ;
             }else if(_montant != 0){
-              piece.regler = piece.regler + _montant;
-              piece.reste = piece.total_ttc - piece.regler ;
+              item.regler = _montant ;
             }else{
               return ;
             }
-            await _queryCtr.updateItemInDb(DbTablesNames.reglementTresorie, item);
-            await _queryCtr.updateItemInDb(DbTablesNames.pieces, piece);
+            await _queryCtr.addItemToTable(DbTablesNames.reglementTresorie, item);
           });
           if(_haspiece == false){
             setState(() {
@@ -781,15 +784,17 @@ class _AddTresoriePageState extends State<AddTresoriePage> with TickerProviderSt
         } else {
           message = S.current.msg_update_err;
         }
+
       } else {
+        // add new tresorie
         Tresorie tresorie = await makeItem();
         id = await _queryCtr.addItemToTable(DbTablesNames.tresorie, tresorie);
         if(id > -1){
           tresorie.id = await _queryCtr.getLastId(DbTablesNames.tresorie);
         }
-        if(_selectedCategorie.id == 2 || _selectedCategorie.id == 3){
+        if(tresorie.categorie == 2 || tresorie.categorie == 3){
           bool _haspiece = true ;
-          if(_selectedPieces.isEmpty){
+          if(tresorie.pieceId == null){
             _haspiece =false ;
             _selectedPieces = await _queryCtr.getAllPiecesByTierId(_selectedClient.id);
           }
@@ -802,18 +807,13 @@ class _AddTresoriePageState extends State<AddTresoriePage> with TickerProviderSt
 
             if(_montant >= piece.reste){
               item.regler = piece.reste ;
-              piece.regler = piece.regler + piece.reste;
               _montant = _montant - piece.reste ;
-              piece.reste = piece.total_ttc - piece.regler ;
             }else if(_montant != 0){
               item.regler = _montant ;
-              piece.regler = piece.regler + _montant;
-              piece.reste = piece.total_ttc - piece.regler ;
             }else{
               return ;
             }
             await _queryCtr.addItemToTable(DbTablesNames.reglementTresorie, item);
-            await _queryCtr.updateItemInDb(DbTablesNames.pieces, piece);
           });
           if(_haspiece == false){
             setState(() {
@@ -852,6 +852,9 @@ class _AddTresoriePageState extends State<AddTresoriePage> with TickerProviderSt
     _tresorie.objet = _objetControl.text;
     _tresorie.modalite=_modaliteControl.text;
     _tresorie.montant= double.parse(_montantControl.text);
+    if(_selectedCategorie.id == 6 || _selectedCategorie.id == 7){
+      _tresorie.montant = _tresorie.montant * -1 ;
+    }
     if(_selectedPieces.isNotEmpty){
       _tresorie.pieceId = _selectedPieces.first.id ;
     }

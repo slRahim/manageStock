@@ -23,6 +23,7 @@ class PiecesFragment extends StatefulWidget {
   final int clientFourn;
   final String peaceType ;
   final int tierId ;
+
   final Function(dynamic) onConfirmSelectedItem;
 
   const PiecesFragment ({Key key, this.clientFourn , this.peaceType,this.tierId,this.onConfirmSelectedItem}): super(key: key);

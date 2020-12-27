@@ -546,10 +546,8 @@ class SqlLiteDatabaseHelper {
     await db.execute('''CREATE TRIGGER update_tier_reglement_credit 
         AFTER INSERT ON Tresories 
         FOR EACH ROW 
-        when (New.Categorie_id = 2 OR New.Categorie_id = 3 OR New.Categorie_id = 6 OR New.Categorie_id = 7) AND New.Piece_id <> Null
-        BEGIN 
-            INSERT INTO ReglementTresorie (Tresorie_id , Piece_id , Regler) Values (New.id , New.Piece_id , New.Montant) ;
-            
+        when (New.Categorie_id = 2 OR New.Categorie_id = 3 OR New.Categorie_id = 6 OR New.Categorie_id = 7)
+        BEGIN             
             UPDATE Tiers
               SET Regler = (SELECT SUM(Montant) FROM Tresories WHERE Tier_id = New.Tier_id)
             WHERE id = NEW.Tier_id ;
@@ -561,8 +559,24 @@ class SqlLiteDatabaseHelper {
         END;
       ''');
 
-    await db.execute('''CREATE TRIGGER update_tier_reglement_credit1
-        AFTER INSERT ON Tresories 
+    await db.execute('''CREATE TRIGGER update_piece_verssement
+        AFTER INSERT ON ReglementTresorie
+        FOR EACH ROW
+        BEGIN
+            UPDATE Pieces
+              SET Regler = (SELECT SUM(Regler) FROM ReglementTresorie WHERE Piece_id = New.Piece_id)
+            WHERE id =  New.Piece_id ;
+
+             UPDATE Pieces
+               SET  Reste = Total_ttc - Regler 
+             WHERE id = New.Piece_id;
+
+        END;
+      ''');
+
+    //******************************************************************************************************
+    await db.execute('''CREATE TRIGGER update_tier_reglement_credit2
+        AFTER UPDATE ON Tresories 
         FOR EACH ROW 
         when (New.Categorie_id = 2 OR New.Categorie_id = 3 OR New.Categorie_id = 6 OR New.Categorie_id = 7) 
         BEGIN             
@@ -574,6 +588,7 @@ class SqlLiteDatabaseHelper {
                SET  Credit = (Solde_depart + Chiffre_affaires) - Regler 
              WHERE id = New.Tier_id;
            
+            DELETE FROM ReglementTresorie WHERE Tresorie_id = Old.id ;
         END;
       ''');
 
@@ -599,13 +614,13 @@ class SqlLiteDatabaseHelper {
         BEFORE DELETE ON ReglementTresorie 
         FOR EACH ROW 
         BEGIN 
-           UPDATE Pieces 
-              SET Regler = Regler - OLD.Regler
-           WHERE id = OLD.Piece_id ;
-           
-           UPDATE Pieces 
-              SET Reste = Total_ttc - Regler 
-           WHERE id = OLD.Piece_id ;
+            UPDATE Pieces
+              SET Regler = (SELECT SUM(Regler-OLD.Regler) FROM ReglementTresorie WHERE Piece_id = OLD.Piece_id)
+            WHERE id =  OLD.Piece_id ;
+
+             UPDATE Pieces
+               SET  Reste = Total_ttc - Regler 
+             WHERE id = OLD.Piece_id;
         END;
       ''');
 
@@ -615,7 +630,7 @@ class SqlLiteDatabaseHelper {
         FOR EACH ROW 
         BEGIN 
            UPDATE Tresories 
-           SET Piece_id = NEW.New_Piece_id 
+              SET Piece_id = NEW.New_Piece_id 
            WHERE Piece_id = NEW.Old_Piece_id ;
            
            UPDATE ReglementTresorie 

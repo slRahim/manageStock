@@ -24,6 +24,7 @@ import 'package:gestmob/models/FormatPiece.dart';
 import 'package:gestmob/models/FormatPrint.dart';
 import 'package:gestmob/models/Journaux.dart';
 import 'package:gestmob/models/Piece.dart';
+import 'package:gestmob/models/ReglementTresorie.dart';
 import 'package:gestmob/models/Tiers.dart';
 import 'package:gestmob/models/TiersFamille.dart';
 import 'package:gestmob/models/Transformer.dart';
@@ -237,8 +238,11 @@ class _AddPiecePageState extends State<AddPiecePage> with TickerProviderStateMix
                 && _piece.piece != PieceType.avoirClient
                 && _piece.piece != PieceType.retourFournisseur && _piece.piece != PieceType.avoirFournisseur)
                 ? ()async{
-
-                  // await transfererPiece(context) ;
+                      await showDialog(
+                          context: context,
+                          builder: (BuildContext context) {
+                            return transferPieceDialog();
+                          });
                 } : null,
           ),
           // extendBody: true,
@@ -1091,20 +1095,143 @@ class _AddPiecePageState extends State<AddPiecePage> with TickerProviderStateMix
     tresorie.numTresorie =  Helpers.generateNumPiece(list.first);
 
     await _queryCtr.addItemToTable(DbTablesNames.tresorie, tresorie);
+
+    ReglementTresorie reglementTresorie = new ReglementTresorie.init();
+    reglementTresorie.tresorie_id= await _queryCtr.getLastId(DbTablesNames.tresorie);
+    reglementTresorie.piece_id = await _queryCtr.getLastId(DbTablesNames.pieces);
+    reglementTresorie.regler = tresorie.montant ;
+    await _queryCtr.addItemToTable(DbTablesNames.reglementTresorie, reglementTresorie);
   }
 
   //***********************************special pour la transformation de la piece*************************************************************
-  Future<void> transfererPiece (context)async{
+
+  Widget transferPieceDialog(){
+    return StatefulBuilder(builder: (context, StateSetter setState) {
+      return Builder(
+          builder: (context) => Dialog(
+            //this right here
+            child: SingleChildScrollView(
+              child: Padding(
+                padding: const EdgeInsets.all(15),
+                child: Wrap(spacing: 13, runSpacing: 13,
+                    children: [
+                      Center(
+                          child: Padding(
+                            padding: const EdgeInsets.only(bottom: 20),
+                            child: Text(
+                              "${S.current.choisir_action}: ",
+                              style: TextStyle(
+                                fontSize: 22,
+                                fontWeight: FontWeight.w400,
+                              ),
+                            ),
+                          )),
+                      Visibility(
+                        visible: (_piece.piece == PieceType.devis),
+                        child: SizedBox(
+                          width: 320.0,
+                          child: Padding(
+                            padding: EdgeInsetsDirectional.only(end: 0, start: 0),
+                            child: RaisedButton(
+                              onPressed: () async {
+                                var msg=await transfererPiece(context,"toCommande");
+                                Helpers.showFlushBar(context, msg);
+                              },
+                              child: Text(
+                                "Vers Commande",
+                                style: TextStyle(color: Colors.white , fontSize: 16),
+                              ),
+                              color: Colors.purple,
+                            ),
+                          ),
+                        ),
+                      ),
+                      Visibility(
+                        visible: (_piece.piece == PieceType.devis || _piece.piece == PieceType.commandeClient || _piece.piece == PieceType.bonCommande),
+                        child: SizedBox(
+                          width: 320.0,
+                          child: Padding(
+                            padding: EdgeInsetsDirectional.only(end: 0, start: 0),
+                            child: RaisedButton(
+                              onPressed: () async {
+                                var msg=await transfererPiece(context,"toBon");
+                                Helpers.showFlushBar(context, msg);
+                              },
+                              child: Text(
+                                "Vers un Bon",
+                                style: TextStyle(color: Colors.white , fontSize: 16),
+                              ),
+                              color: Colors.blue,
+                            ),
+                          ),
+                        ),
+                      ),
+                      Visibility(
+                        visible: (_piece.piece != PieceType.factureClient && _piece.piece != PieceType.factureFournisseur),
+                        child: SizedBox(
+                          width: 320.0,
+                          child: Padding(
+                            padding: EdgeInsetsDirectional.only(end: 0, start: 0),
+                            child: RaisedButton(
+                              onPressed: () async {
+                                var msg=await transfererPiece(context,"toFacture");
+                                Helpers.showFlushBar(context, msg);
+                              },
+                              child: Text(
+                                "Vers Facture",
+                                style: TextStyle(color: Colors.white , fontSize: 16),
+                              ),
+                              color: Colors.green,
+                            ),
+                          ),
+                        ),
+                      ),
+                      Visibility(
+                        visible: (_piece.piece == PieceType.bonReception || _piece.piece == PieceType.bonLivraison||
+                              _piece.piece == PieceType.factureClient || _piece.piece == PieceType.factureFournisseur),
+                        child: SizedBox(
+                          width: 320.0,
+                          child: Padding(
+                            padding: EdgeInsets.only(right: 0, left: 0),
+                            child: RaisedButton(
+                              onPressed: () async {
+                                var msg = await transfererPiece(context,"toRetour");
+                                Helpers.showFlushBar(context, msg);
+                              },
+                              child: Text(
+                                "Vers Retour/Avoir",
+                                style: TextStyle(color: Colors.white , fontSize: 16),
+                              ),
+                              color: Colors.redAccent,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ]
+                ),
+              ),
+            ),
+          ));
+    });
+  }
+
+  Future<String> transfererPiece (context,String to)async{
     try{
       int id = -1 ;
       Piece _newPiece= new Piece.init();
       _newPiece.tier_id = _piece.tier_id;
       _newPiece.raisonSociale = _piece.raisonSociale ;
-      _newPiece.piece = typePieceTransformer(_piece.piece);
-      _newPiece.mov = 1 ;
+      _newPiece.piece = typePieceTransformer(_piece.piece,to);
+      if(_newPiece.piece == PieceType.commandeClient){
+        _newPiece.mov = 0 ;
+      }else{
+        _newPiece.mov = 1 ;
+      }
+
       _newPiece.transformer = 1 ;
       _newPiece.etat = 0 ;
       _newPiece.tarification = _piece.tarification ;
+
       var res = await _queryCtr.getFormatPiece(_newPiece.piece) ;
       _newPiece.num_piece =Helpers.generateNumPiece(res.first);
       _newPiece.total_ttc = _piece.total_ttc ;
@@ -1115,8 +1242,6 @@ class _AddPiecePageState extends State<AddPiecePage> with TickerProviderStateMix
       _newPiece.reste = _piece.reste ;
       _newPiece.regler = _piece.regler ;
 
-      int _oldMov = _piece.mov ;
-
       id = await _queryCtr.addItemToTable(DbTablesNames.pieces, _newPiece);
       if(id > -1){
         _newPiece.id = await _queryCtr.getLastId(DbTablesNames.pieces);
@@ -1126,6 +1251,8 @@ class _AddPiecePageState extends State<AddPiecePage> with TickerProviderStateMix
         await _queryCtr.addItemToTable(DbTablesNames.journaux, journaux);
       });
 
+      int _oldMov = _piece.mov ;
+
       //  add la transformation à la table transformer (oldPiece_id newPiece_id , oldMov)
       Transformer transformer = new Transformer.init();
       transformer.oldMov = _oldMov;
@@ -1134,31 +1261,76 @@ class _AddPiecePageState extends State<AddPiecePage> with TickerProviderStateMix
       await _queryCtr.addItemToTable(DbTablesNames.transformer, transformer);
 
       var message = S.current.msg_piece_transfere;
-      Helpers.showFlushBar(context, message);
 
       _piece.etat = 1 ;
       await saveItem(0);
 
+      Navigator.pop(context);
+
+      return message ;
     }catch(e){
       var message = S.current.msg_transfere_err;
-      Helpers.showFlushBar(context, message);
+      return message ;
     }
 
   }
 
-  String typePieceTransformer(pi) {
+  String typePieceTransformer(pi , to) {
     switch(pi){
       case PieceType.devis :
-        return PieceType.bonLivraison ;
+        if(to == "toCommande"){
+          return PieceType.commandeClient ;
+        }else{
+          if(to == "toBon"){
+            return PieceType.bonLivraison ;
+          }else{
+            if(to == "toFacture"){
+              return PieceType.factureClient ;
+            }
+          }
+        }
         break ;
       case PieceType.commandeClient :
-        return PieceType.bonLivraison ;
+        if(to == "toBon"){
+          return PieceType.bonLivraison ;
+        }else{
+          if(to == "toFacture"){
+            return PieceType.factureClient ;
+          }
+        }
         break ;
       case PieceType.bonLivraison :
-        return PieceType.factureClient ;
+        if(to == "toFacture"){
+          return PieceType.factureClient ;
+        }else{
+          if(to == "toRetour"){
+            return PieceType.retourClient ;
+          }
+        }
+        break ;
+      case PieceType.factureClient :
+        return PieceType.avoirClient ;
+        break ;
+      case PieceType.bonCommande :
+        if(to == "toBon"){
+          return PieceType.bonReception ;
+        }else{
+          if(to == "toFacture"){
+            return PieceType.factureFournisseur ;
+          }
+        }
         break ;
       case PieceType.bonReception :
-        return PieceType.factureFournisseur ;
+        if(to == "toFacture"){
+          return PieceType.factureFournisseur ;
+        }else{
+          if(to == "toRetour"){
+            return PieceType.retourFournisseur ;
+          }
+        }
+        break ;
+      case PieceType.factureFournisseur :
+        return PieceType.avoirClient ;
         break ;
     }
   }
