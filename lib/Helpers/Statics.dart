@@ -41,6 +41,7 @@ class RoutesKeys {
 class ItemsListTypes {
   const ItemsListTypes();
   static const articlesList = 'articlesList';
+  static const journalList = "journalList" ;
   static const clientsList = 'clientsList';
   static const fournisseursList = 'fournisseursList';
   static const pieceList = 'pieceList';

@@ -1,4 +1,5 @@
 import 'package:flutter/services.dart';
+import 'package:flutter_icons/flutter_icons.dart';
 import 'package:gestmob/Helpers/SqlLiteDatabaseHelper.dart';
 import 'package:gestmob/Helpers/Statics.dart';
 import 'package:gestmob/models/Article.dart';
@@ -50,7 +51,6 @@ class QueryCtr {
       String marqueFilter = marque > 0 ? " AND Id_Marque = $marque" : "";
       String familleFilter = famille > 0 ? " AND Id_Famille = $famille" : "";
       String stockFilter = stock ? " AND Qte > 0 " : "";
-
 
       query += " where (Designation like '%${searchTerm??''}%' OR CodeBar like '%${searchTerm??''}%' OR Ref like '%${searchTerm??''}%')";
 
@@ -242,6 +242,29 @@ class QueryCtr {
       list.add(article);
     }
     return list ;
+  }
+
+  Future<List> getJournauxByTier({int offset, int limit, String searchTerm, Map<String, dynamic> filters})async{
+     Database dbClient = await _databaseHelper.db;
+     List<Piece> pieces = new List<Piece>();
+
+     var res = await dbClient.query(DbTablesNames.pieces , where: "Tier_id = ?" , whereArgs: [filters["idTier"].id]);
+     for (var i = 0, j = res.length; i < j; i++) {
+       Piece piece = Piece.fromMap(res[i]);
+       pieces.add(piece);
+     }
+
+     List articles = new List ();
+     var res1 ;
+     for(int i= 0 ; i<pieces.length ; i++){
+       res1 =  await getJournalPiece(pieces[i]);
+       articles.addAll(res1);
+     }
+
+     List<dynamic> result= new List <dynamic>();
+     result.add(articles);
+
+    return articles ;
   }
 
   Future<int> updateJournaux(String tableName, item)async{

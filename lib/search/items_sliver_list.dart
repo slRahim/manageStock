@@ -10,6 +10,7 @@ import 'package:gestmob/Widgets/piece_list_item.dart';
 import 'package:gestmob/Widgets/tier_list_item.dart';
 import 'package:gestmob/Widgets/tresorie_list_item.dart';
 import 'package:gestmob/models/Article.dart';
+import 'package:gestmob/models/Journaux.dart';
 import 'package:gestmob/models/Piece.dart';
 import 'package:gestmob/models/Tiers.dart';
 import 'package:gestmob/models/Tresorie.dart';

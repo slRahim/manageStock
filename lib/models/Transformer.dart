@@ -3,16 +3,18 @@ class Transformer {
 
   int _id ;
   int _oldPieceId , _newPieceId , _oldMov;
+  String _type_piece ;
 
   Transformer.init();
 
-  Transformer(this._id, this._oldPieceId, this._newPieceId, this._oldMov);
+  Transformer(this._id, this._oldPieceId, this._newPieceId, this._oldMov,this._type_piece);
 
   Transformer.fromMap(dynamic obj){
     this._id = obj["id"];
     this._oldMov=obj["Old_Mov"];
     this._oldPieceId=obj["Old_Piece_id"];
     this._newPieceId = obj["New_Piece_id"];
+    this._type_piece = obj["Type_piece"];
   }
 
   Map<String , dynamic> toMap(){
@@ -21,8 +23,16 @@ class Transformer {
     map["Old_Mov"] =this._oldMov;
     map["Old_Piece_id"] =this._oldPieceId;
     map["New_Piece_id"]=this._newPieceId ;
+    map["Type_piece"]=this._type_piece;
 
     return map ;
+  }
+
+
+  String get type_piece => _type_piece;
+
+  set type_piece(String value) {
+    _type_piece = value;
   }
 
   get oldMov => _oldMov;

@@ -5,6 +5,7 @@ import 'dart:ui';
 
 import 'package:esc_pos_bluetooth/esc_pos_bluetooth.dart';
 import 'package:expandable_bottom_bar/expandable_bottom_bar.dart';
+import 'package:floating_action_row/floating_action_row.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bluetooth_basic/flutter_bluetooth_basic.dart';
 import 'package:flutter_icons/flutter_icons.dart';
@@ -32,6 +33,7 @@ import 'package:gestmob/models/Tresorie.dart';
 import 'package:gestmob/search/items_sliver_list.dart';
 import 'package:gestmob/search/sliver_list_data_source.dart';
 import 'package:gestmob/ui/ClientFourFragment.dart';
+import 'package:gestmob/ui/JournalFragment.dart';
 import 'package:gestmob/ui/preview_piece.dart';
 import 'package:gestmob/ui/printer_screen.dart';
 import 'package:image_picker/image_picker.dart';
@@ -274,7 +276,8 @@ class _AddPiecePageState extends State<AddPiecePage> with TickerProviderStateMix
                   InkWell(
                     onTap: ()async{
                       if(editMode){
-                        if(_piece.piece != PieceType.devis && _piece.piece != PieceType.bonCommande){
+                        if(_piece.piece != PieceType.devis && _piece.piece != PieceType.bonCommande
+                           && _piece.piece != PieceType.retourClient){
                           await showDialog(
                               context: context,
                               builder: (BuildContext context) {
@@ -301,32 +304,50 @@ class _AddPiecePageState extends State<AddPiecePage> with TickerProviderStateMix
             // Set onVerticalDrag event to drag handlers of controller for swipe effect
             onVerticalDragUpdate: bottomBarControler.onDrag,
             onVerticalDragEnd: bottomBarControler.onDragEnd,
-            child: FloatingActionButton.extended(
-              label:(editMode)? Text("+ ${S.current.ajouter}") : Icon(Icons.print , color: Colors.white,),
-              elevation: 2,
-              backgroundColor: editMode ? Colors.blue : Colors.redAccent,
-              foregroundColor: Colors.white,
-              //Set onPressed event to swap state of bottom bar
-              onPressed: editMode
-                  ? () async => await showDialog(
+            child: FloatingActionRow(
+              children: [
+                FloatingActionRowButton(
+                  icon:(editMode)? Icon(Icons.add , color: Colors.white,) : Icon(Icons.print , color: Colors.white,),
+                  color: editMode ? Colors.blue : Colors.redAccent,
+                  foregroundColor: Colors.white,
+                  //Set onPressed event to swap state of bottom bar
+                  onTap: editMode
+                      ? () async => await showDialog(
+                              context: context,
+                              builder: (BuildContext context) {
+                                return addArticleDialog();
+                              }).then((val) {calculPiece();})
+                      : ()async {
+                          await showDialog(
+                            context: context,
+                            builder: (BuildContext context) {
+                              return previewItem(_piece);
+                            }
+                          );
+                          if(_ticket != null){
+                            await printItem(_ticket);
+                            setState(() {
+                              _ticket = null ;
+                            });
+                          }
+                      }
+                ),
+                FloatingActionRowDivider(),
+                (_piece.piece == PieceType.avoirClient || _piece.piece == PieceType.retourClient
+                 || _piece.piece == PieceType.avoirClient || _piece.piece == PieceType.retourClient
+                )
+                ?FloatingActionRowButton(
+                    icon: Icon(Icons.insert_drive_file_outlined),
+                    color: Colors.redAccent,
+                    onTap: () async{
+                      await showDialog(
                           context: context,
                           builder: (BuildContext context) {
-                            return addArticleDialog();
-                          }).then((val) {calculPiece();})
-                  : ()async {
-                      await showDialog(
-                        context: context,
-                        builder: (BuildContext context) {
-                          return previewItem(_piece);
-                        }
-                      );
-                      if(_ticket != null){
-                        await printItem(_ticket);
-                        setState(() {
-                          _ticket = null ;
-                        });
-                      }
-                  }
+                        return addJournauxDialog();
+                      }).then((val) {calculPiece();});
+                    }
+                ) : SizedBox(height: 0,),
+              ],
             ),
           ),
           body: Builder(
@@ -510,6 +531,26 @@ class _AddPiecePageState extends State<AddPiecePage> with TickerProviderStateMix
           }
         });
       },
+
+    );
+  }
+
+  Widget addJournauxDialog(){
+    return new JournalFragment(
+      tier: _selectedClient,
+      onConfirmSelectedItems: (selectedItem) {
+        selectedItem.forEach((item) {
+          if (_selectedItems.contains(item)) {
+            _selectedItems.elementAt(_selectedItems.indexOf(item)).selectedQuantite += item.selectedQuantite;
+          } else {
+            _selectedItems.add(item);
+            if(_desSelectedItems.contains(item)){
+              _desSelectedItems.remove(item);
+            }
+          }
+        });
+      },
+
     );
   }
 
@@ -752,6 +793,7 @@ class _AddPiecePageState extends State<AddPiecePage> with TickerProviderStateMix
     });
   }
 
+  //*********************************************************************************************************************************************************************************
   //********************************************************************** partie de la date ****************************************************************************************
   void callDatePicker() async {
     DateTime now = new DateTime.now();
@@ -784,6 +826,7 @@ class _AddPiecePageState extends State<AddPiecePage> with TickerProviderStateMix
     );
   }
 
+  //********************************************************************************************************************************************************************************
   //*************************************************************************** partie de save dialog et options ***********************************************************************************
 
   //dialog de save
@@ -969,13 +1012,14 @@ class _AddPiecePageState extends State<AddPiecePage> with TickerProviderStateMix
     );
   }
 
-
+  //**********************************************************************************************************************************************
   //************************************************add or update item *************************************************************************
   Future<int> addItemToDb() async {
     int id = -1;
     String message;
     try {
       if (widget.arguments.id != null) {
+        //edit piece
         var item = await makePiece();
         id = await _queryCtr.updateItemInDb(DbTablesNames.pieces, item);
         _selectedItems.forEach((article) async {
@@ -1000,6 +1044,7 @@ class _AddPiecePageState extends State<AddPiecePage> with TickerProviderStateMix
           message = S.current.msg_update_err;
         }
       } else {
+        //add new piece
         Piece piece = await makePiece();
         piece.etat = 0 ;
         id = await _queryCtr.addItemToTable(DbTablesNames.pieces, piece);
@@ -1084,9 +1129,11 @@ class _AddPiecePageState extends State<AddPiecePage> with TickerProviderStateMix
       }else{
         if(_piece.piece == PieceType.retourClient ||_piece.piece == PieceType.avoirClient ){
           tresorie.categorie = 6 ;
+          tresorie.montant = tresorie.montant*-1 ;
         }else{
           if(_piece.piece == PieceType.retourFournisseur ||_piece.piece == PieceType.avoirFournisseur ){
             tresorie.categorie = 7 ;
+            tresorie.montant = tresorie.montant*-1 ;
           }
         }
       }
@@ -1103,6 +1150,7 @@ class _AddPiecePageState extends State<AddPiecePage> with TickerProviderStateMix
     await _queryCtr.addItemToTable(DbTablesNames.reglementTresorie, reglementTresorie);
   }
 
+  //******************************************************************************************************************************************
   //***********************************special pour la transformation de la piece*************************************************************
 
   Widget transferPieceDialog(){
@@ -1258,6 +1306,7 @@ class _AddPiecePageState extends State<AddPiecePage> with TickerProviderStateMix
       transformer.oldMov = _oldMov;
       transformer.newPieceId = _newPiece.id ;
       transformer.oldPieceId = _piece.id ;
+      transformer.type_piece = _newPiece.piece ;
       await _queryCtr.addItemToTable(DbTablesNames.transformer, transformer);
 
       var message = S.current.msg_piece_transfere;
@@ -1335,7 +1384,8 @@ class _AddPiecePageState extends State<AddPiecePage> with TickerProviderStateMix
     }
   }
 
-  //****************************************quik print****************************************************************************
+  //******************************************************************************************************************************************
+  //****************************************quik print****************************************************************************************
   quikPrintTicket() async {
     var defaultPrinter = await _queryCtr.getPrinter() ;
 

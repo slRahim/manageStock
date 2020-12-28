@@ -41,8 +41,10 @@ class _ArticleListItemState extends State<ArticleListItem> {
   Widget build(BuildContext context) {
     return ListTileCard(
       onLongPress: () {
-        if(widget.onItemSelected != null){
+        if(widget.onItemSelected != null && widget.article.selectedQuantite < 1){
           selectThisItem();
+        }else{
+          widget.onItemSelected(widget.article);
         }
       },
       onTap: () async {
@@ -58,7 +60,7 @@ class _ArticleListItemState extends State<ArticleListItem> {
 
               setState(() {});
             });
-          } else if(widget.onItemSelected != null){
+          } else if(widget.onItemSelected != null && widget.article.selectedQuantite < 1){
             selectThisItem();
           }
         }
@@ -135,6 +137,13 @@ class _ArticleListItemState extends State<ArticleListItem> {
         break ;
 
       default :
+        if(widget.article.selectedPrice > 0){
+          return Text(
+            "${S.current.prix}  : "+
+                widget.article.selectedPrice.toString()+" ${S.current.da}",
+            style: TextStyle(fontSize: 16.0, fontWeight: FontWeight.bold),
+          );
+        }
         return Text(
           "${S.current.prix}  : "+
           widget.article.prixVente1.toString()+" ${S.current.da}",
@@ -169,7 +178,7 @@ class _ArticleListItemState extends State<ArticleListItem> {
                       ),
                     )),
                 Padding(
-                  padding: EdgeInsets.only(left: 5, right: 5, bottom: 20),
+                  padding: EdgeInsetsDirectional.only(start: 5, end: 5, bottom: 20),
                   child: TextField(
                     controller: _quntiteControler,
                     keyboardType: TextInputType.number,

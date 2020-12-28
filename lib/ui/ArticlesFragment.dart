@@ -13,6 +13,7 @@ import 'package:gestmob/generated/l10n.dart';
 import 'package:gestmob/models/Article.dart';
 import 'package:gestmob/models/ArticleFamille.dart';
 import 'package:gestmob/models/ArticleMarque.dart';
+import 'package:gestmob/models/Tiers.dart';
 import 'package:gestmob/search/items_sliver_list.dart';
 import 'package:gestmob/search/search_input_sliver.dart';
 import 'package:gestmob/search/sliver_list_data_source.dart';
@@ -25,6 +26,7 @@ import 'AddArticlePage.dart';
 class ArticlesFragment extends StatefulWidget {
   final Function(List<dynamic>) onConfirmSelectedItems;
   final int tarification ;
+
 
   const ArticlesFragment({Key key, this.onConfirmSelectedItems , this.tarification}) : super(key: key);
   @override
@@ -49,9 +51,11 @@ class _ArticlesFragmentState extends State<ArticlesFragment> {
   ArticleFamille _selectedFamille;
   bool _filterInStock = false;
 
+
   int _savedSelectedMarque = 0;
   int _savedSelectedFamille = 0;
   bool _savedFilterInStock = false;
+
 
   SliverListDataSource _dataSource;
 
@@ -77,6 +81,7 @@ class _ArticlesFragmentState extends State<ArticlesFragment> {
     _selectedFamille = _familleItems[_savedSelectedFamille];
     _filterInStock = _savedFilterInStock;
 
+
     final tile = StatefulBuilder(builder: (context, StateSetter _setState) {
       return Builder(
         builder: (context) => Column(
@@ -89,7 +94,7 @@ class _ArticlesFragmentState extends State<ArticlesFragment> {
               title: new Text(S.current.famile),
               trailing: famillesDropDown(_setState),
             ),
-            stockCheckBox(_setState)
+            stockCheckBox(_setState),
           ],
         ),
       );
