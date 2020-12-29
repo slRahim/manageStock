@@ -139,15 +139,15 @@ class _AddPiecePageState extends State<AddPiecePage> with TickerProviderStateMix
       _selectedClient = await _queryCtr.getTierById(_piece.tier_id);
       _clientControl.text = _selectedClient.raisonSociale;
       _selectedTarification =  _tarificationItems[_selectedClient.tarification];
-      _selectedItems= await _queryCtr.getJournalPiece(item);
-      _verssementControler.text = _piece.regler.toString();
+      _selectedItems= await _queryCtr.getJournalPiece(item , local: false);
+      _verssementControler.text = "0.0";
       _resteControler.text = _piece.reste.toString();
 
       _restepiece=_piece.reste ;
-      _verssementpiece=_piece.regler;
+      _verssementpiece= 0;
       _total_ht =_piece.total_ht ;
       _total_tva =_piece.total_tva ;
-      _total_ttc =_piece.total_ttc ;
+      _total_ttc =(_piece.total_ttc < 0 )? _piece.total_ttc * -1 : _piece.total_ttc ;
 
     }else{
       _piece.piece = widget.arguments.piece ;
@@ -240,11 +240,17 @@ class _AddPiecePageState extends State<AddPiecePage> with TickerProviderStateMix
                 && _piece.piece != PieceType.avoirClient
                 && _piece.piece != PieceType.retourFournisseur && _piece.piece != PieceType.avoirFournisseur)
                 ? ()async{
-                      await showDialog(
-                          context: context,
-                          builder: (BuildContext context) {
-                            return transferPieceDialog();
-                          });
+                      if( _piece.mov == 2 ){
+                        var message ="Transformation d'un brouilion est impossible";
+                        Helpers.showFlushBar(context, message);
+                      }else{
+                        await showDialog(
+                            context: context,
+                            builder: (BuildContext context) {
+                              return transferPieceDialog();
+                            });
+                      }
+
                 } : null,
           ),
           // extendBody: true,
@@ -277,7 +283,8 @@ class _AddPiecePageState extends State<AddPiecePage> with TickerProviderStateMix
                     onTap: ()async{
                       if(editMode){
                         if(_piece.piece != PieceType.devis && _piece.piece != PieceType.bonCommande
-                           && _piece.piece != PieceType.retourClient){
+                           && _piece.piece != PieceType.retourClient && _piece.piece != PieceType.avoirClient
+                            && _piece.piece != PieceType.retourFournisseur && _piece.piece != PieceType.avoirFournisseur){
                           await showDialog(
                               context: context,
                               builder: (BuildContext context) {
@@ -290,7 +297,10 @@ class _AddPiecePageState extends State<AddPiecePage> with TickerProviderStateMix
                         padding: EdgeInsetsDirectional.only(end: 30),
                         child:Text("${S.current.reste} : "+_restepiece.toString(), textAlign: TextAlign.center,
                           style: TextStyle(
-                              fontWeight: FontWeight.bold
+                              fontWeight: FontWeight.bold,
+                              color: (_piece.piece != PieceType.devis && _piece.piece != PieceType.bonCommande
+                                  && _piece.piece != PieceType.retourClient && _piece.piece != PieceType.avoirClient
+                                  && _piece.piece != PieceType.retourFournisseur && _piece.piece != PieceType.avoirFournisseur)?Colors.black : Colors.black38
                           ),
                         )
                       ),
@@ -333,9 +343,9 @@ class _AddPiecePageState extends State<AddPiecePage> with TickerProviderStateMix
                       }
                 ),
                 FloatingActionRowDivider(),
-                (_piece.piece == PieceType.avoirClient || _piece.piece == PieceType.retourClient
+               (editMode &&  (_piece.piece == PieceType.avoirClient || _piece.piece == PieceType.retourClient
                  || _piece.piece == PieceType.avoirClient || _piece.piece == PieceType.retourClient
-                )
+                 ))
                 ?FloatingActionRowButton(
                     icon: Icon(Icons.insert_drive_file_outlined),
                     color: Colors.redAccent,
@@ -538,6 +548,7 @@ class _AddPiecePageState extends State<AddPiecePage> with TickerProviderStateMix
   Widget addJournauxDialog(){
     return new JournalFragment(
       tier: _selectedClient,
+      pieceType: _piece.piece,
       onConfirmSelectedItems: (selectedItem) {
         selectedItem.forEach((item) {
           if (_selectedItems.contains(item)) {
@@ -605,8 +616,13 @@ class _AddPiecePageState extends State<AddPiecePage> with TickerProviderStateMix
                       keyboardType: TextInputType.number,
                       onChanged: (value){
                         if(_piece.id != null){
-                          double _reste = _piece.regler-double.parse(value) ;
-                          _resteControler.text = _reste.toString();
+                          if(_verssementpiece == 0){
+                            double _reste =_total_ttc-( _piece.regler + double.parse(value)) ;
+                            _resteControler.text = _reste.toString();
+                          }else{
+                            double _reste =_total_ttc-( _piece.regler + double.parse(value)) ;
+                            _resteControler.text = _reste.toString();
+                          }
                         }else{
                           double _reste = _total_ttc-double.parse(value) ;
                           _resteControler.text = _reste.toString();
@@ -773,7 +789,7 @@ class _AddPiecePageState extends State<AddPiecePage> with TickerProviderStateMix
       _total_ttc = _total_ht + _total_tva ;
 
       if(_piece.id != null){
-        if(_total_ttc < _piece.total_ttc){
+        if(_total_ttc <= _piece.total_ttc){
           _verssementpiece = 0.0;
           _verssementControler.text = _verssementpiece.toString() ;
           _restepiece = _total_ttc - _piece.regler ;
@@ -782,7 +798,7 @@ class _AddPiecePageState extends State<AddPiecePage> with TickerProviderStateMix
           _verssementpiece = _total_ttc - _piece.regler;
           _verssementControler.text = _verssementpiece.toString() ;
           _restepiece = _total_ttc - _piece.regler ;
-          _resteControler.text = _restepiece.toString();
+          _resteControler.text ="0.0";
         }
       }else{
         _verssementpiece = _total_ttc;
@@ -949,28 +965,16 @@ class _AddPiecePageState extends State<AddPiecePage> with TickerProviderStateMix
         return 0 ;
         break;
 
-      case(PieceType.bonReception):
-        return 1 ;
-        break;
-
-      case(PieceType.bonLivraison):
-        return 1 ;
-        break;
-
-      case(PieceType.factureClient):
-        return 1 ;
-        break;
-
-      case(PieceType.factureFournisseur):
-        return 1 ;
-        break;
-
       case(PieceType.commandeClient):
         return 0 ;
         break;
 
       case(PieceType.bonCommande):
         return 0 ;
+        break;
+
+      default :
+        return 1 ;
         break;
     }
   }
@@ -982,6 +986,7 @@ class _AddPiecePageState extends State<AddPiecePage> with TickerProviderStateMix
       setState(() {
         modification = true;
         editMode = false;
+        _verssementpiece = 0.0 ;
       });
     }
   }
@@ -1032,8 +1037,8 @@ class _AddPiecePageState extends State<AddPiecePage> with TickerProviderStateMix
           await _queryCtr.updateJournaux(DbTablesNames.journaux, journaux);
         });
 
-        if(_piece.mov == 1){
-          await addTresorie();
+        if(_piece.mov == 1 && _piece.piece != PieceType.retourClient){
+          await addTresorie(_piece,transferer: false);
         }
 
         if (id > -1) {
@@ -1056,9 +1061,13 @@ class _AddPiecePageState extends State<AddPiecePage> with TickerProviderStateMix
           await _queryCtr.addItemToTable(DbTablesNames.journaux, journaux);
         });
 
-        if(_piece.mov == 1){
-          await addTresorie();
+        if(_piece.mov == 1 && _piece.piece != PieceType.retourClient
+            && _piece.piece != PieceType.avoirClient && _piece.piece != PieceType.retourFournisseur
+            && _piece.piece != PieceType.avoirFournisseur){
+
+          await addTresorie(_piece,transferer: false);
         }
+
         if (id > -1) {
           widget.arguments = piece;
           widget.arguments.id = id;
@@ -1099,6 +1108,10 @@ class _AddPiecePageState extends State<AddPiecePage> with TickerProviderStateMix
     }
     _piece.reste=_piece.total_ttc - _piece.regler;
 
+    if(_piece.piece == PieceType.retourClient ||_piece.piece == PieceType.avoirClient
+        ||_piece.piece == PieceType.retourFournisseur ||_piece.piece == PieceType.avoirFournisseur ){
+      _piece.total_ttc = _piece.total_ttc * -1 ;
+    }
 
     var res = await _queryCtr.getPieceByNum(_piece.num_piece , _piece.piece);
     if(res.length >= 1 && !modification){
@@ -1111,27 +1124,29 @@ class _AddPiecePageState extends State<AddPiecePage> with TickerProviderStateMix
     return _piece ;
   }
 
-  Future<void> addTresorie() async {
+  Future<void> addTresorie(item , {transferer}) async {
     Tresorie tresorie = new Tresorie.init();
-
     tresorie.montant = _verssementpiece ;
-    tresorie.objet = "reglement piece ${_piece.piece} ${_piece.num_piece}";
+    if(transferer){
+      tresorie.montant = _piece.regler ;
+    }
+    tresorie.objet = "reglement piece ${item.piece} ${item.num_piece}";
     tresorie.modalite = "espece";
-    tresorie.tierId  = _piece.tier_id ;
-    tresorie.tierRS = _piece.raisonSociale;
-    tresorie.pieceId = _piece.id;
+    tresorie.tierId  = item.tier_id ;
+    tresorie.tierRS = item.raisonSociale;
+    tresorie.pieceId = item.id;
     tresorie.date = new DateTime.now();
-    if(_piece.piece == PieceType.bonLivraison ||_piece.piece == PieceType.factureClient){
+    if(item.piece == PieceType.bonLivraison || item.piece == PieceType.factureClient){
       tresorie.categorie= 2;
     }else{
-      if(_piece.piece == PieceType.bonReception ||_piece.piece == PieceType.factureFournisseur){
+      if(item.piece == PieceType.bonReception ||item.piece == PieceType.factureFournisseur){
         tresorie.categorie= 3;
       }else{
-        if(_piece.piece == PieceType.retourClient ||_piece.piece == PieceType.avoirClient ){
+        if(item.piece == PieceType.retourClient ||item.piece == PieceType.avoirClient ){
           tresorie.categorie = 6 ;
           tresorie.montant = tresorie.montant*-1 ;
         }else{
-          if(_piece.piece == PieceType.retourFournisseur ||_piece.piece == PieceType.avoirFournisseur ){
+          if(item.piece == PieceType.retourFournisseur ||item.piece == PieceType.avoirFournisseur ){
             tresorie.categorie = 7 ;
             tresorie.montant = tresorie.montant*-1 ;
           }
@@ -1235,8 +1250,8 @@ class _AddPiecePageState extends State<AddPiecePage> with TickerProviderStateMix
                         ),
                       ),
                       Visibility(
-                        visible: (_piece.piece == PieceType.bonReception || _piece.piece == PieceType.bonLivraison||
-                              _piece.piece == PieceType.factureClient || _piece.piece == PieceType.factureFournisseur),
+                        visible: ((_piece.piece == PieceType.bonReception || _piece.piece == PieceType.bonLivraison||
+                              _piece.piece == PieceType.factureClient || _piece.piece == PieceType.factureFournisseur)),
                         child: SizedBox(
                           width: 320.0,
                           child: Padding(
@@ -1270,6 +1285,7 @@ class _AddPiecePageState extends State<AddPiecePage> with TickerProviderStateMix
       _newPiece.tier_id = _piece.tier_id;
       _newPiece.raisonSociale = _piece.raisonSociale ;
       _newPiece.piece = typePieceTransformer(_piece.piece,to);
+
       if(_newPiece.piece == PieceType.commandeClient){
         _newPiece.mov = 0 ;
       }else{
@@ -1308,6 +1324,10 @@ class _AddPiecePageState extends State<AddPiecePage> with TickerProviderStateMix
       transformer.oldPieceId = _piece.id ;
       transformer.type_piece = _newPiece.piece ;
       await _queryCtr.addItemToTable(DbTablesNames.transformer, transformer);
+
+      if(_oldMov == 0 && _newPiece.piece != PieceType.commandeClient){
+        await addTresorie(_newPiece,transferer: true);
+      }
 
       var message = S.current.msg_piece_transfere;
 

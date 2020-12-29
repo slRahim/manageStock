@@ -494,7 +494,7 @@ class SqlLiteDatabaseHelper {
            UPDATE Articles
                SET PMP = ((Qte * PMP)+(NEW.Qte * NEW.Prix_revient))/(Qte + NEW.Qte) , 
                    Qte = Qte + NEW.Qte,
-                   Colis = Qte / Qte_Colis,
+                   Colis = Qte / Qte_Colis
              WHERE id = New.Article_id;
 
         END;
@@ -692,7 +692,7 @@ class SqlLiteDatabaseHelper {
 
   }
 
-  createTriggersTresorie(Database db, int version) async{
+  createTriggersTresorie(Database db, int version) async {
     await db.execute('''CREATE TRIGGER update_current_index_tr 
         AFTER INSERT ON Tresories 
         FOR EACH ROW 
@@ -793,7 +793,7 @@ class SqlLiteDatabaseHelper {
     await db.execute('''CREATE TRIGGER update_reglemntTresorie_tresorie 
         AFTER INSERT ON Transformers 
         FOR EACH ROW 
-        WHEN (NEW.Type_piece <> 'AC' AND NEW.Type_piece <> 'RC' AND NEW.Type_piece <> 'AF' AND NEW.Type_piece <> 'RF')
+        WHEN (NEW.Type_piece <> 'AC' AND NEW.Type_piece <> 'RC' AND NEW.Type_piece <> 'AF' AND NEW.Type_piece <> 'RF' AND NEW.Old_Mov = 1)
         BEGIN 
            UPDATE Tresories 
               SET Piece_id = NEW.New_Piece_id 
@@ -804,6 +804,7 @@ class SqlLiteDatabaseHelper {
            WHERE Piece_id = NEW.Old_Piece_id ;
         END;
       ''');
+
 
     await db.execute('''CREATE TRIGGER update_reglemntTresorie_tresorie1 
         BEFORE DELETE ON Transformers 

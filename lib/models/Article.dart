@@ -224,7 +224,7 @@ class Article{
     this._selectedQuantite = obj["Qte"];
     this._selectedPrice = obj["Prix_ht"];
     this._tva = obj["Tva"];
-
+    this._pmp = obj["Prix_revient"];
   }
 
   //convert an object to a map for persistance

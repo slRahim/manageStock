@@ -230,7 +230,7 @@ class QueryCtr {
     return piece;
   }
 
-  Future<List<Article>> getJournalPiece(Piece piece) async{
+  Future<List<Article>> getJournalPiece(Piece piece , {bool local}) async{
     var dbClient = await _databaseHelper.db ;
     String query = 'SELECT Journaux.*,Articles.Ref ,Articles.Designation ,Articles.BytesImageString'
         ' FROM Journaux JOIN Articles ON Journaux.Article_id = Articles.id AND Journaux.Mov <> -2 AND Journaux.Piece_id='+piece.id.toString();
@@ -239,6 +239,12 @@ class QueryCtr {
     List<Article> list = new List<Article>();
     for(int i=0 ; i<res.length ; i++){
       Article article = Article.fromMapJournaux(res[i]);
+      print('article qte = ${article.quantite}');
+      if(local){
+        article.setquantite(article.selectedQuantite ) ;
+        article.selectedQuantite = -1 ;
+        article.setQteMin(-1);
+      }
       list.add(article);
     }
     return list ;
@@ -256,13 +262,13 @@ class QueryCtr {
 
      List articles = new List ();
      var res1 ;
-     for(int i= 0 ; i<pieces.length ; i++){
-       res1 =  await getJournalPiece(pieces[i]);
-       articles.addAll(res1);
-     }
 
-     List<dynamic> result= new List <dynamic>();
-     result.add(articles);
+     for(int i= 0 ; i<pieces.length ; i++){
+       if(pieces[i].piece == filters["pieceType"] && pieces[i].etat == 0){
+         res1 =  await getJournalPiece(pieces[i],local: true);
+         articles.addAll(res1);
+       }
+     }
 
     return articles ;
   }

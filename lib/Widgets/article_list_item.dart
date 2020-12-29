@@ -41,10 +41,8 @@ class _ArticleListItemState extends State<ArticleListItem> {
   Widget build(BuildContext context) {
     return ListTileCard(
       onLongPress: () {
-        if(widget.onItemSelected != null && widget.article.selectedQuantite < 1){
+        if(widget.onItemSelected != null){
           selectThisItem();
-        }else{
-          widget.onItemSelected(widget.article);
         }
       },
       onTap: () async {
@@ -60,7 +58,7 @@ class _ArticleListItemState extends State<ArticleListItem> {
 
               setState(() {});
             });
-          } else if(widget.onItemSelected != null && widget.article.selectedQuantite < 1){
+          } else if(widget.onItemSelected != null ){
             selectThisItem();
           }
         }
@@ -73,7 +71,7 @@ class _ArticleListItemState extends State<ArticleListItem> {
       ),
       title: Text(widget.article.designation),
       subtitle: Text("Ref: " + widget.article.ref),
-      trailingChildren: widget.article.selectedQuantite > 0? [
+      trailingChildren: widget.article.selectedQuantite > 0 ? [
         Text(
           "${S.current.prix} : "+
               (widget.article.selectedQuantite * widget.article.selectedPrice).toString()+" ${S.current.da}",
@@ -274,7 +272,7 @@ class _ArticleListItemState extends State<ArticleListItem> {
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
                             RaisedButton(
-                              onPressed: () async {
+                              onPressed: ()  {
                                 _quntiteControler.text = "0";
                                 widget.article.selectedQuantite = -1;
                                 widget.onItemSelected(widget.article);
@@ -288,7 +286,7 @@ class _ArticleListItemState extends State<ArticleListItem> {
                             ),
                             SizedBox(width: 10),
                             RaisedButton(
-                              onPressed: () async {
+                              onPressed: ()  {
                                 try {
                                   double _qte = double.parse(_quntiteControler.text);
                                   double _price = double.parse(_priceControler.text);
@@ -355,7 +353,9 @@ class _ArticleListItemState extends State<ArticleListItem> {
         widget.article.selectedPrice = widget.article.prixVente3;
         break ;
       default :
-        widget.article.selectedPrice = widget.article.prixVente1;
+        if(widget.article.selectedPrice == null){
+          widget.article.selectedPrice = widget.article.prixVente1;
+        }
         break;
     }
     widget.onItemSelected(widget.article);

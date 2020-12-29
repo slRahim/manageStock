@@ -26,9 +26,10 @@ import 'AddArticlePage.dart';
 class JournalFragment extends StatefulWidget {
   final Function(List<dynamic>) onConfirmSelectedItems;
   final Tiers tier ;
+  final String pieceType ;
 
 
-  const JournalFragment({Key key, this.onConfirmSelectedItems , this.tier}) : super(key: key);
+  const JournalFragment({Key key, this.onConfirmSelectedItems , this.tier , this.pieceType}) : super(key: key);
   @override
   _JournalFragmentState createState() => _JournalFragmentState();
 }
@@ -57,6 +58,21 @@ class _JournalFragmentState extends State<JournalFragment> {
 
   void fillFilter(Map<String, dynamic> filter) {
     filter["idTier"] = widget.tier;
+    switch(widget.pieceType){
+      case PieceType.retourClient :
+        filter["pieceType"] = PieceType.bonLivraison;
+        break ;
+      case PieceType.avoirClient :
+        filter["pieceType"] = PieceType.factureClient ;
+        break ;
+      case PieceType.retourFournisseur:
+        filter["pieceType"] = PieceType.bonReception ;
+        break ;
+      case PieceType.avoirFournisseur:
+        filter["pieceType"] = PieceType.factureFournisseur ;
+        break ;
+    }
+
   }
 
   //********************************************listing des pieces**********************************************************************
@@ -96,7 +112,7 @@ class _JournalFragmentState extends State<JournalFragment> {
         onCancel:  () => {
           setState(() {
             _selectedItems.forEach((item) {
-              item.selectedQuantite = -1;
+              item.selectedQuantite = 0.0;
             });
             _selectedItems = new List<Object>();
           })

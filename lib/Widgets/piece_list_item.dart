@@ -59,8 +59,20 @@ class PieceListItem extends StatelessWidget {
     title: Text(piece.num_piece),
     subtitle:(piece.raisonSociale != null) ? Text("RS: " + piece.raisonSociale) : null,
     trailingChildren: [
-      (piece.reste > 0) ? Text('TTC : '+piece.total_ttc.toString()+" ${S.current.da}", style: TextStyle(fontSize: 16.0, fontWeight: FontWeight.bold ,color: Colors.redAccent),)
-      : Text('TTC : '+piece.total_ttc.toString()+" ${S.current.da}", style: TextStyle(fontSize: 16.0, fontWeight: FontWeight.bold ),) ,
+      (piece.total_ttc < 0)
+          ? Text('TTC : '+(piece.total_ttc * -1).toString()+" ${S.current.da}",
+                  style: TextStyle(
+                      fontSize: 16.0,
+                      fontWeight: FontWeight.bold ,
+                      color: (piece.reste < 0)?Colors.redAccent : Colors.black ),
+            )
+         : Text('TTC : '+(piece.total_ttc).toString()+" ${S.current.da}",
+                  style: TextStyle(
+                      fontSize: 16.0,
+                      fontWeight: FontWeight.bold ,
+                      color: (piece.reste < 0)?Colors.redAccent : Colors.black ),
+            ) ,
+
       SizedBox(height: 5),
       Text(Helpers.dateToText(piece.date), style: TextStyle(color: Colors.black, fontSize: 14.0),),
       SizedBox(height: 5),
