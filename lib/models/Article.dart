@@ -36,7 +36,7 @@ class Article{
 
   int _id, _idFamille,_idMarque;
 
-  double _colis ,  _prixVente1TTC, _prixVente1, _prixVente2TTC, _prixVente2,
+  double _cmdClient , _colis ,  _prixVente1TTC, _prixVente1, _prixVente2TTC, _prixVente2,
          _prixVente3TTC, _prixVente3,_qteInit, _qte, _qteMin, _qteColis,
          _prixAchat, _pmpInit, _pmp, _tva;
 
@@ -91,6 +91,13 @@ class Article{
 
   File get image => _image;
   bool get bloquer => _bloquer;
+
+
+  double get cmdClient => _cmdClient;
+
+  set cmdClient(double value) {
+    _cmdClient = value;
+  }
 
   //section for setters
   void setId(int id) {
@@ -195,6 +202,7 @@ class Article{
     this._idFamille = obj["Id_Famille"];
     this._idMarque = obj["Id_Marque"];
     this._colis = obj["Colis"];
+    this._codeBar = obj["CodeBar"];
     this._prixVente1TTC = obj["PrixVente1TTC"];
     this._prixVente1 = obj["PrixVente1"];
     this._prixVente2TTC = obj["PrixVente2TTC"];
@@ -205,6 +213,7 @@ class Article{
     this._qte = obj["Qte"];
     this._qteMin = obj["Qte_Min"];
     this._qteColis = obj["Qte_Colis"];
+    this._cmdClient = obj["Cmd_client"];
     this._prixAchat = obj["PrixAchat"];
     this._pmpInit = obj["PMP_init"];
     this._pmp = obj["PMP"];
@@ -238,7 +247,7 @@ class Article{
     }
     map["Designation"] = this._designation;
     map["Ref"] = this._ref;
-    map["CodeBar"] = this.codeBar;
+    map["CodeBar"] = this._codeBar;
     map["Id_Famille"] = this._idFamille;
     map["Id_Marque"] = this._idMarque;
     map["Colis"] = this._colis;
@@ -252,6 +261,7 @@ class Article{
     map["Qte"] = this._qte;
     map["Qte_Min"] = this._qteMin;
     map["Qte_Colis"] = this._qteColis;
+    map["Cmd_client"] = this._cmdClient ;
     map["PrixAchat"] = this._prixAchat;
     map["PMP_init"] = this._pmpInit;
     map["PMP"] = this._pmp;
@@ -271,7 +281,7 @@ class Article{
       this._image, this._designation, this._ref, this._codeBar, this._description,
       this._idFamille, this._idMarque, this._colis, this._prixVente1TTC,
       this._prixVente1, this._prixVente2TTC, this._prixVente2, this._prixVente3TTC,
-      this._prixVente3, this._qteInit, this._qte,
+      this._prixVente3, this._qteInit, this._qte, this._cmdClient ,
       this._qteMin, this._qteColis, this._prixAchat, this._pmpInit,
       this._pmp, this._tva, this._bloquer, this._stockable);
 

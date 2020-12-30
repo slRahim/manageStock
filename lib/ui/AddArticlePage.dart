@@ -1054,6 +1054,7 @@ class _AddArticlePageState extends State<AddArticlePage>  with AutomaticKeepAliv
         }
       } else {
         Article article = await makeArticle();
+        article.cmdClient = 0 ;
         id = await widget._queryCtr.addItemToTable(DbTablesNames.articles, article);
         if (id > -1) {
           widget.arguments = article;
@@ -1086,6 +1087,7 @@ class _AddArticlePageState extends State<AddArticlePage>  with AutomaticKeepAliv
     article.setQteInit(double.parse(_stockInitialControl.text));
     article.setquantite(double.parse(_stockInitialControl.text));
     article.setQteMin(double.parse(_stockMinimumControl.text));
+    article.cmdClient = widget.arguments.cmdClient ;
     article.setPmp(double.parse(_pmpControl.text));
     if(!modification && editMode){
       article.setPmpInit(double.parse(_pmpControl.text));

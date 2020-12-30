@@ -96,7 +96,7 @@ class _ArticleListItemState extends State<ArticleListItem> {
         SizedBox(height: 5),
         Text(
           "${S.current.qte} : "+
-          widget.article.quantite.toString(),
+          (widget.article.quantite - widget.article.cmdClient).toString(),
           style: TextStyle(
               color: widget.article.quantite <= widget.article.quantiteMinimum
                   ? Colors.redAccent

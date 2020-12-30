@@ -70,7 +70,7 @@ class PieceListItem extends StatelessWidget {
                   style: TextStyle(
                       fontSize: 16.0,
                       fontWeight: FontWeight.bold ,
-                      color: (piece.reste < 0)?Colors.redAccent : Colors.black ),
+                      color: (piece.reste > 0)?Colors.redAccent : Colors.black ),
             ) ,
 
       SizedBox(height: 5),
@@ -107,7 +107,7 @@ class PieceListItem extends StatelessWidget {
           },
         ),
         FlatButton(
-          child: Text(S.current.oui),
+          child: Text("Seulement"),
           onPressed: ()async{
             int res = await _queryCtr.removeItemFromTable(DbTablesNames.pieces, piece);
             var message = "" ;
@@ -119,6 +119,29 @@ class PieceListItem extends StatelessWidget {
               message =S.current.msg_ereure;
               Navigator.pop(context);
             }
+            Helpers.showFlushBar(context, message);
+          },
+        ),
+        FlatButton(
+          child: Text("Avec Tresorie"),
+          onPressed: ()async{
+            int res = await _queryCtr.removeItemWithForeignKey (DbTablesNames.tresorie , piece.id , "Piece_id");
+            var message = "" ;
+            if(res > 0){
+              int res1 = await _queryCtr.removeItemFromTable(DbTablesNames.pieces, piece);
+              if(res > 0){
+                message =S.current.msg_supp_ok;
+                _confirmDell =true ;
+                Navigator.pop(context);
+              }else{
+                message =S.current.msg_ereure;
+                Navigator.pop(context);
+              }
+            }else{
+              message ="Pas de tresorie associer à la piece";
+              Navigator.pop(context);
+            }
+
             Helpers.showFlushBar(context, message);
           },
         ),

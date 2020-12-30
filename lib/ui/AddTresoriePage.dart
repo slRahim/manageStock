@@ -163,6 +163,8 @@ class _AddTresoriePageState extends State<AddTresoriePage> with TickerProviderSt
     });
   }
 
+  //****************************************************************************************************************************************************************
+  //***********************************************************************build de l'affichage***************************************************************************
   @override
   Widget build(BuildContext context) {
     if (modification) {
@@ -280,8 +282,8 @@ class _AddTresoriePageState extends State<AddTresoriePage> with TickerProviderSt
             ),
           ),
           floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
-          floatingActionButton:FloatingActionButton.extended(
-              label: Text("+ ${S.current.ajouter}"),
+          floatingActionButton:FloatingActionButton(
+              child: Icon(Icons.add),
               elevation: 2,
               backgroundColor: (editMode && !modification) ? Colors.blue : Colors.grey,
               foregroundColor: Colors.white,
@@ -604,6 +606,7 @@ class _AddTresoriePageState extends State<AddTresoriePage> with TickerProviderSt
 
   }
 
+  //***************************************************************************************************************************************************************************
   //********************************************************************** partie de date ****************************************************************************************
   void callDatePicker() async {
     DateTime now = new DateTime.now();
@@ -636,6 +639,7 @@ class _AddTresoriePageState extends State<AddTresoriePage> with TickerProviderSt
     );
   }
 
+  //*************************************************************************************************************************************************************************
   //************************************************************************partie de l'ajout d'une nouvelle categorie************************************************************
 
   Widget addTresoreCategorie() {

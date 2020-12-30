@@ -123,6 +123,7 @@ class SqlLiteDatabaseHelper {
         Qte_Min Double, 
         Qte_Colis Double, 
         Colis Double, 
+        Cmd_client Double Default 0,
         PrixAchat Double, 
         PMP_init Double, 
         PMP Double, TVA Float, 
@@ -301,6 +302,69 @@ class SqlLiteDatabaseHelper {
 
 //fonction speciale pour la creation des triggers de bd table article
   createTriggersJournaux(Database db , int version) async {
+    //*********************************************************************************************************************************************
+    //************************************************* journal commande client********************************************************************
+    await db.execute('''
+        CREATE TRIGGER IF NOT EXISTS update_articles_cmd_onInsert
+        AFTER INSERT ON Journaux
+        FOR EACH ROW
+        WHEN  NEW.Mov = 1 AND (NEW.Piece_type = 'CC' )
+        BEGIN
+            UPDATE Articles
+               SET Cmd_client =Cmd_client + NEW.Qte
+             WHERE id = New.Article_id;
+             
+            Update Pieces
+              Set Marge = (Select SUM(((Prix_ht*tva)/100 + Prix_ht)*Qte) from Journaux where Piece_id = NEW.Piece_id AND New.Mov <> -2)
+            where id = New.Piece_id ;
+        END;
+     ''');
+
+    await db.execute('''
+        CREATE TRIGGER IF NOT EXISTS update_articles_cmd_onUpdate
+        AFTER UPDATE ON Journaux
+        FOR EACH ROW
+        WHEN NEW.Mov = 1 AND (NEW.Piece_type = 'CC')
+        BEGIN
+            UPDATE Articles
+               SET Cmd_client = Cmd_client + (NEW.Qte - OLD.Qte)
+             WHERE id = NEW.Article_id ;
+             
+            Update Pieces
+              Set Marge = (Select SUM(((Prix_ht*tva)/100 + Prix_ht)*Qte) from Journaux where Piece_id = NEW.Piece_id AND New.Mov <> -2)
+            where id = New.Piece_id ;
+        END;
+     ''');
+
+    await db.execute('''
+        CREATE TRIGGER IF NOT EXISTS update_articles_cmd_onUpdate_mov1
+        AFTER UPDATE ON Journaux
+        FOR EACH ROW
+        WHEN (OLD.Mov <> NEW.Mov) AND NEW.Mov = 1 AND (NEW.Piece_type = 'CC')
+        BEGIN
+            UPDATE Articles
+               SET Cmd_client = Cmd_client + NEW.Qte
+             WHERE id = NEW.Article_id ;
+             
+            Update Pieces
+              Set Marge = (Select SUM(((Prix_ht*tva)/100 + Prix_ht)*Qte) from Journaux where Piece_id = NEW.Piece_id AND New.Mov <> -2)
+            where id = New.Piece_id ;
+        END;
+     ''');
+
+    await db.execute('''
+        CREATE TRIGGER IF NOT EXISTS update_articles_cmd_onUpdate_mov
+        AFTER UPDATE ON Journaux
+        FOR EACH ROW
+        WHEN (OLD.Mov <> NEW.Mov)  AND (NEW.Mov = 0 OR NEW.Mov = 2 OR NEW.Mov = -1 OR NEW.Mov = -2)
+              AND (NEW.Piece_type = 'CC')      
+        BEGIN
+            UPDATE Articles
+               SET Cmd_client = Cmd_client - OLD.Qte
+             WHERE id = New.Article_id;
+            
+        END;
+     ''');
 
     //  **********************************************************************************************************************************************
     //  ************************************************ journal des bons de client*************************************************************************
@@ -308,7 +372,7 @@ class SqlLiteDatabaseHelper {
         CREATE TRIGGER IF NOT EXISTS update_articles_qte_onInsert_client
         AFTER INSERT ON Journaux
         FOR EACH ROW
-        WHEN  NEW.Mov = 1 AND (NEW.Piece_type = 'BL' OR NEW.Piece_type = 'FC' OR NEW.Piece_type = 'RF' OR NEW.Piece_type = 'AF')
+        WHEN  NEW.Mov = 1 AND (NEW.Piece_type = 'BL' OR NEW.Piece_type = 'FC')
         BEGIN
             UPDATE Articles
                SET Qte = Qte - NEW.Qte,
@@ -325,7 +389,7 @@ class SqlLiteDatabaseHelper {
         CREATE TRIGGER IF NOT EXISTS update_articles_qte_onUpdate_client
         AFTER UPDATE ON Journaux
         FOR EACH ROW
-        WHEN NEW.Mov = 1 AND (NEW.Piece_type = 'BL' OR NEW.Piece_type = 'FC' OR NEW.Piece_type = 'RF' OR NEW.Piece_type = 'AF')
+        WHEN NEW.Mov = 1 AND (NEW.Piece_type = 'BL' OR NEW.Piece_type = 'FC')
         BEGIN
             UPDATE Articles
                SET Qte = Qte - (NEW.Qte - OLD.Qte) ,
@@ -342,7 +406,7 @@ class SqlLiteDatabaseHelper {
         CREATE TRIGGER IF NOT EXISTS update_articles_qte_onUpdate_client_mov1
         AFTER UPDATE ON Journaux
         FOR EACH ROW
-        WHEN (OLD.Mov <> NEW.Mov) AND NEW.Mov = 1 AND (NEW.Piece_type = 'BL' OR NEW.Piece_type = 'FC' OR NEW.Piece_type = 'RF' OR NEW.Piece_type = 'AF')
+        WHEN (OLD.Mov <> NEW.Mov) AND NEW.Mov = 1 AND (NEW.Piece_type = 'BL' OR NEW.Piece_type = 'FC')
         BEGIN
             UPDATE Articles
                SET Qte = Qte - NEW.Qte ,
@@ -360,7 +424,7 @@ class SqlLiteDatabaseHelper {
         AFTER UPDATE ON Journaux
         FOR EACH ROW
         WHEN (OLD.Mov <> NEW.Mov)  AND (NEW.Mov = 0 OR NEW.Mov = 2 OR NEW.Mov = -1 OR NEW.Mov = -2)
-              AND (NEW.Piece_type = 'BL' OR NEW.Piece_type = 'FC' OR NEW.Piece_type = 'RF' OR NEW.Piece_type = 'AF')      
+              AND (NEW.Piece_type = 'BL' OR NEW.Piece_type = 'FC')      
         BEGIN
             UPDATE Articles
                SET Qte = Qte + OLD.Qte ,
@@ -604,7 +668,7 @@ class SqlLiteDatabaseHelper {
         CREATE TRIGGER IF NOT EXISTS update_tiers_chiffre_affaires1
         AFTER INSERT ON Pieces
         FOR EACH ROW
-        WHEN NEW.Mov = 1 
+        WHEN NEW.Mov = 1 AND NEW.Piece <> "CC"
         BEGIN
              UPDATE Tiers
                SET Chiffre_affaires = Chiffre_affaires + NEW.Total_ttc
@@ -626,7 +690,7 @@ class SqlLiteDatabaseHelper {
         CREATE TRIGGER IF NOT EXISTS update_tiers_chiffre_affaires2
         AFTER UPDATE ON Pieces
         FOR EACH ROW
-        WHEN NEW.Mov = 1 
+        WHEN NEW.Mov = 1 AND NEW.Piece <> "CC"
         BEGIN
              UPDATE Tiers
                SET Chiffre_affaires = Chiffre_affaires + (NEW.Total_ttc-OLD.Total_ttc)
@@ -660,21 +724,20 @@ class SqlLiteDatabaseHelper {
         CREATE TRIGGER IF NOT EXISTS delete_tresorie
         BEFORE DELETE ON Pieces
         FOR EACH ROW
-        WHEN (OLD.Mov = 1 AND OLD.Transformer = 0)
+        WHEN (OLD.Mov = 1 AND NEW.Piece <> "CC")
         BEGIN
             UPDATE Tiers
                SET Chiffre_affaires = Chiffre_affaires - OLD.Total_ttc
             WHERE id = OLD.Tier_id;
             
             UPDATE Tiers
-               SET Regler = (SELECT SUM(Montant) FROM Tresories WHERE Tier_id = New.Tier_id)
-            WHERE id = NEW.Tier_id ;
+               SET Regler = (SELECT SUM(Montant) FROM Tresories WHERE Tier_id = OLD.Tier_id)
+            WHERE id = OLD.Tier_id ;
              
             UPDATE Tiers
               SET  Credit = (Solde_depart + Chiffre_affaires) - Regler 
-            WHERE id = New.Tier_id;
+            WHERE id = OLD.Tier_id;
             
-            Delete from Tresories where Piece_id = OLD.id ;
         END;
      ''');
 
@@ -683,8 +746,8 @@ class SqlLiteDatabaseHelper {
         BEFORE DELETE ON Pieces
         FOR EACH ROW
         WHEN (OLD.Mov = 1 AND OLD.Transformer = 1)
-        BEGIN            
-           Delete from Tresories where Piece_id = OLD.id ;
+        BEGIN    
+                    
            DELETE FROM Transformers WHERE New_Piece_id = OLD.id;
         END;
      ''');
@@ -738,10 +801,10 @@ class SqlLiteDatabaseHelper {
 
     // ***************************************************************************************************************
     //**********************************************update tresorie*******************************************************
-    await db.execute('''CREATE TRIGGER update_tier_reglement_credit2
+    await db.execute('''CREATE TRIGGER update_tier_reglement_credit3
         AFTER UPDATE ON Tresories 
         FOR EACH ROW 
-        when (New.Categorie_id = 2 OR New.Categorie_id = 3 OR New.Categorie_id = 6 OR New.Categorie_id = 7) 
+        when (New.Categorie_id = 2 OR New.Categorie_id = 3 OR New.Categorie_id = 6 OR New.Categorie_id = 7)
         BEGIN             
             UPDATE Tiers
               SET Regler = (SELECT SUM(Montant) FROM Tresories WHERE Tier_id = New.Tier_id)
@@ -751,9 +814,19 @@ class SqlLiteDatabaseHelper {
                SET  Credit = (Solde_depart + Chiffre_affaires) - Regler 
              WHERE id = New.Tier_id;
            
+        END;
+      ''');
+
+    await db.execute('''CREATE TRIGGER update_tier_reglement_credit2
+        AFTER UPDATE ON Tresories 
+        FOR EACH ROW 
+        when (New.Categorie_id = 2 OR New.Categorie_id = 3 OR New.Categorie_id = 6 OR New.Categorie_id = 7) 
+              AND OLD.Piece_id = NEW.Piece_id 
+        BEGIN            
             DELETE FROM ReglementTresorie WHERE Tresorie_id = Old.id ;
         END;
       ''');
+    // le delete est spaecial pour add tresorie page
 
     // ***************************************************************************************************************
     //**********************************************dell tresorie*******************************************************
@@ -805,6 +878,21 @@ class SqlLiteDatabaseHelper {
         END;
       ''');
 
+    await db.execute('''CREATE TRIGGER update_piece_dell_transformation
+        BEFORE DELETE ON Transformers 
+        FOR EACH ROW 
+        BEGIN 
+           UPDATE Pieces 
+           SET Mov = OLD.Old_Mov,
+               Etat = 0
+           WHERE id = OLD.Old_Piece_id ;
+           
+           UPDATE Journaux
+              SET Mov = OLD.Old_Mov 
+           WHERE Piece_id = OLD.Old_Piece_id ;
+           
+        END;
+      ''');
 
     await db.execute('''CREATE TRIGGER update_reglemntTresorie_tresorie1 
         BEFORE DELETE ON Transformers 
@@ -812,27 +900,18 @@ class SqlLiteDatabaseHelper {
         WHEN (OLD.Type_piece <> 'AC' AND OLD.Type_piece <> 'RC' AND OLD.Type_piece <> 'AF' AND OLD.Type_piece <> 'RF')
         BEGIN 
            UPDATE Tresories 
-           SET Piece_id = OLD.Old_Piece_id 
+              SET Piece_id = OLD.Old_Piece_id 
            WHERE Piece_id = OLD.New_Piece_id ;
            
            UPDATE ReglementTresorie 
-           SET Piece_id = OLD.Old_Piece_id 
+              SET Piece_id = OLD.Old_Piece_id 
            WHERE Piece_id = OLD.New_Piece_id ;
-           
-           UPDATE Pieces 
-           SET Mov = OLD.Old_Mov,
-               Etat = 0
-           WHERE id = OLD.Old_Piece_id ;
-           
-           UPDATE Journaux
-           SET Mov = OLD.Old_Mov 
-           WHERE Piece_id = OLD.Old_Piece_id ;
-           
+                   
         END;
       ''');
 
-  }
 
+  }
 
   //*****************************************************************************************************************************************
   //*****************************************************************************************************************************************
@@ -847,28 +926,19 @@ class SqlLiteDatabaseHelper {
 
     batch.rawInsert('INSERT INTO ArticlesMarques(Libelle, BytesImageString) VALUES("Marque", "")');
     batch.rawInsert('INSERT INTO ArticlesMarques(Libelle, BytesImageString) VALUES("Marque 1", "")');
-    batch.rawInsert('INSERT INTO ArticlesMarques(Libelle, BytesImageString) VALUES("Marque 2", "")');
-    batch.rawInsert('INSERT INTO ArticlesMarques(Libelle, BytesImageString) VALUES("Marque 3", "")');
-    batch.rawInsert('INSERT INTO ArticlesMarques(Libelle, BytesImageString) VALUES("Marque 4", "")');
 
     batch.rawInsert('INSERT INTO ArticlesFamilles(Libelle, BytesImageString) VALUES("Famille", "")');
     batch.rawInsert('INSERT INTO ArticlesFamilles(Libelle, BytesImageString) VALUES("Famille 1", "")');
-    batch.rawInsert('INSERT INTO ArticlesFamilles(Libelle, BytesImageString) VALUES("Famille 2", "")');
-    batch.rawInsert('INSERT INTO ArticlesFamilles(Libelle, BytesImageString) VALUES("Famille 3", "")');
-    batch.rawInsert('INSERT INTO ArticlesFamilles(Libelle, BytesImageString) VALUES("Famille 4", "")');
 
     batch.rawInsert('INSERT INTO TiersFamilles(Libelle) VALUES("Famille")');
     batch.rawInsert('INSERT INTO TiersFamilles(Libelle) VALUES("Famille 1")');
-    batch.rawInsert('INSERT INTO TiersFamilles(Libelle) VALUES("Famille 2")');
-    batch.rawInsert('INSERT INTO TiersFamilles(Libelle) VALUES("Famille 3")');
-    batch.rawInsert('INSERT INTO TiersFamilles(Libelle) VALUES("Famille 4")');
 
     batch.rawInsert('INSERT INTO ArticlesTva(Tva) VALUES(0)');
     batch.rawInsert('INSERT INTO ArticlesTva(Tva) VALUES(10)');
     batch.rawInsert('INSERT INTO ArticlesTva(Tva) VALUES(19)');
     batch.rawInsert('INSERT INTO ArticlesTva(Tva) VALUES(29)');
 
-    batch.rawInsert('INSERT INTO TresorieCategories(Libelle) VALUES("Categorie")');
+    batch.rawInsert('INSERT INTO TresorieCategories(Libelle) VALUES("Decaissement")');
     batch.rawInsert('INSERT INTO TresorieCategories(Libelle) VALUES("Reglement Client")');
     batch.rawInsert('INSERT INTO TresorieCategories(Libelle) VALUES("Reglement Fournisseur")');
     batch.rawInsert('INSERT INTO TresorieCategories(Libelle) VALUES("Encaissement")');

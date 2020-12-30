@@ -284,13 +284,16 @@ class QueryCtr {
   Future<List<Tresorie>> getAllTresories(int offset, int limit, {String searchTerm, Map<String, dynamic> filters}) async {
     String query = 'SELECT * FROM Tresories';
 
+    query += " WHERE (Montant > 0 OR Montant < 0)";
+
     if(filters != null){
       int categorie = filters["Categorie"] != null? filters["Categorie"] : -1;
       String categorieFilter = categorie > 0 ? " AND Categorie_id = $categorie" : "";
 
-      query += " WHERE Num_tresorie LIKE '%${searchTerm??''}%'";
+      query += " AND (Num_tresorie LIKE '%${searchTerm??''}%' OR Tier_rs LIKE '%${searchTerm??''}%' OR Objet LIKE '%${searchTerm??''}%')";
       query += categorieFilter;
     }
+
     query += ' ORDER BY id DESC';
 
     Database dbClient = await _databaseHelper.db;
@@ -434,6 +437,13 @@ class QueryCtr {
     return res ;
   }
 
+  Future<int> removeItemWithForeignKey (String tableName , item , String column) async {
+    var dbClient = await _databaseHelper.db ;
+    int res = await dbClient.delete(tableName , where: "${column} = ?" , whereArgs: [item]);
+
+    return res ;
+  }
+
   Future<int> getLastId(String tableName)async{
     var dbClient = await _databaseHelper.db ;
     String query = "Select Max(id) From $tableName ;" ;
@@ -457,28 +467,6 @@ class QueryCtr {
   }
 
 
-
-
-  Future<Article> getTestArticle() async {
-    // var bytes = await rootBundle.load('assets/article.png');
-    /*String tempPath = (await getTemporaryDirectory()).path;
-    File imageFile = File('$tempPath/article.png');
-    await imageFile.writeAsBytes(bytes.buffer.asUint8List(bytes.offsetInBytes, bytes.lengthInBytes));*/
-
-    Article article = new Article(null, "_designation", "_ref", "code bar here", "Description from test article", 1, 2, 3, 2, 3, 2, 3, 2, 1, 2, 3, 2, 1, 3, 2, 1, 29, false, true);
-    // article.imageUint8List = bytes.buffer.asUint8List(bytes.offsetInBytes, bytes.lengthInBytes);
-    return article;
-  }
-
-  Future<Tiers> getTestTier() async {
-    Tiers tier = new Tiers(null,"Passagé", "qrcode", 0, 0, 1, "adresse", "ville", "telephone", "000000", "fax", "email", 0, 0, 0, false);
-    return tier;
-  }
-
-  // Future<Piece> getTestPiece() async {
-  //   Piece piece = new Piece("FP", "05555", 0, 1, new DateTime.now(), 1, 1, 1, 10, 10, 10, 10, 0, 10, 15);
-  //   return piece;
-  // }
 
 
 
