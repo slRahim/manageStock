@@ -129,35 +129,35 @@ HomeItem homeItemParametres = new HomeItem(
 
 HomeItem drawerItemRetourClient = new HomeItem(
     id: drawerItemRetourClientId,
-    title:"Retour Client",
+    title:S.current.retour_client,
     img: "assets/setting.png",
     active: true
 );
 
 HomeItem drawerItemRetourFournisseur = new HomeItem(
     id: drawerItemRetourFournisseurId,
-    title: "Retour Fournisseur",
+    title: S.current.retour_fournisseur,
     img: "assets/setting.png",
     active: true
 );
 
 HomeItem drawerItemAvoirClient = new HomeItem(
     id: drawerItemAvoirClientId,
-    title: "Avoir Client",
+    title: S.current.avoir_client,
     img: "assets/setting.png",
     active: true
 );
 
 HomeItem drawerItemAvoirFournisseur = new HomeItem(
     id: drawerItemAvoirFournisseurId,
-    title: "Avoir Fournisseur",
+    title:S.current.avoir_fournisseur,
     img: "assets/setting.png",
     active: true
 );
 
 HomeItem drawerItemBonDeCommande = new HomeItem(
     id: drawerItemBonDeCommandeId,
-    title: "Bon de Commande",
+    title:S.current.bon_commande,
     img: "assets/setting.png",
     active: true
 );

@@ -46,7 +46,7 @@ class AddEditBarState extends State<AddEditBar>{
       actions: [
         (widget.onTrensferPressed != null && !widget.editMode)
             ?IconButton(
-            tooltip: "Transferer",
+            tooltip: S.current.transferer,
             icon: Icon(MdiIcons.transfer),
             onPressed: widget.onTrensferPressed)
             : SizedBox() ,

@@ -87,7 +87,10 @@ class QueryCtr {
       bool hasCredit = filters["hasCredit"] != null? filters["hasCredit"] : false;
       bool showBloquer = filters["tierBloquer"] != null? filters["tierBloquer"] : false;
 
-      String clientFournFilter = clientFourn > -1 ? " AND (Clientfour = $clientFourn OR Clientfour = 1)" : "";
+      String clientFournFilter = "";
+      if(clientFourn > -1){
+        clientFournFilter = " AND (Clientfour = $clientFourn OR Clientfour = 1)" ;
+      }
       String familleFilter = famille > 0 ? " AND Id_Famille = $famille" : "";
       String hasCreditFilter = hasCredit ? " AND Credit > 0 " : "";
       String showBloquerFilter = showBloquer ? " AND Bloquer > 0 " : "AND Bloquer = 0";
@@ -165,6 +168,7 @@ class QueryCtr {
     if(_tier_id != null){
       _tierFilter= " AND Tier_id = $_tier_id";
       _creditFilter =" AND Reste > 0"  ;
+      _movFilter = " AND Mov = 1";
     }
 
 
@@ -430,6 +434,14 @@ class QueryCtr {
     return res;
   }
 
+  Future<int> updateItemByForeignKey (String tableName , item , String column , key) async {
+    var dbClient = await _databaseHelper.db ;
+    // les champs null sont pris en consideration
+    int res = await dbClient.update(tableName ,item.toMap(), where: "${column} = ?" , whereArgs: [key]);
+
+    return res ;
+  }
+
   Future<int> removeItemFromTable(String tableName , item)async {
     var dbClient = await _databaseHelper.db ;
     int res = await dbClient.delete(tableName , where: "id=?" , whereArgs: [item.id]);
@@ -443,6 +455,7 @@ class QueryCtr {
 
     return res ;
   }
+
 
   Future<int> getLastId(String tableName)async{
     var dbClient = await _databaseHelper.db ;

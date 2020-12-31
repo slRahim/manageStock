@@ -145,6 +145,7 @@ class _AddPiecePageState extends State<AddPiecePage> with TickerProviderStateMix
 
       _restepiece=_piece.reste ;
       _verssementpiece= 0;
+
       _total_ht =_piece.total_ht ;
       _total_tva =_piece.total_tva ;
       _total_ttc =(_piece.total_ttc < 0 )? _piece.total_ttc * -1 : _piece.total_ttc ;
@@ -241,7 +242,7 @@ class _AddPiecePageState extends State<AddPiecePage> with TickerProviderStateMix
                 && _piece.piece != PieceType.retourFournisseur && _piece.piece != PieceType.avoirFournisseur)
                 ? ()async{
                       if( _piece.mov == 2 ){
-                        var message ="Transformation d'un brouilion est impossible";
+                        var message =S.current.msg_err_transfer;
                         Helpers.showFlushBar(context, message);
                       }else{
                         await showDialog(
@@ -326,7 +327,7 @@ class _AddPiecePageState extends State<AddPiecePage> with TickerProviderStateMix
                           if(_piece.piece == PieceType.avoirClient || _piece.piece == PieceType.retourClient
                               || _piece.piece == PieceType.retourFournisseur || _piece.piece == PieceType.avoirFournisseur
                             ){
-                            var message = "Vous risquez d'ajouter des articles inassocier aux pieces !";
+                            var message = S.current.msg_info_article;
                             Helpers.showFlushBar(context, message);
                           }
                           Future.delayed(Duration(seconds: 1),()async {
@@ -1053,11 +1054,10 @@ class _AddPiecePageState extends State<AddPiecePage> with TickerProviderStateMix
             && _piece.piece != PieceType.avoirClient && _piece.piece != PieceType.retourFournisseur
             && _piece.piece != PieceType.avoirFournisseur){
 
+          //ds le cas de modification de mov de piece
+          // await upadteTresorie ()
+
           await addTresorie(_piece,transferer: false);
-        }else{
-          if(_piece.piece == PieceType.commandeClient ){
-            await addTresorie(_piece,transferer: false);
-          }
         }
 
         if (id > -1) {
@@ -1085,10 +1085,6 @@ class _AddPiecePageState extends State<AddPiecePage> with TickerProviderStateMix
             && _piece.piece != PieceType.avoirFournisseur){
 
           await addTresorie(_piece,transferer: false);
-        }else{
-          if(_piece.piece == PieceType.commandeClient ){
-            await addTresorie(_piece,transferer: false);
-          }
         }
 
         if (id > -1) {
@@ -1124,10 +1120,20 @@ class _AddPiecePageState extends State<AddPiecePage> with TickerProviderStateMix
       _piece.transformer = 0 ;
     }
 
+    // partie special pour le cas de broullion avec verssement
+    // ds le cas de l'ajout de mov ds tresorie supp les conditions internes
     if(_piece.id == null ){
-      _piece.regler =_verssementpiece;
+      if(_piece.mov == 1 || _piece.mov == 0){
+        _piece.regler =_verssementpiece;
+      }else{
+        _piece.regler = 0;
+      }
     }else{
-      _piece.regler= _piece.regler+_verssementpiece;
+      if(_piece.mov == 1 || _piece.mov == 0){
+        _piece.regler= _piece.regler+_verssementpiece;
+      }else{
+        _piece.regler = 0;
+      }
     }
     _piece.reste=_piece.total_ttc - _piece.regler;
 
@@ -1151,11 +1157,16 @@ class _AddPiecePageState extends State<AddPiecePage> with TickerProviderStateMix
   Future<void> addTresorie(item , {transferer}) async {
     Tresorie tresorie = new Tresorie.init();
     tresorie.montant = _verssementpiece ;
+
     if(transferer){
-      tresorie.montant = _piece.regler ;
+      tresorie.montant = 0;
     }
-    tresorie.objet = "reglement piece ${item.piece} ${item.num_piece}";
-    tresorie.modalite = "espece";
+
+    //special pour l'etat de la tresorie
+    //tresorie.mov = item.mov ;
+
+    tresorie.objet = "${S.current.reglement_piece} ${item.piece} ${item.num_piece}";
+    tresorie.modalite = S.current.espece;
     tresorie.tierId  = item.tier_id ;
     tresorie.tierRS = item.raisonSociale;
     tresorie.pieceId = item.id;
@@ -1225,7 +1236,7 @@ class _AddPiecePageState extends State<AddPiecePage> with TickerProviderStateMix
                                 Helpers.showFlushBar(context, msg);
                               },
                               child: Text(
-                                "Vers Commande",
+                                S.current.to_commande,
                                 style: TextStyle(color: Colors.white , fontSize: 16),
                               ),
                               color: Colors.purple,
@@ -1245,7 +1256,7 @@ class _AddPiecePageState extends State<AddPiecePage> with TickerProviderStateMix
                                 Helpers.showFlushBar(context, msg);
                               },
                               child: Text(
-                                "Vers un Bon",
+                                S.current.to_bon,
                                 style: TextStyle(color: Colors.white , fontSize: 16),
                               ),
                               color: Colors.blue,
@@ -1265,7 +1276,7 @@ class _AddPiecePageState extends State<AddPiecePage> with TickerProviderStateMix
                                 Helpers.showFlushBar(context, msg);
                               },
                               child: Text(
-                                "Vers Facture",
+                                S.current.to_facture,
                                 style: TextStyle(color: Colors.white , fontSize: 16),
                               ),
                               color: Colors.green,
@@ -1286,7 +1297,7 @@ class _AddPiecePageState extends State<AddPiecePage> with TickerProviderStateMix
                                 Helpers.showFlushBar(context, msg);
                               },
                               child: Text(
-                                "Vers Retour/Avoir",
+                                S.current.to_retour,
                                 style: TextStyle(color: Colors.white , fontSize: 16),
                               ),
                               color: Colors.redAccent,

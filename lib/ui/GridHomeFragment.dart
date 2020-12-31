@@ -111,7 +111,7 @@ class _GridHomeWidgetState extends State<GridHomeWidget> {
        drawerItemAvoirFournisseur.title = S.current.avoir_fournisseur ;
        drawerItemAvoirClient.title = S.current.avoir_client ;
        drawerItemRetourClient.title = S.current.retour_client ;
-       drawerItemRetourFournisseur.title = S.current.retour_fourn ;
+       drawerItemRetourFournisseur.title = S.current.retour_fournisseur;
        drawerItemBonDeCommande.title = S.current.bon_commande ;
        drawerItemHelp.title = S.current.aide ;
        drawerItemExit.title = S.current.quitter ;

@@ -21,7 +21,7 @@
   "avoir_client" : "فاتورة عودة لزبون",
   "avoir_fournisseur": "فاتورة عودة لمورد",
   "retour_client": "وسل عودة لزبون",
-  "retour_fourn": "وسل عودة لمورد",
+  "retour_fournisseur": "وسل عودة لمورد",
   "bon_commande": "أمر شراء",
 
   "profile_titre" : "الملف الشخصي",
@@ -181,5 +181,29 @@
   "preview_titre" : "معاينة الوصل",
 
   "prix" : "الثمن",
-  "qte" : "ك م"
+  "qte" : "ك م",
+
+  "msg_err_transfer" : "Transformation d'un brouilion est impossible",
+  "msg_info_article" : "Vous risquez d'ajouter des articles inassocier aux pieces !",
+  "espece" : "Espèce",
+  "reglement_piece" : "Réglement Piece",
+  "decaissement" : "Decaissement",
+  "reglemnt_client" : "Reglement Client",
+  "reglement_fournisseur": "Reglement Fournisseur",
+  "encaissement": "Encaissement",
+  "charge" : "Charge",
+  "rembourcement_client": "Rembourcement Client",
+  "rembourcement_four": "Rembourcement Fournisseur",
+  "sans_tresorie" : "Sans Tresorie",
+  "avec_tresorie": "Avec Tresorie",
+  "msg_err_tresorie": "Pas de tresorie associer à la piece",
+  "msg_qte_err" : "La quatité doit etre supperieur à 0",
+  "msg_prix_err" : "Le prix doit etre supperieur à 0",
+  "msg_num_err" : "Entrez un nombre valide",
+  "transferer" : "Transferer",
+
+  "to_commande" : "Vers Commande",
+  "to_bon" : "Vers un Bon",
+  "to_facture" : "Vers Facture",
+  "to_retour" : "Vers Retour/Avoir"
 }

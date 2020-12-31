@@ -21,7 +21,7 @@
   "avoir_client" : "Avoir client",
   "avoir_fournisseur": "Avoir fournisseur",
   "retour_client": "Retour client",
-  "retour_fourn": "Retour fournisseur",
+  "retour_fournisseur": "Retour fournisseur",
   "bon_commande": "Bon de commande",
 
   "profile_titre" : "Profile",
@@ -181,7 +181,34 @@
   "preview_titre" : "Aperçu Piece",
 
   "prix" : "Prix",
-  "qte" : "QTE"
+  "qte" : "QTE",
+
+  "msg_err_transfer" : "Transformation d'un brouilion est impossible",
+  "msg_info_article" : "Vous risquez d'ajouter des articles inassocier aux pieces !",
+  "espece" : "Espèce",
+  "reglement_piece" : "Réglement Piece",
+  "decaissement" : "Decaissement",
+  "reglemnt_client" : "Reglement Client",
+  "reglement_fournisseur": "Reglement Fournisseur",
+  "encaissement": "Encaissement",
+  "charge" : "Charge",
+  "rembourcement_client": "Rembourcement Client",
+  "rembourcement_four": "Rembourcement Fournisseur",
+  "sans_tresorie" : "Sans Tresorie",
+  "avec_tresorie": "Avec Tresorie",
+  "msg_err_tresorie": "Pas de tresorie associer à la piece",
+  "msg_qte_err" : "La quatité doit etre supperieur à 0",
+  "msg_prix_err" : "Le prix doit etre supperieur à 0",
+  "msg_num_err" : "Entrez un nombre valide",
+  "transferer" : "Transferer",
+
+  "to_commande" : "Vers Commande",
+  "to_bon" : "Vers un Bon",
+  "to_facture" : "Vers Facture",
+  "to_retour" : "Vers Retour/Avoir"
+
+
+
 
 
 

@@ -107,7 +107,7 @@ class PieceListItem extends StatelessWidget {
           },
         ),
         FlatButton(
-          child: Text("Seulement"),
+          child: Text(S.current.sans_tresorie),
           onPressed: ()async{
             int res = await _queryCtr.removeItemFromTable(DbTablesNames.pieces, piece);
             var message = "" ;
@@ -123,7 +123,7 @@ class PieceListItem extends StatelessWidget {
           },
         ),
         FlatButton(
-          child: Text("Avec Tresorie"),
+          child: Text(S.current.avec_tresorie),
           onPressed: ()async{
             int res = await _queryCtr.removeItemWithForeignKey (DbTablesNames.tresorie , piece.id , "Piece_id");
             var message = "" ;
@@ -138,7 +138,7 @@ class PieceListItem extends StatelessWidget {
                 Navigator.pop(context);
               }
             }else{
-              message ="Pas de tresorie associer à la piece";
+              message =S.current.msg_err_tresorie;
               Navigator.pop(context);
             }
 

@@ -52,6 +52,7 @@ class _AddTresoriePageState extends State<AddTresoriePage> with TickerProviderSt
   bool modification = false;
 
   bool finishedLoading = false;
+  bool _showTierController = true ;
 
   String appBarTitle = S.current.tresorie_titre;
 
@@ -65,7 +66,7 @@ class _AddTresoriePageState extends State<AddTresoriePage> with TickerProviderSt
   TextEditingController _dateControl = new TextEditingController();
   TextEditingController _clientControl = new TextEditingController();
   TextEditingController _objetControl = new TextEditingController();
-  TextEditingController _modaliteControl = new TextEditingController();
+  TextEditingController _modaliteControl = new TextEditingController(text: S.current.espece);
   TextEditingController _montantControl = new TextEditingController();
 
 
@@ -105,6 +106,15 @@ class _AddTresoriePageState extends State<AddTresoriePage> with TickerProviderSt
     _selectedTypeTiers = Statics.tiersItems[0];
 
     _categorieItems = await _queryCtr.getAllTresorieCategorie();
+
+    _categorieItems[0].libelle = S.current.decaissement ;
+    _categorieItems[1].libelle = S.current.reglemnt_client ;
+    _categorieItems[2].libelle = S.current.reglement_fournisseur ;
+    _categorieItems[3].libelle = S.current.encaissement ;
+    _categorieItems[4].libelle = S.current.charge ;
+    _categorieItems[5].libelle = S.current.rembourcement_client ;
+    _categorieItems[6].libelle = S.current.rembourcement_four ;
+
     _categorieDropdownItems = utils.buildDropTresorieCategoriesDownMenuItems(_categorieItems);
     _selectedCategorie= _categorieItems[0];
 
@@ -122,6 +132,7 @@ class _AddTresoriePageState extends State<AddTresoriePage> with TickerProviderSt
     }
     return Future<bool>.value(editMode);
   }
+
 
   Future<void> setDataFromItem( item) async {
     if(item != null){
@@ -144,6 +155,13 @@ class _AddTresoriePageState extends State<AddTresoriePage> with TickerProviderSt
         _selectedPieces = new List<Piece> ();
       }
       _selectedCategorie = _categorieItems[_tresorie.categorie-1];
+      if(_selectedCategorie.id == 2 || _selectedCategorie.id == 3
+          || _selectedCategorie.id == 6 || _selectedCategorie.id == 7){
+
+        _showTierController = true ;
+      }else{
+        _showTierController = false ;
+      }
       _objetControl.text = _tresorie.objet;
       _modaliteControl.text= _tresorie.modalite ;
       _montantControl.text =(_tresorie.montant<0) ?(_tresorie.montant*-1).toString() : _tresorie.montant.toString() ;
@@ -152,6 +170,7 @@ class _AddTresoriePageState extends State<AddTresoriePage> with TickerProviderSt
     }else{
       _selectedTypeTiers =  Statics.tiersItems[0];
       _selectedCategorie = _categorieItems[1];
+      _objetControl.text = _selectedCategorie.libelle ;
     }
 
   }
@@ -271,7 +290,7 @@ class _AddTresoriePageState extends State<AddTresoriePage> with TickerProviderSt
                   ),
                    Container(
                         padding: EdgeInsets.only(right: 30),
-                        child:Text("Reste : "+_restepiece.toString()+" ${S.current.da}", textAlign: TextAlign.center,
+                        child:Text("${S.current.reste}: "+_restepiece.toString()+" ${S.current.da}", textAlign: TextAlign.center,
                           style: TextStyle(
                               fontWeight: FontWeight.bold
                           ),
@@ -377,54 +396,43 @@ class _AddTresoriePageState extends State<AddTresoriePage> with TickerProviderSt
                   ),
                 ],
               ),
-              Row(
-                children: [
-                  Flexible(
-                    flex: 4,
-                    child :ListDropDown(
-                      editMode: editMode && !modification,
-                      value: _selectedTypeTiers,
-                      items: _tiersDropdownItems,
-                      onChanged: (value) {
-                        setState(() {
-                          _selectedTypeTiers = value;
+              Visibility(
+                visible: editMode && !modification,
+                child: ListDropDown(
+                  editMode: editMode  ,
+                  value: _selectedCategorie,
+                  items: _categorieDropdownItems,
+                  onChanged: (value) {
+                    setState(() {
+                      _selectedCategorie = value;
+                      if(_selectedCategorie.id == 2 || _selectedCategorie.id == 3
+                          || _selectedCategorie.id == 6 || _selectedCategorie.id == 7){
 
-                        });
-                      },),
-                  ),
-                  Flexible(
-                    flex: 6,
-                    child: GestureDetector(
-                      onTap: editMode && !modification
-                          ? ()   {
-                        chooseClientDialog();
+                        _showTierController = true ;
+                      }else{
+                        _showTierController = false ;
                       }
-                          : null,
-                      child: TextField(
-                        decoration: InputDecoration(
-                          prefixIcon: Icon(
-                            Icons.people,
-                            color: Colors.blue,
-                          ),
-                          focusedBorder: OutlineInputBorder(
-                              borderSide: BorderSide(color: Colors.blue),
-                              borderRadius: BorderRadius.circular(20)),
-                          labelText: S.current.select_tier,
-                          labelStyle: TextStyle(color: Colors.blue),
-                          enabledBorder: OutlineInputBorder(
-                            gapPadding: 3.3,
-                            borderRadius: BorderRadius.circular(20),
-                            borderSide: BorderSide(color: Colors.blue),
-                          ),
-                        ),
-                        enabled: false,
-                        controller: _clientControl,
-                        keyboardType: TextInputType.text,
-                      ),
-                    ),
-                  ),
+                      _objetControl.text = _selectedCategorie.libelle ;
 
-                ],
+                      if(_selectedCategorie.id == 2 || _selectedCategorie.id == 6){
+                        _selectedTypeTiers =  Statics.tiersItems[0];
+                      }else{
+                        _selectedTypeTiers =  Statics.tiersItems[2];
+                      }
+
+                    });
+
+                  },
+                  onAddPressed: () async {
+                    await showDialog(
+                        context: context,
+                        builder: (BuildContext context) {
+                          return addTresoreCategorie();
+                        }).then((val) {
+                      setState(() {});
+                    });
+                  },
+                ),
               ),
             ],
           ),
@@ -482,25 +490,32 @@ class _AddTresoriePageState extends State<AddTresoriePage> with TickerProviderSt
               runSpacing: 13,
               children: [
                 Visibility(
-                  visible: editMode && !modification,
-                  child: ListDropDown(
-                    editMode: editMode  ,
-                    value: _selectedCategorie,
-                    items: _categorieDropdownItems,
-                    onChanged: (value) {
-                      setState(() {
-                        _selectedCategorie = value;
-                      });
-                    },
-                    onAddPressed: () async {
-                      await showDialog(
-                          context: context,
-                          builder: (BuildContext context) {
-                            return addTresoreCategorie();
-                          }).then((val) {
-                        setState(() {});
-                      });
-                    },
+                  visible: _showTierController,
+                  child: TextField(
+                    onTap: editMode && !modification
+                        ? ()   {
+                      chooseClientDialog();
+                    }
+                        : null,
+                    decoration: InputDecoration(
+                      prefixIcon: Icon(
+                        Icons.people,
+                        color: Colors.blue,
+                      ),
+                      focusedBorder: OutlineInputBorder(
+                          borderSide: BorderSide(color: Colors.blue),
+                          borderRadius: BorderRadius.circular(20)),
+                      labelText: S.current.select_tier,
+                      labelStyle: TextStyle(color: Colors.blue),
+                      enabledBorder: OutlineInputBorder(
+                        gapPadding: 3.3,
+                        borderRadius: BorderRadius.circular(20),
+                        borderSide: BorderSide(color: Colors.blue[700]),
+                      ),
+                    ),
+                    readOnly: true,
+                    controller: _clientControl,
+                    keyboardType: TextInputType.text,
                   ),
                 ),
                 TextField(
@@ -600,6 +615,7 @@ class _AddTresoriePageState extends State<AddTresoriePage> with TickerProviderSt
           _selectedPieces.add(selectedItem);
           _restepiece=_selectedPieces.first.reste;
           _montantControl.text= _restepiece.toString() ;
+          _objetControl.text = _objetControl.text + " ${selectedItem.piece} ${selectedItem.num_piece}";
         });
       },
     );
@@ -737,7 +753,7 @@ class _AddTresoriePageState extends State<AddTresoriePage> with TickerProviderSt
       _selectedCategorie = _categorieItems[_categorieItems.length];
     }
   }
-
+  //*******************************************************************************************************************************************************************************
   //*************************************************************************** partie de save ***********************************************************************************
 
   Future<int> addItemToDb() async {
@@ -853,6 +869,8 @@ class _AddTresoriePageState extends State<AddTresoriePage> with TickerProviderSt
     }
     _tresorie.numTresorie=_numeroControl.text ;
     _tresorie.categorie = _selectedCategorie.id ;
+    // mov de tresorie tjr 1 depuis ce screen
+    //_tresorie.mov = 1 ;
     _tresorie.objet = _objetControl.text;
     _tresorie.modalite=_modaliteControl.text;
     _tresorie.montant= double.parse(_montantControl.text);

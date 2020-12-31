@@ -18,11 +18,11 @@
   "tableau_bord" : "Dashbord",
   "accueil" : "Home",
 
-  "avoir_client" : "Avoir client",
-  "avoir_fournisseur": "Avoir fournisseur",
-  "retour_client": "Retour client",
-  "retour_fourn": "Retour fournisseur",
-  "bon_commande": "Purchase order",
+  "retour_client": "Customer Feedback",
+  "retour_fournisseur" : "Provider FeedBack",
+  "avoir_client" : "Customer Invoice Feedback",
+  "avoir_fournisseur" : "Provider Invoice Feedback",
+  "bon_commande" : "Purchase Order",
 
   "profile_titre" : "Profile",
   "modification_titre": "Edit ",
@@ -181,6 +181,30 @@
   "preview_titre" : "Piece Preciew",
 
   "prix" : "Price",
-  "qte" : "QTE"
+  "qte" : "QTE",
+
+  "msg_err_transfer" : "You can't transform a draft",
+  "msg_info_article" : "Attention you maybe add inassociate articles",
+  "espece" : "Species",
+  "reglement_piece" : "Bill Payment",
+  "decaissement" : "Disbursement",
+  "reglemnt_client" : "Customer Payment",
+  "reglement_fournisseur": "Provider Payment",
+  "encaissement": "Bursement",
+  "charge" : "Fees",
+  "rembourcement_client": "Customer Refund",
+  "rembourcement_four": "Provider Refund",
+  "sans_tresorie" : "Without Treasurer",
+  "avec_tresorie": "With Treasurer",
+  "msg_err_tresorie": "No treasurer is associate",
+  "msg_qte_err" : "Qantité can't be less then 0",
+  "msg_prix_err" : "Price can't be less then 0",
+  "msg_num_err" : "Please enter valid numbers",
+  "transferer" : "Forwad to ",
+
+  "to_commande" : "To Order",
+  "to_bon" : "To Receipt",
+  "to_facture" : "To Invoice",
+  "to_retour" : "To Feedback"
 
 }

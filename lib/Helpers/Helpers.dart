@@ -240,7 +240,7 @@ class Helpers {
         return  S.current.retour_client;
         break;
       case PieceType.retourFournisseur :
-        return  S.current.retour_fourn;
+        return  S.current.retour_fournisseur;
         break;
     }
   }

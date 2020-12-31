@@ -205,50 +205,50 @@ class S {
     );
   }
 
-  /// `Avoir client`
-  String get avoir_client {
-    return Intl.message(
-      'Avoir client',
-      name: 'avoir_client',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Avoir fournisseur`
-  String get avoir_fournisseur {
-    return Intl.message(
-      'Avoir fournisseur',
-      name: 'avoir_fournisseur',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Retour client`
+  /// `Customer Feedback`
   String get retour_client {
     return Intl.message(
-      'Retour client',
+      'Customer Feedback',
       name: 'retour_client',
       desc: '',
       args: [],
     );
   }
 
-  /// `Retour fournisseur`
-  String get retour_fourn {
+  /// `Provider FeedBack`
+  String get retour_fournisseur {
     return Intl.message(
-      'Retour fournisseur',
-      name: 'retour_fourn',
+      'Provider FeedBack',
+      name: 'retour_fournisseur',
       desc: '',
       args: [],
     );
   }
 
-  /// `Purchase order`
+  /// `Customer Invoice Feedback`
+  String get avoir_client {
+    return Intl.message(
+      'Customer Invoice Feedback',
+      name: 'avoir_client',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Provider Invoice Feedback`
+  String get avoir_fournisseur {
+    return Intl.message(
+      'Provider Invoice Feedback',
+      name: 'avoir_fournisseur',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Purchase Order`
   String get bon_commande {
     return Intl.message(
-      'Purchase order',
+      'Purchase Order',
       name: 'bon_commande',
       desc: '',
       args: [],
@@ -1770,6 +1770,226 @@ class S {
     return Intl.message(
       'QTE',
       name: 'qte',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `You can't transform a draft`
+  String get msg_err_transfer {
+    return Intl.message(
+      'You can\'t transform a draft',
+      name: 'msg_err_transfer',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Attention you maybe add inassociate articles`
+  String get msg_info_article {
+    return Intl.message(
+      'Attention you maybe add inassociate articles',
+      name: 'msg_info_article',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Species`
+  String get espece {
+    return Intl.message(
+      'Species',
+      name: 'espece',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Bill Payment`
+  String get reglement_piece {
+    return Intl.message(
+      'Bill Payment',
+      name: 'reglement_piece',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Disbursement`
+  String get decaissement {
+    return Intl.message(
+      'Disbursement',
+      name: 'decaissement',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Customer Payment`
+  String get reglemnt_client {
+    return Intl.message(
+      'Customer Payment',
+      name: 'reglemnt_client',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Provider Payment`
+  String get reglement_fournisseur {
+    return Intl.message(
+      'Provider Payment',
+      name: 'reglement_fournisseur',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Bursement`
+  String get encaissement {
+    return Intl.message(
+      'Bursement',
+      name: 'encaissement',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Fees`
+  String get charge {
+    return Intl.message(
+      'Fees',
+      name: 'charge',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Customer Refund`
+  String get rembourcement_client {
+    return Intl.message(
+      'Customer Refund',
+      name: 'rembourcement_client',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Provider Refund`
+  String get rembourcement_four {
+    return Intl.message(
+      'Provider Refund',
+      name: 'rembourcement_four',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Without Treasurer`
+  String get sans_tresorie {
+    return Intl.message(
+      'Without Treasurer',
+      name: 'sans_tresorie',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `With Treasurer`
+  String get avec_tresorie {
+    return Intl.message(
+      'With Treasurer',
+      name: 'avec_tresorie',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `No treasurer is associate`
+  String get msg_err_tresorie {
+    return Intl.message(
+      'No treasurer is associate',
+      name: 'msg_err_tresorie',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Qantité can't be less then 0`
+  String get msg_qte_err {
+    return Intl.message(
+      'Qantité can\'t be less then 0',
+      name: 'msg_qte_err',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Price can't be less then 0`
+  String get msg_prix_err {
+    return Intl.message(
+      'Price can\'t be less then 0',
+      name: 'msg_prix_err',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Please enter valid numbers`
+  String get msg_num_err {
+    return Intl.message(
+      'Please enter valid numbers',
+      name: 'msg_num_err',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Forwad to `
+  String get transferer {
+    return Intl.message(
+      'Forwad to ',
+      name: 'transferer',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `To Order`
+  String get to_commande {
+    return Intl.message(
+      'To Order',
+      name: 'to_commande',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `To Receipt`
+  String get to_bon {
+    return Intl.message(
+      'To Receipt',
+      name: 'to_bon',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `To Invoice`
+  String get to_facture {
+    return Intl.message(
+      'To Invoice',
+      name: 'to_facture',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `To Feedback`
+  String get to_retour {
+    return Intl.message(
+      'To Feedback',
+      name: 'to_retour',
       desc: '',
       args: [],
     );

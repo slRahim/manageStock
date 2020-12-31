@@ -293,12 +293,12 @@ class _ArticleListItemState extends State<ArticleListItem> {
                                   if(_qte > 0){
                                     _validateQteError = null;
                                   } else{
-                                    _validateQteError = "Qantité can\'t be less then 0";
+                                    _validateQteError = S.current.msg_qte_err;
                                   }
                                   if(_price > 0){
                                     _validatePriceError = null;
                                   } else{
-                                    _validatePriceError = "Price can\'t be less then 0";
+                                    _validatePriceError = S.current.msg_prix_err;
                                   }
                                   if(_validateQteError == null && _validatePriceError == null){
                                     widget.article.selectedQuantite = _qte;
@@ -312,7 +312,7 @@ class _ArticleListItemState extends State<ArticleListItem> {
                                   }
                                 } catch (e) {
                                   setState(() {
-                                    _validateQteError = "Please enter valid numbers";
+                                    _validateQteError = S.current.msg_num_err;
                                   });
                                   print(e);
                                 }

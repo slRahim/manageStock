@@ -589,7 +589,7 @@ class _AddTierPageState extends State<AddTierPage>
               focusedBorder: OutlineInputBorder(
                   borderSide: BorderSide(color: Colors.blue[700]),
                   borderRadius: BorderRadius.circular(20)),
-              labelText: "Solde Depart",
+              labelText: S.current.solde_depart,
               enabledBorder: OutlineInputBorder(
                 gapPadding: 3.3,
                 borderRadius: BorderRadius.circular(20),
@@ -1037,7 +1037,7 @@ class _AddTierPageState extends State<AddTierPage>
                                   print(_famille.libelle);
                                 },
                                 child: Text(
-                                  "Ajouter",
+                                  S.current.ajouter,
                                   style: TextStyle(color: Colors.white),
                                 ),
                                 color: Colors.red,

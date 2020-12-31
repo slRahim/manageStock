@@ -649,7 +649,9 @@ class SqlLiteDatabaseHelper {
 
   }
 
+
   //fonction speciale pour la creation des triggers de bd table piece et format
+  // NB : pour l'etat de la tresorie on doit l'ajouter le mov à la condition de calcul (regler) de tier
   createTriggersPiece(Database db, int version) async {
     // update_current_index
      await db.execute('''CREATE TRIGGER update_current_index 
@@ -668,7 +670,7 @@ class SqlLiteDatabaseHelper {
         CREATE TRIGGER IF NOT EXISTS update_tiers_chiffre_affaires1
         AFTER INSERT ON Pieces
         FOR EACH ROW
-        WHEN NEW.Mov = 1 AND NEW.Piece <> "CC"
+        WHEN NEW.Mov = 1 AND NEW.Piece <> "CC" 
         BEGIN
              UPDATE Tiers
                SET Chiffre_affaires = Chiffre_affaires + NEW.Total_ttc
@@ -694,6 +696,47 @@ class SqlLiteDatabaseHelper {
         BEGIN
              UPDATE Tiers
                SET Chiffre_affaires = Chiffre_affaires + (NEW.Total_ttc-OLD.Total_ttc)
+             WHERE id = OLD.Tier_id;
+           
+             UPDATE Tiers
+                SET Regler = (SELECT SUM(Montant) FROM Tresories WHERE Tier_id = New.Tier_id)
+             WHERE id = NEW.Tier_id ;
+             
+             UPDATE Tiers
+               SET  Credit = (Solde_depart + Chiffre_affaires) - Regler 
+             WHERE id = New.Tier_id;
+        END;
+     ''');
+
+     await db.execute('''
+        CREATE TRIGGER IF NOT EXISTS update_tiers_chiffre_affaires3
+        AFTER UPDATE ON Pieces
+        FOR EACH ROW
+        WHEN (OLD.Mov <> NEW.Mov)  AND (NEW.Mov = 0 OR NEW.Mov = 2 OR NEW.Mov = -1 OR NEW.Mov = -2) 
+            AND NEW.Piece <> "CC"
+        BEGIN
+             UPDATE Tiers
+               SET Chiffre_affaires = Chiffre_affaires - OLD.Total_ttc
+             WHERE id = OLD.Tier_id;
+           
+             UPDATE Tiers
+                SET Regler = (SELECT SUM(Montant) FROM Tresories WHERE Tier_id = New.Tier_id)
+             WHERE id = NEW.Tier_id ;
+             
+             UPDATE Tiers
+               SET  Credit = (Solde_depart + Chiffre_affaires) - Regler 
+             WHERE id = New.Tier_id;
+        END;
+     ''');
+
+     await db.execute('''
+        CREATE TRIGGER IF NOT EXISTS update_tiers_chiffre_affaires4
+        AFTER UPDATE ON Pieces
+        FOR EACH ROW
+        WHEN (OLD.Mov <> NEW.Mov)  AND (NEW.Mov = 1) AND NEW.Piece <> "CC"
+        BEGIN
+             UPDATE Tiers
+               SET Chiffre_affaires = Chiffre_affaires + NEW.Total_ttc
              WHERE id = OLD.Tier_id;
            
              UPDATE Tiers
@@ -755,6 +798,8 @@ class SqlLiteDatabaseHelper {
 
   }
 
+
+  // NB : pour l'etat de la tresorie on doit l'ajouter le mov à la condition de calcul (regler) de tier
   createTriggersTresorie(Database db, int version) async {
     await db.execute('''CREATE TRIGGER update_current_index_tr 
         AFTER INSERT ON Tresories 
