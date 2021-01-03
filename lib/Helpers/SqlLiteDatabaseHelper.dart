@@ -243,7 +243,8 @@ class SqlLiteDatabaseHelper {
           Num_tresorie VARCHAR(50),
           Tier_id ,
           Tier_rs VARCHAR (255),
-          Piece_id ,
+          Piece_id INTEGER,
+          Mov INTEGER ,
           Objet VARCHAR (255),
           Montant DOUBLE,
           Modalite VARCHAR (255),
@@ -677,7 +678,7 @@ class SqlLiteDatabaseHelper {
              WHERE id = New.Tier_id; 
              
              UPDATE Tiers
-                SET Regler = (SELECT SUM(Montant) FROM Tresories WHERE Tier_id = New.Tier_id)
+                SET Regler = (SELECT SUM(Montant) FROM Tresories WHERE Tier_id = New.Tier_id AND Mov = 1)
              WHERE id = NEW.Tier_id ;
              
              UPDATE Tiers
@@ -699,7 +700,7 @@ class SqlLiteDatabaseHelper {
              WHERE id = OLD.Tier_id;
            
              UPDATE Tiers
-                SET Regler = (SELECT SUM(Montant) FROM Tresories WHERE Tier_id = New.Tier_id)
+                SET Regler = (SELECT SUM(Montant) FROM Tresories WHERE Tier_id = New.Tier_id AND Mov = 1)
              WHERE id = NEW.Tier_id ;
              
              UPDATE Tiers
@@ -720,7 +721,7 @@ class SqlLiteDatabaseHelper {
              WHERE id = OLD.Tier_id;
            
              UPDATE Tiers
-                SET Regler = (SELECT SUM(Montant) FROM Tresories WHERE Tier_id = New.Tier_id)
+                SET Regler = (SELECT SUM(Montant) FROM Tresories WHERE Tier_id = New.Tier_id AND Mov = 1)
              WHERE id = NEW.Tier_id ;
              
              UPDATE Tiers
@@ -740,7 +741,7 @@ class SqlLiteDatabaseHelper {
              WHERE id = OLD.Tier_id;
            
              UPDATE Tiers
-                SET Regler = (SELECT SUM(Montant) FROM Tresories WHERE Tier_id = New.Tier_id)
+                SET Regler = (SELECT SUM(Montant) FROM Tresories WHERE Tier_id = New.Tier_id AND Mov = 1)
              WHERE id = NEW.Tier_id ;
              
              UPDATE Tiers
@@ -767,14 +768,14 @@ class SqlLiteDatabaseHelper {
         CREATE TRIGGER IF NOT EXISTS delete_tresorie
         BEFORE DELETE ON Pieces
         FOR EACH ROW
-        WHEN (OLD.Mov = 1 AND NEW.Piece <> "CC")
+        WHEN (OLD.Mov = 1 AND OLD.Piece <> "CC")
         BEGIN
             UPDATE Tiers
                SET Chiffre_affaires = Chiffre_affaires - OLD.Total_ttc
             WHERE id = OLD.Tier_id;
             
             UPDATE Tiers
-               SET Regler = (SELECT SUM(Montant) FROM Tresories WHERE Tier_id = OLD.Tier_id)
+               SET Regler = (SELECT SUM(Montant) FROM Tresories WHERE Tier_id = OLD.Tier_id AND Mov = 1)
             WHERE id = OLD.Tier_id ;
              
             UPDATE Tiers
@@ -819,7 +820,7 @@ class SqlLiteDatabaseHelper {
         when (New.Categorie_id = 2 OR New.Categorie_id = 3 OR New.Categorie_id = 6 OR New.Categorie_id = 7)
         BEGIN             
             UPDATE Tiers
-              SET Regler = (SELECT SUM(Montant) FROM Tresories WHERE Tier_id = New.Tier_id)
+              SET Regler = (SELECT SUM(Montant) FROM Tresories WHERE Tier_id = New.Tier_id AND Mov = 1)
             WHERE id = NEW.Tier_id ;
              
              UPDATE Tiers
@@ -852,7 +853,7 @@ class SqlLiteDatabaseHelper {
         when (New.Categorie_id = 2 OR New.Categorie_id = 3 OR New.Categorie_id = 6 OR New.Categorie_id = 7)
         BEGIN             
             UPDATE Tiers
-              SET Regler = (SELECT SUM(Montant) FROM Tresories WHERE Tier_id = New.Tier_id)
+              SET Regler = (SELECT SUM(Montant) FROM Tresories WHERE Tier_id = New.Tier_id AND Mov = 1)
             WHERE id = NEW.Tier_id ;
              
              UPDATE Tiers
@@ -881,7 +882,7 @@ class SqlLiteDatabaseHelper {
         FOR EACH ROW 
         BEGIN 
            UPDATE Tiers
-             SET Regler = (SELECT (SUM(Montant)-OLD.Montant) FROM Tresories WHERE Tier_id = OLD.Tier_id)
+             SET Regler = (SELECT (SUM(Montant)-OLD.Montant) FROM Tresories WHERE Tier_id = OLD.Tier_id AND Mov = 1)
            WHERE id = OLD.Tier_id ;
              
            UPDATE Tiers
@@ -897,7 +898,7 @@ class SqlLiteDatabaseHelper {
         FOR EACH ROW 
         BEGIN 
             UPDATE Pieces
-              SET Regler = (SELECT SUM(Regler-OLD.Regler) FROM ReglementTresorie WHERE Piece_id = OLD.Piece_id)
+              SET Regler = (SELECT SUM(Regler-OLD.Regler) FROM ReglementTresorie WHERE Piece_id = OLD.Piece_id )
             WHERE id =  OLD.Piece_id ;
 
              UPDATE Pieces

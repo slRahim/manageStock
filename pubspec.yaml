@@ -79,6 +79,8 @@ dependencies:
   fab_circular_menu:
   floating_action_row:
 
+  sliding_card:
+
   #  flutter_plugin_android_lifecycle: ^1.0.8
   #  location_permissions: ^3.0.0
   #  after_layout: ^1.0.7+2

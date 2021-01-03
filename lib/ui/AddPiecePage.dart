@@ -1053,16 +1053,15 @@ class _AddPiecePageState extends State<AddPiecePage> with TickerProviderStateMix
         if(_piece.mov == 1 && _piece.piece != PieceType.retourClient
             && _piece.piece != PieceType.avoirClient && _piece.piece != PieceType.retourFournisseur
             && _piece.piece != PieceType.avoirFournisseur){
-
           //ds le cas de modification de mov de piece
-          // await upadteTresorie ()
-
+          // update tresorie mov
+          await _queryCtr.updateItemByForeignKey(DbTablesNames.tresorie, "Mov",_piece.mov, "Piece_id", _piece.id);
           await addTresorie(_piece,transferer: false);
         }
 
         if (id > -1) {
           widget.arguments = item;
-          widget.arguments.id = id;
+          widget.arguments.id = _piece.id;
           message = S.current.msg_update_item;
         } else {
           message = S.current.msg_update_err;
@@ -1080,7 +1079,7 @@ class _AddPiecePageState extends State<AddPiecePage> with TickerProviderStateMix
           await _queryCtr.addItemToTable(DbTablesNames.journaux, journaux);
         });
 
-        if(_piece.mov == 1 && _piece.piece != PieceType.retourClient
+        if( _piece.piece != PieceType.devis && _piece.piece != PieceType.retourClient
             && _piece.piece != PieceType.avoirClient && _piece.piece != PieceType.retourFournisseur
             && _piece.piece != PieceType.avoirFournisseur){
 
@@ -1123,17 +1122,10 @@ class _AddPiecePageState extends State<AddPiecePage> with TickerProviderStateMix
     // partie special pour le cas de broullion avec verssement
     // ds le cas de l'ajout de mov ds tresorie supp les conditions internes
     if(_piece.id == null ){
-      if(_piece.mov == 1 || _piece.mov == 0){
-        _piece.regler =_verssementpiece;
-      }else{
-        _piece.regler = 0;
-      }
+      _piece.regler =_verssementpiece;
     }else{
-      if(_piece.mov == 1 || _piece.mov == 0){
-        _piece.regler= _piece.regler+_verssementpiece;
-      }else{
-        _piece.regler = 0;
-      }
+      _piece.regler= _piece.regler+_verssementpiece;
+
     }
     _piece.reste=_piece.total_ttc - _piece.regler;
 
@@ -1163,7 +1155,7 @@ class _AddPiecePageState extends State<AddPiecePage> with TickerProviderStateMix
     }
 
     //special pour l'etat de la tresorie
-    //tresorie.mov = item.mov ;
+    tresorie.mov = item.mov ;
 
     tresorie.objet = "${S.current.reglement_piece} ${item.piece} ${item.num_piece}";
     tresorie.modalite = S.current.espece;

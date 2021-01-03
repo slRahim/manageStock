@@ -11,6 +11,7 @@ class Tresorie {
   int _id ;
   int _tierId ;
   int _pieceId ;
+  int _mov ;
   int _categorie;
   String _numTresorie ;
   String _tierRS ;
@@ -26,6 +27,7 @@ class Tresorie {
       this._numTresorie,
       this._tierId,
       this._pieceId,
+      this._mov ,
       this._tierRS,
       this._modalite,
       this._objet,
@@ -39,6 +41,7 @@ class Tresorie {
     this._numTresorie=obj["Num_tresorie"];
     this._tierId= obj["Tier_id"];
     this._pieceId= obj["Piece_id"];
+    this._mov = obj["Mov"];
     this._tierRS= obj["Tier_rs"];
     this._modalite= obj["Modalite"];
     this._objet= obj["Objet"];
@@ -54,6 +57,7 @@ class Tresorie {
     map["Piece_id"]=this._pieceId;
     map["Tier_id"]=this._tierId;
     map["Tier_rs"]=this._tierRS;
+    map["Mov"] = this._mov ;
     map["Modalite"]=this._modalite;
     map["Objet"]=this._objet;
     map["Categorie_id"]=this._categorie;
@@ -61,6 +65,13 @@ class Tresorie {
     map["Date"] = this._date.millisecondsSinceEpoch;
 
     return map ;
+  }
+
+
+  int get mov => _mov;
+
+  set mov(int value) {
+    _mov = value;
   }
 
   DateTime get date => _date;

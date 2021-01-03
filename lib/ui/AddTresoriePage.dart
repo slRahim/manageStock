@@ -870,7 +870,7 @@ class _AddTresoriePageState extends State<AddTresoriePage> with TickerProviderSt
     _tresorie.numTresorie=_numeroControl.text ;
     _tresorie.categorie = _selectedCategorie.id ;
     // mov de tresorie tjr 1 depuis ce screen
-    //_tresorie.mov = 1 ;
+    _tresorie.mov = 1 ;
     _tresorie.objet = _objetControl.text;
     _tresorie.modalite=_modaliteControl.text;
     _tresorie.montant= double.parse(_montantControl.text);

@@ -434,11 +434,13 @@ class QueryCtr {
     return res;
   }
 
-  Future<int> updateItemByForeignKey (String tableName , item , String column , key) async {
+  Future<int> updateItemByForeignKey (String tableName , item ,value, String column , key) async {
     var dbClient = await _databaseHelper.db ;
-    // les champs null sont pris en consideration
-    int res = await dbClient.update(tableName ,item.toMap(), where: "${column} = ?" , whereArgs: [key]);
-
+    int res = await dbClient.rawUpdate('''
+      UPDATE ${tableName}
+        SET ${item} = ${value}
+      WHERE ${column} = ${key} ;
+    ''');
     return res ;
   }
 
