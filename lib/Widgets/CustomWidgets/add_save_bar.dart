@@ -40,7 +40,7 @@ class AddEditBarState extends State<AddEditBar>{
         onPressed: widget.onCancelPressed
       ),
       title: Text(widget.title),
-      backgroundColor: widget.editMode ? Colors.green : Colors.blue,
+      backgroundColor: widget.editMode ? Colors.green : Colors.indigoAccent,
       centerTitle: true,
       bottom: widget.bottom,
       actions: [

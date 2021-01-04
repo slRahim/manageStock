@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:gestmob/Helpers/Helpers.dart';
 import 'package:gestmob/Helpers/QueryCtr.dart';
 import 'package:gestmob/Helpers/Statics.dart';
@@ -7,11 +8,12 @@ import 'package:gestmob/generated/l10n.dart';
 import 'package:gestmob/models/Tresorie.dart';
 import 'package:intl/intl.dart';
 import 'package:intl/date_symbol_data_local.dart';
+import 'package:sliding_card/sliding_card.dart';
 
 import 'CustomWidgets/list_tile_card.dart';
 
 // element à afficher lors de listing des tresorie
-class TresorieListItem extends StatelessWidget {
+class TresorieListItem extends StatefulWidget {
   TresorieListItem({
     @required this.tresorie,
     Key key,
@@ -19,51 +21,99 @@ class TresorieListItem extends StatelessWidget {
         super(key: key);
 
   final Tresorie tresorie;
-  QueryCtr _queryCtr = new QueryCtr() ;
-  bool _confirmDell = false ;
 
   @override
-  Widget build(BuildContext context) => ListTileCard(
-    id: tresorie.id,
-    from: tresorie,
-    confirmDismiss: (DismissDirection dismissDirection) async {
-      await showDialog(
-          context: context,
-          builder: (BuildContext context) {
-            return dellDialog(context);
-          });
-      return _confirmDell ;
-    },
-    onTap: () => {
-      Navigator.of(context).pushNamed(RoutesKeys.addTresorie, arguments: tresorie)
-    },
-    leading: Container(
-      child: Center(
-        child: (tresorie.categorie == 2 || tresorie.categorie ==7) ? Icon(Icons.arrow_upward_outlined , color: Colors.green,)
-            :Icon(Icons.arrow_downward_outlined , color: Colors.red,),
-      ),
-      height: 50,
-      width: 50,
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(50),
-        border: Border.all(
-          width: 3,
-          color: Colors.red,
+  _TresorieListItemState createState() => _TresorieListItemState();
+}
+
+class _TresorieListItemState extends State<TresorieListItem> {
+  QueryCtr _queryCtr = new QueryCtr() ;
+  bool _confirmDell = false ;
+  SlidingCardController controller ;
+
+  @override
+  void initState() {
+    super.initState();
+    controller = SlidingCardController();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Slidable(
+      actionPane: SlidableDrawerActionPane(),
+      actionExtentRatio: 0.25,
+      child: ListTileCard(
+        from: widget.tresorie,
+        onTap: () =>
+        {
+          Navigator.of(context).pushNamed(
+              RoutesKeys.addTresorie, arguments: widget.tresorie)
+        },
+        slidingCardController: controller,
+        onCardTapped: () {
+          if(controller.isCardSeparated == true) {
+            controller.collapseCard();
+          } else {
+            controller.expandCard();
+          }
+        },
+        leading: Container(
+          child: CircleAvatar(
+            child: (widget.tresorie.categorie == 2 ||
+                widget.tresorie.categorie == 7) ? Icon(
+              Icons.arrow_upward_outlined, color: Colors.green,)
+                : Icon(Icons.arrow_downward_outlined, color: Colors.red,),
+            radius: 30,
+            backgroundColor: Colors.grey[100],
+          ),
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(50),
+            border: Border.all(
+              width: 2,
+              color: Colors.red,
+            ),
+            color: Colors.white,
+          ),
         ),
-        color: Colors.white,
+        subtitle: Helpers.dateToText(widget.tresorie.date),
+        title: ("RS: " + widget.tresorie.tierRS),
+        trailingChildren: [
+          Text(
+            "N°: ${widget.tresorie.numTresorie}",
+            style: TextStyle(
+                color: Colors.black,
+                fontSize: 16.0),
+          ),
+          Text(
+            "${S.current.objet}: ${widget.tresorie.objet}",
+            style: TextStyle(
+                color: Colors.black,
+                fontSize: 16.0),
+          ),
+          (widget.tresorie.montant >= 0) ? Text(
+            '${S.current.montant} : ' + widget.tresorie.montant.toString(),
+            style: TextStyle(fontSize: 16.0, fontWeight: FontWeight.bold),)
+              : Text(
+            '${S.current.montant} : ' + (widget.tresorie.montant * -1).toString(),
+            style: TextStyle(fontSize: 16.0, fontWeight: FontWeight.bold),),
+          Icon(Icons.check_circle, color: Colors.blue , size: 26,),
+        ],
       ),
-    ),
-    title: Text(tresorie.numTresorie),
-    subtitle: Text("RS: " + tresorie.tierRS),
-    trailingChildren: [
-      (tresorie.montant >=0)?Text('${S.current.montant} : '+tresorie.montant.toString(), style: TextStyle(fontSize: 16.0, fontWeight: FontWeight.bold ),)
-      :Text('${S.current.montant} : '+(tresorie.montant * -1).toString(), style: TextStyle(fontSize: 16.0, fontWeight: FontWeight.bold ),),
-      SizedBox(height: 5),
-      Text(Helpers.dateToText(tresorie.date), style: TextStyle(color: Colors.black, fontSize: 14.0),),
-      SizedBox(height: 5),
-      Icon(Icons.check_circle , color: Colors.blue),
-    ],
-  );
+      actions: <Widget>[
+        IconSlideAction(
+            color: Theme.of(context).backgroundColor,
+            iconWidget: Icon(Icons.delete_forever,size: 50, color: Colors.red,),
+            onTap: () async {
+              await showDialog(
+                  context: context,
+                  builder: (BuildContext context) {
+                    return dellDialog(context);
+                  });
+            }
+        ),
+      ],
+    );
+  }
 
 
   Widget dellDialog(BuildContext context) {
@@ -80,7 +130,7 @@ class TresorieListItem extends StatelessWidget {
           FlatButton(
             child: Text(S.current.oui),
             onPressed: ()async {
-              int res = await _queryCtr.removeItemFromTable(DbTablesNames.tresorie, tresorie);
+              int res = await _queryCtr.removeItemFromTable(DbTablesNames.tresorie, widget.tresorie);
               var message = "" ;
               if(res > 0){
                 message =S.current.msg_supp_ok;
@@ -96,6 +146,5 @@ class TresorieListItem extends StatelessWidget {
         ],
       );
   }
-
-
 }
+

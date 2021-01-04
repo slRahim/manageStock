@@ -27,6 +27,7 @@ class _SelectableListItemState extends State<SelectableListItem> {
   @override
   Widget build(BuildContext context) {
     return ListTileCard(
+      from: widget.article,
       onTap: () {
         if(widget.onItemSelected != null){
           setState(() {
@@ -37,14 +38,13 @@ class _SelectableListItemState extends State<SelectableListItem> {
           Navigator.of(context).pushNamed(RoutesKeys.addArticle, arguments: widget.article);
         }
       },
-
       itemSelected: itemSelected,
       leading: CircleAvatar(
-        radius: 20,
+        radius: 30,
         backgroundImage: MemoryImage(widget.article.imageUint8List),
       ),
-      title: Text(widget.article.designation),
-      subtitle: Text("Ref: " + widget.article.ref),
+      subtitle: ('fdgsj nf '),
+      title: "Ref: widget.article.ref",
       trailingChildren: [
         Text(
           widget.article.prixVente1.toString(),

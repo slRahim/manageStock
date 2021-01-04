@@ -1,5 +1,8 @@
+import 'dart:ui';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:gestmob/Helpers/Helpers.dart';
 import 'package:gestmob/Helpers/QueryCtr.dart';
 import 'package:gestmob/Helpers/Statics.dart';
@@ -8,12 +11,15 @@ import 'package:gestmob/models/Article.dart';
 import 'package:gestmob/models/Piece.dart';
 import 'package:intl/intl.dart';
 import 'package:intl/date_symbol_data_local.dart';
+import 'package:sliding_card/sliding_card.dart';
 
 import 'CustomWidgets/list_tile_card.dart';
 
 // element à afficher lors de listing des factures
-class PieceListItem extends StatelessWidget {
-   PieceListItem({
+
+class PieceListItem extends StatefulWidget {
+
+ PieceListItem({
     @required this.piece,
     Key key, this.onItemSelected ,
   })  : assert(piece != null),
@@ -22,75 +28,156 @@ class PieceListItem extends StatelessWidget {
   final Piece piece;
   final Function(Object) onItemSelected;
 
+  @override
+  _PieceListItemState createState() => _PieceListItemState();
+}
+
+class _PieceListItemState extends State<PieceListItem> {
+
   QueryCtr _queryCtr = new QueryCtr() ;
   bool _confirmDell = false ;
+  SlidingCardController controller ;
 
   @override
-  Widget build(BuildContext context) => ListTileCard(
-    id: piece.id,
-    from: piece,
-    confirmDismiss:(DismissDirection dismissDirection) async {
-          await showDialog(
-            context: context,
-            builder: (BuildContext context) {
-              return dellDialog(context);
-          });
-          return _confirmDell ;
-    },
-    onLongPress:  () => onItemSelected != null? onItemSelected(piece) : null,
-    onTap: () => {
-      if(onItemSelected == null){
-        Navigator.of(context).pushNamed(RoutesKeys.addPiece, arguments: piece)
-      }
-    },
-    leading: Container(
-      child: Center(child: Text(piece.piece),),
-      height: 50,
-      width: 50,
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(50),
-        border: Border.all(
-          width: 3,
-          color: Colors.green,
+  void initState() {
+    super.initState();
+    controller = SlidingCardController();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    SizeConfig().init(context);
+    return Slidable(
+      actionPane: SlidableDrawerActionPane(),
+      actionExtentRatio: 0.25,
+      child: ListTileCard(
+        from: widget.piece,
+        onLongPress:  () => widget.onItemSelected != null? widget.onItemSelected(widget.piece) : null,
+        onTap: () => {
+          if(widget.onItemSelected == null){
+            Navigator.of(context).pushNamed(RoutesKeys.addPiece, arguments: widget.piece)
+          }
+        },
+        slidingCardController: controller,
+        onCardTapped: () {
+          if(controller.isCardSeparated == true) {
+            controller.collapseCard();
+          } else {
+            controller.expandCard();
+          }
+        },
+        leading: Container(
+          child: CircleAvatar(
+            child: Text("${widget.piece.piece}"),
+            radius: 30,
+            backgroundColor: Colors.grey[200],
+            foregroundColor: Colors.black,
+          ),
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(50),
+            border: Border.all(
+              width: 2,
+              color: Colors.green,
+            ),
+            color: Colors.grey[100],
+          ),
         ),
-        color: Colors.white,
+        subtitle: Helpers.dateToText(widget.piece.date),
+        title:(widget.piece.raisonSociale != null) ? ("RS: " + widget.piece.raisonSociale) : null,
+        trailingChildren: [
+          Text(
+           "N°: ${widget.piece.num_piece}",
+            style: TextStyle(
+                color: Colors.black,
+                fontSize: 16.0),
+          ),
+          Text(
+            "${S.current.regler}: ${widget.piece.regler} ${S.current.da}",
+            style: TextStyle(
+                color: Colors.black,
+                fontSize: 16.0),
+          ),
+          (widget.piece.total_ttc < 0)
+              ? Text('TTC : '+(widget.piece.total_ttc * -1).toString()+" ${S.current.da}",
+            style: TextStyle(
+                fontSize: 16.0,
+                fontWeight: FontWeight.bold ,
+                color: (widget.piece.reste < 0)?Colors.redAccent : Colors.black ),
+          )
+              : Text('TTC : '+(widget.piece.total_ttc).toString()+" ${S.current.da}",
+            style: TextStyle(
+                fontSize: 16.0,
+                fontWeight: FontWeight.bold ,
+                color: (widget.piece.reste > 0)?Colors.redAccent : Colors.black ),
+          ) ,
+          getIcon(),
+          RichText(
+            text: TextSpan(
+                children: [
+                  TextSpan(
+                      text: "${S.current.reste}: ",
+                      style: TextStyle(fontSize: 16 , fontWeight: FontWeight.bold,color: Colors.red)
+                  ),
+                  TextSpan(
+                    text:"${widget.piece.reste} ${S.current.da}",
+                    style: TextStyle(
+                        color: Colors.black,
+                        fontSize: 16.0),
+                  ),
+                ]
+            ),
+          ),
+          RichText(
+            text: TextSpan(
+              children: [
+                TextSpan(
+                  text: "Marge: ",
+                  style: TextStyle(fontSize: 16 , fontWeight: FontWeight.bold,color: Colors.green)
+                ),
+                TextSpan(
+                  text:"${widget.piece.marge} ${S.current.da}",
+                  style: TextStyle(
+                      color: Colors.black,
+                      fontSize: 16.0),
+                ),
+              ]
+            ),
+          ),
+          Text(
+              (widget.piece.transformer == 1)? "C'est une piece transformer":"C'est une piece d'origine",
+            style: TextStyle(
+                color: Colors.black,
+                fontSize: 16.0),
+          ),
+        ],
       ),
-    ),
-    title: Text(piece.num_piece),
-    subtitle:(piece.raisonSociale != null) ? Text("RS: " + piece.raisonSociale) : null,
-    trailingChildren: [
-      (piece.total_ttc < 0)
-          ? Text('TTC : '+(piece.total_ttc * -1).toString()+" ${S.current.da}",
-                  style: TextStyle(
-                      fontSize: 16.0,
-                      fontWeight: FontWeight.bold ,
-                      color: (piece.reste < 0)?Colors.redAccent : Colors.black ),
-            )
-         : Text('TTC : '+(piece.total_ttc).toString()+" ${S.current.da}",
-                  style: TextStyle(
-                      fontSize: 16.0,
-                      fontWeight: FontWeight.bold ,
-                      color: (piece.reste > 0)?Colors.redAccent : Colors.black ),
-            ) ,
+      actions: <Widget>[
+        IconSlideAction(
+            color: Theme.of(context).backgroundColor,
+            iconWidget: Icon(Icons.delete_forever,size: 50, color: Colors.red,),
+            onTap: () async {
+              await showDialog(
+                  context: context,
+                  builder: (BuildContext context) {
+                    return dellDialog(context);
+                  });
+            }
+        ),
+      ],
+    );
+  }
 
-      SizedBox(height: 5),
-      Text(Helpers.dateToText(piece.date), style: TextStyle(color: Colors.black, fontSize: 14.0),),
-      SizedBox(height: 5),
-      getIcon(),
-
-    ],
-  );
 
   Widget getIcon() {
-    switch (piece.mov){
+    switch (widget.piece.mov){
       case 1 :
-        return Icon(Icons.check_circle , color: Colors.blue);
+        return Icon(Icons.check_circle , color: Colors.blue,size: 26,);
         break;
       case 2 :
-        return Icon(Icons.broken_image , color: Colors.black45);
+        return Icon(Icons.broken_image , color: Colors.black45,size: 26,);
         break;
       case 0 :
-        return Icon(Icons.check_circle_outline , color: Colors.black45);
+        return Icon(Icons.check_circle_outline , color: Colors.black45,size: 26,);
         break;
     }
   }
@@ -109,7 +196,7 @@ class PieceListItem extends StatelessWidget {
         FlatButton(
           child: Text(S.current.sans_tresorie),
           onPressed: ()async{
-            int res = await _queryCtr.removeItemFromTable(DbTablesNames.pieces, piece);
+            int res = await _queryCtr.removeItemFromTable(DbTablesNames.pieces, widget.piece);
             var message = "" ;
             if(res > 0){
                message =S.current.msg_supp_ok;
@@ -125,10 +212,10 @@ class PieceListItem extends StatelessWidget {
         FlatButton(
           child: Text(S.current.avec_tresorie),
           onPressed: ()async{
-            int res = await _queryCtr.removeItemWithForeignKey (DbTablesNames.tresorie , piece.id , "Piece_id");
+            int res = await _queryCtr.removeItemWithForeignKey (DbTablesNames.tresorie , widget.piece.id , "Piece_id");
             var message = "" ;
             if(res > 0){
-              int res1 = await _queryCtr.removeItemFromTable(DbTablesNames.pieces, piece);
+              int res1 = await _queryCtr.removeItemFromTable(DbTablesNames.pieces, widget.piece);
               if(res > 0){
                 message =S.current.msg_supp_ok;
                 _confirmDell =true ;
@@ -148,6 +235,5 @@ class PieceListItem extends StatelessWidget {
       ],
     );
   }
-
-
 }
+

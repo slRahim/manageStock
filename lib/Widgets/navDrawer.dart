@@ -96,12 +96,11 @@ class NavDrawer extends StatelessWidget {
           style: TextStyle(color: Colors.white, fontSize: 15),
         ),
         onTap: () => {
-          print(data.title),
           Navigator.of(context).pop(),
           Helpers.handleIdClick(context, data.id),
         },
-        trailing:(Helpers.isDirectionRTL(context))? Icon(Icons.keyboard_arrow_left)
-            :Icon(Icons.keyboard_arrow_right),
+        trailing:(Helpers.isDirectionRTL(context))? Icon(Icons.keyboard_arrow_left,color: Colors.white,)
+            :Icon(Icons.keyboard_arrow_right,color: Colors.white,),
       );
   }
 
@@ -109,7 +108,7 @@ class NavDrawer extends StatelessWidget {
   Widget build(BuildContext context) {
     return Drawer(
         child: Container(
-      color: Color.fromRGBO(41, 128, 185,1.0),
+      color: Colors.indigo[500],
       child: ListView(
         physics: const AlwaysScrollableScrollPhysics(),
         padding: EdgeInsets.zero,

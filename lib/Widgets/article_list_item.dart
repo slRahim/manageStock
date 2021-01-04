@@ -3,10 +3,12 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_icons/flutter_icons.dart';
+import 'package:gestmob/Helpers/Helpers.dart';
 import 'package:gestmob/Helpers/Statics.dart';
 import 'package:gestmob/generated/l10n.dart';
 import 'package:gestmob/models/Article.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
+import 'package:sliding_card/sliding_card.dart';
 
 import 'CustomWidgets/list_tile_card.dart';
 
@@ -36,10 +38,18 @@ class _ArticleListItemState extends State<ArticleListItem> {
   TextEditingController _priceControler = new TextEditingController();
   String _validateQteError;
   String _validatePriceError;
+  SlidingCardController controller ;
+
+  @override
+  void initState() {
+    super.initState();
+    controller = SlidingCardController();
+  }
 
   @override
   Widget build(BuildContext context) {
     return ListTileCard(
+      from:  widget.article,
       onLongPress: () {
         if(widget.onItemSelected != null){
           selectThisItem();
@@ -63,37 +73,43 @@ class _ArticleListItemState extends State<ArticleListItem> {
           }
         }
       },
-
+      slidingCardController: controller,
+      onCardTapped: () {
+        if(controller.isCardSeparated == true) {
+          controller.collapseCard();
+        } else {
+          controller.expandCard();
+        }
+      },
       itemSelected: widget.article.selectedQuantite > 0,
       leading: CircleAvatar(
-        radius: 20,
+        radius: 30,
         backgroundImage: MemoryImage(widget.article.imageUint8List),
       ),
-      title: Text(widget.article.designation),
-      subtitle: Text("Ref: " + widget.article.ref),
+      subtitle: (widget.article.codeBar),
+      title: ("Ref: " + widget.article.ref),
       trailingChildren: widget.article.selectedQuantite > 0 ? [
         Text(
           "${S.current.prix} : "+
               (widget.article.selectedQuantite * widget.article.selectedPrice).toString()+" ${S.current.da}",
-        style: TextStyle(
-            color: Colors.black,
-            fontSize: 15.0,
-          fontWeight: FontWeight.bold
-        ),
-      ),
-        SizedBox(height: 5),
-        Text(
-           "${S.current.qte} : "+
-               widget.article.selectedQuantite.toString(),
           style: TextStyle(
               color: Colors.black,
-              fontSize: 15.0),
-        )
+              fontSize: 15.0,
+            fontWeight: FontWeight.bold
+          ),
+        ),
+      Text(
+         "${S.current.qte} : "+
+             widget.article.selectedQuantite.toString(),
+        style: TextStyle(
+            color: Colors.black,
+            fontSize: 15.0
+        ),
+      )
       ]:
       // listing des articles ds le fragement article
       [
         trailingChildrenOnArticleFragment(),
-        SizedBox(height: 5),
         Text(
           "${S.current.qte} : "+
           (widget.article.quantite - widget.article.cmdClient).toString(),

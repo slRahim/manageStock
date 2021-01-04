@@ -80,6 +80,7 @@ dependencies:
   floating_action_row:
 
   sliding_card:
+  flutter_slidable:
 
   #  flutter_plugin_android_lifecycle: ^1.0.8
   #  location_permissions: ^3.0.0
