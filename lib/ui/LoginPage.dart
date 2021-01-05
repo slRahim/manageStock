@@ -69,7 +69,7 @@ class _LoginAppState extends State<LoginApp> {
         decoration: BoxDecoration(
             gradient: LinearGradient(
                 // colors: [Color(0xFF088787), Color(0xFF1FC877)],
-                colors: [Colors.lightBlueAccent, Colors.blueAccent],
+                colors: [Colors.indigo[200], Colors.indigo[500]],
                 begin: FractionalOffset.topLeft,
                 end: FractionalOffset.bottomRight,
                 stops: [0.0, 1.0],

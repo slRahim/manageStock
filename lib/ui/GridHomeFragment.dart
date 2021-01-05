@@ -137,7 +137,7 @@ class _GridHomeWidgetState extends State<GridHomeWidget> {
           onPressed: () => Scaffold.of(context).openDrawer(),
         ),
         title: Text(_appBarTitle),
-        backgroundColor: Colors.indigoAccent,
+        backgroundColor: Theme.of(context).appBarTheme.color,
         centerTitle: true,
       ),
       body: Container(

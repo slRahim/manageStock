@@ -243,11 +243,11 @@ class QueryCtr {
     List<Article> list = new List<Article>();
     for(int i=0 ; i<res.length ; i++){
       Article article = Article.fromMapJournaux(res[i]);
-      print('article qte = ${article.quantite}');
       if(local){
         article.setquantite(article.selectedQuantite ) ;
         article.selectedQuantite = -1 ;
         article.setQteMin(-1);
+        article.cmdClient = 0 ;
       }
       list.add(article);
     }

@@ -40,7 +40,7 @@ class SelectItemsBarState extends State<SelectItemsBar>{
       automaticallyImplyLeading: false,
       titleSpacing: 0,
       title:  Text(widget.itemsCount.toString(), style: TextStyle(color: Colors.white)),
-      backgroundColor: Colors.black45,
+      backgroundColor: Colors.black,
       centerTitle: true,
       actions: [
         IconButton(

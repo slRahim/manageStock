@@ -17,6 +17,7 @@ import 'package:gestmob/Widgets/CustomWidgets/add_save_bar.dart';
 import 'package:gestmob/Widgets/CustomWidgets/bottom_tab_bar.dart';
 import 'package:gestmob/Widgets/CustomWidgets/image_picker_widget.dart';
 import 'package:gestmob/Widgets/CustomWidgets/list_dropdown.dart';
+import 'package:gestmob/Widgets/CustomWidgets/selectable_list_item.dart';
 import 'package:gestmob/Widgets/article_list_item.dart';
 import 'package:gestmob/Widgets/total_devis.dart';
 import 'package:gestmob/generated/l10n.dart';
@@ -79,13 +80,20 @@ class _AddPiecePageState extends State<AddPiecePage> with TickerProviderStateMix
   TextEditingController _clientControl = new TextEditingController();
   TextEditingController _verssementControler = new TextEditingController();
   TextEditingController _resteControler = new TextEditingController();
+  TextEditingController _remisepieceControler = new TextEditingController();
+  TextEditingController _pourcentremiseControler = new TextEditingController();
   String _validateVerssemntError;
 
   double _restepiece ;
   double _verssementpiece ;
   double _total_ht ;
+  double _net_ht ;
   double _total_tva ;
   double _total_ttc ;
+
+  double _remisepiece ;
+  double _pourcentremise ;
+
 
   SliverListDataSource _dataSource;
   QueryCtr _queryCtr;
@@ -111,6 +119,7 @@ class _AddPiecePageState extends State<AddPiecePage> with TickerProviderStateMix
     super.dispose();
   }
 
+  //**************************************************************************************************************************************
   //*********************************************** init le screen **********************************************************************
   Future<bool> futureInitState() async {
     _tarificationDropdownItems = utils.buildDropTarificationTier(_tarificationItems);
@@ -147,8 +156,14 @@ class _AddPiecePageState extends State<AddPiecePage> with TickerProviderStateMix
       _verssementpiece= 0;
 
       _total_ht =_piece.total_ht ;
+      _net_ht= _piece.net_ht ;
       _total_tva =_piece.total_tva ;
       _total_ttc =(_piece.total_ttc < 0 )? _piece.total_ttc * -1 : _piece.total_ttc ;
+      _remisepiece = (_piece.remise*_total_ht)/100 ;
+      _pourcentremise = _piece.remise ;
+
+      _remisepieceControler.text = _remisepiece.toString();
+      _pourcentremiseControler.text=_pourcentremise.toString();
 
     }else{
       _piece.piece = widget.arguments.piece ;
@@ -157,12 +172,17 @@ class _AddPiecePageState extends State<AddPiecePage> with TickerProviderStateMix
       _selectedTarification = _tarificationItems[_selectedClient.tarification];
       _verssementControler.text = "0.0";
       _resteControler.text ="0.0";
+      _remisepieceControler.text = "0.0" ;
+      _pourcentremiseControler.text="0.0";
 
-      _restepiece = 0 ;
-      _verssementpiece = 0 ;
+       _restepiece = 0 ;
+       _verssementpiece = 0 ;
        _total_ht =0 ;
+       _net_ht = 0 ;
        _total_tva =0 ;
        _total_ttc =0 ;
+       _remisepiece = 0 ;
+       _pourcentremise = 0 ;
 
     }
 
@@ -176,7 +196,8 @@ class _AddPiecePageState extends State<AddPiecePage> with TickerProviderStateMix
     });
   }
 
-  // ***************************************** partie affichage et build *********************************************************
+  //************************************************************************************************************************************
+  // ***************************************** partie affichage et build *****************************************************************
   @override
   Widget build(BuildContext context) {
     if (modification) {
@@ -256,24 +277,44 @@ class _AddPiecePageState extends State<AddPiecePage> with TickerProviderStateMix
           ),
           // extendBody: true,
           bottomNavigationBar: BottomExpandableAppBar(
+            expandedHeight: 180,
             controller: bottomBarControler,
             horizontalMargin: 15,
             shape: AutomaticNotchedShape(
                 RoundedRectangleBorder(), StadiumBorder(side: BorderSide())),
             expandedBackColor: Colors.lightBlueAccent,
-            expandedBody: TotalDevis(total_ht: _total_ht , total_tva: _total_tva, total_ttc: _total_ttc),
+            expandedBody: TotalDevis(
+                total_ht: _total_ht ,
+                total_tva: _total_tva,
+                total_ttc: _total_ttc,
+                net_ht: _net_ht,
+                net_payer: _total_ttc + _piece.timbre,
+                remise: _pourcentremise,
+                timbre: _piece.timbre,
+            ),
             bottomAppBarBody: Padding(
               padding: const EdgeInsets.all(8.0),
               child: Row(
                 mainAxisSize: MainAxisSize.max,
                 children: <Widget>[
                   Expanded(
-                    child: Text(
-                      'TTC : '+
-                      _total_ttc.toString()+" ${S.current.da}",
-                      textAlign: TextAlign.center,
-                      style: TextStyle(
-                        fontWeight: FontWeight.bold
+                    child: InkWell(
+                      onTap: () async{
+                        if(editMode){
+                          await showDialog(
+                              context: context,
+                              builder: (BuildContext context) {
+                            return addRemisedialogue();
+                          });
+                        }
+                      },
+                      child: Text(
+                        '${S.current.total}: '+
+                        _total_ttc.toString()+" ${S.current.da}",
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                          fontWeight: FontWeight.bold
+                        ),
                       ),
                     ),
                   ),
@@ -511,16 +552,18 @@ class _AddPiecePageState extends State<AddPiecePage> with TickerProviderStateMix
                             itemCount: _selectedItems.length,
                             itemBuilder: (BuildContext ctxt, int index) {
                               if(editMode){
-                                return new ArticleListItem(
+                                return new ArticleListItemSelected(
                                   article: _selectedItems[index],
+                                  remise: 0,
                                   onItemSelected: (selectedItem) => ({
                                     removeItemfromPiece(selectedItem),
                                     calculPiece()
                                   }),
                                 );
                               }else{
-                                return new ArticleListItem(
+                                return new ArticleListItemSelected(
                                     article: _selectedItems[index],
+                                    remise: 0,
                                     fromListing: _islisting,
                                 );
                               }
@@ -577,26 +620,26 @@ class _AddPiecePageState extends State<AddPiecePage> with TickerProviderStateMix
   }
 
   //afficher le fragement des clients
-  chooseClientDialog() {
-     showDialog(
-        context: context,
-        builder: (BuildContext context) {
-          return new ClientFourFragment(
-            clientFourn: (_piece.piece == "CC" || _piece.piece == "FC" || _piece.piece == "BL") ? 0 : 2,
-            onConfirmSelectedItem: (selectedItem) {
-              setState(() {
-                _selectedClient = selectedItem;
-                _piece.tier_id = _selectedClient.id;
-                _piece.raisonSociale= _selectedClient.raisonSociale ;
-                _clientControl.text = _selectedClient.raisonSociale;
-                _selectedTarification = _tarificationItems[_selectedClient.tarification];
-              });
-            },
-          );
-        },
+    chooseClientDialog() {
+       showDialog(
+          context: context,
+          builder: (BuildContext context) {
+            return new ClientFourFragment(
+              clientFourn: (_piece.piece == "CC" || _piece.piece == "FC" || _piece.piece == "BL") ? 0 : 2,
+              onConfirmSelectedItem: (selectedItem) {
+                setState(() {
+                  _selectedClient = selectedItem;
+                  _piece.tier_id = _selectedClient.id;
+                  _piece.raisonSociale= _selectedClient.raisonSociale ;
+                  _clientControl.text = _selectedClient.raisonSociale;
+                  _selectedTarification = _tarificationItems[_selectedClient.tarification];
+                });
+              },
+            );
+          },
 
-    );
-  }
+      );
+    }
 
   //afficher un dialog pour versseemnt
   Widget addVerssementdialogue() {
@@ -668,51 +711,6 @@ class _AddPiecePageState extends State<AddPiecePage> with TickerProviderStateMix
                         mainAxisSize: MainAxisSize.max,
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          Row(
-                            mainAxisSize: MainAxisSize.max,
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              RawMaterialButton(
-                                onPressed: () async {
-                                  double _verssement = double.parse(_verssementControler.text);
-                                  double _reste = double.parse(_resteControler.text);
-                                  if(_verssement > 0){
-                                    _verssement = double.parse(_verssementControler.text) - 1000;
-                                    _reste = double.parse(_resteControler.text) + 1000;
-                                  }
-                                  _verssementControler.text = _verssement.toString();
-                                  _resteControler.text = _reste.toString();
-                                },
-                                elevation: 2.0,
-                                fillColor: Colors.redAccent,
-                                child: Icon(
-                                  Icons.remove,
-                                ),
-                                padding: EdgeInsets.all(15.0),
-                                shape: CircleBorder(),
-                              ),
-                              RawMaterialButton(
-                                onPressed: () async {
-                                  double _verssement = double.parse(_verssementControler.text);
-                                  double _reste = double.parse(_resteControler.text);
-                                  if(_verssement < _piece.total_ttc){
-                                    _verssement = double.parse(_verssementControler.text) + 1000;
-                                    _reste = double.parse(_resteControler.text) - 1000;
-                                  }
-                                  _verssementControler.text = _verssement.toString();
-                                  _resteControler.text = _reste.toString();
-                                },
-                                elevation: 2.0,
-                                fillColor: Colors.greenAccent,
-                                child: Icon(
-                                  Icons.add,
-                                ),
-                                padding: EdgeInsets.all(15.0),
-                                shape: CircleBorder(),
-                              )
-                            ],
-                          ),
-                          SizedBox(height: 20),
                           Padding(
                             padding: EdgeInsetsDirectional.only(start: 5, end: 5, bottom: 20),
                             child: TextField(
@@ -776,6 +774,138 @@ class _AddPiecePageState extends State<AddPiecePage> with TickerProviderStateMix
       );
   }
 
+  //afficher un dialog pour la remise
+  Widget addRemisedialogue() {
+    return Dialog(
+      //this right here
+      child: Wrap(
+          children: [Padding(
+            padding: const EdgeInsets.all(15),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Center(
+                    child: Padding(
+                      padding: const EdgeInsets.only(bottom: 20),
+                      child: Text(
+                        "${S.current.modification_titre} Remise",
+                        style: TextStyle(
+                          fontSize: 18,
+                          fontWeight: FontWeight.w400,
+                        ),
+                      ),
+                    )
+                ),
+                Padding(
+                  padding: EdgeInsetsDirectional.only(start: 5, end: 5, bottom: 20),
+                  child: TextField(
+                    controller: _remisepieceControler,
+                    keyboardType: TextInputType.number,
+                    onChanged: (value){
+                      setState(() {
+                        _remisepiece = double.parse(value) ;
+                        _pourcentremise = (_remisepiece*100)/_total_ht ;
+                        _pourcentremiseControler.text = _pourcentremise.toString() ;
+                      });
+                    },
+                    decoration: InputDecoration(
+                      errorText: _validateVerssemntError ?? null,
+                      prefixIcon: Icon(
+                        Icons.monetization_on,
+                        color: Colors.green,
+                      ),
+                      focusedBorder: OutlineInputBorder(
+                          borderSide: BorderSide(color: Colors.green[600]),
+                          borderRadius: BorderRadius.circular(20)),
+                      contentPadding: EdgeInsets.only(left: 10),
+                      labelText: "${S.current.montant}",
+                      labelStyle: TextStyle(color: Colors.green[400]),
+                      enabledBorder: OutlineInputBorder(
+                        gapPadding: 3.3,
+                        borderRadius: BorderRadius.circular(20),
+                        borderSide: BorderSide(color: Colors.green),
+                      ),
+                    ),
+                  ),
+                ),
+                SizedBox(
+                  width: 320.0,
+                  child: Padding(
+                    padding: EdgeInsetsDirectional.only(end: 0, start: 0),
+                    child: Column(
+                      mainAxisSize: MainAxisSize.max,
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Padding(
+                          padding: EdgeInsetsDirectional.only(start: 5, end: 5, bottom: 20),
+                          child: TextField(
+                            controller: _pourcentremiseControler,
+                            keyboardType: TextInputType.number,
+                            onChanged: (value){
+                              setState(() {
+                                _pourcentremise = double.parse(value) ;
+                                _remisepiece = (_total_ht*_pourcentremise)/100;
+                                _remisepieceControler.text = _remisepiece.toString() ;
+                              });
+                            },
+                            decoration: InputDecoration(
+                              prefixIcon: Icon(
+                                MdiIcons.percent,
+                                color: Colors.orange[900],
+                              ),
+                              focusedBorder: OutlineInputBorder(
+                                  borderSide: BorderSide(color: Colors.orange[900]),
+                                  borderRadius: BorderRadius.circular(20)),
+                              enabledBorder: OutlineInputBorder(
+                                  borderSide: BorderSide(color: Colors.orange[600]),
+                                  borderRadius: BorderRadius.circular(20)),
+                              contentPadding: EdgeInsetsDirectional.only(start: 10),
+                              labelText: S.current.reste,
+                              labelStyle: TextStyle(color: Colors.orange[900]),
+                            ),
+                          ),
+                        ),
+                        SizedBox(height: 10),
+                        Row(
+                          mainAxisSize: MainAxisSize.max,
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            RaisedButton(
+                              onPressed: () async {
+                                Navigator.pop(context);
+                              },
+                              child: Text(
+                                S.current.annuler,
+                                style: TextStyle(color: Colors.white),
+                              ),
+                              color: Colors.redAccent,
+                            ),
+                            SizedBox(width: 10),
+                            RaisedButton(
+                              onPressed: () {
+                                calculPiece();
+                                Navigator.pop(context);
+                              },
+                              child: Text(
+                                S.current.confirme,
+                                style: TextStyle(color: Colors.white),
+                              ),
+                              color: Colors.green,
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
+                  ),
+                )
+              ],
+            ),
+          ),
+          ]),
+    );
+  }
+
   //remove item from piece in update mode
   void removeItemfromPiece(selectedItem){
     if (selectedItem != null){
@@ -797,7 +927,8 @@ class _AddPiecePageState extends State<AddPiecePage> with TickerProviderStateMix
       });
       _total_ht =sum ;
       _total_tva = totalTva ;
-      _total_ttc = _total_ht + _total_tva ;
+      _net_ht = _total_ht - ((_total_ht*_pourcentremise)/100);
+      _total_ttc = _net_ht + _total_tva ;
 
       if(_piece.id != null){
         if(_total_ttc <= _piece.total_ttc){
@@ -1112,8 +1243,11 @@ class _AddPiecePageState extends State<AddPiecePage> with TickerProviderStateMix
     _piece.tarification = _selectedTarification ;
 
     _piece.total_ht = _total_ht ;
+    _piece.net_ht = _net_ht;
     _piece.total_tva = _total_tva;
     _piece.total_ttc = _total_ttc ;
+    _piece.net_a_payer = _piece.total_ttc+_piece.timbre ;
+    _piece.remise = _pourcentremise ;
 
     if(_piece.transformer == null){
       _piece.transformer = 0 ;
@@ -1324,10 +1458,13 @@ class _AddPiecePageState extends State<AddPiecePage> with TickerProviderStateMix
       _newPiece.total_ttc = _piece.total_ttc ;
       _newPiece.total_tva = _piece.total_tva ;
       _newPiece.total_ht = _piece.total_ht ;
+      _newPiece.net_ht = _piece.net_ht ;
       _newPiece.date = _piece.date ;
       _newPiece.net_a_payer = _piece.net_a_payer ;
       _newPiece.reste = _piece.reste ;
       _newPiece.regler = _piece.regler ;
+      _newPiece.remise = _piece.remise ;
+      _newPiece.marge = _piece.marge ;
 
       if(_newPiece.piece == PieceType.retourClient ||_newPiece.piece == PieceType.avoirClient
           ||_newPiece.piece == PieceType.retourFournisseur ||_newPiece.piece == PieceType.avoirFournisseur ){
@@ -1372,9 +1509,7 @@ class _AddPiecePageState extends State<AddPiecePage> with TickerProviderStateMix
         await saveItem(0);
       }
 
-
       Navigator.pop(context);
-
       return message ;
     }catch(e){
       var message = S.current.msg_transfere_err;

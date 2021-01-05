@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:gestmob/generated/l10n.dart';
@@ -58,9 +59,10 @@ class _SearchInputSliverState extends State<SearchInputSliver> {
         enabledBorder: InputBorder.none,
         errorBorder: InputBorder.none,
         disabledBorder: InputBorder.none,
-        contentPadding:
-        EdgeInsetsDirectional.only(start: 15, bottom: 11, top: 11, end: 15),
+        contentPadding: EdgeInsetsDirectional.only(start: 15, bottom: 11, top: 11, end: 15),
+        hintStyle: TextStyle(color: Colors.white),
         hintText: S.current.msg_search
+
     ),
     onChanged: _textChangeStreamController.add,
   );

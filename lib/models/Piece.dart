@@ -24,12 +24,14 @@ class Piece{
   int _etat ;
   double _total_ht=0;
   double _total_tva = 0;
+  double _net_ht = 0;
   double _total_ttc = 0;
-  double _timbre;
+  double _timbre=0;
   double _net_a_payer = 0;
-  double _regler;
-  double _reste;
-  double _marge ;
+  double _regler=0;
+  double _reste=0;
+  double _marge=0 ;
+  double _remise =0;
 
   Piece.init();
   Piece.typePiece(this._piece);
@@ -45,6 +47,7 @@ class Piece{
     this._etat = obj["Etat"];
     this._transformer = obj["Transformer"];
     this._total_ht = obj["Total_ht"];
+    this._net_ht = obj["Net_ht"];
     this._total_tva = obj["Total_tva"];
     this._total_ttc = obj["Total_ttc"];
     this._timbre = obj["Timbre"];
@@ -52,6 +55,7 @@ class Piece{
     this._regler = obj["Regler"];
     this._reste = obj["Reste"];
     this._marge = obj["Marge"];
+    this._remise = obj["Remise"];
   }
 
   Map<String, dynamic> toMap() {
@@ -66,6 +70,7 @@ class Piece{
     map["Transformer"] = this._transformer;
     map["Etat"] = this._etat ;
     map["Total_ht"] = this._total_ht;
+    map["Net_ht"] = this._net_ht ;
     map["Total_tva"] = this._total_tva;
     map["Total_ttc"] = this._total_ttc;
     map["Timbre"] = this._timbre;
@@ -73,7 +78,7 @@ class Piece{
     map["Regler"] = this._regler;
     map["Reste"] = this._reste;
     map["Marge"] = this._marge ;
-
+    map["Remise"] = this._remise ;
     return map;
   }
 
@@ -88,13 +93,15 @@ class Piece{
       this._transformer,
       this._etat,
       this._total_ht,
+      this._net_ht ,
       this._total_tva,
       this._total_ttc,
       this._timbre,
       this._net_a_payer,
       this._regler,
       this._reste,
-      this._marge
+      this._marge,
+      this._remise
       );
 
   int get id => _id;
@@ -157,6 +164,12 @@ class Piece{
     _total_ht = value;
   }
 
+  double get net_ht => _net_ht;
+
+  set net_ht(double value) {
+    _net_ht = value;
+  }
+
   double get total_tva => _total_tva;
 
   set total_tva(double value) {
@@ -193,7 +206,6 @@ class Piece{
     _reste = value;
   }
 
-
   int get etat => _etat;
 
   set etat(int value) {
@@ -204,6 +216,13 @@ class Piece{
 
   set marge(double value) {
     _marge = value;
+  }
+
+
+  double get remise => _remise;
+
+  set remise(double value) {
+    _remise = value;
   }
 
   @override

@@ -514,6 +514,7 @@ class _AddTresoriePageState extends State<AddTresoriePage> with TickerProviderSt
                       ),
                     ),
                     readOnly: true,
+                    enabled: editMode,
                     controller: _clientControl,
                     keyboardType: TextInputType.text,
                   ),

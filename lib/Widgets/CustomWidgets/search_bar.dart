@@ -52,7 +52,7 @@ class SearchBarState extends State<SearchBar>{
         searchController: widget.searchController,
         onChanged: (String search) => widget.onSearchChanged(search),
       ),
-      backgroundColor: Colors.indigoAccent,
+      backgroundColor: Theme.of(context).appBarTheme.color,
       centerTitle: true,
       actions: [
         widget.onSearchChanged != null? IconButton(

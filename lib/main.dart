@@ -77,7 +77,9 @@ class _MyAppState extends State<MyApp> {
             brightness: Brightness.light,
             primarySwatch: Colors.red,
             backgroundColor: Color(0xFFF1F8FA),
-
+            appBarTheme: AppBarTheme(
+              color: Colors.indigoAccent,
+            )
           ),
           darkTheme: ThemeData(
             brightness: Brightness.dark,

@@ -23,7 +23,7 @@ class HelpPage extends StatelessWidget {
             onPressed: () => Navigator.pop(context),
           ),
           title: Text("Help"),
-          backgroundColor: Colors.blue,
+          backgroundColor: Theme.of(context).appBarTheme.color,
           centerTitle: true,
 
         ),

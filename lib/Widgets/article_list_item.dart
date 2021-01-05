@@ -48,6 +48,7 @@ class _ArticleListItemState extends State<ArticleListItem> {
 
   @override
   Widget build(BuildContext context) {
+    SizeConfig().init(context);
     return ListTileCard(
       from:  widget.article,
       onLongPress: () {
@@ -86,30 +87,71 @@ class _ArticleListItemState extends State<ArticleListItem> {
         radius: 30,
         backgroundImage: MemoryImage(widget.article.imageUint8List),
       ),
-      subtitle: (widget.article.codeBar),
+      subtitle: (widget.article.codeBar != null)?widget.article.codeBar : null,
       title: ("Ref: " + widget.article.ref),
       trailingChildren: widget.article.selectedQuantite > 0 ? [
+        Text(
+          "${S.current.designation} : "+widget.article.designation,
+          style: TextStyle(fontSize: 16.0,),
+        ),
+        Text(
+           "${S.current.qte} : "+
+               widget.article.selectedQuantite.toString(),
+          style: TextStyle(
+              color: Colors.black,
+              fontSize: 16.0
+          ),
+        ),
         Text(
           "${S.current.prix} : "+
               (widget.article.selectedQuantite * widget.article.selectedPrice).toString()+" ${S.current.da}",
           style: TextStyle(
               color: Colors.black,
-              fontSize: 15.0,
-            fontWeight: FontWeight.bold
+              fontSize: 16.0,
+              fontWeight: FontWeight.bold
           ),
         ),
-      Text(
-         "${S.current.qte} : "+
-             widget.article.selectedQuantite.toString(),
-        style: TextStyle(
-            color: Colors.black,
-            fontSize: 15.0
+        SizedBox(),
+        RichText(
+          text: TextSpan(
+              children: [
+                TextSpan(
+                    text: "Quantité Réel : ",
+                    style: TextStyle(fontSize: 15 , fontWeight: FontWeight.bold,color: Colors.black)
+                ),
+                TextSpan(
+                  text:"${widget.article.quantite}",
+                  style: TextStyle(
+                      color: Colors.black,
+                      fontSize: 15.0),
+                ),
+              ]
+          ),
         ),
-      )
+        RichText(
+          text: TextSpan(
+              children: [
+                TextSpan(
+                    text: "Quantité Dispo : ",
+                    style: TextStyle(fontSize: 15 , fontWeight: FontWeight.bold,color: Colors.black)
+                ),
+                TextSpan(
+                  text:"${widget.article.quantite-widget.article.cmdClient}",
+                  style: TextStyle(
+                      color: Colors.black,
+                      fontSize: 15.0),
+                ),
+              ]
+          ),
+        ),
+        SizedBox(),
       ]:
       // listing des articles ds le fragement article
       [
-        trailingChildrenOnArticleFragment(),
+        Text(
+          "${S.current.designation} : "+widget.article.designation,
+          style: TextStyle(fontSize: 16.0,),
+        ),
         Text(
           "${S.current.qte} : "+
           (widget.article.quantite - widget.article.cmdClient).toString(),
@@ -118,7 +160,42 @@ class _ArticleListItemState extends State<ArticleListItem> {
                   ? Colors.redAccent
                   : Colors.black,
               fontSize: 15.0),
-        )
+        ),
+        trailingChildrenOnArticleFragment(),
+        SizedBox(),
+        RichText(
+          text: TextSpan(
+              children: [
+                TextSpan(
+                    text: "Quantité Réel : ",
+                    style: TextStyle(fontSize: 15 , fontWeight: FontWeight.bold,color: Colors.black)
+                ),
+                TextSpan(
+                  text:"${widget.article.quantite}",
+                  style: TextStyle(
+                      color: Colors.black,
+                      fontSize: 15.0),
+                ),
+              ]
+          ),
+        ),
+        RichText(
+          text: TextSpan(
+              children: [
+                TextSpan(
+                    text: "Quantité Dispo : ",
+                    style: TextStyle(fontSize: 15 , fontWeight: FontWeight.bold,color: Colors.black)
+                ),
+                TextSpan(
+                  text:"${widget.article.quantite-widget.article.cmdClient}",
+                  style: TextStyle(
+                      color: Colors.black,
+                      fontSize: 15.0),
+                ),
+              ]
+          ),
+        ),
+        SizedBox(),
       ],
     );
   }

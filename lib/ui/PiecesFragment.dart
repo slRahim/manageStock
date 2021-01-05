@@ -173,6 +173,7 @@ class _PiecesFragmentState extends State<PiecesFragment> {
     );
   }
 
+  //**************************************************************************************************************************************
   //********************************************listing des pieces**********************************************************************
   @override
   Widget build(BuildContext context) {
@@ -199,9 +200,7 @@ class _PiecesFragmentState extends State<PiecesFragment> {
                   builder: (BuildContext context) {
                     return addFilterdialogue();
                   });
-
             }
-
           },
         ),
         body: ItemsSliverList(

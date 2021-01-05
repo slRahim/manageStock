@@ -10,7 +10,8 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:sliding_card/sliding_card.dart';
 
-
+///**********************************************************************************************************************************************************************
+//********************************************************************Card******************************************************************************************
 class ListTileCard extends StatefulWidget {
   final from ;
   final bool itemSelected;
@@ -52,10 +53,11 @@ class _ListTileCardState extends State<ListTileCard> {
             hiddenCardHeight: SizeConfig.safeBlockVertical * 15,
             frontCardWidget: ListFrontCard(
               title: widget.title,
-              subtitle: widget.subtitle,
+              subtitle:widget.subtitle,
               leading: widget.leading,
               from: widget.from,
               trailingChildren : widget.trailingChildren,
+              itemSelected: widget.itemSelected,
               onShowInfoTapped: () {
                 widget.slidingCardController.expandCard();
               },
@@ -73,26 +75,22 @@ class _ListTileCardState extends State<ListTileCard> {
     );
   }
 
-
 }
 
+//**********************************************************************************************************************************************************************
+//********************************************************************front card******************************************************************************************
 class ListFrontCard extends StatefulWidget {
   final String title ;
   final String subtitle ;
   final from ;
   final List<Widget> trailingChildren;
   final Widget leading;
+  final bool itemSelected;
   final Function onShowInfoTapped;
   final Function onHideInfoTapped;
+
   const ListFrontCard({
-    Key key,
-    @required this.title,
-    @required this.subtitle,
-    @required this.from,
-    @required this.leading,
-    @required this.trailingChildren,
-    @required this.onShowInfoTapped,
-    @required this.onHideInfoTapped,
+    Key key, this.title, this.subtitle, this.from, this.leading,this.itemSelected, this.trailingChildren, this.onShowInfoTapped, this.onHideInfoTapped,
   }) : super(key: key);
 
   @override
@@ -109,7 +107,7 @@ class _ListFrontCardState extends State<ListFrontCard> {
         Expanded(
           child: Container(
             decoration: BoxDecoration(
-                color: Colors.purple,
+                color: (widget.itemSelected != null && widget.itemSelected) ? Colors.green : Colors.purple,
                 borderRadius: BorderRadius.only(
                     topLeft: Radius.circular(25),
                     topRight: Radius.circular(25))),
@@ -164,7 +162,7 @@ class _ListFrontCardState extends State<ListFrontCard> {
                       ],
                     ),
                   ),
-                  Expanded(
+                  (widget.subtitle != null)?Expanded(
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.start,
                       children: <Widget>[
@@ -184,7 +182,7 @@ class _ListFrontCardState extends State<ListFrontCard> {
                         ),
                       ],
                     ),
-                  )
+                  ):SizedBox()
                 ],
               ),
             ),
@@ -254,6 +252,8 @@ class _ListFrontCardState extends State<ListFrontCard> {
   }
 }
 
+//**********************************************************************************************************************************************************************
+//********************************************************************back card******************************************************************************************
 class ListBackCard extends StatelessWidget {
   final List<Widget> trailingChildren;
   final GestureTapCallback onTap;
@@ -341,6 +341,8 @@ class ListBackCard extends StatelessWidget {
   }
 }
 
+//**********************************************************************************************************************************************************************
+//********************************************************************Size config class******************************************************************************************
 class SizeConfig {
   static MediaQueryData _mediaQueryData;
   static double screenWidth;
@@ -369,100 +371,3 @@ class SizeConfig {
 }
 
 
-// le style des list tiele utiliser ds l'app
-// class ListTileCard extends StatelessWidget {
-//
-//   final int id;
-//   final from ;
-//   final bool itemSelected;
-//   final Widget leading;
-//   final Widget title;
-//   final Widget subtitle;
-//   final List<Widget> trailingChildren;
-//   final GestureTapCallback onTap;
-//   final GestureLongPressCallback onLongPress;
-//   final ConfirmDismissCallback confirmDismiss;
-//
-//   const ListTileCard({Key key, this.id, this.from ,this.leading, this.title, this.subtitle, this.trailingChildren, this.onTap, this.confirmDismiss, this.itemSelected, this.onLongPress}) : super(key: key);
-//
-//   @override
-//   Widget build(BuildContext context) => Card(
-//     margin: EdgeInsets.all(2),
-//     color: Colors.grey[200],
-//     elevation: 2,
-//     child: id != null && confirmDismiss != null ? Dismissible(
-//       background: Container(
-//         width: double.maxFinite,
-//         height: double.maxFinite,
-//         decoration: BoxDecoration(
-//           color: Colors.red[700],
-//         ),
-//         child: Padding(
-//           padding: const EdgeInsetsDirectional.fromSTEB(50, 5, 5, 5),
-//           child: Align(
-//             alignment: Alignment.centerLeft, // Align however you like (i.e .centerRight, centerLeft)
-//             child: Row(
-//               children: [
-//                 Icon(MdiIcons.trashCan, color: Colors.white,),
-//                 SizedBox(
-//                   width: 20.0,
-//                   height: 2.0,
-//                 ),
-//                 Text(S.current.supp, style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),),
-//               ],
-//             ),
-//           ),
-//         ),
-//       ),
-//       secondaryBackground: (from is Tiers)?Container(
-//         width: double.maxFinite,
-//         height: double.maxFinite,
-//         decoration: BoxDecoration(
-//           color: Colors.green[700],
-//         ),
-//         child: Padding(
-//           padding: const EdgeInsetsDirectional.fromSTEB(5, 5, 50, 5),
-//           child: Align(
-//             alignment: Alignment.centerLeft, // Align however you like (i.e .centerRight, centerLeft)
-//             child: Row(
-//               mainAxisAlignment: MainAxisAlignment.end,
-//               children: [
-//                 Icon(Icons.call, color: Colors.white,),
-//                 SizedBox(
-//                   width: 20.0,
-//                   height: 2.0,
-//                 ),
-//                 Text(S.current.appeler, style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),),
-//               ],
-//             ),
-//           ),
-//         ),
-//       ):null,
-//       key: Key(id.toString()),
-//       // direction: DismissDirection.startToEnd,
-//       confirmDismiss: confirmDismiss,
-//       child: listTile(),
-//     ) : listTile()
-//   );
-//
-//   Widget listTile(){
-//     return Container(
-//       color: (itemSelected != null && itemSelected) ? Colors.greenAccent : null,
-//       child: ListTile(
-//         onTap: onTap,
-//         onLongPress: onLongPress,
-//         leading: leading,
-//         title: title,
-//         subtitle: subtitle,
-//         trailing: Container(
-//             child: Wrap(
-//               direction: Axis.vertical,
-//               alignment: WrapAlignment.center,
-//               runSpacing: 10.0,
-//               crossAxisAlignment:  WrapCrossAlignment.end,
-//               children: trailingChildren,
-//             )),
-//       )
-//     );
-//   }
-// }

@@ -29,6 +29,7 @@ class TresorieListItem extends StatefulWidget {
 class _TresorieListItemState extends State<TresorieListItem> {
   QueryCtr _queryCtr = new QueryCtr() ;
   bool _confirmDell = false ;
+  bool _visible = true ;
   SlidingCardController controller ;
 
   @override
@@ -39,82 +40,105 @@ class _TresorieListItemState extends State<TresorieListItem> {
 
   @override
   Widget build(BuildContext context) {
-    return Slidable(
-      actionPane: SlidableDrawerActionPane(),
-      actionExtentRatio: 0.25,
-      child: ListTileCard(
-        from: widget.tresorie,
-        onTap: () =>
-        {
-          Navigator.of(context).pushNamed(
-              RoutesKeys.addTresorie, arguments: widget.tresorie)
-        },
-        slidingCardController: controller,
-        onCardTapped: () {
-          if(controller.isCardSeparated == true) {
-            controller.collapseCard();
-          } else {
-            controller.expandCard();
-          }
-        },
-        leading: Container(
-          child: CircleAvatar(
-            child: (widget.tresorie.categorie == 2 ||
-                widget.tresorie.categorie == 7) ? Icon(
-              Icons.arrow_upward_outlined, color: Colors.green,)
-                : Icon(Icons.arrow_downward_outlined, color: Colors.red,),
-            radius: 30,
-            backgroundColor: Colors.grey[100],
-          ),
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(50),
-            border: Border.all(
-              width: 2,
-              color: Colors.red,
+    SizeConfig().init(context);
+    return Visibility(
+      visible: _visible,
+      child: Slidable(
+        actionPane: SlidableDrawerActionPane(),
+        actionExtentRatio: 0.25,
+        child: ListTileCard(
+          from: widget.tresorie,
+          onTap: () =>
+          {
+            Navigator.of(context).pushNamed(
+                RoutesKeys.addTresorie, arguments: widget.tresorie)
+          },
+          slidingCardController: controller,
+          onCardTapped: () {
+            if(controller.isCardSeparated == true) {
+              controller.collapseCard();
+            } else {
+              controller.expandCard();
+            }
+          },
+          leading: Container(
+            child: CircleAvatar(
+              child: (widget.tresorie.categorie == 2 ||
+                  widget.tresorie.categorie == 7) ? Icon(
+                Icons.arrow_upward_outlined, color: Colors.green,)
+                  : Icon(Icons.arrow_downward_outlined, color: Colors.red,),
+              radius: 30,
+              backgroundColor: Colors.grey[100],
             ),
-            color: Colors.white,
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(50),
+              border: Border.all(
+                width: 2,
+                color: Colors.red,
+              ),
+              color: Colors.white,
+            ),
           ),
+          subtitle: Helpers.dateToText(widget.tresorie.date),
+          title: ("RS: " + widget.tresorie.tierRS),
+          trailingChildren: [
+            Text(
+              "N° : ${widget.tresorie.numTresorie}",
+              style: TextStyle(
+                  color: Colors.black,
+                  fontSize: 16.0),
+            ),
+            Text(
+              "${S.current.objet} : ${widget.tresorie.objet}",
+              style: TextStyle(
+                  color: Colors.black,
+                  fontSize: 16.0),
+            ),
+            (widget.tresorie.montant >= 0) ? Text(
+              '${S.current.montant} : ' + widget.tresorie.montant.toString(),
+              style: TextStyle(fontSize: 16.0, fontWeight: FontWeight.bold),)
+                : Text(
+              '${S.current.montant} : ' + (widget.tresorie.montant * -1).toString(),
+              style: TextStyle(fontSize: 16.0, fontWeight: FontWeight.bold),),
+            getIcon(),
+          ],
         ),
-        subtitle: Helpers.dateToText(widget.tresorie.date),
-        title: ("RS: " + widget.tresorie.tierRS),
-        trailingChildren: [
-          Text(
-            "N°: ${widget.tresorie.numTresorie}",
-            style: TextStyle(
-                color: Colors.black,
-                fontSize: 16.0),
+        actions: <Widget>[
+          IconSlideAction(
+              color: Theme.of(context).backgroundColor,
+              iconWidget: Icon(Icons.delete_forever,size: 50, color: Colors.red,),
+              onTap: () async {
+                await showDialog(
+                    context: context,
+                    builder: (BuildContext context) {
+                      return dellDialog(context);
+                    }).then((value){
+                  if(_confirmDell){
+                    setState(() {
+                      _visible = false ;
+                    });
+                  }
+                });
+              }
           ),
-          Text(
-            "${S.current.objet}: ${widget.tresorie.objet}",
-            style: TextStyle(
-                color: Colors.black,
-                fontSize: 16.0),
-          ),
-          (widget.tresorie.montant >= 0) ? Text(
-            '${S.current.montant} : ' + widget.tresorie.montant.toString(),
-            style: TextStyle(fontSize: 16.0, fontWeight: FontWeight.bold),)
-              : Text(
-            '${S.current.montant} : ' + (widget.tresorie.montant * -1).toString(),
-            style: TextStyle(fontSize: 16.0, fontWeight: FontWeight.bold),),
-          Icon(Icons.check_circle, color: Colors.blue , size: 26,),
         ],
       ),
-      actions: <Widget>[
-        IconSlideAction(
-            color: Theme.of(context).backgroundColor,
-            iconWidget: Icon(Icons.delete_forever,size: 50, color: Colors.red,),
-            onTap: () async {
-              await showDialog(
-                  context: context,
-                  builder: (BuildContext context) {
-                    return dellDialog(context);
-                  });
-            }
-        ),
-      ],
     );
   }
 
+  Widget getIcon() {
+    switch (widget.tresorie.mov){
+      case 1 :
+        return Icon(Icons.check_circle , color: Colors.blue,size: 26,);
+        break;
+      case 2 :
+        return Icon(Icons.broken_image , color: Colors.black45,size: 26,);
+        break;
+      case 0 :
+        return Icon(Icons.check_circle_outline , color: Colors.black45,size: 26,);
+        break;
+    }
+  }
 
   Widget dellDialog(BuildContext context) {
       return AlertDialog(

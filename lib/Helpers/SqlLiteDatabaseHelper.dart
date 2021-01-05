@@ -189,13 +189,15 @@ class SqlLiteDatabaseHelper {
         Tarification integer, 
         Etat integer DEFAULT 0,
         Total_ht Double, 
+        Net_ht Double,
         Total_tva Double, 
         Total_ttc Double, 
         Timbre Double,
         Net_a_payer Double, 
         Regler Double, 
         Reste Double,
-        Marge Double
+        Marge Double,
+        Remise Double
         
         )""");
 
@@ -222,8 +224,8 @@ class SqlLiteDatabaseHelper {
         Qte Double, 
         Prix_ht Double, 
         Tva Double,
-        Prix_revient Double
-        
+        Prix_revient Double,
+        Marge Double
         )""");
   }
 
@@ -316,7 +318,7 @@ class SqlLiteDatabaseHelper {
              WHERE id = New.Article_id;
              
             Update Pieces
-              Set Marge = (Select SUM(((Prix_ht*tva)/100 + Prix_ht)*Qte) from Journaux where Piece_id = NEW.Piece_id AND New.Mov <> -2)
+              Set Marge = (Select SUM(Marge) from Journaux where Piece_id = NEW.Piece_id AND New.Mov <> -2)
             where id = New.Piece_id ;
         END;
      ''');
@@ -332,7 +334,7 @@ class SqlLiteDatabaseHelper {
              WHERE id = NEW.Article_id ;
              
             Update Pieces
-              Set Marge = (Select SUM(((Prix_ht*tva)/100 + Prix_ht)*Qte) from Journaux where Piece_id = NEW.Piece_id AND New.Mov <> -2)
+              Set Marge = (Select SUM(Marge) from Journaux where Piece_id = NEW.Piece_id AND New.Mov <> -2)
             where id = New.Piece_id ;
         END;
      ''');
@@ -348,7 +350,7 @@ class SqlLiteDatabaseHelper {
              WHERE id = NEW.Article_id ;
              
             Update Pieces
-              Set Marge = (Select SUM(((Prix_ht*tva)/100 + Prix_ht)*Qte) from Journaux where Piece_id = NEW.Piece_id AND New.Mov <> -2)
+              Set Marge = (Select SUM(Marge) from Journaux where Piece_id = NEW.Piece_id AND New.Mov <> -2)
             where id = New.Piece_id ;
         END;
      ''');
@@ -381,7 +383,7 @@ class SqlLiteDatabaseHelper {
              WHERE id = New.Article_id;
              
             Update Pieces
-              Set Marge = (Select SUM(((Prix_ht*tva)/100 + Prix_ht)*Qte) from Journaux where Piece_id = NEW.Piece_id AND New.Mov <> -2)
+              Set Marge = (Select SUM(Marge) from Journaux where Piece_id = NEW.Piece_id AND New.Mov <> -2)
             where id = New.Piece_id ;
         END;
      ''');
@@ -398,7 +400,7 @@ class SqlLiteDatabaseHelper {
              WHERE id = NEW.Article_id ;
              
             Update Pieces
-              Set Marge = (Select SUM(((Prix_ht*tva)/100 + Prix_ht)*Qte) from Journaux where Piece_id = NEW.Piece_id AND New.Mov <> -2)
+              Set Marge = (Select SUM(Marge) from Journaux where Piece_id = NEW.Piece_id AND New.Mov <> -2)
             where id = New.Piece_id ;
         END;
      ''');
@@ -415,7 +417,7 @@ class SqlLiteDatabaseHelper {
              WHERE id = NEW.Article_id ;
              
             Update Pieces
-              Set Marge = (Select SUM(((Prix_ht*tva)/100 + Prix_ht)*Qte) from Journaux where Piece_id = NEW.Piece_id AND New.Mov <> -2)
+              Set Marge = (Select SUM(Marge) from Journaux where Piece_id = NEW.Piece_id AND New.Mov <> -2)
             where id = New.Piece_id ;
         END;
      ''');
@@ -453,7 +455,7 @@ class SqlLiteDatabaseHelper {
              WHERE id = New.Article_id;
              
             Update Pieces
-              Set Marge = (Select SUM(((Prix_ht*tva)/100 + Prix_ht)*Qte) from Journaux where Piece_id = NEW.Piece_id AND New.Mov <> -2)
+              Set Marge = (Select SUM(Marge) from Journaux where Piece_id = NEW.Piece_id AND New.Mov <> -2)
             where id = New.Piece_id ;
         END;
      ''');
@@ -472,7 +474,7 @@ class SqlLiteDatabaseHelper {
              WHERE id = New.Article_id;
              
             Update Pieces
-              Set Marge = (Select SUM(((Prix_ht*tva)/100 + Prix_ht)*Qte) from Journaux where Piece_id = NEW.Piece_id AND New.Mov <> -2)
+              Set Marge = (Select SUM(Marge) from Journaux where Piece_id = NEW.Piece_id AND New.Mov <> -2)
             where id = New.Piece_id ;
         END;
      ''');
@@ -492,7 +494,7 @@ class SqlLiteDatabaseHelper {
              WHERE id = New.Article_id;
              
             Update Pieces
-              Set Marge = (Select SUM(((Prix_ht*tva)/100 + Prix_ht)*Qte) from Journaux where Piece_id = NEW.Piece_id AND New.Mov <> -2)
+              Set Marge = (Select SUM(Marge) from Journaux where Piece_id = NEW.Piece_id AND New.Mov <> -2)
             where id = New.Piece_id ;
         END;
      ''');

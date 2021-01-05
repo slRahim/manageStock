@@ -13,6 +13,7 @@ class Journaux{
   double _qte;
   double _prix_ht;
   double _prix_revient;
+  double _marge ;
 
   int get id => _id;
 
@@ -78,6 +79,12 @@ class Journaux{
     _prix_revient = value;
   }
 
+  double get marge => _marge;
+
+  set marge(double value) {
+    _marge = value;
+  }
+
   Journaux.fromPiece(Piece piece, Article article){
     this._mov = piece.mov;
     this._date = piece.date;
@@ -85,13 +92,14 @@ class Journaux{
     this._piece_type = piece.piece ;
     this._article_id = article.id;
     this._qte = article.selectedQuantite;
-    this._prix_ht = article.selectedPrice;
+    this._prix_ht = article.selectedPrice-((article.selectedPrice*piece.remise)/100);
     this._tva = article.tva;
     this._prix_revient = article.pmp ;
+    this.marge = this._prix_ht*this._qte - this.prix_revient;
   }
 
   Journaux(this._mov, this._date, this._piece_id,this._piece_type, this._article_id,
-      this._qte, this._prix_ht, this._tva , this._prix_revient);
+      this._qte, this._prix_ht, this._tva , this._prix_revient , this._marge);
 
   Journaux.init();
   Journaux.fromMap(dynamic obj) {
@@ -105,6 +113,7 @@ class Journaux{
     this._prix_ht = obj["Prix_ht"];
     this._tva = obj["Tva"];
     this._prix_revient = obj["Prix_revient"];
+    this.marge = obj["Marge"];
   }
 
   Map<String, dynamic> toMap() {
@@ -119,6 +128,7 @@ class Journaux{
     map["Prix_ht"] = this._prix_ht;
     map["Tva"] = this._tva;
     map["Prix_revient"] = this._prix_revient;
+    map["Marge"] = this.marge ;
 
     return map;
   }

@@ -67,7 +67,7 @@ class _SettingsPageState extends State<SettingsPage> {
           onPressed: () =>Navigator.pop(context),
         ),
         title: Text(S.current.settings),
-        backgroundColor: Colors.blue,
+        backgroundColor: Theme.of(context).appBarTheme.color,
         centerTitle: true,
         actions: [
           IconButton(
