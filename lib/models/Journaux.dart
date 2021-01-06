@@ -12,6 +12,7 @@ class Journaux{
   int _article_id;
   double _qte;
   double _prix_ht;
+  double _net_ht ;
   double _prix_revient;
   double _marge ;
 
@@ -79,6 +80,13 @@ class Journaux{
     _prix_revient = value;
   }
 
+
+  double get net_ht => _net_ht;
+
+  set net_ht(double value) {
+    _net_ht = value;
+  }
+
   double get marge => _marge;
 
   set marge(double value) {
@@ -92,7 +100,8 @@ class Journaux{
     this._piece_type = piece.piece ;
     this._article_id = article.id;
     this._qte = article.selectedQuantite;
-    this._prix_ht = article.selectedPrice-((article.selectedPrice*piece.remise)/100);
+    this._prix_ht = article.selectedPrice ;
+    this._net_ht = this._prix_ht-((this._prix_ht*piece.remise)/100);
     this._tva = article.tva;
     this._prix_revient = article.pmp ;
     this.marge = this._prix_ht*this._qte - this.prix_revient;
@@ -111,6 +120,7 @@ class Journaux{
     this._date = DateTime.fromMillisecondsSinceEpoch(obj["Date"]);
     this._qte = obj["Qte"];
     this._prix_ht = obj["Prix_ht"];
+    this._net_ht = obj["Net_ht"];
     this._tva = obj["Tva"];
     this._prix_revient = obj["Prix_revient"];
     this.marge = obj["Marge"];
@@ -126,6 +136,7 @@ class Journaux{
     map["Date"] = this._date.millisecondsSinceEpoch;
     map["Qte"] = this._qte;
     map["Prix_ht"] = this._prix_ht;
+    map["Net_ht"] = this._net_ht ;
     map["Tva"] = this._tva;
     map["Prix_revient"] = this._prix_revient;
     map["Marge"] = this.marge ;

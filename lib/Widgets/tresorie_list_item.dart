@@ -1,3 +1,4 @@
+import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
@@ -105,20 +106,10 @@ class _TresorieListItemState extends State<TresorieListItem> {
         ),
         actions: <Widget>[
           IconSlideAction(
-              color: Theme.of(context).backgroundColor,
+              color: Colors.white10,
               iconWidget: Icon(Icons.delete_forever,size: 50, color: Colors.red,),
               onTap: () async {
-                await showDialog(
-                    context: context,
-                    builder: (BuildContext context) {
-                      return dellDialog(context);
-                    }).then((value){
-                  if(_confirmDell){
-                    setState(() {
-                      _visible = false ;
-                    });
-                  }
-                });
+                dellDialog(context);
               }
           ),
         ],
@@ -141,34 +132,32 @@ class _TresorieListItemState extends State<TresorieListItem> {
   }
 
   Widget dellDialog(BuildContext context) {
-      return AlertDialog(
-        title:  Text(S.current.supp),
-        content: Text(S.current.msg_supp),
-        actions: [
-          FlatButton(
-            child: Text(S.current.non),
-            onPressed: (){
-              Navigator.pop(context);
-            },
-          ),
-          FlatButton(
-            child: Text(S.current.oui),
-            onPressed: ()async {
-              int res = await _queryCtr.removeItemFromTable(DbTablesNames.tresorie, widget.tresorie);
-              var message = "" ;
-              if(res > 0){
-                message =S.current.msg_supp_ok;
-                _confirmDell =true ;
-                Navigator.pop(context);
-              }else{
-                message =S.current.msg_ereure;
-                Navigator.pop(context);
-              }
-              Helpers.showFlushBar(context, message);
-            }
-          ),
-        ],
-      );
+      AwesomeDialog(
+      context: context,
+      dialogType: DialogType.QUESTION,
+      animType: AnimType.BOTTOMSLIDE,
+      title: S.current.supp,
+      desc: '${S.current.msg_supp} ... ',
+      btnCancelText: S.current.non,
+      btnCancelOnPress: (){},
+      btnOkText: S.current.oui,
+      btnOkOnPress: () async{
+        int res = await _queryCtr.removeItemFromTable(DbTablesNames.tresorie, widget.tresorie);
+        var message = "" ;
+        if(res > 0){
+          message =S.current.msg_supp_ok;
+          _confirmDell =true ;
+        }else{
+          message =S.current.msg_ereure;
+        }
+        Helpers.showFlushBar(context, message);
+        if(_confirmDell){
+          setState(() {
+            _visible = false ;
+          });
+        }
+      },
+    )..show();
   }
 }
 

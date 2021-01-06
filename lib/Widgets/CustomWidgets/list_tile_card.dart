@@ -162,7 +162,7 @@ class _ListFrontCardState extends State<ListFrontCard> {
                       ],
                     ),
                   ),
-                  (widget.subtitle != null)?Expanded(
+                  Expanded(
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.start,
                       children: <Widget>[
@@ -175,14 +175,14 @@ class _ListFrontCardState extends State<ListFrontCard> {
                           width: 10,
                         ),
                         Text(
-                          (widget.subtitle != null)?widget.subtitle:"NO subtitle",
+                           widget.subtitle,
                           style: TextStyle(
                               fontSize: SizeConfig.safeBlockHorizontal * 4.7,
                               color: Colors.white70),
                         ),
                       ],
                     ),
-                  ):SizedBox()
+                  ),
                 ],
               ),
             ),

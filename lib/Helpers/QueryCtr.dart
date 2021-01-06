@@ -227,17 +227,32 @@ class QueryCtr {
 
   Future<Piece> getPieceById(int id) async{
     var dbClient = await _databaseHelper.db ;
-    var res = await dbClient.query(DbTablesNames.pieces ,where: 'id = ?', whereArgs: [id]);
-
+    String query = 'SELECT Pieces.*,Tiers.RaisonSociale FROM Pieces JOIN Tiers ON Pieces.Tier_id = Tiers.id AND Pieces.id = ${id}';
+    var res = await dbClient.rawQuery(query);
+    print(res.length);
     Piece piece = Piece.fromMap(res.first);
 
     return piece;
   }
 
-  Future<List<Article>> getJournalPiece(Piece piece , {bool local}) async{
+  Future<List<Article>> getJournalPiece(Piece piece , {bool local,String searchTerm,Map<String, dynamic> filters}) async{
     var dbClient = await _databaseHelper.db ;
-    String query = 'SELECT Journaux.*,Articles.Ref ,Articles.Designation ,Articles.BytesImageString'
+    String query = 'SELECT Journaux.*,Articles.*'
         ' FROM Journaux JOIN Articles ON Journaux.Article_id = Articles.id AND Journaux.Mov <> -2 AND Journaux.Piece_id='+piece.id.toString();
+
+    if(local && filters != null){
+      int marque = filters["Id_Marque"] != null? filters["Id_Marque"] : -1;
+      int famille = filters["Id_Famille"] != null? filters["Id_Famille"] : -1;
+
+      String marqueFilter = marque > 0 ? " AND Articles.Id_Marque = $marque" : "";
+      String familleFilter = famille > 0 ? " AND Articles.Id_Famille = $famille" : "";
+
+      query += marqueFilter;
+      query += familleFilter;
+
+      query += " where (Designation like '%${searchTerm??''}%' OR CodeBar like '%${searchTerm??''}%' OR Ref like '%${searchTerm??''}%')";
+    }
+
     var res = await dbClient.rawQuery(query);
 
     List<Article> list = new List<Article>();
@@ -269,7 +284,7 @@ class QueryCtr {
 
      for(int i= 0 ; i<pieces.length ; i++){
        if(pieces[i].piece == filters["pieceType"] && pieces[i].etat == 0){
-         res1 =  await getJournalPiece(pieces[i],local: true);
+         res1 =  await getJournalPiece(pieces[i],local: true , searchTerm: searchTerm ,filters: filters);
          articles.addAll(res1);
        }
      }

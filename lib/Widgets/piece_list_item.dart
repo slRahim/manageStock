@@ -1,5 +1,5 @@
 import 'dart:ui';
-
+import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
@@ -99,14 +99,14 @@ class _PieceListItemState extends State<PieceListItem> {
                   color: Colors.black,
                   fontSize: 16.0),
             ),
-            (widget.piece.total_ttc < 0)
-                ? Text('${S.current.prix} : '+(widget.piece.total_ttc * -1).toString()+" ${S.current.da}",
+            (widget.piece.net_a_payer < 0)
+                ? Text('${S.current.prix} : '+(widget.piece.net_a_payer * -1).toString()+" ${S.current.da}",
               style: TextStyle(
                   fontSize: 16.0,
                   fontWeight: FontWeight.bold ,
                   color: (widget.piece.reste < 0)?Colors.redAccent : Colors.black ),
             )
-                : Text('${S.current.prix}  : '+(widget.piece.total_ttc).toString()+" ${S.current.da}",
+                : Text('${S.current.prix}  : '+(widget.piece.net_a_payer).toString()+" ${S.current.da}",
               style: TextStyle(
                   fontSize: 16.0,
                   fontWeight: FontWeight.bold ,
@@ -155,21 +155,10 @@ class _PieceListItemState extends State<PieceListItem> {
         ),
         actions: <Widget>[
           IconSlideAction(
-              color: Theme.of(context).backgroundColor,
+              color: Colors.white10,
               iconWidget: Icon(Icons.delete_forever,size: 50, color: Colors.red,),
               onTap: () async {
-                await showDialog(
-                    context: context,
-                    builder: (BuildContext context) {
-                      return dellDialog(context);
-                    }).then((value){
-                  if(_confirmDell){
-                    setState(() {
-                      _visible = false ;
-                    });
-                  }
-                });
-
+                 dellDialog(context);
               }
           ),
         ],
@@ -193,58 +182,57 @@ class _PieceListItemState extends State<PieceListItem> {
   }
 
   Widget dellDialog(BuildContext context) {
-    return AlertDialog(
-      title:  Text(S.current.supp),
-      content: Text(S.current.msg_supp),
-      actions: [
-        FlatButton(
-          child: Text(S.current.non),
-          onPressed: (){
-            Navigator.pop(context);
-          },
-        ),
-        FlatButton(
-          child: Text(S.current.sans_tresorie),
-          onPressed: ()async{
-            int res = await _queryCtr.removeItemFromTable(DbTablesNames.pieces, widget.piece);
-            var message = "" ;
-            if(res > 0){
-               message =S.current.msg_supp_ok;
-              _confirmDell =true ;
-               Navigator.pop(context);
-            }else{
-              message =S.current.msg_ereure;
-              Navigator.pop(context);
-            }
-            Helpers.showFlushBar(context, message);
-          },
-        ),
-        FlatButton(
-          child: Text(S.current.avec_tresorie),
-          onPressed: ()async{
-            int res = await _queryCtr.removeItemWithForeignKey (DbTablesNames.tresorie , widget.piece.id , "Piece_id");
-            var message = "" ;
-            if(res > 0){
-              int res1 = await _queryCtr.removeItemFromTable(DbTablesNames.pieces, widget.piece);
-              if(res > 0){
-                message =S.current.msg_supp_ok;
-                _confirmDell =true ;
+    AwesomeDialog(
+      context: context,
+      dialogType: DialogType.WARNING,
+      animType: AnimType.BOTTOMSLIDE,
+      title: S.current.supp,
+      desc: '${S.current.msg_supp} ... ',
+      closeIcon: Icon(Icons.remove_circle_outline_sharp , color: Colors.red,size: 26,),
+      showCloseIcon: true,
+      btnCancelText: S.current.sans_tresorie,
+      btnCancelOnPress: () async{
+        int res = await _queryCtr.removeItemFromTable(DbTablesNames.pieces, widget.piece);
+        var message = "" ;
+        if(res > 0){
+          message =S.current.msg_supp_ok;
+          _confirmDell =true ;
+        }else{
+          message =S.current.msg_ereure;
+        }
+        Helpers.showFlushBar(context, message);
+        if(_confirmDell){
+          setState(() {
+            _visible = false ;
+          });
+        }
 
-                Navigator.pop(context);
-              }else{
-                message =S.current.msg_ereure;
-                Navigator.pop(context);
-              }
-            }else{
-              message =S.current.msg_err_tresorie;
-              Navigator.pop(context);
-            }
+      },
+      btnOkText: S.current.avec_tresorie,
+      btnOkOnPress: () async{
+        int res = await _queryCtr.removeItemWithForeignKey (DbTablesNames.tresorie , widget.piece.id , "Piece_id");
+        var message = "" ;
+        if(res > 0){
+          int res1 = await _queryCtr.removeItemFromTable(DbTablesNames.pieces, widget.piece);
+          if(res > 0){
+            message =S.current.msg_supp_ok;
+            _confirmDell =true ;
 
-            Helpers.showFlushBar(context, message);
-          },
-        ),
-      ],
-    );
+          }else{
+            message =S.current.msg_ereure;
+          }
+        }else{
+          message =S.current.msg_err_tresorie;
+        }
+
+        Helpers.showFlushBar(context, message);
+        if(_confirmDell){
+          setState(() {
+            _visible = false ;
+          });
+        }
+      },
+    )..show();
   }
 }
 

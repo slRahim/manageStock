@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:flushbar/flushbar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -65,12 +66,26 @@ class _homeState extends State<home> {
       return Future.value(true);
     } else {
       if (currentBackPressTime == null ||
-          now.difference(currentBackPressTime) > Duration(seconds: 2)) {
+          now.difference(currentBackPressTime) > Duration(seconds: 3)) {
         currentBackPressTime = now;
-        Helpers.showFlushBar(context, "Press back again to exit");
+        Helpers.showToast("Press back again to exit");
         return Future.value(false);
       }
-      exit(0);
+      AwesomeDialog(
+        context: context,
+        dialogType: DialogType.ERROR,
+        animType: AnimType.BOTTOMSLIDE,
+        title: "EXIT",
+        desc: 'Do You Want to Exit... ',
+        btnCancelText: S.current.non,
+        btnCancelOnPress: (){
+
+        },
+        btnOkText: S.current.oui,
+        btnOkOnPress: () async{
+          exit(0);
+        },
+      )..show();
     }
   }
 

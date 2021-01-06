@@ -17,7 +17,6 @@ class ArticleListItemSelected extends StatefulWidget {
     this.onItemSelected,
     this.tarification,
     this.fromListing=false,
-    this.remise
   })  : assert(article != null),
         super(key: key);
 
@@ -25,7 +24,6 @@ class ArticleListItemSelected extends StatefulWidget {
   final Function(Object) onItemSelected;
   final int tarification ;
   final bool fromListing ;
-  final double remise ;
 
   @override
   _ArticleListItemSelectedState createState() => _ArticleListItemSelectedState();
@@ -74,7 +72,7 @@ class _ArticleListItemSelectedState extends State<ArticleListItemSelected> {
       trailingChildren: widget.article.selectedQuantite > 0 ? [
         Text(
           "${S.current.prix} : "+
-              (widget.article.selectedQuantite * ((widget.article.selectedPrice*100)/(100-widget.remise))).toString()+" ${S.current.da}",
+              (widget.article.selectedQuantite * widget.article.selectedPrice).toString()+" ${S.current.da}",
           style: TextStyle(
               color: Colors.black,
               fontSize: 15.0,

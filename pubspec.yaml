@@ -81,6 +81,7 @@ dependencies:
 
   sliding_card:
   flutter_slidable:
+  awesome_dialog:
 
   #  flutter_plugin_android_lifecycle: ^1.0.8
   #  location_permissions: ^3.0.0

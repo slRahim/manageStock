@@ -1885,20 +1885,20 @@ class S {
     );
   }
 
-  /// `Without Treasurer`
+  /// `Not Treasury`
   String get sans_tresorie {
     return Intl.message(
-      'Without Treasurer',
+      'Not Treasury',
       name: 'sans_tresorie',
       desc: '',
       args: [],
     );
   }
 
-  /// `With Treasurer`
+  /// `With Treasury`
   String get avec_tresorie {
     return Intl.message(
-      'With Treasurer',
+      'With Treasury',
       name: 'avec_tresorie',
       desc: '',
       args: [],

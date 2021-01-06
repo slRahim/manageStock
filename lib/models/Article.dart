@@ -234,6 +234,9 @@ class Article{
     this._selectedPrice = obj["Prix_ht"];
     this._tva = obj["Tva"];
     this._pmp = obj["Prix_revient"];
+    this._codeBar = obj["CodeBar"];
+    this._idFamille = obj["Id_Famille"];
+    this._idMarque = obj["Id_Marque"];
   }
 
   //convert an object to a map for persistance

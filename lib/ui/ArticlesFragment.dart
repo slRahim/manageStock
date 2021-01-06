@@ -1,3 +1,4 @@
+import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:barcode_scan/barcode_scan.dart';
 import 'package:fab_circular_menu/fab_circular_menu.dart';
 import 'package:flutter_speed_dial/flutter_speed_dial.dart';
@@ -100,51 +101,25 @@ class _ArticlesFragmentState extends State<ArticlesFragment> {
       );
     });
 
-    return Wrap(children: [
-      Padding(
-        padding: const EdgeInsets.all(6.0),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Padding(
-              padding: EdgeInsetsDirectional.only(start: 5, end: 5, bottom: 20),
-              child: tile,
-            ),
-            SizedBox(
-              width: 320.0,
-              child: Padding(
-                padding: EdgeInsets.only(right: 0, left: 0),
-                child: RaisedButton(
-                  onPressed: () async {
-                    Navigator.pop(context);
-                    setState(() {
-                      _savedSelectedMarque = _marqueItems.indexOf(_selectedMarque);
-                      _savedSelectedFamille = _familleItems.indexOf(_selectedFamille);
-                      _savedFilterInStock = _filterInStock;
-
-                      fillFilter(_filterMap);
-
-                      if( _filterMap.toString() == _emptyFilterMap.toString()){
-                        isFilterOn = false;
-                      } else{
-                        isFilterOn = true;
-                      }
-                      _dataSource.updateFilters(_filterMap);
-                    });
-                  },
-                  child: Text(
-                    S.current.filtrer_btn,
-                    style: TextStyle(color: Colors.white),
-                  ),
-                  color: Colors.green[900],
-                ),
+    return Wrap(
+      children: [
+        Padding(
+          padding: const EdgeInsets.all(6.0),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Padding(
+                padding: EdgeInsetsDirectional.only(start: 5, end: 5, bottom: 5),
+                child: tile,
               ),
-            )
-          ],
+            ],
+          ),
         ),
-      ),
-    ]);
+      ]
+    );
+
+
   }
 
   Widget addFilterdialogue() {
@@ -162,9 +137,7 @@ class _ArticlesFragmentState extends State<ArticlesFragment> {
               ),
             );
           } else {
-            return Dialog(
-              child: snapshot.data,
-            );
+            return snapshot.data;
           }
         });
   }
@@ -214,6 +187,62 @@ class _ArticlesFragmentState extends State<ArticlesFragment> {
   }
 
   //********************************************listing des pieces**********************************************************************
+  Widget getAppBar(setState){
+    if(_selectedItems.length > 0){
+      return SelectItemsBar(
+        itemsCount: _selectedItems.length,
+        onConfirm: () => {
+          widget.onConfirmSelectedItems(_selectedItems),
+          Navigator.pop(context)
+        },
+        onCancel:  () => {
+          setState(() {
+            _selectedItems.forEach((item) {
+              item.selectedQuantite = -1.0;
+            });
+            _selectedItems = new List<Object>();
+          })
+        },
+      );
+    } else{
+      return SearchBar(
+        searchController: searchController,
+        mainContext: widget.onConfirmSelectedItems != null ? null : context,
+        title: S.of(context).articles,
+        isFilterOn: isFilterOn,
+        onSearchChanged: (String search) => _dataSource.updateSearchTerm(search),
+        onFilterPressed: () async {
+          AwesomeDialog(
+              context: context,
+              dialogType: DialogType.INFO,
+              animType: AnimType.BOTTOMSLIDE,
+              title: S.current.supp,
+              body: addFilterdialogue(),
+              btnOkText: S.current.filtrer_btn,
+              closeIcon: Icon(Icons.remove_circle_outline_sharp , color: Colors.red , size: 26,),
+              showCloseIcon: true,
+              btnOkOnPress: () async{
+                setState(() {
+                  _savedSelectedMarque = _marqueItems.indexOf(_selectedMarque);
+                  _savedSelectedFamille = _familleItems.indexOf(_selectedFamille);
+                  _savedFilterInStock = _filterInStock;
+
+                  fillFilter(_filterMap);
+
+                  if( _filterMap.toString() == _emptyFilterMap.toString()){
+                    isFilterOn = false;
+                  } else{
+                    isFilterOn = true;
+                  }
+                  _dataSource.updateFilters(_filterMap);
+                });
+              }
+          )..show();
+        },
+      );
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -277,41 +306,6 @@ class _ArticlesFragmentState extends State<ArticlesFragment> {
         }
       }
     });
-  }
-
-  Widget getAppBar(setState){
-    if(_selectedItems.length > 0){
-      return SelectItemsBar(
-        itemsCount: _selectedItems.length,
-        onConfirm: () => {
-          widget.onConfirmSelectedItems(_selectedItems),
-          Navigator.pop(context)
-        },
-        onCancel:  () => {
-          setState(() {
-            _selectedItems.forEach((item) {
-              item.selectedQuantite = -1.0;
-            });
-            _selectedItems = new List<Object>();
-          })
-        },
-      );
-    } else{
-      return SearchBar(
-        searchController: searchController,
-        mainContext: widget.onConfirmSelectedItems != null ? null : context,
-        title: S.of(context).articles,
-        isFilterOn: isFilterOn,
-        onSearchChanged: (String search) => _dataSource.updateSearchTerm(search),
-        onFilterPressed: () async {
-          showDialog(
-              context: context,
-              builder: (BuildContext context) {
-                return addFilterdialogue();
-              });
-        },
-      );
-    }
   }
 
   Future scanBarCode() async {

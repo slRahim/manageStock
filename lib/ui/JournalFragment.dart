@@ -42,6 +42,17 @@ class _JournalFragmentState extends State<JournalFragment> {
   var _filterMap = new Map<String, dynamic>();
   var _emptyFilterMap = new Map<String, dynamic>();
 
+  List<ArticleMarque> _marqueItems;
+  List<DropdownMenuItem<ArticleMarque>> _marqueDropdownItems;
+
+  List<ArticleFamille> _familleItems;
+  List<DropdownMenuItem<ArticleFamille>> _familleDropdownItems;
+
+  ArticleMarque _selectedMarque;
+  ArticleFamille _selectedFamille;
+
+  int _savedSelectedMarque = 0;
+  int _savedSelectedFamille = 0;
 
   SliverListDataSource _dataSource;
 
@@ -55,6 +66,127 @@ class _JournalFragmentState extends State<JournalFragment> {
   }
 
   //***************************************************partie speciale pour le filtre de recherche***************************************
+  Future<Widget> futureInitState() async {
+
+    _marqueItems = await _dataSource.queryCtr.getAllArticleMarques();
+    _familleItems = await _dataSource.queryCtr.getAllArticleFamilles();
+
+    _marqueDropdownItems = utils.buildMarqueDropDownMenuItems(_marqueItems);
+    _familleDropdownItems = utils.buildDropFamilleArticle(_familleItems);
+
+    _selectedMarque = _marqueItems[_savedSelectedMarque];
+    _selectedFamille = _familleItems[_savedSelectedFamille];
+
+    final tile = StatefulBuilder(builder: (context, StateSetter _setState) {
+      return Builder(
+        builder: (context) => Column(
+          children: [
+            new ListTile(
+              title: new Text(S.current.marque),
+              trailing: marquesDropDown(_setState),
+            ),
+            new ListTile(
+              title: new Text(S.current.famile),
+              trailing: famillesDropDown(_setState),
+            ),
+          ],
+        ),
+      );
+    });
+
+    return Wrap(children: [
+      Padding(
+        padding: const EdgeInsets.all(6.0),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Padding(
+              padding: EdgeInsetsDirectional.only(start: 5, end: 5, bottom: 20),
+              child: tile,
+            ),
+            SizedBox(
+              width: 320.0,
+              child: Padding(
+                padding: EdgeInsets.only(right: 0, left: 0),
+                child: RaisedButton(
+                  onPressed: () async {
+                    Navigator.pop(context);
+                    setState(() {
+                      _savedSelectedMarque = _marqueItems.indexOf(_selectedMarque);
+                      _savedSelectedFamille = _familleItems.indexOf(_selectedFamille);
+
+                      fillFilter(_filterMap);
+
+                      if( _filterMap.toString() == _emptyFilterMap.toString()){
+                        isFilterOn = false;
+                      } else{
+                        isFilterOn = true;
+                      }
+                      _dataSource.updateFilters(_filterMap);
+                    });
+                  },
+                  child: Text(
+                    S.current.filtrer_btn,
+                    style: TextStyle(color: Colors.white),
+                  ),
+                  color: Colors.green[900],
+                ),
+              ),
+            )
+          ],
+        ),
+      ),
+    ]);
+  }
+
+  Widget addFilterdialogue() {
+    return FutureBuilder(
+        future: futureInitState(),
+        builder: (context, snapshot) {
+          if (!snapshot.hasData) {
+            return Dialog(
+              child: Container(
+                  height: 100.0,
+                  width: 100.0,
+                  child: Center(
+                    child: CircularProgressIndicator(),
+                  )
+              ),
+            );
+          } else {
+            return Dialog(
+              child: snapshot.data,
+            );
+          }
+        });
+  }
+
+  Widget marquesDropDown(StateSetter _setState) {
+    return DropdownButtonHideUnderline(
+      child: DropdownButton<ArticleMarque>(
+          value: _selectedMarque,
+          items: _marqueDropdownItems,
+          onChanged: (value) {
+            _setState(() {
+              _selectedMarque = value;
+            });
+          }),
+    );
+  }
+
+  Widget famillesDropDown(StateSetter _setState) {
+    return DropdownButtonHideUnderline(
+      child: DropdownButton<ArticleFamille>(
+          value: _selectedFamille,
+          items: _familleDropdownItems,
+          onChanged: (value) {
+            _setState(() {
+              _selectedFamille = value;
+            });
+          }),
+    );
+  }
 
   void fillFilter(Map<String, dynamic> filter) {
     filter["idTier"] = widget.tier;
@@ -72,6 +204,9 @@ class _JournalFragmentState extends State<JournalFragment> {
         filter["pieceType"] = PieceType.factureFournisseur ;
         break ;
     }
+    filter["Id_Marque"] = _savedSelectedMarque;
+    filter["Id_Famille"] = _savedSelectedFamille;
+
 
   }
 
@@ -80,6 +215,13 @@ class _JournalFragmentState extends State<JournalFragment> {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: getAppBar(setState),
+        floatingActionButton: FloatingActionButton(
+          onPressed: () {
+            scanBarCode() ;
+          },
+          child: Icon(MdiIcons.barcode),
+          tooltip: S.current.scan_qr,
+        ),
         body: ItemsSliverList(
             dataSource: _dataSource,
             canRefresh: _selectedItems.length <= 0,
@@ -126,12 +268,50 @@ class _JournalFragmentState extends State<JournalFragment> {
         isFilterOn: isFilterOn,
         onSearchChanged: (String search) => _dataSource.updateSearchTerm(search),
         onFilterPressed: () async {
-
+          showDialog(
+              context: context,
+              builder: (BuildContext context) {
+                return addFilterdialogue();
+              });
         },
       );
     }
   }
 
+  Future scanBarCode() async {
+    try {
+      var options = ScanOptions(
+        strings: {
+          "cancel": S.current.annuler,
+          "flash_on": S.current.flash_on,
+          "flash_off": S.current.flash_off,
+        },
+      );
 
+      var result = await BarcodeScanner.scan(options: options);
+      if(result.rawContent.isNotEmpty){
+        setState(() {
+          searchController.text = result.rawContent;
+          _dataSource.updateSearchTerm(result.rawContent);
+          FocusScope.of(context).requestFocus(null);
+        });
+      }
+
+    } catch (e) {
+      var result = ScanResult(
+        type: ResultType.Error,
+        format: BarcodeFormat.unknown,
+      );
+
+      if (e.code == BarcodeScanner.cameraAccessDenied) {
+        setState(() {
+          result.rawContent = S.current.msg_cam_permission;
+        });
+      } else {
+        result.rawContent = '${S.current.msg_ereure}: ($e)';
+      }
+      Helpers.showToast(result.rawContent);
+    }
+  }
 
 }

@@ -1,3 +1,4 @@
+import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:gestmob/Helpers/Helpers.dart';
@@ -81,33 +82,6 @@ class _TresorieFragmentState extends State<TresorieFragment> {
               padding: EdgeInsets.only(left: 5, right: 5, bottom: 20),
               child: tile,
             ),
-            SizedBox(
-              width: 320.0,
-              child: Padding(
-                padding: EdgeInsets.only(right: 0, left: 0),
-                child: RaisedButton(
-                  onPressed: () async {
-                    Navigator.pop(context);
-                    setState(() {
-                      _savedSelectedCategorie = _categorieItems.indexOf(_selectedCategorie) ;
-                      fillFilter(_filterMap);
-
-                      if( _filterMap.toString() == _emptyFilterMap.toString()){
-                        isFilterOn = false;
-                      } else{
-                        isFilterOn = true;
-                      }
-                      _dataSource.updateFilters(_filterMap);
-                    });
-                  },
-                  child: Text(
-                    S.current.filtrer_btn,
-                    style: TextStyle(color: Colors.white),
-                  ),
-                  color: Colors.green[900],
-                ),
-              ),
-            )
           ],
         ),
       ),
@@ -129,9 +103,8 @@ class _TresorieFragmentState extends State<TresorieFragment> {
               ),
             );
           } else {
-            return Dialog(
-              child: snapshot.data,
-            );
+            return snapshot.data ;
+
           }
         });
   }
@@ -167,11 +140,29 @@ class _TresorieFragmentState extends State<TresorieFragment> {
           isFilterOn: isFilterOn,
           onSearchChanged: (String search) => _dataSource.updateSearchTerm(search),
           onFilterPressed: () async {
-            showDialog(
+            AwesomeDialog(
                 context: context,
-                builder: (BuildContext context) {
-                  return addFilterdialogue();
-                });
+                dialogType: DialogType.INFO,
+                animType: AnimType.BOTTOMSLIDE,
+                title: S.current.supp,
+                body: addFilterdialogue(),
+                btnOkText: S.current.filtrer_btn,
+                closeIcon: Icon(Icons.remove_circle_outline_sharp , color: Colors.red , size: 26,),
+                showCloseIcon: true,
+                btnOkOnPress: () async{
+                  setState(() {
+                    _savedSelectedCategorie = _categorieItems.indexOf(_selectedCategorie) ;
+                    fillFilter(_filterMap);
+
+                    if( _filterMap.toString() == _emptyFilterMap.toString()){
+                      isFilterOn = false;
+                    } else{
+                      isFilterOn = true;
+                    }
+                    _dataSource.updateFilters(_filterMap);
+                  });
+                }
+            )..show();
           },
         ),
         body: ItemsSliverList(

@@ -443,14 +443,17 @@ class _AddTresoriePageState extends State<AddTresoriePage> with TickerProviderSt
                   padding: EdgeInsets.all(15),
                   child: Column(
                     children: [
-                      SizedBox(height: 10),
+                      SizedBox(height: 5),
                       new ListView.builder(
-                          physics: NeverScrollableScrollPhysics(),
-                          shrinkWrap: true,
-                          itemCount: _selectedPieces.length,
-                          itemBuilder: (BuildContext ctxt, int index) {
-                           return PieceListItem(piece: _selectedPieces[index]);
-                            })
+                            physics: NeverScrollableScrollPhysics(),
+                            shrinkWrap: true,
+                            itemCount: _selectedPieces.length,
+                            itemBuilder: (BuildContext ctxt, int index) {
+                               return PieceListItem(
+                                   piece: _selectedPieces[index],
+                               );
+                            }
+                         )
                     ],
                   ))
                   :Container(
@@ -870,8 +873,12 @@ class _AddTresoriePageState extends State<AddTresoriePage> with TickerProviderSt
     }
     _tresorie.numTresorie=_numeroControl.text ;
     _tresorie.categorie = _selectedCategorie.id ;
-    // mov de tresorie tjr 1 depuis ce screen
-    _tresorie.mov = 1 ;
+    if(modification){
+      _tresorie.mov = _tresorie.mov ;
+    }else{
+      // mov de tresorie tjr 1 on new tresorie
+      _tresorie.mov = 1 ;
+    }
     _tresorie.objet = _objetControl.text;
     _tresorie.modalite=_modaliteControl.text;
     _tresorie.montant= double.parse(_montantControl.text);

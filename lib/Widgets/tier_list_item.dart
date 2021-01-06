@@ -1,6 +1,7 @@
 
 import 'dart:ui';
 
+import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_icons/flutter_icons.dart';
@@ -133,26 +134,16 @@ class _TierListItemState extends State<TierListItem> {
         ),
         actions: <Widget>[
           IconSlideAction(
-              color: Theme.of(context).backgroundColor,
+              color: Colors.white10,
               iconWidget: Icon(Icons.delete_forever,size: 50, color: Colors.red,),
               onTap: () async {
-                await showDialog(
-                    context: context,
-                    builder: (BuildContext context) {
-                      return dellDialog(context);
-                    }).then((value){
-                  if(_confirmDell){
-                    setState(() {
-                      _visible = false ;
-                    });
-                  }
-                });
+                dellDialog(context);
               }
           ),
         ],
         secondaryActions: <Widget>[
           IconSlideAction(
-            color: Theme.of(context).backgroundColor,
+            color: Colors.white10,
             iconWidget: Icon(Icons.phone,size: 50, color: Colors.green,),
             onTap: () async{
               await _makePhoneCall("tel:${widget.tier.mobile}");
@@ -172,49 +163,45 @@ class _TierListItemState extends State<TierListItem> {
     }
   }
 
-
   Widget dellDialog(BuildContext context) {
-    return AlertDialog(
-      title:  Text(S.current.supp),
-      content: Text(S.current.msg_supp),
-      actions: [
-        FlatButton(
-          child: Text(S.current.non),
-          onPressed: (){
-            Navigator.pop(context);
-          },
-        ),
-        FlatButton(
-            child: Text(S.current.oui),
-            onPressed: ()async {
-              if(widget.tier.id == 1 || widget.tier.id == 2){
-                Navigator.pop(context);
-                var message =S.current.msg_supp_err1;
-                Helpers.showFlushBar(context, message);
-              }else{
-                bool hasItems = await _queryCtr.checkTierItems(widget.tier);
-                if(hasItems == false){
-                  int res = await _queryCtr.removeItemFromTable(DbTablesNames.tiers, widget.tier);
-                  var message = "" ;
-                  if(res > 0){
-                    message =S.current.msg_supp_ok;
-                    _confirmDell =true ;
-                    Navigator.pop(context);
-                  }else{
-                    message =S.current.msg_ereure;
-                    Navigator.pop(context);
-                  }
-                  Helpers.showFlushBar(context, message);
-                }else{
-                  Navigator.pop(context);
-                  var message =S.current.msg_supp_err2;
-                  Helpers.showFlushBar(context, message);
-                }
-              }
+    AwesomeDialog(
+      context: context,
+      dialogType: DialogType.QUESTION,
+      animType: AnimType.BOTTOMSLIDE,
+      title: S.current.supp,
+      desc: '${S.current.msg_supp} ... ',
+      btnCancelText: S.current.non,
+      btnCancelOnPress: (){},
+      btnOkText: S.current.oui,
+      btnOkOnPress: () async{
+        if(widget.tier.id == 1 || widget.tier.id == 2){
+          var message =S.current.msg_supp_err1;
+          Helpers.showFlushBar(context, message);
+        }else{
+          bool hasItems = await _queryCtr.checkTierItems(widget.tier);
+          if(hasItems == false){
+            int res = await _queryCtr.removeItemFromTable(DbTablesNames.tiers, widget.tier);
+            var message = "" ;
+            if(res > 0){
+              message =S.current.msg_supp_ok;
+              _confirmDell =true ;
+            }else{
+              message =S.current.msg_ereure;
             }
-        ),
-      ],
-    );
+            Helpers.showFlushBar(context, message);
+            if(_confirmDell){
+              setState(() {
+                _visible = false ;
+              });
+            }
+          }else{
+            var message =S.current.msg_supp_err2;
+            Helpers.showFlushBar(context, message);
+          }
+       }
+      },
+    )..show();
+
   }
 }
 

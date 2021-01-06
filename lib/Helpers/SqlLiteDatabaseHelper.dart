@@ -223,6 +223,7 @@ class SqlLiteDatabaseHelper {
         Article_id integer REFERENCES Articles (id) ON DELETE SET NULL ON UPDATE CASCADE, 
         Qte Double, 
         Prix_ht Double, 
+        Net_ht Double,
         Tva Double,
         Prix_revient Double,
         Marge Double
@@ -448,10 +449,10 @@ class SqlLiteDatabaseHelper {
         WHEN NEW.Mov = 1 AND (NEW.Piece_type = 'BR' OR NEW.Piece_type = 'FF')
         BEGIN
             UPDATE Articles
-               SET PMP = ((Qte * PMP)+(NEW.Qte * NEW.Prix_ht))/(Qte + NEW.Qte) , 
+               SET PMP = ((Qte * PMP)+(NEW.Qte * NEW.Net_ht))/(Qte + NEW.Qte) , 
                    Qte = Qte + NEW.Qte,
                    Colis = Qte / Qte_Colis,
-                   PrixAchat = NEW.Prix_ht
+                   PrixAchat = NEW.Net_ht
              WHERE id = New.Article_id;
              
             Update Pieces
@@ -468,7 +469,7 @@ class SqlLiteDatabaseHelper {
         WHEN NEW.Mov = 1 AND (NEW.Piece_type = 'BR' OR NEW.Piece_type = 'FF')
         BEGIN
             UPDATE Articles
-               SET PMP = ((Qte * PMP)+((NEW.Qte-OLD.Qte) * NEW.Prix_ht))/(Qte + (NEW.Qte-OLD.Qte)) , 
+               SET PMP = ((Qte * PMP)+((NEW.Qte-OLD.Qte) * NEW.Net_ht))/(Qte + (NEW.Qte-OLD.Qte)) , 
                    Qte = Qte + (NEW.Qte-OLD.Qte),
                    Colis = Qte / Qte_Colis
              WHERE id = New.Article_id;
@@ -487,10 +488,10 @@ class SqlLiteDatabaseHelper {
         WHEN (OLD.Mov <> NEW.Mov) AND NEW.Mov = 1 AND (NEW.Piece_type = 'BR' OR NEW.Piece_type = 'FF')
         BEGIN
            UPDATE Articles
-               SET PMP = ((Qte * PMP)+(NEW.Qte * NEW.Prix_ht))/(Qte + NEW.Qte) , 
+               SET PMP = ((Qte * PMP)+(NEW.Qte * NEW.Net_ht))/(Qte + NEW.Qte) , 
                    Qte = Qte + NEW.Qte,
                    Colis = Qte / Qte_Colis,
-                   PrixAchat = NEW.Prix_ht
+                   PrixAchat = NEW.Net_ht
              WHERE id = New.Article_id;
              
             Update Pieces
@@ -508,7 +509,7 @@ class SqlLiteDatabaseHelper {
               AND (NEW.Piece_type = 'BR' OR NEW.Piece_type = 'FF') 
         BEGIN
             UPDATE Articles
-               SET PMP = ((Qte * PMP)-(OLD.Qte * OLD.Prix_ht))/(Qte - OLD.Qte) , 
+               SET PMP = ((Qte * PMP)-(OLD.Qte * OLD.Net_ht))/(Qte - OLD.Qte) , 
                    Qte = Qte - OLD.Qte,
                    Colis = Qte / Qte_Colis
              WHERE id = New.Article_id;
@@ -676,7 +677,7 @@ class SqlLiteDatabaseHelper {
         WHEN NEW.Mov = 1 AND NEW.Piece <> "CC" 
         BEGIN
              UPDATE Tiers
-               SET Chiffre_affaires = Chiffre_affaires + NEW.Total_ttc
+               SET Chiffre_affaires = Chiffre_affaires + NEW.Net_a_payer
              WHERE id = New.Tier_id; 
              
              UPDATE Tiers
@@ -698,7 +699,7 @@ class SqlLiteDatabaseHelper {
         WHEN NEW.Mov = 1 AND NEW.Piece <> "CC"
         BEGIN
              UPDATE Tiers
-               SET Chiffre_affaires = Chiffre_affaires + (NEW.Total_ttc-OLD.Total_ttc)
+               SET Chiffre_affaires = Chiffre_affaires + (NEW.Net_a_payer-OLD.Net_a_payer)
              WHERE id = OLD.Tier_id;
            
              UPDATE Tiers
@@ -719,7 +720,7 @@ class SqlLiteDatabaseHelper {
             AND NEW.Piece <> "CC"
         BEGIN
              UPDATE Tiers
-               SET Chiffre_affaires = Chiffre_affaires - OLD.Total_ttc
+               SET Chiffre_affaires = Chiffre_affaires - OLD.Net_a_payer
              WHERE id = OLD.Tier_id;
            
              UPDATE Tiers
@@ -739,7 +740,7 @@ class SqlLiteDatabaseHelper {
         WHEN (OLD.Mov <> NEW.Mov)  AND (NEW.Mov = 1) AND NEW.Piece <> "CC"
         BEGIN
              UPDATE Tiers
-               SET Chiffre_affaires = Chiffre_affaires + NEW.Total_ttc
+               SET Chiffre_affaires = Chiffre_affaires + NEW.Net_a_payer
              WHERE id = OLD.Tier_id;
            
              UPDATE Tiers
@@ -773,7 +774,7 @@ class SqlLiteDatabaseHelper {
         WHEN (OLD.Mov = 1 AND OLD.Piece <> "CC")
         BEGIN
             UPDATE Tiers
-               SET Chiffre_affaires = Chiffre_affaires - OLD.Total_ttc
+               SET Chiffre_affaires = Chiffre_affaires - OLD.Net_a_payer
             WHERE id = OLD.Tier_id;
             
             UPDATE Tiers
@@ -841,7 +842,7 @@ class SqlLiteDatabaseHelper {
             WHERE id =  New.Piece_id ;
 
              UPDATE Pieces
-               SET  Reste = Total_ttc - Regler 
+               SET  Reste = Net_a_payer - Regler 
              WHERE id = New.Piece_id;
 
         END;
@@ -853,6 +854,7 @@ class SqlLiteDatabaseHelper {
         AFTER UPDATE ON Tresories 
         FOR EACH ROW 
         when (New.Categorie_id = 2 OR New.Categorie_id = 3 OR New.Categorie_id = 6 OR New.Categorie_id = 7)
+             AND (OLD.Mov <> New.Mov) AND NEW.Mov = 1
         BEGIN             
             UPDATE Tiers
               SET Regler = (SELECT SUM(Montant) FROM Tresories WHERE Tier_id = New.Tier_id AND Mov = 1)
@@ -860,21 +862,29 @@ class SqlLiteDatabaseHelper {
              
              UPDATE Tiers
                SET  Credit = (Solde_depart + Chiffre_affaires) - Regler 
-             WHERE id = New.Tier_id;
-           
+             WHERE id = New.Tier_id;  
         END;
       ''');
 
+    // le delete est spaecial pour add tresorie page on update tresorie montant
     await db.execute('''CREATE TRIGGER update_tier_reglement_credit2
         AFTER UPDATE ON Tresories 
         FOR EACH ROW 
         when (New.Categorie_id = 2 OR New.Categorie_id = 3 OR New.Categorie_id = 6 OR New.Categorie_id = 7) 
-              AND OLD.Piece_id = NEW.Piece_id 
-        BEGIN            
+              AND OLD.Mov = NEW.Mov  AND OLD.Piece_id = NEW.Piece_id
+        BEGIN         
+            UPDATE Tiers
+              SET Regler = (SELECT SUM(Montant) FROM Tresories WHERE Tier_id = New.Tier_id AND Mov = 1)
+            WHERE id = NEW.Tier_id ;
+              
+             UPDATE Tiers
+               SET  Credit = (Solde_depart + Chiffre_affaires) - Regler 
+             WHERE id = New.Tier_id;   
+             
             DELETE FROM ReglementTresorie WHERE Tresorie_id = Old.id ;
         END;
       ''');
-    // le delete est spaecial pour add tresorie page
+
 
     // ***************************************************************************************************************
     //**********************************************dell tresorie*******************************************************
@@ -904,7 +914,7 @@ class SqlLiteDatabaseHelper {
             WHERE id =  OLD.Piece_id ;
 
              UPDATE Pieces
-               SET  Reste = Total_ttc - Regler 
+               SET  Reste = Net_a_payer - Regler 
              WHERE id = OLD.Piece_id;
         END;
       ''');

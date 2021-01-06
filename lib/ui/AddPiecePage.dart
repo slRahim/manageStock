@@ -90,10 +90,12 @@ class _AddPiecePageState extends State<AddPiecePage> with TickerProviderStateMix
   double _net_ht ;
   double _total_tva ;
   double _total_ttc ;
+  double _net_a_payer ;
 
   double _remisepiece ;
   double _pourcentremise ;
 
+  int _oldMov ;
 
   SliverListDataSource _dataSource;
   QueryCtr _queryCtr;
@@ -152,6 +154,7 @@ class _AddPiecePageState extends State<AddPiecePage> with TickerProviderStateMix
       _verssementControler.text = "0.0";
       _resteControler.text = _piece.reste.toString();
 
+      _oldMov = _piece.mov ;
       _restepiece=_piece.reste ;
       _verssementpiece= 0;
 
@@ -159,6 +162,7 @@ class _AddPiecePageState extends State<AddPiecePage> with TickerProviderStateMix
       _net_ht= _piece.net_ht ;
       _total_tva =_piece.total_tva ;
       _total_ttc =(_piece.total_ttc < 0 )? _piece.total_ttc * -1 : _piece.total_ttc ;
+      _net_a_payer = _piece.net_a_payer ;
       _remisepiece = (_piece.remise*_total_ht)/100 ;
       _pourcentremise = _piece.remise ;
 
@@ -175,12 +179,13 @@ class _AddPiecePageState extends State<AddPiecePage> with TickerProviderStateMix
       _remisepieceControler.text = "0.0" ;
       _pourcentremiseControler.text="0.0";
 
-       _restepiece = 0 ;
-       _verssementpiece = 0 ;
-       _total_ht =0 ;
-       _net_ht = 0 ;
-       _total_tva =0 ;
-       _total_ttc =0 ;
+       _restepiece = 0.0 ;
+       _verssementpiece = 0.0 ;
+       _total_ht =0.0 ;
+       _net_ht = 0.0 ;
+       _total_tva =0.0 ;
+       _total_ttc =0.0 ;
+       _net_a_payer = _total_ttc + _piece.timbre;
        _remisepiece = 0 ;
        _pourcentremise = 0 ;
 
@@ -310,7 +315,7 @@ class _AddPiecePageState extends State<AddPiecePage> with TickerProviderStateMix
                       },
                       child: Text(
                         '${S.current.total}: '+
-                        _total_ttc.toString()+" ${S.current.da}",
+                        _net_a_payer.toString()+" ${S.current.da}",
                         textAlign: TextAlign.center,
                         style: TextStyle(
                           fontWeight: FontWeight.bold
@@ -554,7 +559,6 @@ class _AddPiecePageState extends State<AddPiecePage> with TickerProviderStateMix
                               if(editMode){
                                 return new ArticleListItemSelected(
                                   article: _selectedItems[index],
-                                  remise: 0,
                                   onItemSelected: (selectedItem) => ({
                                     removeItemfromPiece(selectedItem),
                                     calculPiece()
@@ -563,7 +567,6 @@ class _AddPiecePageState extends State<AddPiecePage> with TickerProviderStateMix
                               }else{
                                 return new ArticleListItemSelected(
                                     article: _selectedItems[index],
-                                    remise: 0,
                                     fromListing: _islisting,
                                 );
                               }
@@ -620,7 +623,7 @@ class _AddPiecePageState extends State<AddPiecePage> with TickerProviderStateMix
   }
 
   //afficher le fragement des clients
-    chooseClientDialog() {
+  Widget chooseClientDialog() {
        showDialog(
           context: context,
           builder: (BuildContext context) {
@@ -803,11 +806,9 @@ class _AddPiecePageState extends State<AddPiecePage> with TickerProviderStateMix
                     controller: _remisepieceControler,
                     keyboardType: TextInputType.number,
                     onChanged: (value){
-                      setState(() {
-                        _remisepiece = double.parse(value) ;
-                        _pourcentremise = (_remisepiece*100)/_total_ht ;
-                        _pourcentremiseControler.text = _pourcentremise.toString() ;
-                      });
+                      _remisepiece = double.parse(value) ;
+                      _pourcentremise = (_remisepiece*100)/_total_ht ;
+                      _pourcentremiseControler.text = _pourcentremise.toString() ;
                     },
                     decoration: InputDecoration(
                       errorText: _validateVerssemntError ?? null,
@@ -843,11 +844,9 @@ class _AddPiecePageState extends State<AddPiecePage> with TickerProviderStateMix
                             controller: _pourcentremiseControler,
                             keyboardType: TextInputType.number,
                             onChanged: (value){
-                              setState(() {
-                                _pourcentremise = double.parse(value) ;
-                                _remisepiece = (_total_ht*_pourcentremise)/100;
-                                _remisepieceControler.text = _remisepiece.toString() ;
-                              });
+                              _pourcentremise = double.parse(value) ;
+                              _remisepiece = (_total_ht*_pourcentremise)/100;
+                              _remisepieceControler.text = _remisepiece.toString() ;
                             },
                             decoration: InputDecoration(
                               prefixIcon: Icon(
@@ -884,6 +883,10 @@ class _AddPiecePageState extends State<AddPiecePage> with TickerProviderStateMix
                             SizedBox(width: 10),
                             RaisedButton(
                               onPressed: () {
+                                setState(() {
+                                  _pourcentremise = double.parse(_pourcentremiseControler.text) ;
+                                  _remisepiece = double.parse(_remisepieceControler.text) ;
+                                });
                                 calculPiece();
                                 Navigator.pop(context);
                               },
@@ -917,41 +920,47 @@ class _AddPiecePageState extends State<AddPiecePage> with TickerProviderStateMix
   }
 
   //calcule le montant total
+  // le total_ttc = net_a_payer le timbre n'est pas pris en consederation
   void calculPiece() {
     double sum = 0;
     double totalTva = 0;
      setState(() {
       _selectedItems.forEach((item) {
-        sum += item.selectedQuantite * item.selectedPrice;
+        sum += (item.selectedQuantite * item.selectedPrice);
         totalTva += item.selectedQuantite * item.tva ;
       });
       _total_ht =sum ;
       _total_tva = totalTva ;
       _net_ht = _total_ht - ((_total_ht*_pourcentremise)/100);
       _total_ttc = _net_ht + _total_tva ;
+      _net_a_payer = _total_ttc+_piece.timbre ;
 
       if(_piece.id != null){
-        if(_total_ttc <= _piece.total_ttc){
+        if(_net_a_payer <= _piece.net_a_payer){
           _verssementpiece = 0.0;
           _verssementControler.text = _verssementpiece.toString() ;
-          _restepiece = _total_ttc - _piece.regler ;
+          _restepiece = _net_a_payer - _piece.regler ;
           _resteControler.text = _restepiece.toString();
         }else{
-          _verssementpiece = _total_ttc - _piece.regler;
-          if(_piece.piece == PieceType.commandeClient){
-            _verssementpiece = 0.0 ;
-          }
+          // le verssement est 0 tjr tq l'utilisateur ne le modifie pas
+          // _verssementpiece = _net_a_payer - _piece.regler;
+          // if(_piece.piece == PieceType.commandeClient){
+          //   _verssementpiece = 0.0 ;
+          // }
+          _verssementpiece = 0.0 ;
           _verssementControler.text = _verssementpiece.toString() ;
-          _restepiece = _total_ttc - _piece.regler ;
+          _restepiece = _net_a_payer - _piece.regler ;
           _resteControler.text ="0.0";
         }
       }else{
-        _verssementpiece = _total_ttc;
-        if(_piece.piece == PieceType.commandeClient){
-          _verssementpiece = 0.0 ;
-        }
+        // le verssement est 0 tjr tq l'utilisateur ne le modifie pas
+        // _verssementpiece = _net_a_payer;
+        // if(_piece.piece == PieceType.commandeClient){
+        //   _verssementpiece = 0.0 ;
+        // }
+        _verssementpiece = 0.0 ;
         _verssementControler.text = _verssementpiece.toString() ;
-        _restepiece = _total_ttc - _verssementpiece ;
+        _restepiece = _net_a_payer - _verssementpiece ;
       }
 
     });
@@ -1181,12 +1190,15 @@ class _AddPiecePageState extends State<AddPiecePage> with TickerProviderStateMix
           await _queryCtr.updateJournaux(DbTablesNames.journaux, journaux);
         });
 
-        if(_piece.mov == 1 && _piece.piece != PieceType.retourClient
-            && _piece.piece != PieceType.avoirClient && _piece.piece != PieceType.retourFournisseur
-            && _piece.piece != PieceType.avoirFournisseur){
+        if(_oldMov != null && _piece.mov != _oldMov){
           //ds le cas de modification de mov de piece
           // update tresorie mov
           await _queryCtr.updateItemByForeignKey(DbTablesNames.tresorie, "Mov",_piece.mov, "Piece_id", _piece.id);
+        }
+
+        if(_piece.piece != PieceType.devis && _piece.piece != PieceType.retourClient && _piece.piece != PieceType.avoirClient
+            && _piece.piece != PieceType.retourFournisseur && _piece.piece != PieceType.avoirFournisseur){
+
           await addTresorie(_piece,transferer: false);
         }
 
@@ -1246,27 +1258,25 @@ class _AddPiecePageState extends State<AddPiecePage> with TickerProviderStateMix
     _piece.net_ht = _net_ht;
     _piece.total_tva = _total_tva;
     _piece.total_ttc = _total_ttc ;
-    _piece.net_a_payer = _piece.total_ttc+_piece.timbre ;
+    _piece.net_a_payer = _net_a_payer;
     _piece.remise = _pourcentremise ;
 
     if(_piece.transformer == null){
       _piece.transformer = 0 ;
     }
 
-    // partie special pour le cas de broullion avec verssement
-    // ds le cas de l'ajout de mov ds tresorie supp les conditions internes
     if(_piece.id == null ){
       _piece.regler =_verssementpiece;
     }else{
-      _piece.regler= _piece.regler+_verssementpiece;
+      _piece.regler= _piece.regler + _verssementpiece;
 
     }
-    _piece.reste=_piece.total_ttc - _piece.regler;
+    _piece.reste=_piece.net_a_payer - _piece.regler;
 
     if(_piece.piece == PieceType.retourClient ||_piece.piece == PieceType.avoirClient
         ||_piece.piece == PieceType.retourFournisseur ||_piece.piece == PieceType.avoirFournisseur ){
 
-      _piece.total_ttc = _piece.total_ttc * -1 ;
+      _piece.net_a_payer = _piece.net_a_payer * -1 ;
     }
 
     var res = await _queryCtr.getPieceByNum(_piece.num_piece , _piece.piece);
