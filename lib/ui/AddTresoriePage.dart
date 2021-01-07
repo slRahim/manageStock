@@ -107,13 +107,14 @@ class _AddTresoriePageState extends State<AddTresoriePage> with TickerProviderSt
 
     _categorieItems = await _queryCtr.getAllTresorieCategorie();
 
-    _categorieItems[0].libelle = S.current.decaissement ;
+    _categorieItems[0].libelle = S.current.choisir ;
     _categorieItems[1].libelle = S.current.reglemnt_client ;
     _categorieItems[2].libelle = S.current.reglement_fournisseur ;
     _categorieItems[3].libelle = S.current.encaissement ;
     _categorieItems[4].libelle = S.current.charge ;
     _categorieItems[5].libelle = S.current.rembourcement_client ;
     _categorieItems[6].libelle = S.current.rembourcement_four ;
+    _categorieItems[7].libelle = S.current.decaissement ;
 
     _categorieDropdownItems = utils.buildDropTresorieCategoriesDownMenuItems(_categorieItems);
     _selectedCategorie= _categorieItems[0];
@@ -271,14 +272,14 @@ class _AddTresoriePageState extends State<AddTresoriePage> with TickerProviderSt
                 children: <Widget>[
                   Expanded(
                     child: (_selectedClient !=null)? Text(
-                      'Cred : '+_selectedClient.credit.toString()+" ${S.current.da}",
+                      '${S.current.credit} : '+_selectedClient.credit.toString()+" ${S.current.da}",
                       textAlign: TextAlign.center,
                       style: TextStyle(
                           fontWeight: FontWeight.bold
                       ),
                     ):
                     Text(
-                      'Cred : 0.0 ${S.current.da}',
+                      '${S.current.reste} : 0.0 ${S.current.da}',
                       textAlign: TextAlign.center,
                       style: TextStyle(
                           fontWeight: FontWeight.bold
@@ -716,6 +717,9 @@ class _AddTresoriePageState extends State<AddTresoriePage> with TickerProviderSt
                         child: Padding(
                           padding: EdgeInsets.only(right: 0, left: 0),
                           child: RaisedButton(
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(18.0),
+                            ),
                             onPressed: () async {
                               setState(() {
                                 _categorieTresorie.libelle= _libelleCategorieControl.text;

@@ -307,7 +307,7 @@ class QueryCtr {
 
     if(filters != null){
       int categorie = filters["Categorie"] != null? filters["Categorie"] : -1;
-      String categorieFilter = categorie > 0 ? " AND Categorie_id = $categorie" : "";
+      String categorieFilter = categorie > 1 ? " AND Categorie_id = $categorie" : "";
 
       query += " AND (Num_tresorie LIKE '%${searchTerm??''}%' OR Tier_rs LIKE '%${searchTerm??''}%' OR Objet LIKE '%${searchTerm??''}%')";
       query += categorieFilter;

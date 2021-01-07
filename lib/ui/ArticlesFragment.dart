@@ -1,7 +1,8 @@
+import 'dart:math';
+
 import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:barcode_scan/barcode_scan.dart';
-import 'package:fab_circular_menu/fab_circular_menu.dart';
-import 'package:flutter_speed_dial/flutter_speed_dial.dart';
+import 'package:circular_menu/circular_menu.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:gestmob/Helpers/Helpers.dart';
@@ -70,10 +71,19 @@ class _ArticlesFragmentState extends State<ArticlesFragment> {
   }
 
   //***************************************************partie speciale pour le filtre de recherche***************************************
+  void fillFilter(Map<String, dynamic> filter) {
+    filter["Id_Marque"] = _savedSelectedMarque;
+    filter["Id_Famille"] = _savedSelectedFamille;
+    filter["inStock"] = _savedFilterInStock;
+  }
+
   Future<Widget> futureInitState() async {
 
     _marqueItems = await _dataSource.queryCtr.getAllArticleMarques();
+    _marqueItems[0].setLibelle( S.current.no_marque) ;
+
     _familleItems = await _dataSource.queryCtr.getAllArticleFamilles();
+    _familleItems[0].setLibelle( S.current.no_famille) ;
 
     _marqueDropdownItems = utils.buildMarqueDropDownMenuItems(_marqueItems);
     _familleDropdownItems = utils.buildDropFamilleArticle(_familleItems);
@@ -180,11 +190,7 @@ class _ArticlesFragmentState extends State<ArticlesFragment> {
     );
   }
 
-  void fillFilter(Map<String, dynamic> filter) {
-    filter["Id_Marque"] = _savedSelectedMarque;
-    filter["Id_Famille"] = _savedSelectedFamille;
-    filter["inStock"] = _savedFilterInStock;
-  }
+
 
   //********************************************listing des pieces**********************************************************************
   Widget getAppBar(setState){
@@ -246,42 +252,38 @@ class _ArticlesFragmentState extends State<ArticlesFragment> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        floatingActionButton: FabCircularMenu(
+        floatingActionButton: CircularMenu(
             alignment: (Helpers.isDirectionRTL(context))?Alignment.bottomLeft:Alignment.bottomRight,
-            fabSize: 60,
-            fabMargin: EdgeInsets.all(12),
-            ringColor: Colors.black12,
-            fabOpenIcon: Icon(Icons.menu,color: Colors.white),
-            fabCloseIcon: Icon(Icons.close,color: Colors.white,),
-            fabElevation: 3,
-            children: <Widget>[
-              Container(
-                decoration: BoxDecoration(
-                    color: Colors.green,
-                    shape: BoxShape.circle
-                ),
-                child: IconButton(
-                    icon: Icon(Icons.add),
-                    color: Colors.white,
-                    tooltip: S.current.ajouter,
-                    onPressed: () {
-                      Navigator.of(context).pushNamed(RoutesKeys.addArticle,arguments: new Article.init());
-                    }
-                ),
+            startingAngleInRadian:(Helpers.isDirectionRTL(context))? 1.6 * pi : 1.1 * pi,
+            endingAngleInRadian: (Helpers.isDirectionRTL(context))? 1.9 * pi :1.4 * pi,
+            radius: 90,
+            toggleButtonBoxShadow: [
+              BoxShadow(
+                color: Colors.white10,
+                blurRadius: 0,
               ),
-              Container(
-                decoration: BoxDecoration(
-                    color: Colors.blue,
-                    shape: BoxShape.circle
-                ),
-                child: IconButton(
-                    icon: Icon(MdiIcons.barcode),
-                    color: Colors.white,
-                    tooltip: S.current.scan_qr,
-                    onPressed: () {
-                      scanBarCode() ;
-                    }
-                ),
+            ],
+            items: [
+              CircularMenuItem(
+                icon:(Icons.add),
+                color: Colors.green,
+                iconSize: 30.0,
+                margin: 10.0,
+                padding: 10.0,
+                onTap: () {
+                  Navigator.of(context).pushNamed(RoutesKeys.addArticle,arguments: new Article.init());
+                },
+              ),
+              CircularMenuItem(
+                icon: (MdiIcons.barcode),
+                iconSize: 30.0,
+                margin: 10.0,
+                padding: 10.0,
+                color: Colors.blue,
+                onTap: () {
+                  scanBarCode() ;
+                },
+
               )
             ]
         ),

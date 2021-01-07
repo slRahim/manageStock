@@ -1,3 +1,4 @@
+import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:gestmob/Helpers/Helpers.dart';
@@ -90,29 +91,34 @@ class _SettingsPageState extends State<SettingsPage> {
                 subtitle: language ,
                 leading: Icon(Icons.language),
                 onTap: () async{
-                  await showDialog(
+                  AwesomeDialog(
                     context: context,
-                    builder: (BuildContext context) {
-                      return  languageDialog();
-                    },
-                  ).then((value)async {
-                    await _savelocale();
-                    setState(() {
-                      language ;
-                      switch(language){
-                        case ("English (ENG)"):
-                          S.load(Locale("en"));
-                          break ;
-                        case ("French (FR)"):
-                          S.load(Locale("fr"));
-                          break ;
+                    dialogType: DialogType.QUESTION,
+                    animType: AnimType.BOTTOMSLIDE,
+                    title: "Choose a language",
+                    body: languageDialog(),
+                    btnCancelText: S.current.non,
+                    btnCancelOnPress: (){},
+                    btnOkText: S.current.oui,
+                    btnOkOnPress: () async{
+                        await _savelocale();
+                        setState(() {
+                          language ;
+                          switch(language){
+                            case ("English (ENG)"):
+                              S.load(Locale("en"));
+                              break ;
+                            case ("French (FR)"):
+                              S.load(Locale("fr"));
+                              break ;
 
-                        case ("Arabic (AR)"):
-                          S.load(Locale("ar"));
-                          break ;
-                      }
-                    });
-                  });
+                            case ("Arabic (AR)"):
+                              S.load(Locale("ar"));
+                              break ;
+                          }
+                        });
+                    }
+                  )..show();
                 },
               ),
               SettingsTile.switchTile(
@@ -130,48 +136,47 @@ class _SettingsPageState extends State<SettingsPage> {
 
    languageDialog() {
       return StatefulBuilder(
-        builder: (context, setState) {
-          return AlertDialog(
-            title: Text("Choose a language"),
-            content: Container(
-              height: 180,
-              child: Column(
-                children: [
-                  RadioListTile(
-                    value: languages[0],
-                    groupValue: language,
-                    title: Text('Anglais (ENG)'),
-                    onChanged: (value){
-                      setState(() {
-                        language= value ;
-                      });
-                    },
-                  ),
-                  RadioListTile(
-                    value: languages[1],
-                    groupValue: language,
-                    title: Text('Français (FR)'),
-                    onChanged: (value){
-                      setState(() {
-                        language= value ;
-                      });
-                    },
-                  ),
-                  RadioListTile(
-                    value: languages[2],
-                    groupValue: language,
-                    title: Text('Arabe (AR)'),
-                    onChanged: (value){
-                      setState(() {
-                        language= value ;
-                      });
-                    },
-                  )
-                ],
+        builder: (context, setState) => Wrap(
+            children: [
+              Container(
+                height: 180,
+                child: Column(
+                  children: [
+                    RadioListTile(
+                      value: languages[0],
+                      groupValue: language,
+                      title: Text('English (ENG)'),
+                      onChanged: (value){
+                        setState(() {
+                          language= value ;
+                        });
+                      },
+                    ),
+                    RadioListTile(
+                      value: languages[1],
+                      groupValue: language,
+                      title: Text('French (FR)'),
+                      onChanged: (value){
+                        setState(() {
+                          language= value ;
+                        });
+                      },
+                    ),
+                    RadioListTile(
+                      value: languages[2],
+                      groupValue: language,
+                      title: Text('Arabic (AR)'),
+                      onChanged: (value){
+                        setState(() {
+                          language= value ;
+                        });
+                      },
+                    )
+                  ],
+                ),
               ),
-            ),
-          );
-        },
+            ],
+          )
       );
   }
 

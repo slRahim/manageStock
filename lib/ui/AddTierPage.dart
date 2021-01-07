@@ -70,7 +70,7 @@ class _AddTierPageState extends State<AddTierPage>
   List<DropdownMenuItem<int>> _tarificationDropdownItems;
   int _selectedTarification;
 
-  List<Object> _familleItems;
+  List<TiersFamille> _familleItems;
   List<DropdownMenuItem<Object>> _familleDropdownItems;
   var _selectedFamille;
 
@@ -143,6 +143,8 @@ class _AddTierPageState extends State<AddTierPage>
 
   Future<bool> futureInitState() async {
     _familleItems = await widget._queryCtr.getAllTierFamilles();
+    _familleItems[0].libelle = S.current.no_famille ;
+
     _familleDropdownItems = utils.buildDropFamilleTier(_familleItems);
     _statutDropdownItems = utils.buildDropStatutTier(Statics.statutItems);
     await getParams() ;
@@ -225,7 +227,7 @@ class _AddTierPageState extends State<AddTierPage>
         if(_clientFourn == 0){
           appBarTitle = S.current.client_titre;
         } else if(_clientFourn == 1){
-          appBarTitle = "Client fournisseur";
+          appBarTitle = S.current.client_titre + S.current.fournisseur_titre;
         } else{
           appBarTitle = S.current.fournisseur_titre;
         }
@@ -241,7 +243,7 @@ class _AddTierPageState extends State<AddTierPage>
         if(_clientFourn == 0){
           appBarTitle = S.current.client_titre;
         } else if(_clientFourn == 1){
-          appBarTitle = "Client fournisseur";
+          appBarTitle = S.current.client_titre + S.current.fournisseur_titre;;
         } else{
           appBarTitle = S.current.client_titre;
         }
@@ -1012,6 +1014,9 @@ class _AddTierPageState extends State<AddTierPage>
                             child: Padding(
                               padding: EdgeInsetsDirectional.only(start: 0, end: 0),
                               child: RaisedButton(
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(18.0),
+                                ),
                                 onPressed: () async {
                                   setState(() {
                                     _famille.libelle =

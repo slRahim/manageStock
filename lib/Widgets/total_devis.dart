@@ -36,7 +36,7 @@ class TotalDevis extends StatelessWidget{
               Row(
                 mainAxisSize: MainAxisSize.max,
                 children: [
-                  Text("Remise= "),
+                  Text("${S.current.remise}= "),
                   Expanded(child: Text(".............................................................................................................",
                     maxLines: 1,)),
                   Text(remise.toString() + " %"),
@@ -46,7 +46,7 @@ class TotalDevis extends StatelessWidget{
               Row(
                 mainAxisSize: MainAxisSize.max,
                 children: [
-                  Text("Net-HT= "),
+                  Text("${S.current.net_ht}== "),
                   Expanded(child: Text(".............................................................................................................",
                     maxLines: 1,)),
                   Text(net_ht.toString() + " ${S.current.da}"),
@@ -76,7 +76,7 @@ class TotalDevis extends StatelessWidget{
               Row(
                 mainAxisSize: MainAxisSize.max,
                 children: [
-                  Text("Timbre= "),
+                  Text("${S.current.timbre}= "),
                   Expanded(child: Text(".............................................................................................................",
                     maxLines: 1,)),
                   Text(timbre.toString() + " ${S.current.da}"),

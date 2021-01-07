@@ -187,6 +187,9 @@
   "msg_info_article" : "Attention you maybe add inassociate articles",
   "espece" : "Species",
   "reglement_piece" : "Bill Payment",
+  "choisir" : "No Categorie",
+  "no_famille": "No Family",
+  "no_marque" : "No Brand",
   "decaissement" : "Disbursement",
   "reglemnt_client" : "Customer Payment",
   "reglement_fournisseur": "Provider Payment",
@@ -205,6 +208,21 @@
   "to_commande" : "To Order",
   "to_bon" : "To Receipt",
   "to_facture" : "To Invoice",
-  "to_retour" : "To Feedback"
+  "to_retour" : "To Feedback",
+
+  "msg_no_dispo" : "this option is not avalaible",
+  "remise" : "Discount",
+  "pourcentage" : "Percentage",
+  "journaux" : "Sheet",
+  "generale" : "General",
+  "langue" : "Language",
+  "chois_lang" : "Choose a language",
+
+  "qte_reel" : "Real Quantity",
+  "qte_dispo" : "Available Quantity",
+  "statut": "Status",
+  "net_ht" : "Net-HT",
+  "timbre" : "Stamped",
+  "fiche_art" : "Info Article"
 
 }

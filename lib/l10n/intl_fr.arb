@@ -72,7 +72,7 @@
 
   "famile": "Famille",
   "filtrer_btn" : "Filter",
-  "ajouter": "Ajouter ",
+  "ajouter": "Ajout ",
   "scan_qr": "Scanner QR",
   "client_titre" : "Client (s)",
   "fournisseur_titre" : "Fournisseur (s)",
@@ -187,6 +187,9 @@
   "msg_info_article" : "Vous risquez d'ajouter des articles inassocier aux pieces !",
   "espece" : "Espèce",
   "reglement_piece" : "Réglement Piece",
+  "choisir" : "Pas de Categorie",
+  "no_famille": "Pas de Famille",
+  "no_marque" : "Pas de Marque",
   "decaissement" : "Decaissement",
   "reglemnt_client" : "Reglement Client",
   "reglement_fournisseur": "Reglement Fournisseur",
@@ -205,7 +208,24 @@
   "to_commande" : "Vers Commande",
   "to_bon" : "Vers un Bon",
   "to_facture" : "Vers Facture",
-  "to_retour" : "Vers Retour/Avoir"
+  "to_retour" : "Vers Retour/Avoir",
+
+  "msg_no_dispo" : "Cette option n'est pas disponible",
+  "remise" : "Remise",
+  "pourcentage" : "Pourcentage",
+  "journaux" : "Journaux",
+  "generale" : "Génerale",
+  "langue" : "Langue",
+  "chois_lang" : "Choisir une langue",
+
+  "qte_reel" : "Quantité Réel",
+  "qte_dispo" : "Quatité Disponible",
+  "statut": "Statut",
+  "net_ht" : "Net-HT",
+  "timbre" : "Timbre",
+  "fiche_art" : "Fiche Article"
+
+
 
 
 

@@ -90,7 +90,7 @@ class _PiecesFragmentState extends State<PiecesFragment> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Padding(
-              padding: EdgeInsets.only(left: 5, right: 5, bottom: 20),
+              padding: EdgeInsetsDirectional.only(start: 5, end: 5, bottom: 5),
               child: tile,
             ),
           ],

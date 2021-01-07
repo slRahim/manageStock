@@ -76,7 +76,7 @@ dependencies:
   image:
 
   flutter_phoenix:
-  fab_circular_menu:
+  circular_menu:
   floating_action_row:
 
   sliding_card:

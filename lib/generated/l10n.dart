@@ -1815,6 +1815,36 @@ class S {
     );
   }
 
+  /// `No Categorie`
+  String get choisir {
+    return Intl.message(
+      'No Categorie',
+      name: 'choisir',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `No Family`
+  String get no_famille {
+    return Intl.message(
+      'No Family',
+      name: 'no_famille',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `No Brand`
+  String get no_marque {
+    return Intl.message(
+      'No Brand',
+      name: 'no_marque',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `Disbursement`
   String get decaissement {
     return Intl.message(
@@ -1990,6 +2020,136 @@ class S {
     return Intl.message(
       'To Feedback',
       name: 'to_retour',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `this option is not avalaible`
+  String get msg_no_dispo {
+    return Intl.message(
+      'this option is not avalaible',
+      name: 'msg_no_dispo',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Discount`
+  String get remise {
+    return Intl.message(
+      'Discount',
+      name: 'remise',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Percentage`
+  String get pourcentage {
+    return Intl.message(
+      'Percentage',
+      name: 'pourcentage',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Sheet`
+  String get journaux {
+    return Intl.message(
+      'Sheet',
+      name: 'journaux',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `General`
+  String get generale {
+    return Intl.message(
+      'General',
+      name: 'generale',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Language`
+  String get langue {
+    return Intl.message(
+      'Language',
+      name: 'langue',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Choose a language`
+  String get chois_lang {
+    return Intl.message(
+      'Choose a language',
+      name: 'chois_lang',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Real Quantity`
+  String get qte_reel {
+    return Intl.message(
+      'Real Quantity',
+      name: 'qte_reel',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Available Quantity`
+  String get qte_dispo {
+    return Intl.message(
+      'Available Quantity',
+      name: 'qte_dispo',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Status`
+  String get statut {
+    return Intl.message(
+      'Status',
+      name: 'statut',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Net-HT`
+  String get net_ht {
+    return Intl.message(
+      'Net-HT',
+      name: 'net_ht',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Stamped`
+  String get timbre {
+    return Intl.message(
+      'Stamped',
+      name: 'timbre',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Info Article`
+  String get fiche_art {
+    return Intl.message(
+      'Info Article',
+      name: 'fiche_art',
       desc: '',
       args: [],
     );

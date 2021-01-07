@@ -1,8 +1,10 @@
+import 'dart:math';
+
+import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:barcode_scan/barcode_scan.dart';
-import 'package:fab_circular_menu/fab_circular_menu.dart';
+import 'package:circular_menu/circular_menu.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
-import 'package:flutter_speed_dial/flutter_speed_dial.dart';
 import 'package:gestmob/Helpers/Helpers.dart';
 import 'package:gestmob/Helpers/QueryCtr.dart';
 import 'package:gestmob/Helpers/Statics.dart';
@@ -40,7 +42,7 @@ class _ClientFourFragmentState extends State<ClientFourFragment> {
   var _filterMap = new Map<String, dynamic>();
   var _emptyFilterMap = new Map<String, dynamic>();
 
-  List<Object> _familleItems;
+  List<TiersFamille> _familleItems;
   List<DropdownMenuItem<Object>> _familleDropdownItems;
   var _selectedFamille;
   int _savedSelectedFamille = 0;
@@ -72,6 +74,8 @@ class _ClientFourFragmentState extends State<ClientFourFragment> {
 
   Future<Widget> futureInitState() async {
     _familleItems = await _dataSource.queryCtr.getAllTierFamilles();
+    _familleItems[0].libelle = S.current.no_famille ;
+
     _familleDropdownItems = utils.buildDropFamilleTier(_familleItems);
     _selectedFamille = _familleItems[_savedSelectedFamille];
 
@@ -101,39 +105,9 @@ class _ClientFourFragmentState extends State<ClientFourFragment> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Padding(
-              padding: EdgeInsets.only(left: 5, right: 5, bottom: 20),
+              padding: EdgeInsetsDirectional.only(start: 5, end: 5, bottom: 5),
               child: tile,
             ),
-            SizedBox(
-              width: 320.0,
-              child: Padding(
-                padding: EdgeInsets.only(right: 0, left: 0),
-                child: RaisedButton(
-                  onPressed: () async {
-                    Navigator.pop(context);
-                    setState(() {
-                      _savedSelectedFamille = _familleItems.indexOf(_selectedFamille);
-                      _savedFilterHasCredit = _filterInHasCredit;
-                      _savedFilterTierBloquer = _filterTierBloquer ;
-
-                      fillFilter(_filterMap);
-
-                      if( _filterMap.toString() == _emptyFilterMap.toString()){
-                        isFilterOn = false;
-                      } else{
-                        isFilterOn = true;
-                      }
-                      _dataSource.updateFilters(_filterMap);
-                    });
-                  },
-                  child: Text(
-                    S.current.filtrer_btn,
-                    style: TextStyle(color: Colors.white),
-                  ),
-                  color: Colors.green[900],
-                ),
-              ),
-            )
           ],
         ),
       ),
@@ -143,42 +117,38 @@ class _ClientFourFragmentState extends State<ClientFourFragment> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        floatingActionButton: FabCircularMenu(
+        floatingActionButton: CircularMenu(
             alignment: (Helpers.isDirectionRTL(context))?Alignment.bottomLeft:Alignment.bottomRight,
-            fabSize: 60,
-            fabMargin: EdgeInsets.all(12),
-            ringColor: Colors.black12,
-            fabOpenIcon: Icon(Icons.menu,color: Colors.white),
-            fabCloseIcon: Icon(Icons.close,color: Colors.white,),
-            fabElevation: 3,
-            children: <Widget>[
-              Container(
-                decoration: BoxDecoration(
-                    color: Colors.green,
-                    shape: BoxShape.circle
-                ),
-                child: IconButton(
-                    icon: Icon(Icons.add),
-                    color: Colors.white,
-                    tooltip: S.current.ajouter,
-                    onPressed: () {
-                      Navigator.of(context).pushNamed(RoutesKeys.addTier,arguments: new Tiers.init(widget.clientFourn));
-                    }
-                ),
+            startingAngleInRadian:(Helpers.isDirectionRTL(context))? 1.6 * pi : 1.1 * pi,
+            endingAngleInRadian: (Helpers.isDirectionRTL(context))? 1.9 * pi :1.4 * pi,
+            radius: 90,
+            toggleButtonBoxShadow: [
+              BoxShadow(
+                color: Colors.white10,
+                blurRadius: 0,
               ),
-              Container(
-                decoration: BoxDecoration(
-                  color: Colors.blue,
-                  shape: BoxShape.circle
-                ),
-                child: IconButton(
-                    icon: Icon(MdiIcons.qrcode),
-                    color: Colors.white,
-                    tooltip: S.current.scan_qr,
-                    onPressed: () {
-                      scanQRCode() ;
-                    }
-                ),
+            ],
+            items: [
+              CircularMenuItem(
+                  icon:(Icons.add),
+                  color: Colors.green,
+                  iconSize: 30.0,
+                  margin: 10.0,
+                  padding: 10.0,
+                  onTap: () {
+                    Navigator.of(context).pushNamed(RoutesKeys.addTier,arguments: new Tiers.init(widget.clientFourn));
+                  },
+              ),
+              CircularMenuItem(
+                icon: (MdiIcons.qrcode),
+                iconSize: 30.0,
+                margin: 10.0,
+                padding: 10.0,
+                color: Colors.blue,
+                onTap: () {
+                  scanQRCode() ;
+                },
+
               )
             ]
         ),
@@ -189,11 +159,32 @@ class _ClientFourFragmentState extends State<ClientFourFragment> {
           isFilterOn: isFilterOn,
           onSearchChanged: (String search) => _dataSource.updateSearchTerm(search),
           onFilterPressed: () async {
-            showDialog(
+            AwesomeDialog(
                 context: context,
-                builder: (BuildContext context) {
-                  return addFilterdialogue();
-                });
+                dialogType: DialogType.INFO,
+                animType: AnimType.BOTTOMSLIDE,
+                title: S.current.supp,
+                body: addFilterdialogue(),
+                btnOkText: S.current.filtrer_btn,
+                closeIcon: Icon(Icons.remove_circle_outline_sharp , color: Colors.red , size: 26,),
+                showCloseIcon: true,
+                btnOkOnPress: () async{
+                  setState(() {
+                    _savedSelectedFamille = _familleItems.indexOf(_selectedFamille);
+                    _savedFilterHasCredit = _filterInHasCredit;
+                    _savedFilterTierBloquer = _filterTierBloquer ;
+
+                    fillFilter(_filterMap);
+
+                    if( _filterMap.toString() == _emptyFilterMap.toString()){
+                      isFilterOn = false;
+                    } else{
+                      isFilterOn = true;
+                    }
+                    _dataSource.updateFilters(_filterMap);
+                  });
+                }
+            )..show();
           },
         ),
         body: ItemsSliverList(
@@ -220,9 +211,7 @@ class _ClientFourFragmentState extends State<ClientFourFragment> {
               ),
             );
           } else {
-            return Dialog(
-              child: snapshot.data,
-            );
+            return snapshot.data;
           }
         });
   }

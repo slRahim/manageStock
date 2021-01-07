@@ -106,7 +106,10 @@ class _AddArticlePageState extends State<AddArticlePage>  with AutomaticKeepAliv
 
   Future<bool> futureInitState() async {
     _marqueItems = await widget._queryCtr.getAllArticleMarques();
+    _marqueItems[0].setLibelle(S.current.no_marque);
+
     _familleItems = await widget._queryCtr.getAllArticleFamilles();
+    _familleItems[0].setLibelle(S.current.no_famille);
 
     _tvaItems = await widget._queryCtr.getAllArticleTva();
 
@@ -243,7 +246,7 @@ class _AddArticlePageState extends State<AddArticlePage>  with AutomaticKeepAliv
               ),
               bottomNavigationBar: BottomTabBar(
                 tabs: [
-                  Tab(child: Column( children: [ Icon(Icons.insert_drive_file),SizedBox(height: 1), Text("${S.current.fiche} ${S.current.articles}"), ], )),
+                  Tab(child: Column( children: [ Icon(Icons.insert_drive_file),SizedBox(height: 1), Text("${S.current.fiche_art}"), ], )),
                   Tab(child: Column( children: [ Icon(Icons.image), SizedBox(height: 1), Text(S.current.photo), ], )),
                   Tab(child: Column( children: [ Icon(Icons.description), SizedBox(height: 1), Text(S.current.description), ], )),
                 ],
@@ -772,6 +775,9 @@ class _AddArticlePageState extends State<AddArticlePage>  with AutomaticKeepAliv
                       child: Padding(
                         padding: EdgeInsets.only(right: 0, left: 0),
                         child: RaisedButton(
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(18.0),
+                          ),
                           onPressed: () async {
                             setState(() {
                               _marque.setLibelle(_libelleMarqueControl.text);
@@ -864,6 +870,9 @@ class _AddArticlePageState extends State<AddArticlePage>  with AutomaticKeepAliv
                         child: Padding(
                           padding: EdgeInsets.only(right: 0, left: 0),
                           child: RaisedButton(
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(18.0),
+                            ),
                             onPressed: () async {
                               setState(() {
                                 _famille.setLibelle(
@@ -961,6 +970,9 @@ class _AddArticlePageState extends State<AddArticlePage>  with AutomaticKeepAliv
                   child: Padding(
                     padding: EdgeInsets.only(right: 0, left: 0),
                     child: RaisedButton(
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(18.0),
+                      ),
                       onPressed: () async {
                         double _taux = double.parse(_tauxTVAControl.text);
                         _tauxTVAControl.text = "";

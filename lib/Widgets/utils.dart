@@ -145,7 +145,7 @@ List<DropdownMenuItem<TresorieCategories>> buildDropTresorieCategoriesDownMenuIt
   for (TresorieCategories listItem in listItems) {
     items.add(
       DropdownMenuItem(
-        child: Text(listItem.libelle.toString()),
+        child: Text(listItem.libelle),
         value: listItem,
       ),
     );

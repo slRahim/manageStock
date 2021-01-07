@@ -982,13 +982,13 @@ class SqlLiteDatabaseHelper {
         'VALUES("", "Raison", "", 0, 1, "Adresse", "AdresseWeb", "Ville", "Departement", "Pays", "Cp", "Telephone", "Telephone2", "Fax", "Mobile", "Mobile2",'
         '"Mail", "Site", "Rc", "Nif", "Ai", "25", "Activite", "Nis", "Codedouane", "Maposition")');
 
-    batch.rawInsert('INSERT INTO ArticlesMarques(Libelle, BytesImageString) VALUES("Marque", "")');
+    batch.rawInsert('INSERT INTO ArticlesMarques(Libelle, BytesImageString) VALUES("No Marque", "")');
     batch.rawInsert('INSERT INTO ArticlesMarques(Libelle, BytesImageString) VALUES("Marque 1", "")');
 
-    batch.rawInsert('INSERT INTO ArticlesFamilles(Libelle, BytesImageString) VALUES("Famille", "")');
+    batch.rawInsert('INSERT INTO ArticlesFamilles(Libelle, BytesImageString) VALUES("No Famille", "")');
     batch.rawInsert('INSERT INTO ArticlesFamilles(Libelle, BytesImageString) VALUES("Famille 1", "")');
 
-    batch.rawInsert('INSERT INTO TiersFamilles(Libelle) VALUES("Famille")');
+    batch.rawInsert('INSERT INTO TiersFamilles(Libelle) VALUES("No Famille")');
     batch.rawInsert('INSERT INTO TiersFamilles(Libelle) VALUES("Famille 1")');
 
     batch.rawInsert('INSERT INTO ArticlesTva(Tva) VALUES(0)');
@@ -996,13 +996,14 @@ class SqlLiteDatabaseHelper {
     batch.rawInsert('INSERT INTO ArticlesTva(Tva) VALUES(19)');
     batch.rawInsert('INSERT INTO ArticlesTva(Tva) VALUES(29)');
 
-    batch.rawInsert('INSERT INTO TresorieCategories(Libelle) VALUES("Decaissement")');
+    batch.rawInsert('INSERT INTO TresorieCategories(Libelle) VALUES("No Categorie")');
     batch.rawInsert('INSERT INTO TresorieCategories(Libelle) VALUES("Reglement Client")');
     batch.rawInsert('INSERT INTO TresorieCategories(Libelle) VALUES("Reglement Fournisseur")');
     batch.rawInsert('INSERT INTO TresorieCategories(Libelle) VALUES("Encaissement")');
     batch.rawInsert('INSERT INTO TresorieCategories(Libelle) VALUES("Charge")');
     batch.rawInsert('INSERT INTO TresorieCategories(Libelle) VALUES("Remboursement Client")');
     batch.rawInsert('INSERT INTO TresorieCategories(Libelle) VALUES("Remboursement Fournisseur")');
+    batch.rawInsert('INSERT INTO TresorieCategories(Libelle) VALUES("Decaissement")');
 
     batch.rawInsert('INSERT INTO FormatPiece(Format , Piece , Current_index) VALUES("XXXX/YYYY"  , "FP" , 0)');
     batch.rawInsert('INSERT INTO FormatPiece(Format , Piece , Current_index) VALUES("XXXX/YYYY"  , "CC" , 0)');

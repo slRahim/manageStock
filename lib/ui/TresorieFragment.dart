@@ -37,7 +37,8 @@ class _TresorieFragmentState extends State<TresorieFragment> {
 
   List<TresorieCategories> _categorieItems;
   List<DropdownMenuItem<TresorieCategories>> _categorieDropdownItems;
-  TresorieCategories  _selectedCategorie=null;
+
+  TresorieCategories  _selectedCategorie;
   int _savedSelectedCategorie = 0;
 
   SliverListDataSource _dataSource;
@@ -45,16 +46,29 @@ class _TresorieFragmentState extends State<TresorieFragment> {
   @override
   Future<void> initState() {
     super.initState();
+
+    fillFilter(_filterMap);
+    fillFilter(_emptyFilterMap);
     _dataSource = SliverListDataSource(ItemsListTypes.tresorieList, _filterMap);
   }
 
   //***************************************************partie speciale pour le filtre de recherche***************************************
   void fillFilter(Map<String, dynamic> filter) {
-    filter["Categorie"] = _selectedCategorie.id ;
+    filter["Categorie"] = _savedSelectedCategorie+1 ;
   }
 
   Future<Widget> futureInitState() async {
     _categorieItems = await _dataSource.queryCtr.getAllTresorieCategorie();
+
+    _categorieItems[0].libelle = S.current.choisir ;
+    _categorieItems[1].libelle = S.current.reglemnt_client ;
+    _categorieItems[2].libelle = S.current.reglement_fournisseur ;
+    _categorieItems[3].libelle = S.current.encaissement ;
+    _categorieItems[4].libelle = S.current.charge ;
+    _categorieItems[5].libelle = S.current.rembourcement_client ;
+    _categorieItems[6].libelle = S.current.rembourcement_four ;
+    _categorieItems[7].libelle = S.current.decaissement ;
+
     _categorieDropdownItems= utils.buildDropTresorieCategoriesDownMenuItems(_categorieItems);
     _selectedCategorie = _categorieItems[_savedSelectedCategorie];
 
@@ -65,7 +79,6 @@ class _TresorieFragmentState extends State<TresorieFragment> {
             new ListTile(
               trailing: categorieDropDown(_setState),
             ),
-
           ],
         ),
       );
@@ -79,7 +92,7 @@ class _TresorieFragmentState extends State<TresorieFragment> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Padding(
-              padding: EdgeInsets.only(left: 5, right: 5, bottom: 20),
+              padding: EdgeInsetsDirectional.only(start: 5, end: 5, bottom: 5),
               child: tile,
             ),
           ],

@@ -116,7 +116,7 @@ class _ArticleListItemState extends State<ArticleListItem> {
           text: TextSpan(
               children: [
                 TextSpan(
-                    text: "Quantité Réel : ",
+                    text: "${S.current.qte_reel} : ",
                     style: TextStyle(fontSize: 15 , fontWeight: FontWeight.bold,color: Colors.black)
                 ),
                 TextSpan(
@@ -132,7 +132,7 @@ class _ArticleListItemState extends State<ArticleListItem> {
           text: TextSpan(
               children: [
                 TextSpan(
-                    text: "Quantité Dispo : ",
+                    text: "${S.current.qte_dispo} : ",
                     style: TextStyle(fontSize: 15 , fontWeight: FontWeight.bold,color: Colors.black)
                 ),
                 TextSpan(
@@ -167,7 +167,7 @@ class _ArticleListItemState extends State<ArticleListItem> {
           text: TextSpan(
               children: [
                 TextSpan(
-                    text: "Quantité Réel : ",
+                    text: "${S.current.qte_reel} : ",
                     style: TextStyle(fontSize: 15 , fontWeight: FontWeight.bold,color: Colors.black)
                 ),
                 TextSpan(
@@ -183,7 +183,7 @@ class _ArticleListItemState extends State<ArticleListItem> {
           text: TextSpan(
               children: [
                 TextSpan(
-                    text: "Quantité Dispo : ",
+                    text: "${S.current.qte_dispo} : ",
                     style: TextStyle(fontSize: 15 , fontWeight: FontWeight.bold,color: Colors.black)
                 ),
                 TextSpan(

@@ -1,5 +1,5 @@
+import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:barcode_scan/barcode_scan.dart';
-import 'package:fab_circular_menu/fab_circular_menu.dart';
 import 'package:flutter_speed_dial/flutter_speed_dial.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
@@ -69,7 +69,10 @@ class _JournalFragmentState extends State<JournalFragment> {
   Future<Widget> futureInitState() async {
 
     _marqueItems = await _dataSource.queryCtr.getAllArticleMarques();
+    _marqueItems[0].setLibelle( S.current.no_marque) ;
+
     _familleItems = await _dataSource.queryCtr.getAllArticleFamilles();
+    _familleItems[0].setLibelle( S.current.no_famille) ;
 
     _marqueDropdownItems = utils.buildMarqueDropDownMenuItems(_marqueItems);
     _familleDropdownItems = utils.buildDropFamilleArticle(_familleItems);
@@ -102,38 +105,9 @@ class _JournalFragmentState extends State<JournalFragment> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Padding(
-              padding: EdgeInsetsDirectional.only(start: 5, end: 5, bottom: 20),
+              padding: EdgeInsetsDirectional.only(start: 5, end: 5, bottom: 5),
               child: tile,
             ),
-            SizedBox(
-              width: 320.0,
-              child: Padding(
-                padding: EdgeInsets.only(right: 0, left: 0),
-                child: RaisedButton(
-                  onPressed: () async {
-                    Navigator.pop(context);
-                    setState(() {
-                      _savedSelectedMarque = _marqueItems.indexOf(_selectedMarque);
-                      _savedSelectedFamille = _familleItems.indexOf(_selectedFamille);
-
-                      fillFilter(_filterMap);
-
-                      if( _filterMap.toString() == _emptyFilterMap.toString()){
-                        isFilterOn = false;
-                      } else{
-                        isFilterOn = true;
-                      }
-                      _dataSource.updateFilters(_filterMap);
-                    });
-                  },
-                  child: Text(
-                    S.current.filtrer_btn,
-                    style: TextStyle(color: Colors.white),
-                  ),
-                  color: Colors.green[900],
-                ),
-              ),
-            )
           ],
         ),
       ),
@@ -155,9 +129,8 @@ class _JournalFragmentState extends State<JournalFragment> {
               ),
             );
           } else {
-            return Dialog(
-              child: snapshot.data,
-            );
+            return snapshot.data ;
+
           }
         });
   }
@@ -264,15 +237,34 @@ class _JournalFragmentState extends State<JournalFragment> {
       return SearchBar(
         searchController: searchController,
         mainContext: widget.onConfirmSelectedItems != null ? null : context,
-        title:"Journaux",
+        title:S.current.journaux,
         isFilterOn: isFilterOn,
         onSearchChanged: (String search) => _dataSource.updateSearchTerm(search),
         onFilterPressed: () async {
-          showDialog(
+          AwesomeDialog(
               context: context,
-              builder: (BuildContext context) {
-                return addFilterdialogue();
-              });
+              dialogType: DialogType.INFO,
+              animType: AnimType.BOTTOMSLIDE,
+              title: S.current.supp,
+              body: addFilterdialogue(),
+              btnOkText: S.current.filtrer_btn,
+              closeIcon: Icon(Icons.remove_circle_outline_sharp , color: Colors.red , size: 26,),
+              showCloseIcon: true,
+              btnOkOnPress: () async{
+                setState(() {
+                  _savedSelectedMarque = _marqueItems.indexOf(_selectedMarque);
+                  _savedSelectedFamille = _familleItems.indexOf(_selectedFamille);
+                  fillFilter(_filterMap);
+
+                  if( _filterMap.toString() == _emptyFilterMap.toString()){
+                    isFilterOn = false;
+                  } else{
+                    isFilterOn = true;
+                  }
+                  _dataSource.updateFilters(_filterMap);
+                });
+              }
+          )..show();
         },
       );
     }
