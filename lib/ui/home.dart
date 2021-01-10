@@ -68,15 +68,15 @@ class _homeState extends State<home> {
       if (currentBackPressTime == null ||
           now.difference(currentBackPressTime) > Duration(seconds: 3)) {
         currentBackPressTime = now;
-        Helpers.showToast("Press back again to exit");
+        Helpers.showToast(S.current.msg_quitter1);
         return Future.value(false);
       }
       AwesomeDialog(
         context: context,
         dialogType: DialogType.ERROR,
         animType: AnimType.BOTTOMSLIDE,
-        title: "EXIT",
-        desc: 'Do You Want to Exit... ',
+        title: S.current.quitter,
+        desc: S.current.msg_quitter,
         btnCancelText: S.current.non,
         btnCancelOnPress: (){
 

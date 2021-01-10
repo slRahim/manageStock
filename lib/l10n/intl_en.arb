@@ -223,6 +223,12 @@
   "statut": "Status",
   "net_ht" : "Net-HT",
   "timbre" : "Stamped",
-  "fiche_art" : "Info Article"
+  "fiche_art" : "Info Article",
+
+  "msg_quitter" : "Do You Want to Exit...",
+  "msg_quitter1" : "Tap back again to exit"
+
+
+
 
 }

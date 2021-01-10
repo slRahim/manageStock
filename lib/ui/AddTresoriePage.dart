@@ -603,6 +603,7 @@ class _AddTresoriePageState extends State<AddTresoriePage> with TickerProviderSt
               _tresorie.tierId = _selectedClient.id;
               _tresorie.tierRS= _selectedClient.raisonSociale ;
               _clientControl.text = _selectedClient.raisonSociale;
+              _montantControl.text= _selectedClient.credit.toString();
             });
           },
         );
@@ -772,10 +773,11 @@ class _AddTresoriePageState extends State<AddTresoriePage> with TickerProviderSt
         //update tresorie
         Tresorie tresorie = await makeItem();
         id = await _queryCtr.updateItemInDb(DbTablesNames.tresorie, tresorie);
-
         if(tresorie.categorie == 2 || tresorie.categorie == 3){
           bool _haspiece = true ;
+          double verssementSolde = 0 ;
           if(tresorie.pieceId == null){
+            _haspiece = false ;
             _selectedPieces = await _queryCtr.getAllPiecesByTierId(_selectedClient.id);
           }else{
             var piece = await _queryCtr.getPieceById(_selectedClient.id);
@@ -783,31 +785,56 @@ class _AddTresoriePageState extends State<AddTresoriePage> with TickerProviderSt
             _selectedPieces.add(piece);
           }
           double _montant = tresorie.montant ;
-          _selectedPieces.forEach((piece) async{
+          while(_montant > 0){
+            // recuperer la some des verssement pour le solde
+            verssementSolde = await _queryCtr.getVerssementSolde(_selectedClient);
+            if((_selectedClient.solde_depart - verssementSolde) > 0 && _haspiece == false){
+              ReglementTresorie item= new ReglementTresorie.init();
+              item.piece_id = 0 ;
+              item.tresorie_id = tresorie.id ;
+              if(_montant <= (_selectedClient.solde_depart-verssementSolde)){
+                item.regler = _montant ;
+                _montant = 0 ;
+              }else{
+                item.regler = (_selectedClient.solde_depart - verssementSolde);
+                _montant = _montant -  (_selectedClient.solde_depart - verssementSolde);
+              }
+              await _queryCtr.addItemToTable(DbTablesNames.reglementTresorie, item);
 
-            ReglementTresorie item= new ReglementTresorie.init();
-            item.piece_id = piece.id ;
-            item.tresorie_id = widget.arguments.id ;
-
-            if(_montant >= piece.reste){
-              item.regler = piece.reste ;
-              _montant = _montant - piece.reste ;
-            }else if(_montant != 0){
-              item.regler = _montant ;
             }else{
-              return ;
+              // le solde de depart est reglé
+              _selectedPieces.forEach((piece) async{
+                ReglementTresorie item= new ReglementTresorie.init();
+                item.piece_id = piece.id ;
+                item.tresorie_id = widget.arguments.id ;
+
+                if(_montant >= piece.reste){
+                  item.regler = piece.reste ;
+                  _montant = _montant - piece.reste ;
+                }else if(_montant != 0){
+                  item.regler = _montant ;
+                  _montant = 0 ;
+                }else{
+                  return ;
+                }
+                await _queryCtr.addItemToTable(DbTablesNames.reglementTresorie, item);
+              });
             }
-            await _queryCtr.addItemToTable(DbTablesNames.reglementTresorie, item);
-          });
+          }
           if(_haspiece == false){
             setState(() {
               _selectedPieces= new List<Piece> ();
             });
           }
         }
+
         if (id > -1) {
           widget.arguments = tresorie;
           widget.arguments.id = id;
+          setState(() {
+            modification = true;
+            editMode = false;
+          });
           message = S.current.msg_update_item;
         } else {
           message = S.current.msg_update_err;
@@ -822,27 +849,48 @@ class _AddTresoriePageState extends State<AddTresoriePage> with TickerProviderSt
         }
         if(tresorie.categorie == 2 || tresorie.categorie == 3){
           bool _haspiece = true ;
+          double verssementSolde = 0 ;
           if(tresorie.pieceId == null){
             _haspiece =false ;
             _selectedPieces = await _queryCtr.getAllPiecesByTierId(_selectedClient.id);
           }
           double _montant = tresorie.montant ;
-          _selectedPieces.forEach((piece) async{
+          while(_montant > 0){
+            // recuperer la some des verssement pour le solde
+            verssementSolde = await _queryCtr.getVerssementSolde(_selectedClient);
+            if((_selectedClient.solde_depart - verssementSolde) > 0 && !_haspiece){
+              ReglementTresorie item= new ReglementTresorie.init();
+              item.piece_id = 0 ;
+              item.tresorie_id = tresorie.id ;
+              if(_montant <= (_selectedClient.solde_depart-verssementSolde)){
+               item.regler = _montant ;
+               _montant = 0 ;
+              }else{
+                item.regler = (_selectedClient.solde_depart - verssementSolde);
+                _montant = _montant - item.regler;
+              }
+              await _queryCtr.addItemToTable(DbTablesNames.reglementTresorie, item);
 
-            ReglementTresorie item= new ReglementTresorie.init();
-            item.piece_id = piece.id ;
-            item.tresorie_id = tresorie.id ;
-
-            if(_montant >= piece.reste){
-              item.regler = piece.reste ;
-              _montant = _montant - piece.reste ;
-            }else if(_montant != 0){
-              item.regler = _montant ;
             }else{
-              return ;
+              // le solde de depart est reglé
+              _selectedPieces.forEach((piece) async{
+                ReglementTresorie item= new ReglementTresorie.init();
+                item.piece_id = piece.id ;
+                item.tresorie_id = tresorie.id ;
+
+                if(_montant >= piece.reste){
+                  item.regler = piece.reste ;
+                  _montant = _montant - piece.reste ;
+                }else if(_montant != 0){
+                  item.regler = _montant ;
+                  _montant = 0 ;
+                }else{
+                  return ;
+                }
+                await _queryCtr.addItemToTable(DbTablesNames.reglementTresorie, item);
+              });
             }
-            await _queryCtr.addItemToTable(DbTablesNames.reglementTresorie, item);
-          });
+          }
           if(_haspiece == false){
             setState(() {
               _selectedPieces= new List<Piece> ();

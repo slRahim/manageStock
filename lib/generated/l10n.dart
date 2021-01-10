@@ -2154,6 +2154,26 @@ class S {
       args: [],
     );
   }
+
+  /// `Do You Want to Exit...`
+  String get msg_quitter {
+    return Intl.message(
+      'Do You Want to Exit...',
+      name: 'msg_quitter',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Tap back again to exit`
+  String get msg_quitter1 {
+    return Intl.message(
+      'Tap back again to exit',
+      name: 'msg_quitter1',
+      desc: '',
+      args: [],
+    );
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<S> {

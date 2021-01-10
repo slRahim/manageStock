@@ -259,7 +259,7 @@ class SqlLiteDatabaseHelper {
       CREATE TABLE ReglementTresorie (
           id INTEGER PRIMARY KEY AUTOINCREMENT,
           Tresorie_id INTEGER REFERENCES Tresories(id) ON DELETE SET NULL ON UPDATE CASCADE,
-          Piece_id INTEGER REFERENCES Pieces (id) ON DELETE SET NULL ON UPDATE CASCADE,
+          Piece_id,
           Regler DOUBLE
       )""");
   }
@@ -871,7 +871,7 @@ class SqlLiteDatabaseHelper {
         AFTER UPDATE ON Tresories 
         FOR EACH ROW 
         when (New.Categorie_id = 2 OR New.Categorie_id = 3 OR New.Categorie_id = 6 OR New.Categorie_id = 7) 
-              AND OLD.Mov = NEW.Mov  AND OLD.Piece_id = NEW.Piece_id
+              AND OLD.Mov = NEW.Mov  AND (OLD.Piece_id = NEW.Piece_id OR OLD.Piece_id  IS NULL) 
         BEGIN         
             UPDATE Tiers
               SET Regler = (SELECT SUM(Montant) FROM Tresories WHERE Tier_id = New.Tier_id AND Mov = 1)
@@ -1021,7 +1021,7 @@ class SqlLiteDatabaseHelper {
     batch.rawInsert("INSERT INTO MyParams(Tarification , Tva) VALUES(2,0)");
 
     Uint8List image = await Helpers.getDefaultImageUint8List();
-    Tiers tier0 = new Tiers(image ,"Client Passagé", null, 0, 0, 0, "adresse", "ville", "telephone", "000000", "fax", "email", 0, 0, 0, false);
+    Tiers tier0 = new Tiers(image ,"Client Passagé", null, 0, 0, 0, "adresse", "ville", "telephone", "000000", "fax", "email", 1000, 0, 0, false);
     tier0.clientFour = 0 ;
     batch.insert(DbTablesNames.tiers, tier0.toMap());
 

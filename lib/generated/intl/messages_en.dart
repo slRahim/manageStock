@@ -131,6 +131,8 @@ class MessageLookup extends MessageLookupByLibrary {
     "msg_piece_transfere" : MessageLookupByLibrary.simpleMessage("Piece has been transferred"),
     "msg_prix_err" : MessageLookupByLibrary.simpleMessage("Price can\'t be less then 0"),
     "msg_qte_err" : MessageLookupByLibrary.simpleMessage("Qantité can\'t be less then 0"),
+    "msg_quitter" : MessageLookupByLibrary.simpleMessage("Do You Want to Exit..."),
+    "msg_quitter1" : MessageLookupByLibrary.simpleMessage("Tap back again to exit"),
     "msg_save_pass" : MessageLookupByLibrary.simpleMessage("Click save to store your password"),
     "msg_scan_barcode" : MessageLookupByLibrary.simpleMessage("Double tap to scan barcode"),
     "msg_scan_qr" : MessageLookupByLibrary.simpleMessage("Double tap to scan qr"),

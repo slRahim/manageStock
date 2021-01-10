@@ -344,6 +344,22 @@ class QueryCtr {
       return list;
   }
 
+  Future<double> getVerssementSolde(Tiers item)async{
+    var dbClient = await _databaseHelper.db ;
+
+    var res = await dbClient.rawQuery('SELECT * FROM Tresories WHERE Tier_id = ${item.id}');
+    List<Tresorie> list = new List<Tresorie>();
+    for (var i = 0; i<res.length; i++) {
+      Tresorie tresorie = new Tresorie.fromMap(res[i]);
+      list.add(tresorie);
+    }
+    double sum = 0 ;
+    for(int i = 0 ; i<list.length ; i++){
+      var res1 = await dbClient.rawQuery("Select Sum(Regler) From ReglementTresorie Where Tresorie_id = ${list[i].id}");
+      sum = sum + ((res1.first["Sum(Regler)"] != null)? res1.first["Sum(Regler)"] :0 );
+    }
+    return sum ;
+  }
 
   Future<List<ArticleMarque>> getAllArticleMarques() async {
     Database dbClient = await _databaseHelper.db;

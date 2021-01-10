@@ -223,7 +223,13 @@
   "statut": "Statut",
   "net_ht" : "Net-HT",
   "timbre" : "Timbre",
-  "fiche_art" : "Fiche Article"
+  "fiche_art" : "Fiche Article",
+
+  "msg_quitter" : "Voullez vous quitter l'apllication...",
+  "msg_quitter1" : "Tapez retour une autre fois pour quitter"
+
+
+
 
 
 

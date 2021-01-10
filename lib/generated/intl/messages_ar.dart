@@ -131,6 +131,8 @@ class MessageLookup extends MessageLookupByLibrary {
     "msg_piece_transfere" : MessageLookupByLibrary.simpleMessage("تم تحويل الإيصال بنجاح"),
     "msg_prix_err" : MessageLookupByLibrary.simpleMessage("السعر يجب أن يكون أكبر من 0"),
     "msg_qte_err" : MessageLookupByLibrary.simpleMessage("الكمية يجب أن تكون أكبر من 0"),
+    "msg_quitter" : MessageLookupByLibrary.simpleMessage("هل تريد الخروج من التطبيق..."),
+    "msg_quitter1" : MessageLookupByLibrary.simpleMessage("إضغط على رجوع مرة أخرى للخروج"),
     "msg_save_pass" : MessageLookupByLibrary.simpleMessage("إضغط على حفظ لتأكيد المعلومات"),
     "msg_scan_barcode" : MessageLookupByLibrary.simpleMessage("الضغظ نقؤتين لمسح البار كود"),
     "msg_scan_qr" : MessageLookupByLibrary.simpleMessage("نقرتين لمسح رمز QR"),
