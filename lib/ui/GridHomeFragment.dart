@@ -5,6 +5,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gestmob/Helpers/Helpers.dart';
+import 'package:gestmob/Helpers/local_notification.dart';
 import 'package:gestmob/Widgets/HomeItemsWidgets.dart';
 import 'package:gestmob/Widgets/HomeItemsWidgets.dart';
 import 'package:gestmob/Widgets/HomeItemsWidgets.dart';
@@ -15,8 +16,8 @@ import 'package:gestmob/cubit/home_cubit.dart';
 import 'package:gestmob/models/HomeItem.dart';
 import 'package:reorderables/reorderables.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-
 import 'AddArticlePage.dart';
+import 'package:gestmob/Helpers/local_notification.dart' as localNotification;
 
 class GridHomeWidget extends StatefulWidget {
   static bool Global_Draggable_Mode = false;
@@ -52,8 +53,9 @@ class _GridHomeWidgetState extends State<GridHomeWidget> {
     homeItemParametres
   ];
 
+
   @override
-  Future<void> initState() {
+  Future<void> initState(){
     super.initState();
     _addButton = DraggableItem(
       fixed: true,
@@ -85,6 +87,11 @@ class _GridHomeWidgetState extends State<GridHomeWidget> {
               icon: Icon(Icons.add_box, size: 20),
               label: Text(S.current.ajouter, style: TextStyle(fontSize: 12)))),
     );
+
+    notificationPlugin.setListenerForLowerVersions(onNotificationInLowerVersions);
+    notificationPlugin.setOnNotificationClick(onNotificationClick);
+    showNotification();
+
   }
 
   @override
@@ -126,6 +133,20 @@ class _GridHomeWidgetState extends State<GridHomeWidget> {
     _key.currentState.showSnackBar(SnackBar(
       content: Text(text),
     ));
+  }
+
+  Future showNotification() async{
+    // await notificationPlugin.showDailyAtTime();
+    await notificationPlugin.showWeeklyAtDayTime() ;
+
+  }
+
+  onNotificationInLowerVersions(ReceivedNotification receivedNotification) {
+    print('Notification Received ${receivedNotification.id}');
+  }
+
+  onNotificationClick(String payload) {
+    print('Payload : $payload');
   }
 
   @override
@@ -282,4 +303,6 @@ class _GridHomeWidgetState extends State<GridHomeWidget> {
       return null;
     }
   }
+
+
 }

@@ -279,7 +279,11 @@ class SqlLiteDatabaseHelper {
     await db.execute("""CREATE TABLE IF NOT EXISTS MyParams (
         id INTEGER PRIMARY KEY AUTOINCREMENT, 
         Tarification integer DEFAULT 1, 
-        Tva integer DEFAULT 0
+        Tva integer DEFAULT 0,
+        Timbre integer DEFAULT 0,
+        Notifications integer DEFAULT 1,
+        Notification_time Varchar(10),
+        Notification_day integer
         )""");
 
     await db.execute('''CREATE TABLE IF NOT EXISTS FormatPrints (
@@ -1018,7 +1022,7 @@ class SqlLiteDatabaseHelper {
     batch.rawInsert('INSERT INTO FormatPiece(Format , Piece , Current_index) VALUES("XXXX/YYYY"  , "AC" , 0)');
     batch.rawInsert('INSERT INTO FormatPiece(Format , Piece , Current_index) VALUES("XXXX/YYYY"  , "TR" , 0)');
 
-    batch.rawInsert("INSERT INTO MyParams(Tarification , Tva) VALUES(2,0)");
+    batch.rawInsert("INSERT INTO MyParams VALUES(1,2,0,0,1,'8:00',2)");
 
     Uint8List image = await Helpers.getDefaultImageUint8List();
     Tiers tier0 = new Tiers(image ,"Client Passagé", null, 0, 0, 0, "adresse", "ville", "telephone", "000000", "fax", "email", 1000, 0, 0, false);

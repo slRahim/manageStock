@@ -48,7 +48,7 @@ dependencies:
   material_design_icons_flutter: 4.0.5555
 
   image_picker: ^0.6.7+4
-  http: ^0.12.2
+  http:
 
   flushbar: ^1.10.4
   fancy_bottom_bar: ^0.0.1
@@ -82,6 +82,8 @@ dependencies:
   sliding_card:
   flutter_slidable:
   awesome_dialog:
+
+  flutter_local_notifications: ^1.4.4+1
 
   #  flutter_plugin_android_lifecycle: ^1.0.8
   #  location_permissions: ^3.0.0

@@ -175,11 +175,8 @@ class _AddArticlePageState extends State<AddArticlePage>  with AutomaticKeepAliv
         price3 = true ;
         break;
     }
-    if(_myParams.tva >= 1){
-      tva = true ;
-    }else{
-      tva = false ;
-    }
+    tva = _myParams.tva ;
+
   }
 
   @override

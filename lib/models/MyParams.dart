@@ -3,28 +3,67 @@ class MyParams {
 
   int _id ;
   int _tarification ;
-  int _tva ;
+  bool _tva ;
+  bool _timbre ;
+  bool _notifications ;
+  String _notificationTime ;
+  int _notificationDay ;
 
   MyParams.init();
 
-  MyParams(this._id, this._tarification, this._tva);
+  MyParams(this._id, this._tarification, this._tva , this._timbre ,
+      this._notifications , this._notificationTime , this._notificationDay);
 
   MyParams.frommMap(dynamic map){
     this._id=map["id"];
     this._tarification=map["Tarification"];
-    this._tva=map["Tva"];
+    this._tva=(map["Tva"] == 1)?true:false;
+    this._timbre = (map["Timbre"] == 1)?true : false;
+    this._notifications=(map["Notifications"] == 1)? true :false;
+    this._notificationTime=map["Notification_time"];
+    this._notificationDay = map["Notification_day"];
   }
 
   Map<String , dynamic> toMap(){
     Map<String , dynamic> map= new  Map<String , dynamic>();
 
     map["tarification"]=this._tarification;
-    map["Tva"] = this._tva;
+    map["Tva"] = (this._tva)?1:0;
+    map["Timbre"]=(this._timbre)?1:0;
+    map["Notifications"]=(this._notifications)?1:0;
+    map["Notification_time"]=this._notificationTime;
+    map["Notification_day"]=this._notificationDay;
+
+    return map ;
   }
 
-  int get tva => _tva;
+  int get notificationDay => _notificationDay;
 
-  set tva(int value) {
+  set notificationDay(int value) {
+    _notificationDay = value;
+  }
+
+  String get notificationTime => _notificationTime;
+
+  set notificationTime(String value) {
+    _notificationTime = value;
+  }
+
+  bool get notifications => _notifications;
+
+  set notifications(bool value) {
+    _notifications = value;
+  }
+
+  bool get timbre => _timbre;
+
+  set timbre(bool value) {
+    _timbre = value;
+  }
+
+  bool get tva => _tva;
+
+  set tva(bool value) {
     _tva = value;
   }
 
@@ -42,7 +81,7 @@ class MyParams {
 
   @override
   String toString() {
-    return 'MyParams{_id: $_id, _tarification: $_tarification, _tva: $_tva}';
+    return 'MyParams{_id: $_id, _tarification: $_tarification, _tva: $_tva, _timbre: $_timbre, _notifications: $_notifications, _notificationTime: $_notificationTime, _notificationDay: $_notificationDay}';
   }
 
   @override
