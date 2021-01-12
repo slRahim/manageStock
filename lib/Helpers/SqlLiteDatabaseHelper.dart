@@ -1022,7 +1022,7 @@ class SqlLiteDatabaseHelper {
     batch.rawInsert('INSERT INTO FormatPiece(Format , Piece , Current_index) VALUES("XXXX/YYYY"  , "AC" , 0)');
     batch.rawInsert('INSERT INTO FormatPiece(Format , Piece , Current_index) VALUES("XXXX/YYYY"  , "TR" , 0)');
 
-    batch.rawInsert("INSERT INTO MyParams VALUES(1,2,0,0,1,'8:00',2)");
+    batch.rawInsert("INSERT INTO MyParams VALUES(1,2,0,0,1,'15:50',0)");
 
     Uint8List image = await Helpers.getDefaultImageUint8List();
     Tiers tier0 = new Tiers(image ,"Client Passagé", null, 0, 0, 0, "adresse", "ville", "telephone", "000000", "fax", "email", 1000, 0, 0, false);

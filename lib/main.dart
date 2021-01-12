@@ -6,6 +6,8 @@ import 'package:flutter_phoenix/flutter_phoenix.dart';
 import 'package:gestmob/Helpers/QueryCtr.dart';
 import 'package:gestmob/cubit/home_cubit.dart';
 import 'package:gestmob/generated/l10n.dart';
+import 'package:gestmob/services/local_notification.dart';
+import 'package:gestmob/services/push_notifications.dart';
 import 'package:gestmob/ui/home.dart';
 import 'package:get_it/get_it.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -13,9 +15,16 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'Helpers/Statics.dart';
 import 'Helpers/TouchIdUtil.dart';
 import 'Helpers/route_generator.dart';
+import 'models/MyParams.dart';
 
 
-void main() => runApp(Phoenix(child: MyApp()));
+void main() => runApp(
+    Phoenix(
+        child: PushNotificationsManager (
+            child: MyApp()
+        )
+    )
+);
 
 
 class MyApp extends StatefulWidget {
@@ -30,11 +39,10 @@ class _MyAppState extends State<MyApp> {
   @override
   void initState() {
     super.initState();
-    initLanguage() ;
-
+    futureInit() ;
   }
 
-  initLanguage()async{
+  futureInit()async{
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String _locale = prefs.getString("myLocale");
     switch(_locale){
@@ -59,7 +67,6 @@ class _MyAppState extends State<MyApp> {
         });
         break ;
     }
-
   }
 
   @override

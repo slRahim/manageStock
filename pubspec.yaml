@@ -24,10 +24,9 @@ dependencies:
   intl: ^0.16.1
   google_fonts: ^0.2.0
 
-#  firebase_core: ^0.4.0+9
-#  firebase_auth: ^0.14.0+5
-#  cloud_firestore: ^0.12.9+5
-#  firebase_analytics: ^5.0.2
+  firebase_core: ^0.4.0+9
+  firebase_analytics: ^5.0.2
+  firebase_messaging: ^6.0.9
 
   reorderables: ^0.3.2
   draggable_container: ^0.1.8+5

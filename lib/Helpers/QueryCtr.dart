@@ -235,6 +235,12 @@ class QueryCtr {
     return piece;
   }
 
+  Future<bool> pieceHasCredit () async{
+    var dbClient = await _databaseHelper.db ;
+    var res = await dbClient.query(DbTablesNames.pieces,where: "Reste > 0");
+    return res.isEmpty ;
+  }
+
   Future<List<Article>> getJournalPiece(Piece piece , {bool local,String searchTerm,Map<String, dynamic> filters}) async{
     var dbClient = await _databaseHelper.db ;
     String query = 'SELECT Journaux.*,Articles.*'

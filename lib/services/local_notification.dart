@@ -8,16 +8,15 @@ import 'package:http/http.dart' as http;
 
 import 'package:rxdart/subjects.dart';
 
-
 class NotificationPlugin {
-
   FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin;
   final BehaviorSubject<ReceivedNotification>
-  didReceivedLocalNotificationSubject =
-  BehaviorSubject<ReceivedNotification>();
+      didReceivedLocalNotificationSubject =
+      BehaviorSubject<ReceivedNotification>();
   var initializationSettings;
+  int IdNotification = 0;
 
-  NotificationPlugin._(){
+  NotificationPlugin._() {
     init();
   }
 
@@ -33,7 +32,7 @@ class NotificationPlugin {
 
   initializePlatformSpecifics() {
     var initializationSettingsAndroid =
-    AndroidInitializationSettings("app_not_icon");
+        AndroidInitializationSettings("@mipmap/ic_launcher");
     var initializationSettingsIOS = IOSInitializationSettings(
       requestAlertPermission: true,
       requestBadgePermission: true,
@@ -45,18 +44,19 @@ class NotificationPlugin {
       },
     );
 
-    initializationSettings = InitializationSettings(initializationSettingsAndroid, initializationSettingsIOS);
+    initializationSettings = InitializationSettings(
+        initializationSettingsAndroid, initializationSettingsIOS);
   }
 
   _requestIOSPermission() {
     flutterLocalNotificationsPlugin
         .resolvePlatformSpecificImplementation<
-        IOSFlutterLocalNotificationsPlugin>()
+            IOSFlutterLocalNotificationsPlugin>()
         .requestPermissions(
-      alert: false,
-      badge: true,
-      sound: true,
-    );
+          alert: false,
+          badge: true,
+          sound: true,
+        );
   }
 
   setListenerForLowerVersions(Function onNotificationInLowerVersions) {
@@ -68,15 +68,14 @@ class NotificationPlugin {
   setOnNotificationClick(Function onNotificationClick) async {
     await flutterLocalNotificationsPlugin.initialize(initializationSettings,
         onSelectNotification: (String payload) async {
-          onNotificationClick(payload);
-        });
+      onNotificationClick(payload);
+    });
   }
-
-
 
   //******************************************************************************************************************************************************************
   //*********************************************************notifications********************************************************************************************
-  Future<void> showNotification() async {
+  Future<void> showNotification(
+      {String body, String title, String payload = ''}) async {
     var androidChannelSpecifics = AndroidNotificationDetails(
       'CHANNEL_ID',
       'CHANNEL_NAME',
@@ -84,23 +83,19 @@ class NotificationPlugin {
       importance: Importance.Max,
       priority: Priority.High,
       playSound: true,
-      timeoutAfter: 5000,
-      styleInformation: DefaultStyleInformation(true, true),
     );
     var iosChannelSpecifics = IOSNotificationDetails();
     var platformChannelSpecifics =
-    NotificationDetails(androidChannelSpecifics, iosChannelSpecifics);
+        NotificationDetails(androidChannelSpecifics, iosChannelSpecifics);
     await flutterLocalNotificationsPlugin.show(
-      0,
-      'Test Title',
-      'Test Body', //null
-      platformChannelSpecifics,
-      payload: 'New Payload',
-    );
+        IdNotification, title, body, platformChannelSpecifics,
+        payload: payload);
+    IdNotification++;
   }
 
-  Future<void> showDailyAtTime() async {
-    var time = Time(14, 3, 0);
+  Future<void> showDailyAtTime(String dayTime) async {
+    var hh_mm = dayTime.split(":");
+    var time = Time(int.parse(hh_mm.first), int.parse(hh_mm.last), 0);
     var androidChannelSpecifics = AndroidNotificationDetails(
       'CHANNEL_ID 41',
       'CHANNEL_NAME 41',
@@ -110,19 +105,34 @@ class NotificationPlugin {
     );
     var iosChannelSpecifics = IOSNotificationDetails();
     var platformChannelSpecifics =
-    NotificationDetails(androidChannelSpecifics, iosChannelSpecifics);
+        NotificationDetails(androidChannelSpecifics, iosChannelSpecifics);
+
     await flutterLocalNotificationsPlugin.showDailyAtTime(
-      0,
-      'Test Title at ${time.hour}:${time.minute}.${time.second}',
-      'Test showDailyAtTime', //null
+      IdNotification,
+      'Piece Credit',
+      'Vous avez des pieces non payer', //null
       time,
       platformChannelSpecifics,
       payload: 'Test Payload',
     );
+    IdNotification++;
   }
 
-  Future<void> showWeeklyAtDayTime() async {
-    var time = Time(14, 25, 0);
+  // la semaine demmare par dimanche = 1 / termine le samedi = 7
+  Future<void> showWeeklyAtDayTime(String dayTime, int day) async {
+    var hh_mm = dayTime.split(":");
+    var time = Time(int.parse(hh_mm.first), int.parse(hh_mm.last), 0);
+    var days = [
+      null,
+      Day.Sunday,
+      Day.Monday,
+      Day.Tuesday,
+      Day.Wednesday,
+      Day.Thursday,
+      Day.Friday,
+      Day.Sunday
+    ];
+    print(days[day]);
     var androidChannelSpecifics = AndroidNotificationDetails(
       'CHANNEL_ID 55',
       'CHANNEL_NAME 55',
@@ -131,19 +141,20 @@ class NotificationPlugin {
       priority: Priority.Max,
     );
     var iosChannelSpecifics = IOSNotificationDetails();
+
     var platformChannelSpecifics =
-    NotificationDetails(androidChannelSpecifics, iosChannelSpecifics);
+        NotificationDetails(androidChannelSpecifics, iosChannelSpecifics);
     await flutterLocalNotificationsPlugin.showWeeklyAtDayAndTime(
-      0,
-      'Test Title at ${time.hour}:${time.minute}.${time.second}',
-      'Test Body showWeeklyAtDayTime', //null
-      Day.Monday,
+      IdNotification,
+      'Piece Credit',
+      'Vous avez des pieces non payer',
+      days[day],
       time,
       platformChannelSpecifics,
       payload: 'Test Payload',
     );
+    IdNotification++;
   }
-
 
   Future<void> cancelNotification() async {
     await flutterLocalNotificationsPlugin.cancel(0);
@@ -157,6 +168,7 @@ class NotificationPlugin {
 //***************************************************************************************************************************************************************************
 //**************************************************************************************************************************************************************************
 NotificationPlugin notificationPlugin = NotificationPlugin._();
+
 class ReceivedNotification {
   final int id;
   final String title;
@@ -170,5 +182,3 @@ class ReceivedNotification {
     @required this.payload,
   });
 }
-
-
