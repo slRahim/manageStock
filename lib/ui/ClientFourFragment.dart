@@ -136,7 +136,10 @@ class _ClientFourFragmentState extends State<ClientFourFragment> {
                   margin: 10.0,
                   padding: 10.0,
                   onTap: () {
-                    Navigator.of(context).pushNamed(RoutesKeys.addTier,arguments: new Tiers.init(widget.clientFourn));
+                    Navigator.of(context).pushNamed(RoutesKeys.addTier,arguments: new Tiers.init(widget.clientFourn))
+                        .then((value){
+                      _dataSource.refresh();
+                    });
                   },
               ),
               CircularMenuItem(

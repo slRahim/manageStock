@@ -437,7 +437,7 @@ class _SettingsPageState extends State<SettingsPage> {
 
     int id = -1;
     id = await _queryCtr.updateItemInDb(DbTablesNames.myparams, _myParams);
-    await showNotification();
+    // await showNotification();
     var message = "";
     if (id > -1) {
       message = "Settings has succesfuly updated";

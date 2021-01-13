@@ -11,8 +11,6 @@ import 'package:gestmob/Widgets/navDrawer.dart';
 import 'package:gestmob/cubit/home_cubit.dart';
 import 'package:gestmob/generated/l10n.dart';
 import 'package:gestmob/models/HomeItem.dart';
-import 'package:gestmob/models/MyParams.dart';
-import 'package:gestmob/services/local_notification.dart';
 import 'package:gestmob/ui/AddArticlePage.dart';
 
 import 'GridHomeFragment.dart';
@@ -27,31 +25,7 @@ HomeState _currentHomeState = null;
 DateTime currentBackPressTime;
 
 class _homeState extends State<home> {
-  MyParams _myParams ;
-  bool _pieceHasCredit ;
-  QueryCtr _queryCtr ;
 
-  configureLocalNotification()async{
-    _myParams = await _queryCtr.getAllParams();
-    _pieceHasCredit = await _queryCtr.pieceHasCredit();
-    //add piece condition
-    if(_myParams.notifications){
-      switch(_myParams.notificationDay){
-        case 0 :
-          for(int i=0 ; i<4; i++){
-            await notificationPlugin.showDailyAtTime(_myParams.notificationTime);
-          }
-          break;
-        default :
-          for(int i=0 ; i<4; i++){
-            await notificationPlugin.showWeeklyAtDayTime(_myParams.notificationTime , _myParams.notificationDay);
-          }
-          break;
-      }
-    }else{
-      await notificationPlugin.cancelAllNotification();
-    }
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -61,14 +35,11 @@ class _homeState extends State<home> {
         key: _globalKey,
         drawer: NavDrawer(),
         body: BlocConsumer<HomeCubit, HomeState>(
-          listener: (context, state) async{
+          listener: (context, state){
             if (state is HomeError) {
               Scaffold.of(context).showSnackBar(SnackBar(
                 content: Text(state.message),
               ));
-            }
-            if(state is HomeLoading){
-              await configureLocalNotification();
             }
           },
           builder: (context, state) {

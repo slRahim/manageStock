@@ -2,6 +2,8 @@ import 'dart:ffi';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:gestmob/Helpers/QueryCtr.dart';
+import 'package:gestmob/models/MyParams.dart';
 import 'package:path_provider/path_provider.dart';
 import 'dart:io' show File, Platform;
 import 'package:http/http.dart' as http;
@@ -109,7 +111,7 @@ class NotificationPlugin {
 
     await flutterLocalNotificationsPlugin.showDailyAtTime(
       IdNotification,
-      'Piece Credit',
+      'Credit',
       'Vous avez des pieces non payer', //null
       time,
       platformChannelSpecifics,
@@ -146,7 +148,7 @@ class NotificationPlugin {
         NotificationDetails(androidChannelSpecifics, iosChannelSpecifics);
     await flutterLocalNotificationsPlugin.showWeeklyAtDayAndTime(
       IdNotification,
-      'Piece Credit',
+      'Credit',
       'Vous avez des pieces non payer',
       days[day],
       time,
@@ -163,6 +165,7 @@ class NotificationPlugin {
   Future<void> cancelAllNotification() async {
     await flutterLocalNotificationsPlugin.cancelAll();
   }
+
 }
 
 //***************************************************************************************************************************************************************************

@@ -1,22 +1,23 @@
 import 'dart:convert';
-
 import 'package:draggable_container/draggable_container.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gestmob/Helpers/Helpers.dart';
-import 'file:///E:/AndroidStudio/FlutterProjects/gestmob/lib/services/local_notification.dart';
+import 'package:gestmob/Helpers/QueryCtr.dart';
 import 'package:gestmob/Widgets/HomeItemsWidgets.dart';
 import 'package:gestmob/Widgets/HomeItemsWidgets.dart';
 import 'package:gestmob/Widgets/HomeItemsWidgets.dart';
 import 'package:gestmob/Widgets/navDrawer.dart';
 import 'package:gestmob/generated/l10n.dart';
+import 'package:gestmob/models/MyParams.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:gestmob/cubit/home_cubit.dart';
 import 'package:gestmob/models/HomeItem.dart';
 import 'package:reorderables/reorderables.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'AddArticlePage.dart';
+
 
 class GridHomeWidget extends StatefulWidget {
   static bool Global_Draggable_Mode = false;
@@ -87,7 +88,6 @@ class _GridHomeWidgetState extends State<GridHomeWidget> {
               label: Text(S.current.ajouter, style: TextStyle(fontSize: 12)))),
     );
 
-
   }
 
   @override
@@ -142,6 +142,14 @@ class _GridHomeWidgetState extends State<GridHomeWidget> {
         title: Text(_appBarTitle),
         backgroundColor: Theme.of(context).appBarTheme.color,
         centerTitle: true,
+        // actions: [
+        //   IconButton(
+        //     icon: Icon(Icons.error , color: Colors.white,),
+        //     onPressed: (){
+        //
+        //     },
+        //   )
+        // ],
       ),
       body: Container(
           alignment: Alignment.center,
@@ -231,6 +239,7 @@ class _GridHomeWidgetState extends State<GridHomeWidget> {
         homeDraggableItemList.add(null);
       }
     }
+
     return homeDraggableItemList;
   }
 

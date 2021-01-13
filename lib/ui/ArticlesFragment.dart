@@ -271,7 +271,10 @@ class _ArticlesFragmentState extends State<ArticlesFragment> {
                 margin: 10.0,
                 padding: 10.0,
                 onTap: () {
-                  Navigator.of(context).pushNamed(RoutesKeys.addArticle,arguments: new Article.init());
+                  Navigator.of(context).pushNamed(RoutesKeys.addArticle,arguments: new Article.init())
+                      .then((value){
+                      _dataSource.refresh();
+                  });
                 },
               ),
               CircularMenuItem(

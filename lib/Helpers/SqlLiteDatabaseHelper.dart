@@ -13,27 +13,32 @@ import 'package:path_provider/path_provider.dart';
 import 'Helpers.dart';
 
 class SqlLiteDatabaseHelper {
-  static final SqlLiteDatabaseHelper _instance =
-      new SqlLiteDatabaseHelper.internal();
+
+  static final SqlLiteDatabaseHelper _instance = new SqlLiteDatabaseHelper.internal();
   factory SqlLiteDatabaseHelper() => _instance;
+  SqlLiteDatabaseHelper.internal();
 
   static Database _db;
 
   Future<Database> get db async {
-    if (_db != null) return _db;
+    if (_db != null) {
+      return _db;
+    }
     _db = await initDb();
     return _db;
   }
 
-  SqlLiteDatabaseHelper.internal();
-
   initDb() async {
-    String databasesPath = await getDatabasesPath();
-    String dbPath = join(databasesPath, 'gestmob.db');
-
-    Database database = await openDatabase(dbPath, version: 2, onCreate: _onCreate);
+    String dbPath = await _databasePath();
+    Database database = await openDatabase(dbPath, version: 1, onCreate: _onCreate);
     return database;
   }
+
+  Future<String> _databasePath() async {
+    String databasesPath = await getDatabasesPath();
+    return join(databasesPath, 'gestmob.db');
+  }
+
 
   void _onCreate(Database db, int version) async {
 
@@ -51,6 +56,9 @@ class SqlLiteDatabaseHelper {
     await setInitialData(db, version);
 
   }
+
+//*********************************************************************************************************************************************
+//**********************************************creation des tables***************************************************************************
 
   // les informations de la societe
   Future<void> createProfileTable(Database db, int version) async {
@@ -308,7 +316,7 @@ class SqlLiteDatabaseHelper {
 //  ********************************************************************************************************************************************
 //  ********************************************************************************************************************************************
 
-//fonction speciale pour la creation des triggers de bd table article
+  //fonction speciale pour la creation des triggers de bd table article
   createTriggersJournaux(Database db , int version) async {
     //*********************************************************************************************************************************************
     //************************************************* journal commande client********************************************************************
@@ -975,9 +983,9 @@ class SqlLiteDatabaseHelper {
 
   }
 
-  //*****************************************************************************************************************************************
-  //*****************************************************************************************************************************************
-  //*****************************************************************************************************************************************
+//*****************************************************************************************************************************************
+//*****************************************************************************************************************************************
+//*****************************************************************************************************************************************
   Future<void> setInitialData(Database db, int version) async {
     Batch batch = db.batch();
 
@@ -1022,7 +1030,7 @@ class SqlLiteDatabaseHelper {
     batch.rawInsert('INSERT INTO FormatPiece(Format , Piece , Current_index) VALUES("XXXX/YYYY"  , "AC" , 0)');
     batch.rawInsert('INSERT INTO FormatPiece(Format , Piece , Current_index) VALUES("XXXX/YYYY"  , "TR" , 0)');
 
-    batch.rawInsert("INSERT INTO MyParams VALUES(1,2,0,0,1,'15:50',0)");
+    batch.rawInsert("INSERT INTO MyParams VALUES(1,2,0,0,1,'9:01',0)");
 
     Uint8List image = await Helpers.getDefaultImageUint8List();
     Tiers tier0 = new Tiers(image ,"Client Passagé", null, 0, 0, 0, "adresse", "ville", "telephone", "000000", "fax", "email", 1000, 0, 0, false);

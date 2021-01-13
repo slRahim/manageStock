@@ -150,7 +150,10 @@ class _PiecesFragmentState extends State<PiecesFragment> {
     return Scaffold(
         floatingActionButton: FloatingActionButton(
           onPressed: () {
-             Navigator.of(context).pushNamed(RoutesKeys.addPiece, arguments: new Piece.typePiece(widget.peaceType));
+             Navigator.of(context).pushNamed(RoutesKeys.addPiece, arguments: new Piece.typePiece(widget.peaceType))
+                 .then((value){
+               _dataSource.refresh();
+             });
           },
           child: Icon(Icons.add),
         ),

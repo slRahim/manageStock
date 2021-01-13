@@ -213,7 +213,7 @@ class _AddArticlePageState extends State<AddArticlePage>  with AutomaticKeepAliv
                       Navigator.of(context)
                           .pushReplacementNamed(RoutesKeys.addArticle, arguments: widget.arguments)
                     } else{
-                      Navigator.pop(context)
+                      Navigator.pop(context),
                     }
                   } else{
                     Navigator.pop(context),

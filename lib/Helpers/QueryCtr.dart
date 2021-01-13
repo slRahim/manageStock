@@ -237,8 +237,10 @@ class QueryCtr {
 
   Future<bool> pieceHasCredit () async{
     var dbClient = await _databaseHelper.db ;
-    var res = await dbClient.query(DbTablesNames.pieces,where: "Reste > 0");
-    return res.isEmpty ;
+    String query = "Select Count(*) From Pieces Where Reste > 0";
+    var res = await dbClient.rawQuery(query);
+
+    return (res.first["Count(*)"] > 1)  ;
   }
 
   Future<List<Article>> getJournalPiece(Piece piece , {bool local,String searchTerm,Map<String, dynamic> filters}) async{

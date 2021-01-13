@@ -142,7 +142,10 @@ class _TresorieFragmentState extends State<TresorieFragment> {
     return Scaffold(
         floatingActionButton: FloatingActionButton(
           onPressed: () {
-            Navigator.of(context).pushNamed(RoutesKeys.addTresorie, arguments: new Tresorie.init());
+            Navigator.of(context).pushNamed(RoutesKeys.addTresorie, arguments: new Tresorie.init())
+                .then((value){
+              _dataSource.refresh();
+            });
           },
           child: Icon(Icons.add),
         ),
