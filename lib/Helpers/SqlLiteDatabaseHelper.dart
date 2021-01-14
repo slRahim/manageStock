@@ -9,8 +9,9 @@ import 'package:path/path.dart';
 import 'package:gestmob/models/Article.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:path_provider/path_provider.dart';
-
 import 'Helpers.dart';
+import 'dart:convert' as convert;
+import 'package:encrypt/encrypt.dart' as encrypt ;
 
 class SqlLiteDatabaseHelper {
 
@@ -18,7 +19,29 @@ class SqlLiteDatabaseHelper {
   factory SqlLiteDatabaseHelper() => _instance;
   SqlLiteDatabaseHelper.internal();
 
+  static const SECRET_KEY = "2020_PRIVATES_KEYS_ENCRYPTS_2020";
+  static const DATABASE_VERSION = 1;
   static Database _db;
+
+  List<String> db_tables =[
+    DbTablesNames.profile,
+    DbTablesNames.articles ,
+    DbTablesNames.pieces ,
+    DbTablesNames.tiers ,
+    DbTablesNames.articlesFamilles ,
+    DbTablesNames.tiersFamille ,
+    DbTablesNames.articlesMarques ,
+    DbTablesNames.tresorie ,
+    DbTablesNames.categorieTresorie,
+    DbTablesNames.reglementTresorie,
+    DbTablesNames.formatPiece,
+    DbTablesNames.formatPrint,
+    DbTablesNames.journaux,
+    DbTablesNames.transformer,
+    DbTablesNames.defaultPrinter,
+    DbTablesNames.articlesTva ,
+    DbTablesNames.myparams,
+  ];
 
   Future<Database> get db async {
     if (_db != null) {
@@ -30,7 +53,7 @@ class SqlLiteDatabaseHelper {
 
   initDb() async {
     String dbPath = await _databasePath();
-    Database database = await openDatabase(dbPath, version: 1, onCreate: _onCreate);
+    Database database = await openDatabase(dbPath, version: DATABASE_VERSION, onCreate: _onCreate , onUpgrade:_onUpgrade);
     return database;
   }
 
@@ -41,7 +64,6 @@ class SqlLiteDatabaseHelper {
 
 
   void _onCreate(Database db, int version) async {
-
     await createProfileTable(db, version);
     await createArticlesTable(db, version);
     await createTiersTable(db, version);
@@ -55,6 +77,25 @@ class SqlLiteDatabaseHelper {
     await createTriggersTresorie (db,version);
     await setInitialData(db, version);
 
+  }
+
+  FutureOr<void> _onUpgrade(Database db , int oldVersion, int newVersion ) async {
+    for (var migration = oldVersion; migration < newVersion; migration++)
+    {
+      this._onUpgrades["from_version_${migration}_to_version_${migration+1}"](db);
+    }
+  }
+
+  Map<String,Function> _onUpgrades = {
+    'from_version_1_to_version_2':(Database db) async {
+
+    },
+
+  };
+
+  Future deleteDB() async {
+    String path = await _databasePath();
+    await deleteDatabase(path);
   }
 
 //*********************************************************************************************************************************************
