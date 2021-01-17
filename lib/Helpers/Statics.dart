@@ -18,6 +18,19 @@ class Statics {
   ];
   static List<int> tarificationItems = [1, 2, 3];
   static List<String> tiersItems = ["Clients","Cl/Fourr" ,"Fournisseurs"];
+
+  static List<int> echeances = [1,3,7,15,21,30];
+  static List<String> repeateNotifications = [
+    "Dailly",
+    "Every Sunday",
+    "Every Monday",
+    "Every Tuesday",
+    "Every Wednesday",
+    "Every Thursday",
+    "Every Friday",
+    "Every Saturday"
+  ];
+  static List<String> languages = ["English (ENG)", "French (FR)", "Arabic (AR)"];
 }
 
 class Profiles {
@@ -35,6 +48,7 @@ class RoutesKeys {
   static const addPiece = '/add_piece';
   static const addTresorie = '/add_tresorie';
   static const settingsPage = '/settingsPage';
+  static const driveListing = '/drivePage';
   static const helpPage = '/helpPage';
 }
 

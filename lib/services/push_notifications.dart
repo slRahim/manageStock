@@ -1,6 +1,9 @@
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
+import 'package:gestmob/Helpers/Helpers.dart';
 import 'package:gestmob/Helpers/QueryCtr.dart';
+import 'package:gestmob/Helpers/Statics.dart';
+import 'package:gestmob/models/HomeItem.dart';
 import 'package:gestmob/models/MyParams.dart';
 import 'local_notification.dart';
 
@@ -16,9 +19,9 @@ class PushNotificationsManager extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    notificationPlugin.setOnNotificationClick(onNotificationClick);
     configureCloudMessaginCallbacks();
     configureLocalNotification() ;
-    notificationPlugin.setOnNotificationClick(onNotificationClick);
     return child;
   }
 
@@ -32,11 +35,11 @@ class PushNotificationsManager extends StatelessWidget {
               title: message['notification']['title'],
               payload: message['data']['type']);
 
-          onNotificationClick(message['data']['type']);
-        } else
+        } else{
           notificationPlugin.showNotification(
               body: message['notification']['body'],
               title: message['notification']['title']);
+        }
       },
       onLaunch: (Map<String, dynamic> message) async {
         print("onLaunch: $message");
@@ -47,14 +50,11 @@ class PushNotificationsManager extends StatelessWidget {
     );
   }
 
-  // pour créer des notification pour chaque piece non payée
-  //on recupere la liste , ajout de navigator vers la pieces par
-  //la methode onNotificationClick
   configureLocalNotification()async{
     _myParams = await _queryCtr.getAllParams();
     _pieceHasCredit = await _queryCtr.pieceHasCredit();
 
-    if(_pieceHasCredit){
+    if(true){
       if(_myParams.notifications){
         switch(_myParams.notificationDay){
           case 0 :
@@ -72,8 +72,8 @@ class PushNotificationsManager extends StatelessWidget {
     }
   }
 
-
-  onNotificationClick(String payload) {
+  onNotificationClick(context,String payload) {
     print('taped notification : $payload');
+    Navigator.pushNamed(context, RoutesKeys.settingsPage);
   }
 }

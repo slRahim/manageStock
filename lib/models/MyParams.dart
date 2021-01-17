@@ -8,11 +8,12 @@ class MyParams {
   bool _notifications ;
   String _notificationTime ;
   int _notificationDay ;
+  int _echeance ;
 
   MyParams.init();
 
   MyParams(this._id, this._tarification, this._tva , this._timbre ,
-      this._notifications , this._notificationTime , this._notificationDay);
+      this._notifications , this._notificationTime , this._notificationDay , this._echeance);
 
   MyParams.frommMap(dynamic map){
     this._id=map["id"];
@@ -22,6 +23,7 @@ class MyParams {
     this._notifications=(map["Notifications"] == 1)? true :false;
     this._notificationTime=map["Notification_time"];
     this._notificationDay = map["Notification_day"];
+    this._echeance = map["Echeance"];
   }
 
   Map<String , dynamic> toMap(){
@@ -33,8 +35,16 @@ class MyParams {
     map["Notifications"]=(this._notifications)?1:0;
     map["Notification_time"]=this._notificationTime;
     map["Notification_day"]=this._notificationDay;
+    map["Echeance"] = this._echeance ;
 
     return map ;
+  }
+
+
+  int get echeance => _echeance;
+
+  set echeance(int value) {
+    _echeance = value;
   }
 
   int get notificationDay => _notificationDay;

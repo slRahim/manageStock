@@ -142,14 +142,6 @@ class _GridHomeWidgetState extends State<GridHomeWidget> {
         title: Text(_appBarTitle),
         backgroundColor: Theme.of(context).appBarTheme.color,
         centerTitle: true,
-        // actions: [
-        //   IconButton(
-        //     icon: Icon(Icons.error , color: Colors.white,),
-        //     onPressed: (){
-        //
-        //     },
-        //   )
-        // ],
       ),
       body: Container(
           alignment: Alignment.center,
@@ -216,7 +208,6 @@ class _GridHomeWidgetState extends State<GridHomeWidget> {
 
   //get items list +order +
   Future<List<DraggableItem>> asyncStart() async {
-
     for (var i = 0, j = homeItemList.length; i < j; i++) {
       HomeDraggableItem item = new HomeDraggableItem(index: i, context: context, data: homeItemList[i]);
 

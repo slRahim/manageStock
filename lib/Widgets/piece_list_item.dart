@@ -12,6 +12,7 @@ import 'package:gestmob/models/Piece.dart';
 import 'package:intl/intl.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:sliding_card/sliding_card.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import 'CustomWidgets/list_tile_card.dart';
 
@@ -162,10 +163,19 @@ class _PieceListItemState extends State<PieceListItem> {
               }
           ),
         ],
+        secondaryActions: [
+          IconSlideAction(
+            color: Colors.white10,
+            iconWidget: Icon(Icons.phone_enabled,size: 50, color: Colors.green,),
+            onTap: () async{
+              await _makePhoneCall("tel:${widget.piece.mobileTier}");
+            },
+            foregroundColor: Colors.green,
+          ),
+        ],
       ),
     );
   }
-
 
   Widget getIcon() {
     switch (widget.piece.mov){
@@ -178,6 +188,14 @@ class _PieceListItemState extends State<PieceListItem> {
       case 0 :
         return Icon(Icons.check_circle_outline , color: Colors.black45,size: 26,);
         break;
+    }
+  }
+
+  Future<void> _makePhoneCall(String phone) async {
+    if (await canLaunch(phone)) {
+      await launch(phone);
+    } else {
+      throw 'Could not launch $phone';
     }
   }
 
@@ -234,5 +252,7 @@ class _PieceListItemState extends State<PieceListItem> {
       },
     )..show();
   }
+
+
 }
 

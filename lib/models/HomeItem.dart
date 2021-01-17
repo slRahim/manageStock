@@ -26,6 +26,7 @@ const String drawerItemAvoirFournisseurId = "drawerItemAvoirFournisseurId";
 const String drawerItemBonDeCommandeId = "drawerItemBonDeCommandeId";
 const String drawerItemHelpId = "drawerItemHelpId";
 const String drawerItemExitId = "drawerItemExitId";
+const String allPieceWithCreditId = "allPieceWithCreditId";
 
 class HomeItem {
   String id;

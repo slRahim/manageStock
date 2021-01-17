@@ -16,6 +16,7 @@ class Piece{
   int _mov;
   String _num_piece;
   String _raisonSociale;
+  String _mobileTier;
   String _piece;
   DateTime _date;
 
@@ -43,6 +44,7 @@ class Piece{
     this._piece = obj["Piece"].toString();
     this._date = DateTime.fromMillisecondsSinceEpoch(obj["Date"]);
     this._raisonSociale = obj["RaisonSociale"];
+    this._mobileTier = obj["Mobile"];
     this._tarification = obj["Tarification"];
     this._etat = obj["Etat"];
     this._transformer = obj["Transformer"];
@@ -223,6 +225,13 @@ class Piece{
 
   set remise(double value) {
     _remise = value;
+  }
+
+
+  String get mobileTier => _mobileTier;
+
+  set mobileTier(String value) {
+    _mobileTier = value;
   }
 
   @override

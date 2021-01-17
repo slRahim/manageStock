@@ -32,6 +32,7 @@ class HomeDraggableItem extends DraggableItem {
         }
       },
       child: Container(
+        padding: EdgeInsetsDirectional.only(start: 5 , end :5),
         width: 92.0,
         height: 92.0,
         decoration: BoxDecoration(

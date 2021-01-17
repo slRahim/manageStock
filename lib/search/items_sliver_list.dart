@@ -25,7 +25,7 @@ class ItemsSliverList extends StatefulWidget {
   final bool canRefresh;
   final int tarification ;
 
-  ItemsSliverList({Key key, @required this.dataSource, this.onItemSelected, this.canRefresh , this.tarification}) : super(key: key);
+  ItemsSliverList({Key key, @required this.dataSource, this.onItemSelected, this.canRefresh , this.tarification,}) : super(key: key);
 
   @override
   _ItemsSliverListState createState() => _ItemsSliverListState();

@@ -13,6 +13,7 @@ import 'package:gestmob/ui/HelpPage.dart';
 import 'package:gestmob/ui/LoginPage.dart';
 import 'package:gestmob/ui/SettingsPage.dart';
 import 'package:gestmob/ui/AddArticlePage.dart';
+import 'package:gestmob/ui/backup_restore_listing.dart';
 import 'package:gestmob/ui/home.dart';
 
 import 'QueryCtr.dart';
@@ -70,6 +71,11 @@ class RouteGenerator {
         return MaterialPageRoute(
           builder: (_) => SettingsPage(),
         );
+      case RoutesKeys.driveListing:
+        return MaterialPageRoute(
+          builder: (_) => Selectfromdrive(),
+        );
+        break;
       case RoutesKeys.helpPage:
         return MaterialPageRoute(
           builder: (_) => HelpPage(),

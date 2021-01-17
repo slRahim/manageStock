@@ -83,6 +83,11 @@ dependencies:
   flutter_slidable:
   awesome_dialog:
 
+  googleapis: ^0.56.1
+  googleapis_auth:
+  google_sign_in: ^4.5.9
+
+
   flutter_local_notifications: ^1.4.4+1
 
   #  flutter_plugin_android_lifecycle: ^1.0.8

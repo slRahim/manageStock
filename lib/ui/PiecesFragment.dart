@@ -24,10 +24,11 @@ class PiecesFragment extends StatefulWidget {
   final int clientFourn;
   final String peaceType ;
   final int tierId ;
+  final bool fromNotification ;
 
   final Function(dynamic) onConfirmSelectedItem;
 
-  const PiecesFragment ({Key key, this.clientFourn , this.peaceType,this.tierId,this.onConfirmSelectedItem}): super(key: key);
+  const PiecesFragment ({Key key, this.clientFourn , this.peaceType,this.tierId,this.onConfirmSelectedItem,this.fromNotification}): super(key: key);
 
   @override
   _PiecesFragmentState createState() => _PiecesFragmentState();
@@ -40,6 +41,7 @@ class _PiecesFragmentState extends State<PiecesFragment> {
   var _filterMap = new Map<String, dynamic>();
   var _emptyFilterMap = new Map<String, dynamic>();
   var _tier_id ;
+  var _fromNotification ;
 
   bool _filterInHasCredit = false;
   bool _savedFilterHasCredit = false;
@@ -53,6 +55,12 @@ class _PiecesFragmentState extends State<PiecesFragment> {
   Future<void> initState() {
     super.initState();
     _tier_id = widget.tierId ;
+    _fromNotification = widget.fromNotification ;
+    if(_fromNotification){
+      setState(() {
+        _savedFilterHasCredit = true ;
+      });
+    }
     fillFilter(_filterMap);
     fillFilter(_emptyFilterMap);
     _dataSource = SliverListDataSource(ItemsListTypes.pieceList, _filterMap);
@@ -65,6 +73,7 @@ class _PiecesFragmentState extends State<PiecesFragment> {
     filter["Credit"] = _savedFilterHasCredit ;
     filter["Draft"] = _savedFilterIsDraft ;
     filter["Tierid"] = _tier_id ;
+    filter["FromNotification"] = _fromNotification ;
   }
 
   Future<Widget> futureInitState() async {
@@ -148,7 +157,7 @@ class _PiecesFragmentState extends State<PiecesFragment> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        floatingActionButton: FloatingActionButton(
+        floatingActionButton: (!_fromNotification)?FloatingActionButton(
           onPressed: () {
              Navigator.of(context).pushNamed(RoutesKeys.addPiece, arguments: new Piece.typePiece(widget.peaceType))
                  .then((value){
@@ -156,7 +165,7 @@ class _PiecesFragmentState extends State<PiecesFragment> {
              });
           },
           child: Icon(Icons.add),
-        ),
+        ):null,
         appBar: SearchBar(
           searchController: searchController,
           mainContext: context,
@@ -198,7 +207,7 @@ class _PiecesFragmentState extends State<PiecesFragment> {
         ),
         body: ItemsSliverList(
             dataSource: _dataSource,
-            onItemSelected: widget.onConfirmSelectedItem != null? (selectedItem) {
+            onItemSelected: (widget.onConfirmSelectedItem != null ) ? (selectedItem) {
               widget.onConfirmSelectedItem(selectedItem);
               Navigator.pop(context);
             } : null

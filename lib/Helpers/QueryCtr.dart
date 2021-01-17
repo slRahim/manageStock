@@ -32,13 +32,24 @@ import 'Helpers.dart';
 class QueryCtr {
   SqlLiteDatabaseHelper _databaseHelper = SqlLiteDatabaseHelper();
 
+  Future<void> createBackup()async{
+    await _databaseHelper.generateBackup(isEncrypted: true);
+  }
+
+  Future<void> clearAll()async{
+    var res = await _databaseHelper.clearAllTables();
+  }
+
+  Future<void> restoreBackup(File backup)async{
+    await _databaseHelper.restoreBackup(backup,isEncrypted: true);
+  }
+
   Future<Profile> getProfileById(int id) async {
     Database dbClient = await _databaseHelper.db;
     var res = await dbClient.rawQuery('SELECT * FROM ' + DbTablesNames.profile + ' where id like $id');
     Profile profile = new Profile.fromMap(res[0]);
     return profile;
   }
-
 
   Future<List<Article>> getAllArticles({int offset, int limit, String searchTerm, Map<String, dynamic> filters}) async {
     String query = 'SELECT * FROM ' + DbTablesNames.articles;
@@ -144,7 +155,7 @@ class QueryCtr {
   }
 
   Future<List<Piece>> getAllPieces(int offset, int limit, {String searchTerm, Map<String, dynamic> filters}) async {
-    String query = 'SELECT Pieces.*,Tiers.RaisonSociale FROM Pieces JOIN Tiers ON Pieces.Tier_id = Tiers.id';
+    String query = 'SELECT Pieces.*,Tiers.RaisonSociale,Tiers.Mobile FROM Pieces JOIN Tiers ON Pieces.Tier_id = Tiers.id';
 
     String _piece = filters["Piece"];
     int _mov = filters["Mov"] != null? filters["Mov"] : 0;
@@ -177,11 +188,16 @@ class QueryCtr {
 
     query += " where Num_piece like '%${searchTerm??''}%'";
 
-    query += _pieceFilter;
-    query += _movFilter;
-    query+=_tierFilter ;
-    query += _creditFilter ;
+    if(filters["FromNotification"] == true){
+      query += " AND Mov = 1";
+      query += _creditFilter ;
 
+    }else{
+      query += _pieceFilter;
+      query += _movFilter;
+      query+=_tierFilter ;
+      query += _creditFilter ;
+    }
 
     query += ' ORDER BY id DESC';
 
@@ -193,6 +209,15 @@ class QueryCtr {
     for (var i = 0, j = res.length; i < j; i++) {
       Piece piece = Piece.fromMap(res[i]);
       list.add(piece);
+    }
+
+    if(filters["FromNotification"] == true){
+      MyParams _params = await getAllParams();
+      list.forEach((e) {
+        if(e.date.add(Duration(days: Statics.echeances.elementAt(_params.echeance))).isAfter(DateTime.now())){
+          list.remove(e);
+        }
+      });
     }
 
     return list;
@@ -237,10 +262,22 @@ class QueryCtr {
 
   Future<bool> pieceHasCredit () async{
     var dbClient = await _databaseHelper.db ;
-    String query = "Select Count(*) From Pieces Where Reste > 0";
-    var res = await dbClient.rawQuery(query);
+    var res = await dbClient.query(DbTablesNames.pieces , where: "Reste > 0 AND (Piece LIKE 'BL' OR Piece LIKE 'FC') ");
+    MyParams _params = await getAllParams();
+    
+    // List<Piece> list = new List<Piece>();
+    // res.forEach((p) {
+    //   Piece piece = Piece.fromMap(p);
+    //   list.add(piece);
+    // });
 
-    return (res.first["Count(*)"] > 1)  ;
+    // list.forEach((e) {
+    //   if(e.date.add(Duration(days: Statics.echeances.elementAt(_params.echeance))).isBefore(DateTime.now())){
+    //     return true ;
+    //   }
+    // });
+    
+    return (res.length>0) ;
   }
 
   Future<List<Article>> getJournalPiece(Piece piece , {bool local,String searchTerm,Map<String, dynamic> filters}) async{
@@ -306,7 +343,6 @@ class QueryCtr {
 
     return res ;
   }
-
 
   Future<List<Tresorie>> getAllTresories(int offset, int limit, {String searchTerm, Map<String, dynamic> filters}) async {
     String query = 'SELECT * FROM Tresories';

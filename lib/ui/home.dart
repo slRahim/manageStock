@@ -11,6 +11,7 @@ import 'package:gestmob/Widgets/navDrawer.dart';
 import 'package:gestmob/cubit/home_cubit.dart';
 import 'package:gestmob/generated/l10n.dart';
 import 'package:gestmob/models/HomeItem.dart';
+import 'package:gestmob/services/local_notification.dart';
 import 'package:gestmob/ui/AddArticlePage.dart';
 
 import 'GridHomeFragment.dart';
@@ -25,7 +26,6 @@ HomeState _currentHomeState = null;
 DateTime currentBackPressTime;
 
 class _homeState extends State<home> {
-
 
   @override
   Widget build(BuildContext context) {

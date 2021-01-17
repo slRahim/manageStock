@@ -5,6 +5,7 @@ import 'dart:typed_data';
 
 import 'package:gestmob/Helpers/Statics.dart';
 import 'package:gestmob/models/Tiers.dart';
+import 'package:gestmob/services/cloud_backup_restore.dart';
 import 'package:path/path.dart';
 import 'package:gestmob/models/Article.dart';
 import 'package:sqflite/sqflite.dart';
@@ -22,6 +23,7 @@ class SqlLiteDatabaseHelper {
   static const SECRET_KEY = "2020_PRIVATES_KEYS_ENCRYPTS_2020";
   static const DATABASE_VERSION = 1;
   static Database _db;
+  GoogleApi _googleApi =new GoogleApi() ;
 
   List<String> db_tables =[
     DbTablesNames.profile,
@@ -97,6 +99,89 @@ class SqlLiteDatabaseHelper {
     String path = await _databasePath();
     await deleteDatabase(path);
   }
+
+  Future clearAllTables() async {
+    try {
+      var dbs = await this.db;
+      for (String table  in db_tables ) {
+        await dbs.delete(table);
+      }
+    } catch(e){
+
+    }
+  }
+
+  Future<void> generateBackup({bool isEncrypted = true}) async {
+    print('GENERATE BACKUP');
+
+    var dbs = await this.db;
+
+    List data =[];
+
+    List<Map<String,dynamic>> listMaps=[];
+
+    for (var i = 0; i < db_tables.length; i++)
+    {
+
+      listMaps = await dbs.query(db_tables[i]);
+
+      data.add(listMaps);
+
+    }
+
+    List backups=[db_tables,data];
+
+    String json =convert.jsonEncode(backups);
+
+    if(isEncrypted) {
+      final key = encrypt.Key.fromUtf8(SECRET_KEY);
+      final iv = encrypt.IV.fromLength(16);
+      final encrypter = encrypt.Encrypter(encrypt.AES(key));
+      final encrypted = encrypter.encrypt(json, iv: iv);
+
+      json =  encrypted.base64;
+    }
+
+    //file upload
+    final directory = await getApplicationDocumentsDirectory();
+
+    File file = new File('${directory.path}/gestmob_Backup${DateTime.now().toString()}.txt');
+    file.writeAsString(json);
+
+    await _googleApi.upload(file);
+  }
+
+  Future<void>restoreBackup(File backupFile,{ bool isEncrypted = true})async{
+    await clearAllTables() ;
+
+    String backup = await backupFile.readAsString();
+    print(backup) ;
+
+    var dbs = await this.db;
+
+    Batch batch = dbs.batch();
+
+    final key = encrypt.Key.fromUtf8(SECRET_KEY);
+
+    final iv = encrypt.IV.fromLength(16);
+
+    final encrypter = encrypt.Encrypter(encrypt.AES(key));
+
+    List json = convert.jsonDecode(isEncrypted ? encrypter.decrypt64(backup,iv:iv):backup);
+
+    for (var i = 0; i < json[0].length; i++)
+    {
+      for (var k = 0; k < json[1][i].length; k++)
+      {
+        batch.insert(json[0][i],json[1][i][k]);
+      }
+    }
+
+    await batch.commit(continueOnError:false,noResult:true);
+
+    print('RESTORE BACKUP');
+  }
+
 
 //*********************************************************************************************************************************************
 //**********************************************creation des tables***************************************************************************
@@ -332,7 +417,8 @@ class SqlLiteDatabaseHelper {
         Timbre integer DEFAULT 0,
         Notifications integer DEFAULT 1,
         Notification_time Varchar(10),
-        Notification_day integer
+        Notification_day integer,
+        Echeance integer
         )""");
 
     await db.execute('''CREATE TABLE IF NOT EXISTS FormatPrints (
@@ -1071,7 +1157,7 @@ class SqlLiteDatabaseHelper {
     batch.rawInsert('INSERT INTO FormatPiece(Format , Piece , Current_index) VALUES("XXXX/YYYY"  , "AC" , 0)');
     batch.rawInsert('INSERT INTO FormatPiece(Format , Piece , Current_index) VALUES("XXXX/YYYY"  , "TR" , 0)');
 
-    batch.rawInsert("INSERT INTO MyParams VALUES(1,2,0,0,1,'9:01',0)");
+    batch.rawInsert("INSERT INTO MyParams VALUES(1,2,0,0,1,'9:01',0,0)");
 
     Uint8List image = await Helpers.getDefaultImageUint8List();
     Tiers tier0 = new Tiers(image ,"Client Passagé", null, 0, 0, 0, "adresse", "ville", "telephone", "000000", "fax", "email", 1000, 0, 0, false);

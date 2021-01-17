@@ -26,24 +26,16 @@ class SettingsPage extends StatefulWidget {
 class _SettingsPageState extends State<SettingsPage> {
   bool _finishedLoading = false;
   SharedPreferences _prefs;
-  List<String> _languages = ["English (ENG)", "French (FR)", "Arabic (AR)"];
+
   bool _prices3;
   bool _tva;
   bool _timbre;
   String _language;
   bool _notifications;
   String _dayTime;
-  List<String> _repeateNotifications = [
-    "Dailly",
-    "Every Sunday",
-    "Every Monday",
-    "Every Tuesday",
-    "Every Wednesday",
-    "Every Thursday",
-    "Every Friday",
-    "Every Saturday"
-  ];
+
   String _repeateNotification;
+  int _echeance;
 
   QueryCtr _queryCtr = new QueryCtr();
   MyParams _myParams;
@@ -51,7 +43,7 @@ class _SettingsPageState extends State<SettingsPage> {
   @override
   Future<void> initState() {
     super.initState();
-    _language = _languages[0];
+    _language = Statics.languages[0];
     futureInit().then((value) {
       setState(() {
         _finishedLoading = true;
@@ -65,22 +57,22 @@ class _SettingsPageState extends State<SettingsPage> {
     switch (_prefs.getString("myLocale")) {
       case ("en"):
         setState(() {
-          _language = _languages[0];
+          _language = Statics.languages[0];
         });
         break;
       case ("fr"):
         setState(() {
-          _language = _languages[1];
+          _language = Statics.languages[1];
         });
         break;
       case ("ar"):
         setState(() {
-          _language = _languages[2];
+          _language = Statics.languages[2];
         });
         break;
       default:
         setState(() {
-          _language = _languages[0];
+          _language = Statics.languages[0];
         });
         break;
     }
@@ -94,7 +86,9 @@ class _SettingsPageState extends State<SettingsPage> {
     _timbre = item.timbre;
     _notifications = item.notifications;
     _dayTime = item.notificationTime;
-    _repeateNotification = _repeateNotifications[item.notificationDay];
+    _repeateNotification = Statics.repeateNotifications[item.notificationDay];
+    _echeance = Statics.echeances[item.echeance];
+
   }
 
   @override
@@ -119,7 +113,7 @@ class _SettingsPageState extends State<SettingsPage> {
                       },
                       btnOkText: S.current.oui,
                       btnOkOnPress: () async {
-                        await updateItem();
+                        await _updateItem();
                       })
                     ..show();
                 }),
@@ -152,7 +146,7 @@ class _SettingsPageState extends State<SettingsPage> {
                           dialogType: DialogType.QUESTION,
                           animType: AnimType.BOTTOMSLIDE,
                           title: "Choose a language",
-                          body: languageDialog(),
+                          body: _languageDialog(),
                           btnCancelText: S.current.non,
                           btnCancelOnPress: () {},
                           btnOkText: S.current.oui,
@@ -226,6 +220,7 @@ class _SettingsPageState extends State<SettingsPage> {
                     title: 'Notification Time',
                     leading: Icon(Icons.access_time_outlined),
                     subtitle: _dayTime,
+                    enabled: _notifications,
                     onTap: () async {
                       await showTimePicker(
                         context: context,
@@ -240,13 +235,14 @@ class _SettingsPageState extends State<SettingsPage> {
                   SettingsTile(
                     title: 'Repeat Notification',
                     subtitle: _repeateNotification,
+                    enabled: _notifications,
                     leading: Icon(Icons.today_outlined),
                     onTap: () async {
                       AwesomeDialog(
                           context: context,
                           dialogType: DialogType.QUESTION,
                           animType: AnimType.BOTTOMSLIDE,
-                          body: dayofWeekDialog(),
+                          body: _dayofWeekDialog(),
                           btnCancelText: S.current.non,
                           btnCancelOnPress: () {},
                           btnOkText: S.current.oui,
@@ -258,6 +254,48 @@ class _SettingsPageState extends State<SettingsPage> {
                         ..show();
                     },
                   ),
+                  SettingsTile(
+                    title: 'Echeance',
+                    subtitle: "$_echeance Day (s)",
+                    enabled: _notifications,
+                    leading: Icon(Icons.calendar_today),
+                    onTap: () async {
+                      AwesomeDialog(
+                          context: context,
+                          dialogType: DialogType.QUESTION,
+                          animType: AnimType.BOTTOMSLIDE,
+                          body: _echeanceDialog(),
+                          btnCancelText: S.current.non,
+                          btnCancelOnPress: () {},
+                          btnOkText: S.current.oui,
+                          btnOkOnPress: () async {
+                            setState(() {
+                              _echeance;
+                            });
+                          })
+                        ..show();
+                    },
+                  ),
+                ],
+              ),
+              SettingsSection(
+                title: 'Backup & Restore',
+                tiles: [
+                  SettingsTile(
+                    title: 'Create Backup',
+                    leading: Icon(Icons.backup),
+                    onTap: () async{
+                       // await _queryCtr.createBackup();
+                    },
+                  ),
+                  SettingsTile(
+                    title: 'Restore Data',
+                    leading: Icon(Icons.restore),
+                    onTap: () async {
+                      Navigator.pushNamed(context, RoutesKeys.driveListing)
+                          .then((value) => null);
+                    },
+                  ),
                 ],
               ),
             ],
@@ -265,7 +303,7 @@ class _SettingsPageState extends State<SettingsPage> {
     }
   }
 
-  languageDialog() {
+  _languageDialog() {
     return StatefulBuilder(
         builder: (context, setState) => Wrap(
               children: [
@@ -274,7 +312,7 @@ class _SettingsPageState extends State<SettingsPage> {
                   child: Column(
                     children: [
                       RadioListTile(
-                        value: _languages[0],
+                        value: Statics.languages[0],
                         groupValue: _language,
                         title: Text('English (ENG)'),
                         onChanged: (value) {
@@ -284,7 +322,7 @@ class _SettingsPageState extends State<SettingsPage> {
                         },
                       ),
                       RadioListTile(
-                        value: _languages[1],
+                        value: Statics.languages[1],
                         groupValue: _language,
                         title: Text('French (FR)'),
                         onChanged: (value) {
@@ -294,7 +332,7 @@ class _SettingsPageState extends State<SettingsPage> {
                         },
                       ),
                       RadioListTile(
-                        value: _languages[2],
+                        value: Statics.languages[2],
                         groupValue: _language,
                         title: Text('Arabic (AR)'),
                         onChanged: (value) {
@@ -325,7 +363,7 @@ class _SettingsPageState extends State<SettingsPage> {
     }
   }
 
-  dayofWeekDialog() {
+  _dayofWeekDialog() {
     ScrollController _controller = new ScrollController();
     return StatefulBuilder(
         builder: (context, setState) => Wrap(
@@ -339,7 +377,7 @@ class _SettingsPageState extends State<SettingsPage> {
                       controller: _controller,
                       children: [
                         RadioListTile(
-                          value: _repeateNotifications[0],
+                          value: Statics.repeateNotifications[0],
                           groupValue: _repeateNotification,
                           title: Text('Dailly'),
                           onChanged: (value) {
@@ -349,7 +387,7 @@ class _SettingsPageState extends State<SettingsPage> {
                           },
                         ),
                         RadioListTile(
-                          value: _repeateNotifications[1],
+                          value: Statics.repeateNotifications[1],
                           groupValue: _repeateNotification,
                           title: Text('Every Sunday'),
                           onChanged: (value) {
@@ -359,7 +397,7 @@ class _SettingsPageState extends State<SettingsPage> {
                           },
                         ),
                         RadioListTile(
-                          value: _repeateNotifications[2],
+                          value: Statics.repeateNotifications[2],
                           groupValue: _repeateNotification,
                           title: Text('Every Monday'),
                           onChanged: (value) {
@@ -369,7 +407,7 @@ class _SettingsPageState extends State<SettingsPage> {
                           },
                         ),
                         RadioListTile(
-                          value: _repeateNotifications[3],
+                          value: Statics.repeateNotifications[3],
                           groupValue: _repeateNotification,
                           title: Text('Every Tuesday'),
                           onChanged: (value) {
@@ -379,7 +417,7 @@ class _SettingsPageState extends State<SettingsPage> {
                           },
                         ),
                         RadioListTile(
-                          value: _repeateNotifications[4],
+                          value: Statics.repeateNotifications[4],
                           groupValue: _repeateNotification,
                           title: Text('Every Wednesday'),
                           onChanged: (value) {
@@ -389,7 +427,7 @@ class _SettingsPageState extends State<SettingsPage> {
                           },
                         ),
                         RadioListTile(
-                          value: _repeateNotifications[5],
+                          value: Statics.repeateNotifications[5],
                           groupValue: _repeateNotification,
                           title: Text('Every Thursday'),
                           onChanged: (value) {
@@ -399,7 +437,7 @@ class _SettingsPageState extends State<SettingsPage> {
                           },
                         ),
                         RadioListTile(
-                          value: _repeateNotifications[6],
+                          value: Statics.repeateNotifications[6],
                           groupValue: _repeateNotification,
                           title: Text('Every Friday'),
                           onChanged: (value) {
@@ -409,7 +447,7 @@ class _SettingsPageState extends State<SettingsPage> {
                           },
                         ),
                         RadioListTile(
-                          value: _repeateNotifications[7],
+                          value: Statics.repeateNotifications[7],
                           groupValue: _repeateNotification,
                           title: Text('Every Saturday'),
                           onChanged: (value) {
@@ -426,14 +464,95 @@ class _SettingsPageState extends State<SettingsPage> {
             ));
   }
 
-  Future<void> updateItem() async {
+  _echeanceDialog() {
+    ScrollController _controller = new ScrollController();
+    return StatefulBuilder(
+        builder: (context, setState) => Wrap(
+          children: [
+            Container(
+              height: 220,
+              child: Scrollbar(
+                isAlwaysShown: true,
+                controller: _controller,
+                child: ListView(
+                  controller: _controller,
+                  children: [
+                    RadioListTile(
+                      value: Statics.echeances[0],
+                      groupValue: _echeance,
+                      title: Text('1 Day'),
+                      onChanged: (value) {
+                        setState(() {
+                          _echeance = value;
+                        });
+                      },
+                    ),
+                    RadioListTile(
+                      value: Statics.echeances[1],
+                      groupValue: _echeance,
+                      title: Text('3 Days'),
+                      onChanged: (value) {
+                        setState(() {
+                          _echeance = value;
+                        });
+                      },
+                    ),
+                    RadioListTile(
+                      value: Statics.echeances[2],
+                      groupValue: _echeance,
+                      title: Text('7 Days'),
+                      onChanged: (value) {
+                        setState(() {
+                          _echeance = value;
+                        });
+                      },
+                    ),
+                    RadioListTile(
+                      value: Statics.echeances[3],
+                      groupValue: _echeance,
+                      title: Text('15 Days'),
+                      onChanged: (value) {
+                        setState(() {
+                          _echeance = value;
+                        });
+                      },
+                    ),
+                    RadioListTile(
+                      value: Statics.echeances[4],
+                      groupValue: _echeance,
+                      title: Text('21 Days'),
+                      onChanged: (value) {
+                        setState(() {
+                          _echeance = value;
+                        });
+                      },
+                    ),
+                    RadioListTile(
+                      value: Statics.echeances[5],
+                      groupValue: _echeance,
+                      title: Text('30 Days'),
+                      onChanged: (value) {
+                        setState(() {
+                          _echeance = value;
+                        });
+                      },
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ],
+        ));
+  }
+
+  Future<void> _updateItem() async {
     _myParams.tarification = (_prices3) ? 3 : 2;
     _myParams.tva = _tva;
     _myParams.timbre = _timbre;
-    _myParams.notificationDay =
-        _repeateNotifications.indexOf(_repeateNotification);
+    _myParams.notificationDay = Statics.repeateNotifications.indexOf(_repeateNotification);
     _myParams.notifications = _notifications;
     _myParams.notificationTime = _dayTime;
+    _myParams.echeance = Statics.echeances.indexOf(_echeance);
 
     int id = -1;
     id = await _queryCtr.updateItemInDb(DbTablesNames.myparams, _myParams);
