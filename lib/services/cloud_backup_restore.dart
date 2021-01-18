@@ -1,5 +1,4 @@
 import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:googleapis/drive/v3.dart' as ga;
 import 'package:http/http.dart' as http;
@@ -43,16 +42,29 @@ class GoogleApi {
     return httpClient;
   }
 
+  //logout from account
   GoogleLogout() async {
     await _googleSignIn.signOut();
   }
 
+  //login to account
   GoogleLogin() async {
     if (_googleSignIn.currentUser == null) await GoogleLogout();
     await _googleSignIn.signIn();
     var user = _googleSignIn.currentUser;
     // _GoogleLogout();
     return user;
+  }
+
+  //listing des files ds le drive
+  Future<ga.FileList> ListGoogleDriveFiles() async {
+    var client = await getHttpClient();
+    if (client == null) return null;
+    var drive = ga.DriveApi(client);
+
+    var files = await drive.files.list();
+
+    return files;
   }
 
   //Upload File to drive
@@ -75,16 +87,6 @@ class GoogleApi {
     GoogleLogout();
   }
 
-  //listing des files ds le drive
-  Future<ga.FileList> ListGoogleDriveFiles() async {
-    var client = await getHttpClient();
-    if (client == null) return null;
-    var drive = ga.DriveApi(client);
-
-    var files = await drive.files.list();
-
-    return files;
-  }
 
   //download file from drive
   DownloadGoogleDriveFile(String fName, String gdID) async {

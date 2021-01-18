@@ -7,6 +7,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:gestmob/Helpers/Helpers.dart';
 import 'package:gestmob/Helpers/QueryCtr.dart';
+import 'package:gestmob/Helpers/Statics.dart';
 import 'package:gestmob/Widgets/navDrawer.dart';
 import 'package:gestmob/cubit/home_cubit.dart';
 import 'package:gestmob/generated/l10n.dart';
@@ -26,6 +27,16 @@ HomeState _currentHomeState = null;
 DateTime currentBackPressTime;
 
 class _homeState extends State<home> {
+
+  @override
+  void initState() {
+    notificationPlugin.setOnNotificationClick(onNotificationClick);
+  }
+
+  onNotificationClick(String payload) {
+    print('taped notification from home: $payload');
+    Navigator.pushNamed(context, RoutesKeys.allPieces);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -109,4 +120,6 @@ class _homeState extends State<home> {
   Widget buildLoading() {
     return Center(child: CircularProgressIndicator());
   }
+
+
 }

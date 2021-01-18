@@ -7,22 +7,37 @@ import 'package:gestmob/models/HomeItem.dart';
 import 'package:gestmob/models/MyParams.dart';
 import 'local_notification.dart';
 
-class PushNotificationsManager extends StatelessWidget {
+class PushNotificationsManager extends StatefulWidget {
   Widget child;
 
+  PushNotificationsManager({Key key,this.child}):super(key: key);
+
+  @override
+  _PushNotificationsManagerState createState() => _PushNotificationsManagerState();
+}
+
+class _PushNotificationsManagerState extends State<PushNotificationsManager> {
   final FirebaseMessaging _firebaseMessaging = FirebaseMessaging();
   MyParams _myParams ;
   bool _pieceHasCredit ;
   QueryCtr _queryCtr=new QueryCtr() ;
 
-  PushNotificationsManager({this.child});
+  @override
+  void initState() {
+    super.initState();
+    futurinit();
+  }
+
+  futurinit() async {
+    notificationPlugin.setOnNotificationClick(onNotificationClick);
+    notificationPlugin.setListenerForLowerVersions(onNotificationInLowerVersions);
+    await configureCloudMessaginCallbacks();
+    await configureLocalNotification() ;
+  }
 
   @override
   Widget build(BuildContext context) {
-    notificationPlugin.setOnNotificationClick(onNotificationClick);
-    configureCloudMessaginCallbacks();
-    configureLocalNotification() ;
-    return child;
+    return widget.child ;
   }
 
   configureCloudMessaginCallbacks() async {
@@ -54,7 +69,7 @@ class PushNotificationsManager extends StatelessWidget {
     _myParams = await _queryCtr.getAllParams();
     _pieceHasCredit = await _queryCtr.pieceHasCredit();
 
-    if(true){
+    if(_pieceHasCredit){
       if(_myParams.notifications){
         switch(_myParams.notificationDay){
           case 0 :
@@ -70,10 +85,16 @@ class PushNotificationsManager extends StatelessWidget {
     }else{
       await notificationPlugin.cancelAllNotification();
     }
+
   }
 
-  onNotificationClick(context,String payload) {
-    print('taped notification : $payload');
-    Navigator.pushNamed(context, RoutesKeys.settingsPage);
+  onNotificationInLowerVersions(ReceivedNotification receivedNotification) {
+    print('Notification Received ${receivedNotification.id}');
+  }
+
+  onNotificationClick(String payload) {
+    print('taped notification from service: $payload');
   }
 }
+
+

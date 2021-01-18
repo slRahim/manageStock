@@ -6,6 +6,8 @@ import 'package:gestmob/models/Article.dart';
 import 'package:gestmob/models/ArticleFamille.dart';
 import 'package:gestmob/models/ArticleMarque.dart';
 import 'package:gestmob/models/ArticleTva.dart';
+import 'package:gestmob/models/ChargeTresorie.dart';
+import 'package:gestmob/models/CompteTresorie.dart';
 import 'package:gestmob/models/DefaultPrinter.dart';
 import 'package:gestmob/models/FormatPiece.dart';
 import 'package:gestmob/models/FormatPrint.dart';
@@ -161,7 +163,7 @@ class QueryCtr {
     int _mov = filters["Mov"] != null? filters["Mov"] : 0;
     int _tier_id = filters["Tierid"] != null ? filters["Tierid"] : null ;
 
-    String _pieceFilter = _piece != null? " AND Piece like '$_piece'" : "";
+    String _pieceFilter = _piece != null? " AND Piece like '$_piece'" : " AND (Piece like 'BL' OR Piece like 'FC')";
     String _movFilter = " AND Mov >= $_mov";
 
 
@@ -186,22 +188,16 @@ class QueryCtr {
     Database dbClient = await _databaseHelper.db;
     var res;
 
-    query += " where Num_piece like '%${searchTerm??''}%'";
+    query += " where (Num_piece like '%${searchTerm??''}%' OR Tiers.RaisonSociale like '%${searchTerm??''}%')";
 
-    if(filters["FromNotification"] == true){
-      query += " AND Mov = 1";
-      query += _creditFilter ;
 
-    }else{
-      query += _pieceFilter;
-      query += _movFilter;
-      query+=_tierFilter ;
-      query += _creditFilter ;
-    }
+    query += _pieceFilter;
+    query += _movFilter;
+    query+=_tierFilter ;
+    query += _creditFilter ;
 
     query += ' ORDER BY id DESC';
 
-    print(query);
 
     res = await dbClient.rawQuery(query);
 
@@ -211,13 +207,15 @@ class QueryCtr {
       list.add(piece);
     }
 
-    if(filters["FromNotification"] == true){
+    if(filters["Piece"] == null){
       MyParams _params = await getAllParams();
-      list.forEach((e) {
-        if(e.date.add(Duration(days: Statics.echeances.elementAt(_params.echeance))).isAfter(DateTime.now())){
-          list.remove(e);
+      List<Piece> listcredit = new List<Piece>();
+      for(int i=0 ; i<list.length;i++){
+        if(list[i].date.add(Duration(days: Statics.echeances[_params.echeance])).isBefore(DateTime.now())){
+          listcredit.add(list[i]);
         }
-      });
+      }
+      return listcredit ;
     }
 
     return list;
@@ -265,19 +263,19 @@ class QueryCtr {
     var res = await dbClient.query(DbTablesNames.pieces , where: "Reste > 0 AND (Piece LIKE 'BL' OR Piece LIKE 'FC') ");
     MyParams _params = await getAllParams();
     
-    // List<Piece> list = new List<Piece>();
-    // res.forEach((p) {
-    //   Piece piece = Piece.fromMap(p);
-    //   list.add(piece);
-    // });
+    List<Piece> list = new List<Piece>();
+    res.forEach((p) {
+      Piece piece = Piece.fromMap(p);
+      list.add(piece);
+    });
 
-    // list.forEach((e) {
-    //   if(e.date.add(Duration(days: Statics.echeances.elementAt(_params.echeance))).isBefore(DateTime.now())){
-    //     return true ;
-    //   }
-    // });
-    
-    return (res.length>0) ;
+    for(int i = 0 ; i<list.length ; i++){
+      if(list[i].date.add(Duration(days: Statics.echeances[_params.echeance])).isBefore(DateTime.now())){
+        return true ;
+      }
+    }
+
+    return false ;
   }
 
   Future<List<Article>> getJournalPiece(Piece piece , {bool local,String searchTerm,Map<String, dynamic> filters}) async{
@@ -465,6 +463,32 @@ class QueryCtr {
     for (var i = 0, j = res.length; i < j; i++) {
       TresorieCategories categories = TresorieCategories.fromMap(res[i]);
       list.add(categories);
+    }
+
+    return list;
+  }
+
+  Future<List<CompteTresorie>> getAllCompteTresorie() async {
+    Database dbClient = await _databaseHelper.db;
+    var res = await dbClient.query(DbTablesNames.compteTresorie);
+
+    List<CompteTresorie> list = new List<CompteTresorie>();
+    for (var i = 0, j = res.length; i < j; i++) {
+      CompteTresorie compteTresorie = CompteTresorie.fromMap(res[i]);
+      list.add(compteTresorie);
+    }
+
+    return list;
+  }
+
+  Future<List<ChargeTresorie>> getAllChargeTresorie() async {
+    Database dbClient = await _databaseHelper.db;
+    var res = await dbClient.query(DbTablesNames.chargeTresorie);
+
+    List<ChargeTresorie> list = new List<ChargeTresorie>();
+    for (var i = 0, j = res.length; i < j; i++) {
+      ChargeTresorie chargeTresorie = ChargeTresorie.fromMap(res[i]);
+      list.add(chargeTresorie);
     }
 
     return list;

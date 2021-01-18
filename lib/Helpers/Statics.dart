@@ -47,6 +47,7 @@ class RoutesKeys {
   static const addTier = '/add_tier';
   static const addPiece = '/add_piece';
   static const addTresorie = '/add_tresorie';
+  static const allPieces = "/all_pieces";
   static const settingsPage = '/settingsPage';
   static const driveListing = '/drivePage';
   static const helpPage = '/helpPage';
@@ -76,6 +77,8 @@ class DbTablesNames {
   static const tresorie='Tresories';
   static const categorieTresorie = "TresorieCategories";
   static const reglementTresorie = "ReglementTresorie";
+  static const compteTresorie = "CompteTresorie";
+  static const chargeTresorie = "ChargeTresorie" ;
   static const transformer = "Transformers";
   static const formatPiece = "FormatPiece" ;
   static const myparams = "MyParams" ;

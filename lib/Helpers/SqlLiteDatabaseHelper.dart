@@ -43,6 +43,8 @@ class SqlLiteDatabaseHelper {
     DbTablesNames.defaultPrinter,
     DbTablesNames.articlesTva ,
     DbTablesNames.myparams,
+    DbTablesNames.compteTresorie,
+    DbTablesNames.chargeTresorie,
   ];
 
   Future<Database> get db async {
@@ -368,10 +370,23 @@ class SqlLiteDatabaseHelper {
   Future<void> createTresorieTable (Database db , int version) async {
     //table des categories des tresories
     await db.execute("""CREATE TABLE IF NOT EXISTS TresorieCategories (
-       
         id INTEGER PRIMARY KEY AUTOINCREMENT,
         Libelle VARCHAR(20)
 
+        )""");
+
+    await db.execute("""CREATE TABLE IF NOT EXISTS CompteTresorie (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        Num_compte VARCHAR(20),
+        Nom_compte VARCHAR(20),
+        Code_compte VARCHAR(20),
+        Solde_depart Double,
+        Solde Double
+        )""");
+
+    await db.execute("""CREATE TABLE IF NOT EXISTS ChargeTresorie (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        Libelle VARCHAR(50)
         )""");
 
     await db.execute("""
@@ -386,6 +401,8 @@ class SqlLiteDatabaseHelper {
           Montant DOUBLE,
           Modalite VARCHAR (255),
           Categorie_id INTEGER REFERENCES TresorieCategories (id) ON DELETE SET NULL ON UPDATE CASCADE,
+          Compte_id INTEGER REFERENCES CompteTresorie (id) ON DELETE SET NULL ON UPDATE CASCADE,
+          Charge_id,
           Date integer
       )""");
 
@@ -794,7 +811,6 @@ class SqlLiteDatabaseHelper {
 
 
   //fonction speciale pour la creation des triggers de bd table piece et format
-  // NB : pour l'etat de la tresorie on doit l'ajouter le mov à la condition de calcul (regler) de tier
   createTriggersPiece(Database db, int version) async {
     // update_current_index
      await db.execute('''CREATE TRIGGER update_current_index 
@@ -951,10 +967,30 @@ class SqlLiteDatabaseHelper {
             UPDATE FormatPiece
                SET Current_index = Current_index+1
             WHERE  FormatPiece.Piece LIKE "TR" ; 
+            
         END;
       ''');
     // ***************************************************************************************************************
     //**********************************************add tresorie*******************************************************
+
+    await db.execute('''CREATE TRIGGER update_compte_solde 
+        AFTER INSERT ON Tresories 
+        FOR EACH ROW 
+        BEGIN     
+                
+            UPDATE CompteTresorie
+              SET  Solde = Solde_depart + (Select Sum(Montant) From Tresorie 
+                                            Where Compte_id = New.Compte_id AND 
+                                                  (Categorie_id = 2 OR Categorie_id = 4 OR Categorie_id = 6)
+                                            ) + 
+                                            (Select (Sum(Montant)*-1) From Tresorie 
+                                            Where Compte_id = New.Compte_id AND 
+                                                  (Categorie_id = 3 OR Categorie_id = 5 OR Categorie_id = 7 OR Categorie_id = 8)
+                                            )
+            WHERE id = New.Compte_id; 
+           
+        END;
+      ''');
 
     await db.execute('''CREATE TRIGGER update_tier_reglement_credit 
         AFTER INSERT ON Tresories 
@@ -989,6 +1025,25 @@ class SqlLiteDatabaseHelper {
 
     // ***************************************************************************************************************
     //**********************************************update tresorie*******************************************************
+    await db.execute('''CREATE TRIGGER update_compte_solde_onupdate
+        AFTER UPDATE ON Tresories 
+        FOR EACH ROW 
+        BEGIN     
+                
+            UPDATE CompteTresorie
+              SET  Solde = Solde_depart + (Select Sum(Montant) From Tresorie 
+                                            Where Compte_id = New.Compte_id AND 
+                                                  (Categorie_id = 2 OR Categorie_id = 4 OR Categorie_id = 6)
+                                            ) + 
+                                            (Select (Sum(Montant)*-1) From Tresorie 
+                                            Where Compte_id = New.Compte_id AND 
+                                                  (Categorie_id = 3 OR Categorie_id = 5 OR Categorie_id = 7 OR Categorie_id = 8)
+                                            )
+            WHERE id = New.Compte_id; 
+           
+        END;
+      ''');
+
     await db.execute('''CREATE TRIGGER update_tier_reglement_credit3
         AFTER UPDATE ON Tresories 
         FOR EACH ROW 
@@ -1002,6 +1057,8 @@ class SqlLiteDatabaseHelper {
              UPDATE Tiers
                SET  Credit = (Solde_depart + Chiffre_affaires) - Regler 
              WHERE id = New.Tier_id;  
+             
+             
         END;
       ''');
 
@@ -1027,6 +1084,24 @@ class SqlLiteDatabaseHelper {
 
     // ***************************************************************************************************************
     //**********************************************dell tresorie*******************************************************
+    await db.execute('''CREATE TRIGGER update_compte_solde_onDelete
+        BEFORE DELETE ON Tresories 
+        FOR EACH ROW 
+        BEGIN     
+                
+            UPDATE CompteTresorie
+              SET  Solde = Solde_depart + (Select (Sum(Montant)-OLD.Montant) From Tresorie 
+                                            Where Compte_id = OLD.Compte_id AND 
+                                                  (Categorie_id = 2 OR Categorie_id = 4 OR Categorie_id = 6)
+                                            ) + 
+                                            (Select ((Sum(Montant)-OLD.Montant)*-1) From Tresorie 
+                                            Where Compte_id = OLD.Compte_id AND 
+                                                  (Categorie_id = 3 OR Categorie_id = 5 OR Categorie_id = 7 OR Categorie_id = 8)
+                                            )
+            WHERE id = New.Compte_id; 
+           
+        END;
+      ''');
 
     await db.execute('''CREATE TRIGGER dell_tresorie 
         BEFORE DELETE ON Tresories 
@@ -1143,6 +1218,13 @@ class SqlLiteDatabaseHelper {
     batch.rawInsert('INSERT INTO TresorieCategories(Libelle) VALUES("Remboursement Client")');
     batch.rawInsert('INSERT INTO TresorieCategories(Libelle) VALUES("Remboursement Fournisseur")');
     batch.rawInsert('INSERT INTO TresorieCategories(Libelle) VALUES("Decaissement")');
+
+    batch.rawInsert('INSERT INTO CompteTresorie(Num_compte,Nom_compte,Solde_depart,Solde) VALUES("00001","Caisse",0,0)');
+
+    batch.rawInsert('INSERT INTO ChargeTresorie(Libelle) VALUES("No Categorie")');
+    batch.rawInsert('INSERT INTO ChargeTresorie(Libelle) VALUES("Electricité")');
+    batch.rawInsert('INSERT INTO ChargeTresorie(Libelle) VALUES("Loyer")');
+    batch.rawInsert('INSERT INTO ChargeTresorie(Libelle) VALUES("Salaire")');
 
     batch.rawInsert('INSERT INTO FormatPiece(Format , Piece , Current_index) VALUES("XXXX/YYYY"  , "FP" , 0)');
     batch.rawInsert('INSERT INTO FormatPiece(Format , Piece , Current_index) VALUES("XXXX/YYYY"  , "CC" , 0)');

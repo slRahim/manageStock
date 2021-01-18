@@ -5,12 +5,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gestmob/Helpers/Helpers.dart';
 import 'package:gestmob/Helpers/QueryCtr.dart';
+import 'package:gestmob/Helpers/Statics.dart';
 import 'package:gestmob/Widgets/HomeItemsWidgets.dart';
 import 'package:gestmob/Widgets/HomeItemsWidgets.dart';
 import 'package:gestmob/Widgets/HomeItemsWidgets.dart';
 import 'package:gestmob/Widgets/navDrawer.dart';
 import 'package:gestmob/generated/l10n.dart';
 import 'package:gestmob/models/MyParams.dart';
+import 'package:gestmob/services/local_notification.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:gestmob/cubit/home_cubit.dart';
 import 'package:gestmob/models/HomeItem.dart';
@@ -52,7 +54,6 @@ class _GridHomeWidgetState extends State<GridHomeWidget> {
     homeItemRapports,
     homeItemParametres
   ];
-
 
   @override
   Future<void> initState(){
@@ -130,6 +131,7 @@ class _GridHomeWidgetState extends State<GridHomeWidget> {
       content: Text(text),
     ));
   }
+
 
   @override
   Widget build(BuildContext context) {
@@ -285,6 +287,7 @@ class _GridHomeWidgetState extends State<GridHomeWidget> {
       return null;
     }
   }
+
 
 
 }

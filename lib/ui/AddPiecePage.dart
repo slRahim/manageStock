@@ -1329,7 +1329,7 @@ class _AddPiecePageState extends State<AddPiecePage> with TickerProviderStateMix
   Future<void> addTresorie(item, {transferer}) async {
     Tresorie tresorie = new Tresorie.init();
     tresorie.montant = _verssementpiece;
-
+    tresorie.compte = 1 ;
     if (transferer) {
       tresorie.montant = 0;
     }

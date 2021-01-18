@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:gestmob/models/ArticleFamille.dart';
 import 'package:gestmob/models/ArticleMarque.dart';
 import 'package:gestmob/models/ArticleTva.dart';
+import 'package:gestmob/models/ChargeTresorie.dart';
+import 'package:gestmob/models/CompteTresorie.dart';
 import 'package:gestmob/models/Tiers.dart';
 import 'package:gestmob/models/TiersFamille.dart';
 import 'package:gestmob/models/TresorieCategories.dart';
@@ -143,6 +145,32 @@ List<DropdownMenuItem<String>> buildDropStatutDownMenuItems(List listItems) {
 List<DropdownMenuItem<TresorieCategories>> buildDropTresorieCategoriesDownMenuItems(List listItems) {
   List<DropdownMenuItem<TresorieCategories>> items = List();
   for (TresorieCategories listItem in listItems) {
+    items.add(
+      DropdownMenuItem(
+        child: Text(listItem.libelle),
+        value: listItem,
+      ),
+    );
+  }
+  return items;
+}
+
+List<DropdownMenuItem<CompteTresorie>> buildDropCompteTresorieDownMenuItems(List listItems) {
+  List<DropdownMenuItem<CompteTresorie>> items = List();
+  for (CompteTresorie listItem in listItems) {
+    items.add(
+      DropdownMenuItem(
+        child: Text(listItem.nomCompte+"(${listItem.nomCompte})"),
+        value: listItem,
+      ),
+    );
+  }
+  return items;
+}
+
+List<DropdownMenuItem<ChargeTresorie>> buildDropChargeTresorieDownMenuItems(List listItems) {
+  List<DropdownMenuItem<ChargeTresorie>> items = List();
+  for (ChargeTresorie listItem in listItems) {
     items.add(
       DropdownMenuItem(
         child: Text(listItem.libelle),

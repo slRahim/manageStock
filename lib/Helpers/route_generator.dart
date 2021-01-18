@@ -13,6 +13,7 @@ import 'package:gestmob/ui/HelpPage.dart';
 import 'package:gestmob/ui/LoginPage.dart';
 import 'package:gestmob/ui/SettingsPage.dart';
 import 'package:gestmob/ui/AddArticlePage.dart';
+import 'package:gestmob/ui/all_piece_listing.dart';
 import 'package:gestmob/ui/backup_restore_listing.dart';
 import 'package:gestmob/ui/home.dart';
 
@@ -67,6 +68,10 @@ class RouteGenerator {
           );
         }
         break;
+      case RoutesKeys.allPieces:
+        return MaterialPageRoute(
+          builder: (_) => PiecesScreen(),
+        );
       case RoutesKeys.settingsPage:
         return MaterialPageRoute(
           builder: (_) => SettingsPage(),

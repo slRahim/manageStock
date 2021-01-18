@@ -1,23 +1,32 @@
 
-import 'dart:convert';
-import 'dart:io';
 
-import 'dart:typed_data';
 
-import 'package:flutter/cupertino.dart';
-import 'package:gestmob/Helpers/Helpers.dart';
+
 
 class Tresorie {
-  int _id ;
-  int _tierId ;
-  int _pieceId ;
-  int _mov ;
+  int _id;
+
+  int _tierId;
+
+  int _pieceId;
+
+  int _mov;
+
   int _categorie;
-  String _numTresorie ;
-  String _tierRS ;
-  String _modalite ;
-  String _objet ;
-  double _montant ;
+  int _compte;
+
+  int _charge;
+
+  String _numTresorie;
+
+  String _tierRS;
+
+  String _modalite;
+
+  String _objet;
+
+  double _montant;
+
   DateTime _date;
 
   Tresorie.init();
@@ -27,46 +36,62 @@ class Tresorie {
       this._numTresorie,
       this._tierId,
       this._pieceId,
-      this._mov ,
+      this._mov,
       this._tierRS,
       this._modalite,
       this._objet,
       this._categorie,
+      this._compte,
+      this._charge,
       this._montant,
-      this._date
-    );
+      this._date);
 
-  Tresorie.fromMap(dynamic obj){
-    this._id= obj["id"];
-    this._numTresorie=obj["Num_tresorie"];
-    this._tierId= obj["Tier_id"];
-    this._pieceId= obj["Piece_id"];
+  Tresorie.fromMap(dynamic obj) {
+    this._id = obj["id"];
+    this._numTresorie = obj["Num_tresorie"];
+    this._tierId = obj["Tier_id"];
+    this._pieceId = obj["Piece_id"];
     this._mov = obj["Mov"];
-    this._tierRS= obj["Tier_rs"];
-    this._modalite= obj["Modalite"];
-    this._objet= obj["Objet"];
-    this._categorie= obj["Categorie_id"];
-    this._montant= obj["Montant"];
+    this._tierRS = obj["Tier_rs"];
+    this._modalite = obj["Modalite"];
+    this._objet = obj["Objet"];
+    this._categorie = obj["Categorie_id"];
+    this._compte = obj["Compte_id"];
+    this._charge = obj["Charge_id"];
+    this._montant = obj["Montant"];
     this._date = new DateTime.fromMillisecondsSinceEpoch(obj["Date"]);
   }
 
-  Map<String , dynamic> toMap(){
-    Map<String , dynamic> map = new Map<String , dynamic>();
+  Map<String, dynamic> toMap() {
+    Map<String, dynamic> map = new Map<String, dynamic>();
 
-    map["Num_tresorie"]=this._numTresorie;
-    map["Piece_id"]=this._pieceId;
-    map["Tier_id"]=this._tierId;
-    map["Tier_rs"]=this._tierRS;
-    map["Mov"] = this._mov ;
-    map["Modalite"]=this._modalite;
-    map["Objet"]=this._objet;
-    map["Categorie_id"]=this._categorie;
-    map["Montant"]=this._montant;
+    map["Num_tresorie"] = this._numTresorie;
+    map["Piece_id"] = this._pieceId;
+    map["Tier_id"] = this._tierId;
+    map["Tier_rs"] = this._tierRS;
+    map["Mov"] = this._mov;
+    map["Modalite"] = this._modalite;
+    map["Objet"] = this._objet;
+    map["Categorie_id"] = this._categorie;
+    map["Compte_id"] = this._compte;
+    map["Charge_id"] = this._charge;
+    map["Montant"] = this._montant;
     map["Date"] = this._date.millisecondsSinceEpoch;
 
-    return map ;
+    return map;
   }
 
+  int get charge => _charge;
+
+  set charge(int value) {
+    _charge = value;
+  }
+
+  int get compte => _compte;
+
+  set compte(int value) {
+    _compte = value;
+  }
 
   int get mov => _mov;
 
@@ -115,7 +140,6 @@ class Tresorie {
   set pieceId(value) {
     _pieceId = value;
   }
-
 
   String get numTresorie => _numTresorie;
 
