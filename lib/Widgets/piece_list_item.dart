@@ -70,9 +70,10 @@ class _PieceListItemState extends State<PieceListItem> {
             }
           },
           leading: Container(
+            margin: EdgeInsets.all(5),
             child: CircleAvatar(
               child: Text("${widget.piece.piece}"),
-              radius: 30,
+              radius:30,
               backgroundColor: Colors.grey[200],
               foregroundColor: Colors.black,
             ),

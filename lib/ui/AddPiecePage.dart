@@ -25,6 +25,7 @@ import 'package:gestmob/models/Article.dart';
 import 'package:gestmob/models/FormatPiece.dart';
 import 'package:gestmob/models/FormatPrint.dart';
 import 'package:gestmob/models/Journaux.dart';
+import 'package:gestmob/models/MyParams.dart';
 import 'package:gestmob/models/Piece.dart';
 import 'package:gestmob/models/ReglementTresorie.dart';
 import 'package:gestmob/models/Tiers.dart';
@@ -104,6 +105,8 @@ class _AddPiecePageState extends State<AddPiecePage> with TickerProviderStateMix
 
   Ticket _ticket;
 
+  MyParams _myParams ;
+
   void initState() {
     super.initState();
     bottomBarControler =
@@ -126,9 +129,9 @@ class _AddPiecePageState extends State<AddPiecePage> with TickerProviderStateMix
   //**************************************************************************************************************************************
   //*********************************************** init le screen **********************************************************************
   Future<bool> futureInitState() async {
-    _tarificationDropdownItems =
-        utils.buildDropTarificationTier(_tarificationItems);
+    _tarificationDropdownItems = utils.buildDropTarificationTier(_tarificationItems);
     _selectedTarification = _tarificationItems[0];
+
     if (widget.arguments is Piece &&
         widget.arguments.id != null &&
         widget.arguments.id > -1) {
@@ -142,6 +145,7 @@ class _AddPiecePageState extends State<AddPiecePage> with TickerProviderStateMix
       _dateControl.text = Helpers.dateToText(DateTime.now());
       editMode = true;
     }
+    _myParams = await _queryCtr.getAllParams();
     return Future<bool>.value(editMode);
   }
 
@@ -176,7 +180,15 @@ class _AddPiecePageState extends State<AddPiecePage> with TickerProviderStateMix
       _pourcentremiseControler.text = _pourcentremise.toString();
     } else {
       _piece.piece = widget.arguments.piece;
-      _selectedClient = await _queryCtr.getTierById(1);
+      if(_piece.piece == PieceType.devis || _piece.piece == PieceType.retourClient ||
+          _piece.piece == PieceType.avoirClient || _piece.piece == PieceType.commandeClient ||
+          _piece.piece == PieceType.bonLivraison ||  _piece.piece == PieceType.factureClient){
+
+        _selectedClient = await _queryCtr.getTierById(1);
+      }else{
+        _selectedClient = await _queryCtr.getTierById(2);
+      }
+
       _clientControl.text = _selectedClient.raisonSociale;
       _selectedTarification = _tarificationItems[_selectedClient.tarification];
       _verssementControler.text = "0.0";
@@ -323,6 +335,7 @@ class _AddPiecePageState extends State<AddPiecePage> with TickerProviderStateMix
               net_payer: _total_ttc + _piece.timbre,
               remise: _pourcentremise,
               timbre: _piece.timbre,
+              myParams: _myParams,
             ),
             bottomAppBarBody: Padding(
               padding: const EdgeInsets.all(8.0),
@@ -956,10 +969,10 @@ class _AddPiecePageState extends State<AddPiecePage> with TickerProviderStateMix
         totalTva += item.selectedQuantite * item.tva;
       });
       _total_ht = sum;
-      _total_tva = totalTva;
+      _total_tva =(_myParams.tva)? totalTva : 0.0;
       _net_ht = _total_ht - ((_total_ht * _pourcentremise) / 100);
       _total_ttc = _net_ht + _total_tva;
-      _net_a_payer = _total_ttc + _piece.timbre;
+      _net_a_payer =(_myParams.timbre)? _total_ttc + _piece.timbre : _total_ttc + 0.0;
 
       if (_piece.id != null) {
         if (_net_a_payer <= _piece.net_a_payer) {
@@ -1330,6 +1343,7 @@ class _AddPiecePageState extends State<AddPiecePage> with TickerProviderStateMix
     Tresorie tresorie = new Tresorie.init();
     tresorie.montant = _verssementpiece;
     tresorie.compte = 1 ;
+    tresorie.charge=null ;
     if (transferer) {
       tresorie.montant = 0;
     }

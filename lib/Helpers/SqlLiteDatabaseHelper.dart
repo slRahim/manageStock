@@ -402,7 +402,7 @@ class SqlLiteDatabaseHelper {
           Modalite VARCHAR (255),
           Categorie_id INTEGER REFERENCES TresorieCategories (id) ON DELETE SET NULL ON UPDATE CASCADE,
           Compte_id INTEGER REFERENCES CompteTresorie (id) ON DELETE SET NULL ON UPDATE CASCADE,
-          Charge_id,
+          Charge_id integer,
           Date integer
       )""");
 
@@ -979,16 +979,14 @@ class SqlLiteDatabaseHelper {
         BEGIN     
                 
             UPDATE CompteTresorie
-              SET  Solde = Solde_depart + (Select Sum(Montant) From Tresorie 
-                                            Where Compte_id = New.Compte_id AND 
-                                                  (Categorie_id = 2 OR Categorie_id = 4 OR Categorie_id = 6)
-                                            ) + 
-                                            (Select (Sum(Montant)*-1) From Tresorie 
+              SET  Solde = Solde_depart + (SELECT SUM(Montant) FROM Tresories WHERE (Compte_id = NEW.Compte_id) AND 
+                                                  (Categorie_id = 2 OR Categorie_id = 4 OR Categorie_id = 6))
+                                        + (Select  -1*Sum(Montant) From Tresories 
                                             Where Compte_id = New.Compte_id AND 
                                                   (Categorie_id = 3 OR Categorie_id = 5 OR Categorie_id = 7 OR Categorie_id = 8)
-                                            )
+                                          )
             WHERE id = New.Compte_id; 
-           
+            
         END;
       ''');
 
@@ -1031,11 +1029,11 @@ class SqlLiteDatabaseHelper {
         BEGIN     
                 
             UPDATE CompteTresorie
-              SET  Solde = Solde_depart + (Select Sum(Montant) From Tresorie 
+              SET  Solde = Solde_depart + (Select Sum(Montant) From Tresories 
                                             Where Compte_id = New.Compte_id AND 
                                                   (Categorie_id = 2 OR Categorie_id = 4 OR Categorie_id = 6)
                                             ) + 
-                                            (Select (Sum(Montant)*-1) From Tresorie 
+                                            (Select  -1 * Sum(Montant) From Tresories 
                                             Where Compte_id = New.Compte_id AND 
                                                   (Categorie_id = 3 OR Categorie_id = 5 OR Categorie_id = 7 OR Categorie_id = 8)
                                             )
@@ -1084,25 +1082,22 @@ class SqlLiteDatabaseHelper {
 
     // ***************************************************************************************************************
     //**********************************************dell tresorie*******************************************************
-    await db.execute('''CREATE TRIGGER update_compte_solde_onDelete
-        BEFORE DELETE ON Tresories 
+
+    await db.execute('''CREATE TRIGGER update_compte_solde_onDELETE
+        AFTER DELETE ON Tresories 
         FOR EACH ROW 
         BEGIN     
-                
-            UPDATE CompteTresorie
-              SET  Solde = Solde_depart + (Select (Sum(Montant)-OLD.Montant) From Tresorie 
-                                            Where Compte_id = OLD.Compte_id AND 
-                                                  (Categorie_id = 2 OR Categorie_id = 4 OR Categorie_id = 6)
-                                            ) + 
-                                            (Select ((Sum(Montant)-OLD.Montant)*-1) From Tresorie 
-                                            Where Compte_id = OLD.Compte_id AND 
-                                                  (Categorie_id = 3 OR Categorie_id = 5 OR Categorie_id = 7 OR Categorie_id = 8)
-                                            )
-            WHERE id = New.Compte_id; 
-           
+             UPDATE CompteTresorie
+              SET Solde = Solde_depart + (SELECT Sum(Montant) FROM Tresories 
+                                            WHERE (Compte_id = OLD.Compte_id) AND 
+                                                  (Categorie_id = 2 OR Categorie_id = 4 OR Categorie_id = 6))  
+                                         +  (SELECT  -1 * Sum(Montant) FROM Tresories 
+                                              WHERE (Compte_id = OLD.Compte_id) AND 
+                                                 (Categorie_id = 3 OR Categorie_id = 5 OR Categorie_id = 7 OR Categorie_id = 8))
+            WHERE id = OLD.Compte_id; 
+          
         END;
       ''');
-
     await db.execute('''CREATE TRIGGER dell_tresorie 
         BEFORE DELETE ON Tresories 
         FOR EACH ROW 

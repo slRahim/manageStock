@@ -49,7 +49,7 @@ class _ListTileCardState extends State<ListTileCard> {
             cardsGap: SizeConfig.safeBlockVertical,
             controller: widget.slidingCardController,
             slidingCardWidth: SizeConfig.horizontalBloc * 95,
-            visibleCardHeight: SizeConfig.safeBlockVertical * 27,
+            visibleCardHeight: SizeConfig.safeBlockVertical * 19,
             hiddenCardHeight: SizeConfig.safeBlockVertical * 15,
             frontCardWidget: ListFrontCard(
               title: widget.title,
@@ -112,7 +112,7 @@ class _ListFrontCardState extends State<ListFrontCard> {
                     topLeft: Radius.circular(25),
                     topRight: Radius.circular(25))),
             child: Padding(
-              padding: const EdgeInsets.only(top: 0, left: 20),
+              padding: const EdgeInsetsDirectional.only(top: 0, start: 20),
               child: Column(
                 children: <Widget>[
                   Expanded(

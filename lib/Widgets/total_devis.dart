@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:gestmob/generated/l10n.dart';
+import 'package:gestmob/models/MyParams.dart';
 import 'package:gestmob/models/Piece.dart';
 
 // montant de facture à afficher ds le bas de screen add piece
@@ -11,9 +12,10 @@ class TotalDevis extends StatelessWidget{
   final double total_ttc ;
   final double timbre ;
   final double net_payer ;
+  final MyParams myParams;
 
   const TotalDevis({Key key, this.total_ttc , this.total_tva , this.total_ht
-    , this.timbre ,this.net_ht ,this.remise , this.net_payer}) : super(key: key);
+    , this.timbre ,this.net_ht ,this.remise , this.net_payer , this.myParams}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -53,14 +55,17 @@ class TotalDevis extends StatelessWidget{
                 ],
               ),
               SizedBox(height: 5),
-              Row(
-                mainAxisSize: MainAxisSize.max,
-                children: [
-                  Text("${S.current.total_tva}= "),
-                  Expanded(child: Text(".............................................................................................................",
-                    maxLines: 1,)),
-                  Text(total_tva.toString() + " ${S.current.da}"),
-                ],
+              Visibility(
+                visible: (myParams.tva),
+                child: Row(
+                  mainAxisSize: MainAxisSize.max,
+                  children: [
+                    Text("${S.current.total_tva}= "),
+                    Expanded(child: Text(".............................................................................................................",
+                      maxLines: 1,)),
+                    Text(total_tva.toString() + " ${S.current.da}"),
+                  ],
+                ),
               ),
               SizedBox(height: 5),
               Row(
@@ -73,14 +78,17 @@ class TotalDevis extends StatelessWidget{
                 ],
               ),
               SizedBox(height: 5),
-              Row(
-                mainAxisSize: MainAxisSize.max,
-                children: [
-                  Text("${S.current.timbre}= "),
-                  Expanded(child: Text(".............................................................................................................",
-                    maxLines: 1,)),
-                  Text(timbre.toString() + " ${S.current.da}"),
-                ],
+              Visibility(
+                visible: (myParams.timbre),
+                child: Row(
+                  mainAxisSize: MainAxisSize.max,
+                  children: [
+                    Text("${S.current.timbre}= "),
+                    Expanded(child: Text(".............................................................................................................",
+                      maxLines: 1,)),
+                    Text(timbre.toString() + " ${S.current.da}"),
+                  ],
+                ),
               ),
               SizedBox(height: 5),
               Row(

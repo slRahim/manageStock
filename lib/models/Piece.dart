@@ -27,7 +27,7 @@ class Piece{
   double _total_tva = 0;
   double _net_ht = 0;
   double _total_ttc = 0;
-  double _timbre=0;
+  double _timbre=35.0;
   double _net_a_payer = 0;
   double _regler=0;
   double _reste=0;

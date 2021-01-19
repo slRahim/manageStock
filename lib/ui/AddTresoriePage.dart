@@ -852,63 +852,133 @@ class _AddTresoriePageState extends State<AddTresoriePage>
       _categorieItems.add(item);
       _categorieDropdownItems =
           utils.buildDropTresorieCategoriesDownMenuItems(_categorieItems);
-      _selectedCategorie = _categorieItems[_categorieItems.length];
+      _selectedCategorie = _categorieItems[_categorieItems.length-1];
     }
   }
 
   Widget addCompte() {
     TextEditingController _libelleCompteControl = new TextEditingController();
+    TextEditingController _numCompteControl = new TextEditingController();
+    TextEditingController _codeCompteControl = new TextEditingController();
+    TextEditingController _soldeCompteControl = new TextEditingController();
     CompteTresorie _compteTresorie = new CompteTresorie.init();
+    ScrollController _controller = new ScrollController();
     return StatefulBuilder(builder: (context, StateSetter setState) {
       return Builder(
           builder: (context) => Dialog(
                 //this right here
                 child: SingleChildScrollView(
                   child: Container(
-                    height: 250,
-                    child: Padding(
-                      padding: const EdgeInsets.all(6.0),
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        crossAxisAlignment: CrossAxisAlignment.center,
+                    height: 350,
+                    child: Scrollbar(
+                      isAlwaysShown: true,
+                      controller: _controller,
+                      child: ListView(
+                        controller: _controller,
+                        padding: EdgeInsets.all(15),
                         children: [
                           Padding(
                             padding: EdgeInsets.only(
-                                left: 5, right: 5, bottom: 20, top: 20),
+                                left: 5, right: 5, bottom: 20, top: 10),
                             child: Text(
                               "${S.current.ajouter} Compte:",
+                              textAlign: TextAlign.center,
                               style: TextStyle(
-                                  fontSize: 20, color: Colors.redAccent),
+                                  fontSize: 20,),
                             ),
                           ),
-                          Padding(
-                            padding: EdgeInsets.only(
-                                left: 5, right: 5, bottom: 20, top: 20),
-                            child: TextField(
-                              controller: _libelleCompteControl,
-                              keyboardType: TextInputType.text,
-                              decoration: InputDecoration(
-                                prefixIcon: Icon(
-                                  Icons.view_agenda,
-                                  color: Colors.orange[900],
-                                ),
-                                focusedBorder: OutlineInputBorder(
-                                    borderSide:
-                                        BorderSide(color: Colors.orange[900]),
-                                    borderRadius: BorderRadius.circular(20)),
-                                contentPadding: EdgeInsets.only(left: 10),
-                                labelText: S.current.categorie,
-                                labelStyle:
-                                    TextStyle(color: Colors.orange[900]),
-                                enabledBorder: OutlineInputBorder(
-                                  gapPadding: 3.3,
-                                  borderRadius: BorderRadius.circular(20),
+                          TextField(
+                            controller: _numCompteControl,
+                            keyboardType: TextInputType.text,
+                            decoration: InputDecoration(
+                              prefixIcon: Icon(
+                                Icons.view_agenda,
+                                color: Colors.blue,
+                              ),
+                              focusedBorder: OutlineInputBorder(
                                   borderSide:
-                                      BorderSide(color: Colors.orange[900]),
-                                ),
+                                  BorderSide(color: Colors.blue),
+                                  borderRadius: BorderRadius.circular(20)),
+                              contentPadding: EdgeInsets.only(left: 10),
+                              labelText: "N°:",
+                              enabledBorder: OutlineInputBorder(
+                                gapPadding: 3.3,
+                                borderRadius: BorderRadius.circular(20),
+                                borderSide:
+                                BorderSide(color: Colors.blue),
                               ),
                             ),
                           ),
+                          SizedBox(height: 5,),
+                          TextField(
+                            controller: _libelleCompteControl,
+                            keyboardType: TextInputType.text,
+                            decoration: InputDecoration(
+                              prefixIcon: Icon(
+                                Icons.description,
+                                color: Colors.blue,
+                              ),
+                              focusedBorder: OutlineInputBorder(
+                                  borderSide:
+                                  BorderSide(color: Colors.blue),
+                                  borderRadius: BorderRadius.circular(20)),
+                              contentPadding: EdgeInsets.only(left: 10),
+                              labelText: S.current.designation,
+                              enabledBorder: OutlineInputBorder(
+                                gapPadding: 3.3,
+                                borderRadius: BorderRadius.circular(20),
+                                borderSide:
+                                BorderSide(color: Colors.blue),
+                              ),
+                            ),
+                          ),
+                          SizedBox(height: 10,),
+                          TextField(
+                            controller: _codeCompteControl,
+                            keyboardType: TextInputType.text,
+                            decoration: InputDecoration(
+                              prefixIcon: Icon(
+                                Icons.vpn_key,
+                                color: Colors.blue,
+                              ),
+                              focusedBorder: OutlineInputBorder(
+                                  borderSide:
+                                  BorderSide(color: Colors.blue),
+                                  borderRadius: BorderRadius.circular(20)),
+                              contentPadding: EdgeInsets.only(left: 10),
+                              labelText: S.current.code_pin,
+                              enabledBorder: OutlineInputBorder(
+                                gapPadding: 3.3,
+                                borderRadius: BorderRadius.circular(20),
+                                borderSide:
+                                BorderSide(color: Colors.blue),
+                              ),
+                            ),
+                          ),
+                          SizedBox(height: 10,),
+                          TextField(
+                            controller: _soldeCompteControl,
+                            keyboardType: TextInputType.text,
+                            decoration: InputDecoration(
+                              prefixIcon: Icon(
+                                Icons.monetization_on,
+                                color: Colors.blue,
+                              ),
+                              focusedBorder: OutlineInputBorder(
+                                  borderSide:
+                                  BorderSide(color: Colors.blue),
+                                  borderRadius: BorderRadius.circular(20)),
+                              contentPadding: EdgeInsets.only(left: 10),
+                              labelText: S.current.solde_depart,
+                              enabledBorder: OutlineInputBorder(
+                                gapPadding: 3.3,
+                                borderRadius: BorderRadius.circular(20),
+                                borderSide:
+                                BorderSide(color: Colors.blue),
+                              ),
+                            ),
+                          ),
+                          SizedBox(height: 10,),
                           SizedBox(
                             width: 320.0,
                             child: Padding(
@@ -919,17 +989,24 @@ class _AddTresoriePageState extends State<AddTresoriePage>
                                 ),
                                 onPressed: () async {
                                   setState(() {
-                                    // _categorieTresorie.libelle= _libelleCategorieControl.text;
+                                    _compteTresorie.numCompte= _numCompteControl.text;
+                                    _numCompteControl.text = "";
+                                    _compteTresorie.nomCompte =  _libelleCompteControl.text;
                                     _libelleCompteControl.text = "";
+                                    _compteTresorie.codeCompte = _codeCompteControl.text;
+                                    _codeCompteControl.text = "";
+                                    _compteTresorie.soldeDepart = double.parse(_soldeCompteControl.text);
+                                    _soldeCompteControl.text = "";
+                                    _compteTresorie.solde = 0.0 ;
                                   });
-                                  // await addCompteIfNotExist(_categorieTresorie);
+                                  await addCompteIfNotExist(_compteTresorie);
                                   Navigator.pop(context);
                                 },
                                 child: Text(
                                   S.current.ajouter,
                                   style: TextStyle(color: Colors.white),
                                 ),
-                                color: Colors.red,
+                                color: Colors.green,
                               ),
                             ),
                           )
@@ -954,7 +1031,7 @@ class _AddTresoriePageState extends State<AddTresoriePage>
       _compteItems.add(item);
       _compteDropdownItems =
           utils.buildDropCompteTresorieDownMenuItems(_compteItems);
-      _selectedCompte = _compteItems[_compteItems.length];
+      _selectedCompte = _compteItems[_compteItems.length-1];
     }
   }
 
@@ -964,7 +1041,6 @@ class _AddTresoriePageState extends State<AddTresoriePage>
     return StatefulBuilder(builder: (context, StateSetter setState) {
       return Builder(
           builder: (context) => Dialog(
-            //this right here
             child: SingleChildScrollView(
               child: Container(
                 height: 250,
@@ -976,11 +1052,11 @@ class _AddTresoriePageState extends State<AddTresoriePage>
                     children: [
                       Padding(
                         padding: EdgeInsets.only(
-                            left: 8, right: 8, bottom: 20, top: 20),
+                            left: 8, right: 8, bottom: 10, top: 10),
                         child: Text(
                           "${S.current.ajouter} charge:",
                           style: TextStyle(
-                              fontSize: 20, color: Colors.redAccent),
+                              fontSize: 20),
                         ),
                       ),
                       Padding(
@@ -992,21 +1068,19 @@ class _AddTresoriePageState extends State<AddTresoriePage>
                           decoration: InputDecoration(
                             prefixIcon: Icon(
                               Icons.view_agenda,
-                              color: Colors.orange[900],
+                              color: Colors.green,
                             ),
                             focusedBorder: OutlineInputBorder(
-                                borderSide:
-                                BorderSide(color: Colors.blue),
-                                borderRadius: BorderRadius.circular(20)),
+                                borderSide: BorderSide(color: Colors.blue),
+                                borderRadius: BorderRadius.circular(20),
+                            ),
                             contentPadding: EdgeInsets.only(left: 10),
                             labelText: S.current.categorie,
-                            labelStyle:
-                            TextStyle(color: Colors.blue),
                             enabledBorder: OutlineInputBorder(
                               gapPadding: 3.3,
                               borderRadius: BorderRadius.circular(20),
                               borderSide:
-                              BorderSide(color: Colors.blue),
+                              BorderSide(color: Colors.green),
                             ),
                           ),
                         ),
@@ -1031,7 +1105,7 @@ class _AddTresoriePageState extends State<AddTresoriePage>
                               S.current.ajouter,
                               style: TextStyle(color: Colors.white),
                             ),
-                            color: Colors.red,
+                            color: Colors.green,
                           ),
                         ),
                       )
@@ -1049,14 +1123,11 @@ class _AddTresoriePageState extends State<AddTresoriePage>
     if (chargeIndex > -1) {
       _selectedCharge = _chargeItems[chargeIndex];
     } else {
-      int id =
-      await _queryCtr.addItemToTable(DbTablesNames.chargeTresorie, item);
+      int id = await _queryCtr.addItemToTable(DbTablesNames.chargeTresorie, item);
       item.id = id;
-
       _chargeItems.add(item);
-      _chargeDropdownItems =
-          utils.buildDropChargeTresorieDownMenuItems(_chargeItems);
-      _selectedCharge = _chargeItems[_chargeItems.length];
+      _chargeDropdownItems = utils.buildDropChargeTresorieDownMenuItems(_chargeItems);
+      _selectedCharge = _chargeItems[_chargeItems.length-1];
     }
   }
 

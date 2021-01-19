@@ -84,7 +84,7 @@ class _ArticleListItemState extends State<ArticleListItem> {
       },
       itemSelected: widget.article.selectedQuantite > 0,
       leading: CircleAvatar(
-        radius: 30,
+        radius: 25,
         backgroundImage: MemoryImage(widget.article.imageUint8List),
       ),
       subtitle: (widget.article.codeBar != null)?widget.article.codeBar : null,

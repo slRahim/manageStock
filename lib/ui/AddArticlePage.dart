@@ -65,9 +65,9 @@ class _AddArticlePageState extends State<AddArticlePage>  with AutomaticKeepAliv
   List<DropdownMenuItem<ArticleTva>> _tvaDropdownItems;
   ArticleTva _selectedTva;
 
-  bool price2 = false ;
-  bool price3 = false ;
-  bool tva=false ;
+  bool _price2 = false ;
+  bool _price3 = false ;
+  bool _tva=false ;
   bool _validateDes = false;
 
   TextEditingController _designationControl = new TextEditingController();
@@ -163,19 +163,19 @@ class _AddArticlePageState extends State<AddArticlePage>  with AutomaticKeepAliv
     _myParams = await _queryCtr.getAllParams();
     switch(_myParams.tarification){
       case 1 :
-        price2 = false ;
-        price3 = false ;
+        _price2 = false ;
+        _price3 = false ;
         break;
       case 2 :
-        price2 = true ;
-        price3 = false ;
+        _price2 = true ;
+        _price3 = false ;
         break;
       case 2 :
-        price2 = true ;
-        price3 = true ;
+        _price2 = true ;
+        _price3 = true ;
         break;
     }
-    tva = _myParams.tva ;
+    _tva = _myParams.tva ;
 
   }
 
@@ -497,10 +497,10 @@ class _AddArticlePageState extends State<AddArticlePage>  with AutomaticKeepAliv
                 ),
               ),
               Padding(padding: EdgeInsets.all(4)),
-              Flexible(
-                flex: 5,
-                child: Visibility(
-                  visible: modification && !editMode,
+              Visibility(
+                visible: modification && !editMode,
+                child: Flexible(
+                  flex: 5,
                   child: TextField(
                     enabled: false,
                     controller: _colisControl,
@@ -549,7 +549,7 @@ class _AddArticlePageState extends State<AddArticlePage>  with AutomaticKeepAliv
             ),
           ),
           Visibility(
-            visible: price2 ,
+            visible: _price2 ,
             child: TextField(
               enabled: editMode,
               controller: _price2Control,
@@ -573,7 +573,7 @@ class _AddArticlePageState extends State<AddArticlePage>  with AutomaticKeepAliv
             ),
           ),
           Visibility(
-            visible:price3,
+            visible:_price3,
             child: TextField(
               enabled: editMode,
               controller: _price3Control,
@@ -658,7 +658,7 @@ class _AddArticlePageState extends State<AddArticlePage>  with AutomaticKeepAliv
         direction: Axis.horizontal,
         children: [
           Visibility(
-            visible: tva,
+            visible: _tva,
             child: ListDropDown(
               leftIcon: Icons.attach_money,
               editMode: editMode,

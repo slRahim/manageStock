@@ -27,7 +27,7 @@ class _SettingsPageState extends State<SettingsPage> {
   bool _finishedLoading = false;
   SharedPreferences _prefs;
 
-  bool _prices3;
+  int _tarification;
   bool _tva;
   bool _timbre;
   String _language;
@@ -81,7 +81,7 @@ class _SettingsPageState extends State<SettingsPage> {
   }
 
   setDataFromItem(item) async {
-    _prices3 = (item.tarification > 2);
+    _tarification = item.tarification ;
     _tva = item.tva;
     _timbre = item.timbre;
     _notifications = item.notifications;
@@ -171,14 +171,26 @@ class _SettingsPageState extends State<SettingsPage> {
                         ..show();
                     },
                   ),
-                  SettingsTile.switchTile(
-                    title: 'Use 3 prices',
+                  SettingsTile(
+                    title: 'Tarification',
+                    subtitle:("use : "+_tarification.toString()),
                     leading: Icon(Icons.attach_money),
-                    switchValue: _prices3,
-                    onToggle: (bool value) {
-                      setState(() {
-                        _prices3 = value;
-                      });
+                    onTap: () async {
+                      AwesomeDialog(
+                          context: context,
+                          dialogType: DialogType.QUESTION,
+                          animType: AnimType.BOTTOMSLIDE,
+                          title: "Choisir Tarification",
+                          body: _tarificationDialog(),
+                          btnCancelText: S.current.non,
+                          btnCancelOnPress: () {},
+                          btnOkText: S.current.oui,
+                          btnOkOnPress: () async {
+                            setState(() {
+                              _tarification ;
+                            });
+                          })
+                        ..show();
                     },
                   ),
                   SettingsTile.switchTile(
@@ -361,6 +373,57 @@ class _SettingsPageState extends State<SettingsPage> {
         _prefs.setString("myLocale", "ar");
         break;
     }
+  }
+
+  _tarificationDialog() {
+    ScrollController _controller = new ScrollController();
+    return StatefulBuilder(
+        builder: (context, setState) => Wrap(
+          children: [
+            Container(
+              height: 220,
+              child: Scrollbar(
+                isAlwaysShown: true,
+                controller: _controller,
+                child: ListView(
+                  controller: _controller,
+                  children: [
+                    RadioListTile(
+                      value: Statics.tarificationItems[0],
+                      groupValue: _tarification,
+                      title: Text('Tarif 1'),
+                      onChanged: (value) {
+                        setState(() {
+                          _tarification = value;
+                        });
+                      },
+                    ),
+                    RadioListTile(
+                      value: Statics.tarificationItems[1],
+                      groupValue: _tarification,
+                      title: Text('Tarif 2'),
+                      onChanged: (value) {
+                        setState(() {
+                          _tarification = value;
+                        });
+                      },
+                    ),
+                    RadioListTile(
+                      value: Statics.tarificationItems[2],
+                      groupValue: _tarification,
+                      title: Text('Tarif 3'),
+                      onChanged: (value) {
+                        setState(() {
+                          _tarification = value;
+                        });
+                      },
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ],
+        ));
   }
 
   _dayofWeekDialog() {
@@ -546,7 +609,7 @@ class _SettingsPageState extends State<SettingsPage> {
   }
 
   Future<void> _updateItem() async {
-    _myParams.tarification = (_prices3) ? 3 : 2;
+    _myParams.tarification = _tarification ;
     _myParams.tva = _tva;
     _myParams.timbre = _timbre;
     _myParams.notificationDay = Statics.repeateNotifications.indexOf(_repeateNotification);
