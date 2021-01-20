@@ -69,21 +69,14 @@ class _PieceListItemState extends State<PieceListItem> {
               controller.expandCard();
             }
           },
-          leading: Container(
-            margin: EdgeInsets.all(5),
+          leading: CircleAvatar(
+            radius: 28,
+            backgroundColor: Colors.green,
             child: CircleAvatar(
               child: Text("${widget.piece.piece}"),
-              radius:30,
+              radius:25,
               backgroundColor: Colors.grey[200],
               foregroundColor: Colors.black,
-            ),
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(50),
-              border: Border.all(
-                width: 2,
-                color: Colors.green,
-              ),
-              color: Colors.grey[100],
             ),
           ),
           subtitle: Helpers.dateToText(widget.piece.date),

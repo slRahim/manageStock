@@ -202,7 +202,7 @@ class _AddPiecePageState extends State<AddPiecePage> with TickerProviderStateMix
       _net_ht = 0.0;
       _total_tva = 0.0;
       _total_ttc = 0.0;
-      _net_a_payer = _total_ttc + _piece.timbre;
+      _net_a_payer = _total_ttc ;
       _remisepiece = 0;
       _pourcentremise = 0;
     }
@@ -332,7 +332,7 @@ class _AddPiecePageState extends State<AddPiecePage> with TickerProviderStateMix
               total_tva: _total_tva,
               total_ttc: _total_ttc,
               net_ht: _net_ht,
-              net_payer: _total_ttc + _piece.timbre,
+              net_payer:(_myParams.timbre)? _total_ttc + _piece.timbre : _total_ttc,
               remise: _pourcentremise,
               timbre: _piece.timbre,
               myParams: _myParams,
@@ -598,10 +598,10 @@ class _AddPiecePageState extends State<AddPiecePage> with TickerProviderStateMix
                   Flexible(
                     flex: 4,
                     child: ListDropDown(
-                      libelle: S.current.tarif,
                       editMode: editMode,
                       value: _selectedTarification,
                       items: _tarificationDropdownItems,
+                      libelle: "${S.current.tarif }",
                       onChanged: (value) {
                         setState(() {
                           _selectedTarification = value;

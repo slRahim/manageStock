@@ -63,7 +63,6 @@ class _AddTresoriePageState extends State<AddTresoriePage>
 
   Tiers _selectedClient;
 
-  bool _validateRaison = false;
 
   TextEditingController _numeroControl = new TextEditingController();
   TextEditingController _dateControl = new TextEditingController();
@@ -95,6 +94,8 @@ class _AddTresoriePageState extends State<AddTresoriePage>
   QueryCtr _queryCtr = new QueryCtr();
 
   BottomBarController bottomBarControler;
+
+  final _formKey = GlobalKey<FormState>();
 
   void initState() {
     super.initState();
@@ -264,26 +265,7 @@ class _AddTresoriePageState extends State<AddTresoriePage>
               });
             },
             onSavePressed: () async {
-              if ((_selectedCategorie.id == 2 ||
-                  _selectedCategorie.id == 3 ||
-                  _selectedCategorie.id == 6 ||
-                  _selectedCategorie.id == 7)) {
-                if (_selectedClient != null) {
-                  int id = await addItemToDb();
-                  if (id > -1) {
-                    setState(() {
-                      modification = true;
-                      editMode = false;
-                    });
-                  }
-                } else {
-                  Helpers.showFlushBar(context, S.current.msg_select_tier);
-
-                  setState(() {
-                    _validateRaison = true;
-                  });
-                }
-              } else {
+              if (_formKey.currentState.validate()){
                 int id = await addItemToDb();
                 if (id > -1) {
                   setState(() {
@@ -291,7 +273,10 @@ class _AddTresoriePageState extends State<AddTresoriePage>
                     editMode = false;
                   });
                 }
+              }else{
+                Helpers.showFlushBar(context, "Veuillez remplir les champs obligatoire");
               }
+
             },
           ),
           // extendBody: true,
@@ -371,310 +356,367 @@ class _AddTresoriePageState extends State<AddTresoriePage>
     return SingleChildScrollView(
         physics: ScrollPhysics(),
         padding: const EdgeInsets.fromLTRB(15, 25, 15, 40),
-        child: Column(mainAxisSize: MainAxisSize.max, children: [
-          Wrap(
-            spacing: 13,
-            runSpacing: 13,
+        child: Column(
+            mainAxisSize: MainAxisSize.max,
             children: [
-              Row(
+              Wrap(
+                spacing: 13,
+                runSpacing: 13,
                 children: [
-                  Flexible(
-                    flex: 4,
-                    child: TextField(
-                      decoration: InputDecoration(
-                        prefixIcon: Icon(
-                          MdiIcons.idCard,
-                          color: Colors.orange[900],
-                        ),
-                        focusedBorder: OutlineInputBorder(
-                            borderSide: BorderSide(color: Colors.orange[900]),
-                            borderRadius: BorderRadius.circular(20)),
-                        labelText: "N°",
-                        labelStyle: TextStyle(color: Colors.orange[900]),
-                        enabledBorder: OutlineInputBorder(
-                          gapPadding: 3.3,
-                          borderRadius: BorderRadius.circular(20),
-                          borderSide: BorderSide(color: Colors.orange[900]),
+                  Row(
+                    children: [
+                      Flexible(
+                        flex: 4,
+                        child: TextField(
+                          decoration: InputDecoration(
+                            prefixIcon: Icon(
+                              MdiIcons.idCard,
+                              color: Colors.orange[900],
+                            ),
+                            focusedBorder: OutlineInputBorder(
+                                borderSide: BorderSide(color: Colors.orange[900]),
+                                borderRadius: BorderRadius.circular(20)),
+                            labelText: "N°",
+                            labelStyle: TextStyle(color: Colors.orange[900]),
+                            enabledBorder: OutlineInputBorder(
+                              gapPadding: 3.3,
+                              borderRadius: BorderRadius.circular(20),
+                              borderSide: BorderSide(color: Colors.orange[900]),
+                            ),
+                          ),
+                          enabled: editMode && !modification,
+                          controller: _numeroControl,
+                          keyboardType: TextInputType.text,
                         ),
                       ),
-                      enabled: editMode && !modification,
-                      controller: _numeroControl,
-                      keyboardType: TextInputType.text,
-                    ),
+                      Padding(padding: EdgeInsets.fromLTRB(5, 5, 5, 5)),
+                      Flexible(
+                        flex: 6,
+                        child: GestureDetector(
+                          onTap: editMode && !modification
+                              ? () {
+                                  callDatePicker();
+                                }
+                              : null,
+                          child: TextField(
+                            decoration: InputDecoration(
+                              prefixIcon: Icon(
+                                Icons.date_range,
+                                color: Colors.blue,
+                              ),
+                              focusedBorder: OutlineInputBorder(
+                                  borderSide: BorderSide(color: Colors.blue),
+                                  borderRadius: BorderRadius.circular(20)),
+                              labelText: S.current.date,
+                              labelStyle: TextStyle(color: Colors.blue),
+                              enabledBorder: OutlineInputBorder(
+                                gapPadding: 3.3,
+                                borderRadius: BorderRadius.circular(20),
+                                borderSide: BorderSide(color: Colors.blue),
+                              ),
+                            ),
+                            enabled: false,
+                            controller: _dateControl,
+                            keyboardType: TextInputType.text,
+                          ),
+                        ),
+                      ),
+                    ],
                   ),
-                  Padding(padding: EdgeInsets.fromLTRB(5, 5, 5, 5)),
-                  Flexible(
-                    flex: 6,
-                    child: GestureDetector(
-                      onTap: editMode && !modification
-                          ? () {
-                              callDatePicker();
-                            }
-                          : null,
-                      child: TextField(
-                        decoration: InputDecoration(
-                          prefixIcon: Icon(
-                            Icons.date_range,
-                            color: Colors.blue,
-                          ),
-                          focusedBorder: OutlineInputBorder(
-                              borderSide: BorderSide(color: Colors.blue),
-                              borderRadius: BorderRadius.circular(20)),
-                          labelText: S.current.date,
-                          labelStyle: TextStyle(color: Colors.blue),
-                          enabledBorder: OutlineInputBorder(
-                            gapPadding: 3.3,
-                            borderRadius: BorderRadius.circular(20),
-                            borderSide: BorderSide(color: Colors.blue),
-                          ),
-                        ),
-                        enabled: false,
-                        controller: _dateControl,
-                        keyboardType: TextInputType.text,
-                      ),
+                  Visibility(
+                    visible: editMode && !modification,
+                    child: ListDropDown(
+                      editMode: editMode,
+                      value: _selectedCategorie,
+                      items: _categorieDropdownItems,
+                      libelle: _selectedCategorie.libelle,
+                      onChanged: (value) {
+                        setState(() {
+                          _selectedCategorie = value;
+                          if (_selectedCategorie.id == 2 ||
+                              _selectedCategorie.id == 3 ||
+                              _selectedCategorie.id == 6 ||
+                              _selectedCategorie.id == 7) {
+                            _showTierController = true;
+                          } else {
+                            _showTierController = false;
+                          }
+                          _objetControl.text = _selectedCategorie.libelle;
+
+                          if (_selectedCategorie.id == 2 ||
+                              _selectedCategorie.id == 6) {
+                            _selectedTypeTiers = Statics.tiersItems[0];
+                          } else {
+                            _selectedTypeTiers = Statics.tiersItems[2];
+                          }
+                        });
+                      },
+                      onAddPressed: () async {
+                        await showDialog(
+                            context: context,
+                            builder: (BuildContext context) {
+                              return addTresoreCategorie();
+                            }).then((val) {
+                          setState(() {});
+                        });
+                      },
                     ),
                   ),
                 ],
               ),
+              SizedBox(height: 15),
               Visibility(
-                visible: editMode && !modification,
-                child: ListDropDown(
-                  editMode: editMode,
-                  value: _selectedCategorie,
-                  items: _categorieDropdownItems,
-                  onChanged: (value) {
-                    setState(() {
-                      _selectedCategorie = value;
-                      if (_selectedCategorie.id == 2 ||
-                          _selectedCategorie.id == 3 ||
-                          _selectedCategorie.id == 6 ||
-                          _selectedCategorie.id == 7) {
-                        _showTierController = true;
-                      } else {
-                        _showTierController = false;
-                      }
-                      _objetControl.text = _selectedCategorie.libelle;
-
-                      if (_selectedCategorie.id == 2 ||
-                          _selectedCategorie.id == 6) {
-                        _selectedTypeTiers = Statics.tiersItems[0];
-                      } else {
-                        _selectedTypeTiers = Statics.tiersItems[2];
-                      }
-                    });
-                  },
-                  onAddPressed: () async {
-                    await showDialog(
-                        context: context,
-                        builder: (BuildContext context) {
-                          return addTresoreCategorie();
-                        }).then((val) {
-                      setState(() {});
-                    });
-                  },
-                ),
-              ),
-            ],
-          ),
-          SizedBox(height: 15),
-          Visibility(
-            visible: (_selectedCategorie.id == 2 ||
-                _selectedCategorie.id == 3 ||
-                _selectedCategorie.id == 6 ||
-                _selectedCategorie.id == 7),
-            child: Center(
-                child: _selectedPieces.isNotEmpty
-                    ? Container(
-                        padding: EdgeInsets.all(15),
-                        child: Column(
-                          children: [
-                            SizedBox(height: 5),
-                            new ListView.builder(
-                                physics: NeverScrollableScrollPhysics(),
-                                shrinkWrap: true,
-                                itemCount: _selectedPieces.length,
-                                itemBuilder: (BuildContext ctxt, int index) {
-                                  return PieceListItem(
-                                    piece: _selectedPieces[index],
-                                  );
-                                })
-                          ],
-                        ))
-                    : Container(
-                        margin:
-                            EdgeInsets.symmetric(vertical: 20, horizontal: 20),
-                        padding:
-                            EdgeInsets.symmetric(vertical: 10, horizontal: 10),
-                        decoration: BoxDecoration(
-                            color: Colors.green[200],
-                            borderRadius: BorderRadius.circular(10)),
-                        child: ListTile(
-                          title: Text(
-                            S.current.msg_credit_total,
-                            style: TextStyle(
-                              fontSize: 16,
-                            ),
-                          ),
-                          leading: Container(
-                            child: Center(
-                              child: Text("TR"),
-                            ),
-                            height: 50,
-                            width: 50,
+                visible: (_selectedCategorie.id == 2 ||
+                    _selectedCategorie.id == 3 ||
+                    _selectedCategorie.id == 6 ||
+                    _selectedCategorie.id == 7),
+                child: Center(
+                    child: _selectedPieces.isNotEmpty
+                        ? Container(
+                            padding: EdgeInsets.all(15),
+                            child: Column(
+                              children: [
+                                SizedBox(height: 5),
+                                new ListView.builder(
+                                    physics: NeverScrollableScrollPhysics(),
+                                    shrinkWrap: true,
+                                    itemCount: _selectedPieces.length,
+                                    itemBuilder: (BuildContext ctxt, int index) {
+                                      return PieceListItem(
+                                        piece: _selectedPieces[index],
+                                      );
+                                    })
+                              ],
+                            ))
+                        : Container(
+                            margin:
+                                EdgeInsets.symmetric(vertical: 20, horizontal: 20),
+                            padding:
+                                EdgeInsets.symmetric(vertical: 10, horizontal: 10),
                             decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(50),
-                              border: Border.all(
-                                width: 3,
-                                color: Colors.blue,
+                                color: Colors.green[200],
+                                borderRadius: BorderRadius.circular(10)),
+                            child: ListTile(
+                              title: Text(
+                                S.current.msg_credit_total,
+                                style: TextStyle(
+                                  fontSize: 16,
+                                ),
                               ),
-                              color: Colors.white,
+                              leading: Container(
+                                child: Center(
+                                  child: Text("TR"),
+                                ),
+                                height: 50,
+                                width: 50,
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(50),
+                                  border: Border.all(
+                                    width: 3,
+                                    color: Colors.blue,
+                                  ),
+                                  color: Colors.white,
+                                ),
+                              ),
+                            ),
+                          )),
+              ),
+              SingleChildScrollView(
+                padding: const EdgeInsets.fromLTRB(15, 10, 15, 15),
+                child: Form(
+                  key : _formKey,
+                  child: Wrap(
+                    spacing: 13,
+                    runSpacing: 13,
+                    children: [
+                      Visibility(
+                        visible: _showTierController,
+                        child: TextFormField(
+                          readOnly: true,
+                          enabled: editMode,
+                          controller: _clientControl,
+                          keyboardType: TextInputType.text,
+                          validator: (value) {
+                            if (value.isEmpty && (_selectedCategorie.id == 2 ||
+                                _selectedCategorie.id == 3 ||
+                                _selectedCategorie.id == 6 ||
+                                _selectedCategorie.id == 7)) {
+
+                              return S.current.msg_select_tier;
+                            }
+                            return null;
+                          },
+                          onTap: editMode && !modification
+                              ? () {
+                            chooseClientDialog();
+                          }
+                              : null,
+                          decoration: InputDecoration(
+                            labelText: S.current.select_tier,
+                            labelStyle: TextStyle(color: Colors.blue),
+                            prefixIcon: Icon(
+                              Icons.people,
+                              color: Colors.blue,
+                            ),
+                            focusedBorder: OutlineInputBorder(
+                                borderSide: BorderSide(color: Colors.blue),
+                                borderRadius: BorderRadius.circular(20)),
+                            enabledBorder: OutlineInputBorder(
+                              gapPadding: 3.3,
+                              borderRadius: BorderRadius.circular(20),
+                              borderSide: BorderSide(color: Colors.blue[700]),
+                            ),
+                            errorBorder:  OutlineInputBorder(
+                              gapPadding: 3.3,
+                              borderRadius: BorderRadius.circular(20),
+                              borderSide: BorderSide(color: Colors.red),
                             ),
                           ),
                         ),
-                      )),
-          ),
-          SingleChildScrollView(
-            padding: const EdgeInsets.fromLTRB(15, 10, 15, 15),
-            child: Wrap(
-              spacing: 13,
-              runSpacing: 13,
-              children: [
-                Visibility(
-                  visible: _showTierController,
-                  child: TextField(
-                    onTap: editMode && !modification
-                        ? () {
-                            chooseClientDialog();
+                      ),
+                      Visibility(
+                        visible: (_selectedCategorie.id == 5),
+                        child: ListDropDown(
+                          editMode: editMode,
+                          value: _selectedCharge,
+                          items: _chargeDropdownItems,
+                          libelle: _selectedCharge.libelle,
+                          onChanged: (value) {
+                            setState(() {
+                              _selectedCharge = value;
+                            });
+                          },
+                          onAddPressed: () async {
+                            await showDialog(
+                                context: context,
+                                builder: (BuildContext context) {
+                                  return addCharge();
+                                }).then((val) {
+                              setState(() {});
+                            });
+                          },
+                        ),
+                      ),
+                      TextFormField(
+                        enabled: editMode,
+                        controller: _objetControl,
+                        keyboardType: TextInputType.text,
+                        validator: (value) {
+                          if (value.isEmpty) {
+                            return S.current.msg_champ_oblg;
                           }
-                        : null,
-                    decoration: InputDecoration(
-                      prefixIcon: Icon(
-                        Icons.people,
-                        color: Colors.blue,
+                          return null;
+                        },
+                        decoration: InputDecoration(
+                          labelText: S.current.objet,
+                          prefixIcon: Icon(
+                            Icons.subject,
+                            color: Colors.blue[700],
+                          ),
+                          focusedBorder: OutlineInputBorder(
+                              borderSide: BorderSide(color: Colors.blue[700]),
+                              borderRadius: BorderRadius.circular(20)),
+                          enabledBorder: OutlineInputBorder(
+                            gapPadding: 3.3,
+                            borderRadius: BorderRadius.circular(20),
+                            borderSide: BorderSide(color: Colors.blue[700]),
+                          ),
+                          errorBorder:  OutlineInputBorder(
+                            gapPadding: 3.3,
+                            borderRadius: BorderRadius.circular(20),
+                            borderSide: BorderSide(color: Colors.red),
+                          ),
+                        ),
                       ),
-                      focusedBorder: OutlineInputBorder(
-                          borderSide: BorderSide(color: Colors.blue),
-                          borderRadius: BorderRadius.circular(20)),
-                      labelText: S.current.select_tier,
-                      labelStyle: TextStyle(color: Colors.blue),
-                      enabledBorder: OutlineInputBorder(
-                        gapPadding: 3.3,
-                        borderRadius: BorderRadius.circular(20),
-                        borderSide: BorderSide(color: Colors.blue[700]),
+                      TextFormField(
+                        enabled: editMode,
+                        controller: _modaliteControl,
+                        keyboardType: TextInputType.text,
+                        validator: (value) {
+                          if (value.isEmpty) {
+                            return S.current.msg_champ_oblg;
+                          }
+                          return null;
+                        },
+                        decoration: InputDecoration(
+                          labelText: S.current.modalite,
+                          prefixIcon: Icon(
+                            Icons.merge_type,
+                            color: Colors.blue[700],
+                          ),
+                          focusedBorder: OutlineInputBorder(
+                              borderSide: BorderSide(color: Colors.blue[700]),
+                              borderRadius: BorderRadius.circular(20)),
+                          enabledBorder: OutlineInputBorder(
+                            gapPadding: 3.3,
+                            borderRadius: BorderRadius.circular(20),
+                            borderSide: BorderSide(color: Colors.blue[700]),
+                          ),
+                          errorBorder:  OutlineInputBorder(
+                            gapPadding: 3.3,
+                            borderRadius: BorderRadius.circular(20),
+                            borderSide: BorderSide(color: Colors.red),
+                          ),
+                        ),
                       ),
-                    ),
-                    readOnly: true,
-                    enabled: editMode,
-                    controller: _clientControl,
-                    keyboardType: TextInputType.text,
-                  ),
-                ),
-                Visibility(
-                  visible: (_selectedCategorie.id == 5),
-                  child: ListDropDown(
-                    editMode: editMode,
-                    value: _selectedCharge,
-                    items: _chargeDropdownItems,
-                    onChanged: (value) {
-                      setState(() {
-                        _selectedCharge = value;
-                      });
-                    },
-                    onAddPressed: () async {
-                      await showDialog(
+                      ListDropDown(
+                        editMode: editMode,
+                        value: _selectedCompte,
+                        items: _compteDropdownItems,
+                        libelle: (_selectedCompte.nomCompte),
+                        onChanged: (value) {
+                          setState(() {
+                            _selectedCompte = value;
+                          });
+                        },
+                        onAddPressed: () async {
+                          await showDialog(
                               context: context,
                               builder: (BuildContext context) {
-                                return addCharge();
-                              })
-                          .then((val) {
-                        setState(() {});
-                      });
-                    },
+                                return addCompte();
+                              }).then((val) {
+                            setState(() {});
+                          });
+                        },
+                      ),
+                      TextFormField(
+                        enabled: editMode,
+                        controller: _montantControl,
+                        keyboardType: TextInputType.number,
+                        validator: (value) {
+                          if (value.isEmpty) {
+                            return S.current.msg_champ_oblg;
+                          }
+                          return null;
+                        },
+                        decoration: InputDecoration(
+                          labelText: S.current.montant,
+                          prefixIcon: Icon(
+                            Icons.monetization_on,
+                            color: Colors.blue[700],
+                          ),
+                          focusedBorder: OutlineInputBorder(
+                              borderSide: BorderSide(color: Colors.blue[700]),
+                              borderRadius: BorderRadius.circular(20)),
+                          enabledBorder: OutlineInputBorder(
+                            gapPadding: 3.3,
+                            borderRadius: BorderRadius.circular(20),
+                            borderSide: BorderSide(color: Colors.blue[700]),
+                          ),
+                          errorBorder:  OutlineInputBorder(
+                            gapPadding: 3.3,
+                            borderRadius: BorderRadius.circular(20),
+                            borderSide: BorderSide(color: Colors.red),
+                          ),
+                        ),
+                      ),
+                    ],
                   ),
                 ),
-                TextField(
-                  enabled: editMode,
-                  controller: _objetControl,
-                  keyboardType: TextInputType.text,
-                  decoration: InputDecoration(
-                    prefixIcon: Icon(
-                      Icons.subject,
-                      color: Colors.blue[700],
-                    ),
-                    focusedBorder: OutlineInputBorder(
-                        borderSide: BorderSide(color: Colors.blue[700]),
-                        borderRadius: BorderRadius.circular(20)),
-                    labelText: S.current.objet,
-                    enabledBorder: OutlineInputBorder(
-                      gapPadding: 3.3,
-                      borderRadius: BorderRadius.circular(20),
-                      borderSide: BorderSide(color: Colors.blue[700]),
-                    ),
-                  ),
-                ),
-                TextField(
-                  enabled: editMode,
-                  controller: _modaliteControl,
-                  keyboardType: TextInputType.text,
-                  decoration: InputDecoration(
-                    prefixIcon: Icon(
-                      Icons.merge_type,
-                      color: Colors.blue[700],
-                    ),
-                    focusedBorder: OutlineInputBorder(
-                        borderSide: BorderSide(color: Colors.blue[700]),
-                        borderRadius: BorderRadius.circular(20)),
-                    labelText: S.current.modalite,
-                    enabledBorder: OutlineInputBorder(
-                      gapPadding: 3.3,
-                      borderRadius: BorderRadius.circular(20),
-                      borderSide: BorderSide(color: Colors.blue[700]),
-                    ),
-                  ),
-                ),
-                ListDropDown(
-                  editMode: editMode,
-                  value: _selectedCompte,
-                  items: _compteDropdownItems,
-                  onChanged: (value) {
-                    setState(() {
-                      _selectedCompte = value;
-                    });
-                  },
-                  onAddPressed: () async {
-                    await showDialog(
-                        context: context,
-                        builder: (BuildContext context) {
-                          return addCompte();
-                        }).then((val) {
-                      setState(() {});
-                    });
-                  },
-                ),
-                TextField(
-                  enabled: editMode,
-                  controller: _montantControl,
-                  keyboardType: TextInputType.number,
-                  decoration: InputDecoration(
-                    prefixIcon: Icon(
-                      Icons.monetization_on,
-                      color: Colors.blue[700],
-                    ),
-                    focusedBorder: OutlineInputBorder(
-                        borderSide: BorderSide(color: Colors.blue[700]),
-                        borderRadius: BorderRadius.circular(20)),
-                    labelText: S.current.montant,
-                    enabledBorder: OutlineInputBorder(
-                      gapPadding: 3.3,
-                      borderRadius: BorderRadius.circular(20),
-                      borderSide: BorderSide(color: Colors.blue[700]),
-                    ),
-                  ),
-                ),
-              ],
-            ),
-          )
-        ]));
+              )
+        ]
+        )
+    );
   }
 
   //afficher le fragement des clients
@@ -852,7 +894,7 @@ class _AddTresoriePageState extends State<AddTresoriePage>
       _categorieItems.add(item);
       _categorieDropdownItems =
           utils.buildDropTresorieCategoriesDownMenuItems(_categorieItems);
-      _selectedCategorie = _categorieItems[_categorieItems.length-1];
+      _selectedCategorie = _categorieItems[_categorieItems.length - 1];
     }
   }
 
@@ -884,7 +926,8 @@ class _AddTresoriePageState extends State<AddTresoriePage>
                               "${S.current.ajouter} Compte:",
                               textAlign: TextAlign.center,
                               style: TextStyle(
-                                  fontSize: 20,),
+                                fontSize: 20,
+                              ),
                             ),
                           ),
                           TextField(
@@ -896,20 +939,20 @@ class _AddTresoriePageState extends State<AddTresoriePage>
                                 color: Colors.blue,
                               ),
                               focusedBorder: OutlineInputBorder(
-                                  borderSide:
-                                  BorderSide(color: Colors.blue),
+                                  borderSide: BorderSide(color: Colors.blue),
                                   borderRadius: BorderRadius.circular(20)),
                               contentPadding: EdgeInsets.only(left: 10),
                               labelText: "N°:",
                               enabledBorder: OutlineInputBorder(
                                 gapPadding: 3.3,
                                 borderRadius: BorderRadius.circular(20),
-                                borderSide:
-                                BorderSide(color: Colors.blue),
+                                borderSide: BorderSide(color: Colors.blue),
                               ),
                             ),
                           ),
-                          SizedBox(height: 5,),
+                          SizedBox(
+                            height: 5,
+                          ),
                           TextField(
                             controller: _libelleCompteControl,
                             keyboardType: TextInputType.text,
@@ -919,20 +962,20 @@ class _AddTresoriePageState extends State<AddTresoriePage>
                                 color: Colors.blue,
                               ),
                               focusedBorder: OutlineInputBorder(
-                                  borderSide:
-                                  BorderSide(color: Colors.blue),
+                                  borderSide: BorderSide(color: Colors.blue),
                                   borderRadius: BorderRadius.circular(20)),
                               contentPadding: EdgeInsets.only(left: 10),
                               labelText: S.current.designation,
                               enabledBorder: OutlineInputBorder(
                                 gapPadding: 3.3,
                                 borderRadius: BorderRadius.circular(20),
-                                borderSide:
-                                BorderSide(color: Colors.blue),
+                                borderSide: BorderSide(color: Colors.blue),
                               ),
                             ),
                           ),
-                          SizedBox(height: 10,),
+                          SizedBox(
+                            height: 10,
+                          ),
                           TextField(
                             controller: _codeCompteControl,
                             keyboardType: TextInputType.text,
@@ -942,20 +985,20 @@ class _AddTresoriePageState extends State<AddTresoriePage>
                                 color: Colors.blue,
                               ),
                               focusedBorder: OutlineInputBorder(
-                                  borderSide:
-                                  BorderSide(color: Colors.blue),
+                                  borderSide: BorderSide(color: Colors.blue),
                                   borderRadius: BorderRadius.circular(20)),
                               contentPadding: EdgeInsets.only(left: 10),
                               labelText: S.current.code_pin,
                               enabledBorder: OutlineInputBorder(
                                 gapPadding: 3.3,
                                 borderRadius: BorderRadius.circular(20),
-                                borderSide:
-                                BorderSide(color: Colors.blue),
+                                borderSide: BorderSide(color: Colors.blue),
                               ),
                             ),
                           ),
-                          SizedBox(height: 10,),
+                          SizedBox(
+                            height: 10,
+                          ),
                           TextField(
                             controller: _soldeCompteControl,
                             keyboardType: TextInputType.text,
@@ -965,20 +1008,20 @@ class _AddTresoriePageState extends State<AddTresoriePage>
                                 color: Colors.blue,
                               ),
                               focusedBorder: OutlineInputBorder(
-                                  borderSide:
-                                  BorderSide(color: Colors.blue),
+                                  borderSide: BorderSide(color: Colors.blue),
                                   borderRadius: BorderRadius.circular(20)),
                               contentPadding: EdgeInsets.only(left: 10),
                               labelText: S.current.solde_depart,
                               enabledBorder: OutlineInputBorder(
                                 gapPadding: 3.3,
                                 borderRadius: BorderRadius.circular(20),
-                                borderSide:
-                                BorderSide(color: Colors.blue),
+                                borderSide: BorderSide(color: Colors.blue),
                               ),
                             ),
                           ),
-                          SizedBox(height: 10,),
+                          SizedBox(
+                            height: 10,
+                          ),
                           SizedBox(
                             width: 320.0,
                             child: Padding(
@@ -989,15 +1032,19 @@ class _AddTresoriePageState extends State<AddTresoriePage>
                                 ),
                                 onPressed: () async {
                                   setState(() {
-                                    _compteTresorie.numCompte= _numCompteControl.text;
+                                    _compteTresorie.numCompte =
+                                        _numCompteControl.text;
                                     _numCompteControl.text = "";
-                                    _compteTresorie.nomCompte =  _libelleCompteControl.text;
+                                    _compteTresorie.nomCompte =
+                                        _libelleCompteControl.text;
                                     _libelleCompteControl.text = "";
-                                    _compteTresorie.codeCompte = _codeCompteControl.text;
+                                    _compteTresorie.codeCompte =
+                                        _codeCompteControl.text;
                                     _codeCompteControl.text = "";
-                                    _compteTresorie.soldeDepart = double.parse(_soldeCompteControl.text);
+                                    _compteTresorie.soldeDepart =
+                                        double.parse(_soldeCompteControl.text);
                                     _soldeCompteControl.text = "";
-                                    _compteTresorie.solde = 0.0 ;
+                                    _compteTresorie.solde = 0.0;
                                   });
                                   await addCompteIfNotExist(_compteTresorie);
                                   Navigator.pop(context);
@@ -1031,7 +1078,7 @@ class _AddTresoriePageState extends State<AddTresoriePage>
       _compteItems.add(item);
       _compteDropdownItems =
           utils.buildDropCompteTresorieDownMenuItems(_compteItems);
-      _selectedCompte = _compteItems[_compteItems.length-1];
+      _selectedCompte = _compteItems[_compteItems.length - 1];
     }
   }
 
@@ -1041,80 +1088,79 @@ class _AddTresoriePageState extends State<AddTresoriePage>
     return StatefulBuilder(builder: (context, StateSetter setState) {
       return Builder(
           builder: (context) => Dialog(
-            child: SingleChildScrollView(
-              child: Container(
-                height: 250,
-                child: Padding(
-                  padding: const EdgeInsets.all(6.0),
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      Padding(
-                        padding: EdgeInsets.only(
-                            left: 8, right: 8, bottom: 10, top: 10),
-                        child: Text(
-                          "${S.current.ajouter} charge:",
-                          style: TextStyle(
-                              fontSize: 20),
-                        ),
-                      ),
-                      Padding(
-                        padding: EdgeInsets.only(
-                            left: 5, right: 5, bottom: 20, top: 20),
-                        child: TextField(
-                          controller: _libelleChargeControl,
-                          keyboardType: TextInputType.text,
-                          decoration: InputDecoration(
-                            prefixIcon: Icon(
-                              Icons.view_agenda,
-                              color: Colors.green,
-                            ),
-                            focusedBorder: OutlineInputBorder(
-                                borderSide: BorderSide(color: Colors.blue),
-                                borderRadius: BorderRadius.circular(20),
-                            ),
-                            contentPadding: EdgeInsets.only(left: 10),
-                            labelText: S.current.categorie,
-                            enabledBorder: OutlineInputBorder(
-                              gapPadding: 3.3,
-                              borderRadius: BorderRadius.circular(20),
-                              borderSide:
-                              BorderSide(color: Colors.green),
-                            ),
-                          ),
-                        ),
-                      ),
-                      SizedBox(
-                        width: 320.0,
-                        child: Padding(
-                          padding: EdgeInsets.only(right: 0, left: 0),
-                          child: RaisedButton(
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(18.0),
-                            ),
-                            onPressed: () async {
-                              setState(() {
-                                _chargeTresorie.libelle= _libelleChargeControl.text;
-                                _libelleChargeControl.text = "";
-                              });
-                              await addChargeIfNotExist(_chargeTresorie);
-                              Navigator.pop(context);
-                            },
+                child: SingleChildScrollView(
+                  child: Container(
+                    height: 250,
+                    child: Padding(
+                      padding: const EdgeInsets.all(6.0),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          Padding(
+                            padding: EdgeInsets.only(
+                                left: 8, right: 8, bottom: 10, top: 10),
                             child: Text(
-                              S.current.ajouter,
-                              style: TextStyle(color: Colors.white),
+                              "${S.current.ajouter} charge:",
+                              style: TextStyle(fontSize: 20),
                             ),
-                            color: Colors.green,
                           ),
-                        ),
-                      )
-                    ],
+                          Padding(
+                            padding: EdgeInsets.only(
+                                left: 5, right: 5, bottom: 20, top: 20),
+                            child: TextField(
+                              controller: _libelleChargeControl,
+                              keyboardType: TextInputType.text,
+                              decoration: InputDecoration(
+                                prefixIcon: Icon(
+                                  Icons.view_agenda,
+                                  color: Colors.green,
+                                ),
+                                focusedBorder: OutlineInputBorder(
+                                  borderSide: BorderSide(color: Colors.blue),
+                                  borderRadius: BorderRadius.circular(20),
+                                ),
+                                contentPadding: EdgeInsets.only(left: 10),
+                                labelText: S.current.categorie,
+                                enabledBorder: OutlineInputBorder(
+                                  gapPadding: 3.3,
+                                  borderRadius: BorderRadius.circular(20),
+                                  borderSide: BorderSide(color: Colors.green),
+                                ),
+                              ),
+                            ),
+                          ),
+                          SizedBox(
+                            width: 320.0,
+                            child: Padding(
+                              padding: EdgeInsets.only(right: 0, left: 0),
+                              child: RaisedButton(
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(18.0),
+                                ),
+                                onPressed: () async {
+                                  setState(() {
+                                    _chargeTresorie.libelle =
+                                        _libelleChargeControl.text;
+                                    _libelleChargeControl.text = "";
+                                  });
+                                  await addChargeIfNotExist(_chargeTresorie);
+                                  Navigator.pop(context);
+                                },
+                                child: Text(
+                                  S.current.ajouter,
+                                  style: TextStyle(color: Colors.white),
+                                ),
+                                color: Colors.green,
+                              ),
+                            ),
+                          )
+                        ],
+                      ),
+                    ),
                   ),
                 ),
-              ),
-            ),
-          ));
+              ));
     });
   }
 
@@ -1123,11 +1169,13 @@ class _AddTresoriePageState extends State<AddTresoriePage>
     if (chargeIndex > -1) {
       _selectedCharge = _chargeItems[chargeIndex];
     } else {
-      int id = await _queryCtr.addItemToTable(DbTablesNames.chargeTresorie, item);
+      int id =
+          await _queryCtr.addItemToTable(DbTablesNames.chargeTresorie, item);
       item.id = id;
       _chargeItems.add(item);
-      _chargeDropdownItems = utils.buildDropChargeTresorieDownMenuItems(_chargeItems);
-      _selectedCharge = _chargeItems[_chargeItems.length-1];
+      _chargeDropdownItems =
+          utils.buildDropChargeTresorieDownMenuItems(_chargeItems);
+      _selectedCharge = _chargeItems[_chargeItems.length - 1];
     }
   }
 

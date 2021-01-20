@@ -68,7 +68,6 @@ class _AddArticlePageState extends State<AddArticlePage>  with AutomaticKeepAliv
   bool _price2 = false ;
   bool _price3 = false ;
   bool _tva=false ;
-  bool _validateDes = false;
 
   TextEditingController _designationControl = new TextEditingController();
   TextEditingController _stockInitialControl = new TextEditingController();
@@ -76,14 +75,14 @@ class _AddArticlePageState extends State<AddArticlePage>  with AutomaticKeepAliv
   TextEditingController _prixAchatControl = new TextEditingController();
   TextEditingController _refControl = new TextEditingController();
   TextEditingController _codeBarControl = new TextEditingController();
-  TextEditingController _pmpControl = new TextEditingController(text: "0.0");
+  TextEditingController _pmpControl = new TextEditingController();
   TextEditingController _descriptionControl = new TextEditingController();
-  TextEditingController _price1Control = new TextEditingController(text: "0.0");
-  TextEditingController _price2Control = new TextEditingController(text: "0.0");
-  TextEditingController _price3Control = new TextEditingController(text: "0.0");
+  TextEditingController _price1Control = new TextEditingController();
+  TextEditingController _price2Control = new TextEditingController();
+  TextEditingController _price3Control = new TextEditingController();
   TextEditingController _libelleFamilleControl = new TextEditingController();
   TextEditingController _libelleMarqueControl = new TextEditingController();
-  TextEditingController _tauxTVAControl = new TextEditingController(text: "0.0");
+  TextEditingController _tauxTVAControl = new TextEditingController();
   TextEditingController _colisControl = new TextEditingController();
   TextEditingController _qteColisCotrol = new TextEditingController();
 
@@ -93,6 +92,8 @@ class _AddArticlePageState extends State<AddArticlePage>  with AutomaticKeepAliv
 
   MyParams _myParams ;
   QueryCtr _queryCtr = new QueryCtr();
+
+  final _formKey = GlobalKey<FormState>();
 
   void initState() {
     super.initState();
@@ -163,14 +164,14 @@ class _AddArticlePageState extends State<AddArticlePage>  with AutomaticKeepAliv
     _myParams = await _queryCtr.getAllParams();
     switch(_myParams.tarification){
       case 1 :
-        _price2 = false ;
-        _price3 = false ;
+        _price2Control.text = "0.0";
+        _price3Control.text = "0.0";
         break;
       case 2 :
         _price2 = true ;
-        _price3 = false ;
+        _price3Control.text = "0.0";
         break;
-      case 2 :
+      case 3 :
         _price2 = true ;
         _price3 = true ;
         break;
@@ -225,19 +226,16 @@ class _AddArticlePageState extends State<AddArticlePage>  with AutomaticKeepAliv
                   });
                 },
                 onSavePressed: () async {
-                  if (_designationControl.text.isNotEmpty) {
-                    int id = await addArticleToDb();
-                    if (id > -1) {
-                      setState(() {
-                        modification = true;
-                        editMode = false;
-                      });
-                    }
-                  } else {
-                    Helpers.showFlushBar(context, S.current.msg_designation);
-                    setState(() {
-                      _validateDes = true;
-                    });
+                  if (_formKey.currentState.validate()) {
+                      int id = await addArticleToDb();
+                      if (id > -1) {
+                        setState(() {
+                          modification = true;
+                          editMode = false;
+                        });
+                      }
+                  }else{
+                    Helpers.showFlushBar(context, "Veuillez remplir les champs obligatoire");
                   }
                 },
               ),
@@ -263,341 +261,478 @@ class _AddArticlePageState extends State<AddArticlePage>  with AutomaticKeepAliv
   Widget fichetab() {
     return SingleChildScrollView(
       padding: const EdgeInsets.fromLTRB(15, 25, 15, 15),
-      child: Wrap(
-        spacing: 13,
-        runSpacing: 13,
-        children: [
-          TextField(
-            enabled: editMode,
-            controller: _designationControl,
-            keyboardType: TextInputType.text,
-            decoration: InputDecoration(
-              hintText: S.current.msg_entre_design,
-              prefixIcon: Icon(
-                Icons.assignment,
-                color: Colors.orange[900],
-              ),
-              focusedBorder: OutlineInputBorder(
-                  borderSide: BorderSide(color: Colors.orange[900]),
-                  borderRadius: BorderRadius.circular(20)),
-              labelText: S.current.designation,
-              labelStyle: TextStyle(color: Colors.orange[900]),
-              errorText: _validateDes ? S.current.msg_champ_oblg : null,
-              enabledBorder: OutlineInputBorder(
-                gapPadding: 3.3,
-                borderRadius: BorderRadius.circular(20),
-                borderSide: BorderSide(color: Colors.orange[900]),
-              ),
-            ),
-          ),
-          TextField(
-            enabled: editMode,
-            controller: _refControl,
-            keyboardType: TextInputType.text,
-            decoration: InputDecoration(
-              prefixIcon: Icon(
-                Icons.archive,
-                color: Colors.blue[700],
-              ),
-              focusedBorder: OutlineInputBorder(
-                  borderSide: BorderSide(color: Colors.blue[700]),
-                  borderRadius: BorderRadius.circular(20)),
-              labelText: S.current.referance,
-              labelStyle: TextStyle(color: Colors.blue[700]),
-              enabledBorder: OutlineInputBorder(
-                gapPadding: 3.3,
-                borderRadius: BorderRadius.circular(20),
-                borderSide: BorderSide(color: Colors.blue[700]),
-              ),
-            ),
-          ),
-          InkWell(
-            onDoubleTap: () async {
-              await scanBarCode();
-            },
-            child: TextField(
+      child: Form(
+        key: _formKey,
+        child: Wrap(
+          spacing: 13,
+          runSpacing: 13,
+          children: [
+            TextFormField(
               enabled: editMode,
-              controller: _codeBarControl,
+              controller: _designationControl,
               keyboardType: TextInputType.text,
+              validator: (value) {
+                if (value.isEmpty) {
+                  return S.current.msg_champ_oblg;
+                }
+                return null;
+              },
               decoration: InputDecoration(
+                labelText: S.current.designation,
+                labelStyle: TextStyle(color: Colors.green),
+                hintText: S.current.msg_entre_design,
                 prefixIcon: Icon(
-                  MdiIcons.barcode,
-                  color: Colors.blue[700],
+                  Icons.assignment,
+                  color: Colors.blue,
                 ),
                 focusedBorder: OutlineInputBorder(
-                    borderSide: BorderSide(color: Colors.blue[700]),
-                    borderRadius: BorderRadius.circular(20)),
-                labelText: S.current.msg_scan_barcode,
-                labelStyle: TextStyle(color: Colors.blue[700]),
+                    borderSide: BorderSide(color: Colors.green),
+                    borderRadius: BorderRadius.circular(20)
+                ),
                 enabledBorder: OutlineInputBorder(
                   gapPadding: 3.3,
                   borderRadius: BorderRadius.circular(20),
-                  borderSide: BorderSide(color: Colors.blue[700]),
+                  borderSide: BorderSide(color: Colors.green),
+                ),
+                errorBorder:  OutlineInputBorder(
+                  gapPadding: 3.3,
+                  borderRadius: BorderRadius.circular(20),
+                  borderSide: BorderSide(color: Colors.red),
                 ),
               ),
             ),
-          ),
-          Row(
-            children: [
-              Visibility(
-                visible: _stockable,
-                child: Flexible(
-                  flex: 5,
-                  child: TextField(
-                    enabled: editMode && _stockable,
-                    controller: _prixAchatControl,
-                    keyboardType: TextInputType.number,
-                    decoration: InputDecoration(
-                      prefixIcon: Icon(
-                        Icons.attach_money,
-                        color: Colors.blue[700],
-                      ),
-                      focusedBorder: OutlineInputBorder(
-                          borderSide: BorderSide(color: Colors.blue[700]),
-                          borderRadius: BorderRadius.circular(20)),
-                      labelText: S.current.prix_achat,
-                      labelStyle: TextStyle(color: Colors.blue[700]),
-                      enabledBorder: OutlineInputBorder(
-                        gapPadding: 3.3,
-                        borderRadius: BorderRadius.circular(20),
-                        borderSide: BorderSide(color: Colors.blue[700]),
-                      ),
-                    ),
-                  ),
-                ),
-              ),
-              Padding(padding: EdgeInsets.fromLTRB(_stockable?8:0, 0, 0, 0)),
-              Flexible(
-                flex: 5,
-                child: Container(
-                  decoration: editMode? new BoxDecoration(
-                    border: Border.all(color: Colors.blueAccent,),
-                    borderRadius: BorderRadius.circular(20.0),
-                  ) : null,
-                  child: CheckboxListTile(
-                    title: Text(S.current.stockable, maxLines: 1,),
-                    value: _stockable,
-                    onChanged: editMode? (bool value) {
-                      setState(() {
-                        _stockable = value;
-                        if(!_stockable){
-                          _prixAchatControl.text = "";
-                        }
-                      });
-                    } : null,
-                  ),
-                ),
-              )
-            ],
-          ),
-
-          Visibility(
-            visible: _stockable,
-            child: TextField(
+            TextFormField(
               enabled: editMode,
-              controller: _pmpControl,
-              keyboardType: TextInputType.number,
+              controller: _refControl,
+              keyboardType: TextInputType.text,
+              validator: (value) {
+                if (value.isEmpty) {
+                  return S.current.msg_champ_oblg;
+                }
+                return null;
+              },
               decoration: InputDecoration(
+                labelText: S.current.referance,
+                labelStyle: TextStyle(color: Colors.blue[700]),
                 prefixIcon: Icon(
                   Icons.archive,
                   color: Colors.blue[700],
                 ),
                 focusedBorder: OutlineInputBorder(
                     borderSide: BorderSide(color: Colors.blue[700]),
-                    borderRadius: BorderRadius.circular(20)),
-                labelText: (modification) ? S.current.pmp : "${S.current.pmp} ${S.current.init}",
-                labelStyle: TextStyle(color: Colors.blue[700]),
+                    borderRadius: BorderRadius.circular(20)
+                ),
                 enabledBorder: OutlineInputBorder(
                   gapPadding: 3.3,
                   borderRadius: BorderRadius.circular(20),
                   borderSide: BorderSide(color: Colors.blue[700]),
                 ),
+                errorBorder:  OutlineInputBorder(
+                  gapPadding: 3.3,
+                  borderRadius: BorderRadius.circular(20),
+                  borderSide: BorderSide(color: Colors.red),
+                ),
               ),
             ),
-          ),
-
-          Row(
-            children: [
-              Flexible(
-                child: TextField(
-                  enabled: editMode,
-                  controller: _stockInitialControl,
-                  keyboardType: TextInputType.number,
-                  decoration: InputDecoration(
-                    prefixIcon: Icon(
-                      Icons.apps,
-                      color: Colors.blue[700],
-                    ),
-                    focusedBorder: OutlineInputBorder(
-                        borderSide: BorderSide(color: Colors.blue[700]),
-                        borderRadius: BorderRadius.circular(20)),
-                    labelText: modification? S.current.quantit:S.current.stock_init,
-                    labelStyle: TextStyle(color: Colors.blue[700]),
-                    enabledBorder: OutlineInputBorder(
-                      gapPadding: 3.3,
-                      borderRadius: BorderRadius.circular(20),
+            InkWell(
+              onDoubleTap: () async {
+                await scanBarCode();
+              },
+              child: TextFormField(
+                enabled: editMode,
+                controller: _codeBarControl,
+                keyboardType: TextInputType.text,
+                validator: (value) {
+                  if (value.isEmpty) {
+                    return S.current.msg_champ_oblg;
+                  }
+                  return null;
+                },
+                decoration: InputDecoration(
+                  labelText: S.current.msg_scan_barcode,
+                  labelStyle: TextStyle(color: Colors.blue[700]),
+                  prefixIcon: Icon(
+                    MdiIcons.barcode,
+                    color: Colors.blue[700],
+                  ),
+                  focusedBorder: OutlineInputBorder(
                       borderSide: BorderSide(color: Colors.blue[700]),
-                    ),
+                      borderRadius: BorderRadius.circular(20)),
+                  enabledBorder: OutlineInputBorder(
+                    gapPadding: 3.3,
+                    borderRadius: BorderRadius.circular(20),
+                    borderSide: BorderSide(color: Colors.blue[700]),
+                  ),
+                  errorBorder:  OutlineInputBorder(
+                    gapPadding: 3.3,
+                    borderRadius: BorderRadius.circular(20),
+                    borderSide: BorderSide(color: Colors.red),
                   ),
                 ),
               ),
-              Padding(padding: EdgeInsets.all(4)),
-              Flexible(
-                child: TextField(
-                  enabled: editMode,
-                  controller: _stockMinimumControl,
-                  keyboardType: TextInputType.number,
-                  decoration: InputDecoration(
-                    prefixIcon: Icon(
-                      Icons.apps,
-                      color: Colors.blue[700],
-                    ),
-                    focusedBorder: OutlineInputBorder(
-                        borderSide: BorderSide(color: Colors.blue[700]),
-                        borderRadius: BorderRadius.circular(20)),
-                    labelText: S.current.stock_min,
-                    labelStyle: TextStyle(color: Colors.blue[700]),
-                    enabledBorder: OutlineInputBorder(
-                      gapPadding: 3.3,
-                      borderRadius: BorderRadius.circular(20),
-                      borderSide: BorderSide(color: Colors.blue[700]),
+            ),
+            Row(
+              children: [
+                Visibility(
+                  visible: _stockable,
+                  child: Flexible(
+                    flex: 5,
+                    child: TextFormField(
+                      enabled: editMode && _stockable,
+                      controller: _prixAchatControl,
+                      keyboardType: TextInputType.number,
+                      validator: (value) {
+                        if (value.isEmpty) {
+                          return S.current.msg_champ_oblg;
+                        }
+                        return null;
+                      },
+                      decoration: InputDecoration(
+                        labelText: S.current.prix_achat,
+                        labelStyle: TextStyle(color: Colors.blue[700]),
+                        prefixIcon: Icon(
+                          Icons.attach_money,
+                          color: Colors.blue[700],
+                        ),
+                        focusedBorder: OutlineInputBorder(
+                            borderSide: BorderSide(color: Colors.blue[700]),
+                            borderRadius: BorderRadius.circular(20)),
+                        enabledBorder: OutlineInputBorder(
+                          gapPadding: 3.3,
+                          borderRadius: BorderRadius.circular(20),
+                          borderSide: BorderSide(color: Colors.blue[700]),
+                        ),
+                        errorBorder:  OutlineInputBorder(
+                          gapPadding: 3.3,
+                          borderRadius: BorderRadius.circular(20),
+                          borderSide: BorderSide(color: Colors.red),
+                        )
+                      ),
                     ),
                   ),
                 ),
-              ),
-            ],
-          ),
+                Padding(padding: EdgeInsets.fromLTRB(_stockable?8:0, 0, 0, 0)),
+                Flexible(
+                  flex: 5,
+                  child: Container(
+                    decoration: editMode? new BoxDecoration(
+                      border: Border.all(color: Colors.blueAccent,),
+                      borderRadius: BorderRadius.circular(20.0),
+                    ) : null,
+                    child: CheckboxListTile(
+                      title: Text(S.current.stockable, maxLines: 1,),
+                      value: _stockable,
+                      onChanged: editMode? (bool value) {
+                        setState(() {
+                          _stockable = value;
+                          if(!_stockable){
+                            _prixAchatControl.text = "";
+                          }
+                        });
+                      } : null,
+                    ),
+                  ),
+                )
+              ],
+            ),
 
-          Row(
-            children: [
-              Flexible(
-                flex: 5,
-                child: Visibility(
-                  child: TextField(
+            Visibility(
+              visible: _stockable,
+              child: TextFormField(
+                enabled: editMode,
+                controller: _pmpControl,
+                keyboardType: TextInputType.number,
+                validator: (value) {
+                  if (value.isEmpty) {
+                    return S.current.msg_champ_oblg;
+                  }
+                  return null;
+                },
+                decoration: InputDecoration(
+                  labelText: (modification) ? S.current.pmp : "${S.current.pmp} ${S.current.init}",
+                  labelStyle: TextStyle(color: Colors.blue[700]),
+                  prefixIcon: Icon(
+                    Icons.archive,
+                    color: Colors.blue[700],
+                  ),
+                  focusedBorder: OutlineInputBorder(
+                      borderSide: BorderSide(color: Colors.blue[700]),
+                      borderRadius: BorderRadius.circular(20)),
+                  enabledBorder: OutlineInputBorder(
+                    gapPadding: 3.3,
+                    borderRadius: BorderRadius.circular(20),
+                    borderSide: BorderSide(color: Colors.blue[700]),
+                  ),
+                  errorBorder:  OutlineInputBorder(
+                    gapPadding: 3.3,
+                    borderRadius: BorderRadius.circular(20),
+                    borderSide: BorderSide(color: Colors.red),
+                  )
+                ),
+              ),
+            ),
+
+            Row(
+              children: [
+                Flexible(
+                  child: TextFormField(
                     enabled: editMode,
-                    controller: _qteColisCotrol,
+                    controller: _stockInitialControl,
                     keyboardType: TextInputType.number,
+                    validator: (value) {
+                      if (value.isEmpty) {
+                        return S.current.msg_champ_oblg;
+                      }
+                      return null;
+                    },
                     decoration: InputDecoration(
+                      labelText: modification? S.current.quantit:S.current.stock_init,
+                      labelStyle: TextStyle(color: Colors.blue[700]),
                       prefixIcon: Icon(
-                        Icons.shopping_bag_rounded,
+                        Icons.apps,
                         color: Colors.blue[700],
                       ),
                       focusedBorder: OutlineInputBorder(
                           borderSide: BorderSide(color: Colors.blue[700]),
-                          borderRadius: BorderRadius.circular(20)),
-                      labelText: S.current.qte_colis,
-                      labelStyle: TextStyle(color: Colors.blue[700]),
+                          borderRadius: BorderRadius.circular(20)
+                      ),
                       enabledBorder: OutlineInputBorder(
                         gapPadding: 3.3,
                         borderRadius: BorderRadius.circular(20),
                         borderSide: BorderSide(color: Colors.blue[700]),
                       ),
+                      errorBorder:  OutlineInputBorder(
+                        gapPadding: 3.3,
+                        borderRadius: BorderRadius.circular(20),
+                        borderSide: BorderSide(color: Colors.red),
+                      ),
                     ),
                   ),
                 ),
-              ),
-              Padding(padding: EdgeInsets.all(4)),
-              Visibility(
-                visible: modification && !editMode,
-                child: Flexible(
-                  flex: 5,
-                  child: TextField(
-                    enabled: false,
-                    controller: _colisControl,
+                Padding(padding: EdgeInsets.all(4)),
+                Flexible(
+                  child: TextFormField(
+                    enabled: editMode,
+                    controller: _stockMinimumControl,
                     keyboardType: TextInputType.number,
+                    validator: (value) {
+                      if (value.isEmpty) {
+                        return S.current.msg_champ_oblg;
+                      }
+                      return null;
+                    },
                     decoration: InputDecoration(
+                      labelText: S.current.stock_min,
+                      labelStyle: TextStyle(color: Colors.blue[700]),
                       prefixIcon: Icon(
-                        Icons.archive,
+                        Icons.apps,
                         color: Colors.blue[700],
                       ),
                       focusedBorder: OutlineInputBorder(
                           borderSide: BorderSide(color: Colors.blue[700]),
                           borderRadius: BorderRadius.circular(20)),
-                      labelText: S.current.colis,
-                      labelStyle: TextStyle(color: Colors.blue[700]),
-                      enabledBorder:OutlineInputBorder(
+                      enabledBorder: OutlineInputBorder(
                         gapPadding: 3.3,
                         borderRadius: BorderRadius.circular(20),
                         borderSide: BorderSide(color: Colors.blue[700]),
                       ),
+                      errorBorder:  OutlineInputBorder(
+                        gapPadding: 3.3,
+                        borderRadius: BorderRadius.circular(20),
+                        borderSide: BorderSide(color: Colors.red),
+                      ),
                     ),
                   ),
                 ),
-              ),
-            ],
-          ),
+              ],
+            ),
 
-          TextField(
-            enabled: editMode,
-            controller: _price1Control,
-            keyboardType: TextInputType.number,
-            decoration: InputDecoration(
-              prefixIcon: Icon(
-                Icons.monetization_on,
-                color: Colors.blue[700],
-              ),
-              focusedBorder: OutlineInputBorder(
-                  borderSide: BorderSide(color: Colors.blue[700]),
-                  borderRadius: BorderRadius.circular(20)),
-              labelText: S.current.prix_v1,
-              labelStyle: TextStyle(color: Colors.blue[700]),
-              enabledBorder: OutlineInputBorder(
-                gapPadding: 3.3,
-                borderRadius: BorderRadius.circular(20),
-                borderSide: BorderSide(color: Colors.blue[700]),
-              ),
+            Row(
+              children: [
+                Flexible(
+                  flex: 5,
+                  child: Visibility(
+                    child: TextFormField(
+                      enabled: editMode,
+                      controller: _qteColisCotrol,
+                      keyboardType: TextInputType.number,
+                      validator: (value) {
+                        if (value.isEmpty) {
+                          return S.current.msg_champ_oblg;
+                        }
+                        return null;
+                      },
+                      decoration: InputDecoration(
+                        labelText: S.current.qte_colis,
+                        labelStyle: TextStyle(color: Colors.blue[700]),
+                        prefixIcon: Icon(
+                          Icons.shopping_bag_rounded,
+                          color: Colors.blue[700],
+                        ),
+                        focusedBorder: OutlineInputBorder(
+                            borderSide: BorderSide(color: Colors.blue[700]),
+                            borderRadius: BorderRadius.circular(20)),
+                        enabledBorder: OutlineInputBorder(
+                          gapPadding: 3.3,
+                          borderRadius: BorderRadius.circular(20),
+                          borderSide: BorderSide(color: Colors.blue[700]),
+                        ),
+                        errorBorder:  OutlineInputBorder(
+                          gapPadding: 3.3,
+                          borderRadius: BorderRadius.circular(20),
+                          borderSide: BorderSide(color: Colors.red),
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+                Padding(padding: EdgeInsets.all(4)),
+                Visibility(
+                  visible: modification && !editMode,
+                  child: Flexible(
+                    flex: 5,
+                    child: TextFormField(
+                      enabled: false,
+                      controller: _colisControl,
+                      keyboardType: TextInputType.number,
+                      validator: (value) {
+                        if (value.isEmpty) {
+                          return S.current.msg_champ_oblg;
+                        }
+                        return null;
+                      },
+                      decoration: InputDecoration(
+                        prefixIcon: Icon(
+                          Icons.archive,
+                          color: Colors.blue[700],
+                        ),
+                        focusedBorder: OutlineInputBorder(
+                            borderSide: BorderSide(color: Colors.blue[700]),
+                            borderRadius: BorderRadius.circular(20)),
+                        labelText: S.current.colis,
+                        labelStyle: TextStyle(color: Colors.blue[700]),
+                        enabledBorder:OutlineInputBorder(
+                          gapPadding: 3.3,
+                          borderRadius: BorderRadius.circular(20),
+                          borderSide: BorderSide(color: Colors.blue[700]),
+                        ),
+                        errorBorder:  OutlineInputBorder(
+                          gapPadding: 3.3,
+                          borderRadius: BorderRadius.circular(20),
+                          borderSide: BorderSide(color: Colors.red),
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+              ],
             ),
-          ),
-          Visibility(
-            visible: _price2 ,
-            child: TextField(
+
+            TextFormField(
               enabled: editMode,
-              controller: _price2Control,
+              controller: _price1Control,
               keyboardType: TextInputType.number,
+              validator: (value) {
+                if (value.isEmpty) {
+                  return S.current.msg_champ_oblg;
+                }
+                return null;
+              },
               decoration: InputDecoration(
+                labelText: S.current.prix_v1,
+                labelStyle: TextStyle(color: Colors.blue[700]),
                 prefixIcon: Icon(
                   Icons.monetization_on,
-                  color: Colors.blueGrey[700],
+                  color: Colors.blue[700],
                 ),
                 focusedBorder: OutlineInputBorder(
                     borderSide: BorderSide(color: Colors.blue[700]),
                     borderRadius: BorderRadius.circular(20)),
-                labelText: S.current.prix_v2,
-                labelStyle: TextStyle(color: Colors.blue[700]),
                 enabledBorder: OutlineInputBorder(
                   gapPadding: 3.3,
                   borderRadius: BorderRadius.circular(20),
                   borderSide: BorderSide(color: Colors.blue[700]),
                 ),
-              ),
-            ),
-          ),
-          Visibility(
-            visible:_price3,
-            child: TextField(
-              enabled: editMode,
-              controller: _price3Control,
-              keyboardType: TextInputType.number,
-              decoration: InputDecoration(
-                prefixIcon: Icon(
-                  Icons.monetization_on,
-                  color: Colors.blueGrey[500],
-                ),
-                focusedBorder: OutlineInputBorder(
-                    borderSide: BorderSide(color: Colors.blue[700]),
-                    borderRadius: BorderRadius.circular(20)),
-                labelText: S.current.prix_v3,
-                labelStyle: TextStyle(color: Colors.blue[700]),
-                enabledBorder: OutlineInputBorder(
+                errorBorder:  OutlineInputBorder(
                   gapPadding: 3.3,
                   borderRadius: BorderRadius.circular(20),
-                  borderSide: BorderSide(color: Colors.blue[700]),
+                  borderSide: BorderSide(color: Colors.red),
                 ),
               ),
             ),
-          ),
-          dropdowns(),
-        ],
+            Visibility(
+              visible: _price2 ,
+              child: TextFormField(
+                enabled: editMode,
+                controller: _price2Control,
+                keyboardType: TextInputType.number,
+                validator: (value) {
+                  if (value.isEmpty && _price2) {
+                    return S.current.msg_champ_oblg;
+                  }
+                  return null ;
+                },
+                decoration: InputDecoration(
+                  labelText: S.current.prix_v2,
+                  labelStyle: TextStyle(color: Colors.blue[700]),
+                  prefixIcon: Icon(
+                    Icons.monetization_on,
+                    color: Colors.blueGrey[700],
+                  ),
+                  focusedBorder: OutlineInputBorder(
+                      borderSide: BorderSide(color: Colors.blue[700]),
+                      borderRadius: BorderRadius.circular(20)),
+                  enabledBorder: OutlineInputBorder(
+                    gapPadding: 3.3,
+                    borderRadius: BorderRadius.circular(20),
+                    borderSide: BorderSide(color: Colors.blue[700]),
+                  ),
+                  errorBorder:  OutlineInputBorder(
+                    gapPadding: 3.3,
+                    borderRadius: BorderRadius.circular(20),
+                    borderSide: BorderSide(color: Colors.red),
+                  ),
+                ),
+              ),
+            ),
+            Visibility(
+              visible:_price3,
+              child: TextFormField(
+                enabled: editMode,
+                controller: _price3Control,
+                keyboardType: TextInputType.number,
+                validator: (value) {
+                  if (value.isEmpty && _price3) {
+                    return S.current.msg_champ_oblg;
+                  }
+                  return null ;
+                },
+                decoration: InputDecoration(
+                  labelText: S.current.prix_v3,
+                  labelStyle: TextStyle(color: Colors.blue[700]),
+                  prefixIcon: Icon(
+                    Icons.monetization_on,
+                    color: Colors.blueGrey[500],
+                  ),
+                  focusedBorder: OutlineInputBorder(
+                      borderSide: BorderSide(color: Colors.blue[700]),
+                      borderRadius: BorderRadius.circular(20)),
+                  enabledBorder: OutlineInputBorder(
+                    gapPadding: 3.3,
+                    borderRadius: BorderRadius.circular(20),
+                    borderSide: BorderSide(color: Colors.blue[700]),
+                  ),
+                  errorBorder:  OutlineInputBorder(
+                    gapPadding: 3.3,
+                    borderRadius: BorderRadius.circular(20),
+                    borderSide: BorderSide(color: Colors.red),
+                  ),
+                ),
+              ),
+            ),
+            dropdowns(),
+          ],
+        ),
       ),
     );
   }
@@ -660,9 +795,8 @@ class _AddArticlePageState extends State<AddArticlePage>  with AutomaticKeepAliv
           Visibility(
             visible: _tva,
             child: ListDropDown(
-              leftIcon: Icons.attach_money,
               editMode: editMode,
-              libelle: S.current.taux_tva,
+              libelle: ("${S.current.taux_tva}: ${_selectedTva.tva.toString()} %"),
               value: _selectedTva,
               items: _tvaDropdownItems,
               onChanged: (value) {
@@ -685,6 +819,7 @@ class _AddArticlePageState extends State<AddArticlePage>  with AutomaticKeepAliv
             editMode: editMode,
             value: _selectedMarque,
             items: _marqueDropdownItems,
+            libelle: _selectedMarque.libelle,
             onChanged: (value) {
               setState(() {
                 _selectedMarque = value;
@@ -704,6 +839,7 @@ class _AddArticlePageState extends State<AddArticlePage>  with AutomaticKeepAliv
             editMode: editMode,
             value: _selectedFamille,
             items: _familleDropdownItems,
+            libelle: _selectedFamille.libelle,
             onChanged: (value) {
               setState(() {
                 _selectedFamille = value;

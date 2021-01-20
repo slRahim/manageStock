@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:gestmob/generated/l10n.dart';
 import 'package:gestmob/models/ArticleFamille.dart';
 import 'package:gestmob/models/ArticleMarque.dart';
 import 'package:gestmob/models/ArticleTva.dart';
@@ -121,7 +122,7 @@ List<DropdownMenuItem<ArticleTva>> buildDropTvaDownMenuItems(List listItems) {
   for (ArticleTva listItem in listItems) {
     items.add(
       DropdownMenuItem(
-        child: Text(listItem.tva.toString()),
+        child: Text( "${S.current.taux_tva}: ${listItem.tva.toString()} %"),
         value: listItem,
       ),
     );

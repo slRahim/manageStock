@@ -72,10 +72,14 @@ class _TierListItemState extends State<TierListItem> {
             }
           },
           leading: CircleAvatar(
-            radius: 30,
-            backgroundImage: (widget.tier.imageUint8List == null) ? MemoryImage(
-                widget.tier.imageUint8List) : null,
+            backgroundColor: Colors.yellow[700],
+            radius: 28,
+            child: CircleAvatar(
+              radius: 25,
+              backgroundImage: (widget.tier.imageUint8List == null) ? MemoryImage(
+                  widget.tier.imageUint8List) : null,
 
+            ),
           ),
           title: ("RS: "+widget.tier.raisonSociale),
           subtitle: ("${S.current.statut}: " + Statics.statutItems[widget.tier.statut]),
@@ -144,7 +148,7 @@ class _TierListItemState extends State<TierListItem> {
         secondaryActions: <Widget>[
           IconSlideAction(
             color: Colors.white10,
-            iconWidget: Icon(Icons.phone,size: 50, color: Colors.green,),
+            iconWidget: Icon(Icons.phone_enabled,size: 50, color: Colors.green,),
             onTap: () async{
               await _makePhoneCall("tel:${widget.tier.mobile}");
             },

@@ -72,9 +72,7 @@ class _AddTierPageState extends State<AddTierPage>
 
   List<TiersFamille> _familleItems;
   List<DropdownMenuItem<Object>> _familleDropdownItems;
-  var _selectedFamille;
-
-  bool _validateRaison = false;
+  TiersFamille _selectedFamille;
 
   TextEditingController _raisonSocialeControl = new TextEditingController();
   TextEditingController _qrCodeControl = new TextEditingController();
@@ -99,6 +97,7 @@ class _AddTierPageState extends State<AddTierPage>
   MyParams _myParams ;
 
   GlobalKey globalKey = new GlobalKey();
+  final _formKey = GlobalKey<FormState>();
 
 
   @override
@@ -334,7 +333,7 @@ class _AddTierPageState extends State<AddTierPage>
                     });
                   },
                   onSavePressed: () async {
-                    if (_raisonSocialeControl.text.isNotEmpty) {
+                    if(_formKey.currentState.validate()){
                       int id = await addItemToDb();
                       if (id > -1) {
                         setState(() {
@@ -342,14 +341,10 @@ class _AddTierPageState extends State<AddTierPage>
                           editMode = false;
                         });
                       }
-                    } else {
-                      Helpers.showFlushBar(
-                          context, S.current.msg_entre_rs);
-
-                      setState(() {
-                        _validateRaison = true;
-                      });
+                    }else{
+                      Helpers.showFlushBar(context, "Veuillez remplir les champs obligatoire");
                     }
+
                   },
                 ),
                 bottomNavigationBar: BottomTabBar(
@@ -383,75 +378,365 @@ class _AddTierPageState extends State<AddTierPage>
   Widget fichetab() {
     return SingleChildScrollView(
       padding: const EdgeInsetsDirectional.fromSTEB(15, 25, 15, 15),
-      child: Wrap(
-        spacing: 13,
-        runSpacing: 13,
-        children: [
-          Row(
-            children: [
-              Flexible(
-                child: TextField(
-                  decoration: InputDecoration(
-                    prefixIcon: Icon(
-                      MdiIcons.idCard,
-                      color: Colors.orange[900],
-                    ),
-                    focusedBorder: OutlineInputBorder(
-                        borderSide: BorderSide(color: Colors.orange[900]),
-                        borderRadius: BorderRadius.circular(20)),
-                    labelText: S.current.rs,
-                    errorText: _validateRaison ? S.current.msg_champ_oblg : null,
-                    labelStyle: TextStyle(color: Colors.orange[900]),
-                    enabledBorder: OutlineInputBorder(
-                      gapPadding: 3.3,
-                      borderRadius: BorderRadius.circular(20),
-                      borderSide: BorderSide(color: Colors.orange[900]),
+      child: Form(
+        key: _formKey,
+        child: Wrap(
+          spacing: 13,
+          runSpacing: 13,
+          children: [
+            Row(
+              children: [
+                Flexible(
+                  child: TextFormField(
+                    enabled: editMode,
+                    controller: _raisonSocialeControl,
+                    keyboardType: TextInputType.text,
+                    validator: (value) {
+                      if (value.isEmpty) {
+                        return S.current.msg_champ_oblg;
+                      }
+                      return null;
+                    },
+                    decoration: InputDecoration(
+                      labelText: S.current.rs,
+                      prefixIcon: Icon(
+                        MdiIcons.idCard,
+                        color: Colors.blue[700],
+                      ),
+                      focusedBorder: OutlineInputBorder(
+                          borderSide: BorderSide(color: Colors.green),
+                          borderRadius: BorderRadius.circular(20)),
+                      labelStyle: TextStyle(color: Colors.green),
+                      enabledBorder: OutlineInputBorder(
+                        gapPadding: 3.3,
+                        borderRadius: BorderRadius.circular(20),
+                        borderSide: BorderSide(color: Colors.green),
+                      ),
+                      errorBorder:  OutlineInputBorder(
+                        gapPadding: 3.3,
+                        borderRadius: BorderRadius.circular(20),
+                        borderSide: BorderSide(color: Colors.red),
+                      ),
                     ),
                   ),
-                  enabled: editMode,
-                  controller: _raisonSocialeControl,
-                  keyboardType: TextInputType.text,
+                ),
+                Padding(padding: EdgeInsetsDirectional.fromSTEB(5, 5, 5, 5)),
+                Container(
+                  padding: const EdgeInsets.all(3),
+                  decoration: editMode? new BoxDecoration(
+                    border: Border.all(color: Colors.blueAccent,),
+                    borderRadius: BorderRadius.circular(20.0),
+                  ) : null,
+                  child: DropdownButtonHideUnderline(
+                    child: DropdownButton<String>(
+                        disabledHint: Text(_selectedStatut),
+                        value: _selectedStatut,
+                        items: _statutDropdownItems,
+                        onChanged: editMode
+                            ? (value) {
+                          setState(() {
+                            _selectedStatut = value;
+                          });
+                        }
+                            : null),),
+                ),
+              ],
+            ),
+            TextFormField(
+              enabled: editMode,
+              controller: _adresseControl,
+              keyboardType: TextInputType.text,
+              validator: (value) {
+                if (value.isEmpty) {
+                  return S.current.msg_champ_oblg;
+                }
+                return null;
+              },
+              decoration: InputDecoration(
+                labelText: S.current.adresse,
+                prefixIcon: Icon(
+                  MdiIcons.homeCityOutline,
+                  color: Colors.blue[700],
+                ),
+                focusedBorder: OutlineInputBorder(
+                    borderSide: BorderSide(color: Colors.blue[700]),
+                    borderRadius: BorderRadius.circular(20)),
+                enabledBorder: OutlineInputBorder(
+                  gapPadding: 3.3,
+                  borderRadius: BorderRadius.circular(20),
+                  borderSide: BorderSide(color: Colors.blue[700]),
+                ),
+                errorBorder:  OutlineInputBorder(
+                  gapPadding: 3.3,
+                  borderRadius: BorderRadius.circular(20),
+                  borderSide: BorderSide(color: Colors.red),
                 ),
               ),
-              Padding(padding: EdgeInsetsDirectional.fromSTEB(5, 5, 5, 5)),
-              Container(
-                padding: const EdgeInsets.all(3),
-                decoration: editMode? new BoxDecoration(
-                  border: Border.all(color: Colors.blueAccent,),
-                  borderRadius: BorderRadius.circular(20.0),
-                ) : null,
-                child: DropdownButtonHideUnderline(
-                  child: DropdownButton<String>(
-                      disabledHint: Text(_selectedStatut),
-                      value: _selectedStatut,
-                      items: _statutDropdownItems,
-                      onChanged: editMode
-                          ? (value) {
-                        setState(() {
-                          _selectedStatut = value;
-                        });
-                      }
-                          : null),),
+            ),
+            TextFormField(
+              enabled: editMode,
+              controller: _villeControl,
+              keyboardType: TextInputType.text,
+              // validator: (value) {
+              //   if (value.isEmpty) {
+              //     return S.current.msg_champ_oblg;
+              //   }
+              //   return null;
+              // },
+              decoration: InputDecoration(
+                labelText: S.current.ville,
+                prefixIcon: Icon(
+                  Icons.add_location,
+                  color: Colors.blue[700],
+                ),
+                focusedBorder: OutlineInputBorder(
+                    borderSide: BorderSide(color: Colors.blue[700]),
+                    borderRadius: BorderRadius.circular(20)),
+                enabledBorder: OutlineInputBorder(
+                  gapPadding: 3.3,
+                  borderRadius: BorderRadius.circular(20),
+                  borderSide: BorderSide(color: Colors.blue[700]),
+                ),
+                errorBorder:  OutlineInputBorder(
+                  gapPadding: 3.3,
+                  borderRadius: BorderRadius.circular(20),
+                  borderSide: BorderSide(color: Colors.red),
+                ),
               ),
-            ],
-          ),
-         Visibility(
-              visible: false,
-              child: TextField(
+            ),
+            TextFormField(
+              enabled: editMode,
+              controller: _telephoneControl,
+              keyboardType: TextInputType.phone,
+              // validator: (value) {
+              //   if (value.isEmpty) {
+              //     return S.current.msg_champ_oblg;
+              //   }
+              //   return null;
+              // },
+              decoration: InputDecoration(
+                labelText: S.current.telephone,
+                prefixIcon: Icon(
+                  Icons.phone,
+                  color: Colors.blue[700],
+                ),
+                focusedBorder: OutlineInputBorder(
+                    borderSide: BorderSide(color: Colors.blue[700]),
+                    borderRadius: BorderRadius.circular(20)),
+                enabledBorder: OutlineInputBorder(
+                  gapPadding: 3.3,
+                  borderRadius: BorderRadius.circular(20),
+                  borderSide: BorderSide(color: Colors.blue[700]),
+                ),
+                errorBorder:  OutlineInputBorder(
+                  gapPadding: 3.3,
+                  borderRadius: BorderRadius.circular(20),
+                  borderSide: BorderSide(color: Colors.red),
+                ),
+              ),
+            ),
+            TextFormField(
+              enabled: editMode,
+              controller: _mobileControl,
+              keyboardType: TextInputType.phone,
+              validator: (value) {
+                if (value.isEmpty) {
+                  return S.current.msg_champ_oblg;
+                }
+                return null;
+              },
+              decoration: InputDecoration(
+                labelText: S.current.mobile,
+                prefixIcon: Icon(
+                  Icons.phone_android,
+                  color: Colors.blue[700],
+                ),
+                focusedBorder: OutlineInputBorder(
+                    borderSide: BorderSide(color: Colors.blue[700]),
+                    borderRadius: BorderRadius.circular(20)),
+                enabledBorder: OutlineInputBorder(
+                  gapPadding: 3.3,
+                  borderRadius: BorderRadius.circular(20),
+                  borderSide: BorderSide(color: Colors.blue[700]),
+                ),
+                errorBorder:  OutlineInputBorder(
+                  gapPadding: 3.3,
+                  borderRadius: BorderRadius.circular(20),
+                  borderSide: BorderSide(color: Colors.red),
+                ),
+              ),
+            ),
+            TextFormField(
+              enabled: editMode,
+              controller: _faxControl,
+              keyboardType: TextInputType.phone,
+              // validator: (value) {
+              //   if (value.isEmpty) {
+              //     return S.current.msg_champ_oblg;
+              //   }
+              //   return null;
+              // },
+              decoration: InputDecoration(
+                labelText: S.current.fax,
+                prefixIcon: Icon(
+                  MdiIcons.fax,
+                  color: Colors.blue[700],
+                ),
+                focusedBorder: OutlineInputBorder(
+                    borderSide: BorderSide(color: Colors.blue[700]),
+                    borderRadius: BorderRadius.circular(20)),
+                enabledBorder: OutlineInputBorder(
+                  gapPadding: 3.3,
+                  borderRadius: BorderRadius.circular(20),
+                  borderSide: BorderSide(color: Colors.blue[700]),
+                ),
+                errorBorder:  OutlineInputBorder(
+                  gapPadding: 3.3,
+                  borderRadius: BorderRadius.circular(20),
+                  borderSide: BorderSide(color: Colors.red),
+                ),
+              ),
+            ),
+            TextFormField(
+              enabled: editMode,
+              controller: _emailControl,
+              keyboardType: TextInputType.emailAddress,
+              // validator: (value) {
+              //   if (value.isEmpty) {
+              //     return S.current.msg_champ_oblg;
+              //   }
+              //   return null;
+              // },
+              decoration: InputDecoration(
+                labelText: S.current.mail,
+                prefixIcon: Icon(
+                  Icons.email,
+                  color: Colors.blue[700],
+                ),
+                focusedBorder: OutlineInputBorder(
+                    borderSide: BorderSide(color: Colors.blue[700]),
+                    borderRadius: BorderRadius.circular(20)),
+                enabledBorder: OutlineInputBorder(
+                  gapPadding: 3.3,
+                  borderRadius: BorderRadius.circular(20),
+                  borderSide: BorderSide(color: Colors.blue[700]),
+                ),
+                errorBorder:  OutlineInputBorder(
+                  gapPadding: 3.3,
+                  borderRadius: BorderRadius.circular(20),
+                  borderSide: BorderSide(color: Colors.red),
+                ),
+              ),
+            ),
+            TextFormField(
+              enabled: editMode && !modification,
+              controller: _solde_departControl,
+              keyboardType: TextInputType.number,
+              validator: (value) {
+                if (value.isEmpty) {
+                  return S.current.msg_champ_oblg;
+                }
+                return null;
+              },
+              decoration: InputDecoration(
+                labelText: S.current.solde_depart,
+                prefixIcon: Icon(
+                  Icons.monetization_on,
+                  color: Colors.blue[700],
+                ),
+                focusedBorder: OutlineInputBorder(
+                    borderSide: BorderSide(color: Colors.blue[700]),
+                    borderRadius: BorderRadius.circular(20)),
+                enabledBorder: OutlineInputBorder(
+                  gapPadding: 3.3,
+                  borderRadius: BorderRadius.circular(20),
+                  borderSide: BorderSide(color: Colors.blue[700]),
+                ),
+                errorBorder:  OutlineInputBorder(
+                  gapPadding: 3.3,
+                  borderRadius: BorderRadius.circular(20),
+                  borderSide: BorderSide(color: Colors.red),
+                ),
+              ),
+            ),
+            TextFormField(
+              enabled: editMode && !modification,
+              controller: _chiffre_affairesControl,
+              keyboardType: TextInputType.number,
+              validator: (value) {
+                if (value.isEmpty) {
+                  return S.current.msg_champ_oblg;
+                }
+                return null;
+              },
+              decoration: InputDecoration(
+                labelText: S.current.chifre_affaire,
+                prefixIcon: Icon(
+                  Icons.monetization_on,
+                  color: Colors.blue[700],
+                ),
+                focusedBorder: OutlineInputBorder(
+                    borderSide: BorderSide(color: Colors.blue[700]),
+                    borderRadius: BorderRadius.circular(20)),
+                enabledBorder: OutlineInputBorder(
+                  gapPadding: 3.3,
+                  borderRadius: BorderRadius.circular(20),
+                  borderSide: BorderSide(color: Colors.blue[700]),
+                ),
+                errorBorder:  OutlineInputBorder(
+                  gapPadding: 3.3,
+                  borderRadius: BorderRadius.circular(20),
+                  borderSide: BorderSide(color: Colors.red),
+                ),
+              ),
+            ),
+            TextFormField(
+              enabled: editMode && !modification,
+              controller: _reglerControl,
+              keyboardType: TextInputType.number,
+              validator: (value) {
+                if (value.isEmpty) {
+                  return S.current.msg_champ_oblg;
+                }
+                return null;
+              },
+              decoration: InputDecoration(
+                labelText: S.current.regler,
+                prefixIcon: Icon(
+                  Icons.monetization_on,
+                  color: Colors.blue[700],
+                ),
+                focusedBorder: OutlineInputBorder(
+                    borderSide: BorderSide(color: Colors.blue[700]),
+                    borderRadius: BorderRadius.circular(20)),
+                enabledBorder: OutlineInputBorder(
+                  gapPadding: 3.3,
+                  borderRadius: BorderRadius.circular(20),
+                  borderSide: BorderSide(color: Colors.blue[700]),
+                ),
+                errorBorder:  OutlineInputBorder(
+                  gapPadding: 3.3,
+                  borderRadius: BorderRadius.circular(20),
+                  borderSide: BorderSide(color: Colors.red),
+                ),
+              ),
+            ),
+            Visibility(
+              visible: modification,
+              child: TextFormField(
                 enabled: false,
-                readOnly: true,
-                controller: _qrCodeControl,
-                keyboardType: TextInputType.text,
+                controller: _creditControl,
+                keyboardType: TextInputType.number,
                 decoration: InputDecoration(
                   prefixIcon: Icon(
-                    MdiIcons.qrcode,
+                    Icons.account_balance_wallet,
                     color: Colors.blue[700],
                   ),
                   focusedBorder: OutlineInputBorder(
                       borderSide: BorderSide(color: Colors.blue[700]),
                       borderRadius: BorderRadius.circular(20)),
-                  labelText: S.current.msg_scan_qr,
-                  disabledBorder: OutlineInputBorder(
+                  labelText: S.current.credit,
+                  enabledBorder: OutlineInputBorder(
                     gapPadding: 3.3,
                     borderRadius: BorderRadius.circular(20),
                     borderSide: BorderSide(color: Colors.blue[700]),
@@ -459,250 +744,48 @@ class _AddTierPageState extends State<AddTierPage>
                 ),
               ),
             ),
-          TextField(
-            enabled: editMode,
-            controller: _adresseControl,
-            keyboardType: TextInputType.text,
-            decoration: InputDecoration(
-              prefixIcon: Icon(
-                MdiIcons.homeCityOutline,
-                color: Colors.blue[700],
-              ),
-              focusedBorder: OutlineInputBorder(
-                  borderSide: BorderSide(color: Colors.blue[700]),
-                  borderRadius: BorderRadius.circular(20)),
-              labelText: S.current.adresse,
-              enabledBorder: OutlineInputBorder(
-                gapPadding: 3.3,
-                borderRadius: BorderRadius.circular(20),
-                borderSide: BorderSide(color: Colors.blue[700]),
-              ),
-            ),
-          ),
-          TextField(
-            enabled: editMode,
-            controller: _villeControl,
-            keyboardType: TextInputType.text,
-            decoration: InputDecoration(
-              prefixIcon: Icon(
-                Icons.add_location,
-                color: Colors.blue[700],
-              ),
-              focusedBorder: OutlineInputBorder(
-                  borderSide: BorderSide(color: Colors.blue[700]),
-                  borderRadius: BorderRadius.circular(20)),
-              labelText: S.current.ville,
-              enabledBorder: OutlineInputBorder(
-                gapPadding: 3.3,
-                borderRadius: BorderRadius.circular(20),
-                borderSide: BorderSide(color: Colors.blue[700]),
-              ),
-            ),
-          ),
-          TextField(
-            enabled: editMode,
-            controller: _telephoneControl,
-            keyboardType: TextInputType.phone,
-            decoration: InputDecoration(
-              prefixIcon: Icon(
-                Icons.phone,
-                color: Colors.blue[700],
-              ),
-              focusedBorder: OutlineInputBorder(
-                  borderSide: BorderSide(color: Colors.blue[700]),
-                  borderRadius: BorderRadius.circular(20)),
-              labelText: S.current.telephone,
-              enabledBorder: OutlineInputBorder(
-                gapPadding: 3.3,
-                borderRadius: BorderRadius.circular(20),
-                borderSide: BorderSide(color: Colors.blue[700]),
-              ),
-            ),
-          ),
-          TextField(
-            enabled: editMode,
-            controller: _mobileControl,
-            keyboardType: TextInputType.phone,
-            decoration: InputDecoration(
-              prefixIcon: Icon(
-                Icons.phone_android,
-                color: Colors.blue[700],
-              ),
-              focusedBorder: OutlineInputBorder(
-                  borderSide: BorderSide(color: Colors.blue[700]),
-                  borderRadius: BorderRadius.circular(20)),
-              labelText: S.current.mobile,
-              enabledBorder: OutlineInputBorder(
-                gapPadding: 3.3,
-                borderRadius: BorderRadius.circular(20),
-                borderSide: BorderSide(color: Colors.blue[700]),
-              ),
-            ),
-          ),
-          TextField(
-            enabled: editMode,
-            controller: _faxControl,
-            keyboardType: TextInputType.phone,
-            decoration: InputDecoration(
-              prefixIcon: Icon(
-                MdiIcons.fax,
-                color: Colors.blue[700],
-              ),
-              focusedBorder: OutlineInputBorder(
-                  borderSide: BorderSide(color: Colors.blue[700]),
-                  borderRadius: BorderRadius.circular(20)),
-              labelText: S.current.fax,
-              enabledBorder: OutlineInputBorder(
-                gapPadding: 3.3,
-                borderRadius: BorderRadius.circular(20),
-                borderSide: BorderSide(color: Colors.blue[700]),
-              ),
-            ),
-          ),
-          TextField(
-            enabled: editMode,
-            controller: _emailControl,
-            keyboardType: TextInputType.emailAddress,
-            decoration: InputDecoration(
-              prefixIcon: Icon(
-                Icons.email,
-                color: Colors.blue[700],
-              ),
-              focusedBorder: OutlineInputBorder(
-                  borderSide: BorderSide(color: Colors.blue[700]),
-                  borderRadius: BorderRadius.circular(20)),
-              labelText: S.current.mail,
-              enabledBorder: OutlineInputBorder(
-                gapPadding: 3.3,
-                borderRadius: BorderRadius.circular(20),
-                borderSide: BorderSide(color: Colors.blue[700]),
-              ),
-            ),
-          ),
-          TextField(
-            enabled: editMode && !modification,
-            controller: _solde_departControl,
-            keyboardType: TextInputType.number,
-            decoration: InputDecoration(
-              prefixIcon: Icon(
-                Icons.monetization_on,
-                color: Colors.blue[700],
-              ),
-              focusedBorder: OutlineInputBorder(
-                  borderSide: BorderSide(color: Colors.blue[700]),
-                  borderRadius: BorderRadius.circular(20)),
-              labelText: S.current.solde_depart,
-              enabledBorder: OutlineInputBorder(
-                gapPadding: 3.3,
-                borderRadius: BorderRadius.circular(20),
-                borderSide: BorderSide(color: Colors.blue[700]),
-              ),
-            ),
-          ),
-          TextField(
-            enabled: editMode && !modification,
-            controller: _chiffre_affairesControl,
-            keyboardType: TextInputType.number,
-            decoration: InputDecoration(
-              prefixIcon: Icon(
-                Icons.monetization_on,
-                color: Colors.blue[700],
-              ),
-              focusedBorder: OutlineInputBorder(
-                  borderSide: BorderSide(color: Colors.blue[700]),
-                  borderRadius: BorderRadius.circular(20)),
-              labelText: S.current.chifre_affaire,
-              enabledBorder: OutlineInputBorder(
-                gapPadding: 3.3,
-                borderRadius: BorderRadius.circular(20),
-                borderSide: BorderSide(color: Colors.blue[700]),
-              ),
-            ),
-          ),
-          TextField(
-            enabled: editMode && !modification,
-            controller: _reglerControl,
-            keyboardType: TextInputType.number,
-            decoration: InputDecoration(
-              prefixIcon: Icon(
-                Icons.monetization_on,
-                color: Colors.blue[700],
-              ),
-              focusedBorder: OutlineInputBorder(
-                  borderSide: BorderSide(color: Colors.blue[700]),
-                  borderRadius: BorderRadius.circular(20)),
-              labelText: S.current.regler,
-              enabledBorder: OutlineInputBorder(
-                gapPadding: 3.3,
-                borderRadius: BorderRadius.circular(20),
-                borderSide: BorderSide(color: Colors.blue[700]),
-              ),
-            ),
-          ),
-          Visibility(
-            visible: modification,
-            child: TextField(
-              enabled: false,
-              controller: _creditControl,
-              keyboardType: TextInputType.number,
-              decoration: InputDecoration(
-                prefixIcon: Icon(
-                  Icons.account_balance_wallet,
-                  color: Colors.blue[700],
-                ),
-                focusedBorder: OutlineInputBorder(
-                    borderSide: BorderSide(color: Colors.blue[700]),
-                    borderRadius: BorderRadius.circular(20)),
-                labelText: S.current.credit,
-                enabledBorder: OutlineInputBorder(
-                  gapPadding: 3.3,
-                  borderRadius: BorderRadius.circular(20),
-                  borderSide: BorderSide(color: Colors.blue[700]),
-                ),
-              ),
-            ),
-          ),
-          dropdowns() ,
-          Container(
-            decoration: editMode? new BoxDecoration(
-              border: Border.all(color: Colors.blueAccent,),
-              borderRadius: BorderRadius.circular(20.0),
-            ) : null,
-            child: CheckboxListTile(
-              title: Text(S.current.client_four),
-              value: _clientFournBool,
-              onChanged: editMode? (bool value) {
-                setState(() {
-                  _clientFournBool = value;
-                });
-              } : null,
-            ),
-          ),
-           Container(
+            dropdowns() ,
+            Container(
               decoration: editMode? new BoxDecoration(
                 border: Border.all(color: Colors.blueAccent,),
                 borderRadius: BorderRadius.circular(20.0),
               ) : null,
-              child: SwitchListTile(
-                title: Text(S.current.bloquer),
-                value: _controlBloquer,
-                onChanged: (bool value){
+              child: CheckboxListTile(
+                title: Text(S.current.client_four),
+                value: _clientFournBool,
+                onChanged: editMode? (bool value) {
                   setState(() {
-                    if(widget.arguments.id != null){
-                      if(widget.arguments.id < 2){
-                        _controlBloquer =false ;
+                    _clientFournBool = value;
+                  });
+                } : null,
+              ),
+            ),
+             Container(
+                decoration: editMode? new BoxDecoration(
+                  border: Border.all(color: Colors.blueAccent,),
+                  borderRadius: BorderRadius.circular(20.0),
+                ) : null,
+                child: SwitchListTile(
+                  title: Text(S.current.bloquer),
+                  value: _controlBloquer,
+                  onChanged: (bool value){
+                    setState(() {
+                      if(widget.arguments.id != null){
+                        if(widget.arguments.id < 2){
+                          _controlBloquer =false ;
+                        }else{
+                          _controlBloquer = value ;
+                        }
                       }else{
                         _controlBloquer = value ;
                       }
-                    }else{
-                      _controlBloquer = value ;
-                    }
 
-                  });
-                },
-              )
-          ),
-        ],
+                    });
+                  },
+                )
+            ),
+          ],
+        ),
       ),
     );
   }
@@ -929,6 +1012,7 @@ class _AddTierPageState extends State<AddTierPage>
           editMode: editMode,
           value: _selectedFamille,
           items: _familleDropdownItems,
+          libelle: _selectedFamille.libelle,
           onChanged: (value) {
             setState(() {
               _selectedFamille = value;
@@ -946,7 +1030,7 @@ class _AddTierPageState extends State<AddTierPage>
         ),
         Padding(padding: EdgeInsetsDirectional.fromSTEB(10, 10, 10, 10),),
         ListDropDown(
-          libelle: S.current.tarification,
+          libelle: "${S.current.tarif }",
           editMode: editMode,
           value: _selectedTarification,
           items: _tarificationDropdownItems,

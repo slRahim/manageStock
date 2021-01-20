@@ -62,26 +62,20 @@ class _TresorieListItemState extends State<TresorieListItem> {
               controller.expandCard();
             }
           },
-          leading: Container(
+          leading: CircleAvatar(
+            radius: 28,
+            backgroundColor: Colors.yellow[700],
             child: CircleAvatar(
               child: (widget.tresorie.categorie == 2 ||
                   widget.tresorie.categorie == 7) ? Icon(
                 Icons.arrow_upward_outlined, color: Colors.green,)
                   : Icon(Icons.arrow_downward_outlined, color: Colors.red,),
-              radius: 30,
+              radius: 25,
               backgroundColor: Colors.grey[100],
-            ),
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(50),
-              border: Border.all(
-                width: 2,
-                color: Colors.red,
-              ),
-              color: Colors.white,
             ),
           ),
           subtitle: Helpers.dateToText(widget.tresorie.date),
-          title: (widget.tresorie.tierRS != null)?("RS: " + widget.tresorie.tierRS):("RS : "),
+          title: (widget.tresorie.tierRS != null)?("RS: " + widget.tresorie.tierRS):("RS : ___ "),
           trailingChildren: [
             Text(
               "N° : ${widget.tresorie.numTresorie}",

@@ -73,6 +73,8 @@ class _ProfilePageState extends State<ProfilePage> with TickerProviderStateMixin
 
   SliverListDataSource _dataSource;
   QueryCtr _queryCtr;
+
+  final _formKey = GlobalKey<FormState>();
   
   void initState() {
     super.initState();
@@ -195,431 +197,619 @@ class _ProfilePageState extends State<ProfilePage> with TickerProviderStateMixin
   Widget fichetab() {
     return SingleChildScrollView(
       padding: const EdgeInsets.fromLTRB(15, 25, 15, 15),
-      child: Wrap(
-        spacing: 13,
-        runSpacing: 13,
-        children: [
-          Row(
-            children: [
-              Flexible(
-                child: TextField(
-                  decoration: InputDecoration(
-                    prefixIcon: Icon(
-                      MdiIcons.idCard,
-                      color: Colors.orange[900],
-                    ),
-                    focusedBorder: OutlineInputBorder(
-                        borderSide: BorderSide(color: Colors.orange[900]),
-                        borderRadius: BorderRadius.circular(20)),
-                    labelText:  S.current.rs,
-                    errorText: _validateRaison ? S.current.msg_champ_oblg : null,
-                    labelStyle: TextStyle(color: Colors.orange[900]),
-                    enabledBorder: OutlineInputBorder(
-                      gapPadding: 3.3,
-                      borderRadius: BorderRadius.circular(20),
-                      borderSide: BorderSide(color: Colors.orange[900]),
-                    ),
-                  ),
-                  enabled: editMode,
-                  controller: _raisonSocialeControl,
-                  keyboardType: TextInputType.text,
-                ),
-              ),
-              Padding(padding: EdgeInsets.fromLTRB(5, 5, 5, 5)),
-              Container(
-                padding: const EdgeInsets.all(3),
-                decoration: editMode? new BoxDecoration(
-                  border: Border.all(color: Colors.blueAccent,),
-                  borderRadius: BorderRadius.circular(20.0),
-                ) : null,
-                child: DropdownButtonHideUnderline(
-                  child: DropdownButton<String>(
-                      disabledHint: Text(_selectedStatut),
-                      value: _selectedStatut,
-                      items: _statutDropdownItems,
-                      onChanged: editMode
-                          ? (value) {
-                        setState(() {
-                          _selectedStatut = value;
-                        });
-                      }
-                          : null),),
-              ),
-            ],
-          ),
-          TextField(
-            enabled: editMode,
-            controller: _activiteControl,
-            keyboardType: TextInputType.text,
-            decoration: InputDecoration(
-              prefixIcon: Icon(
-                MdiIcons.homeCityOutline,
-                color: Colors.blue[700],
-              ),
-              focusedBorder: OutlineInputBorder(
-                  borderSide: BorderSide(color: Colors.blue[700]),
-                  borderRadius: BorderRadius.circular(20)),
-              labelText:  S.current.activite,
-              enabledBorder: OutlineInputBorder(
-                gapPadding: 3.3,
-                borderRadius: BorderRadius.circular(20),
-                borderSide: BorderSide(color: Colors.blue[700]),
-              ),
-            ),
-          ),
-          TextField(
-            enabled: editMode,
-            controller: _adresseControl,
-            keyboardType: TextInputType.text,
-            decoration: InputDecoration(
-              prefixIcon: Icon(
-                MdiIcons.homeCityOutline,
-                color: Colors.blue[700],
-              ),
-              focusedBorder: OutlineInputBorder(
-                  borderSide: BorderSide(color: Colors.blue[700]),
-                  borderRadius: BorderRadius.circular(20)),
-              labelText:  S.current.adresse,
-              enabledBorder: OutlineInputBorder(
-                gapPadding: 3.3,
-                borderRadius: BorderRadius.circular(20),
-                borderSide: BorderSide(color: Colors.blue[700]),
-              ),
-            ),
-          ),
-          TextField(
-            enabled: editMode,
-            controller: _villeControl,
-            keyboardType: TextInputType.text,
-            decoration: InputDecoration(
-              prefixIcon: Icon(
-                Icons.add_location,
-                color: Colors.blue[700],
-              ),
-              focusedBorder: OutlineInputBorder(
-                  borderSide: BorderSide(color: Colors.blue[700]),
-                  borderRadius: BorderRadius.circular(20)),
-              labelText:  S.current.ville,
-              enabledBorder: OutlineInputBorder(
-                gapPadding: 3.3,
-                borderRadius: BorderRadius.circular(20),
-                borderSide: BorderSide(color: Colors.blue[700]),
-              ),
-            ),
-          ),
-          TextField(
-            enabled: editMode,
-            controller: _paysControl,
-            keyboardType: TextInputType.text,
-            decoration: InputDecoration(
-              prefixIcon: Icon(
-                Icons.add_location,
-                color: Colors.blue[700],
-              ),
-              focusedBorder: OutlineInputBorder(
-                  borderSide: BorderSide(color: Colors.blue[700]),
-                  borderRadius: BorderRadius.circular(20)),
-              labelText:  S.current.pays,
-              enabledBorder: OutlineInputBorder(
-                gapPadding: 3.3,
-                borderRadius: BorderRadius.circular(20),
-                borderSide: BorderSide(color: Colors.blue[700]),
-              ),
-            ),
-          ),
-          TextField(
-            enabled: editMode,
-            controller: _telephoneControl,
-            keyboardType: TextInputType.number,
-            decoration: InputDecoration(
-              prefixIcon: Icon(
-                Icons.phone,
-                color: Colors.blue[700],
-              ),
-              focusedBorder: OutlineInputBorder(
-                  borderSide: BorderSide(color: Colors.blue[700]),
-                  borderRadius: BorderRadius.circular(20)),
-              labelText:  S.current.telephone,
-              enabledBorder: OutlineInputBorder(
-                gapPadding: 3.3,
-                borderRadius: BorderRadius.circular(20),
-                borderSide: BorderSide(color: Colors.blue[700]),
-              ),
-            ),
-          ),
-          TextField(
-            enabled: editMode,
-            controller: _telephone2Control,
-            keyboardType: TextInputType.number,
-            decoration: InputDecoration(
-              prefixIcon: Icon(
-                Icons.phone,
-                color: Colors.blue[700],
-              ),
-              focusedBorder: OutlineInputBorder(
-                  borderSide: BorderSide(color: Colors.blue[700]),
-                  borderRadius: BorderRadius.circular(20)),
-              labelText:  S.current.telephone2,
-              enabledBorder: OutlineInputBorder(
-                gapPadding: 3.3,
-                borderRadius: BorderRadius.circular(20),
-                borderSide: BorderSide(color: Colors.blue[700]),
-              ),
-            ),
-          ),
-          TextField(
-            enabled: editMode,
-            controller: _mobileControl,
-            keyboardType: TextInputType.number,
-            decoration: InputDecoration(
-              prefixIcon: Icon(
-                Icons.phone_android,
-                color: Colors.blue[700],
-              ),
-              focusedBorder: OutlineInputBorder(
-                  borderSide: BorderSide(color: Colors.blue[700]),
-                  borderRadius: BorderRadius.circular(20)),
-              labelText:  S.current.mobile,
-              enabledBorder: OutlineInputBorder(
-                gapPadding: 3.3,
-                borderRadius: BorderRadius.circular(20),
-                borderSide: BorderSide(color: Colors.blue[700]),
-              ),
-            ),
-          ),
-          TextField(
-            enabled: editMode,
-            controller: _mobile2Control,
-            keyboardType: TextInputType.number,
-            decoration: InputDecoration(
-              prefixIcon: Icon(
-                Icons.phone_android,
-                color: Colors.blue[700],
-              ),
-              focusedBorder: OutlineInputBorder(
-                  borderSide: BorderSide(color: Colors.blue[700]),
-                  borderRadius: BorderRadius.circular(20)),
-              labelText:  S.current.mobile2,
-              enabledBorder: OutlineInputBorder(
-                gapPadding: 3.3,
-                borderRadius: BorderRadius.circular(20),
-                borderSide: BorderSide(color: Colors.blue[700]),
-              ),
-            ),
-          ),
-          TextField(
-            enabled: editMode,
-            controller: _faxControl,
-            keyboardType: TextInputType.number,
-            decoration: InputDecoration(
-              prefixIcon: Icon(
-                MdiIcons.fax,
-                color: Colors.blue[700],
-              ),
-              focusedBorder: OutlineInputBorder(
-                  borderSide: BorderSide(color: Colors.blue[700]),
-                  borderRadius: BorderRadius.circular(20)),
-              labelText:  S.current.fax,
-              enabledBorder: OutlineInputBorder(
-                gapPadding: 3.3,
-                borderRadius: BorderRadius.circular(20),
-                borderSide: BorderSide(color: Colors.blue[700]),
-              ),
-            ),
-          ),
-          TextField(
-            enabled: editMode,
-            controller: _emailControl,
-            keyboardType: TextInputType.text,
-            decoration: InputDecoration(
-              prefixIcon: Icon(
-                Icons.email,
-                color: Colors.blue[700],
-              ),
-              focusedBorder: OutlineInputBorder(
-                  borderSide: BorderSide(color: Colors.blue[700]),
-                  borderRadius: BorderRadius.circular(20)),
-              labelText:  S.current.mail,
-              enabledBorder: OutlineInputBorder(
-                gapPadding: 3.3,
-                borderRadius: BorderRadius.circular(20),
-                borderSide: BorderSide(color: Colors.blue[700]),
-              ),
-            ),
-          ),
-          TextField(
-            enabled: editMode,
-            controller: _addresseWebControl,
-            keyboardType: TextInputType.text,
-            decoration: InputDecoration(
-              prefixIcon: Icon(
-                Icons.email,
-                color: Colors.blue[700],
-              ),
-              focusedBorder: OutlineInputBorder(
-                  borderSide: BorderSide(color: Colors.blue[700]),
-                  borderRadius: BorderRadius.circular(20)),
-              labelText:  S.current.adresse_web,
-              enabledBorder: OutlineInputBorder(
-                gapPadding: 3.3,
-                borderRadius: BorderRadius.circular(20),
-                borderSide: BorderSide(color: Colors.blue[700]),
-              ),
-            ),
-          ),
-          TextField(
-            enabled: editMode,
-            controller: _rcControl,
-            keyboardType: TextInputType.text,
-            decoration: InputDecoration(
-              prefixIcon: Icon(
-                Icons.email,
-                color: Colors.blue[700],
-              ),
-              focusedBorder: OutlineInputBorder(
-                  borderSide: BorderSide(color: Colors.blue[700]),
-                  borderRadius: BorderRadius.circular(20)),
-              labelText:  S.current.n_rc,
-              enabledBorder: OutlineInputBorder(
-                gapPadding: 3.3,
-                borderRadius: BorderRadius.circular(20),
-                borderSide: BorderSide(color: Colors.blue[700]),
-              ),
-            ),
-          ),
-          TextField(
-            enabled: editMode,
-            controller: _aiControl,
-            keyboardType: TextInputType.text,
-            decoration: InputDecoration(
-              prefixIcon: Icon(
-                Icons.email,
-                color: Colors.blue[700],
-              ),
-              focusedBorder: OutlineInputBorder(
-                  borderSide: BorderSide(color: Colors.blue[700]),
-                  borderRadius: BorderRadius.circular(20)),
-              labelText:  S.current.art_imp,
-              enabledBorder: OutlineInputBorder(
-                gapPadding: 3.3,
-                borderRadius: BorderRadius.circular(20),
-                borderSide: BorderSide(color: Colors.blue[700]),
-              ),
-            ),
-          ),
-          TextField(
-            enabled: editMode,
-            controller: _nifControl,
-            keyboardType: TextInputType.text,
-            decoration: InputDecoration(
-              prefixIcon: Icon(
-                Icons.email,
-                color: Colors.blue[700],
-              ),
-              focusedBorder: OutlineInputBorder(
-                  borderSide: BorderSide(color: Colors.blue[700]),
-                  borderRadius: BorderRadius.circular(20)),
-              labelText:  S.current.nif,
-              enabledBorder: OutlineInputBorder(
-                gapPadding: 3.3,
-                borderRadius: BorderRadius.circular(20),
-                borderSide: BorderSide(color: Colors.blue[700]),
-              ),
-            ),
-          ),
-          TextField(
-            enabled: editMode,
-            controller: _nisControl,
-            keyboardType: TextInputType.text,
-            decoration: InputDecoration(
-              prefixIcon: Icon(
-                Icons.email,
-                color: Colors.blue[700],
-              ),
-              focusedBorder: OutlineInputBorder(
-                  borderSide: BorderSide(color: Colors.blue[700]),
-                  borderRadius: BorderRadius.circular(20)),
-              labelText:  S.current.nis,
-              enabledBorder: OutlineInputBorder(
-                gapPadding: 3.3,
-                borderRadius: BorderRadius.circular(20),
-                borderSide: BorderSide(color: Colors.blue[700]),
-              ),
-            ),
-          ),
-          TextField(
-            enabled: editMode,
-            controller: _capitalsocialControl,
-            keyboardType: TextInputType.number,
-            decoration: InputDecoration(
-              prefixIcon: Icon(
-                Icons.monetization_on,
-                color: Colors.blue[700],
-              ),
-              focusedBorder: OutlineInputBorder(
-                  borderSide: BorderSide(color: Colors.blue[700]),
-                  borderRadius: BorderRadius.circular(20)),
-              labelText:  S.current.capitale_sociale,
-              enabledBorder: OutlineInputBorder(
-                gapPadding: 3.3,
-                borderRadius: BorderRadius.circular(20),
-                borderSide: BorderSide(color: Colors.blue[700]),
-              ),
-            ),
-          ),
-          Container(
-            width: double.infinity,
-            padding: const EdgeInsets.all(5),
-            decoration: editMode
-                ? new BoxDecoration(
-              border: Border.all(
-                color: Colors.blueAccent,
-              ),
-              borderRadius: BorderRadius.circular(20.0),
-            )
-                : null,
-            child: Row(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              mainAxisSize: MainAxisSize.max,
+      child: Form(
+        child: Wrap(
+          spacing: 13,
+          runSpacing: 13,
+          children: [
+            Row(
               children: [
-                SizedBox(width: 6),
-                Icon(
-                  Icons.security, color: Colors.blue[700],),
-                SizedBox(width: 13),
-                Expanded(
-                  child: GestureDetector(
-                    onTap: () {
-                      arguments.codePinEnabled = !arguments.codePinEnabled;
+                Flexible(
+                  child: TextFormField(
+                    enabled: editMode,
+                    controller: _raisonSocialeControl,
+                    keyboardType: TextInputType.text,
+                    validator: (value) {
+                      if (value.isEmpty) {
+                        return S.current.msg_champ_oblg;
+                      }
+                      return null;
                     },
-                    child: new Text( S.current.code_pin,
-                      style: TextStyle(
-                          fontSize: 16,
-                          color:
-                          editMode ? Colors.black : Colors.black54)),
+                    decoration: InputDecoration(
+                      labelText:  S.current.rs,
+                      labelStyle: TextStyle(color: Colors.green),
+                      prefixIcon: Icon(
+                        MdiIcons.idCard,
+                        color: Colors.blue[700],
+                      ),
+                      focusedBorder: OutlineInputBorder(
+                          borderSide: BorderSide(color: Colors.green),
+                          borderRadius: BorderRadius.circular(20)),
+                      enabledBorder: OutlineInputBorder(
+                        gapPadding: 3.3,
+                        borderRadius: BorderRadius.circular(20),
+                        borderSide: BorderSide(color: Colors.green),
+                      ),
+                      errorBorder:  OutlineInputBorder(
+                        gapPadding: 3.3,
+                        borderRadius: BorderRadius.circular(20),
+                        borderSide: BorderSide(color: Colors.red),
+                      ),
+                    ),
                   ),
                 ),
-
-                Switch(
-                  value: arguments.codePinEnabled,
-                  onChanged: editMode?(bool isOn) {
-                    setState(() {
-                      arguments.codePinEnabled = isOn;
-                      if(isOn){
-                        setState(() {
-                          _tabController.index = 2;
-                        });
-                      }
-                    });
-                  }: null,
-                  activeColor: Colors.blue,
-                  inactiveTrackColor: Colors.grey,
-                  inactiveThumbColor: editMode? Colors.blue:Colors.grey,
-                )
+                Padding(padding: EdgeInsets.fromLTRB(5, 5, 5, 5)),
+                Container(
+                  padding: const EdgeInsets.all(3),
+                  decoration: editMode? new BoxDecoration(
+                    border: Border.all(color: Colors.blueAccent,),
+                    borderRadius: BorderRadius.circular(20.0),
+                  ) : null,
+                  child: DropdownButtonHideUnderline(
+                    child: DropdownButton<String>(
+                        disabledHint: Text(_selectedStatut),
+                        value: _selectedStatut,
+                        items: _statutDropdownItems,
+                        onChanged: editMode
+                            ? (value) {
+                          setState(() {
+                            _selectedStatut = value;
+                          });
+                        }
+                            : null),),
+                ),
               ],
             ),
-          )
+            TextFormField(
+              enabled: editMode,
+              controller: _activiteControl,
+              keyboardType: TextInputType.text,
+              validator: (value) {
+                if (value.isEmpty) {
+                  return S.current.msg_champ_oblg;
+                }
+                return null;
+              },
+              decoration: InputDecoration(
+                labelText:  S.current.activite,
+                prefixIcon: Icon(
+                  MdiIcons.homeCityOutline,
+                  color: Colors.blue[700],
+                ),
+                focusedBorder: OutlineInputBorder(
+                    borderSide: BorderSide(color: Colors.blue[700]),
+                    borderRadius: BorderRadius.circular(20)),
+                enabledBorder: OutlineInputBorder(
+                  gapPadding: 3.3,
+                  borderRadius: BorderRadius.circular(20),
+                  borderSide: BorderSide(color: Colors.blue[700]),
+                ),
+                errorBorder:  OutlineInputBorder(
+                  gapPadding: 3.3,
+                  borderRadius: BorderRadius.circular(20),
+                  borderSide: BorderSide(color: Colors.red),
+                ),
+              ),
+            ),
+            TextFormField(
+              enabled: editMode,
+              controller: _adresseControl,
+              keyboardType: TextInputType.text,
+              validator: (value) {
+                if (value.isEmpty) {
+                  return S.current.msg_champ_oblg;
+                }
+                return null;
+              },
+              decoration: InputDecoration(
+                labelText:  S.current.adresse,
+                prefixIcon: Icon(
+                  MdiIcons.homeCityOutline,
+                  color: Colors.blue[700],
+                ),
+                focusedBorder: OutlineInputBorder(
+                    borderSide: BorderSide(color: Colors.blue[700]),
+                    borderRadius: BorderRadius.circular(20)),
+                enabledBorder: OutlineInputBorder(
+                  gapPadding: 3.3,
+                  borderRadius: BorderRadius.circular(20),
+                  borderSide: BorderSide(color: Colors.blue[700]),
+                ),
+                errorBorder:  OutlineInputBorder(
+                  gapPadding: 3.3,
+                  borderRadius: BorderRadius.circular(20),
+                  borderSide: BorderSide(color: Colors.red),
+                ),
+              ),
+            ),
+            TextFormField(
+              enabled: editMode,
+              controller: _villeControl,
+              keyboardType: TextInputType.text,
+              // validator: (value) {
+              //   if (value.isEmpty) {
+              //     return S.current.msg_champ_oblg;
+              //   }
+              //   return null;
+              // },
+              decoration: InputDecoration(
+                labelText:  S.current.ville,
+                prefixIcon: Icon(
+                  Icons.add_location,
+                  color: Colors.blue[700],
+                ),
+                focusedBorder: OutlineInputBorder(
+                    borderSide: BorderSide(color: Colors.blue[700]),
+                    borderRadius: BorderRadius.circular(20)),
+                enabledBorder: OutlineInputBorder(
+                  gapPadding: 3.3,
+                  borderRadius: BorderRadius.circular(20),
+                  borderSide: BorderSide(color: Colors.blue[700]),
+                ),
+                errorBorder:  OutlineInputBorder(
+                  gapPadding: 3.3,
+                  borderRadius: BorderRadius.circular(20),
+                  borderSide: BorderSide(color: Colors.red),
+                ),
+              ),
+            ),
+            TextFormField(
+              enabled: editMode,
+              controller: _paysControl,
+              keyboardType: TextInputType.text,
+              // validator: (value) {
+              //   if (value.isEmpty) {
+              //     return S.current.msg_champ_oblg;
+              //   }
+              //   return null;
+              // },
+              decoration: InputDecoration(
+                labelText:  S.current.pays,
+                prefixIcon: Icon(
+                  Icons.add_location,
+                  color: Colors.blue[700],
+                ),
+                focusedBorder: OutlineInputBorder(
+                    borderSide: BorderSide(color: Colors.blue[700]),
+                    borderRadius: BorderRadius.circular(20)),
+                enabledBorder: OutlineInputBorder(
+                  gapPadding: 3.3,
+                  borderRadius: BorderRadius.circular(20),
+                  borderSide: BorderSide(color: Colors.blue[700]),
+                ),
+                errorBorder:  OutlineInputBorder(
+                  gapPadding: 3.3,
+                  borderRadius: BorderRadius.circular(20),
+                  borderSide: BorderSide(color: Colors.red),
+                ),
+              ),
+            ),
+            TextFormField(
+              enabled: editMode,
+              controller: _telephoneControl,
+              keyboardType: TextInputType.number,
+              // validator: (value) {
+              //   if (value.isEmpty) {
+              //     return S.current.msg_champ_oblg;
+              //   }
+              //   return null;
+              // },
+              decoration: InputDecoration(
+                labelText:  S.current.telephone,
+                prefixIcon: Icon(
+                  Icons.phone,
+                  color: Colors.blue[700],
+                ),
+                focusedBorder: OutlineInputBorder(
+                    borderSide: BorderSide(color: Colors.blue[700]),
+                    borderRadius: BorderRadius.circular(20)),
+                enabledBorder: OutlineInputBorder(
+                  gapPadding: 3.3,
+                  borderRadius: BorderRadius.circular(20),
+                  borderSide: BorderSide(color: Colors.blue[700]),
+                ),
+                errorBorder:  OutlineInputBorder(
+                  gapPadding: 3.3,
+                  borderRadius: BorderRadius.circular(20),
+                  borderSide: BorderSide(color: Colors.red),
+                ),
+              ),
+            ),
+            TextFormField(
+              enabled: editMode,
+              controller: _telephone2Control,
+              keyboardType: TextInputType.number,
+              // validator: (value) {
+              //   if (value.isEmpty) {
+              //     return S.current.msg_champ_oblg;
+              //   }
+              //   return null;
+              // },
+              decoration: InputDecoration(
+                labelText:  S.current.telephone2,
+                prefixIcon: Icon(
+                  Icons.phone,
+                  color: Colors.blue[700],
+                ),
+                focusedBorder: OutlineInputBorder(
+                    borderSide: BorderSide(color: Colors.blue[700]),
+                    borderRadius: BorderRadius.circular(20)),
+                enabledBorder: OutlineInputBorder(
+                  gapPadding: 3.3,
+                  borderRadius: BorderRadius.circular(20),
+                  borderSide: BorderSide(color: Colors.blue[700]),
+                ),
+                errorBorder:  OutlineInputBorder(
+                  gapPadding: 3.3,
+                  borderRadius: BorderRadius.circular(20),
+                  borderSide: BorderSide(color: Colors.red),
+                ),
+              ),
+            ),
+            TextFormField(
+              enabled: editMode,
+              controller: _mobileControl,
+              keyboardType: TextInputType.number,
+              validator: (value) {
+                if (value.isEmpty) {
+                  return S.current.msg_champ_oblg;
+                }
+                return null;
+              },
+              decoration: InputDecoration(
+                labelText:  S.current.mobile,
+                prefixIcon: Icon(
+                  Icons.phone_android,
+                  color: Colors.blue[700],
+                ),
+                focusedBorder: OutlineInputBorder(
+                    borderSide: BorderSide(color: Colors.blue[700]),
+                    borderRadius: BorderRadius.circular(20)),
+                enabledBorder: OutlineInputBorder(
+                  gapPadding: 3.3,
+                  borderRadius: BorderRadius.circular(20),
+                  borderSide: BorderSide(color: Colors.blue[700]),
+                ),
+                errorBorder:  OutlineInputBorder(
+                  gapPadding: 3.3,
+                  borderRadius: BorderRadius.circular(20),
+                  borderSide: BorderSide(color: Colors.red),
+                ),
+              ),
+            ),
+            TextFormField(
+              enabled: editMode,
+              controller: _mobile2Control,
+              keyboardType: TextInputType.number,
+              // validator: (value) {
+              //   if (value.isEmpty) {
+              //     return S.current.msg_champ_oblg;
+              //   }
+              //   return null;
+              // },
+              decoration: InputDecoration(
+                labelText:  S.current.mobile2,
+                prefixIcon: Icon(
+                  Icons.phone_android,
+                  color: Colors.blue[700],
+                ),
+                focusedBorder: OutlineInputBorder(
+                    borderSide: BorderSide(color: Colors.blue[700]),
+                    borderRadius: BorderRadius.circular(20)),
+                enabledBorder: OutlineInputBorder(
+                  gapPadding: 3.3,
+                  borderRadius: BorderRadius.circular(20),
+                  borderSide: BorderSide(color: Colors.blue[700]),
+                ),
+                errorBorder:  OutlineInputBorder(
+                  gapPadding: 3.3,
+                  borderRadius: BorderRadius.circular(20),
+                  borderSide: BorderSide(color: Colors.red),
+                ),
+              ),
+            ),
+            TextFormField(
+              enabled: editMode,
+              controller: _faxControl,
+              keyboardType: TextInputType.number,
+              // validator: (value) {
+              //   if (value.isEmpty) {
+              //     return S.current.msg_champ_oblg;
+              //   }
+              //   return null;
+              // },
+              decoration: InputDecoration(
+                labelText:  S.current.fax,
+                prefixIcon: Icon(
+                  MdiIcons.fax,
+                  color: Colors.blue[700],
+                ),
+                focusedBorder: OutlineInputBorder(
+                    borderSide: BorderSide(color: Colors.blue[700]),
+                    borderRadius: BorderRadius.circular(20)),
+                enabledBorder: OutlineInputBorder(
+                  gapPadding: 3.3,
+                  borderRadius: BorderRadius.circular(20),
+                  borderSide: BorderSide(color: Colors.blue[700]),
+                ),
+                errorBorder:  OutlineInputBorder(
+                  gapPadding: 3.3,
+                  borderRadius: BorderRadius.circular(20),
+                  borderSide: BorderSide(color: Colors.red),
+                ),
+              ),
+            ),
+            TextFormField(
+              enabled: editMode,
+              controller: _emailControl,
+              keyboardType: TextInputType.text,
+              // validator: (value) {
+              //   if (value.isEmpty) {
+              //     return S.current.msg_champ_oblg;
+              //   }
+              //   return null;
+              // },
+              decoration: InputDecoration(
+                labelText:  S.current.mail,
+                prefixIcon: Icon(
+                  Icons.email,
+                  color: Colors.blue[700],
+                ),
+                focusedBorder: OutlineInputBorder(
+                    borderSide: BorderSide(color: Colors.blue[700]),
+                    borderRadius: BorderRadius.circular(20)),
+                enabledBorder: OutlineInputBorder(
+                  gapPadding: 3.3,
+                  borderRadius: BorderRadius.circular(20),
+                  borderSide: BorderSide(color: Colors.blue[700]),
+                ),
+                errorBorder:  OutlineInputBorder(
+                  gapPadding: 3.3,
+                  borderRadius: BorderRadius.circular(20),
+                  borderSide: BorderSide(color: Colors.red),
+                ),
+              ),
+            ),
+            TextFormField(
+              enabled: editMode,
+              controller: _addresseWebControl,
+              keyboardType: TextInputType.text,
+              // validator: (value) {
+              //   if (value.isEmpty) {
+              //     return S.current.msg_champ_oblg;
+              //   }
+              //   return null;
+              // },
+              decoration: InputDecoration(
+                labelText:  S.current.adresse_web,
+                prefixIcon: Icon(
+                  Icons.email,
+                  color: Colors.blue[700],
+                ),
+                focusedBorder: OutlineInputBorder(
+                    borderSide: BorderSide(color: Colors.blue[700]),
+                    borderRadius: BorderRadius.circular(20)),
+                enabledBorder: OutlineInputBorder(
+                  gapPadding: 3.3,
+                  borderRadius: BorderRadius.circular(20),
+                  borderSide: BorderSide(color: Colors.blue[700]),
+                ),
+                errorBorder:  OutlineInputBorder(
+                  gapPadding: 3.3,
+                  borderRadius: BorderRadius.circular(20),
+                  borderSide: BorderSide(color: Colors.red),
+                ),
+              ),
+            ),
+            TextFormField(
+              enabled: editMode,
+              controller: _rcControl,
+              keyboardType: TextInputType.text,
+              validator: (value) {
+                if (value.isEmpty) {
+                  return S.current.msg_champ_oblg;
+                }
+                return null;
+              },
+              decoration: InputDecoration(
+                labelText:  S.current.n_rc,
+                prefixIcon: Icon(
+                  Icons.email,
+                  color: Colors.blue[700],
+                ),
+                focusedBorder: OutlineInputBorder(
+                    borderSide: BorderSide(color: Colors.blue[700]),
+                    borderRadius: BorderRadius.circular(20)),
+                enabledBorder: OutlineInputBorder(
+                  gapPadding: 3.3,
+                  borderRadius: BorderRadius.circular(20),
+                  borderSide: BorderSide(color: Colors.blue[700]),
+                ),
+                errorBorder:  OutlineInputBorder(
+                  gapPadding: 3.3,
+                  borderRadius: BorderRadius.circular(20),
+                  borderSide: BorderSide(color: Colors.red),
+                ),
+              ),
+            ),
+            TextFormField(
+              enabled: editMode,
+              controller: _aiControl,
+              keyboardType: TextInputType.text,
+              // validator: (value) {
+              //   if (value.isEmpty) {
+              //     return S.current.msg_champ_oblg;
+              //   }
+              //   return null;
+              // },
+              decoration: InputDecoration(
+                labelText:  S.current.art_imp,
+                prefixIcon: Icon(
+                  Icons.email,
+                  color: Colors.blue[700],
+                ),
+                focusedBorder: OutlineInputBorder(
+                    borderSide: BorderSide(color: Colors.blue[700]),
+                    borderRadius: BorderRadius.circular(20)),
+                enabledBorder: OutlineInputBorder(
+                  gapPadding: 3.3,
+                  borderRadius: BorderRadius.circular(20),
+                  borderSide: BorderSide(color: Colors.blue[700]),
+                ),
+                errorBorder:  OutlineInputBorder(
+                  gapPadding: 3.3,
+                  borderRadius: BorderRadius.circular(20),
+                  borderSide: BorderSide(color: Colors.red),
+                ),
+              ),
+            ),
+            TextFormField(
+              enabled: editMode,
+              controller: _nifControl,
+              keyboardType: TextInputType.text,
+              validator: (value) {
+                if (value.isEmpty) {
+                  return S.current.msg_champ_oblg;
+                }
+                return null;
+              },
+              decoration: InputDecoration(
+                labelText:  S.current.nif,
+                prefixIcon: Icon(
+                  Icons.email,
+                  color: Colors.blue[700],
+                ),
+                focusedBorder: OutlineInputBorder(
+                    borderSide: BorderSide(color: Colors.blue[700]),
+                    borderRadius: BorderRadius.circular(20)),
+                enabledBorder: OutlineInputBorder(
+                  gapPadding: 3.3,
+                  borderRadius: BorderRadius.circular(20),
+                  borderSide: BorderSide(color: Colors.blue[700]),
+                ),
+                errorBorder:  OutlineInputBorder(
+                  gapPadding: 3.3,
+                  borderRadius: BorderRadius.circular(20),
+                  borderSide: BorderSide(color: Colors.red),
+                ),
+              ),
+            ),
+            TextFormField(
+              enabled: editMode,
+              controller: _nisControl,
+              keyboardType: TextInputType.text,
+              // validator: (value) {
+              //   if (value.isEmpty) {
+              //     return S.current.msg_champ_oblg;
+              //   }
+              //   return null;
+              // },
+              decoration: InputDecoration(
+                labelText:  S.current.nis,
+                prefixIcon: Icon(
+                  Icons.email,
+                  color: Colors.blue[700],
+                ),
+                focusedBorder: OutlineInputBorder(
+                    borderSide: BorderSide(color: Colors.blue[700]),
+                    borderRadius: BorderRadius.circular(20)),
+                enabledBorder: OutlineInputBorder(
+                  gapPadding: 3.3,
+                  borderRadius: BorderRadius.circular(20),
+                  borderSide: BorderSide(color: Colors.blue[700]),
+                ),
+                errorBorder:  OutlineInputBorder(
+                  gapPadding: 3.3,
+                  borderRadius: BorderRadius.circular(20),
+                  borderSide: BorderSide(color: Colors.red),
+                ),
+              ),
+            ),
+            TextFormField(
+              enabled: editMode,
+              controller: _capitalsocialControl,
+              keyboardType: TextInputType.number,
+              validator: (value) {
+                if (value.isEmpty) {
+                  return S.current.msg_champ_oblg;
+                }
+                return null;
+              },
+              decoration: InputDecoration(
+                labelText:  S.current.capitale_sociale,
+                prefixIcon: Icon(
+                  Icons.monetization_on,
+                  color: Colors.blue[700],
+                ),
+                focusedBorder: OutlineInputBorder(
+                    borderSide: BorderSide(color: Colors.blue[700]),
+                    borderRadius: BorderRadius.circular(20)),
+                enabledBorder: OutlineInputBorder(
+                  gapPadding: 3.3,
+                  borderRadius: BorderRadius.circular(20),
+                  borderSide: BorderSide(color: Colors.blue[700]),
+                ),
+                errorBorder:  OutlineInputBorder(
+                  gapPadding: 3.3,
+                  borderRadius: BorderRadius.circular(20),
+                  borderSide: BorderSide(color: Colors.red),
+                ),
+              ),
+            ),
+            Container(
+              width: double.infinity,
+              padding: const EdgeInsets.all(5),
+              decoration: editMode
+                  ? new BoxDecoration(
+                border: Border.all(
+                  color: Colors.blueAccent,
+                ),
+                borderRadius: BorderRadius.circular(20.0),
+              )
+                  : null,
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                mainAxisSize: MainAxisSize.max,
+                children: [
+                  SizedBox(width: 6),
+                  Icon(
+                    Icons.security, color: Colors.blue[700],),
+                  SizedBox(width: 13),
+                  Expanded(
+                    child: GestureDetector(
+                      onTap: () {
+                        arguments.codePinEnabled = !arguments.codePinEnabled;
+                      },
+                      child: new Text( S.current.code_pin,
+                        style: TextStyle(
+                            fontSize: 16,
+                            color:
+                            editMode ? Colors.black : Colors.black54)),
+                    ),
+                  ),
 
-        ],
+                  Switch(
+                    value: arguments.codePinEnabled,
+                    onChanged: editMode?(bool isOn) {
+                      setState(() {
+                        arguments.codePinEnabled = isOn;
+                        if(isOn){
+                          setState(() {
+                            _tabController.index = 2;
+                          });
+                        }
+                      });
+                    }: null,
+                    activeColor: Colors.blue,
+                    inactiveTrackColor: Colors.grey,
+                    inactiveThumbColor: editMode? Colors.blue:Colors.grey,
+                  )
+                ],
+              ),
+            )
+
+          ],
+        ),
       ),
     );
   }

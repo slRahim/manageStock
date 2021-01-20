@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:gestmob/generated/l10n.dart';
 
 // drop down menu restyle
 class ListDropDown extends StatefulWidget {
@@ -50,8 +51,8 @@ class ListDropDownState extends State<ListDropDown> {
           // Icon(Icons.help, color: Colors.grey,),
           widget.leftIcon != null? Icon(widget.leftIcon, size: 25) : SizedBox(height: 1),
           SizedBox(width: 13),
-          widget.libelle != null
-              ? new Text(widget.libelle,
+          ((widget.value is int ) && widget.editMode)
+              ? new Text("${widget.libelle}",
                   style: TextStyle(
                       fontSize: 16,
                       color:
@@ -61,7 +62,7 @@ class ListDropDownState extends State<ListDropDown> {
             child: DropdownButtonHideUnderline(
               child: DropdownButton<Object>(
                   key: dropdownKey,
-                  disabledHint: Text(widget.value.toString()),
+                  disabledHint: (widget.value is int ) ? Text("${widget.libelle} ${widget.value.toString()}") :Text(widget.libelle),
                   icon: widget.onAddPressed != null
                       ? Row(
                         children: [

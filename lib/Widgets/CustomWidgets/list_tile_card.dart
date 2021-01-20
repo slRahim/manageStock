@@ -37,7 +37,6 @@ class _ListTileCardState extends State<ListTileCard> {
 
   @override
   Widget build(BuildContext context) {
-
     return Center(
       child: InkWell(
         onTap: widget.onTap,
@@ -49,8 +48,9 @@ class _ListTileCardState extends State<ListTileCard> {
             cardsGap: SizeConfig.safeBlockVertical,
             controller: widget.slidingCardController,
             slidingCardWidth: SizeConfig.horizontalBloc * 95,
-            visibleCardHeight: SizeConfig.safeBlockVertical * 19,
+            visibleCardHeight: SizeConfig.safeBlockVertical * 21,
             hiddenCardHeight: SizeConfig.safeBlockVertical * 15,
+            showColors: false,
             frontCardWidget: ListFrontCard(
               title: widget.title,
               subtitle:widget.subtitle,
@@ -264,79 +264,74 @@ class ListBackCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: <Widget>[
-        Container(
-          width: SizeConfig.horizontalBloc * 95,
-          height: SizeConfig.safeBlockVertical * 15,
-          decoration: BoxDecoration(
-              color: Colors.white, borderRadius: BorderRadius.circular(25)),
-          child: Padding(
-            padding: const EdgeInsets.only(left: 20, right: 20, top: 8),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: <Widget>[
-                Expanded(
-                    child: Padding(
-                      padding: const EdgeInsets.only(top: 0.0),
-                      child: Text(
-                        'Details :',
-                        style: TextStyle(
-                          fontSize: SizeConfig.safeBlockHorizontal * 5,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.blue[500],),
+    return Container(
+      decoration: BoxDecoration(
+          color: Colors.white, borderRadius: BorderRadius.circular(25)),
+      child: Padding(
+        padding: const EdgeInsetsDirectional.only(start: 20, end: 20, top: 8),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: <Widget>[
+            Expanded(
+                child: Padding(
+                  padding: const EdgeInsets.only(top: 0.0),
+                  child: Text(
+                    'Details :',
+                    style: TextStyle(
+                      fontSize: SizeConfig.safeBlockHorizontal * 5,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.blue[500],),
+                  ),
+                )),
+            Expanded(
+              flex: 4,
+              child: Padding(
+                padding: const EdgeInsets.only(bottom: 5.0),
+                child: Container(
+                  width: SizeConfig.safeBlockHorizontal * 90,
+                  child: Row(
+                    children: <Widget>[
+                      Expanded(
+                        flex: 4,
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: <Widget>[
+                            trailingChildren[4],
+                            SizedBox(height: 5,),
+                            trailingChildren[5],
+                            SizedBox(height: 5,),
+                            trailingChildren[6],
+                          ],
+                        ),
                       ),
-                    )),
-                Expanded(
-                  flex: 4,
-                  child: Padding(
-                    padding: const EdgeInsets.only(bottom: 8.0),
-                    child: Container(
-                      width: SizeConfig.safeBlockHorizontal * 80,
-                      child: Row(
-                        children: <Widget>[
-                          Expanded(
-                            flex: 3,
-                            child: Column(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: <Widget>[
-                                trailingChildren[4],
-                                SizedBox(height: 5,),
-                                trailingChildren[5],
-                                SizedBox(height: 5,),
-                                trailingChildren[6],
-                              ],
+                      Expanded(
+                        flex: 1,
+                          child: Padding(
+                            padding: const EdgeInsets.all(10.0),
+                            child: InkWell(
+                              onTap: onTap,
+                              child: Container(
+                                decoration: BoxDecoration(
+                                    color: Colors.blue[500],
+                                    shape: BoxShape.circle),
+                                child: Center(
+                                    child: Icon(
+                                      Icons.remove_red_eye,
+                                      size: SizeConfig.safeBlockHorizontal * 7,
+                                      color: Colors.white,
+                                    )),
+                              ),
                             ),
-                          ),
-                          Expanded(
-                              child: Padding(
-                                padding: const EdgeInsets.all(8.0),
-                                child: InkWell(
-                                  onTap: onTap,
-                                  child: Container(
-                                    decoration: BoxDecoration(
-                                        color: Colors.blue[500],
-                                        shape: BoxShape.circle),
-                                    child: Center(
-                                        child: Icon(
-                                          Icons.remove_red_eye,
-                                          size: SizeConfig.safeBlockHorizontal * 9,
-                                          color: Colors.white,
-                                        )),
-                                  ),
-                                ),
-                              ))
-                        ],
-                      ),
-                    ),
+                          ))
+                    ],
                   ),
                 ),
-              ],
+              ),
             ),
-          ),
-        )
-      ],
+          ],
+        ),
+      ),
     );
   }
 }
