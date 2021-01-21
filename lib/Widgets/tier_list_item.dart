@@ -75,9 +75,9 @@ class _TierListItemState extends State<TierListItem> {
             backgroundColor: Colors.yellow[700],
             radius: 28,
             child: CircleAvatar(
+              backgroundColor: Colors.white,
               radius: 25,
-              backgroundImage: (widget.tier.imageUint8List == null) ? MemoryImage(
-                  widget.tier.imageUint8List) : null,
+              backgroundImage:  MemoryImage(widget.tier.imageUint8List),
 
             ),
           ),

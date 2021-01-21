@@ -2,10 +2,10 @@ import 'dart:convert';
 import 'dart:io';
 import 'dart:typed_data';
 import 'package:flutter/services.dart';
-
 import 'package:data_connection_checker/data_connection_checker.dart';
 import 'package:flushbar/flushbar.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_image_compress/flutter_image_compress.dart';
 import 'package:flutter_phoenix/flutter_phoenix.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:gestmob/Helpers/route_generator.dart';
@@ -19,12 +19,12 @@ import 'package:gestmob/ui/home.dart';
 import 'package:map_launcher/map_launcher.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
-
 import 'Statics.dart';
 import 'package:intl/intl.dart' as intl;
+import 'package:archive/archive.dart';
+
 
 class Helpers {
 
@@ -40,25 +40,36 @@ class Helpers {
         timeInSecForIosWeb: 1);
   }
 
-  static Future<File> getFileFromByteString(String byteString) async {
-    Uint8List tempImg = Base64Decoder().convert(byteString);
-    File file;
-    if (tempImg != null) {
-      final tempDir = await getTemporaryDirectory();
-      // int time = DateTime.now().millisecondsSinceEpoch;
-      String fileName = "temp_image.png";
-      file = await new File('${tempDir.path}/$fileName').create();
-      file.writeAsBytesSync(tempImg);
+  static Future<Uint8List> getDefaultImageUint8List({String from}) async {
+    var bytes ;
+    switch(from){
+      case "article":
+        bytes = await rootBundle.load('assets/article.png');
+        break;
+      case "tier":
+        bytes = await rootBundle.load('assets/client.png');
+        break;
+      case "profile":
+        bytes = await rootBundle.load('assets/festival.png');
+        break;
     }
-    return file;
+    Uint8List image = bytes.buffer.asUint8List(bytes.offsetInBytes, bytes.lengthInBytes);
+    return image;
   }
 
+
+  //*************************************************************************to read from db**************************************************************************************
+  // base64 to Uint8List
+  static Uint8List getUint8ListFromByteString(String byteString) {
+    return Base64Decoder().convert(byteString);
+  }
+
+  //Uint8List to file
   static Future<File> getFileFromUint8List(Uint8List uint8list) async {
     File file;
     if (uint8list != null) {
       final tempDir = await getTemporaryDirectory();
-      // int time = DateTime.now().millisecondsSinceEpoch;
-      String fileName = "temp_image.png";
+      String fileName = "temp_image.jpg";
 
       File imageExist = new File('${tempDir.path}/$fileName');
       if(await imageExist.exists()) {
@@ -72,18 +83,55 @@ class Helpers {
     return file;
   }
 
-  static Uint8List getUint8ListFromByteString(String byteString) {
-    return Base64Decoder().convert(byteString);
+  //file from base64 to file  (base64 -> file complete)
+  static Future<File> getFileFromByteString(String byteString) async {
+    Uint8List tempImg = getUint8ListFromByteString(byteString);
+    File file;
+    if (tempImg != null) {
+      final tempDir = await getTemporaryDirectory();
+      String fileName = "temp_image.jpg";
+
+      File imageExist = new File('${tempDir.path}/$fileName');
+      if(await imageExist.exists()) {
+        imageExist.delete();
+        imageCache.clear();
+      }
+
+      file = await new File('${tempDir.path}/$fileName').create();
+      file.writeAsBytesSync(tempImg);
+    }
+    return file;
+  }
+  //*************************************************************************fin/to read from db/***********************************************************************************
+
+  //********************************************************************to save image into db***************************************************************************************
+  // file to Uint8List
+  static Future<Uint8List> getUint8ListFromFile(File file)async{
+    final filePath = file.absolute.path;
+    final lastIndex = filePath.lastIndexOf(new RegExp(r'.jp'));
+    final splitted = filePath.substring(0, (lastIndex));
+    final outPath = "${splitted}_out${filePath.substring(lastIndex)}";
+    final compressedImage = await FlutterImageCompress.compressAndGetFile(
+        filePath,
+        outPath,
+        minWidth: 300,
+        minHeight: 300,
+        quality: 95);
+
+    return compressedImage.readAsBytesSync();
   }
 
-  static getEncodedByteStringFromFile(File file) {
-    Uint8List imageBytes = getUint8ListFromFile(file);
-    return base64Encode(imageBytes);
+  //Uint8List to base64
+  static getEncodedByteStringFromUint8List(Uint8List image) {
+    return base64Encode(image);
   }
 
-  static Uint8List getUint8ListFromFile(File file) {
-    return file.readAsBytesSync();
+  // file to byteString (complete)
+  static getEncodedByteStringFromFile(File file) async{
+    Uint8List imageBytes = await getUint8ListFromFile(file);
+    return getEncodedByteStringFromUint8List(imageBytes);
   }
+  //********************************************************************fin/to save image into db/***************************************************************************************
 
   static handleIdClick(context, id) {
     switch (id) {
@@ -126,11 +174,6 @@ class Helpers {
     )..show(context);
   }
 
-  static Future<Uint8List> getDefaultImageUint8List() async {
-    var bytes = await rootBundle.load('assets/article.png');
-    Uint8List image = bytes.buffer.asUint8List(bytes.offsetInBytes, bytes.lengthInBytes);
-    return image;
-  }
 
   static openMapsSheet(context, final Coords coords) async {
     try {

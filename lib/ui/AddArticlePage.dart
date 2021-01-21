@@ -37,7 +37,7 @@ class AddArticlePage extends StatefulWidget {
   _AddArticlePageState createState() => _AddArticlePageState();
 }
 
-class _AddArticlePageState extends State<AddArticlePage>  with AutomaticKeepAliveClientMixin{
+class _AddArticlePageState extends State<AddArticlePage> with TickerProviderStateMixin , AutomaticKeepAliveClientMixin {
   @override
   bool get wantKeepAlive => true;
 
@@ -95,12 +95,25 @@ class _AddArticlePageState extends State<AddArticlePage>  with AutomaticKeepAliv
 
   final _formKey = GlobalKey<FormState>();
 
+  TabController _tabController;
+  int _tabSelectedIndex = 0;
+
+  //*************************************************************************************************************************************************************************
+  //************************************************************************special init data***********************************************************************************
   void initState() {
     super.initState();
 
     futureInitState().then((val) {
       setState(() {
         finishedLoading = true;
+      });
+    });
+
+    _tabController = TabController(length: 3, vsync: this);
+
+    _tabController.addListener(() {
+      setState(() {
+        _tabSelectedIndex = _tabController.index;
       });
     });
   }
@@ -135,6 +148,7 @@ class _AddArticlePageState extends State<AddArticlePage>  with AutomaticKeepAliv
   }
 
   Future<void> setDataFromArticle(Article article) async {
+    _articleImage = await Helpers.getFileFromUint8List(article.imageUint8List);
     _designationControl.text = article.designation;
     _stockInitialControl.text = article.quantite.toString();
     _stockMinimumControl.text = article.quantiteMinimum.toString();
@@ -153,8 +167,6 @@ class _AddArticlePageState extends State<AddArticlePage>  with AutomaticKeepAliv
     _price1Control.text = article.prixVente1.toString();
     _price2Control.text = article.prixVente2.toString();
     _price3Control.text = article.prixVente3.toString();
-    _articleImage = await Helpers.getFileFromUint8List(article.imageUint8List);
-
     _selectedMarque = _marqueItems[article.idMarque];
     _selectedFamille = _familleItems[article.idFamille];
     _selectedTva = new ArticleTva(article.tva);
@@ -180,6 +192,8 @@ class _AddArticlePageState extends State<AddArticlePage>  with AutomaticKeepAliv
 
   }
 
+  //*************************************************************************************************************************************************************************
+  //************************************************************************partie daffichage***********************************************************************************
   @override
   Widget build(BuildContext context) {
     if (modification) {
@@ -226,7 +240,8 @@ class _AddArticlePageState extends State<AddArticlePage>  with AutomaticKeepAliv
                   });
                 },
                 onSavePressed: () async {
-                  if (_formKey.currentState.validate()) {
+                  if(_formKey.currentState != null){
+                    if (_formKey.currentState.validate()) {
                       int id = await addArticleToDb();
                       if (id > -1) {
                         setState(() {
@@ -234,12 +249,20 @@ class _AddArticlePageState extends State<AddArticlePage>  with AutomaticKeepAliv
                           editMode = false;
                         });
                       }
+                    }else{
+                      Helpers.showFlushBar(context, "Veuillez remplir les champs obligatoire");
+                    }
                   }else{
-                    Helpers.showFlushBar(context, "Veuillez remplir les champs obligatoire");
+                    setState(() {
+                      _tabSelectedIndex = 0 ;
+                      _tabController.index = _tabSelectedIndex ;
+                    });
                   }
                 },
               ),
               bottomNavigationBar: BottomTabBar(
+                selectedIndex: _tabSelectedIndex,
+                controller: _tabController,
                 tabs: [
                   Tab(child: Column( children: [ Icon(Icons.insert_drive_file),SizedBox(height: 1), Text("${S.current.fiche_art}"), ], )),
                   Tab(child: Column( children: [ Icon(Icons.image), SizedBox(height: 1), Text(S.current.photo), ], )),
@@ -248,6 +271,7 @@ class _AddArticlePageState extends State<AddArticlePage>  with AutomaticKeepAliv
               ),
               body: Builder(
                 builder: (context) => TabBarView(
+                  controller: _tabController,
                   children: [
                     fichetab(),
                     imageTab(),
@@ -737,8 +761,6 @@ class _AddArticlePageState extends State<AddArticlePage>  with AutomaticKeepAliv
     );
   }
 
-  //////////////////////////////////////////////////////////////////////////////////////
-
   Widget imageTab() {
     return SingleChildScrollView(
       child: ImagePickerWidget(
@@ -748,8 +770,6 @@ class _AddArticlePageState extends State<AddArticlePage>  with AutomaticKeepAliv
       }),
     );
   }
-
-  ////////////////////////////////////////////////////////////////////////////////////
 
   Widget descriptionTab() {
     return SingleChildScrollView(
@@ -782,8 +802,6 @@ class _AddArticlePageState extends State<AddArticlePage>  with AutomaticKeepAliv
           Padding(padding: EdgeInsets.all(10)),
         ]));
   }
-
-  //////////////////////////////////////////////////////////////////////////////////
 
   Widget dropdowns() {
     return Center(
@@ -860,8 +878,6 @@ class _AddArticlePageState extends State<AddArticlePage>  with AutomaticKeepAliv
     );
   }
 
-  //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-  /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
   Widget addMarquedialogue() {
     return StatefulBuilder(builder: (context, StateSetter setState) {
       return Dialog(
@@ -951,8 +967,20 @@ class _AddArticlePageState extends State<AddArticlePage>  with AutomaticKeepAliv
     });
   }
 
-  ////////////////////////////////////////////////////////////////////////////////////////////////////////
-  ///////////////////////////////////////////////////////////////////////////////////////////////////////
+  Future<void> addMarqueIfNotExist(ArticleMarque marque) async {
+    int marqueIndex = _marqueItems.indexOf(marque);
+    if (marqueIndex > -1) {
+      _selectedMarque = _marqueItems[marqueIndex];
+    } else {
+      int id = await widget._queryCtr.addItemToTable(DbTablesNames.articlesMarques, marque);
+      marque.id = id;
+
+      _marqueItems.add(marque);
+      _marqueDropdownItems = utils.buildMarqueDropDownMenuItems(_marqueItems);
+      _selectedMarque = _marqueItems[_marqueItems.length];
+    }
+  }
+
   Widget addFamilledialogue() {
     return StatefulBuilder(builder: (context, StateSetter setState) {
       return Builder(
@@ -1049,8 +1077,21 @@ class _AddArticlePageState extends State<AddArticlePage>  with AutomaticKeepAliv
     });
   }
 
-  /////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-  ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+  Future<void> addFamilleIfNotExist(ArticleFamille famille) async {
+    int familleIndex = _familleItems.indexOf(famille);
+    if (familleIndex > -1) {
+      _selectedFamille = _familleItems[familleIndex];
+    } else {
+      int id = await widget._queryCtr.addItemToTable(DbTablesNames.articlesTva, famille);
+      famille.id = id;
+
+      _familleItems.add(famille);
+      _familleDropdownItems =
+          utils.buildDropFamilleArticle(_familleItems);
+      _selectedFamille = _familleItems[_familleItems.length];
+    }
+  }
+
   Widget addTVAdialogue() {
     return StatefulBuilder(builder: (context, StateSetter setState) {
       return Dialog(
@@ -1157,35 +1198,8 @@ class _AddArticlePageState extends State<AddArticlePage>  with AutomaticKeepAliv
     }
   }
 
-  Future<void> addMarqueIfNotExist(ArticleMarque marque) async {
-    int marqueIndex = _marqueItems.indexOf(marque);
-    if (marqueIndex > -1) {
-      _selectedMarque = _marqueItems[marqueIndex];
-    } else {
-      int id = await widget._queryCtr.addItemToTable(DbTablesNames.articlesMarques, marque);
-      marque.id = id;
-
-      _marqueItems.add(marque);
-      _marqueDropdownItems = utils.buildMarqueDropDownMenuItems(_marqueItems);
-      _selectedMarque = _marqueItems[_marqueItems.length];
-    }
-  }
-
-  Future<void> addFamilleIfNotExist(ArticleFamille famille) async {
-    int familleIndex = _familleItems.indexOf(famille);
-    if (familleIndex > -1) {
-      _selectedFamille = _familleItems[familleIndex];
-    } else {
-      int id = await widget._queryCtr.addItemToTable(DbTablesNames.articlesTva, famille);
-      famille.id = id;
-
-      _familleItems.add(famille);
-      _familleDropdownItems =
-          utils.buildDropFamilleArticle(_familleItems);
-      _selectedFamille = _familleItems[_familleItems.length];
-    }
-  }
-
+  //*************************************************************************************************************************************************************************
+  //************************************************************************partie de save***********************************************************************************
   Future<int> addArticleToDb() async {
     int id = -1;
     String message;
@@ -1217,7 +1231,6 @@ class _AddArticlePageState extends State<AddArticlePage>  with AutomaticKeepAliv
     }
 
   }
-
 
   Future<Article> makeArticle() async {
     Article article = new Article.init();
@@ -1262,16 +1275,17 @@ class _AddArticlePageState extends State<AddArticlePage>  with AutomaticKeepAliv
     article.setStockable(_stockable);
 
     if (_articleImage != null) {
-      article.setImageUint8List(Helpers.getUint8ListFromFile(_articleImage));
+      article.setImageUint8List(await Helpers.getUint8ListFromFile(_articleImage));
     } else{
-      Uint8List image = await Helpers.getDefaultImageUint8List();
+      Uint8List image = await Helpers.getDefaultImageUint8List(from: "article");
       article.setImageUint8List(image);
     }
 
     return article;
   }
 
-
+  //**********************************************************************************************************************************************************************
+  //**************************************************************************partie pecial qr code************************************************************************
   Future scanBarCode() async {
     try {
       var options = ScanOptions(

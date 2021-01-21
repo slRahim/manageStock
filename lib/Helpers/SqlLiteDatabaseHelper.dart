@@ -1186,9 +1186,11 @@ class SqlLiteDatabaseHelper {
   Future<void> setInitialData(Database db, int version) async {
     Batch batch = db.batch();
 
+    Uint8List image01 = await Helpers.getDefaultImageUint8List(from: "profile");
+
     batch.rawInsert('INSERT INTO Profile(BytesImageString, Raison, CodePin, CodePinEnabled, Statut, Adresse, AdresseWeb, Ville, Departement, Pays, Cp, Telephone, Telephone2, Fax, Mobile, Mobile2,'
         'Mail, Site, Rc, Nif, Ai, Capital, Activite, Nis, Codedouane, Maposition) '
-        'VALUES("", "Raison", "", 0, 1, "Adresse", "AdresseWeb", "Ville", "Departement", "Pays", "Cp", "Telephone", "Telephone2", "Fax", "Mobile", "Mobile2",'
+        'VALUES("${Helpers.getEncodedByteStringFromUint8List(image01)}", "Raison", "", 0, 1, "Adresse", "AdresseWeb", "Ville", "Departement", "Pays", "Cp", "Telephone", "Telephone2", "Fax", "Mobile", "Mobile2",'
         '"Mail", "Site", "Rc", "Nif", "Ai", "25", "Activite", "Nis", "Codedouane", "Maposition")');
 
     batch.rawInsert('INSERT INTO ArticlesMarques(Libelle, BytesImageString) VALUES("No Marque", "")');
@@ -1236,17 +1238,16 @@ class SqlLiteDatabaseHelper {
 
     batch.rawInsert("INSERT INTO MyParams VALUES(1,2,0,0,1,'9:01',0,0)");
 
-    Uint8List image = await Helpers.getDefaultImageUint8List();
-    Tiers tier0 = new Tiers(image ,"Client Passagé", null, 0, 0, 0, "adresse", "ville", "telephone", "000000", "fax", "email", 1000, 0, 0, false);
+    Uint8List image = await Helpers.getDefaultImageUint8List(from: "tier");
+    Tiers tier0 = new Tiers(image ,"Client Passagé", null, 1, 0, 0, "adresse", "ville", "telephone", "000000", "fax", "email", 1000, 0, 0, false);
     tier0.clientFour = 0 ;
     batch.insert(DbTablesNames.tiers, tier0.toMap());
 
-    Tiers tier2 = new Tiers(image,"Fournisseur Passagé", null, 0, 0, 0, "adresse", "ville", "telephone", "000000", "fax", "email", 0, 0, 0, false);
+    Tiers tier2 = new Tiers(image,"Fournisseur Passagé", null, 1, 0, 0, "adresse", "ville", "telephone", "000000", "fax", "email", 0, 0, 0, false);
     tier2.clientFour = 2 ;
     batch.insert(DbTablesNames.tiers, tier2.toMap());
 
     await batch.commit();
-
 
   }
 

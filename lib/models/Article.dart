@@ -187,9 +187,9 @@ class Article{
     this._pmpInit=pmpinit;
   }
 
-  void setpic(File img) {
+  void setpic(File img) async{
     this._image=img;
-    this._imageUint8List= Helpers.getUint8ListFromFile(img);
+    this._imageUint8List= await Helpers.getUint8ListFromFile(img);
   }
 
   // constructor to convert map to object
@@ -244,10 +244,9 @@ class Article{
     var map = new Map<String, dynamic>();
 
     if(_imageUint8List != null && _imageUint8List.isNotEmpty){
-      map["BytesImageString"] = base64Encode(_imageUint8List);
-    } else{
-      map["BytesImageString"] = Helpers.getEncodedByteStringFromFile(this._image);
+      map["BytesImageString"] = Helpers.getEncodedByteStringFromUint8List(_imageUint8List);
     }
+
     map["Designation"] = this._designation;
     map["Ref"] = this._ref;
     map["CodeBar"] = this._codeBar;

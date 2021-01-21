@@ -37,19 +37,15 @@ class _ProfilePageState extends State<ProfilePage> with TickerProviderStateMixin
 
   final _scaffoldKey = GlobalKey<ScaffoldState>();
 
-  //le mode d'edition et activer ou non
   bool editMode = true;
-  // esq cette page accepte le mode modification ou non
   bool modification = false;
-
   bool finishedLoading = false;
-
   String appBarTitle = "Tiers";
 
   List<DropdownMenuItem<String>> _statutDropdownItems;
   String _selectedStatut;
 
-  bool _validateRaison = false;
+
 
   TextEditingController _raisonSocialeControl = new TextEditingController();
   TextEditingController _activiteControl = new TextEditingController();
@@ -95,6 +91,8 @@ class _ProfilePageState extends State<ProfilePage> with TickerProviderStateMixin
     _tabController.dispose();
     super.dispose();
   }
+  //****************************************************************************************************************************************************************************
+  //*************************************************************************partie special pour l'initialisation********************************************************************
 
   Future<bool> futureInitState() async {
     _statutDropdownItems = utils.buildDropStatutTier(Statics.statutItems);
@@ -108,6 +106,33 @@ class _ProfilePageState extends State<ProfilePage> with TickerProviderStateMixin
 
     return Future<bool>.value(editMode);
   }
+
+  Future<void> setDataFromItem(Profile item) async {
+    //read image
+    _itemImage = await Helpers.getFileFromUint8List(item.imageUint8List);
+    _raisonSocialeControl.text = item.raisonSociale;
+    _selectedStatut = Statics.statutItems[item.statut];
+    _activiteControl.text = item.activite;
+    _adresseControl.text = item.adresse;
+    _villeControl.text = item.ville;
+    _paysControl.text = item.pays;
+    _telephoneControl.text = item.telephone;
+    _telephone2Control.text = item.telephone2;
+    _mobileControl.text = item.mobile;
+    _mobile2Control.text = item.mobile2;
+    _faxControl.text = item.fax;
+    _emailControl.text = item.email;
+    _addresseWebControl.text = item.addressWeb;
+    _rcControl.text = item.rc;
+    _aiControl.text = item.ai;
+    _nifControl.text = item.nif;
+    _nisControl.text = item.nis;
+    _capitalsocialControl.text = item.capital.toString();
+
+  }
+
+  //****************************************************************************************************************************************************************************
+  //*************************************************************************partie special pour l'affichage********************************************************************
 
   @override
   Widget build(BuildContext context) {
@@ -155,22 +180,24 @@ class _ProfilePageState extends State<ProfilePage> with TickerProviderStateMixin
                   });
                 },
                 onSavePressed: () async {
-                  if (_raisonSocialeControl.text.isNotEmpty) {
-                    int id = await addItemToDb();
-                    if (id > -1) {
-                      setState(() {
-                        modification = true;
-                        editMode = false;
-                      });
+                  if(_formKey.currentState != null){
+                    if(_formKey.currentState.validate()){
+                      int id = await addItemToDb();
+                      if (id > -1) {
+                        setState(() {
+                          modification = true;
+                          editMode = false;
+                        });
+                      }
+                    } else {
+                      Helpers.showFlushBar(context, "Veuillez remplir les champs obligatoire");
                     }
-                  } else {
-                    Helpers.showFlushBar(
-                        context,  S.current.msg_entre_rs);
-
+                  }else{
                     setState(() {
-                      _validateRaison = true;
+                      _tabController.index = 0 ;
                     });
                   }
+
                 },
               ),
               bottomNavigationBar: BottomTabBar(
@@ -198,6 +225,7 @@ class _ProfilePageState extends State<ProfilePage> with TickerProviderStateMixin
     return SingleChildScrollView(
       padding: const EdgeInsets.fromLTRB(15, 25, 15, 15),
       child: Form(
+        key: _formKey,
         child: Wrap(
           spacing: 13,
           runSpacing: 13,
@@ -835,29 +863,8 @@ class _ProfilePageState extends State<ProfilePage> with TickerProviderStateMixin
     });
   }
 
-  Future<void> setDataFromItem(Profile item) async {
-    _raisonSocialeControl.text = item.raisonSociale;
-    _selectedStatut = Statics.statutItems[item.statut];
-    _activiteControl.text = item.activite;
-    _adresseControl.text = item.adresse;
-    _villeControl.text = item.ville;
-    _paysControl.text = item.pays;
-    _telephoneControl.text = item.telephone;
-    _telephone2Control.text = item.telephone2;
-    _mobileControl.text = item.mobile;
-    _mobile2Control.text = item.mobile2;
-    _faxControl.text = item.fax;
-    _emailControl.text = item.email;
-    _addresseWebControl.text = item.addressWeb;
-    _rcControl.text = item.rc;
-    _aiControl.text = item.ai;
-    _nifControl.text = item.nif;
-    _nisControl.text = item.nis;
-    _capitalsocialControl.text = item.capital.toString();
-
-    _itemImage = await Helpers.getFileFromUint8List(item.imageUint8List);
-
-  }
+  //****************************************************************************************************************************************************************************
+  //*************************************************************************partie du sauvgarde********************************************************************************
 
   Future<int> addItemToDb() async {
     int id = -1;
@@ -912,20 +919,18 @@ class _ProfilePageState extends State<ProfilePage> with TickerProviderStateMixin
     item.fax = _faxControl.text;
     item.email = _emailControl.text;
     item.addressWeb = _addresseWebControl.text;
+    if (_itemImage != null) {
+      item.imageUint8List = await Helpers.getUint8ListFromFile(_itemImage);
+    } else {
+      Uint8List image = await Helpers.getDefaultImageUint8List(from: "profile");
+      item.imageUint8List = image;
+    }
     item.rc = _rcControl.text;
     item.ai = _aiControl.text;
     item.nif = _nifControl.text;
     item.nis = _nisControl.text;
     item.capital = double.tryParse(_capitalsocialControl.text);
 
-    if (_itemImage != null) {
-      item.imageUint8List = Helpers.getUint8ListFromFile(_itemImage);
-    } else {
-      Uint8List image = await Helpers.getDefaultImageUint8List();
-      item.imageUint8List = image;
-    }
     return item;
-
-    return await _queryCtr.getProfileById(1);
   }
 }

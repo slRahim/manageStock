@@ -92,7 +92,7 @@ class Profile{
     var map = new Map<String, dynamic>();
 
     if(_imageUint8List != null && _imageUint8List.isNotEmpty){
-      map["BytesImageString"] = base64Encode(_imageUint8List);
+      map["BytesImageString"] = Helpers.getEncodedByteStringFromUint8List(_imageUint8List);
     }
 
     map["id"] = this._id;

@@ -121,6 +121,8 @@ class _AddTierPageState extends State<AddTierPage>
     Statics.statutItems[9] = S.current.statut_etp ;
   }
 
+  //**********************************************************************************************************************************************************************
+  //**************************************************************************partie special init data************************************************************************
   void initState() {
     super.initState();
 
@@ -169,9 +171,7 @@ class _AddTierPageState extends State<AddTierPage>
   Future<void> setDataFromItem(item) async {
     _raisonSocialeControl.text = item.raisonSociale;
     _qrCodeControl.text = item.qrCode;
-
     _adresseControl.text = item.adresse;
-
     _clientFournBool = _clientFourn == 1;
 
     if(item.latitude != null && item.longitude != null){
@@ -179,6 +179,7 @@ class _AddTierPageState extends State<AddTierPage>
       _longitude = item.longitude;
     }
 
+    _itemImage = await Helpers.getFileFromUint8List(item.imageUint8List);
     _villeControl.text = item.ville;
     _telephoneControl.text = item.telephone;
     _mobileControl.text = item.mobile;
@@ -188,10 +189,7 @@ class _AddTierPageState extends State<AddTierPage>
     _chiffre_affairesControl.text = item.chiffre_affaires.toString();
     _reglerControl.text = item.regler.toString();
     _creditControl.text = item.credit.toString();
-
-    _itemImage = await Helpers.getFileFromUint8List(item.imageUint8List);
-
-    _selectedFamille = _familleItems[item.id_famille];
+    _selectedFamille = _familleItems[item.id_famille-1];
     _selectedStatut = Statics.statutItems[item.statut];
     _selectedTarification = _tarificationItems[item.tarification];
     _controlBloquer = item.bloquer ;
@@ -216,6 +214,8 @@ class _AddTierPageState extends State<AddTierPage>
 
   }
 
+  //**********************************************************************************************************************************************************************
+  //**************************************************************************partie special affichage************************************************************************
   @override
   Widget build(BuildContext context) {
     super.build(context);
@@ -269,7 +269,6 @@ class _AddTierPageState extends State<AddTierPage>
                           onPressed: () async {
                             GeoPoint geoPoint = await osmKey.currentState.selectPosition();
                             if(geoPoint != null){
-                              // await osmKey.currentState.setStaticPosition([GeoPoint(latitude: 47.4333594, longitude: 8.4680184)], "Location");
                               _latitude = geoPoint.latitude;
                               _longitude = geoPoint.longitude;
                             }
@@ -297,9 +296,7 @@ class _AddTierPageState extends State<AddTierPage>
                             visible: _tabSelectedIndex == 2 && editMode,
                             child: FloatingActionButton(
                               onPressed: () async {
-                                // GeoPoint geoPoint = await osmKey.currentState.myLocation();
                                 await osmKey.currentState.currentLocation();
-                                // await osmKey.currentState.enableTracking();
                               },
                               child: Icon(Icons.my_location),
                             ),
@@ -333,16 +330,23 @@ class _AddTierPageState extends State<AddTierPage>
                     });
                   },
                   onSavePressed: () async {
-                    if(_formKey.currentState.validate()){
-                      int id = await addItemToDb();
-                      if (id > -1) {
-                        setState(() {
-                          modification = true;
-                          editMode = false;
-                        });
+                    if(_formKey.currentState != null){
+                      if(_formKey.currentState.validate()){
+                        int id = await addItemToDb();
+                        if (id > -1) {
+                          setState(() {
+                            modification = true;
+                            editMode = false;
+                          });
+                        }
+                      }else{
+                        Helpers.showFlushBar(context, "Veuillez remplir les champs obligatoire");
                       }
                     }else{
-                      Helpers.showFlushBar(context, "Veuillez remplir les champs obligatoire");
+                      setState(() {
+                        _tabSelectedIndex = 0 ;
+                        _tabController.index = _tabSelectedIndex ;
+                      });
                     }
 
                   },
@@ -794,9 +798,11 @@ class _AddTierPageState extends State<AddTierPage>
     return SingleChildScrollView(
       child: ImagePickerWidget(
           imageFile: _itemImage,
-          editMode: editMode, onImageChange: (File imageFile) => {
-        _itemImage = imageFile
-      }),
+          editMode: editMode,
+          onImageChange: (File imageFile) => {
+              _itemImage = imageFile
+          }
+        ),
     );
   }
 
@@ -1157,6 +1163,8 @@ class _AddTierPageState extends State<AddTierPage>
     }
   }
 
+  //*************************************************************************************************************************************************************************
+  //************************************************************************partie de save***********************************************************************************
   Future<int> addItemToDb() async {
     int id = -1;
     String message;
@@ -1190,7 +1198,6 @@ class _AddTierPageState extends State<AddTierPage>
     }
   }
 
-
   Future<Object> makeItem() async {
     var item = new Tiers.empty();
     item.id = widget.arguments.id;
@@ -1221,23 +1228,22 @@ class _AddTierPageState extends State<AddTierPage>
     item.solde_depart = double.tryParse(_solde_departControl.text);
     item.chiffre_affaires = double.tryParse(_chiffre_affairesControl.text);
     item.regler = double.tryParse(_reglerControl.text);
-
+    if (_itemImage != null) {
+      item.imageUint8List =  await Helpers.getUint8ListFromFile(_itemImage);
+    } else {
+      Uint8List image = await Helpers.getDefaultImageUint8List(from: "tier");
+      item.imageUint8List = image;
+    }
     item.id_famille = _selectedFamille.id;
     item.statut = Statics.statutItems.indexOf(_selectedStatut);
     item.tarification = _tarificationItems.indexOf(_selectedTarification);
-
     item.bloquer = _controlBloquer;
-
-    if (_itemImage != null) {
-      item.imageUint8List = Helpers.getUint8ListFromFile(_itemImage);
-    } else {
-      Uint8List image = await Helpers.getDefaultImageUint8List();
-      item.imageUint8List = image;
-    }
 
     return item;
   }
 
+  //**********************************************************************************************************************************************************************
+  //**************************************************************************partie pecial qr code************************************************************************
   Future scanQRCode() async {
     try {
       var options = ScanOptions(

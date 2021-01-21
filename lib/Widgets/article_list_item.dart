@@ -84,8 +84,13 @@ class _ArticleListItemState extends State<ArticleListItem> {
       },
       itemSelected: widget.article.selectedQuantite > 0,
       leading: CircleAvatar(
-        radius: 25,
-        backgroundImage: MemoryImage(widget.article.imageUint8List),
+        radius: 28,
+        backgroundColor: Colors.yellow[700],
+        child: CircleAvatar(
+          backgroundColor: Colors.white,
+          radius: 25,
+          backgroundImage: MemoryImage(widget.article.imageUint8List),
+        ),
       ),
       subtitle: (widget.article.codeBar != null)?widget.article.codeBar : null,
       title: ("Ref: " + widget.article.ref),

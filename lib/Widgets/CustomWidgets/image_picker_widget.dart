@@ -53,6 +53,7 @@ class ImagePickerWidgetState extends State<ImagePickerWidget> {
               child: _imageFile == null
                   ? Center(child: Text(S.current.ajout_image))
                   : new CircleAvatar(
+                      backgroundColor: Colors.transparent,
                       backgroundImage: new FileImage(_imageFile),
                       radius: 200.0,
                     ),
