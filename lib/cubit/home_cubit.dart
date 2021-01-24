@@ -8,6 +8,8 @@ import 'package:gestmob/ui/GridHomeFragment.dart';
 import 'package:gestmob/ui/PiecesFragment.dart';
 import 'package:gestmob/ui/SettingsPage.dart';
 import 'package:gestmob/ui/TresorieFragment.dart';
+import 'package:gestmob/ui/dashboard_fragment.dart';
+import 'package:gestmob/ui/rapport_fragment.dart';
 import 'package:meta/meta.dart';
 import 'package:gestmob/models/HomeItem.dart';
 import 'package:gestmob/ui/AddArticlePage.dart';
@@ -27,7 +29,7 @@ class HomeCubit extends Cubit<HomeState> {
         break;
 
       case homeItemTableauDeBordId:
-        emit(new HomeLoading());
+        emit(new FragmentLoaded(Dashboard()));
 
         break;
 
@@ -65,22 +67,18 @@ class HomeCubit extends Cubit<HomeState> {
 
       case homeItemFactureDeVenteId:
         emit(new FragmentLoaded(PiecesFragment(clientFourn: 0,peaceType: 'FC')));
-
         break;
 
       case drawerItemAvoirClientId:
         emit(new FragmentLoaded(PiecesFragment(clientFourn: 0,peaceType: 'AC')));
-
         break;
 
       case drawerItemAvoirFournisseurId:
         emit(new FragmentLoaded(PiecesFragment(clientFourn: 2,peaceType: 'AF')));
-
         break;
 
       case drawerItemBonDeCommandeId:
         emit(new FragmentLoaded(PiecesFragment(clientFourn: 2,peaceType: 'BC')));
-
         break;
 
       case drawerItemRetourClientId:
@@ -92,7 +90,7 @@ class HomeCubit extends Cubit<HomeState> {
         break;
 
       case homeItemRapportsId:
-        emit(new HomeLoading());
+        emit(new FragmentLoaded(Rapport()));
         break;
 
       case homeItemTresorerieId:

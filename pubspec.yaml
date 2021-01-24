@@ -89,6 +89,7 @@ dependencies:
 
   flutter_image_compress:
   flutter_local_notifications: ^1.4.4+1
+  fl_chart:
 
   flutter_localizations:
     sdk: flutter
@@ -143,6 +144,7 @@ flutter:
     - assets/addArticle.png
     - assets/logos/cirtait_logo.png
     - assets/logos/profile_logo.png
+    - assets/worker-svgrepo-com.svg
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware.
