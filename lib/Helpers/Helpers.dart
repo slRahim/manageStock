@@ -114,8 +114,8 @@ class Helpers {
     final compressedImage = await FlutterImageCompress.compressAndGetFile(
         filePath,
         outPath,
-        minWidth: 300,
-        minHeight: 300,
+        minWidth: 600,
+        minHeight: 600,
         quality: 95);
 
     return compressedImage.readAsBytesSync();

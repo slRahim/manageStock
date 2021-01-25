@@ -1,16 +1,17 @@
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
+import 'package:gestmob/models/Tiers.dart';
 
 import 'CustomWidgets/chart_badge.dart';
 import 'CustomWidgets/chart_indicator.dart';
 
 class ChartPie extends StatefulWidget {
   final data;
+  final typeData ;
   final Color backgroundColor;
   final Color textColor;
 
-
-  ChartPie({Key key, this.data, this.backgroundColor, this.textColor})
+  ChartPie({Key key, this.data, this.typeData ,this.backgroundColor, this.textColor})
       : super(key: key);
 
   @override
@@ -31,6 +32,7 @@ class _ChartPieState extends State<ChartPie> {
     Colors.amberAccent,
     Colors.deepOrange
   ];
+
 
   @override
   Widget build(BuildContext context) {
@@ -68,7 +70,6 @@ class _ChartPieState extends State<ChartPie> {
                   ),
                 ],
               ),
-
               Expanded(
                 child: AspectRatio(
                   aspectRatio: 1,
@@ -95,11 +96,13 @@ class _ChartPieState extends State<ChartPie> {
                   ),
                 ),
               ),
-              Row(
-                mainAxisSize: MainAxisSize.max,
-                mainAxisAlignment: MainAxisAlignment.start,
-                crossAxisAlignment: CrossAxisAlignment.end,
-                children: getIndicator(),
+              Container(
+                height: 30,
+                child: ListView(
+                  padding: EdgeInsets.all(2),
+                  scrollDirection: Axis.horizontal,
+                  children: getIndicator(),
+                ),
               ),
               SizedBox(height: 10,)
 
@@ -112,11 +115,11 @@ class _ChartPieState extends State<ChartPie> {
 
   List <Widget> getIndicator(){
     List<Widget> indicators = new List<Widget>();
-    for(int i=0 ; i<4 ; i++){
+    for(int i=0 ; i < widget.data.length; i++){
       indicators.add( Indicator(
         color: colors[i],
-        text: 'item ${i+1}',
-        isSquare: true,
+        text: getTitle(i),
+        isSquare: false,
         textColor: widget.textColor,
       ));
       indicators.add(SizedBox(width: 6,));
@@ -127,7 +130,7 @@ class _ChartPieState extends State<ChartPie> {
 
   List<PieChartSectionData> showingSections() {
 
-    return List.generate(5, (index) {
+    return List.generate(widget.data.length , (index) {
       final isTouched = index == touchedIndex;
       final double fontSize = isTouched ? 20 : 16;
       final double radius = isTouched ? 110 : 100;
@@ -150,5 +153,33 @@ class _ChartPieState extends State<ChartPie> {
         badgePositionPercentageOffset: .98,
       );
     });
+  }
+
+  double getYvalue(int index){
+    if(widget.data is List<Tiers>){
+      return widget.data[index].raisonSociale ;
+    }else{
+      if(widget.data[index] is double){
+        return widget.data[index] ;
+      }else{
+        return widget.data[index]["Sum(Montant)"] ;
+      }
+    }
+    return 0.0 ;
+  }
+
+  String getTitle(index){
+    switch(widget.typeData){
+      case ("article"):
+        return widget.data[index]["Designation"];
+        break ;
+      case ("tiers"):
+        return widget.data[index].raisonSociale;
+        break ;
+      case ("famille"):
+        return  widget.data[index]["Libelle"] ;
+        break ;
+    }
+
   }
 }

@@ -34,6 +34,8 @@ import 'Helpers.dart';
 class QueryCtr {
   SqlLiteDatabaseHelper _databaseHelper = SqlLiteDatabaseHelper();
 
+  //*****************************************************************************************************************************************************************
+  //************************************************************************special backup&restore*****************************************************************************
   Future<void> createBackup()async{
     await _databaseHelper.generateBackup(isEncrypted: true);
   }
@@ -46,6 +48,8 @@ class QueryCtr {
     await _databaseHelper.restoreBackup(backup,isEncrypted: true);
   }
 
+  //*****************************************************************************************************************************************************************
+  //*******************************************************************logique metier******************************************************************************
   Future<Profile> getProfileById(int id) async {
     Database dbClient = await _databaseHelper.db;
     var res = await dbClient.rawQuery('SELECT * FROM ' + DbTablesNames.profile + ' where id like $id');
@@ -519,7 +523,6 @@ class QueryCtr {
     return new FormatPrint.fromMap(res.last);
   }
 
-
   Future<dynamic> addItemToTable(String tableName, item) async {
     var dbClient = await _databaseHelper.db;
     int res = await dbClient.insert(tableName, item.toMap());
@@ -557,7 +560,6 @@ class QueryCtr {
     return res ;
   }
 
-
   Future<int> getLastId(String tableName)async{
     var dbClient = await _databaseHelper.db ;
     String query = "Select Max(id) From $tableName ;" ;
@@ -580,10 +582,127 @@ class QueryCtr {
     return list ;
   }
 
+  //*****************************************************************************************************************************************************************
+  //************************************************************************special statistique**********************************************************************
+  // ok
+  Future<Map<int , dynamic>> statIndiceFinanciere() async{
+    var dbClient = await _databaseHelper.db;
+    Map<int , dynamic> result = new Map<int , dynamic>();
+    String query1="Select Sum(Chiffre_affaires) From Tiers Where Clientfour = 0 ;";
+    String query2="Select Sum(Regler) From Tiers Where Clientfour = 0 ;";
+    String query3="Select Sum(Regler) From Tiers Where Clientfour = 2 ;";
+    String query4="Select Sum(Net_a_payer) From Pieces Where Mov=1 AND (Piece LIKE 'BR' OR Piece LIKE 'FF') ;";
+    String query5="Select Sum(Marge) From Pieces Where Mov=1 AND (Piece LIKE 'BL' OR Piece LIKE 'FC') ;";
+
+    var res1 = await dbClient.rawQuery(query1);
+    var res2 = await dbClient.rawQuery(query2);
+    var res3 = await dbClient.rawQuery(query3);
+    var res4 = await dbClient.rawQuery(query4);
+    var res5 = await dbClient.rawQuery(query5);
+
+    result={
+      0 :  res1.first["Sum(Chiffre_affaires)"],
+      1 :  res2.first["Sum(Regler)"],
+      2 :  res3.first["Sum(Regler)"],
+      3 :  res4.first["Sum(Net_a_payer)"],
+      4 :  res5.first["Sum(Marge)"],
+    };
+
+    return result ;
+  }
+
+  //ok
+  Future<List<CompteTresorie>> statSoldeCompte()async{
+     var dbClient = await _databaseHelper.db;
+     var res = await dbClient.query(DbTablesNames.compteTresorie);
+
+     List<CompteTresorie> list = new List<CompteTresorie>();
+     for(int i =0 ; i<res.length ; i++){
+       CompteTresorie item = new CompteTresorie.fromMap(res[i]);
+       list.add(item);
+     }
+
+     return list ;
+  }
+
+  //ok
+  Future statCharge() async{
+    var dbClient = await _databaseHelper.db;
+    String query = "Select Tresories.Charge_id ,ChargeTresorie.* ,Sum(Montant) From Tresories JOIN ChargeTresorie ON Tresories.Charge_id = ChargeTresorie.id "+
+        "Where Mov=1 AND Categorie_id=5 Group BY Charge_id ;";
+
+    var res = await dbClient.rawQuery(query);
+
+    return res ;
+  }
+
+  //ok
+  Future statVenteArticle()async{
+    var dbClient = await _databaseHelper.db;
+    String query = "Select Journaux.Article_id ,Articles.Ref, Articles.Designation , Sum(Journaux.Qte*Journaux.Net_ht) From Journaux JOIN Articles ON Journaux.Article_id = Articles.id "+
+        "Where Mov = 1 AND (Piece_type LIKE 'BL' OR Piece_type LIKE 'FC') Group BY Article_id ORDER BY Sum(Journaux.Qte*Journaux.Net_ht) DESC LIMIT 5 ;";
+
+    var res = await dbClient.rawQuery(query);
+
+    return(res);
+  }
+
+  //ok
+  Future<List> statVenteClient() async{
+    var dbClient = await _databaseHelper.db;
+    String query="Select * From Tiers Where Clientfour = 0 ORDER BY Chiffre_affaires DESC LIMIT 5 ;";
+
+    var res = await dbClient.rawQuery(query);
+
+    List<Tiers> list = new List<Tiers>();
+    for(int i =0 ; i<res.length ; i++){
+      Tiers item = new Tiers.fromMap(res[i]);
+      list.add(item);
+    }
+
+    return list ;
+  }
+
+  Future statVenteFamille()async{
+    var dbClient = await _databaseHelper.db;
+    String query = "Select ArticlesFamilles.*, Sum(Journaux.Qte*Journaux.Net_ht) From Journaux "+
+      "LEFT JOIN Articles ON Journaux.Article_id = Articles.id "+
+      "LEFT JOIN ArticlesFamilles ON Articles.Id_Famille+1 = ArticlesFamilles.id "+
+      "Where Mov = 1 AND (Piece_type LIKE 'BL' OR Piece_type LIKE 'FC')  "+
+      "Group BY ArticlesFamilles.id "+
+      "ORDER BY Sum(Journaux.Qte*Journaux.Net_ht) DESC LIMIT 5 ;";
 
 
+    var res = await dbClient.rawQuery(query);
 
+    print(res);
+    return(res);
+  }
 
+  Future statAchatArticle()async{
+    var dbClient = await _databaseHelper.db;
+    String query = "Select Journaux.Article_id , Articles.Ref , Articles.Designation, Sum(Journaux.Qte*Journaux.Net_ht) From Journaux JOIN Articles ON Journaux.Article_id = Articles.id "+
+        "Where Mov = 1 AND (Piece_type LIKE 'BR' OR Piece_type LIKE 'FF') Group BY Article_id ORDER BY Sum(Journaux.Qte*Journaux.Net_ht) DESC LIMIT 5 ;";
+
+    var res = await dbClient.rawQuery(query);
+
+    return(res);
+  }
+
+  Future<List<Tiers>> statAchatFournisseur()async{
+    var dbClient = await _databaseHelper.db;
+    String query="Select * From Tiers Where Clientfour = 2 ORDER BY Chiffre_affaires DESC LIMIT 5 ;";
+
+    var res = await dbClient.rawQuery(query);
+
+    List<Tiers> list = new List<Tiers>();
+    for(int i =0 ; i<res.length ; i++){
+      Tiers item = new Tiers.fromMap(res[i]);
+      list.add(item);
+    }
+
+    return list ;
+  }
 
 
 }

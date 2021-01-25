@@ -1,5 +1,6 @@
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
+import 'package:gestmob/models/CompteTresorie.dart';
 
 import 'CustomWidgets/chart_indicator.dart';
 
@@ -7,7 +8,6 @@ class ChartBar extends StatefulWidget {
   final String chartTitle ;
   final data ;
   final backgroundColor ;
-
 
   ChartBar({Key key , this.chartTitle ,this.backgroundColor ,this.data}):super(key:key);
 
@@ -30,7 +30,6 @@ class _ChartBarState extends State<ChartBar> {
     Colors.amberAccent,
     Colors.deepOrange
   ];
-
 
   @override
   Widget build(BuildContext context) {
@@ -78,7 +77,7 @@ class _ChartBarState extends State<ChartBar> {
                   child: BarChart(
                     BarChartData(
                       alignment: BarChartAlignment.center,
-                      groupsSpace: 12,
+                      groupsSpace: 30,
                       barTouchData: BarTouchData(
                         enabled: true,
                       ),
@@ -90,26 +89,7 @@ class _ChartBarState extends State<ChartBar> {
                           const TextStyle(color: Colors.white, fontSize: 10),
                           margin: 10,
                           rotateAngle: 0,
-                          getTitles: (double value) {
-                            switch (value.toInt()) {
-                              case 0:
-                                return 'Mon';
-                              case 1:
-                                return 'Tue';
-                              case 2:
-                                return 'Wed';
-                              case 3:
-                                return 'Thu';
-                              case 4:
-                                return 'Fri';
-                              case 5:
-                                return 'Sat';
-                              case 6:
-                                return 'Sun';
-                              default:
-                                return '';
-                            }
-                          },
+                          getTitles: (double value)=>(getTitle(value.toInt()))
                         ),
                         bottomTitles: SideTitles(
                           showTitles: true,
@@ -117,56 +97,17 @@ class _ChartBarState extends State<ChartBar> {
                           const TextStyle(color: Colors.white, fontSize: 10),
                           margin: 10,
                           rotateAngle: 0,
-                          getTitles: (double value) {
-                            switch (value.toInt()) {
-                              case 0:
-                                return 'Mon';
-                              case 1:
-                                return 'Tue';
-                              case 2:
-                                return 'Wed';
-                              case 3:
-                                return 'Thu';
-                              case 4:
-                                return 'Fri';
-                              case 5:
-                                return 'Sat';
-                              case 6:
-                                return 'Sun';
-                              default:
-                                return '';
-                            }
-                          },
+                          getTitles: (double value)=>(getTitle(value.toInt()))
                         ),
                         leftTitles: SideTitles(
                           showTitles: true,
                           getTextStyles: (value) =>
                           const TextStyle(color: Colors.white, fontSize: 10),
-                          rotateAngle: 45,
-                          getTitles: (double value) {
-                            if (value == 0) {
-                              return '0';
-                            }
-                            return '${value.toInt()}0k';
-                          },
-                          interval: 5,
-                          margin: 8,
-                          reservedSize: 30,
+                          rotateAngle: 20,
+                          interval: 100,
                         ),
                         rightTitles: SideTitles(
-                          showTitles: true,
-                          getTextStyles: (value) =>
-                          const TextStyle(color: Colors.white, fontSize: 10),
-                          rotateAngle: 90,
-                          getTitles: (double value) {
-                            if (value == 0) {
-                              return '0';
-                            }
-                            return '${value.toInt()}0k';
-                          },
-                          interval: 5,
-                          margin: 8,
-                          reservedSize: 30,
+                          showTitles: false,
                         ),
                       ),
                       gridData: FlGridData(
@@ -194,12 +135,6 @@ class _ChartBarState extends State<ChartBar> {
               SizedBox(
                 height: 12,
               ),
-              Row(
-                mainAxisSize: MainAxisSize.max,
-                mainAxisAlignment: MainAxisAlignment.start,
-                crossAxisAlignment: CrossAxisAlignment.end,
-                children: getIndicator(),
-              ),
             ],
           ),
         ),
@@ -208,47 +143,83 @@ class _ChartBarState extends State<ChartBar> {
 
   }
 
-  List <Widget> getIndicator(){
-    List<Widget> indicators = new List<Widget>();
-    for(int i=0 ; i<4 ; i++){
-      indicators.add( Indicator(
-        color: colors[i],
-        text: 'item ${i+1}',
-        isSquare: true,
-        textColor: Colors.white,
-      ));
-      indicators.add(SizedBox(width: 6,));
-    }
-
-    return indicators ;
-  }
-
-
   List<BarChartGroupData> showingBars(){
-    return List.generate(7, (index) {
+    return List.generate(widget.data.length , (index) {
       return BarChartGroupData(
         x: index,
         barRods: [
           BarChartRodData(
-            y: (index.toDouble()+1)*1.66,
+            y: getYvalue(index),
             width: barWidth,
             borderRadius: const BorderRadius.only(
                 topLeft: Radius.circular(6),
-                topRight: Radius.circular(6)),
-            rodStackItems: [
+                topRight: Radius.circular(6)
+            ),
+            rodStackItems:  [
+              // BarChartRodStackItem(0,widget.data[index],colors[index]),
               BarChartRodStackItem(
-                  0, 2, const Color(0xff2bdb90)),
+                  500, 1000, const Color(0xff19bfff)),
               BarChartRodStackItem(
-                  2, 5, const Color(0xffffdd80)),
+                  200, 400, const Color(0xffff4d94)),
               BarChartRodStackItem(
-                  5, 7.5, const Color(0xffff4d94)),
+                  100, 200, const Color(0xffffdd80)),
               BarChartRodStackItem(
-                  7.5, 15.5, const Color(0xff19bfff)),
+                  0, 100, const Color(0xff2bdb90)),
+              BarChartRodStackItem(
+                  0, -100, const Color(0xff2bdb90)),
+              BarChartRodStackItem(
+                  -100, -200, const Color(0xffffdd80)),
+              BarChartRodStackItem(
+                  -200, -400, const Color(0xffff4d94)),
+              BarChartRodStackItem(
+                  -500, -1000, const Color(0xff19bfff)),
             ],
           ),
         ],
       ) ;
     });
+  }
+  
+  double getYvalue(int index){
+    if(widget.data is List<CompteTresorie>){
+      return widget.data[index].solde ;
+    }else{
+      if(widget.data[index] is double){
+        return widget.data[index] ;
+      }else{
+        return widget.data[index]["Sum(Montant)"] ;
+      }
+    }
+    return 0.0 ;
+  }
+
+  String getTitle(index){
+    if(widget.data is List<CompteTresorie>){
+      return widget.data[index].nomCompte;
+    }else{
+      if(widget.data[index] is double){
+        switch(index){
+          case 0:
+            return "C.A";
+            break;
+          case 1:
+            return "Reg.Cl";
+            break;
+          case 2:
+            return "Reg.Four";
+            break;
+          case 3:
+            return "Achats";
+            break;
+          case 4:
+            return "Marge";
+            break;
+        }
+      }else{
+        return widget.data[index]["Libelle"] ;
+      }
+    }
+    return "" ;
   }
 
   Widget makeTransactionsIcon() {
