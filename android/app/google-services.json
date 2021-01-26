@@ -1,33 +1,41 @@
 {
   "project_info": {
-    "project_number": "283935353106",
-    "project_id": "gestmob-d27e5",
-    "storage_bucket": "gestmob-d27e5.appspot.com"
+    "project_number": "941860635685",
+    "project_id": "fluttergestmob",
+    "storage_bucket": "fluttergestmob.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:283935353106:android:d02068caf0dac22f46ebcb",
+        "mobilesdk_app_id": "1:941860635685:android:ee19879d5ea44977242bcc",
         "android_client_info": {
-          "package_name": "com.cirtait.gestmob"
+          "package_name": "com.cirtait.flutter.gestmob"
         }
       },
       "oauth_client": [
         {
-          "client_id": "283935353106-pltiq1k4cjqig5guvu8k9r2efn1eis5v.apps.googleusercontent.com",
+          "client_id": "941860635685-l5j6ehn2s1rvgd2r9jnjviiqkjpt3kmu.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.cirtait.flutter.gestmob",
+            "certificate_hash": "0349856eed4546ef975ad293d0c42a80dd748106"
+          }
+        },
+        {
+          "client_id": "941860635685-lkgsncs3678kfb3iv7u0n7ks1gj536vt.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyCVatGmYYcsRmYk-36uwlkVJy4euswxOjs"
+          "current_key": "AIzaSyD3Nd4EafLOkDi77tVeK0WqQ1v064sAYEo"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "283935353106-pltiq1k4cjqig5guvu8k9r2efn1eis5v.apps.googleusercontent.com",
+              "client_id": "941860635685-lkgsncs3678kfb3iv7u0n7ks1gj536vt.apps.googleusercontent.com",
               "client_type": 3
             }
           ]

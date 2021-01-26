@@ -36,16 +36,18 @@ class QueryCtr {
 
   //*****************************************************************************************************************************************************************
   //************************************************************************special backup&restore*****************************************************************************
-  Future<void> createBackup()async{
-    await _databaseHelper.generateBackup(isEncrypted: true);
+  Future createBackup()async{
+    var res = await _databaseHelper.generateBackup(isEncrypted: true);
+    return res ;
   }
 
   Future<void> clearAll()async{
     var res = await _databaseHelper.clearAllTables();
   }
 
-  Future<void> restoreBackup(File backup)async{
-    await _databaseHelper.restoreBackup(backup,isEncrypted: true);
+  Future restoreBackup(File backup)async{
+    var res = await _databaseHelper.restoreBackup(backup,isEncrypted: true);
+    return res ;
   }
 
   //*****************************************************************************************************************************************************************
@@ -639,7 +641,7 @@ class QueryCtr {
   //ok
   Future statVenteArticle()async{
     var dbClient = await _databaseHelper.db;
-    String query = "Select Journaux.Article_id ,Articles.Ref, Articles.Designation , Sum(Journaux.Qte*Journaux.Net_ht) From Journaux JOIN Articles ON Journaux.Article_id = Articles.id "+
+    String query = "Select Journaux.Article_id ,Articles.Ref, Articles.Designation ,Articles.BytesImageString, Sum(Journaux.Qte*Journaux.Net_ht) From Journaux JOIN Articles ON Journaux.Article_id = Articles.id "+
         "Where Mov = 1 AND (Piece_type LIKE 'BL' OR Piece_type LIKE 'FC') Group BY Article_id ORDER BY Sum(Journaux.Qte*Journaux.Net_ht) DESC LIMIT 5 ;";
 
     var res = await dbClient.rawQuery(query);
@@ -681,7 +683,7 @@ class QueryCtr {
 
   Future statAchatArticle()async{
     var dbClient = await _databaseHelper.db;
-    String query = "Select Journaux.Article_id , Articles.Ref , Articles.Designation, Sum(Journaux.Qte*Journaux.Net_ht) From Journaux JOIN Articles ON Journaux.Article_id = Articles.id "+
+    String query = "Select Journaux.Article_id , Articles.Ref , Articles.Designation,Articles.BytesImageString, Sum(Journaux.Qte*Journaux.Net_ht) From Journaux JOIN Articles ON Journaux.Article_id = Articles.id "+
         "Where Mov = 1 AND (Piece_type LIKE 'BR' OR Piece_type LIKE 'FF') Group BY Article_id ORDER BY Sum(Journaux.Qte*Journaux.Net_ht) DESC LIMIT 5 ;";
 
     var res = await dbClient.rawQuery(query);

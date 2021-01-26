@@ -99,36 +99,36 @@ class _SettingsPageState extends State<SettingsPage> {
       return Scaffold(
           appBar: AppBar(
             leading: IconButton(
-                icon: Icon(Icons.arrow_back, size: 25),
-                onPressed: () {
-                  AwesomeDialog(
-                      context: context,
-                      title: "Save Changes",
-                      desc: "Do you want to save last changes ...",
-                      dialogType: DialogType.QUESTION,
-                      animType: AnimType.BOTTOMSLIDE,
-                      btnCancelText: S.current.non,
-                      btnCancelOnPress: () {
-                        Navigator.pop(context);
-                      },
-                      btnOkText: S.current.oui,
-                      btnOkOnPress: () async {
-                        await _updateItem();
-                      })
-                    ..show();
-                }),
+              icon: Icon(
+                Icons.live_help_sharp,
+              ),
+              onPressed: () {
+                Helpers.handleIdClick(context, drawerItemHelpId);
+              },
+            ),
             title: Text(S.current.settings),
             backgroundColor: Theme.of(context).appBarTheme.color,
             centerTitle: true,
             actions: [
               IconButton(
-                icon: Icon(
-                  Icons.help,
-                ),
-                onPressed: () {
-                  Helpers.handleIdClick(context, drawerItemHelpId);
-                },
-              ),
+                  icon: Icon(Icons.save, size: 25),
+                  onPressed: () {
+                    AwesomeDialog(
+                        context: context,
+                        title: "Save Changes",
+                        desc: "Do you want to save last changes ...",
+                        dialogType: DialogType.QUESTION,
+                        animType: AnimType.BOTTOMSLIDE,
+                        btnCancelText: S.current.non,
+                        btnCancelOnPress: () {
+                          Navigator.pop(context);
+                        },
+                        btnOkText: S.current.oui,
+                        btnOkOnPress: () async {
+                          await _updateItem();
+                        })
+                      ..show();
+                  }),
             ],
           ),
           body: SettingsList(
@@ -297,15 +297,21 @@ class _SettingsPageState extends State<SettingsPage> {
                     title: 'Create Backup',
                     leading: Icon(Icons.backup),
                     onTap: () async{
-                       // await _queryCtr.createBackup();
+                      _queryCtr.createBackup()
+                          .then((value){
+                        if(value["name"] != null){
+                          Helpers.showFlushBar(context, "Succer,Backup a bien été créer");
+                        }else{
+                          Helpers.showFlushBar(context, "Ereure,Backup n'a pas été créer");
+                        }
+                      });
                     },
                   ),
                   SettingsTile(
                     title: 'Restore Data',
                     leading: Icon(Icons.restore),
                     onTap: () async {
-                      Navigator.pushNamed(context, RoutesKeys.driveListing)
-                          .then((value) => null);
+                      Navigator.pushNamed(context, RoutesKeys.driveListing);
                     },
                   ),
                 ],

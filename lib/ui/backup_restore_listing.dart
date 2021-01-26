@@ -1,6 +1,7 @@
 import 'dart:io';
 import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:flutter/material.dart';
+import 'package:gestmob/Helpers/Helpers.dart';
 import 'package:gestmob/Helpers/QueryCtr.dart';
 import 'package:gestmob/generated/l10n.dart';
 import 'package:gestmob/services/cloud_backup_restore.dart';
@@ -139,9 +140,16 @@ class _SelectfromdriveState extends State<Selectfromdrive> {
               btnOkText: S.current.oui,
               btnOkOnPress: () async {
                 File backupFile = await googleapi.DownloadGoogleDriveFile(file.name, file.id);
-                Navigator.pop(context);
-                await _query.restoreBackup(backupFile);
+                _query.restoreBackup(backupFile).then((value){
+                  if(value != null){
+                    Navigator.pop(context);
+                    Helpers.showFlushBar(context, "Succer, restoration a bien terminé");
 
+                  }else{
+                    Navigator.pop(context);
+                    Helpers.showFlushBar(context, "Ereure, à la restoration");
+                  }
+                });
               })
             ..show();
         },

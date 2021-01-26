@@ -1021,8 +1021,6 @@ class _AddPiecePageState extends State<AddPiecePage> with TickerProviderStateMix
   }
 
   Future<DateTime> getDate(DateTime dateTime) {
-    // Imagine that this function is
-    // more complex and slow.
     return showDatePicker(
       context: context,
       initialDate: dateTime,

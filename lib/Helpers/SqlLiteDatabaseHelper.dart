@@ -113,75 +113,53 @@ class SqlLiteDatabaseHelper {
     }
   }
 
-  Future<void> generateBackup({bool isEncrypted = true}) async {
-    print('GENERATE BACKUP');
-
+  Future generateBackup({bool isEncrypted = true}) async {
     var dbs = await this.db;
-
     List data =[];
-
     List<Map<String,dynamic>> listMaps=[];
 
-    for (var i = 0; i < db_tables.length; i++)
-    {
-
+    for (var i = 0; i < db_tables.length; i++) {
       listMaps = await dbs.query(db_tables[i]);
-
       data.add(listMaps);
-
     }
 
     List backups=[db_tables,data];
-
     String json =convert.jsonEncode(backups);
-
     if(isEncrypted) {
       final key = encrypt.Key.fromUtf8(SECRET_KEY);
       final iv = encrypt.IV.fromLength(16);
       final encrypter = encrypt.Encrypter(encrypt.AES(key));
       final encrypted = encrypter.encrypt(json, iv: iv);
-
       json =  encrypted.base64;
     }
-
     //file upload
     final directory = await getApplicationDocumentsDirectory();
-
-    File file = new File('${directory.path}/gestmob_Backup${DateTime.now().toString()}.txt');
+    File file = new File('${directory.path}/gestmob_Backup${DateTime.now().toString()}.bkp');
     file.writeAsString(json);
+    var res = await _googleApi.upload(file);
 
-    await _googleApi.upload(file);
+    return res ;
   }
 
-  Future<void>restoreBackup(File backupFile,{ bool isEncrypted = true})async{
+  Future restoreBackup(File backupFile,{ bool isEncrypted = true})async{
     await clearAllTables() ;
 
     String backup = await backupFile.readAsString();
-    print(backup) ;
-
     var dbs = await this.db;
 
     Batch batch = dbs.batch();
-
     final key = encrypt.Key.fromUtf8(SECRET_KEY);
-
     final iv = encrypt.IV.fromLength(16);
-
     final encrypter = encrypt.Encrypter(encrypt.AES(key));
-
     List json = convert.jsonDecode(isEncrypted ? encrypter.decrypt64(backup,iv:iv):backup);
-
-    for (var i = 0; i < json[0].length; i++)
-    {
-      for (var k = 0; k < json[1][i].length; k++)
-      {
+    for (var i = 0; i < json[0].length; i++) {
+      for (var k = 0; k < json[1][i].length; k++) {
         batch.insert(json[0][i],json[1][i][k]);
       }
     }
 
-    await batch.commit(continueOnError:false,noResult:true);
-
-    print('RESTORE BACKUP');
+    var res = await batch.commit(continueOnError:false,noResult:false);
+    return res ;
   }
 
 

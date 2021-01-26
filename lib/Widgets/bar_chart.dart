@@ -185,9 +185,9 @@ class _ChartBarState extends State<ChartBar> {
       return widget.data[index].solde ;
     }else{
       if(widget.data[index] is double){
-        return widget.data[index] ;
+        return (widget.data[index] == null)?0.0:widget.data[index] ;
       }else{
-        return widget.data[index]["Sum(Montant)"] ;
+        return (widget.data[index]== null )? 0.0 : widget.data[index]["Sum(Montant)"] ;
       }
     }
     return 0.0 ;
@@ -216,7 +216,7 @@ class _ChartBarState extends State<ChartBar> {
             break;
         }
       }else{
-        return widget.data[index]["Libelle"] ;
+        return (widget.data[index] == null)?"":widget.data[index]["Libelle"] ;
       }
     }
     return "" ;

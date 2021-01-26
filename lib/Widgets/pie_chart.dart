@@ -1,5 +1,8 @@
+import 'dart:typed_data';
+
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
+import 'package:gestmob/Helpers/Helpers.dart';
 import 'package:gestmob/models/Tiers.dart';
 
 import 'CustomWidgets/chart_badge.dart';
@@ -20,6 +23,7 @@ class ChartPie extends StatefulWidget {
 
 class _ChartPieState extends State<ChartPie> {
   int touchedIndex;
+  double _totalSum = 0 ;
   List<Color> colors = [
     Color(0xff0293ee),
     Color(0xfff8b250),
@@ -33,6 +37,13 @@ class _ChartPieState extends State<ChartPie> {
     Colors.deepOrange
   ];
 
+  @override
+  void initState() {
+    super.initState();
+    for(int i =0 ; i<widget.data.length ; i++){
+      _totalSum = _totalSum +  getYvalue(i);
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -90,8 +101,8 @@ class _ChartPieState extends State<ChartPie> {
                           show: false,
                         ),
                         sectionsSpace: 5,
-                        centerSpaceRadius: 25,
-                        centerSpaceColor: Colors.lightGreen[300],
+                        centerSpaceRadius: 15,
+                        centerSpaceColor: Colors.white,
                         sections: showingSections()),
                   ),
                 ),
@@ -133,22 +144,22 @@ class _ChartPieState extends State<ChartPie> {
     return List.generate(widget.data.length , (index) {
       final isTouched = index == touchedIndex;
       final double fontSize = isTouched ? 20 : 16;
-      final double radius = isTouched ? 110 : 100;
+      final double radius = isTouched ? 130 : 110;
       final double widgetSize = isTouched ? 55 : 40;
 
       return PieChartSectionData(
         color: colors[index],
-        value: (index.toDouble() + 1),
-        title: '${(index)*10}%',
+        value: (getYvalue(index) == 0 && widget.data.length == 1 )? 1 : getYvalue(index),
+        title: '${(getYvalue(index)*100/_totalSum).toStringAsFixed(2)}%'.toString(),
         radius: radius,
         titleStyle: TextStyle(
             fontSize: fontSize,
             fontWeight: FontWeight.bold,
             color: const Color(0xffffffff)),
         badgeWidget: Badge(
-          'assets/worker-svgrepo-com.svg',
+          getImage(index),
           size: widgetSize,
-          borderColor: const Color(0xff0293ee),
+          borderColor: Colors.yellow[700],
         ),
         badgePositionPercentageOffset: .98,
       );
@@ -156,16 +167,17 @@ class _ChartPieState extends State<ChartPie> {
   }
 
   double getYvalue(int index){
-    if(widget.data is List<Tiers>){
-      return widget.data[index].raisonSociale ;
-    }else{
-      if(widget.data[index] is double){
-        return widget.data[index] ;
-      }else{
-        return widget.data[index]["Sum(Montant)"] ;
-      }
-    }
-    return 0.0 ;
+    switch(widget.typeData){
+      case ("article"):
+        return widget.data[index]["Sum(Journaux.Qte*Journaux.Net_ht)"];
+        break ;
+      case ("tiers"):
+        return widget.data[index].chiffre_affaires;
+        break ;
+      case ("famille"):
+        return  widget.data[index]["Sum(Journaux.Qte*Journaux.Net_ht)"] ;
+        break ;
+    };
   }
 
   String getTitle(index){
@@ -181,5 +193,19 @@ class _ChartPieState extends State<ChartPie> {
         break ;
     }
 
+  }
+
+  Uint8List getImage(index){
+    switch(widget.typeData){
+      case ("article"):
+        return Helpers.getUint8ListFromByteString(widget.data[index]["BytesImageString"]) ;
+        break ;
+      case ("tiers"):
+        return widget.data[index].imageUint8List;
+        break ;
+      case ("famille"):
+        return Helpers.getUint8ListFromByteString(widget.data[index]["BytesImageString"]) ;
+        break ;
+    }
   }
 }

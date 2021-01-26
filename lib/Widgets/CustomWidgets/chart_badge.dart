@@ -1,9 +1,11 @@
+import 'dart:typed_data';
+
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
 class Badge extends StatelessWidget {
-  final String svgAsset;
+  final Uint8List svgAsset;
   final double size;
   final Color borderColor;
 
@@ -36,11 +38,9 @@ class Badge extends StatelessWidget {
         ],
       ),
       padding: EdgeInsets.all(size * .15),
-      child: Center(
-        child: SvgPicture.asset(
-          svgAsset,
-          fit: BoxFit.contain,
-        ),
+      child: CircleAvatar(
+        backgroundColor: Colors.white,
+        backgroundImage:  MemoryImage(svgAsset),
       ),
     );
   }

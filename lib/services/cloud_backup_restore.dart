@@ -83,8 +83,8 @@ class GoogleApi {
     var response = await drive.files.create(fileToUpload,
         uploadMedia: ga.Media(file.openRead(), file.lengthSync()));
 
-    print("Result ${response.toJson()}");
     GoogleLogout();
+    return (response.toJson());
   }
 
 
