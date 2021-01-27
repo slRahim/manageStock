@@ -631,7 +631,7 @@ class QueryCtr {
   Future statCharge() async{
     var dbClient = await _databaseHelper.db;
     String query = "Select Tresories.Charge_id ,ChargeTresorie.* ,Sum(Montant) From Tresories JOIN ChargeTresorie ON Tresories.Charge_id = ChargeTresorie.id "+
-        "Where Mov=1 AND Categorie_id=5 Group BY Charge_id ;";
+        "Where Mov=1 AND Categorie_id=5 Group BY Charge_id ORDER BY Sum(Montant) DESC LIMIT 5 ;";
 
     var res = await dbClient.rawQuery(query);
 

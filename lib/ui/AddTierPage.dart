@@ -24,6 +24,9 @@ import 'package:path_provider/path_provider.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 import 'package:flutter/rendering.dart';
 import 'package:share/share.dart';
+import 'package:pdf/pdf.dart';
+import 'package:pdf/widgets.dart' as pw;
+import 'package:printing/printing.dart';
 
 class AddTierPage extends StatefulWidget {
 
@@ -925,16 +928,16 @@ class _AddTierPageState extends State<AddTierPage>
                       ),
                     ],
                   ),
-                  child: new IconButton(
-                    color: Colors.black,
+                  child: IconButton(
                     icon: new Icon(
-                      Icons.save_alt,
+                      Icons.share,
                       size: 30,
-                      color: Colors.blue[700],
+                      color:(_qrCodeControl.text != "")? Colors.blue[700]:Colors.black54,
                     ),
-                    onPressed: () async{
-                      await _captureAndSharePng();
-                    }
+                    onPressed:(_qrCodeControl.text != "")? () async{
+                      if(_qrCodeControl.text != "")
+                        await _captureAndSharePng();
+                    }:null
                   ),
                 ),
                 Container(
@@ -951,16 +954,17 @@ class _AddTierPageState extends State<AddTierPage>
                       ),
                     ],
                   ),
-                  child: new IconButton(
-                      color: Colors.black,
+                  child: IconButton(
                       icon: new Icon(
-                        Icons.print,
+                        Icons.print_rounded,
                         size: 30,
-                        color: Colors.blue[700],
+                        color:(_qrCodeControl.text != "")? Colors.blue[700]:Colors.black54,
                       ),
-                      onPressed: () async{
-                      //  print qr code with thermel printer
-                      }
+                      onPressed:(_qrCodeControl.text != "")? () async{
+                        if(_qrCodeControl.text != ""){
+                          await _printQr();
+                        }
+                      }:null
                   ),
                 ),
               ],
@@ -1298,6 +1302,36 @@ class _AddTierPageState extends State<AddTierPage>
           text: 'Hey, check it out the sharefiles repo!',
           sharePositionOrigin: box.localToGlobal(Offset.zero) & box.size ,
       );
+    } catch(e) {
+      print(e.toString());
+    }
+  }
+
+  Future _printQr()async{
+    try {
+      RenderRepaintBoundary boundary = globalKey.currentContext.findRenderObject();
+      var image = await boundary.toImage();
+      ByteData byteData = await image.toByteData(format: ImageByteFormat.png);
+      Uint8List pngBytes = byteData.buffer.asUint8List();
+
+      final tempDir = await getTemporaryDirectory();
+      final file = await new File('${tempDir.path}/image.png').create();
+      await file.writeAsBytes(pngBytes);
+
+      final doc = pw.Document();
+      final image01 = pw.MemoryImage(
+        file.readAsBytesSync(),
+      );
+
+      doc.addPage(pw.Page(build: (pw.Context context) {
+        return pw.Center(
+          child: pw.Image(image01),
+        ); // Center
+      }));
+
+      await Printing.layoutPdf(
+          onLayout: (PdfPageFormat format) async => doc.save());
+
     } catch(e) {
       print(e.toString());
     }

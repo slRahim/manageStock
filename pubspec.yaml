@@ -91,6 +91,13 @@ dependencies:
   flutter_local_notifications: ^1.4.4+1
   fl_chart:
 
+  wifi: ^0.1.5
+  ping_discover_network: ^0.2.0+1
+  connectivity: ^2.0.2
+
+  printing: ^4.0.0
+  pdf: ^2.0.0
+
   flutter_localizations:
     sdk: flutter
 

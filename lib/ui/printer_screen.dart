@@ -1,4 +1,5 @@
 import 'dart:typed_data';
+import 'package:connectivity/connectivity.dart';
 import 'package:flutter/material.dart' hide Image;
 import 'package:esc_pos_bluetooth/esc_pos_bluetooth.dart';
 import 'package:esc_pos_utils/esc_pos_utils.dart';
@@ -10,46 +11,70 @@ import 'package:gestmob/generated/l10n.dart';
 import 'package:gestmob/models/DefaultPrinter.dart';
 import 'dart:io' show Platform;
 import 'package:image/image.dart';
+import 'package:ping_discover_network/ping_discover_network.dart';
+import 'package:wifi/wifi.dart';
 
 class Print extends StatefulWidget {
   final Ticket data;
+
   Print(this.data);
+
   @override
   _PrintState createState() => _PrintState();
 }
 
 class _PrintState extends State<Print> {
-
   PrinterBluetoothManager _printerManager = PrinterBluetoothManager();
   List<PrinterBluetooth> _devices = [];
   String _devicesMsg;
   BluetoothManager bluetoothManager = BluetoothManager.instance;
 
-  QueryCtr _queryCtr = new QueryCtr() ;
+  // String _localIp = '';
+  // List<String> _wifidevices = [];
+  // String _wifidevicesMsg;
+  // bool _isDiscovering = false;
+  // int _found = -1;
+  // var _subscription ;
+
+  QueryCtr _queryCtr = new QueryCtr();
   DefaultPrinter defaultPrinter = new DefaultPrinter.init();
+
+  ScrollController _controller = new ScrollController();
+  ScrollController _controller1 = new ScrollController();
+
 
   @override
   void initState() {
     if (Platform.isAndroid) {
+      // _subscription = Connectivity().onConnectivityChanged.listen((ConnectivityResult result) {
+      //   if(result.index == ConnectivityResult.wifi.index){
+      //     initWifiPrinter();
+      //   }else{
+      //     setState(() {
+      //       _wifidevicesMsg= "Please turn wifi on";
+      //     });
+      //   }
+      //
+      // });
       bluetoothManager.state.listen((val) {
-        print('state = $val');
         if (!mounted) return;
         if (val == 12) {
-          print('on');
-          initPrinter();
+          initBlPrinter();
         } else if (val == 10) {
-          print('off');
           setState(() => _devicesMsg = S.current.blue_off);
         }
       });
     } else {
-      initPrinter();
+      initBlPrinter();
+      // initWifiPrinter();
     }
+
+
 
     super.initState();
   }
 
-  void initPrinter() {
+  void initBlPrinter() {
     _printerManager.startScan(Duration(seconds: 2));
     _printerManager.scanResults.listen((val) {
       if (!mounted) return;
@@ -58,20 +83,77 @@ class _PrintState extends State<Print> {
     });
   }
 
+  // void initWifiPrinter() async {
+  //   setState(() {
+  //     _isDiscovering = true;
+  //     _wifidevices.clear();
+  //     _found = -1;
+  //   });
+  //
+  //   String ip;
+  //   try {
+  //     ip = await Wifi.ip;
+  //   } catch (e) {
+  //     setState(() {
+  //       _wifidevicesMsg = 'Please connect to network' ;
+  //     });
+  //     return;
+  //   }
+  //   setState(() {
+  //     _localIp = ip;
+  //   });
+  //
+  //   final String subnet = ip.substring(0, ip.lastIndexOf('.'));
+  //   int port = 9100;
+  //   print('subnet:\t$subnet, port:\t$port');
+  //
+  //   final stream = NetworkAnalyzer.discover2(subnet, port);
+  //
+  //   stream.listen((NetworkAddress addr) {
+  //     if (addr.exists) {
+  //       print('Found device: ${addr.ip}');
+  //       setState(() {
+  //         _wifidevices.add(addr.ip);
+  //         _found = _wifidevices.length;
+  //       });
+  //     }
+  //   })
+  //     ..onDone(() {
+  //       setState(() {
+  //         _isDiscovering = false;
+  //         _found = _wifidevices.length;
+  //       });
+  //       if(_found < 1){
+  //         setState(() {
+  //           _wifidevicesMsg = 'No Device is found' ;
+  //         });
+  //         return;
+  //       }
+  //     })
+  //     ..onError((dynamic e) {
+  //       setState(() {
+  //         _wifidevicesMsg = 'No Device is found' ;
+  //       });
+  //       return;
+  //     });
+  // }
+
   @override
   void dispose() {
     _printerManager.stopScan();
+    // _subscription.cancel();
     super.dispose();
   }
 
-  printTicket(context , device) async {
+  printTicket(context, device) async {
     _printerManager.selectPrinter(device);
-    Ticket ticket=widget.data ;
+    Ticket ticket = widget.data;
 
-    defaultPrinter.name = device.name ;
-    defaultPrinter.adress = device.address ;
-    defaultPrinter.type = device.type ;
-    await _queryCtr.addItemToTable(DbTablesNames.defaultPrinter, defaultPrinter);
+    defaultPrinter.name = device.name;
+    defaultPrinter.adress = device.address;
+    defaultPrinter.type = device.type;
+    await _queryCtr.addItemToTable(
+        DbTablesNames.defaultPrinter, defaultPrinter);
 
     _printerManager.printTicket(ticket).then((result) {
       showDialog(
@@ -81,7 +163,7 @@ class _PrintState extends State<Print> {
         ),
       );
       dispose();
-    }).catchError((error){
+    }).catchError((error) {
       showDialog(
         context: context,
         builder: (_) => AlertDialog(
@@ -99,25 +181,106 @@ class _PrintState extends State<Print> {
         centerTitle: true,
         backgroundColor: Colors.green,
       ),
-      body: _devices.isEmpty
-          ? Center(child: Text(_devicesMsg ?? ''))
-          : ListView.builder(
-          itemCount: _devices.length,
-          itemBuilder: (c, i) {
-          return ListTile(
-            leading: Icon(Icons.print),
-            title: Text(_devices[i].name),
-            subtitle: Text(_devices[i].address),
-            onTap: () async{
-              await printTicket(context , _devices[i]);
-              Navigator.pop(context);
-            },
-          );
-        },
+      body: ListView(
+        padding: EdgeInsets.all(10),
+        children: [
+          Container(
+            padding: EdgeInsets.all(5),
+            child: Text(
+              "Bluetooth Devices",
+              style: TextStyle(
+                fontWeight: FontWeight.bold,
+                fontSize: 16,
+              ),
+            ),
+          ),
+          Container(
+              margin: EdgeInsets.only(top: 5 , bottom: 5),
+              padding: EdgeInsets.all(5),
+              height: 600,
+              decoration: BoxDecoration(
+                color: Colors.white,
+              ),
+              child: (_devices.isEmpty)
+                  ? Center(
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          (_devicesMsg != null )?Icon(Icons.warning , color: Colors.yellow[700], size: 60,):SizedBox(),
+                          SizedBox(height: 5,),
+                          Text(_devicesMsg ?? '' , style: TextStyle(fontWeight: FontWeight.bold),),
+                        ],
+                      )
+                  )
+                  : Scrollbar(
+                      isAlwaysShown: true,
+                      controller: _controller,
+                      child: ListView.builder(
+                        controller: _controller,
+                        itemCount: _devices.length,
+                        itemBuilder: (c, i) {
+                          return ListTile(
+                            leading: Icon(Icons.print),
+                            title: Text(_devices[i].name),
+                            subtitle: Text(_devices[i].address),
+                            onTap: () async {
+                              await printTicket(context, _devices[i]);
+                              Navigator.pop(context);
+                            },
+                          );
+                        },
+                      ),
+                    )),
+          // Container(
+          //   padding: EdgeInsets.all(5),
+          //   child: Text(
+          //     "Wifi Devices",
+          //     style: TextStyle(
+          //       fontWeight: FontWeight.bold,
+          //       fontSize: 16,
+          //     ),
+          //   ),
+          // ),
+          // Container(
+          //     margin: EdgeInsets.only(bottom: 10 , top : 5),
+          //     height: 300,
+          //     decoration: BoxDecoration(
+          //       color: Colors.white,
+          //     ),
+          //     padding: EdgeInsets.all(5),
+          //     child: (_wifidevices.isEmpty)
+          //         ? Center(
+          //           child: Column(
+          //             mainAxisAlignment: MainAxisAlignment.center,
+          //             children: [
+          //               (_wifidevicesMsg != null)?Icon(Icons.warning , color: Colors.yellow[700], size: 60,)
+          //                   :CircularProgressIndicator(),
+          //               SizedBox(height: 5,),
+          //               Text(_wifidevicesMsg ?? '' , style: TextStyle(fontWeight: FontWeight.bold),),
+          //             ],
+          //           )
+          //         )
+          //         : Scrollbar(
+          //             isAlwaysShown: true,
+          //             controller: _controller1,
+          //             child: ListView.builder(
+          //               controller: _controller1,
+          //               itemCount: _wifidevices.length,
+          //               itemBuilder: (c, i) {
+          //                 return ListTile(
+          //                   leading: Icon(Icons.print),
+          //                   title: Text(_wifidevices[i]),
+          //                   subtitle: Text("9100"),
+          //                   onTap: () async {
+          //                     // await printTicket(context, _devices[i]);
+          //                     Navigator.pop(context);
+          //                   },
+          //                 );
+          //               },
+          //             ),
+          //           )),
+        ],
       ),
     );
   }
-
-
-
 }

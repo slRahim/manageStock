@@ -45,6 +45,10 @@ import 'package:material_design_icons_flutter/material_design_icons_flutter.dart
 import 'package:esc_pos_utils/esc_pos_utils.dart';
 import 'ArticlesFragment.dart';
 
+import 'package:pdf/pdf.dart';
+import 'package:pdf/widgets.dart' as pw;
+import 'package:printing/printing.dart';
+
 class AddPiecePage extends StatefulWidget {
   var arguments;
   AddPiecePage({Key key, @required this.arguments}) : super(key: key);
@@ -1670,35 +1674,43 @@ class _AddPiecePageState extends State<AddPiecePage> with TickerProviderStateMix
   quikPrintTicket() async {
     var defaultPrinter = await _queryCtr.getPrinter();
 
+    // tester le type d'imprimante lan or bluetooth
     if (defaultPrinter != null) {
-      PrinterBluetoothManager _printerManager = PrinterBluetoothManager();
-      BluetoothDevice device = new BluetoothDevice();
-      device.name = defaultPrinter.name;
-      device.type = defaultPrinter.type;
-      device.address = defaultPrinter.adress;
-      device.connected = true;
+      if(defaultPrinter.adress == "192.168.1.1" && defaultPrinter.type == 0 ){
+        final doc = _makePdfDocument() ;
+        await Printing.layoutPdf(
+            onLayout: (PdfPageFormat format) async => doc.save());
 
-      PrinterBluetooth _device = new PrinterBluetooth(device);
+      }else{
+        PrinterBluetoothManager _printerManager = PrinterBluetoothManager();
+        BluetoothDevice device = new BluetoothDevice();
+        device.name = defaultPrinter.name;
+        device.type = defaultPrinter.type;
+        device.address = defaultPrinter.adress;
+        device.connected = true;
 
-      _printerManager.selectPrinter(_device);
-      var formatPrint = await _queryCtr.getFormatPrint();
-      Ticket ticket = await _maketicket(formatPrint);
-      _printerManager.printTicket(ticket).then((result) {
-        showDialog(
-          context: context,
-          builder: (_) => AlertDialog(
-            content: Text(result.msg),
-          ),
-        );
-        dispose();
-      }).catchError((error) {
-        showDialog(
-          context: context,
-          builder: (_) => AlertDialog(
-            content: Text(error.toString()),
-          ),
-        );
-      });
+        PrinterBluetooth _device = new PrinterBluetooth(device);
+
+        _printerManager.selectPrinter(_device);
+        var formatPrint = await _queryCtr.getFormatPrint();
+        Ticket ticket = await _maketicket(formatPrint);
+        _printerManager.printTicket(ticket).then((result) {
+          showDialog(
+            context: context,
+            builder: (_) => AlertDialog(
+              content: Text(result.msg),
+            ),
+          );
+          dispose();
+        }).catchError((error) {
+          showDialog(
+            context: context,
+            builder: (_) => AlertDialog(
+              content: Text(error.toString()),
+            ),
+          );
+        });
+      }
     } else {
       var message = S.current.msg_imp_err;
       Helpers.showFlushBar(context, message);
@@ -1799,5 +1811,103 @@ class _AddPiecePageState extends State<AddPiecePage> with TickerProviderStateMix
     ticket.cut();
 
     return ticket;
+  }
+
+  _makePdfDocument(){
+    // get default format
+    final doc = pw.Document();
+    doc.addPage(
+      pw.MultiPage(
+        build: (context) => [
+          pw.Column(
+              crossAxisAlignment: pw.CrossAxisAlignment.center,
+              children: [
+                pw.Center(child: pw.Text("Téléphone : 0000000000")),
+                pw.Center(child: pw.Text("Email : 0000000000"))
+              ]),
+          pw.SizedBox(height: 10),
+          pw.Row(children: [
+            pw.Expanded(
+                flex: 6,
+                child: pw.Column(
+                    crossAxisAlignment: pw.CrossAxisAlignment.start,
+                    children: [
+                      pw.Text("Client : designation "),
+                      pw.Divider(height: 2),
+                      pw.Text("Client adresse"),
+                      pw.Text("client ville"),
+                    ])),
+            pw.SizedBox(width: 3),
+            pw.Expanded(
+                flex: 6,
+                child: pw.Column(children: [
+                  pw.Text("|||||||||||||||||||||||||||||||"),
+                  pw.Text("Bon de Comptoir",
+                      style: pw.TextStyle(fontWeight: pw.FontWeight.bold)),
+                  pw.Text("N°: 002/02222",
+                      style: pw.TextStyle(fontWeight: pw.FontWeight.bold)),
+                  pw.Text("Date: 02/22/2200"),
+                ]))
+          ]),
+          pw.SizedBox(height: 20),
+          pw.Table(
+              children:[
+                pw.TableRow(
+                    decoration: pw.BoxDecoration(color: PdfColors.grey),
+                    children: [
+                      pw.Text("Referance",
+                          style: pw.TextStyle(fontWeight: pw.FontWeight.bold)),
+                      pw.Text("Designation",
+                          style: pw.TextStyle(fontWeight: pw.FontWeight.bold)),
+                      pw.Text("QTE",
+                          style: pw.TextStyle(fontWeight: pw.FontWeight.bold)),
+                      pw.Text("Prix-U",
+                          style: pw.TextStyle(fontWeight: pw.FontWeight.bold)),
+                      pw.Text("Montant",
+                          style: pw.TextStyle(fontWeight: pw.FontWeight.bold))
+                    ]),
+                for(var e in _selectedItems) pw.TableRow(children: [
+                  pw.Text("${e.ref}"),
+                  pw.Text("${e.designation}"),
+                  pw.Text("${e.selectedQuantite}"),
+                  pw.Text("${e.selectedPrice}"),
+                  pw.Text("${e.selectedPrice*e.selectedQuantite}"),
+                ]),
+
+              ]
+          ),
+          pw.SizedBox(height: 10),
+          pw.Divider(height: 2),
+          pw.SizedBox(height: 10),
+          pw.Row(children: [
+            pw.Expanded(
+                flex: 6,
+                child: pw.Column(children: [
+                  pw.Text("Merci pour Votre Visite",
+                      style: pw.TextStyle(fontWeight: pw.FontWeight.bold)),
+                  pw.Text("****BY Ciratit****",
+                      style: pw.TextStyle(fontWeight: pw.FontWeight.bold)),
+                ])),
+            pw.Expanded(
+                flex: 6,
+                child: pw.Column(
+                    crossAxisAlignment: pw.CrossAxisAlignment.start,
+                    children: [
+                      pw.Text("Total HT : ${_piece.total_ht} DZD"),
+                      pw.Text("Remise : ${_piece.remise} %"),
+                      pw.Text("Net-HT : ${_piece.net_ht} DZD"),
+                      pw.Divider(height: 2),
+                      pw.Text("Total Tva : ${_piece.total_tva} DZD"),
+                      pw.Text("Net-Payer : ${_piece.net_a_payer} DZD"),
+                      pw.Divider(height: 2),
+                    ])),
+            pw.SizedBox(width: 3),
+          ]),
+
+        ],
+      ),
+    );
+
+    return doc;
   }
 }
