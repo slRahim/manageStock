@@ -115,8 +115,8 @@ class _SettingsPageState extends State<SettingsPage> {
                   onPressed: () {
                     AwesomeDialog(
                         context: context,
-                        title: "Save Changes",
-                        desc: "Do you want to save last changes ...",
+                        title: "${S.current.param_save}",
+                        desc: "${S.current.param_msg_save}",
                         dialogType: DialogType.QUESTION,
                         animType: AnimType.BOTTOMSLIDE,
                         btnCancelText: S.current.non,
@@ -134,10 +134,10 @@ class _SettingsPageState extends State<SettingsPage> {
           body: SettingsList(
             sections: [
               SettingsSection(
-                title: 'General',
+                title: '${S.current.param_general}',
                 tiles: [
                   SettingsTile(
-                    title: 'Language',
+                    title: '${S.current.param_lang}',
                     subtitle: _language,
                     leading: Icon(Icons.language),
                     onTap: () async {
@@ -145,7 +145,7 @@ class _SettingsPageState extends State<SettingsPage> {
                           context: context,
                           dialogType: DialogType.QUESTION,
                           animType: AnimType.BOTTOMSLIDE,
-                          title: "Choose a language",
+                          title: "${S.current.param_lang_title}",
                           body: _languageDialog(),
                           btnCancelText: S.current.non,
                           btnCancelOnPress: () {},
@@ -172,15 +172,15 @@ class _SettingsPageState extends State<SettingsPage> {
                     },
                   ),
                   SettingsTile(
-                    title: 'Tarification',
-                    subtitle:("use : "+_tarification.toString()),
+                    title: '${S.current.tarification}',
+                    subtitle:("${S.current.use} : "+_tarification.toString()),
                     leading: Icon(Icons.attach_money),
                     onTap: () async {
                       AwesomeDialog(
                           context: context,
                           dialogType: DialogType.QUESTION,
                           animType: AnimType.BOTTOMSLIDE,
-                          title: "Choisir Tarification",
+                          title: "${S.current.param_lang_tarif_title}",
                           body: _tarificationDialog(),
                           btnCancelText: S.current.non,
                           btnCancelOnPress: () {},
@@ -194,7 +194,7 @@ class _SettingsPageState extends State<SettingsPage> {
                     },
                   ),
                   SettingsTile.switchTile(
-                    title: 'Enable Tva',
+                    title: '${S.current.param_tva}',
                     leading: Icon(Icons.money_outlined),
                     switchValue: _tva,
                     onToggle: (bool value) {
@@ -204,7 +204,7 @@ class _SettingsPageState extends State<SettingsPage> {
                     },
                   ),
                   SettingsTile.switchTile(
-                    title: 'Enable timbre',
+                    title: '${S.current.param_timbre}',
                     leading: Icon(Icons.fact_check),
                     switchValue: _timbre,
                     onToggle: (bool value) {
@@ -216,10 +216,10 @@ class _SettingsPageState extends State<SettingsPage> {
                 ],
               ),
               SettingsSection(
-                title: 'Notifications',
+                title: '${S.current.param_notif_title}',
                 tiles: [
                   SettingsTile.switchTile(
-                    title: 'Accept Notification',
+                    title: '${S.current.param_notif}',
                     leading: Icon(Icons.notifications_active),
                     switchValue: _notifications,
                     onToggle: (bool value) {
@@ -229,7 +229,7 @@ class _SettingsPageState extends State<SettingsPage> {
                     },
                   ),
                   SettingsTile(
-                    title: 'Notification Time',
+                    title: '${S.current.param_notif_time}',
                     leading: Icon(Icons.access_time_outlined),
                     subtitle: _dayTime,
                     enabled: _notifications,
@@ -245,7 +245,7 @@ class _SettingsPageState extends State<SettingsPage> {
                     },
                   ),
                   SettingsTile(
-                    title: 'Repeat Notification',
+                    title: '${S.current.param_notif_repeat}',
                     subtitle: _repeateNotification,
                     enabled: _notifications,
                     leading: Icon(Icons.today_outlined),
@@ -267,8 +267,8 @@ class _SettingsPageState extends State<SettingsPage> {
                     },
                   ),
                   SettingsTile(
-                    title: 'Echeance',
-                    subtitle: "$_echeance Day (s)",
+                    title: '${S.current.param_echeance}',
+                    subtitle: "$_echeance ${S.current.day} (s)",
                     enabled: _notifications,
                     leading: Icon(Icons.calendar_today),
                     onTap: () async {
@@ -291,24 +291,24 @@ class _SettingsPageState extends State<SettingsPage> {
                 ],
               ),
               SettingsSection(
-                title: 'Backup & Restore',
+                title: '${S.current.param_back_title}',
                 tiles: [
                   SettingsTile(
-                    title: 'Create Backup',
+                    title: '${S.current.param_backup}',
                     leading: Icon(Icons.backup),
                     onTap: () async{
                       _queryCtr.createBackup()
                           .then((value){
                         if(value["name"] != null){
-                          Helpers.showFlushBar(context, "Succer,Backup a bien été créer");
+                          Helpers.showFlushBar(context, "${S.current.msg_back_suce}");
                         }else{
-                          Helpers.showFlushBar(context, "Ereure,Backup n'a pas été créer");
+                          Helpers.showFlushBar(context, "${S.current.msg_back_err}");
                         }
                       });
                     },
                   ),
                   SettingsTile(
-                    title: 'Restore Data',
+                    title: '${S.current.param_resto_data}',
                     leading: Icon(Icons.restore),
                     onTap: () async {
                       Navigator.pushNamed(context, RoutesKeys.driveListing);
@@ -397,7 +397,7 @@ class _SettingsPageState extends State<SettingsPage> {
                     RadioListTile(
                       value: Statics.tarificationItems[0],
                       groupValue: _tarification,
-                      title: Text('Tarif 1'),
+                      title: Text('${S.current.tarif} 1'),
                       onChanged: (value) {
                         setState(() {
                           _tarification = value;
@@ -407,7 +407,7 @@ class _SettingsPageState extends State<SettingsPage> {
                     RadioListTile(
                       value: Statics.tarificationItems[1],
                       groupValue: _tarification,
-                      title: Text('Tarif 2'),
+                      title: Text('${S.current.tarif} 2'),
                       onChanged: (value) {
                         setState(() {
                           _tarification = value;
@@ -417,7 +417,7 @@ class _SettingsPageState extends State<SettingsPage> {
                     RadioListTile(
                       value: Statics.tarificationItems[2],
                       groupValue: _tarification,
-                      title: Text('Tarif 3'),
+                      title: Text('${S.current.tarif} 3'),
                       onChanged: (value) {
                         setState(() {
                           _tarification = value;
@@ -448,7 +448,7 @@ class _SettingsPageState extends State<SettingsPage> {
                         RadioListTile(
                           value: Statics.repeateNotifications[0],
                           groupValue: _repeateNotification,
-                          title: Text('Dailly'),
+                          title: Text('${S.current.ev_day}'),
                           onChanged: (value) {
                             setState(() {
                               _repeateNotification = value;
@@ -458,7 +458,7 @@ class _SettingsPageState extends State<SettingsPage> {
                         RadioListTile(
                           value: Statics.repeateNotifications[1],
                           groupValue: _repeateNotification,
-                          title: Text('Every Sunday'),
+                          title: Text('${S.current.ev_sun}'),
                           onChanged: (value) {
                             setState(() {
                               _repeateNotification = value;
@@ -468,7 +468,7 @@ class _SettingsPageState extends State<SettingsPage> {
                         RadioListTile(
                           value: Statics.repeateNotifications[2],
                           groupValue: _repeateNotification,
-                          title: Text('Every Monday'),
+                          title: Text('${S.current.ev_mon}'),
                           onChanged: (value) {
                             setState(() {
                               _repeateNotification = value;
@@ -478,7 +478,7 @@ class _SettingsPageState extends State<SettingsPage> {
                         RadioListTile(
                           value: Statics.repeateNotifications[3],
                           groupValue: _repeateNotification,
-                          title: Text('Every Tuesday'),
+                          title: Text('${S.current.ev_tue}'),
                           onChanged: (value) {
                             setState(() {
                               _repeateNotification = value;
@@ -488,7 +488,7 @@ class _SettingsPageState extends State<SettingsPage> {
                         RadioListTile(
                           value: Statics.repeateNotifications[4],
                           groupValue: _repeateNotification,
-                          title: Text('Every Wednesday'),
+                          title: Text('${S.current.ev_wedn}'),
                           onChanged: (value) {
                             setState(() {
                               _repeateNotification = value;
@@ -498,7 +498,7 @@ class _SettingsPageState extends State<SettingsPage> {
                         RadioListTile(
                           value: Statics.repeateNotifications[5],
                           groupValue: _repeateNotification,
-                          title: Text('Every Thursday'),
+                          title: Text('${S.current.ev_thur}'),
                           onChanged: (value) {
                             setState(() {
                               _repeateNotification = value;
@@ -508,7 +508,7 @@ class _SettingsPageState extends State<SettingsPage> {
                         RadioListTile(
                           value: Statics.repeateNotifications[6],
                           groupValue: _repeateNotification,
-                          title: Text('Every Friday'),
+                          title: Text('${S.current.ev_fri}'),
                           onChanged: (value) {
                             setState(() {
                               _repeateNotification = value;
@@ -518,7 +518,7 @@ class _SettingsPageState extends State<SettingsPage> {
                         RadioListTile(
                           value: Statics.repeateNotifications[7],
                           groupValue: _repeateNotification,
-                          title: Text('Every Saturday'),
+                          title: Text('${S.current.ev_sat}'),
                           onChanged: (value) {
                             setState(() {
                               _repeateNotification = value;
@@ -549,7 +549,7 @@ class _SettingsPageState extends State<SettingsPage> {
                     RadioListTile(
                       value: Statics.echeances[0],
                       groupValue: _echeance,
-                      title: Text('1 Day'),
+                      title: Text('1 ${S.current.day}'),
                       onChanged: (value) {
                         setState(() {
                           _echeance = value;
@@ -559,7 +559,7 @@ class _SettingsPageState extends State<SettingsPage> {
                     RadioListTile(
                       value: Statics.echeances[1],
                       groupValue: _echeance,
-                      title: Text('3 Days'),
+                      title: Text('3 ${S.current.day} (s)'),
                       onChanged: (value) {
                         setState(() {
                           _echeance = value;
@@ -569,7 +569,7 @@ class _SettingsPageState extends State<SettingsPage> {
                     RadioListTile(
                       value: Statics.echeances[2],
                       groupValue: _echeance,
-                      title: Text('7 Days'),
+                      title: Text('7 ${S.current.day} (s)'),
                       onChanged: (value) {
                         setState(() {
                           _echeance = value;
@@ -579,7 +579,7 @@ class _SettingsPageState extends State<SettingsPage> {
                     RadioListTile(
                       value: Statics.echeances[3],
                       groupValue: _echeance,
-                      title: Text('15 Days'),
+                      title: Text('15 ${S.current.day} (s)'),
                       onChanged: (value) {
                         setState(() {
                           _echeance = value;
@@ -589,7 +589,7 @@ class _SettingsPageState extends State<SettingsPage> {
                     RadioListTile(
                       value: Statics.echeances[4],
                       groupValue: _echeance,
-                      title: Text('21 Days'),
+                      title: Text('21 ${S.current.day} (s)'),
                       onChanged: (value) {
                         setState(() {
                           _echeance = value;
@@ -599,7 +599,7 @@ class _SettingsPageState extends State<SettingsPage> {
                     RadioListTile(
                       value: Statics.echeances[5],
                       groupValue: _echeance,
-                      title: Text('30 Days'),
+                      title: Text('30 ${S.current.day} (s)'),
                       onChanged: (value) {
                         setState(() {
                           _echeance = value;
@@ -628,9 +628,9 @@ class _SettingsPageState extends State<SettingsPage> {
     // await showNotification();
     var message = "";
     if (id > -1) {
-      message = "Settings has succesfuly updated";
+      message = "${S.current.msg_upd_param}";
     } else {
-      message = "Error on updating settings";
+      message = "${S.current.msg_err_upd_param}";
     }
 
     Navigator.pop(context);

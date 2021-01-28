@@ -108,7 +108,7 @@ class GoogleApi {
     }, onError: (error) {
       print("Some Error");
     });
-    GoogleLogout();
+
     return saveFile;
   }
 }

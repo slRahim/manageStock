@@ -41,10 +41,6 @@ class QueryCtr {
     return res ;
   }
 
-  Future<void> clearAll()async{
-    var res = await _databaseHelper.clearAllTables();
-  }
-
   Future restoreBackup(File backup)async{
     var res = await _databaseHelper.restoreBackup(backup,isEncrypted: true);
     return res ;

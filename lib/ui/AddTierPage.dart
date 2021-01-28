@@ -343,7 +343,7 @@ class _AddTierPageState extends State<AddTierPage>
                           });
                         }
                       }else{
-                        Helpers.showFlushBar(context, "Veuillez remplir les champs obligatoire");
+                        Helpers.showFlushBar(context, "${S.current.msg_champs_obg}");
                       }
                     }else{
                       setState(() {

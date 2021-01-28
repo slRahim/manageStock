@@ -127,7 +127,8 @@ class _DashboardState extends State<Dashboard> {
         Container(
           height: 400,
           child: ChartBar(
-            backgroundColor: Color(0xff2c4260),
+            backgroundColor: Colors.white,
+            textColor: Colors.black,
             chartTitle: "indiceFinanciere",
             data: _indiceFinanciere,
           ),
@@ -135,27 +136,30 @@ class _DashboardState extends State<Dashboard> {
         Container(
             padding: EdgeInsets.all(10),
             child: Text(
-              "Mes Comptes",
+              "${S.current.dash_charge_title}",
               style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
             )),
         Container(
           height: 400,
-          child: ChartBar(
-            backgroundColor: Color(0xff2c4230),
-            data: _soldeCompte,
+          child: ChartPie(
+            backgroundColor: Colors.white,
+            textColor: Colors.black,
+            data: _statCharge,
+            typeData: "charge",
           ),
         ),
         Container(
             padding: EdgeInsets.all(10),
             child: Text(
-              "Repartition des charges",
+              "${S.current.dash_compte_title}",
               style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
             )),
         Container(
           height: 400,
           child: ChartBar(
-            backgroundColor: Color(0xff020227),
-            data: _statCharge,
+            backgroundColor: Colors.white,
+            textColor: Colors.black,
+            data: _soldeCompte,
           ),
         ),
       ],
@@ -169,14 +173,14 @@ class _DashboardState extends State<Dashboard> {
         Container(
             padding: EdgeInsets.all(10),
             child: Text(
-              "Classement des Ventes par article",
+              "${S.current.dash_vente_art_title}",
               style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
             )),
         Container(
           height: 400,
           child: ChartPie(
-              backgroundColor: Color(0xff2c4260),
-              textColor: Colors.white,
+            backgroundColor: Colors.white,
+            textColor: Colors.black,
               data: _caArticle,
               typeData: "article",
           ),
@@ -184,14 +188,14 @@ class _DashboardState extends State<Dashboard> {
         Container(
             padding: EdgeInsets.all(10),
             child: Text(
-              "Classement des Ventes par client",
+              "${S.current.dash_vente_cl_title}",
               style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
             )),
         Container(
           height: 400,
           child: ChartPie(
-              backgroundColor: Color(0xff2c4230),
-              textColor: Colors.white,
+            backgroundColor: Colors.white,
+            textColor: Colors.black,
               data: _caClient,
               typeData: "tiers",
           ),
@@ -199,13 +203,13 @@ class _DashboardState extends State<Dashboard> {
         Container(
             padding: EdgeInsets.all(10),
             child: Text(
-              "Classement des Ventes par famille",
+              "${S.current.dash_vente_fam_title}",
               style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
             )),
         Container(
           height: 400,
           child: ChartPie(
-            backgroundColor: Colors.white54,
+            backgroundColor: Colors.white,
             textColor: Colors.black,
             data: _caFamilleArticle,
             typeData: "famille",
@@ -222,14 +226,14 @@ class _DashboardState extends State<Dashboard> {
         Container(
             padding: EdgeInsets.all(10),
             child: Text(
-              "Classement des Achats par article",
+              "${S.current.dash_achat_art_title}",
               style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
             )),
         Container(
           height: 400,
           child: ChartPie(
-            backgroundColor: Color(0xff2c4260),
-            textColor: Colors.white70,
+            backgroundColor: Colors.white,
+            textColor: Colors.black,
             data: _achatArticle,
             typeData: "article",
           ),
@@ -237,13 +241,13 @@ class _DashboardState extends State<Dashboard> {
         Container(
             padding: EdgeInsets.all(10),
             child: Text(
-              "Classement des Achats par fournisseur",
+              "${S.current.dash_achat_four_title}",
               style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
             )),
         Container(
           height: 400,
           child: ChartPie(
-            backgroundColor: Colors.white30,
+            backgroundColor: Colors.white,
             textColor: Colors.black,
             data: _caFournisseur,
             typeData: "tiers",

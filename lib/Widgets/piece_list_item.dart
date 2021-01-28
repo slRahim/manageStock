@@ -128,7 +128,7 @@ class _PieceListItemState extends State<PieceListItem> {
               text: TextSpan(
                 children: [
                   TextSpan(
-                    text: "Marge : ",
+                    text: "${S.current.marge} : ",
                     style: TextStyle(fontSize: 15 , fontWeight: FontWeight.bold,color: Colors.green)
                   ),
                   TextSpan(
@@ -141,7 +141,7 @@ class _PieceListItemState extends State<PieceListItem> {
               ),
             ),
             Text(
-                (widget.piece.transformer == 1)? "C'est une piece transformer":"C'est une piece d'origine",
+                (widget.piece.transformer == 1)? "${S.current.msg_piece_transfo}":"${S.current.msg_piece_origin}",
               style: TextStyle(
                   color: Colors.black,
                   fontSize: 16.0),

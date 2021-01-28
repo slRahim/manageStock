@@ -59,7 +59,7 @@ class _SelectfromdriveState extends State<Selectfromdrive> {
                   googleapi.GoogleLogout();
                   Navigator.pop(context);
                 }),
-            title: Text("My Backups"),
+            title: Text("${S.current.backups}"),
             centerTitle: true,
             backgroundColor: Theme.of(context).appBarTheme.color,
           ),
@@ -133,8 +133,8 @@ class _SelectfromdriveState extends State<Selectfromdrive> {
               context: context,
               dialogType: DialogType.INFO,
               animType: AnimType.BOTTOMSLIDE,
-              title: "Restore Data",
-              desc: "la restoration de votre data va ecrasser toutes les données non sauvgarder",
+              title: "${S.current.restore_data}",
+              desc: "${S.current.restore_msg}",
               btnCancelText: S.current.non,
               btnCancelOnPress: () {},
               btnOkText: S.current.oui,
@@ -143,11 +143,13 @@ class _SelectfromdriveState extends State<Selectfromdrive> {
                 _query.restoreBackup(backupFile).then((value){
                   if(value != null){
                     Navigator.pop(context);
-                    Helpers.showFlushBar(context, "Succer, restoration a bien terminé");
+                    Navigator.pop(context);
+                    Helpers.showFlushBar(context, "${S.current.msg_succes_restoration}");
 
                   }else{
                     Navigator.pop(context);
-                    Helpers.showFlushBar(context, "Ereure, à la restoration");
+                    Navigator.pop(context);
+                    Helpers.showFlushBar(context, "${S.current.msg_err_restoration}");
                   }
                 });
               })

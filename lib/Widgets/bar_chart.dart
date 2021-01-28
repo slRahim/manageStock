@@ -1,5 +1,6 @@
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
+import 'package:gestmob/generated/l10n.dart';
 import 'package:gestmob/models/CompteTresorie.dart';
 
 import 'CustomWidgets/chart_indicator.dart';
@@ -8,8 +9,9 @@ class ChartBar extends StatefulWidget {
   final String chartTitle ;
   final data ;
   final backgroundColor ;
+  final textColor ;
 
-  ChartBar({Key key , this.chartTitle ,this.backgroundColor ,this.data}):super(key:key);
+  ChartBar({Key key , this.chartTitle ,this.backgroundColor ,this.textColor,this.data}):super(key:key);
 
   @override
   _ChartBarState createState() => _ChartBarState();
@@ -55,15 +57,15 @@ class _ChartBarState extends State<ChartBar> {
                     width: 38,
                   ),
                   Text(
-                    'Indice',
-                    style: TextStyle(color: Colors.white, fontSize: 22),
+                    '${S.current.indice}',
+                    style: TextStyle(color: widget.textColor, fontSize: 22),
                   ),
                   SizedBox(
                     width: 4,
                   ),
                   Text(
-                    'financiere',
-                    style: TextStyle(color: Color(0xff77839a), fontSize: 16),
+                    '${S.current.financiere}',
+                    style: TextStyle(color: widget.textColor, fontSize: 16),
                   ),
                 ],
               )
@@ -85,24 +87,21 @@ class _ChartBarState extends State<ChartBar> {
                         show: true,
                         topTitles: SideTitles(
                           showTitles: true,
-                          getTextStyles: (value) =>
-                          const TextStyle(color: Colors.white, fontSize: 10),
+                          getTextStyles: (value) => TextStyle(color: widget.textColor, fontSize: 10),
                           margin: 10,
                           rotateAngle: 0,
                           getTitles: (double value)=>(getTitle(value.toInt()))
                         ),
                         bottomTitles: SideTitles(
                           showTitles: true,
-                          getTextStyles: (value) =>
-                          const TextStyle(color: Colors.white, fontSize: 10),
+                          getTextStyles: (value) => TextStyle(color: widget.textColor, fontSize: 10),
                           margin: 10,
                           rotateAngle: 0,
                           getTitles: (double value)=>(getTitle(value.toInt()))
                         ),
                         leftTitles: SideTitles(
                           showTitles: true,
-                          getTextStyles: (value) =>
-                          const TextStyle(color: Colors.white, fontSize: 10),
+                          getTextStyles: (value) => TextStyle(color: widget.textColor, fontSize: 10),
                           rotateAngle: 20,
                           interval: 100,
                         ),
@@ -156,23 +155,7 @@ class _ChartBarState extends State<ChartBar> {
                 topRight: Radius.circular(6)
             ),
             rodStackItems:  [
-              // BarChartRodStackItem(0,widget.data[index],colors[index]),
-              BarChartRodStackItem(
-                  500, 1000, const Color(0xff19bfff)),
-              BarChartRodStackItem(
-                  200, 400, const Color(0xffff4d94)),
-              BarChartRodStackItem(
-                  100, 200, const Color(0xffffdd80)),
-              BarChartRodStackItem(
-                  0, 100, const Color(0xff2bdb90)),
-              BarChartRodStackItem(
-                  0, -100, const Color(0xff2bdb90)),
-              BarChartRodStackItem(
-                  -100, -200, const Color(0xffffdd80)),
-              BarChartRodStackItem(
-                  -200, -400, const Color(0xffff4d94)),
-              BarChartRodStackItem(
-                  -500, -1000, const Color(0xff19bfff)),
+              BarChartRodStackItem(0,getYvalue(index),colors[index]),
             ],
           ),
         ],
@@ -232,7 +215,7 @@ class _ChartBarState extends State<ChartBar> {
         Container(
           width: width,
           height: 10,
-          color: Colors.white.withOpacity(0.4),
+          color: Colors.black.withOpacity(0.4),
         ),
         const SizedBox(
           width: space,
@@ -240,7 +223,7 @@ class _ChartBarState extends State<ChartBar> {
         Container(
           width: width,
           height: 28,
-          color: Colors.white.withOpacity(0.8),
+          color: Colors.black.withOpacity(0.8),
         ),
         const SizedBox(
           width: space,
@@ -248,7 +231,7 @@ class _ChartBarState extends State<ChartBar> {
         Container(
           width: width,
           height: 42,
-          color: Colors.white.withOpacity(1),
+          color: Colors.black.withOpacity(1),
         ),
         const SizedBox(
           width: space,
@@ -256,7 +239,7 @@ class _ChartBarState extends State<ChartBar> {
         Container(
           width: width,
           height: 28,
-          color: Colors.white.withOpacity(0.8),
+          color: Colors.black.withOpacity(0.8),
         ),
         const SizedBox(
           width: space,
@@ -264,7 +247,7 @@ class _ChartBarState extends State<ChartBar> {
         Container(
           width: width,
           height: 10,
-          color: Colors.white.withOpacity(0.4),
+          color: Colors.black.withOpacity(0.4),
         ),
       ],
     );

@@ -22,7 +22,7 @@ class HelpPage extends StatelessWidget {
             icon: Icon(Icons.arrow_back, size: 25),
             onPressed: () => Navigator.pop(context),
           ),
-          title: Text("Help"),
+          title: Text("${S.current.aide}"),
           backgroundColor: Theme.of(context).appBarTheme.color,
           centerTitle: true,
 

@@ -18,7 +18,7 @@ import 'package:pdf/pdf.dart';
 import 'package:pdf/widgets.dart' as pw;
 import 'package:printing/printing.dart';
 
-enum Format { format80, format58 }
+enum Format { format80, format58 , formatA45 }
 enum Display { referance, designation }
 
 class PreviewPiece extends StatefulWidget {
@@ -46,7 +46,10 @@ class _PreviewPieceState extends State<PreviewPiece> {
   Format _format = Format.format80;
   Display _item = Display.referance;
   bool _controlTotalHT = true;
+  bool _controlRemise = true;
+  bool _controlNetHt = true;
   bool _controlTotalTva = true;
+  bool _controlTimbre = true;
   bool _controlReste = true;
   bool _controlCredit = true;
 
@@ -73,7 +76,7 @@ class _PreviewPieceState extends State<PreviewPiece> {
           IconButton(
             icon: Icon(Icons.share),
             onPressed: () async {
-              var doc01 = _pdfDocument();
+              var doc01 = await _pdfDocument();
               await Printing.sharePdf(
                   bytes: await doc01.save(), filename: 'my-document.pdf');
             },
@@ -81,21 +84,7 @@ class _PreviewPieceState extends State<PreviewPiece> {
         ],
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          AwesomeDialog(
-            context: context,
-            dialogType: DialogType.QUESTION,
-            animType: AnimType.BOTTOMSLIDE,
-            title: S.current.supp,
-            body: addChoicesDialog(),
-            closeIcon: Icon(
-              Icons.remove_circle_outline_sharp,
-              color: Colors.red,
-              size: 26,
-            ),
-            showCloseIcon: true,
-          )..show();
-        },
+        onPressed: () => _printChoise(),
         child: Icon(
           Icons.print_rounded,
           color: Colors.white,
@@ -121,15 +110,15 @@ class _PreviewPieceState extends State<PreviewPiece> {
                   ),
                 ],
               ),
-              child: Column(
+              child: (default_format != null)? Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 crossAxisAlignment: (default_format == PaperSize.mm80)
                     ? CrossAxisAlignment.center
                     : CrossAxisAlignment.start,
                 children: [
                   Text("N° ${widget.piece.piece} : ${widget.piece.num_piece}"),
-                  Text("Date :${Helpers.dateToText(widget.piece.date)}"),
-                  Text("Tier : Client01"),
+                  Text("${S.current.date} :${Helpers.dateToText(widget.piece.date)}"),
+                  Text("${S.current.rs} : Client01"),
                   Text(
                       "----------------------------------------------------------------------------------------"),
                   Table(
@@ -137,19 +126,19 @@ class _PreviewPieceState extends State<PreviewPiece> {
                     children: [
                       TableRow(children: [
                         Text(
-                          "Item",
+                          "${S.current.articles}",
                           style: TextStyle(fontWeight: FontWeight.bold),
                         ),
                         Text(
-                          "QTE",
+                          "${S.current.qte}",
                           style: TextStyle(fontWeight: FontWeight.bold),
                         ),
                         Text(
-                          "Prix",
+                          "${S.current.prix}",
                           style: TextStyle(fontWeight: FontWeight.bold),
                         ),
                         Text(
-                          "Monatant",
+                          "${S.current.montant}",
                           style: TextStyle(fontWeight: FontWeight.bold),
                         ),
                       ]),
@@ -174,21 +163,30 @@ class _PreviewPieceState extends State<PreviewPiece> {
                   Text(
                       "---------------------------------------------------------------------------------------"),
                   (_controlTotalHT)
-                      ? Text("\n Total HT:${widget.piece.total_ht}")
+                      ? Text("\n ${S.current.total_ht}:${widget.piece.total_ht}")
+                      : SizedBox(),
+                  (_controlRemise)
+                      ? Text("${S.current.remise}:${widget.piece.remise}%")
+                      : SizedBox(),
+                  (_controlNetHt)
+                      ? Text("${S.current.net_ht}:${widget.piece.net_ht}")
                       : SizedBox(),
                   (_controlTotalTva)
-                      ? Text("Total TVA :${widget.piece.total_tva}")
+                      ? Text("${S.current.total_tva} :${widget.piece.total_tva}")
                       : SizedBox(),
-                  Text("Regler :${widget.piece.regler}"),
+                  (_controlTimbre)
+                      ? Text("${S.current.timbre} :${widget.piece.timbre}")
+                      : SizedBox(),
+                  Text("${S.current.regler} :${widget.piece.regler}"),
                   (_controlReste)
-                      ? Text("Reste :${widget.piece.reste}")
+                      ? Text("${S.current.reste} :${widget.piece.reste}")
                       : SizedBox(),
                   (_controlCredit)
-                      ? Text("Total Credit :${widget.tier.credit} \n")
+                      ? Text("${S.current.credit} :${widget.tier.credit} \n")
                       : SizedBox(),
                   Text("============================================"),
                   Text(
-                    "Total TTC :${widget.piece.total_ttc}",
+                    "${S.current.net_payer} :${widget.piece.net_a_payer}",
                     style: TextStyle(fontSize: 20),
                   ),
                   Text("============================================"),
@@ -199,6 +197,15 @@ class _PreviewPieceState extends State<PreviewPiece> {
                     "***BY CIRTA IT***",
                     style: TextStyle(fontWeight: FontWeight.bold),
                   ),
+                ],
+              )
+              :Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Icon(Icons.info,color: Colors.blue, size: 50,),
+                  Text("${S.current.msg_pdf_view}", style: TextStyle(
+                    fontWeight: FontWeight.bold
+                  ),),
                 ],
               ),
             ),
@@ -234,7 +241,19 @@ class _PreviewPieceState extends State<PreviewPiece> {
                           });
                         },
                       ),
+                      RadioListTile<Format>(
+                        title: Text("${S.current.format_a45}"),
+                        value: Format.formatA45,
+                        groupValue: _format,
+                        onChanged: (Format value) {
+                          setState(() {
+                            _format = value;
+                            default_format = null;
+                          });
+                        },
+                      ),
                     ]),
+                    Divider(height: 1,),
                     Column(children: [
                       RadioListTile<Display>(
                         title: Text(S.current.par_ref),
@@ -259,6 +278,7 @@ class _PreviewPieceState extends State<PreviewPiece> {
                         },
                       ),
                     ]),
+                    Divider(height: 1,),
                     CheckboxListTile(
                       title: Text(
                         S.current.total_ht,
@@ -273,6 +293,30 @@ class _PreviewPieceState extends State<PreviewPiece> {
                     ),
                     CheckboxListTile(
                       title: Text(
+                        "${S.current.remise}",
+                        maxLines: 1,
+                      ),
+                      value: _controlRemise,
+                      onChanged: (bool value) {
+                        setState(() {
+                          _controlRemise = value;
+                        });
+                      },
+                    ),
+                    CheckboxListTile(
+                      title: Text(
+                        "${S.current.net_ht}",
+                        maxLines: 1,
+                      ),
+                      value: _controlNetHt,
+                      onChanged: (bool value) {
+                        setState(() {
+                          _controlNetHt = value;
+                        });
+                      },
+                    ),
+                    CheckboxListTile(
+                      title: Text(
                         S.current.total_tva,
                         maxLines: 1,
                       ),
@@ -280,6 +324,18 @@ class _PreviewPieceState extends State<PreviewPiece> {
                       onChanged: (bool value) {
                         setState(() {
                           _controlTotalTva = value;
+                        });
+                      },
+                    ),
+                    CheckboxListTile(
+                      title: Text(
+                        "${S.current.timbre}",
+                        maxLines: 1,
+                      ),
+                      value: _controlTimbre,
+                      onChanged: (bool value) {
+                        setState(() {
+                          _controlTimbre = value;
                         });
                       },
                     ),
@@ -317,84 +373,22 @@ class _PreviewPieceState extends State<PreviewPiece> {
     );
   }
 
-  Widget addChoicesDialog() {
-    return StatefulBuilder(builder: (context, StateSetter setState) {
-      return Builder(
-          builder: (context) => SingleChildScrollView(
-                child: Padding(
-                  padding: const EdgeInsets.all(15),
-                  child: Wrap(spacing: 13, runSpacing: 13, children: [
-                    Center(
-                        child: Padding(
-                      padding: const EdgeInsets.only(bottom: 20),
-                      child: Text(
-                        "${S.current.choisir_action}: ",
-                        style: TextStyle(
-                          fontSize: 22,
-                          fontWeight: FontWeight.w400,
-                        ),
-                      ),
-                    )),
-                    SizedBox(
-                      width: 320.0,
-                      child: Padding(
-                        padding: EdgeInsetsDirectional.only(end: 0, start: 0),
-                        child: RaisedButton(
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(18.0),
-                          ),
-                          onPressed: () async {
-                            await _saveLanPrinter();
-                            Navigator.pop(context);
-                            Navigator.pop(context);
-                            final doc = _pdfDocument();
-                            await Printing.layoutPdf(
-                                onLayout: (PdfPageFormat format) async =>
-                                    doc.save());
-                          },
-                          child: Text(
-                            "Local Printer",
-                            style: TextStyle(color: Colors.white, fontSize: 16),
-                          ),
-                          color: Colors.blueAccent,
-                        ),
-                      ),
-                    ),
-                    SizedBox(
-                      width: 320.0,
-                      child: Padding(
-                        padding: EdgeInsetsDirectional.only(end: 0, start: 0),
-                        child: RaisedButton(
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(18.0),
-                          ),
-                          onPressed: () async {
-                            Navigator.pop(context);
-                            Ticket ticket = await _ticket(default_format);
-                            formaPrint.default_format = default_format;
-                            formaPrint.default_display = default_display;
-                            formaPrint.totalHt = (_controlTotalHT) ? 1 : 0;
-                            formaPrint.totalTva = (_controlTotalTva) ? 1 : 0;
-                            formaPrint.reste = (_controlReste) ? 1 : 0;
-                            formaPrint.credit = (_controlCredit) ? 1 : 0;
-                            await _queryCtr.addItemToTable(
-                                DbTablesNames.formatPrint, formaPrint);
+  _printChoise() async{
+    if(default_format != null){
+      Ticket ticket = await _ticket(default_format);
+      await _saveFormatPrint();
+      Navigator.pop(context);
+      widget.ticket(ticket);
 
-                            Navigator.pop(context);
-                            widget.ticket(ticket);
-                          },
-                          child: Text(
-                            "Bluetooth printer",
-                            style: TextStyle(color: Colors.white, fontSize: 16),
-                          ),
-                          color: Colors.green,
-                        ),
-                      ),
-                    ),
-                  ]),
-                ),
-              ));
-    });
+    }else{
+      await _saveLanPrinter();
+      await _saveFormatPrint();
+      Navigator.pop(context);
+      final doc = await _pdfDocument();
+      await Printing.layoutPdf(
+          onLayout: (PdfPageFormat format) async =>
+              doc.save());
+    }
   }
 
   Future<Ticket> _ticket(PaperSize paper) async {
@@ -405,28 +399,29 @@ class _PreviewPieceState extends State<PreviewPiece> {
             align: (default_format == PaperSize.mm80)
                 ? PosAlign.center
                 : PosAlign.left));
-    ticket.text("Date : ${Helpers.dateToText(widget.piece.date)}",
+    ticket.text("${S.current.date} : ${Helpers.dateToText(widget.piece.date)}",
         styles: PosStyles(
             align: (default_format == PaperSize.mm80)
                 ? PosAlign.center
                 : PosAlign.left));
-    ticket.text("Tier : ${widget.piece.raisonSociale}",
+    ticket.text("${S.current.rs} : ${widget.piece.raisonSociale}",
         styles: PosStyles(
             align: (default_format == PaperSize.mm80)
                 ? PosAlign.center
                 : PosAlign.left));
     ticket.hr(ch: '-');
     ticket.row([
-      PosColumn(text: 'Item', width: 6, styles: PosStyles(bold: true)),
-      PosColumn(text: 'QTE', width: 2, styles: PosStyles(bold: true)),
-      PosColumn(text: 'Prix', width: 2, styles: PosStyles(bold: true)),
-      PosColumn(text: 'Montant', width: 2, styles: PosStyles(bold: true)),
+      PosColumn(text: '${S.current.articles}', width: 6, styles: PosStyles(bold: true)),
+      PosColumn(text: '${S.current.qte}', width: 2, styles: PosStyles(bold: true)),
+      PosColumn(text: '${S.current.prix}', width: 2, styles: PosStyles(bold: true)),
+      PosColumn(text: '${S.current.montant}', width: 2, styles: PosStyles(bold: true)),
     ]);
     widget.articles.forEach((element) {
       ticket.row([
         (default_display == "Referance")
             ? PosColumn(text: '${element.ref}', width: 6)
             : PosColumn(text: '${element.designation}', width: 6),
+
         PosColumn(text: '${element.selectedQuantite}', width: 2),
         PosColumn(text: '${element.selectedPrice}', width: 2),
         PosColumn(
@@ -436,48 +431,65 @@ class _PreviewPieceState extends State<PreviewPiece> {
     });
     ticket.hr(ch: '-');
     if (_controlTotalHT) {
-      ticket.text("Total HT : ${widget.piece.total_ht}",
+      ticket.text("${S.current.total_ht} : ${widget.piece.total_ht}",
+          styles: PosStyles(
+              align: (default_format == PaperSize.mm80)
+                  ? PosAlign.center
+                  : PosAlign.left));
+    }
+    if(_controlRemise){
+      ticket.text("${S.current.remise} : ${widget.piece.remise} %",
+          styles: PosStyles(
+              align: (default_format == PaperSize.mm80)
+                  ? PosAlign.center
+                  : PosAlign.left));
+    }
+    if(_controlNetHt){
+      ticket.text("${S.current.net_ht} : ${widget.piece.net_ht}",
           styles: PosStyles(
               align: (default_format == PaperSize.mm80)
                   ? PosAlign.center
                   : PosAlign.left));
     }
     if (_controlTotalTva) {
-      ticket.text("Total TVA : ${widget.piece.total_tva}",
+      ticket.text("${S.current.total_tva} : ${widget.piece.total_tva}",
           styles: PosStyles(
               align: (default_format == PaperSize.mm80)
                   ? PosAlign.center
                   : PosAlign.left));
     }
 
-    ticket.text("Regler : ${widget.piece.net_ht}",
+    if(_controlTimbre){
+      ticket.text("${S.current.timbre} : ${(widget.piece.total_ttc == widget.piece.net_a_payer)?widget.piece.timbre:0.0}",
+          styles: PosStyles(
+              align: (default_format == PaperSize.mm80)
+                  ? PosAlign.center
+                  : PosAlign.left));
+    }
+
+    ticket.text("${S.current.regler} : ${widget.piece.regler}",
         styles: PosStyles(
             align: (default_format == PaperSize.mm80)
                 ? PosAlign.center
                 : PosAlign.left));
 
-    ticket.text("Regler : ${widget.piece.regler}",
-        styles: PosStyles(
-            align: (default_format == PaperSize.mm80)
-                ? PosAlign.center
-                : PosAlign.left));
 
     if (_controlReste) {
-      ticket.text("Reste : ${widget.piece.reste}",
+      ticket.text("${S.current.reste} : ${widget.piece.reste}",
           styles: PosStyles(
               align: (default_format == PaperSize.mm80)
                   ? PosAlign.center
                   : PosAlign.left));
     }
     if (_controlCredit) {
-      ticket.text("Total Credit : ${widget.tier.credit}",
+      ticket.text("${S.current.credit} : ${widget.tier.credit}",
           styles: PosStyles(
               align: (default_format == PaperSize.mm80)
                   ? PosAlign.center
                   : PosAlign.left));
     }
     ticket.hr(ch: '=');
-    ticket.text("TOTAL TTC : ${widget.piece.net_a_payer}",
+    ticket.text("${S.current.net_payer} : ${widget.piece.net_a_payer}",
         styles: PosStyles(
           align: (default_format == PaperSize.mm80)
               ? PosAlign.center
@@ -499,7 +511,7 @@ class _PreviewPieceState extends State<PreviewPiece> {
     return ticket;
   }
 
-  _pdfDocument() {
+  Future _pdfDocument() async{
     final doc = pw.Document();
     doc.addPage(
       pw.MultiPage(
@@ -507,8 +519,8 @@ class _PreviewPieceState extends State<PreviewPiece> {
           pw.Column(
               crossAxisAlignment: pw.CrossAxisAlignment.center,
               children: [
-                pw.Center(child: pw.Text("Téléphone : 0000000000")),
-                pw.Center(child: pw.Text("Email : 0000000000"))
+                pw.Center(child: pw.Text("${S.current.telephone} : 0000000000")),
+                pw.Center(child: pw.Text("${S.current.mail} : 0000000000"))
               ]),
           pw.SizedBox(height: 10),
           pw.Row(children: [
@@ -517,21 +529,21 @@ class _PreviewPieceState extends State<PreviewPiece> {
                 child: pw.Column(
                     crossAxisAlignment: pw.CrossAxisAlignment.start,
                     children: [
-                      pw.Text("Client RS : ${widget.tier.raisonSociale} "),
+                      pw.Text("${S.current.rs} : ${widget.tier.raisonSociale} "),
                       pw.Divider(height: 2),
-                      pw.Text("Adresse : ${widget.tier.adresse} "),
-                      pw.Text("Ville : ${widget.tier.ville}"),
+                      pw.Text("${S.current.adresse} : ${widget.tier.adresse} "),
+                      pw.Text("${S.current.ville} : ${widget.tier.ville}"),
                     ])),
             pw.SizedBox(width: 3),
             pw.Expanded(
                 flex: 6,
                 child: pw.Column(children: [
                   pw.Text("|||||||||||||||||||||||||||||||"),
-                  pw.Text("Bon de Comptoir",
+                  pw.Text("${Helpers.getPieceTitle(widget.piece.piece)}",
                       style: pw.TextStyle(fontWeight: pw.FontWeight.bold)),
-                  pw.Text("N°: 002/02222",
+                  pw.Text("N°: ${widget.piece.num_piece}",
                       style: pw.TextStyle(fontWeight: pw.FontWeight.bold)),
-                  pw.Text("Date: 02/22/2200"),
+                  pw.Text("${S.current.date}: ${Helpers.dateToText(widget.piece.date)}"),
                 ]))
           ]),
           pw.SizedBox(height: 20),
@@ -540,15 +552,15 @@ class _PreviewPieceState extends State<PreviewPiece> {
               pw.TableRow(
                   decoration: pw.BoxDecoration(color: PdfColors.grey),
                   children: [
-                    pw.Text("Referance",
+                    pw.Text("${S.current.referance}",
                         style: pw.TextStyle(fontWeight: pw.FontWeight.bold)),
-                    pw.Text("Designation",
+                    pw.Text("${S.current.designation}",
                         style: pw.TextStyle(fontWeight: pw.FontWeight.bold)),
-                    pw.Text("QTE",
+                    pw.Text("${S.current.qte}",
                         style: pw.TextStyle(fontWeight: pw.FontWeight.bold)),
-                    pw.Text("Prix-U",
+                    pw.Text("${S.current.prix}",
                         style: pw.TextStyle(fontWeight: pw.FontWeight.bold)),
-                    pw.Text("Montant",
+                    pw.Text("${S.current.montant}",
                         style: pw.TextStyle(fontWeight: pw.FontWeight.bold))
                   ]),
               for(var e in widget.articles) pw.TableRow(children: [
@@ -568,22 +580,29 @@ class _PreviewPieceState extends State<PreviewPiece> {
             pw.Expanded(
                 flex: 6,
                 child: pw.Column(children: [
-                  pw.Text("Merci pour Votre Visite",
+                  pw.Text("${S.current.regler} : ${widget.piece.regler} DZD"),
+                  (_controlReste)?pw.Text("${S.current.reste} : ${widget.piece.reste} DZD"):pw.SizedBox(),
+                  (_controlCredit)?pw.Text("${S.current.credit} : ${widget.tier.credit} DZD"):pw.SizedBox(),
+                  pw.Divider(height: 2),
+                  pw.SizedBox(height: 4),
+                  pw.Text("${S.current.msg_visite}",
                       style: pw.TextStyle(fontWeight: pw.FontWeight.bold)),
                   pw.Text("****BY Ciratit****",
                       style: pw.TextStyle(fontWeight: pw.FontWeight.bold)),
                 ])),
+            pw.SizedBox(width: 10),
             pw.Expanded(
                 flex: 6,
                 child: pw.Column(
                     crossAxisAlignment: pw.CrossAxisAlignment.start,
                     children: [
-                      pw.Text("Total HT : ${widget.piece.total_ht} DZD"),
-                      pw.Text("Remise : ${widget.piece.remise} %"),
-                      pw.Text("Net-HT : ${widget.piece.net_ht} DZD"),
+                      (_controlTotalHT)?pw.Text("${S.current.total_ht} : ${widget.piece.total_ht} ${S.current.da}"):pw.SizedBox(),
+                      (_controlRemise)?pw.Text("${S.current.remise} : ${widget.piece.remise} %"):pw.SizedBox(),
+                      (_controlNetHt)?pw.Text("${S.current.net_ht} : ${widget.piece.net_ht} ${S.current.da}"):pw.SizedBox(),
                       pw.Divider(height: 2),
-                      pw.Text("Total Tva : ${widget.piece.total_tva} DZD"),
-                      pw.Text("Net-Payer : ${widget.piece.net_a_payer} DZD"),
+                      (_controlTotalTva)?pw.Text("${S.current.total_tva} : ${widget.piece.total_tva} ${S.current.da}"):pw.SizedBox(),
+                      (_controlTimbre)?pw.Text("${S.current.timbre} : ${(widget.piece.total_ttc == widget.piece.net_a_payer)?widget.piece.timbre:0.0} ${S.current.da}"):pw.SizedBox(),
+                      pw.Text("${S.current.net_payer} : ${widget.piece.net_a_payer} ${S.current.da}"),
                       pw.Divider(height: 2),
                     ])),
             pw.SizedBox(width: 3),
@@ -596,45 +615,25 @@ class _PreviewPieceState extends State<PreviewPiece> {
     return doc;
   }
 
-  List _getArticleList(){
-    List list = new List();
-
-     final header = pw.TableRow(
-        decoration: pw.BoxDecoration(color: PdfColors.grey),
-        children: [
-          pw.Text("Referance",
-              style: pw.TextStyle(fontWeight: pw.FontWeight.bold)),
-          pw.Text("Designation",
-              style: pw.TextStyle(fontWeight: pw.FontWeight.bold)),
-          pw.Text("qte",
-              style: pw.TextStyle(fontWeight: pw.FontWeight.bold)),
-          pw.Text("prix u",
-              style: pw.TextStyle(fontWeight: pw.FontWeight.bold)),
-          pw.Text("montant",
-              style: pw.TextStyle(fontWeight: pw.FontWeight.bold))
-        ]);
-
-    list.add(header);
-
-    for(int i =0 ; i<25 ; i++){
-      var widget = pw.TableRow(children: [
-        pw.Text("gzgjzgebkz zign gzvnbzg "),
-        pw.Text("f gghng zkeg z gge zke g "),
-        pw.Text("1000000"),
-        pw.Text("9999999"),
-        pw.Text("1000000000000")
-      ]);
-      list.add(widget);
-    }
-
-    return list ;
-  }
-
   Future _saveLanPrinter() async {
     defaultPrinter.name = "lan printer";
     defaultPrinter.adress = "192.168.1.1";
     defaultPrinter.type = 0;
     await _queryCtr.addItemToTable(
         DbTablesNames.defaultPrinter, defaultPrinter);
+  }
+
+  Future _saveFormatPrint()async{
+    formaPrint.default_format = default_format;
+    formaPrint.default_display = default_display;
+    formaPrint.totalHt = (_controlTotalHT) ? 1 : 0;
+    formaPrint.remise = (_controlRemise) ? 1 : 0;
+    formaPrint.netHt = (_controlNetHt) ? 1 : 0;
+    formaPrint.totalTva = (_controlTotalTva) ? 1 : 0;
+    formaPrint.timbre = (_controlTimbre) ? 1 : 0;
+    formaPrint.reste = (_controlReste) ? 1 : 0;
+    formaPrint.credit = (_controlCredit) ? 1 : 0;
+    await _queryCtr.addItemToTable(
+        DbTablesNames.formatPrint, formaPrint);
   }
 }

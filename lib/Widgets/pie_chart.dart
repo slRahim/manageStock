@@ -156,11 +156,11 @@ class _ChartPieState extends State<ChartPie> {
             fontSize: fontSize,
             fontWeight: FontWeight.bold,
             color: const Color(0xffffffff)),
-        badgeWidget: Badge(
+        badgeWidget: (widget.typeData != "charge")?Badge(
           getImage(index),
           size: widgetSize,
           borderColor: Colors.yellow[700],
-        ),
+        ):null,
         badgePositionPercentageOffset: .98,
       );
     });
@@ -177,6 +177,9 @@ class _ChartPieState extends State<ChartPie> {
       case ("famille"):
         return  widget.data[index]["Sum(Journaux.Qte*Journaux.Net_ht)"] ;
         break ;
+      case ("charge"):
+        return widget.data[index]["Sum(Montant)"];
+        break;
     };
   }
 
@@ -189,6 +192,9 @@ class _ChartPieState extends State<ChartPie> {
         return widget.data[index].raisonSociale;
         break ;
       case ("famille"):
+        return  widget.data[index]["Libelle"] ;
+        break ;
+      case ("charge"):
         return  widget.data[index]["Libelle"] ;
         break ;
     }

@@ -2174,6 +2174,556 @@ class S {
       args: [],
     );
   }
+
+  /// `Veuillez remplir les champs obligatoire`
+  String get msg_champs_obg {
+    return Intl.message(
+      'Veuillez remplir les champs obligatoire',
+      name: 'msg_champs_obg',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `TVA`
+  String get tva {
+    return Intl.message(
+      'TVA',
+      name: 'tva',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Merci pour votre visite`
+  String get msg_visite {
+    return Intl.message(
+      'Merci pour votre visite',
+      name: 'msg_visite',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Compte`
+  String get compte {
+    return Intl.message(
+      'Compte',
+      name: 'compte',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Restoration`
+  String get restore_data {
+    return Intl.message(
+      'Restoration',
+      name: 'restore_data',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `la restoration de votre data va ecrasser toutes les données non sauvgarder`
+  String get restore_msg {
+    return Intl.message(
+      'la restoration de votre data va ecrasser toutes les données non sauvgarder',
+      name: 'restore_msg',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Succer, restoration a bien terminé`
+  String get msg_succes_restoration {
+    return Intl.message(
+      'Succer, restoration a bien terminé',
+      name: 'msg_succes_restoration',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Ereure, à la restoration`
+  String get msg_err_restoration {
+    return Intl.message(
+      'Ereure, à la restoration',
+      name: 'msg_err_restoration',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Mes Sauvegardes`
+  String get backups {
+    return Intl.message(
+      'Mes Sauvegardes',
+      name: 'backups',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Indice`
+  String get indice {
+    return Intl.message(
+      'Indice',
+      name: 'indice',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `financiere`
+  String get financiere {
+    return Intl.message(
+      'financiere',
+      name: 'financiere',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Repartition des charges`
+  String get dash_charge_title {
+    return Intl.message(
+      'Repartition des charges',
+      name: 'dash_charge_title',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Mes Comptes`
+  String get dash_compte_title {
+    return Intl.message(
+      'Mes Comptes',
+      name: 'dash_compte_title',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Classement des Ventes par article`
+  String get dash_vente_art_title {
+    return Intl.message(
+      'Classement des Ventes par article',
+      name: 'dash_vente_art_title',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Classement des Ventes par client`
+  String get dash_vente_cl_title {
+    return Intl.message(
+      'Classement des Ventes par client',
+      name: 'dash_vente_cl_title',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Classement des Ventes par famille`
+  String get dash_vente_fam_title {
+    return Intl.message(
+      'Classement des Ventes par famille',
+      name: 'dash_vente_fam_title',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Classement des Achats par article`
+  String get dash_achat_art_title {
+    return Intl.message(
+      'Classement des Achats par article',
+      name: 'dash_achat_art_title',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Classement des Achats par fournisseur`
+  String get dash_achat_four_title {
+    return Intl.message(
+      'Classement des Achats par fournisseur',
+      name: 'dash_achat_four_title',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Pdf preview is available before Printing`
+  String get msg_pdf_view {
+    return Intl.message(
+      'Pdf preview is available before Printing',
+      name: 'msg_pdf_view',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Format A4/A5`
+  String get format_a45 {
+    return Intl.message(
+      'Format A4/A5',
+      name: 'format_a45',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Imprimante Bluetooth`
+  String get blue_device {
+    return Intl.message(
+      'Imprimante Bluetooth',
+      name: 'blue_device',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Save Changes`
+  String get param_save {
+    return Intl.message(
+      'Save Changes',
+      name: 'param_save',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Do you want to save last changes ...`
+  String get param_msg_save {
+    return Intl.message(
+      'Do you want to save last changes ...',
+      name: 'param_msg_save',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `General`
+  String get param_general {
+    return Intl.message(
+      'General',
+      name: 'param_general',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Langue`
+  String get param_lang {
+    return Intl.message(
+      'Langue',
+      name: 'param_lang',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Choisir une langue`
+  String get param_lang_title {
+    return Intl.message(
+      'Choisir une langue',
+      name: 'param_lang_title',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Choisir Tarification`
+  String get param_lang_tarif_title {
+    return Intl.message(
+      'Choisir Tarification',
+      name: 'param_lang_tarif_title',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Activer Tva`
+  String get param_tva {
+    return Intl.message(
+      'Activer Tva',
+      name: 'param_tva',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Activer timbre`
+  String get param_timbre {
+    return Intl.message(
+      'Activer timbre',
+      name: 'param_timbre',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Notifications`
+  String get param_notif_title {
+    return Intl.message(
+      'Notifications',
+      name: 'param_notif_title',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Activer notification`
+  String get param_notif {
+    return Intl.message(
+      'Activer notification',
+      name: 'param_notif',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Heure Notification`
+  String get param_notif_time {
+    return Intl.message(
+      'Heure Notification',
+      name: 'param_notif_time',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Repeter Notification`
+  String get param_notif_repeat {
+    return Intl.message(
+      'Repeter Notification',
+      name: 'param_notif_repeat',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Echeance`
+  String get param_echeance {
+    return Intl.message(
+      'Echeance',
+      name: 'param_echeance',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Jour`
+  String get day {
+    return Intl.message(
+      'Jour',
+      name: 'day',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Sauvgarde Restauration`
+  String get param_back_title {
+    return Intl.message(
+      'Sauvgarde Restauration',
+      name: 'param_back_title',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Créer Sauvegarde`
+  String get param_backup {
+    return Intl.message(
+      'Créer Sauvegarde',
+      name: 'param_backup',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Succer,Backup a bien été créer`
+  String get msg_back_suce {
+    return Intl.message(
+      'Succer,Backup a bien été créer',
+      name: 'msg_back_suce',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Ereure,Backup n'a pas été créer`
+  String get msg_back_err {
+    return Intl.message(
+      'Ereure,Backup n\'a pas été créer',
+      name: 'msg_back_err',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Restaurer Données`
+  String get param_resto_data {
+    return Intl.message(
+      'Restaurer Données',
+      name: 'param_resto_data',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Chaque Jour`
+  String get ev_day {
+    return Intl.message(
+      'Chaque Jour',
+      name: 'ev_day',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Chaque Dimanche`
+  String get ev_sun {
+    return Intl.message(
+      'Chaque Dimanche',
+      name: 'ev_sun',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Chaque Lundi`
+  String get ev_mon {
+    return Intl.message(
+      'Chaque Lundi',
+      name: 'ev_mon',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Chaque Mardi`
+  String get ev_tue {
+    return Intl.message(
+      'Chaque Mardi',
+      name: 'ev_tue',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Chaque Mercredi`
+  String get ev_wedn {
+    return Intl.message(
+      'Chaque Mercredi',
+      name: 'ev_wedn',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Chaque Jeudi`
+  String get ev_thur {
+    return Intl.message(
+      'Chaque Jeudi',
+      name: 'ev_thur',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Chaque Vendredi`
+  String get ev_fri {
+    return Intl.message(
+      'Chaque Vendredi',
+      name: 'ev_fri',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Chaque Samedi`
+  String get ev_sat {
+    return Intl.message(
+      'Chaque Samedi',
+      name: 'ev_sat',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Paramétres ont bien été modifier`
+  String get msg_upd_param {
+    return Intl.message(
+      'Paramétres ont bien été modifier',
+      name: 'msg_upd_param',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Ereure à la modifications des paramétres`
+  String get msg_err_upd_param {
+    return Intl.message(
+      'Ereure à la modifications des paramétres',
+      name: 'msg_err_upd_param',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `utiliser`
+  String get use {
+    return Intl.message(
+      'utiliser',
+      name: 'use',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Détails`
+  String get details {
+    return Intl.message(
+      'Détails',
+      name: 'details',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Marge`
+  String get marge {
+    return Intl.message(
+      'Marge',
+      name: 'marge',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `C'est une piece transformer`
+  String get msg_piece_transfo {
+    return Intl.message(
+      'C\'est une piece transformer',
+      name: 'msg_piece_transfo',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `C'est une piece d'origine`
+  String get msg_piece_origin {
+    return Intl.message(
+      'C\'est une piece d\'origine',
+      name: 'msg_piece_origin',
+      desc: '',
+      args: [],
+    );
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<S> {

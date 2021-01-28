@@ -22,12 +22,6 @@ import 'package:gestmob/Widgets/utils.dart' as utils;
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 
 class AddArticlePage extends StatefulWidget {
-  /*final QueryCtr queryCtr;
-  addArticle({
-    Key key,
-    @required this.queryCtr,
-  }) : super(key: key);*/
-
   final QueryCtr _queryCtr = QueryCtr();
 
   Article arguments;
@@ -1108,7 +1102,7 @@ class _AddArticlePageState extends State<AddArticlePage> with TickerProviderStat
                     child: Padding(
                       padding: const EdgeInsets.only(bottom: 20),
                       child: Text(
-                        "${S.current.ajouter} TVA",
+                        "${S.current.ajouter} ${S.current.tva}",
                         style: TextStyle(
                           fontSize: 18,
                           fontWeight: FontWeight.w400,
@@ -1155,7 +1149,7 @@ class _AddArticlePageState extends State<AddArticlePage> with TickerProviderStat
                         Navigator.pop(context);
                         final snackBar = SnackBar(
                           content: Text(
-                            'TVA ' + _taux.toString() + '%',
+                            '${S.current.tva} ' + _taux.toString() + '%',
                             style: TextStyle(
                                 color: Colors.white,
                                 fontSize: 15,

@@ -274,7 +274,7 @@ class _AddTresoriePageState extends State<AddTresoriePage>
                   });
                 }
               }else{
-                Helpers.showFlushBar(context, "Veuillez remplir les champs obligatoire");
+                Helpers.showFlushBar(context, "${S.current.msg_champs_obg}");
               }
 
             },
@@ -923,7 +923,7 @@ class _AddTresoriePageState extends State<AddTresoriePage>
                             padding: EdgeInsets.only(
                                 left: 5, right: 5, bottom: 20, top: 10),
                             child: Text(
-                              "${S.current.ajouter} Compte:",
+                              "${S.current.ajouter} ${S.current.compte}:",
                               textAlign: TextAlign.center,
                               style: TextStyle(
                                 fontSize: 20,
@@ -1101,7 +1101,7 @@ class _AddTresoriePageState extends State<AddTresoriePage>
                             padding: EdgeInsets.only(
                                 left: 8, right: 8, bottom: 10, top: 10),
                             child: Text(
-                              "${S.current.ajouter} charge:",
+                              "${S.current.ajouter} ${S.current.charge}:",
                               style: TextStyle(fontSize: 20),
                             ),
                           ),

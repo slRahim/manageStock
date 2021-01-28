@@ -1674,10 +1674,10 @@ class _AddPiecePageState extends State<AddPiecePage> with TickerProviderStateMix
   quikPrintTicket() async {
     var defaultPrinter = await _queryCtr.getPrinter();
 
-    // tester le type d'imprimante lan or bluetooth
     if (defaultPrinter != null) {
       if(defaultPrinter.adress == "192.168.1.1" && defaultPrinter.type == 0 ){
-        final doc = _makePdfDocument() ;
+        var formatPrint = await _queryCtr.getFormatPrint();
+        final doc = await _makePdfDocument(formatPrint) ;
         await Printing.layoutPdf(
             onLayout: (PdfPageFormat format) async => doc.save());
 
@@ -1725,22 +1725,22 @@ class _AddPiecePageState extends State<AddPiecePage> with TickerProviderStateMix
             align: (formatPrint.default_format == PaperSize.mm80)
                 ? PosAlign.center
                 : PosAlign.left));
-    ticket.text("Date : ${Helpers.dateToText(_piece.date)}",
+    ticket.text("${S.current.date} : ${Helpers.dateToText(_piece.date)}",
         styles: PosStyles(
             align: (formatPrint.default_format == PaperSize.mm80)
                 ? PosAlign.center
                 : PosAlign.left));
-    ticket.text("Tier : ${_piece.raisonSociale}",
+    ticket.text("${S.current.rs} : ${_piece.raisonSociale}",
         styles: PosStyles(
             align: (formatPrint.default_format == PaperSize.mm80)
                 ? PosAlign.center
                 : PosAlign.left));
     ticket.hr(ch: '-');
     ticket.row([
-      PosColumn(text: 'Item', width: 6, styles: PosStyles(bold: true)),
-      PosColumn(text: 'QTE', width: 2, styles: PosStyles(bold: true)),
-      PosColumn(text: 'Prix', width: 2, styles: PosStyles(bold: true)),
-      PosColumn(text: 'Montant', width: 2, styles: PosStyles(bold: true)),
+      PosColumn(text: '${S.current.articles}', width: 6, styles: PosStyles(bold: true)),
+      PosColumn(text: '${S.current.qte}', width: 2, styles: PosStyles(bold: true)),
+      PosColumn(text: '${S.current.prix}', width: 2, styles: PosStyles(bold: true)),
+      PosColumn(text: '${S.current.montant}', width: 2, styles: PosStyles(bold: true)),
     ]);
     _selectedItems.forEach((element) {
       ticket.row([
@@ -1756,42 +1756,62 @@ class _AddPiecePageState extends State<AddPiecePage> with TickerProviderStateMix
     });
     ticket.hr(ch: '-');
     if (formatPrint.totalHt == 1) {
-      ticket.text("Total HT : ${_piece.total_ht}",
+      ticket.text("${S.current.total_ht} : ${_piece.total_ht}",
           styles: PosStyles(
               align: (formatPrint.default_format == PaperSize.mm80)
+                  ? PosAlign.center
+                  : PosAlign.left));
+    }
+    if(formatPrint.remise == 1){
+      ticket.text("${S.current.remise} : ${_piece.remise} %",
+          styles: PosStyles(
+              align: (formatPrint.default_format  == PaperSize.mm80)
+                  ? PosAlign.center
+                  : PosAlign.left));
+    }
+    if(formatPrint.netHt == 1){
+      ticket.text("${S.current.net_ht} : ${_piece.net_ht}",
+          styles: PosStyles(
+              align: (formatPrint.default_format  == PaperSize.mm80)
                   ? PosAlign.center
                   : PosAlign.left));
     }
     if (formatPrint.totalTva == 1) {
-      ticket.text("Total TVA : ${_piece.total_tva}",
+      ticket.text("${S.current.total_tva} : ${_piece.total_tva}",
           styles: PosStyles(
               align: (formatPrint.default_format == PaperSize.mm80)
                   ? PosAlign.center
                   : PosAlign.left));
     }
-
-    ticket.text("Regler : ${_piece.regler}",
+    if(formatPrint.timbre == 1){
+      ticket.text("${S.current.timbre} : ${(_piece.total_ttc == _piece.net_a_payer)?_piece.timbre:0.0}",
+          styles: PosStyles(
+              align: (formatPrint.default_format == PaperSize.mm80)
+                  ? PosAlign.center
+                  : PosAlign.left));
+    }
+    ticket.text("${S.current.regler} : ${_piece.regler}",
         styles: PosStyles(
             align: (formatPrint.default_format == PaperSize.mm80)
                 ? PosAlign.center
                 : PosAlign.left));
 
     if (formatPrint.reste == 1) {
-      ticket.text("Reste : ${_piece.reste}",
+      ticket.text("${S.current.reste} : ${_piece.reste}",
           styles: PosStyles(
               align: (formatPrint.default_format == PaperSize.mm80)
                   ? PosAlign.center
                   : PosAlign.left));
     }
     if (formatPrint.credit == 1) {
-      ticket.text("Total Credit : ${_selectedClient.credit}",
+      ticket.text("${S.current.credit} : ${_selectedClient.credit}",
           styles: PosStyles(
               align: (formatPrint.default_format == PaperSize.mm80)
                   ? PosAlign.center
                   : PosAlign.left));
     }
     ticket.hr(ch: '=');
-    ticket.text("TOTAL TTC : ${_piece.total_ttc}",
+    ticket.text("${S.current.net_payer} : ${_piece.net_a_payer}",
         styles: PosStyles(
           align: (formatPrint.default_format == PaperSize.mm80)
               ? PosAlign.center
@@ -1813,8 +1833,7 @@ class _AddPiecePageState extends State<AddPiecePage> with TickerProviderStateMix
     return ticket;
   }
 
-  _makePdfDocument(){
-    // get default format
+  Future _makePdfDocument(FormatPrint formatPrint)async{
     final doc = pw.Document();
     doc.addPage(
       pw.MultiPage(
@@ -1822,8 +1841,8 @@ class _AddPiecePageState extends State<AddPiecePage> with TickerProviderStateMix
           pw.Column(
               crossAxisAlignment: pw.CrossAxisAlignment.center,
               children: [
-                pw.Center(child: pw.Text("Téléphone : 0000000000")),
-                pw.Center(child: pw.Text("Email : 0000000000"))
+                pw.Center(child: pw.Text("${S.current.telephone} : 0000000000")),
+                pw.Center(child: pw.Text("${S.current.mail} : 0000000000"))
               ]),
           pw.SizedBox(height: 10),
           pw.Row(children: [
@@ -1832,21 +1851,21 @@ class _AddPiecePageState extends State<AddPiecePage> with TickerProviderStateMix
                 child: pw.Column(
                     crossAxisAlignment: pw.CrossAxisAlignment.start,
                     children: [
-                      pw.Text("Client : designation "),
+                      pw.Text("${S.current.rs} : ${_selectedClient.raisonSociale} "),
                       pw.Divider(height: 2),
-                      pw.Text("Client adresse"),
-                      pw.Text("client ville"),
+                      pw.Text("${S.current.adresse} : ${_selectedClient.adresse} "),
+                      pw.Text("${S.current.ville} : ${_selectedClient.ville}"),
                     ])),
             pw.SizedBox(width: 3),
             pw.Expanded(
                 flex: 6,
                 child: pw.Column(children: [
                   pw.Text("|||||||||||||||||||||||||||||||"),
-                  pw.Text("Bon de Comptoir",
+                  pw.Text("${Helpers.getPieceTitle(_piece.piece)}",
                       style: pw.TextStyle(fontWeight: pw.FontWeight.bold)),
-                  pw.Text("N°: 002/02222",
+                  pw.Text("N°: ${_piece.num_piece}",
                       style: pw.TextStyle(fontWeight: pw.FontWeight.bold)),
-                  pw.Text("Date: 02/22/2200"),
+                  pw.Text("${S.current.date}: ${Helpers.dateToText(_piece.date)}"),
                 ]))
           ]),
           pw.SizedBox(height: 20),
@@ -1855,15 +1874,15 @@ class _AddPiecePageState extends State<AddPiecePage> with TickerProviderStateMix
                 pw.TableRow(
                     decoration: pw.BoxDecoration(color: PdfColors.grey),
                     children: [
-                      pw.Text("Referance",
+                      pw.Text("${S.current.referance}",
                           style: pw.TextStyle(fontWeight: pw.FontWeight.bold)),
-                      pw.Text("Designation",
+                      pw.Text("${S.current.designation}",
                           style: pw.TextStyle(fontWeight: pw.FontWeight.bold)),
-                      pw.Text("QTE",
+                      pw.Text("${S.current.qte}",
                           style: pw.TextStyle(fontWeight: pw.FontWeight.bold)),
-                      pw.Text("Prix-U",
+                      pw.Text("${S.current.prix}",
                           style: pw.TextStyle(fontWeight: pw.FontWeight.bold)),
-                      pw.Text("Montant",
+                      pw.Text("${S.current.montant}",
                           style: pw.TextStyle(fontWeight: pw.FontWeight.bold))
                     ]),
                 for(var e in _selectedItems) pw.TableRow(children: [
@@ -1883,7 +1902,11 @@ class _AddPiecePageState extends State<AddPiecePage> with TickerProviderStateMix
             pw.Expanded(
                 flex: 6,
                 child: pw.Column(children: [
-                  pw.Text("Merci pour Votre Visite",
+                  pw.Text("${S.current.regler} : ${_piece.regler} ${S.current.da}"),
+                  (formatPrint.reste == 1)?pw.Text("${S.current.reste} : ${_piece.reste} ${S.current.da}"):pw.SizedBox(),
+                  (formatPrint.credit == 1)?pw.Text("${S.current.credit} : ${_selectedClient.credit} ${S.current.da}"):pw.SizedBox(),
+                  pw.Divider(height: 2),
+                  pw.Text("${S.current.msg_visite}",
                       style: pw.TextStyle(fontWeight: pw.FontWeight.bold)),
                   pw.Text("****BY Ciratit****",
                       style: pw.TextStyle(fontWeight: pw.FontWeight.bold)),
@@ -1893,12 +1916,13 @@ class _AddPiecePageState extends State<AddPiecePage> with TickerProviderStateMix
                 child: pw.Column(
                     crossAxisAlignment: pw.CrossAxisAlignment.start,
                     children: [
-                      pw.Text("Total HT : ${_piece.total_ht} DZD"),
-                      pw.Text("Remise : ${_piece.remise} %"),
-                      pw.Text("Net-HT : ${_piece.net_ht} DZD"),
+                      (formatPrint.totalHt == 1)?pw.Text("${S.current.total_ht} : ${_piece.total_ht} ${S.current.da}"):pw.SizedBox(),
+                      (formatPrint.remise == 1)?pw.Text("${S.current.remise} : ${_piece.remise} %"):pw.SizedBox(),
+                      (formatPrint.netHt == 1)?pw.Text("${S.current.net_ht} : ${_piece.net_ht} ${S.current.da}"):pw.SizedBox(),
                       pw.Divider(height: 2),
-                      pw.Text("Total Tva : ${_piece.total_tva} DZD"),
-                      pw.Text("Net-Payer : ${_piece.net_a_payer} DZD"),
+                      (formatPrint.totalTva == 1)?pw.Text("${S.current.total_tva} : ${_piece.total_tva} ${S.current.da}"):pw.SizedBox(),
+                      (formatPrint.timbre == 1)?pw.Text("${S.current.timbre} : ${(_piece.total_ttc == _piece.net_a_payer)?_piece.timbre:0.0} ${S.current.da}"):pw.SizedBox(),
+                      pw.Text("${S.current.net_payer} : ${_piece.net_a_payer} ${S.current.da}"),
                       pw.Divider(height: 2),
                     ])),
             pw.SizedBox(width: 3),

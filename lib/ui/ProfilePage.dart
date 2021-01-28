@@ -190,7 +190,7 @@ class _ProfilePageState extends State<ProfilePage> with TickerProviderStateMixin
                         });
                       }
                     } else {
-                      Helpers.showFlushBar(context, "Veuillez remplir les champs obligatoire");
+                      Helpers.showFlushBar(context, "${S.current.msg_champs_obg}");
                     }
                   }else{
                     setState(() {

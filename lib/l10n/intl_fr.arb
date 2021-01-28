@@ -226,18 +226,62 @@
   "fiche_art" : "Fiche Article",
 
   "msg_quitter" : "Voullez vous quitter l'apllication...",
-  "msg_quitter1" : "Tapez retour une autre fois pour quitter"
+  "msg_quitter1" : "Tapez retour une autre fois pour quitter",
 
+  "msg_champs_obg" : "Veuillez remplir les champs obligatoire",
+  "tva" : "TVA",
+  "msg_visite" : "Merci pour votre visite",
+  "compte" : "Compte",
+  "restore_data" : "Restauration",
+  "restore_msg" : "la restauration de votre data va ecrasser toutes les données non sauvgarder",
+  "msg_succes_restoration" : "Succer, restauration a bien terminé",
+  "msg_err_restoration" : "Ereure, à la restauration",
+  "backups" : "Mes Sauvegardes",
+  "indice" : "Indice",
+  "financiere" : "financiere",
+  "dash_charge_title" : "Repartition des charges",
+  "dash_compte_title" : "Mes Comptes",
+  "dash_vente_art_title" : "Classement des Ventes par article",
+  "dash_vente_cl_title" : "Classement des Ventes par client",
+  "dash_vente_fam_title" : "Classement des Ventes par famille",
+  "dash_achat_art_title" : "Classement des Achats par article",
+  "dash_achat_four_title" : "Classement des Achats par fournisseur",
+  "msg_pdf_view" : "Pdf preview is available before Printing",
+  "format_a45" : "Format A4/A5",
+  "blue_device" : "Imprimante Bluetooth",
 
-
-
-
-
-
-
-
-
-
-
-
+  "param_save" : "Save Modification",
+  "param_msg_save" : "Voullez vous save les derniers changement",
+  "param_general" : "General",
+  "param_lang" : "Langue",
+  "param_lang_title" : "Choisir une langue",
+  "param_lang_tarif_title" : "Choisir Tarification",
+  "param_tva" : "Activer Tva",
+  "param_timbre" : "Activer timbre",
+  "param_notif_title" : "Notifications",
+  "param_notif" : "Activer notification",
+  "param_notif_time" : "Heure Notification",
+  "param_notif_repeat" : "Repeter Notification",
+  "param_echeance" : "Echeance",
+  "day" : "Jour",
+  "param_back_title" : "Sauvgarde Restauration",
+  "param_backup" : "Créer Sauvegarde",
+  "msg_back_suce" : "Succer,Backup a bien été créer",
+  "msg_back_err" : "Ereure,Backup n'a pas été créer",
+  "param_resto_data" : "Restaurer Données",
+  "ev_day" : "Chaque Jour",
+  "ev_sun" : "Chaque Dimanche",
+  "ev_mon" : "Chaque Lundi",
+  "ev_tue" : "Chaque Mardi",
+  "ev_wedn" : "Chaque Mercredi",
+  "ev_thur" : "Chaque Jeudi",
+  "ev_fri" : "Chaque Vendredi",
+  "ev_sat" : "Chaque Samedi",
+  "msg_upd_param" : "Paramétres ont bien été modifier",
+  "msg_err_upd_param" : "Ereure à la modifications des paramétres",
+  "use" : "utiliser",
+  "details" : "Détails",
+  "marge" : "Marge",
+  "msg_piece_transfo" : "C'est une piece transformer",
+  "msg_piece_origin" : "C'est une piece d'origine"
 }

@@ -187,7 +187,7 @@ class _PrintState extends State<Print> {
           Container(
             padding: EdgeInsets.all(5),
             child: Text(
-              "Bluetooth Devices",
+              "${S.current.blue_device}",
               style: TextStyle(
                 fontWeight: FontWeight.bold,
                 fontSize: 16,

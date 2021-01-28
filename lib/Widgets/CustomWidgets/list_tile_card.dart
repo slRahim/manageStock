@@ -276,7 +276,7 @@ class ListBackCard extends StatelessWidget {
                 child: Padding(
                   padding: const EdgeInsets.only(top: 0.0),
                   child: Text(
-                    'Details :',
+                    '${S.current.details}:',
                     style: TextStyle(
                       fontSize: SizeConfig.safeBlockHorizontal * 5,
                       fontWeight: FontWeight.bold,

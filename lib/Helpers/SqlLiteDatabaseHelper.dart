@@ -66,7 +66,6 @@ class SqlLiteDatabaseHelper {
     return join(databasesPath, 'gestmob.db');
   }
 
-
   void _onCreate(Database db, int version) async {
     await createProfileTable(db, version);
     await createArticlesTable(db, version);
@@ -102,11 +101,10 @@ class SqlLiteDatabaseHelper {
     await deleteDatabase(path);
   }
 
-  Future clearAllTables() async {
+  Future clearAllTables(batch) async {
     try {
-      var dbs = await this.db;
       for (String table  in db_tables ) {
-        await dbs.delete(table);
+        await batch.delete(table);
       }
     } catch(e){
 
@@ -142,12 +140,12 @@ class SqlLiteDatabaseHelper {
   }
 
   Future restoreBackup(File backupFile,{ bool isEncrypted = true})async{
-    await clearAllTables() ;
-
-    String backup = await backupFile.readAsString();
     var dbs = await this.db;
-
     Batch batch = dbs.batch();
+    String backup = await backupFile.readAsString();
+
+    await clearAllTables(batch);
+
     final key = encrypt.Key.fromUtf8(SECRET_KEY);
     final iv = encrypt.IV.fromLength(16);
     final encrypter = encrypt.Encrypter(encrypt.AES(key));
@@ -421,7 +419,10 @@ class SqlLiteDatabaseHelper {
         Default_format VARCHAR(4),
         Default_display VARCHAR(25),
         Total_ht integer , 
+        Remise integer ,
+        Net_ht integer ,
         Total_tva integer , 
+        Timbre integer ,
         Reste integer , 
         Credit integer  
         )''');
