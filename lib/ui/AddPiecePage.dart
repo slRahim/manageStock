@@ -7,6 +7,7 @@ import 'package:esc_pos_bluetooth/esc_pos_bluetooth.dart';
 import 'package:expandable_bottom_bar/expandable_bottom_bar.dart';
 import 'package:floating_action_row/floating_action_row.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bluetooth_basic/flutter_bluetooth_basic.dart';
 import 'package:flutter_icons/flutter_icons.dart';
 import 'package:flutter_osm_plugin/flutter_osm_plugin.dart';
@@ -51,13 +52,15 @@ import 'package:printing/printing.dart';
 
 class AddPiecePage extends StatefulWidget {
   var arguments;
+
   AddPiecePage({Key key, @required this.arguments}) : super(key: key);
 
   @override
   _AddPiecePageState createState() => _AddPiecePageState();
 }
 
-class _AddPiecePageState extends State<AddPiecePage> with TickerProviderStateMixin {
+class _AddPiecePageState extends State<AddPiecePage>
+    with TickerProviderStateMixin {
   final _scaffoldKey = GlobalKey<ScaffoldState>();
 
   Piece _piece = new Piece.init();
@@ -106,10 +109,10 @@ class _AddPiecePageState extends State<AddPiecePage> with TickerProviderStateMix
   QueryCtr _queryCtr;
 
   BottomBarController bottomBarControler;
-
   Ticket _ticket;
+  MyParams _myParams;
 
-  MyParams _myParams ;
+  bool directionRtl = false;
 
   void initState() {
     super.initState();
@@ -133,7 +136,8 @@ class _AddPiecePageState extends State<AddPiecePage> with TickerProviderStateMix
   //**************************************************************************************************************************************
   //*********************************************** init le screen **********************************************************************
   Future<bool> futureInitState() async {
-    _tarificationDropdownItems = utils.buildDropTarificationTier(_tarificationItems);
+    _tarificationDropdownItems =
+        utils.buildDropTarificationTier(_tarificationItems);
     _selectedTarification = _tarificationItems[0];
 
     if (widget.arguments is Piece &&
@@ -184,12 +188,14 @@ class _AddPiecePageState extends State<AddPiecePage> with TickerProviderStateMix
       _pourcentremiseControler.text = _pourcentremise.toString();
     } else {
       _piece.piece = widget.arguments.piece;
-      if(_piece.piece == PieceType.devis || _piece.piece == PieceType.retourClient ||
-          _piece.piece == PieceType.avoirClient || _piece.piece == PieceType.commandeClient ||
-          _piece.piece == PieceType.bonLivraison ||  _piece.piece == PieceType.factureClient){
-
+      if (_piece.piece == PieceType.devis ||
+          _piece.piece == PieceType.retourClient ||
+          _piece.piece == PieceType.avoirClient ||
+          _piece.piece == PieceType.commandeClient ||
+          _piece.piece == PieceType.bonLivraison ||
+          _piece.piece == PieceType.factureClient) {
         _selectedClient = await _queryCtr.getTierById(1);
-      }else{
+      } else {
         _selectedClient = await _queryCtr.getTierById(2);
       }
 
@@ -206,7 +212,7 @@ class _AddPiecePageState extends State<AddPiecePage> with TickerProviderStateMix
       _net_ht = 0.0;
       _total_tva = 0.0;
       _total_ttc = 0.0;
-      _net_a_payer = _total_ttc ;
+      _net_a_payer = _total_ttc;
       _remisepiece = 0;
       _pourcentremise = 0;
     }
@@ -224,6 +230,7 @@ class _AddPiecePageState extends State<AddPiecePage> with TickerProviderStateMix
   // ***************************************** partie affichage et build *****************************************************************
   @override
   Widget build(BuildContext context) {
+    directionRtl = Helpers.isDirectionRTL(context);
     if (modification) {
       if (editMode) {
         appBarTitle = S.current.modification_titre;
@@ -336,7 +343,8 @@ class _AddPiecePageState extends State<AddPiecePage> with TickerProviderStateMix
               total_tva: _total_tva,
               total_ttc: _total_ttc,
               net_ht: _net_ht,
-              net_payer:(_myParams.timbre)? _total_ttc + _piece.timbre : _total_ttc,
+              net_payer:
+                  (_myParams.timbre) ? _total_ttc + _piece.timbre : _total_ttc,
               remise: _pourcentremise,
               timbre: _piece.timbre,
               myParams: _myParams,
@@ -349,29 +357,33 @@ class _AddPiecePageState extends State<AddPiecePage> with TickerProviderStateMix
                   Expanded(
                     child: InkWell(
                       onTap: () async {
-                        if (editMode && _selectedItems.isNotEmpty) {
-                          AwesomeDialog(
-                            context: context,
-                            dialogType: DialogType.INFO,
-                            animType: AnimType.BOTTOMSLIDE,
-                            title: S.current.supp,
-                            body: addRemisedialogue(),
-                            btnCancelText: S.current.annuler,
-                            btnCancelOnPress: (){},
-                            btnOkText:S.current.confirme,
-                            btnOkOnPress: (){
-                              setState(() {
-                                _pourcentremise =
-                                    double.parse(_pourcentremiseControler.text);
-                                _remisepiece =
-                                    double.parse(_remisepieceControler.text);
-                              });
-                              calculPiece();
-                            }
-                          )..show();
-
-                        }else{
-                          Helpers.showFlushBar(context,  S.current.msg_select_art);
+                        if(editMode){
+                          if (_selectedItems.isNotEmpty) {
+                            AwesomeDialog(
+                                context: context,
+                                dialogType: DialogType.INFO,
+                                animType: AnimType.BOTTOMSLIDE,
+                                title: S.current.supp,
+                                body: addRemisedialogue(),
+                                btnCancelText: S.current.annuler,
+                                btnCancelOnPress: () {},
+                                btnOkText: S.current.confirme,
+                                btnOkOnPress: () {
+                                  setState(() {
+                                    _pourcentremise = double.parse(
+                                        _pourcentremiseControler.text);
+                                    _remisepiece =
+                                        double.parse(_remisepieceControler.text);
+                                  });
+                                  calculPiece();
+                                })
+                              ..show();
+                          } else {
+                            Helpers.showFlushBar(
+                                context, S.current.msg_select_art);
+                          }
+                        }else {
+                          Helpers.showFlushBar(context, S.current.msg_no_dispo);
                         }
                       },
                       child: Text(
@@ -379,7 +391,8 @@ class _AddPiecePageState extends State<AddPiecePage> with TickerProviderStateMix
                             _net_a_payer.toString() +
                             " ${S.current.da}",
                         textAlign: TextAlign.center,
-                        style: TextStyle(fontWeight: FontWeight.bold , color: Colors.blue),
+                        style: TextStyle(
+                            fontWeight: FontWeight.bold, color: (editMode)?Colors.blue:Colors.black54),
                       ),
                     ),
                   ),
@@ -394,9 +407,8 @@ class _AddPiecePageState extends State<AddPiecePage> with TickerProviderStateMix
                             _piece.piece != PieceType.retourClient &&
                             _piece.piece != PieceType.avoirClient &&
                             _piece.piece != PieceType.retourFournisseur &&
-                            _piece.piece != PieceType.avoirFournisseur ) {
-
-                          if(_selectedItems.isNotEmpty){
+                            _piece.piece != PieceType.avoirFournisseur) {
+                          if (_selectedItems.isNotEmpty) {
                             AwesomeDialog(
                                 context: context,
                                 dialogType: DialogType.INFO,
@@ -404,22 +416,22 @@ class _AddPiecePageState extends State<AddPiecePage> with TickerProviderStateMix
                                 title: S.current.supp,
                                 body: addVerssementdialogue(),
                                 btnCancelText: S.current.annuler,
-                                btnCancelOnPress: (){},
-                                btnOkText:S.current.confirme,
-                                btnOkOnPress: (){
+                                btnCancelOnPress: () {},
+                                btnOkText: S.current.confirme,
+                                btnOkOnPress: () {
                                   setState(() {
                                     _restepiece =
                                         double.parse(_resteControler.text);
                                     _verssementpiece =
                                         double.parse(_verssementControler.text);
                                   });
-                                }
-                            )..show();
-                          }else{
-                            Helpers.showFlushBar(context,  S.current.msg_select_art);
+                                })
+                              ..show();
+                          } else {
+                            Helpers.showFlushBar(
+                                context, S.current.msg_select_art);
                           }
-
-                        }else{
+                        } else {
                           Helpers.showFlushBar(context, S.current.msg_no_dispo);
                         }
                       }
@@ -435,10 +447,8 @@ class _AddPiecePageState extends State<AddPiecePage> with TickerProviderStateMix
                                       _piece.piece != PieceType.bonCommande &&
                                       _piece.piece != PieceType.retourClient &&
                                       _piece.piece != PieceType.avoirClient &&
-                                      _piece.piece !=
-                                          PieceType.retourFournisseur &&
-                                      _piece.piece !=
-                                          PieceType.avoirFournisseur)
+                                      _piece.piece != PieceType.retourFournisseur &&
+                                      _piece.piece != PieceType.avoirFournisseur && editMode)
                                   ? Colors.blue
                                   : Colors.black54),
                         )),
@@ -447,7 +457,8 @@ class _AddPiecePageState extends State<AddPiecePage> with TickerProviderStateMix
               ),
             ),
           ),
-          floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
+          floatingActionButtonLocation:
+              FloatingActionButtonLocation.centerDocked,
           floatingActionButton: GestureDetector(
             // Set onVerticalDrag event to drag handlers of controller for swipe effect
             onVerticalDragUpdate: bottomBarControler.onDrag,
@@ -550,7 +561,7 @@ class _AddPiecePageState extends State<AddPiecePage> with TickerProviderStateMix
                         focusedBorder: OutlineInputBorder(
                             borderSide: BorderSide(color: Colors.orange[900]),
                             borderRadius: BorderRadius.circular(20)),
-                        labelText: "N°",
+                        labelText: "${S.current.n}",
                         labelStyle: TextStyle(color: Colors.orange[900]),
                         enabledBorder: OutlineInputBorder(
                           gapPadding: 3.3,
@@ -605,7 +616,7 @@ class _AddPiecePageState extends State<AddPiecePage> with TickerProviderStateMix
                       editMode: editMode,
                       value: _selectedTarification,
                       items: _tarificationDropdownItems,
-                      libelle: "${S.current.tarif }",
+                      libelle: "${S.current.tarif}",
                       onChanged: (value) {
                         setState(() {
                           _selectedTarification = value;
@@ -755,105 +766,101 @@ class _AddPiecePageState extends State<AddPiecePage> with TickerProviderStateMix
   //afficher un dialog pour versseemnt
   Widget addVerssementdialogue() {
     return Wrap(children: [
-        Padding(
-          padding: const EdgeInsets.all(15),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Center(
-                  child: Padding(
-                    padding: const EdgeInsets.only(bottom: 20),
-                    child: Text(
-                      "${S.current.modification_titre} ${S.current.verssement}",
-                      style: TextStyle(
-                        fontSize: 18,
-                        fontWeight: FontWeight.w400,
-                      ),
-                    ),
-              )),
-              Padding(
-                padding:
-                    EdgeInsetsDirectional.only(start: 5, end: 5, bottom: 20),
-                child: TextField(
-                  controller: _verssementControler,
-                  keyboardType: TextInputType.number,
-                  onChanged: (value) {
-                    if (_piece.id != null) {
-                      if (_verssementpiece == 0) {
-                        double _reste =
-                            _total_ttc - (_piece.regler + double.parse(value));
-                        _resteControler.text = _reste.toString();
-                      } else {
-                        double _reste =
-                            _total_ttc - (_piece.regler + double.parse(value));
-                        _resteControler.text = _reste.toString();
-                      }
+      Padding(
+        padding: const EdgeInsets.all(15),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Center(
+                child: Padding(
+              padding: const EdgeInsets.only(bottom: 20),
+              child: Text(
+                "${S.current.modification_titre} ${S.current.verssement}",
+                style: TextStyle(
+                  fontSize: 18,
+                  fontWeight: FontWeight.w400,
+                ),
+              ),
+            )),
+            Padding(
+              padding: EdgeInsetsDirectional.only(start: 5, end: 5, bottom: 20),
+              child: TextField(
+                controller: _verssementControler,
+                keyboardType: TextInputType.number,
+                onChanged: (value) {
+                  if (_piece.id != null) {
+                    if (_verssementpiece == 0) {
+                      double _reste =
+                          _total_ttc - (_piece.regler + double.parse(value));
+                      _resteControler.text = _reste.toString();
                     } else {
-                      double _reste = _total_ttc - double.parse(value);
+                      double _reste =
+                          _total_ttc - (_piece.regler + double.parse(value));
                       _resteControler.text = _reste.toString();
                     }
-                  },
-                  decoration: InputDecoration(
-                    errorText: _validateVerssemntError ?? null,
-                    prefixIcon: Icon(
-                      Icons.monetization_on,
-                      color: Colors.green,
-                    ),
-                    focusedBorder: OutlineInputBorder(
-                        borderSide: BorderSide(color: Colors.greenAccent),
-                        borderRadius: BorderRadius.circular(20)),
-                    contentPadding: EdgeInsets.only(left: 10),
-                    labelText: "${S.current.total} ${S.current.verssement}",
-                    labelStyle: TextStyle(color: Colors.green),
-                    enabledBorder: OutlineInputBorder(
-                      gapPadding: 3.3,
-                      borderRadius: BorderRadius.circular(20),
-                      borderSide: BorderSide(color: Colors.green),
-                    ),
+                  } else {
+                    double _reste = _total_ttc - double.parse(value);
+                    _resteControler.text = _reste.toString();
+                  }
+                },
+                decoration: InputDecoration(
+                  errorText: _validateVerssemntError ?? null,
+                  prefixIcon: Icon(
+                    Icons.monetization_on,
+                    color: Colors.green,
+                  ),
+                  focusedBorder: OutlineInputBorder(
+                      borderSide: BorderSide(color: Colors.greenAccent),
+                      borderRadius: BorderRadius.circular(20)),
+                  contentPadding: EdgeInsets.only(left: 10),
+                  labelText: "${S.current.total} ${S.current.verssement}",
+                  labelStyle: TextStyle(color: Colors.green),
+                  enabledBorder: OutlineInputBorder(
+                    gapPadding: 3.3,
+                    borderRadius: BorderRadius.circular(20),
+                    borderSide: BorderSide(color: Colors.green),
                   ),
                 ),
               ),
-              SizedBox(
-                width: 320.0,
-                child: Padding(
-                  padding: EdgeInsetsDirectional.only(end: 0, start: 0),
-                  child: Column(
-                    mainAxisSize: MainAxisSize.max,
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Padding(
-                        padding: EdgeInsetsDirectional.only(
-                            start: 5, end: 5, bottom: 5),
-                        child: TextField(
-                          controller: _resteControler,
-                          keyboardType: TextInputType.number,
-                          decoration: InputDecoration(
-                            prefixIcon: Icon(
-                              Icons.money,
-                              color: Colors.orange[900],
-                            ),
-                            disabledBorder: OutlineInputBorder(
-                                borderSide:
-                                    BorderSide(color: Colors.orange[900]),
-                                borderRadius: BorderRadius.circular(20)),
-                            contentPadding:
-                                EdgeInsetsDirectional.only(start: 10),
-                            labelText: S.current.reste,
-                            labelStyle: TextStyle(color: Colors.orange[900]),
-                            enabled: false,
+            ),
+            SizedBox(
+              width: 320.0,
+              child: Padding(
+                padding: EdgeInsetsDirectional.only(end: 0, start: 0),
+                child: Column(
+                  mainAxisSize: MainAxisSize.max,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Padding(
+                      padding: EdgeInsetsDirectional.only(
+                          start: 5, end: 5, bottom: 5),
+                      child: TextField(
+                        controller: _resteControler,
+                        keyboardType: TextInputType.number,
+                        decoration: InputDecoration(
+                          prefixIcon: Icon(
+                            Icons.money,
+                            color: Colors.orange[900],
                           ),
+                          disabledBorder: OutlineInputBorder(
+                              borderSide: BorderSide(color: Colors.orange[900]),
+                              borderRadius: BorderRadius.circular(20)),
+                          contentPadding: EdgeInsetsDirectional.only(start: 10),
+                          labelText: S.current.reste,
+                          labelStyle: TextStyle(color: Colors.orange[900]),
+                          enabled: false,
                         ),
                       ),
-                    ],
-                  ),
+                    ),
+                  ],
                 ),
-              )
-            ],
-          ),
+              ),
+            )
+          ],
         ),
-      ]
-    );
+      ),
+    ]);
   }
 
   //afficher un dialog pour la remise
@@ -867,14 +874,14 @@ class _AddPiecePageState extends State<AddPiecePage> with TickerProviderStateMix
           children: [
             Center(
                 child: Padding(
-                padding: const EdgeInsets.only(bottom: 20),
-                child: Text(
-                  "${S.current.modification_titre} ${S.current.remise}",
-                  style: TextStyle(
-                    fontSize: 18,
-                    fontWeight: FontWeight.w400,
-                  ),
+              padding: const EdgeInsets.only(bottom: 20),
+              child: Text(
+                "${S.current.modification_titre} ${S.current.remise}",
+                style: TextStyle(
+                  fontSize: 18,
+                  fontWeight: FontWeight.w400,
                 ),
+              ),
             )),
             Padding(
               padding: EdgeInsetsDirectional.only(start: 5, end: 5, bottom: 20),
@@ -973,10 +980,11 @@ class _AddPiecePageState extends State<AddPiecePage> with TickerProviderStateMix
         totalTva += item.selectedQuantite * item.tva;
       });
       _total_ht = sum;
-      _total_tva =(_myParams.tva)? totalTva : 0.0;
+      _total_tva = (_myParams.tva) ? totalTva : 0.0;
       _net_ht = _total_ht - ((_total_ht * _pourcentremise) / 100);
       _total_ttc = _net_ht + _total_tva;
-      _net_a_payer =(_myParams.timbre)? _total_ttc + _piece.timbre : _total_ttc + 0.0;
+      _net_a_payer =
+          (_myParams.timbre) ? _total_ttc + _piece.timbre : _total_ttc + 0.0;
 
       if (_piece.id != null) {
         if (_net_a_payer <= _piece.net_a_payer) {
@@ -1052,14 +1060,14 @@ class _AddPiecePageState extends State<AddPiecePage> with TickerProviderStateMix
                   child: Wrap(spacing: 13, runSpacing: 13, children: [
                     Center(
                         child: Padding(
-                          padding: const EdgeInsets.only(bottom: 20),
-                          child: Text(
-                            "${S.current.choisir_action}: ",
-                            style: TextStyle(
-                              fontSize: 22,
-                              fontWeight: FontWeight.w400,
-                            ),
-                          ),
+                      padding: const EdgeInsets.only(bottom: 20),
+                      child: Text(
+                        "${S.current.choisir_action}: ",
+                        style: TextStyle(
+                          fontSize: 22,
+                          fontWeight: FontWeight.w400,
+                        ),
+                      ),
                     )),
                     SizedBox(
                       width: 320.0,
@@ -1344,8 +1352,8 @@ class _AddPiecePageState extends State<AddPiecePage> with TickerProviderStateMix
   Future<void> addTresorie(item, {transferer}) async {
     Tresorie tresorie = new Tresorie.init();
     tresorie.montant = _verssementpiece;
-    tresorie.compte = 1 ;
-    tresorie.charge=null ;
+    tresorie.compte = 1;
+    tresorie.charge = null;
     if (transferer) {
       tresorie.montant = 0;
     }
@@ -1675,13 +1683,12 @@ class _AddPiecePageState extends State<AddPiecePage> with TickerProviderStateMix
     var defaultPrinter = await _queryCtr.getPrinter();
 
     if (defaultPrinter != null) {
-      if(defaultPrinter.adress == "192.168.1.1" && defaultPrinter.type == 0 ){
+      if (defaultPrinter.adress == "192.168.1.1" && defaultPrinter.type == 0) {
         var formatPrint = await _queryCtr.getFormatPrint();
-        final doc = await _makePdfDocument(formatPrint) ;
+        final doc = await _makePdfDocument(formatPrint);
         await Printing.layoutPdf(
             onLayout: (PdfPageFormat format) async => doc.save());
-
-      }else{
+      } else {
         PrinterBluetoothManager _printerManager = PrinterBluetoothManager();
         BluetoothDevice device = new BluetoothDevice();
         device.name = defaultPrinter.name;
@@ -1737,10 +1744,18 @@ class _AddPiecePageState extends State<AddPiecePage> with TickerProviderStateMix
                 : PosAlign.left));
     ticket.hr(ch: '-');
     ticket.row([
-      PosColumn(text: '${S.current.articles}', width: 6, styles: PosStyles(bold: true)),
-      PosColumn(text: '${S.current.qte}', width: 2, styles: PosStyles(bold: true)),
-      PosColumn(text: '${S.current.prix}', width: 2, styles: PosStyles(bold: true)),
-      PosColumn(text: '${S.current.montant}', width: 2, styles: PosStyles(bold: true)),
+      PosColumn(
+          text: '${S.current.articles}',
+          width: 6,
+          styles: PosStyles(bold: true)),
+      PosColumn(
+          text: '${S.current.qte}', width: 2, styles: PosStyles(bold: true)),
+      PosColumn(
+          text: '${S.current.prix}', width: 2, styles: PosStyles(bold: true)),
+      PosColumn(
+          text: '${S.current.montant}',
+          width: 2,
+          styles: PosStyles(bold: true)),
     ]);
     _selectedItems.forEach((element) {
       ticket.row([
@@ -1762,17 +1777,17 @@ class _AddPiecePageState extends State<AddPiecePage> with TickerProviderStateMix
                   ? PosAlign.center
                   : PosAlign.left));
     }
-    if(formatPrint.remise == 1){
+    if (formatPrint.remise == 1) {
       ticket.text("${S.current.remise} : ${_piece.remise} %",
           styles: PosStyles(
-              align: (formatPrint.default_format  == PaperSize.mm80)
+              align: (formatPrint.default_format == PaperSize.mm80)
                   ? PosAlign.center
                   : PosAlign.left));
     }
-    if(formatPrint.netHt == 1){
+    if (formatPrint.netHt == 1) {
       ticket.text("${S.current.net_ht} : ${_piece.net_ht}",
           styles: PosStyles(
-              align: (formatPrint.default_format  == PaperSize.mm80)
+              align: (formatPrint.default_format == PaperSize.mm80)
                   ? PosAlign.center
                   : PosAlign.left));
     }
@@ -1783,8 +1798,9 @@ class _AddPiecePageState extends State<AddPiecePage> with TickerProviderStateMix
                   ? PosAlign.center
                   : PosAlign.left));
     }
-    if(formatPrint.timbre == 1){
-      ticket.text("${S.current.timbre} : ${(_piece.total_ttc == _piece.net_a_payer)?_piece.timbre:0.0}",
+    if (formatPrint.timbre == 1) {
+      ticket.text(
+          "${S.current.timbre} : ${(_piece.total_ttc == _piece.net_a_payer) ? _piece.timbre : 0.0}",
           styles: PosStyles(
               align: (formatPrint.default_format == PaperSize.mm80)
                   ? PosAlign.center
@@ -1833,16 +1849,25 @@ class _AddPiecePageState extends State<AddPiecePage> with TickerProviderStateMix
     return ticket;
   }
 
-  Future _makePdfDocument(FormatPrint formatPrint)async{
+  Future _makePdfDocument(FormatPrint formatPrint) async {
+    var data = await rootBundle.load("assets/arial.ttf");
+    final ttf = pw.Font.ttf(data);
+
     final doc = pw.Document();
     doc.addPage(
       pw.MultiPage(
+        textDirection:
+            (directionRtl) ? pw.TextDirection.rtl : pw.TextDirection.ltr,
         build: (context) => [
           pw.Column(
               crossAxisAlignment: pw.CrossAxisAlignment.center,
               children: [
-                pw.Center(child: pw.Text("${S.current.telephone} : 0000000000")),
-                pw.Center(child: pw.Text("${S.current.mail} : 0000000000"))
+                pw.Center(
+                    child: pw.Text("${S.current.telephone}\t  778965426",
+                        style: pw.TextStyle(font: ttf))),
+                pw.Center(
+                    child: pw.Text("${S.current.mail}\t hghkd@hfhd.com",
+                        style: pw.TextStyle(font: ttf)))
               ]),
           pw.SizedBox(height: 10),
           pw.Row(children: [
@@ -1851,10 +1876,15 @@ class _AddPiecePageState extends State<AddPiecePage> with TickerProviderStateMix
                 child: pw.Column(
                     crossAxisAlignment: pw.CrossAxisAlignment.start,
                     children: [
-                      pw.Text("${S.current.rs} : ${_selectedClient.raisonSociale} "),
+                      pw.Text(
+                          "${S.current.rs}\t ${_selectedClient.raisonSociale} ",
+                          style: pw.TextStyle(font: ttf)),
                       pw.Divider(height: 2),
-                      pw.Text("${S.current.adresse} : ${_selectedClient.adresse} "),
-                      pw.Text("${S.current.ville} : ${_selectedClient.ville}"),
+                      pw.Text(
+                          "${S.current.adresse}\t  ${_selectedClient.adresse} ",
+                          style: pw.TextStyle(font: ttf)),
+                      pw.Text("${S.current.ville}\t  ${_selectedClient.ville}",
+                          style: pw.TextStyle(font: ttf)),
                     ])),
             pw.SizedBox(width: 3),
             pw.Expanded(
@@ -1862,39 +1892,46 @@ class _AddPiecePageState extends State<AddPiecePage> with TickerProviderStateMix
                 child: pw.Column(children: [
                   pw.Text("|||||||||||||||||||||||||||||||"),
                   pw.Text("${Helpers.getPieceTitle(_piece.piece)}",
-                      style: pw.TextStyle(fontWeight: pw.FontWeight.bold)),
-                  pw.Text("N°: ${_piece.num_piece}",
-                      style: pw.TextStyle(fontWeight: pw.FontWeight.bold)),
-                  pw.Text("${S.current.date}: ${Helpers.dateToText(_piece.date)}"),
+                      style: pw.TextStyle(
+                          fontWeight: pw.FontWeight.bold, font: ttf)),
+                  pw.Text("${S.current.n}\t  ${_piece.num_piece}",
+                      style: pw.TextStyle(
+                          fontWeight: pw.FontWeight.bold, font: ttf)),
+                  pw.Text(
+                      "${S.current.date}\t  ${Helpers.dateToText(_piece.date)}",
+                      style: pw.TextStyle(font: ttf)),
                 ]))
           ]),
           pw.SizedBox(height: 20),
-          pw.Table(
-              children:[
-                pw.TableRow(
-                    decoration: pw.BoxDecoration(color: PdfColors.grey),
-                    children: [
-                      pw.Text("${S.current.referance}",
-                          style: pw.TextStyle(fontWeight: pw.FontWeight.bold)),
-                      pw.Text("${S.current.designation}",
-                          style: pw.TextStyle(fontWeight: pw.FontWeight.bold)),
-                      pw.Text("${S.current.qte}",
-                          style: pw.TextStyle(fontWeight: pw.FontWeight.bold)),
-                      pw.Text("${S.current.prix}",
-                          style: pw.TextStyle(fontWeight: pw.FontWeight.bold)),
-                      pw.Text("${S.current.montant}",
-                          style: pw.TextStyle(fontWeight: pw.FontWeight.bold))
-                    ]),
-                for(var e in _selectedItems) pw.TableRow(children: [
-                  pw.Text("${e.ref}"),
-                  pw.Text("${e.designation}"),
-                  pw.Text("${e.selectedQuantite}"),
-                  pw.Text("${e.selectedPrice}"),
-                  pw.Text("${e.selectedPrice*e.selectedQuantite}"),
+          pw.Table(children: [
+            pw.TableRow(
+                decoration: pw.BoxDecoration(color: PdfColors.grey),
+                children: [
+                  pw.Text("${S.current.referance}",
+                      style: pw.TextStyle(
+                          fontWeight: pw.FontWeight.bold, font: ttf)),
+                  pw.Text("${S.current.designation}",
+                      style: pw.TextStyle(
+                          fontWeight: pw.FontWeight.bold, font: ttf)),
+                  pw.Text("${S.current.qte}",
+                      style: pw.TextStyle(
+                          fontWeight: pw.FontWeight.bold, font: ttf)),
+                  pw.Text("${S.current.prix}",
+                      style: pw.TextStyle(
+                          fontWeight: pw.FontWeight.bold, font: ttf)),
+                  pw.Text("${S.current.montant}",
+                      style: pw.TextStyle(
+                          fontWeight: pw.FontWeight.bold, font: ttf))
                 ]),
-
-              ]
-          ),
+            for (var e in _selectedItems)
+              pw.TableRow(children: [
+                pw.Text("${e.ref}",style: pw.TextStyle(font: ttf)),
+                pw.Text("${e.designation}",style: pw.TextStyle(font: ttf)),
+                pw.Text("${e.selectedQuantite}"),
+                pw.Text("${e.selectedPrice}"),
+                pw.Text("${e.selectedPrice * e.selectedQuantite}"),
+              ]),
+          ]),
           pw.SizedBox(height: 10),
           pw.Divider(height: 2),
           pw.SizedBox(height: 10),
@@ -1902,32 +1939,67 @@ class _AddPiecePageState extends State<AddPiecePage> with TickerProviderStateMix
             pw.Expanded(
                 flex: 6,
                 child: pw.Column(children: [
-                  pw.Text("${S.current.regler} : ${_piece.regler} ${S.current.da}"),
-                  (formatPrint.reste == 1)?pw.Text("${S.current.reste} : ${_piece.reste} ${S.current.da}"):pw.SizedBox(),
-                  (formatPrint.credit == 1)?pw.Text("${S.current.credit} : ${_selectedClient.credit} ${S.current.da}"):pw.SizedBox(),
+                  pw.Text(
+                      "${S.current.regler}\t ${_piece.regler} ${S.current.da}",
+                      style: pw.TextStyle(font: ttf)),
+                  (formatPrint.reste == 1)
+                      ? pw.Text(
+                          "${S.current.reste}\t ${_piece.reste} ${S.current.da}",
+                          style: pw.TextStyle(font: ttf))
+                      : pw.SizedBox(),
+                  (formatPrint.credit == 1)
+                      ? pw.Text(
+                          "${S.current.credit}\t ${_selectedClient.credit} ${S.current.da}",
+                          style: pw.TextStyle(font: ttf))
+                      : pw.SizedBox(),
                   pw.Divider(height: 2),
+                  pw.SizedBox(height: 4),
                   pw.Text("${S.current.msg_visite}",
-                      style: pw.TextStyle(fontWeight: pw.FontWeight.bold)),
+                      style: pw.TextStyle(
+                          fontWeight: pw.FontWeight.bold, font: ttf)),
                   pw.Text("****BY Ciratit****",
-                      style: pw.TextStyle(fontWeight: pw.FontWeight.bold)),
+                      style: pw.TextStyle(
+                          fontWeight: pw.FontWeight.bold, font: ttf)),
                 ])),
+            pw.SizedBox(width: 10),
             pw.Expanded(
                 flex: 6,
                 child: pw.Column(
                     crossAxisAlignment: pw.CrossAxisAlignment.start,
                     children: [
-                      (formatPrint.totalHt == 1)?pw.Text("${S.current.total_ht} : ${_piece.total_ht} ${S.current.da}"):pw.SizedBox(),
-                      (formatPrint.remise == 1)?pw.Text("${S.current.remise} : ${_piece.remise} %"):pw.SizedBox(),
-                      (formatPrint.netHt == 1)?pw.Text("${S.current.net_ht} : ${_piece.net_ht} ${S.current.da}"):pw.SizedBox(),
+                      (formatPrint.totalHt == 1)
+                          ? pw.Text(
+                              "${S.current.total_ht}\t  ${_piece.total_ht}\t ${S.current.da}",
+                              style: pw.TextStyle(font: ttf))
+                          : pw.SizedBox(),
+                      (formatPrint.remise == 1)
+                          ? pw.Text(
+                              "${S.current.remise}\t  ${_piece.remise}\t  %",
+                              style: pw.TextStyle(font: ttf))
+                          : pw.SizedBox(),
+                      (formatPrint.netHt == 1)
+                          ? pw.Text(
+                              "${S.current.net_ht}\t  ${_piece.net_ht}\t  ${S.current.da}",
+                              style: pw.TextStyle(font: ttf))
+                          : pw.SizedBox(),
                       pw.Divider(height: 2),
-                      (formatPrint.totalTva == 1)?pw.Text("${S.current.total_tva} : ${_piece.total_tva} ${S.current.da}"):pw.SizedBox(),
-                      (formatPrint.timbre == 1)?pw.Text("${S.current.timbre} : ${(_piece.total_ttc == _piece.net_a_payer)?_piece.timbre:0.0} ${S.current.da}"):pw.SizedBox(),
-                      pw.Text("${S.current.net_payer} : ${_piece.net_a_payer} ${S.current.da}"),
+                      (formatPrint.totalTva == 1)
+                          ? pw.Text(
+                              "${S.current.total_tva}\t  ${_piece.total_tva}\t  ${S.current.da}",
+                              style: pw.TextStyle(font: ttf))
+                          : pw.SizedBox(),
+                      (formatPrint.timbre == 1)
+                          ? pw.Text(
+                              "${S.current.timbre}\t  ${(_piece.total_ttc == _piece.net_a_payer) ? _piece.timbre : 0.0}\t  ${S.current.da}",
+                              style: pw.TextStyle(font: ttf))
+                          : pw.SizedBox(),
+                      pw.Text(
+                          "${S.current.net_payer}\t  ${_piece.net_a_payer}\t  ${S.current.da}",
+                          style: pw.TextStyle(font: ttf)),
                       pw.Divider(height: 2),
                     ])),
             pw.SizedBox(width: 3),
           ]),
-
         ],
       ),
     );

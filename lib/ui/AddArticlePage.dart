@@ -244,7 +244,7 @@ class _AddArticlePageState extends State<AddArticlePage> with TickerProviderStat
                         });
                       }
                     }else{
-                      Helpers.showFlushBar(context, "Veuillez remplir les champs obligatoire");
+                      Helpers.showFlushBar(context, "${S.current.msg_champs_obg}");
                     }
                   }else{
                     setState(() {

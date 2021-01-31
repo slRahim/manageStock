@@ -75,10 +75,10 @@ class _TresorieListItemState extends State<TresorieListItem> {
             ),
           ),
           subtitle: Helpers.dateToText(widget.tresorie.date),
-          title: (widget.tresorie.tierRS != null)?("RS: " + widget.tresorie.tierRS):("RS : ___ "),
+          title: (widget.tresorie.tierRS != null)?("${S.current.rs}: " + widget.tresorie.tierRS):("${S.current.rs} : ___ "),
           trailingChildren: [
             Text(
-              "N° : ${widget.tresorie.numTresorie}",
+              "${S.current.n}: ${widget.tresorie.numTresorie}",
               style: TextStyle(
                   color: Colors.black,
                   fontSize: 16.0),

@@ -71,6 +71,7 @@ class _PushNotificationsManagerState extends State<PushNotificationsManager> {
 
     if(_pieceHasCredit){
       if(_myParams.notifications){
+        await notificationPlugin.cancelAllNotification();
         switch(_myParams.notificationDay){
           case 0 :
             await notificationPlugin.showDailyAtTime(_myParams.notificationTime);

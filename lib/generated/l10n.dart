@@ -2724,6 +2724,196 @@ class S {
       args: [],
     );
   }
+
+  /// `Ventes`
+  String get vente {
+    return Intl.message(
+      'Ventes',
+      name: 'vente',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Achats`
+  String get achat {
+    return Intl.message(
+      'Achats',
+      name: 'achat',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Ref`
+  String get ref {
+    return Intl.message(
+      'Ref',
+      name: 'ref',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `N°`
+  String get n {
+    return Intl.message(
+      'N°',
+      name: 'n',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Meilleur Cinq`
+  String get best_5 {
+    return Intl.message(
+      'Meilleur Cinq',
+      name: 'best_5',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `éléments`
+  String get item {
+    return Intl.message(
+      'éléments',
+      name: 'item',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Cl/Four`
+  String get cl_four {
+    return Intl.message(
+      'Cl/Four',
+      name: 'cl_four',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `FP`
+  String get fp {
+    return Intl.message(
+      'FP',
+      name: 'fp',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `CC`
+  String get cc {
+    return Intl.message(
+      'CC',
+      name: 'cc',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `BL`
+  String get bl {
+    return Intl.message(
+      'BL',
+      name: 'bl',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `FC`
+  String get fc {
+    return Intl.message(
+      'FC',
+      name: 'fc',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `AC`
+  String get ac {
+    return Intl.message(
+      'AC',
+      name: 'ac',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `RC`
+  String get rc {
+    return Intl.message(
+      'RC',
+      name: 'rc',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `BC`
+  String get bc {
+    return Intl.message(
+      'BC',
+      name: 'bc',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `BR`
+  String get br {
+    return Intl.message(
+      'BR',
+      name: 'br',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `FF`
+  String get ff {
+    return Intl.message(
+      'FF',
+      name: 'ff',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `AF`
+  String get af {
+    return Intl.message(
+      'AF',
+      name: 'af',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `RF`
+  String get rf {
+    return Intl.message(
+      'RF',
+      name: 'rf',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `TR`
+  String get tr {
+    return Intl.message(
+      'TR',
+      name: 'tr',
+      desc: '',
+      args: [],
+    );
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<S> {

@@ -68,7 +68,7 @@ class _ArticleListItemSelectedState extends State<ArticleListItemSelected> {
         backgroundImage: MemoryImage(widget.article.imageUint8List),
       ),
       title: Text(widget.article.designation),
-      subtitle: Text("Ref: " + widget.article.ref),
+      subtitle: Text("${S.current.ref}: " + widget.article.ref),
       trailingChildren: widget.article.selectedQuantite > 0 ? [
         Text(
           "${S.current.prix} : "+

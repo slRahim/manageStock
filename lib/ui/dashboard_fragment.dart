@@ -70,7 +70,7 @@ class _DashboardState extends State<Dashboard> {
             backgroundColor: Theme.of(context).backgroundColor,
             appBar: SearchBar(
               mainContext: context,
-              title: "Dashboard",
+              title: S.current.tableau_bord,
               isFilterOn: false,
             ),
             bottomNavigationBar: BottomTabBar(
@@ -82,7 +82,7 @@ class _DashboardState extends State<Dashboard> {
                   children: [
                     Icon(MdiIcons.scaleBalance),
                     SizedBox(height: 1),
-                    Text("Generale"),
+                    Text(S.current.generale),
                   ],
                 )),
                 Tab(
@@ -90,7 +90,7 @@ class _DashboardState extends State<Dashboard> {
                   children: [
                     Icon(MdiIcons.basketUnfill),
                     SizedBox(height: 1),
-                    Text("Ventes"),
+                    Text(S.current.vente),
                   ],
                 )),
                 Tab(
@@ -98,7 +98,7 @@ class _DashboardState extends State<Dashboard> {
                   children: [
                     Icon(MdiIcons.basketFill),
                     SizedBox(height: 1),
-                    Text("Achats"),
+                    Text(S.current.achat),
                   ],
                 )),
               ],

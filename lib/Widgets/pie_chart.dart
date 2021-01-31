@@ -3,6 +3,7 @@ import 'dart:typed_data';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:gestmob/Helpers/Helpers.dart';
+import 'package:gestmob/generated/l10n.dart';
 import 'package:gestmob/models/Tiers.dart';
 
 import 'CustomWidgets/chart_badge.dart';
@@ -69,14 +70,14 @@ class _ChartPieState extends State<ChartPie> {
                     width: 38,
                   ),
                   Text(
-                    'Best Five',
+                    '${S.current.best_5}',
                     style: TextStyle(color: widget.textColor, fontSize: 22),
                   ),
                   SizedBox(
                     width: 4,
                   ),
                   Text(
-                    'items',
+                    '${S.current.item}',
                     style: TextStyle(color: Color(0xff77839a), fontSize: 16),
                   ),
                 ],

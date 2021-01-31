@@ -17,18 +17,18 @@ class Statics {
     S.current.statut_etp
   ];
   static List<int> tarificationItems = [1, 2, 3];
-  static List<String> tiersItems = ["Clients","Cl/Fourr" ,"Fournisseurs"];
+  static List<String> tiersItems = [S.current.client,S.current.cl_four,S.current.fournisseur];
 
   static List<int> echeances = [1,3,7,15,21,30];
   static List<String> repeateNotifications = [
-    "Dailly",
-    "Every Sunday",
-    "Every Monday",
-    "Every Tuesday",
-    "Every Wednesday",
-    "Every Thursday",
-    "Every Friday",
-    "Every Saturday"
+    S.current.ev_day,
+    S.current.ev_sun,
+    S.current.ev_mon,
+    S.current.ev_tue,
+    S.current.ev_wedn,
+    S.current.ev_thur,
+    S.current.ev_fri,
+    S.current.ev_sat
   ];
   static List<String> languages = ["English (ENG)", "French (FR)", "Arabic (AR)"];
 }

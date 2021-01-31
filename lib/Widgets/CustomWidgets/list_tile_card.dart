@@ -105,6 +105,7 @@ class _ListFrontCardState extends State<ListFrontCard> {
       children: <Widget>[
         //en tete de la carte
         Expanded(
+          flex: 1,
           child: Container(
             decoration: BoxDecoration(
                 color: (widget.itemSelected != null && widget.itemSelected) ? Colors.green : Colors.purple,
@@ -191,6 +192,7 @@ class _ListFrontCardState extends State<ListFrontCard> {
         ),
         //corp de la carte
         Expanded(
+          flex: 1,
           child: Container(
             decoration: BoxDecoration(
                 color: Colors.white,
@@ -199,7 +201,8 @@ class _ListFrontCardState extends State<ListFrontCard> {
                     bottomRight: Radius.circular(25))),
             child: Padding(
               padding: const EdgeInsetsDirectional.only(start: 20.0, end: 20.0),
-              child: Column(
+              child: ListView(
+                padding: EdgeInsets.all(4),
                 children: <Widget>[
                   Expanded(
                     child: Container(
@@ -269,8 +272,7 @@ class ListBackCard extends StatelessWidget {
           color: Colors.white, borderRadius: BorderRadius.circular(25)),
       child: Padding(
         padding: const EdgeInsetsDirectional.only(start: 20, end: 20, top: 8),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
+        child: ListView(
           children: <Widget>[
             Expanded(
                 child: Padding(
@@ -308,7 +310,7 @@ class ListBackCard extends StatelessWidget {
                       Expanded(
                         flex: 1,
                           child: Padding(
-                            padding: const EdgeInsets.all(10.0),
+                            padding:  EdgeInsets.all(15.0),
                             child: InkWell(
                               onTap: onTap,
                               child: Container(
@@ -318,7 +320,7 @@ class ListBackCard extends StatelessWidget {
                                 child: Center(
                                     child: Icon(
                                       Icons.remove_red_eye,
-                                      size: SizeConfig.safeBlockHorizontal * 7,
+                                      size: SizeConfig.safeBlockHorizontal * 10,
                                       color: Colors.white,
                                     )),
                               ),

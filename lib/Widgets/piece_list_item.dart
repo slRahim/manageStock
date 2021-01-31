@@ -73,17 +73,17 @@ class _PieceListItemState extends State<PieceListItem> {
             radius: 28,
             backgroundColor: Colors.green,
             child: CircleAvatar(
-              child: Text("${widget.piece.piece}"),
+              child: Text(getPiecetype()),
               radius:25,
               backgroundColor: Colors.grey[200],
               foregroundColor: Colors.black,
             ),
           ),
           subtitle: Helpers.dateToText(widget.piece.date),
-          title:(widget.piece.raisonSociale != null) ? ("RS: " + widget.piece.raisonSociale) : null,
+          title:(widget.piece.raisonSociale != null) ? ("${S.current.rs}: " + widget.piece.raisonSociale) : null,
           trailingChildren: [
             Text(
-             "N°: ${widget.piece.num_piece}",
+             "${S.current.n}: ${widget.piece.num_piece}",
               style: TextStyle(
                   color: Colors.black,
                   fontSize: 16.0),
@@ -169,6 +169,44 @@ class _PieceListItemState extends State<PieceListItem> {
         ],
       ),
     );
+  }
+
+  String getPiecetype(){
+    switch(widget.piece.piece){
+      case "FP":
+        return S.current.fp;
+        break ;
+      case "CC":
+        return S.current.cc;
+        break ;
+      case "BL":
+        return S.current.bl;
+        break ;
+      case "FC":
+        return S.current.fc;
+        break ;
+      case "RC":
+        return S.current.rc;
+        break ;
+      case "AC":
+        return S.current.ac;
+        break ;
+      case "BC":
+        return S.current.bc;
+        break ;
+      case "BR":
+        return S.current.br;
+        break ;
+      case "FF":
+        return S.current.ff;
+        break ;
+      case "RF":
+        return S.current.rf;
+        break ;
+      case "AF":
+        return S.current.af;
+        break ;
+    }
   }
 
   Widget getIcon() {

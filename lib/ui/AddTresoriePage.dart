@@ -376,7 +376,7 @@ class _AddTresoriePageState extends State<AddTresoriePage>
                             focusedBorder: OutlineInputBorder(
                                 borderSide: BorderSide(color: Colors.orange[900]),
                                 borderRadius: BorderRadius.circular(20)),
-                            labelText: "N°",
+                            labelText: "${S.current.n}",
                             labelStyle: TextStyle(color: Colors.orange[900]),
                             enabledBorder: OutlineInputBorder(
                               gapPadding: 3.3,

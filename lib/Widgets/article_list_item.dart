@@ -93,7 +93,7 @@ class _ArticleListItemState extends State<ArticleListItem> {
         ),
       ),
       subtitle: (widget.article.codeBar != null)?widget.article.codeBar : null,
-      title: ("Ref: " + widget.article.ref),
+      title: ("${S.current.ref}: " + widget.article.ref),
       trailingChildren: widget.article.selectedQuantite > 0 ? [
         Text(
           "${S.current.designation} : "+widget.article.designation,

@@ -81,7 +81,7 @@ class _TierListItemState extends State<TierListItem> {
 
             ),
           ),
-          title: ("RS: "+widget.tier.raisonSociale),
+          title: ("${S.current.rs}: "+widget.tier.raisonSociale),
           subtitle: ("${S.current.statut}: " + Statics.statutItems[widget.tier.statut]),
           trailingChildren: [
             Text(

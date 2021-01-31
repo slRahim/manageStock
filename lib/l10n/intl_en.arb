@@ -283,7 +283,28 @@
   "details" : "Détails",
   "marge" : "Marge",
   "msg_piece_transfo" : "C'est une piece transformer",
-  "msg_piece_origin" : "C'est une piece d'origine"
+  "msg_piece_origin" : "C'est une piece d'origine",
+
+  "vente" : "Ventes",
+  "achat" : "Achats",
+  "ref" : "Ref",
+  "n" : "N°",
+  "best_5" : "Meilleur Cinq",
+  "item" : "éléments",
+  "cl_four" : "Cl/Four",
+
+  "fp" : "FP",
+  "cc" : "CC",
+  "bl" : "BL",
+  "fc" : "FC",
+  "ac" : "AC",
+  "rc" : "RC",
+  "bc" : "BC",
+  "br" : "BR",
+  "ff" : "FF",
+  "af" : "AF",
+  "rf" : "RF",
+  "tr" : "TR"
 
 
 }

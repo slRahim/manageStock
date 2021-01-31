@@ -268,7 +268,7 @@ class _SettingsPageState extends State<SettingsPage> {
                   ),
                   SettingsTile(
                     title: '${S.current.param_echeance}',
-                    subtitle: "$_echeance ${S.current.day} (s)",
+                    subtitle: "$_echeance ${S.current.day}",
                     enabled: _notifications,
                     leading: Icon(Icons.calendar_today),
                     onTap: () async {
