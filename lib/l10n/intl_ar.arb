@@ -117,10 +117,10 @@
   "piece_titre" : "إيصال",
   "aff_draft" : "مسودة",
 
-  "total_ht" : "المبلغ(HT)",
+  "total_ht" : "HT مجموع",
   "da": "دج",
-  "total_tva": "مجموع(ض ر)",
-  "net_payer": "المبلغ كلي",
+  "total_tva": "مجموع TVA",
+  "net_payer": "اجمالي الدفع",
   "msg_select_art": "الرجاء إضافة عنصر واحد على الأقل",
   "reste": "الباقي",
   "date" : "التاريخ",
@@ -211,7 +211,7 @@
   "to_retour" : "إلى إرجاع",
 
   "msg_no_dispo" : "هذه الخاصية غير متوفرة",
-  "remise" : "خصم",
+  "remise" : "الخصم",
   "pourcentage" : "النسبة",
   "journaux" : "القائمة",
   "generale" : "عامة",
@@ -221,7 +221,7 @@
   "qte_reel" : "الكمية الحقيقية",
   "qte_dispo" : "الكمية المتوفرة",
   "statut": "الوضعية",
-  "net_ht" : "المبلغ(HT) بعد الخصم",
+  "net_ht" : "الصافي HT",
   "timbre" : "الطابع",
   "fiche_art" : "ملف المنتج",
 

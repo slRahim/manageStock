@@ -3,6 +3,7 @@ import 'dart:typed_data';
 import 'dart:ui';
 
 import 'package:awesome_dialog/awesome_dialog.dart';
+import 'package:charset_converter/charset_converter.dart';
 import 'package:esc_pos_bluetooth/esc_pos_bluetooth.dart';
 import 'package:expandable_bottom_bar/expandable_bottom_bar.dart';
 import 'package:floating_action_row/floating_action_row.dart';
@@ -1727,124 +1728,296 @@ class _AddPiecePageState extends State<AddPiecePage>
   Future<Ticket> _maketicket(FormatPrint formatPrint) async {
     final ticket = Ticket(formatPrint.default_format);
 
-    ticket.text("N° ${_piece.piece}: ${_piece.num_piece}",
-        styles: PosStyles(
-            align: (formatPrint.default_format == PaperSize.mm80)
-                ? PosAlign.center
-                : PosAlign.left));
-    ticket.text("${S.current.date} : ${Helpers.dateToText(_piece.date)}",
-        styles: PosStyles(
-            align: (formatPrint.default_format == PaperSize.mm80)
-                ? PosAlign.center
-                : PosAlign.left));
-    ticket.text("${S.current.rs} : ${_piece.raisonSociale}",
-        styles: PosStyles(
-            align: (formatPrint.default_format == PaperSize.mm80)
-                ? PosAlign.center
-                : PosAlign.left));
-    ticket.hr(ch: '-');
-    ticket.row([
-      PosColumn(
-          text: '${S.current.articles}',
-          width: 6,
-          styles: PosStyles(bold: true)),
-      PosColumn(
-          text: '${S.current.qte}', width: 2, styles: PosStyles(bold: true)),
-      PosColumn(
-          text: '${S.current.prix}', width: 2, styles: PosStyles(bold: true)),
-      PosColumn(
-          text: '${S.current.montant}',
-          width: 2,
-          styles: PosStyles(bold: true)),
-    ]);
-    _selectedItems.forEach((element) {
-      ticket.row([
-        (formatPrint.default_display == "Referance")
-            ? PosColumn(text: '${element.ref}', width: 6)
-            : PosColumn(text: '${element.designation}', width: 6),
-        PosColumn(text: '${element.selectedQuantite}', width: 2),
-        PosColumn(text: '${element.selectedPrice}', width: 2),
-        PosColumn(
-            text: '${element.selectedPrice * element.selectedQuantite}',
-            width: 2),
-      ]);
-    });
-    ticket.hr(ch: '-');
-    if (formatPrint.totalHt == 1) {
-      ticket.text("${S.current.total_ht} : ${_piece.total_ht}",
+    if(directionRtl){
+      var input = "${S.current.n} ${getPiecetype()}";
+      Uint8List encArabic = await CharsetConverter.encode("ISO-8859-6", "${_piece.num_piece}: ${input.split('').reversed.join()}");
+      ticket.textEncoded(
+          encArabic,
           styles: PosStyles(
+              codeTable: PosCodeTable.arabic,
               align: (formatPrint.default_format == PaperSize.mm80)
                   ? PosAlign.center
                   : PosAlign.left));
-    }
-    if (formatPrint.remise == 1) {
-      ticket.text("${S.current.remise} : ${_piece.remise} %",
-          styles: PosStyles(
-              align: (formatPrint.default_format == PaperSize.mm80)
-                  ? PosAlign.center
-                  : PosAlign.left));
-    }
-    if (formatPrint.netHt == 1) {
-      ticket.text("${S.current.net_ht} : ${_piece.net_ht}",
-          styles: PosStyles(
-              align: (formatPrint.default_format == PaperSize.mm80)
-                  ? PosAlign.center
-                  : PosAlign.left));
-    }
-    if (formatPrint.totalTva == 1) {
-      ticket.text("${S.current.total_tva} : ${_piece.total_tva}",
-          styles: PosStyles(
-              align: (formatPrint.default_format == PaperSize.mm80)
-                  ? PosAlign.center
-                  : PosAlign.left));
-    }
-    if (formatPrint.timbre == 1) {
-      ticket.text(
-          "${S.current.timbre} : ${(_piece.total_ttc == _piece.net_a_payer) ? _piece.timbre : 0.0}",
-          styles: PosStyles(
-              align: (formatPrint.default_format == PaperSize.mm80)
-                  ? PosAlign.center
-                  : PosAlign.left));
-    }
-    ticket.text("${S.current.regler} : ${_piece.regler}",
-        styles: PosStyles(
-            align: (formatPrint.default_format == PaperSize.mm80)
-                ? PosAlign.center
-                : PosAlign.left));
 
-    if (formatPrint.reste == 1) {
-      ticket.text("${S.current.reste} : ${_piece.reste}",
+      input = "${S.current.date}";
+      encArabic = await CharsetConverter.encode("ISO-8859-6", "${Helpers.dateToText(_piece.date)}: ${input.split('').reversed.join()}");
+      ticket.textEncoded(encArabic,
           styles: PosStyles(
+              codeTable: PosCodeTable.arabic,
               align: (formatPrint.default_format == PaperSize.mm80)
                   ? PosAlign.center
                   : PosAlign.left));
-    }
-    if (formatPrint.credit == 1) {
-      ticket.text("${S.current.credit} : ${_selectedClient.credit}",
+
+      input = "${S.current.rs}";
+      encArabic = await CharsetConverter.encode("ISO-8859-6", "${_piece.raisonSociale}: ${input.split('').reversed.join()}");
+      ticket.textEncoded(encArabic,
           styles: PosStyles(
+              codeTable: PosCodeTable.arabic,
               align: (formatPrint.default_format == PaperSize.mm80)
                   ? PosAlign.center
                   : PosAlign.left));
-    }
-    ticket.hr(ch: '=');
-    ticket.text("${S.current.net_payer} : ${_piece.net_a_payer}",
-        styles: PosStyles(
-          align: (formatPrint.default_format == PaperSize.mm80)
-              ? PosAlign.center
-              : PosAlign.left,
-          height: PosTextSize.size2,
-          width: PosTextSize.size2,
-        ));
-    ticket.hr(ch: '=');
-    ticket.feed(1);
-    ticket.text('***BY CIRTA IT***',
-        styles: PosStyles(
+
+      ticket.hr(ch: '-');
+      ticket.row([
+        PosColumn(
+            textEncoded: await CharsetConverter.encode("ISO-8859-6", "${S.current.articles.split('').reversed.join()}"),
+            width: 6,
+            styles: PosStyles(bold: true , codeTable: PosCodeTable.arabic,)),
+        PosColumn(
+            textEncoded: await CharsetConverter.encode("ISO-8859-6", "${S.current.qte.split('').reversed.join()}"),
+            width: 2,
+            styles: PosStyles(bold: true, codeTable: PosCodeTable.arabic,)),
+        PosColumn(
+            textEncoded: await CharsetConverter.encode("ISO-8859-6", "${S.current.prix.split('').reversed.join()}"),
+            width: 2,
+            styles: PosStyles(bold: true, codeTable: PosCodeTable.arabic,)),
+        PosColumn(
+            textEncoded: await CharsetConverter.encode("ISO-8859-6", "${S.current.montant.split('').reversed.join()}"),
+            width: 2,
+            styles: PosStyles(bold: true, codeTable: PosCodeTable.arabic,)),
+      ]);
+      for(int i=0 ; i<_selectedItems.length ; i++){
+        var element = _selectedItems[i];
+        ticket.row([
+          (formatPrint.default_display == "Referance")
+              ? PosColumn(textEncoded: await CharsetConverter.encode("ISO-8859-6", "${element.ref.substring(0,(element.ref.length<10 ? element.ref.length : 10 ))}"), width: 6)
+              : PosColumn(textEncoded: await CharsetConverter.encode("ISO-8859-6", "${element.designation.substring(0,(element.designation.length<10 ? element.designation.length : 10 ))}"), width: 6),
+          PosColumn(text: '${element.selectedQuantite.toStringAsFixed(2)}', width: 2),
+          PosColumn(text: '${element.selectedPrice.toStringAsFixed(2)}', width: 2),
+          PosColumn(
+              text: '${(element.selectedPrice * element.selectedQuantite).toStringAsFixed(2)}',
+              width: 2),
+        ]);
+      }
+      ticket.hr(ch:'-');
+      if (formatPrint.totalHt == 1) {
+        input = "${S.current.total_ht}";
+        encArabic = await CharsetConverter.encode("ISO-8859-6", "${_piece.total_ht.toStringAsFixed(2)}: ${input.split('').reversed.join()}");
+        ticket.textEncoded(encArabic,
+            styles: PosStyles(
+                codeTable: PosCodeTable.arabic,
+                align: (formatPrint.default_format == PaperSize.mm80)
+                    ? PosAlign.center
+                    : PosAlign.left));
+      }
+      if (formatPrint.remise == 1) {
+        input = "${S.current.remise}";
+        encArabic = await CharsetConverter.encode("ISO-8859-6", "(% ${_piece.remise}) ${((_piece.total_ht*_piece.remise)/100).toStringAsFixed(2)}: ${input.split('').reversed.join()}");
+        ticket.textEncoded(encArabic,
+            styles: PosStyles(
+                codeTable: PosCodeTable.arabic,
+                align: (formatPrint.default_format == PaperSize.mm80)
+                    ? PosAlign.center
+                    : PosAlign.left));
+      }
+      if (formatPrint.netHt == 1) {
+        input = "${S.current.net_ht}";
+        encArabic = await CharsetConverter.encode("ISO-8859-6", "${_piece.net_ht.toStringAsFixed(2)}: ${input.split('').reversed.join()}");
+        ticket.textEncoded(encArabic,
+            styles: PosStyles(
+                codeTable: PosCodeTable.arabic,
+                align: (formatPrint.default_format == PaperSize.mm80)
+                    ? PosAlign.center
+                    : PosAlign.left));
+      }
+      if (formatPrint.totalTva == 1) {
+        input = "${S.current.total_tva}";
+        encArabic = await CharsetConverter.encode("ISO-8859-6", "${_piece.total_tva.toStringAsFixed(2)}: ${input.split('').reversed.join()}");
+        ticket.textEncoded(encArabic,
+            styles: PosStyles(
+                codeTable: PosCodeTable.arabic,
+                align: (formatPrint.default_format == PaperSize.mm80)
+                    ? PosAlign.center
+                    : PosAlign.left));
+      }
+
+      input = "${S.current.total}";
+      encArabic = await CharsetConverter.encode("ISO-8859-6", "${_piece.total_ttc.toStringAsFixed(2)}: ${input.split('').reversed.join()}");
+      ticket.textEncoded(encArabic,
+          styles: PosStyles(
+              codeTable: PosCodeTable.arabic,
+              align: (formatPrint.default_format == PaperSize.mm80)
+                  ? PosAlign.center
+                  : PosAlign.left)
+      );
+
+      if (formatPrint.timbre == 1) {
+        input = "${S.current.timbre}";
+        encArabic = await CharsetConverter.encode("ISO-8859-6", "${(_piece.total_ttc < _piece.net_a_payer) ? _piece.timbre.toStringAsFixed(2) : 0.0}: ${input.split('').reversed.join()}");
+        ticket.textEncoded(
+            encArabic,
+            styles: PosStyles(
+                codeTable: PosCodeTable.arabic,
+                align: (formatPrint.default_format == PaperSize.mm80)
+                    ? PosAlign.center
+                    : PosAlign.left));
+      }
+
+      ticket.hr(ch: '=');
+      input = "${S.current.net_payer}";
+      encArabic = await CharsetConverter.encode("ISO-8859-6", "${_piece.net_a_payer.toStringAsFixed(2)}: ${input.split('').reversed.join()}");
+      ticket.textEncoded(encArabic,
+          styles: PosStyles(
+            codeTable: PosCodeTable.arabic,
             align: (formatPrint.default_format == PaperSize.mm80)
                 ? PosAlign.center
                 : PosAlign.left,
-            bold: true));
-    ticket.feed(1);
-    ticket.cut();
+            height: PosTextSize.size2,
+            width: PosTextSize.size2,
+          ));
+
+      ticket.hr(ch: '=');
+      ticket.row([
+        PosColumn(
+            textEncoded: await CharsetConverter.encode("ISO-8859-6", "${_piece.regler.toStringAsFixed(2)}: ${S.current.regler.split('').reversed.join()}"),
+            width: 6
+        ),
+        (formatPrint.reste == 1)?PosColumn(
+            textEncoded: await CharsetConverter.encode("ISO-8859-6", "${_piece.reste.toStringAsFixed(2)}: ${S.current.reste.split('').reversed.join()}"),
+            width: 6
+        ):null,
+      ]);
+      if (formatPrint.credit == 1) {
+        input = "${S.current.credit}";
+        encArabic = await CharsetConverter.encode("ISO-8859-6", "${_selectedClient.credit.toStringAsFixed(2)}: ${input.split('').reversed.join()}");
+        ticket.textEncoded(encArabic,
+            styles: PosStyles(
+                codeTable: PosCodeTable.arabic));
+      }
+
+      ticket.feed(1);
+      ticket.text('***BY CIRTA IT***',
+          styles: PosStyles(
+              align: (formatPrint.default_format == PaperSize.mm80)
+                  ? PosAlign.center
+                  : PosAlign.left,
+              bold: true));
+      ticket.feed(1);
+      ticket.cut();
+
+    }else{
+      ticket.text("${S.current.n} ${_piece.piece}: ${_piece.num_piece}",
+          styles: PosStyles(
+              align: (formatPrint.default_format == PaperSize.mm80)
+                  ? PosAlign.center
+                  : PosAlign.left));
+      ticket.text("${S.current.date} : ${Helpers.dateToText(_piece.date)}",
+          styles: PosStyles(
+              align: (formatPrint.default_format == PaperSize.mm80)
+                  ? PosAlign.center
+                  : PosAlign.left));
+      ticket.text("${S.current.rs} : ${_piece.raisonSociale}",
+          styles: PosStyles(
+              align: (formatPrint.default_format == PaperSize.mm80)
+                  ? PosAlign.center
+                  : PosAlign.left));
+      ticket.hr(ch: '-');
+      ticket.row([
+        PosColumn(
+            text: '${S.current.articles}',
+            width: 6,
+            styles: PosStyles(bold: true)),
+        PosColumn(
+            text: '${S.current.qte}', width: 2, styles: PosStyles(bold: true)),
+        PosColumn(
+            text: '${S.current.prix}', width: 2, styles: PosStyles(bold: true)),
+        PosColumn(
+            text: '${S.current.montant}',
+            width: 2,
+            styles: PosStyles(bold: true)),
+      ]);
+      _selectedItems.forEach((element) {
+        ticket.row([
+          (formatPrint.default_display == "Referance")
+              ? PosColumn(text: '${element.ref.substring(0,(element.ref.length<10 ? element.ref.length : 10))}', width: 6)
+              : PosColumn(text: '${element.designation.substring(0,(element.designation.length<10 ? element.designation.length : 10))}', width: 6),
+          PosColumn(text: '${element.selectedQuantite.toStringAsFixed(2)}', width: 2),
+          PosColumn(text: '${element.selectedPrice.toStringAsFixed(2)}', width: 2),
+          PosColumn(
+              text: '${(element.selectedPrice * element.selectedQuantite).toStringAsFixed(2)}',
+              width: 2),
+        ]);
+      });
+      ticket.hr(ch: '-');
+      if (formatPrint.totalHt == 1) {
+        ticket.text("${S.current.total_ht} : ${_piece.total_ht.toStringAsFixed(2)}",
+            styles: PosStyles(
+                align: (formatPrint.default_format == PaperSize.mm80)
+                    ? PosAlign.center
+                    : PosAlign.left));
+      }
+      if (formatPrint.remise == 1) {
+        ticket.text("${S.current.remise} : ${((_piece.total_ht * _piece.remise)/100).toStringAsFixed(2)} (${_piece.remise} %)",
+            styles: PosStyles(
+                align: (formatPrint.default_format == PaperSize.mm80)
+                    ? PosAlign.center
+                    : PosAlign.left));
+      }
+      if (formatPrint.netHt == 1) {
+        ticket.text("${S.current.net_ht} : ${_piece.net_ht.toStringAsFixed(2)}",
+            styles: PosStyles(
+                align: (formatPrint.default_format == PaperSize.mm80)
+                    ? PosAlign.center
+                    : PosAlign.left));
+      }
+      if (formatPrint.totalTva == 1) {
+        ticket.text("${S.current.total_tva} : ${_piece.total_tva.toStringAsFixed(2)}",
+            styles: PosStyles(
+                align: (formatPrint.default_format == PaperSize.mm80)
+                    ? PosAlign.center
+                    : PosAlign.left));
+      }
+
+      ticket.text("${S.current.total} : ${_piece.total_ttc.toStringAsFixed(2)}",
+          styles: PosStyles(
+              align: (formatPrint.default_format == PaperSize.mm80)
+                  ? PosAlign.center
+                  : PosAlign.left));
+
+      if (formatPrint.timbre == 1 ) {
+        ticket.text(
+            "${S.current.timbre} : ${(_piece.total_ttc < _piece.net_a_payer) ? _piece.timbre.toStringAsFixed(2) : 0.0}",
+            styles: PosStyles(
+                align: (formatPrint.default_format == PaperSize.mm80)
+                    ? PosAlign.center
+                    : PosAlign.left));
+      }
+
+      ticket.hr(ch: '=');
+      ticket.text("${S.current.net_payer} : ${_piece.net_a_payer.toStringAsFixed(2)}",
+          styles: PosStyles(
+            align: (formatPrint.default_format == PaperSize.mm80)
+                ? PosAlign.center
+                : PosAlign.left,
+            height: PosTextSize.size2,
+            width: PosTextSize.size2,
+          ));
+      ticket.hr(ch: '=');
+
+      ticket.row([
+        PosColumn(
+            text: "${S.current.regler} : ${_piece.regler.toStringAsFixed(2)}",
+            width: 6
+        ),
+        (formatPrint.reste == 1)? PosColumn(
+            text: "${S.current.reste} : ${_piece.reste.toStringAsFixed(2)}",
+            width: 6
+        ):null,
+      ]);
+      if (formatPrint.credit == 1) {
+        ticket.text("${S.current.credit} : ${_selectedClient.credit.toStringAsFixed(2)}");
+      }
+      ticket.feed(1);
+      ticket.text('***BY CIRTA IT***',
+          styles: PosStyles(
+              align: (formatPrint.default_format == PaperSize.mm80)
+                  ? PosAlign.center
+                  : PosAlign.left,
+              bold: true));
+      ticket.feed(1);
+      ticket.cut();
+    }
+
 
     return ticket;
   }
@@ -1859,17 +2032,6 @@ class _AddPiecePageState extends State<AddPiecePage>
         textDirection:
             (directionRtl) ? pw.TextDirection.rtl : pw.TextDirection.ltr,
         build: (context) => [
-          pw.Column(
-              crossAxisAlignment: pw.CrossAxisAlignment.center,
-              children: [
-                pw.Center(
-                    child: pw.Text("${S.current.telephone}\t  778965426",
-                        style: pw.TextStyle(font: ttf))),
-                pw.Center(
-                    child: pw.Text("${S.current.mail}\t hghkd@hfhd.com",
-                        style: pw.TextStyle(font: ttf)))
-              ]),
-          pw.SizedBox(height: 10),
           pw.Row(children: [
             pw.Expanded(
                 flex: 6,
@@ -1927,9 +2089,9 @@ class _AddPiecePageState extends State<AddPiecePage>
               pw.TableRow(children: [
                 pw.Text("${e.ref}",style: pw.TextStyle(font: ttf)),
                 pw.Text("${e.designation}",style: pw.TextStyle(font: ttf)),
-                pw.Text("${e.selectedQuantite}"),
-                pw.Text("${e.selectedPrice}"),
-                pw.Text("${e.selectedPrice * e.selectedQuantite}"),
+                pw.Text("${e.selectedQuantite.toStringAsFixed(2)}"),
+                pw.Text("${e.selectedPrice.toStringAsFixed(2)}"),
+                pw.Text("${(e.selectedPrice * e.selectedQuantite).toStringAsFixed(2)}"),
               ]),
           ]),
           pw.SizedBox(height: 10),
@@ -1940,16 +2102,16 @@ class _AddPiecePageState extends State<AddPiecePage>
                 flex: 6,
                 child: pw.Column(children: [
                   pw.Text(
-                      "${S.current.regler}\t ${_piece.regler} ${S.current.da}",
+                      "${S.current.regler}\t ${_piece.regler.toStringAsFixed(2)} ${S.current.da}",
                       style: pw.TextStyle(font: ttf)),
                   (formatPrint.reste == 1)
                       ? pw.Text(
-                          "${S.current.reste}\t ${_piece.reste} ${S.current.da}",
+                          "${S.current.reste}\t ${_piece.reste.toStringAsFixed(2)} ${S.current.da}",
                           style: pw.TextStyle(font: ttf))
                       : pw.SizedBox(),
                   (formatPrint.credit == 1)
                       ? pw.Text(
-                          "${S.current.credit}\t ${_selectedClient.credit} ${S.current.da}",
+                          "${S.current.credit}\t ${_selectedClient.credit.toStringAsFixed(2)} ${S.current.da}",
                           style: pw.TextStyle(font: ttf))
                       : pw.SizedBox(),
                   pw.Divider(height: 2),
@@ -1969,32 +2131,35 @@ class _AddPiecePageState extends State<AddPiecePage>
                     children: [
                       (formatPrint.totalHt == 1)
                           ? pw.Text(
-                              "${S.current.total_ht}\t  ${_piece.total_ht}\t ${S.current.da}",
+                              "${S.current.total_ht}\t  ${_piece.total_ht.toStringAsFixed(2)}\t ${S.current.da}",
                               style: pw.TextStyle(font: ttf))
                           : pw.SizedBox(),
                       (formatPrint.remise == 1)
                           ? pw.Text(
-                              "${S.current.remise}\t  ${_piece.remise}\t  %",
+                              "${S.current.remise}\t  ${((_piece.total_ht*_piece.remise)/100).toStringAsFixed(2)}  (${_piece.remise}\t  %)\t ${S.current.da}",
                               style: pw.TextStyle(font: ttf))
                           : pw.SizedBox(),
                       (formatPrint.netHt == 1)
                           ? pw.Text(
-                              "${S.current.net_ht}\t  ${_piece.net_ht}\t  ${S.current.da}",
+                              "${S.current.net_ht}\t  ${_piece.net_ht.toStringAsFixed(2)}\t  ${S.current.da}",
                               style: pw.TextStyle(font: ttf))
                           : pw.SizedBox(),
-                      pw.Divider(height: 2),
                       (formatPrint.totalTva == 1)
                           ? pw.Text(
-                              "${S.current.total_tva}\t  ${_piece.total_tva}\t  ${S.current.da}",
-                              style: pw.TextStyle(font: ttf))
-                          : pw.SizedBox(),
-                      (formatPrint.timbre == 1)
-                          ? pw.Text(
-                              "${S.current.timbre}\t  ${(_piece.total_ttc == _piece.net_a_payer) ? _piece.timbre : 0.0}\t  ${S.current.da}",
+                              "${S.current.total_tva}\t  ${_piece.total_tva.toStringAsFixed(2)}\t  ${S.current.da}",
                               style: pw.TextStyle(font: ttf))
                           : pw.SizedBox(),
                       pw.Text(
-                          "${S.current.net_payer}\t  ${_piece.net_a_payer}\t  ${S.current.da}",
+                          "${S.current.total}\t  ${_piece.total_ttc.toStringAsFixed(2)}\t  ${S.current.da}",
+                          style: pw.TextStyle(font: ttf)),
+                      pw.Divider(height: 2),
+                      (formatPrint.timbre == 1)
+                          ? pw.Text(
+                              "${S.current.timbre}\t  ${(_piece.total_ttc < _piece.net_a_payer) ? _piece.timbre.toStringAsFixed(2) : 0.0}\t  ${S.current.da}",
+                              style: pw.TextStyle(font: ttf))
+                          : pw.SizedBox(),
+                      pw.Text(
+                          "${S.current.net_payer}\t  ${_piece.net_a_payer.toStringAsFixed(2)}\t  ${S.current.da}",
                           style: pw.TextStyle(font: ttf)),
                       pw.Divider(height: 2),
                     ])),
@@ -2005,5 +2170,43 @@ class _AddPiecePageState extends State<AddPiecePage>
     );
 
     return doc;
+  }
+
+  String getPiecetype(){
+    switch(_piece.piece){
+      case "FP":
+        return S.current.fp;
+        break ;
+      case "CC":
+        return S.current.cc;
+        break ;
+      case "BL":
+        return S.current.bl;
+        break ;
+      case "FC":
+        return S.current.fc;
+        break ;
+      case "RC":
+        return S.current.rc;
+        break ;
+      case "AC":
+        return S.current.ac;
+        break ;
+      case "BC":
+        return S.current.bc;
+        break ;
+      case "BR":
+        return S.current.br;
+        break ;
+      case "FF":
+        return S.current.ff;
+        break ;
+      case "RF":
+        return S.current.rf;
+        break ;
+      case "AF":
+        return S.current.af;
+        break ;
+    }
   }
 }

@@ -31,6 +31,13 @@ class Statics {
     S.current.ev_sat
   ];
   static List<String> languages = ["English (ENG)", "French (FR)", "Arabic (AR)"];
+  static List<String> rapporItems = [
+    S.current.vente,
+    S.current.achat,
+    "Stock",
+    S.current.cl_four,
+    S.current.generale
+  ];
 }
 
 class Profiles {

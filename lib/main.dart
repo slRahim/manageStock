@@ -1,4 +1,7 @@
 
+import 'dart:async';
+
+import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
@@ -18,13 +21,22 @@ import 'Helpers/route_generator.dart';
 import 'models/MyParams.dart';
 
 
-void main() => runApp(
-    Phoenix(
-        child: PushNotificationsManager (
-            child: MyApp()
+void main() async{
+  Crashlytics.instance.enableInDevMode = true;
+  FlutterError.onError = Crashlytics.instance.recordFlutterError;
+
+  runZoned(() {
+    runApp(
+        Phoenix(
+            child: PushNotificationsManager (
+                child: MyApp()
+            )
         )
-    )
-);
+    );
+  }, onError: Crashlytics.instance.recordError);
+
+
+}
 
 
 class MyApp extends StatefulWidget {
