@@ -582,7 +582,6 @@ class QueryCtr {
 
   //*****************************************************************************************************************************************************************
   //************************************************************************special statistique**********************************************************************
-  // ok
   Future<Map<int , dynamic>> statIndiceFinanciere() async{
     var dbClient = await _databaseHelper.db;
     Map<int , dynamic> result = new Map<int , dynamic>();
@@ -609,7 +608,6 @@ class QueryCtr {
     return result ;
   }
 
-  //ok
   Future<List<CompteTresorie>> statSoldeCompte()async{
      var dbClient = await _databaseHelper.db;
      var res = await dbClient.query(DbTablesNames.compteTresorie);
@@ -623,7 +621,6 @@ class QueryCtr {
      return list ;
   }
 
-  //ok
   Future statCharge() async{
     var dbClient = await _databaseHelper.db;
     String query = "Select Tresories.Charge_id ,ChargeTresorie.* ,Sum(Montant) From Tresories JOIN ChargeTresorie ON Tresories.Charge_id = ChargeTresorie.id "+
@@ -634,7 +631,6 @@ class QueryCtr {
     return res ;
   }
 
-  //ok
   Future statVenteArticle()async{
     var dbClient = await _databaseHelper.db;
     String query = "Select Journaux.Article_id ,Articles.Ref, Articles.Designation ,Articles.BytesImageString, Sum(Journaux.Qte*Journaux.Net_ht) From Journaux JOIN Articles ON Journaux.Article_id = Articles.id "+
@@ -645,7 +641,6 @@ class QueryCtr {
     return(res);
   }
 
-  //ok
   Future<List> statVenteClient() async{
     var dbClient = await _databaseHelper.db;
     String query="Select * From Tiers Where Clientfour = 0 ORDER BY Chiffre_affaires DESC LIMIT 5 ;";
@@ -702,5 +697,200 @@ class QueryCtr {
     return list ;
   }
 
+//**********************************************************************************************************************************************************************************
+//************************************************************************special statistique****************************************************************************************
+  Future rapportVente(int rapport , DateTime start , DateTime end ) async {
+    var dbClient = await _databaseHelper.db;
+     String query="" ;
+     int dateStart = start.millisecondsSinceEpoch ;
+     int dateEnd = end.millisecondsSinceEpoch ;
+     switch(rapport){
+       case 0 :
+         query = """
+         Select Articles.Ref , Articles.Designation , Sum(Journaux.Qte) as qte , 
+                Sum(Journaux.Marge*Journaux.Qte)/Sum(Journaux.Qte) as Marge_u ,
+                (Sum(Journaux.Marge*Journaux.Qte)/Sum(Journaux.Qte)*Sum(Journaux.Qte)) as Marge_total
+         From Journaux 
+         Join Articles ON Journaux.Article_id = Articles.id 
+         Where Journaux.Mov = 1 AND (Piece_type like 'BL' OR Piece_type like 'FC') AND  Journaux.Date Between ${dateStart} AND ${dateEnd}
+         Group By Articles.Ref 
+         order by Articles.Ref
+         """;
+         break;
+       case 1 :
+         query = """
+         Select Articles.Ref , Articles.Designation , Sum(Journaux.Qte) as qte , 
+                Sum(Journaux.Prix_ht*Journaux.Qte)/Sum(Journaux.Qte) as Prix_ht,
+                (Sum(Journaux.Prix_ht*Journaux.Qte)/Sum(Journaux.Qte)*Sum(Journaux.Qte)) as Montant
+         From Journaux 
+         Join Articles ON Journaux.Article_id = Articles.id 
+         Where Journaux.Mov = 1 AND Piece_type like 'CC'  AND  Journaux.Date Between ${dateStart} AND ${dateEnd}
+         Group By Articles.Ref 
+         order by Articles.Ref
+         """;
+         break;
+       case 2 :
+         query = """
+         Select Journaux.Piece_type ,Pieces.Num_piece ,Pieces.Date ,Articles.Ref ,Articles.Designation ,Tiers.RaisonSociale as Client ,
+                Journaux.Qte ,Journaux.Prix_ht , (Journaux.Prix_ht * Journaux.Qte) as Montant
+         From Journaux 
+         Left Join Pieces ON Journaux.Piece_id = Pieces.id 
+         Left Join Tiers ON Pieces.Tier_id = Tiers.id 
+         Left Join Articles ON Journaux.Article_id = Articles.id 
+         Where Journaux.Mov = 1 AND (Piece_type like 'BL' OR Piece_type like 'FC')  AND  Journaux.Date Between ${dateStart} AND ${dateEnd}
+         order by Pieces.Num_piece
+         """;
+         break;
+       case 3 :
+         query = """
+         Select Journaux.Piece_type ,Pieces.Num_piece ,Pieces.Date ,Articles.Ref ,Articles.Designation ,Tiers.RaisonSociale as Client ,
+                Journaux.Qte ,Journaux.Prix_ht , (Journaux.Prix_ht * Journaux.Qte) as Montant
+         From Journaux 
+         Left Join Pieces ON Journaux.Piece_id = Pieces.id 
+         Left Join Tiers ON Pieces.Tier_id = Tiers.id 
+         Left Join Articles ON Journaux.Article_id = Articles.id 
+         Where Journaux.Mov = 1 AND Piece_type like 'CC'   AND  Journaux.Date Between ${dateStart} AND ${dateEnd}
+         order by Pieces.Num_piece
+         """;
+         break;
+     }
+
+     var res = await dbClient.rawQuery(query);
+     return res ;
+  }
+
+  Future rapportAchat(int rapport , DateTime start , DateTime end ) async {
+    var dbClient = await _databaseHelper.db;
+    String query="" ;
+    int dateStart = start.millisecondsSinceEpoch ;
+    int dateEnd = end.millisecondsSinceEpoch ;
+    switch(rapport){
+      case 0 :
+        query = """
+         Select Articles.Ref , Articles.Designation , Sum(Journaux.Qte) as qte , 
+                Sum(Journaux.Marge*Journaux.Qte)/Sum(Journaux.Qte) as Marge_u ,
+                (Sum(Journaux.Marge*Journaux.Qte)/Sum(Journaux.Qte)*Sum(Journaux.Qte)) as Marge_total
+         From Journaux 
+         Join Articles ON Journaux.Article_id = Articles.id 
+         Where Journaux.Mov = 1 AND (Piece_type like 'BR' OR Piece_type like 'FF') AND  Journaux.Date Between ${dateStart} AND ${dateEnd}
+         Group By Articles.Ref 
+         order by Articles.Ref
+         """;
+        break;
+      case 1 :
+        query = """
+         Select Articles.Ref , Articles.Designation , Sum(Journaux.Qte) as qte , 
+                Sum(Journaux.Prix_ht*Journaux.Qte)/Sum(Journaux.Qte) as Prix_ht,
+                (Sum(Journaux.Prix_ht*Journaux.Qte)/Sum(Journaux.Qte)*Sum(Journaux.Qte)) as Montant
+         From Journaux 
+         Join Articles ON Journaux.Article_id = Articles.id 
+         Where Journaux.Mov = 0 AND Piece_type like 'BC'  AND  Journaux.Date Between ${dateStart} AND ${dateEnd}
+         Group By Articles.Ref 
+         order by Articles.Ref
+         """;
+        break;
+      case 2 :
+        query = """
+         Select Journaux.Piece_type ,Pieces.Num_piece ,Pieces.Date ,Articles.Ref ,Articles.Designation ,Tiers.RaisonSociale as Client ,
+                Journaux.Qte ,Journaux.Prix_ht , (Journaux.Prix_ht * Journaux.Qte) as Montant
+         From Journaux 
+         Left Join Pieces ON Journaux.Piece_id = Pieces.id 
+         Left Join Tiers ON Pieces.Tier_id = Tiers.id 
+         Left Join Articles ON Journaux.Article_id = Articles.id 
+         Where Journaux.Mov = 1 AND (Piece_type like 'BR' OR Piece_type like 'FF')  AND  Journaux.Date Between ${dateStart} AND ${dateEnd}
+         order by Pieces.Num_piece
+         """;
+        break;
+      case 3 :
+        query = """
+         Select Journaux.Piece_type ,Pieces.Num_piece ,Pieces.Date ,Articles.Ref ,Articles.Designation ,Tiers.RaisonSociale as Client ,
+                Journaux.Qte ,Journaux.Prix_ht , (Journaux.Prix_ht * Journaux.Qte) as Montant
+         From Journaux 
+         Left Join Pieces ON Journaux.Piece_id = Pieces.id 
+         Left Join Tiers ON Pieces.Tier_id = Tiers.id 
+         Left Join Articles ON Journaux.Article_id = Articles.id 
+         Where Journaux.Mov = 0 AND Piece_type like 'BC'   AND  Journaux.Date Between ${dateStart} AND ${dateEnd}
+         order by Pieces.Num_piece
+         """;
+        break;
+    }
+
+    var res = await dbClient.rawQuery(query);
+    return res ;
+  }
+
+  Future rapportStock(int rapport) async {
+    var dbClient = await _databaseHelper.db;
+    String query="" ;
+
+    switch(rapport){
+      case 0 :
+        query = """
+        Select Ref ,Designation , Qte , PMP , (Qte*PMP) as Valeur_Stock
+        From Articles where Qte > 0
+        """;
+        break;
+      case 1 :
+        query = """
+        Select Ref ,Designation , Qte , Qte_Min, PMP , (Qte*PMP) as Valeur_Stock
+        From Articles where Qte < 1 OR Qte < Qte_Min
+        """;
+        break;
+      case 2 :
+        query = """
+        Select Ref ,Designation , Qte , PrixVente1, (Qte*PrixVente1) as chifre_affaire
+        From Articles where Qte > 0
+        """;
+        break;
+    }
+
+    var res = await dbClient.rawQuery(query);
+    return res ;
+  }
+
+  Future rapportTier(int rapport) async {
+    var dbClient = await _databaseHelper.db;
+    String query="" ;
+
+    switch(rapport){
+      case 0 :
+        query = """
+        Select RaisonSociale , Mobile , Chiffre_affaires , Regler , Credit 
+        From Tiers where Clientfour = 0 
+        """;
+        break;
+      case 1 :
+        query = """
+        Select RaisonSociale , Mobile , Chiffre_affaires , Regler , Credit 
+        From Tiers where Clientfour = 2 
+        """;
+        break;
+    }
+
+    var res = await dbClient.rawQuery(query);
+    return res ;
+  }
+
+  Future rapportGeneral(int rapport , DateTime start , DateTime end ) async {
+    var dbClient = await _databaseHelper.db;
+    String query="" ;
+    int dateStart = start.millisecondsSinceEpoch ;
+    int dateEnd = end.millisecondsSinceEpoch ;
+    switch(rapport){
+      case 0 :
+        query = """
+        """;
+        break;
+      case 1 :
+        query = "";
+        break;
+      case 2 :
+        query = "";
+        break;
+    }
+
+    var res = await dbClient.rawQuery(query);
+    return res ;
+  }
 
 }
