@@ -699,6 +699,7 @@ class QueryCtr {
 
 //**********************************************************************************************************************************************************************************
 //************************************************************************special statistique****************************************************************************************
+   //ok
   Future rapportVente(int rapport , DateTime start , DateTime end ) async {
     var dbClient = await _databaseHelper.db;
      String query="" ;
@@ -759,6 +760,7 @@ class QueryCtr {
      return res ;
   }
 
+  //ok
   Future rapportAchat(int rapport , DateTime start , DateTime end ) async {
     var dbClient = await _databaseHelper.db;
     String query="" ;
@@ -819,6 +821,7 @@ class QueryCtr {
     return res ;
   }
 
+  // ok
   Future rapportStock(int rapport) async {
     var dbClient = await _databaseHelper.db;
     String query="" ;
@@ -848,6 +851,7 @@ class QueryCtr {
     return res ;
   }
 
+  // ok
   Future rapportTier(int rapport) async {
     var dbClient = await _databaseHelper.db;
     String query="" ;
@@ -871,6 +875,7 @@ class QueryCtr {
     return res ;
   }
 
+  // ok
   Future rapportGeneral(int rapport , DateTime start , DateTime end ) async {
     var dbClient = await _databaseHelper.db;
     String query="" ;
@@ -879,13 +884,105 @@ class QueryCtr {
     switch(rapport){
       case 0 :
         query = """
+        Select date , Sum(vente) as vente , Sum(Reg_cl) as Reg_cl , Sum(Creance) as Creance , 
+              Sum(Achat) as Achat , Sum(Reg_four) as Reg_four , Sum(dette)  as dette , 
+              Sum(charge) as charge ,Sum(marge) as marge ,(Sum(marge)-Sum(charge)) as net
+        from (
+            Select  strftime('%d-%m-%Y', datetime(Date/1000, 'unixepoch')) date , Sum(Net_a_payer) as vente , Sum(Regler) as Reg_cl ,Sum(Reste) as Creance ,
+                   0 as Achat , 0 as Reg_four , 0 as dette , 
+                   0 as charge , Sum(Marge) as marge
+            from Pieces 
+            where Pieces.Mov = 1 And (Pieces.Piece Like 'BL' Or  Pieces.Piece Like 'FC') And Date Between ${dateStart} And ${dateEnd}
+            Group by Date
+            
+            Union
+            
+            Select  strftime('%d-%m-%Y', datetime(Date/1000, 'unixepoch')) date , 0 as vente ,0 as Reg_cl ,0 as Creance  ,
+                    Sum(Net_a_payer) as achat , Sum(Regler) as Reg_four ,Sum(Reste) as dette ,
+                    0 as charge , 0 as marge
+            from Pieces
+            where Pieces.Mov = 1 And (Pieces.Piece Like 'BR' Or  Pieces.Piece Like 'FF') And Date Between ${dateStart} And ${dateEnd}
+            Group by Date 
+            
+            Union
+            
+            Select  strftime('%d-%m-%Y', datetime(Date/1000, 'unixepoch')) date , 0 as vente ,0 as Reg_cl ,0 as Creance  ,
+                    0 achat , 0 as Reg_four ,0 as dette , 
+                    Sum(Tresories.Montant) as charge , 0 as marge
+            from Tresories
+            where Mov = 1 And Categorie_id = 5 And Date Between ${dateStart} And ${dateEnd}
+            Group by Date ) a 
+            
+        Group by date
         """;
         break;
       case 1 :
-        query = "";
+        query = """
+        Select date , Sum(vente) as vente , Sum(Reg_cl) as Reg_cl , Sum(Creance) as Creance , 
+              Sum(Achat) as Achat , Sum(Reg_four) as Reg_four , Sum(dette)  as dette , 
+              Sum(charge) as charge ,Sum(marge) as marge ,(Sum(marge)-Sum(charge)) as net
+        from (
+            Select  strftime('%m-%Y', datetime(Date/1000, 'unixepoch')) date , Sum(Net_a_payer) as vente , Sum(Regler) as Reg_cl ,Sum(Reste) as Creance ,
+                   0 as Achat , 0 as Reg_four , 0 as dette , 
+                   0 as charge , Sum(Marge) as marge
+            from Pieces 
+            where Pieces.Mov = 1 And (Pieces.Piece Like 'BL' Or  Pieces.Piece Like 'FC') And Date Between ${dateStart} And ${dateEnd}
+            Group by Date
+            
+            Union
+            
+            Select  strftime('%m-%Y', datetime(Date/1000, 'unixepoch')) date , 0 as vente ,0 as Reg_cl ,0 as Creance  ,
+                    Sum(Net_a_payer) as achat , Sum(Regler) as Reg_four ,Sum(Reste) as dette ,
+                    0 as charge , 0 as marge
+            from Pieces
+            where Pieces.Mov = 1 And (Pieces.Piece Like 'BR' Or  Pieces.Piece Like 'FF') And Date Between ${dateStart} And ${dateEnd}
+            Group by Date 
+            
+            Union
+            
+            Select  strftime('%m-%Y', datetime(Date/1000, 'unixepoch')) date , 0 as vente ,0 as Reg_cl ,0 as Creance  ,
+                    0 achat , 0 as Reg_four ,0 as dette , 
+                    Sum(Tresories.Montant) as charge , 0 as marge
+            from Tresories
+            where Mov = 1 And Categorie_id = 5 And Date Between ${dateStart} And ${dateEnd}
+            Group by Date ) a 
+            
+        Group by date
+        """;
         break;
       case 2 :
-        query = "";
+        query = """
+        Select date , Sum(vente) as vente , Sum(Reg_cl) as Reg_cl , Sum(Creance) as Creance , 
+              Sum(Achat) as Achat , Sum(Reg_four) as Reg_four , Sum(dette)  as dette , 
+              Sum(charge) as charge ,Sum(marge) as marge ,(Sum(marge)-Sum(charge)) as net
+        from (
+            Select  strftime('%Y', datetime(Date/1000, 'unixepoch')) date , Sum(Net_a_payer) as vente , Sum(Regler) as Reg_cl ,Sum(Reste) as Creance ,
+                   0 as Achat , 0 as Reg_four , 0 as dette , 
+                   0 as charge , Sum(Marge) as marge
+            from Pieces 
+            where Pieces.Mov = 1 And (Pieces.Piece Like 'BL' Or  Pieces.Piece Like 'FC') 
+            Group by Date
+            
+            Union
+            
+            Select  strftime('%Y', datetime(Date/1000, 'unixepoch')) date , 0 as vente ,0 as Reg_cl ,0 as Creance  ,
+                    Sum(Net_a_payer) as achat , Sum(Regler) as Reg_four ,Sum(Reste) as dette ,
+                    0 as charge , 0 as marge
+            from Pieces
+            where Pieces.Mov = 1 And (Pieces.Piece Like 'BR' Or  Pieces.Piece Like 'FF') 
+            Group by Date 
+            
+            Union
+            
+            Select  strftime('%Y', datetime(Date/1000, 'unixepoch')) date , 0 as vente ,0 as Reg_cl ,0 as Creance  ,
+                    0 achat , 0 as Reg_four ,0 as dette , 
+                    Sum(Tresories.Montant) as charge , 0 as marge
+            from Tresories
+            where Mov = 1 And Categorie_id = 5 
+            Group by Date ) a 
+            
+        Group by date
+        """;
         break;
     }
 

@@ -100,6 +100,7 @@ dependencies:
   pdf: ^2.0.0
 
   charset_converter:
+  advance_pdf_viewer:
 
   flutter_localizations:
     sdk: flutter

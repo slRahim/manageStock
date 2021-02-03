@@ -24,6 +24,7 @@ import 'package:gestmob/Widgets/article_list_item.dart';
 import 'package:gestmob/Widgets/total_devis.dart';
 import 'package:gestmob/generated/l10n.dart';
 import 'package:gestmob/models/Article.dart';
+import 'package:gestmob/models/DefaultPrinter.dart';
 import 'package:gestmob/models/FormatPiece.dart';
 import 'package:gestmob/models/FormatPrint.dart';
 import 'package:gestmob/models/Journaux.dart';
@@ -45,6 +46,7 @@ import 'package:gestmob/Widgets/utils.dart' as utils;
 import 'package:map_launcher/map_launcher.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:esc_pos_utils/esc_pos_utils.dart';
+import 'package:path_provider/path_provider.dart';
 import 'ArticlesFragment.dart';
 
 import 'package:pdf/pdf.dart';
@@ -114,6 +116,7 @@ class _AddPiecePageState extends State<AddPiecePage>
   MyParams _myParams;
 
   bool directionRtl = false;
+  DefaultPrinter defaultPrinter = new DefaultPrinter.init();
 
   void initState() {
     super.initState();
@@ -499,17 +502,18 @@ class _AddPiecePageState extends State<AddPiecePage>
                             });
                           }
                         : () async {
-                            await showDialog(
-                                context: context,
-                                builder: (BuildContext context) {
-                                  return previewItem(_piece);
-                                });
-                            if (_ticket != null) {
-                              await printItem(_ticket);
-                              setState(() {
-                                _ticket = null;
-                              });
-                            }
+                            AwesomeDialog(
+                              context: context,
+                              dialogType: DialogType.QUESTION,
+                              animType: AnimType.BOTTOMSLIDE,
+                              body: printChoicesDialog(),
+                              closeIcon: Icon(
+                                Icons.remove_circle_outline_sharp,
+                                color: Colors.red,
+                                size: 26,
+                              ),
+                              showCloseIcon: true,
+                            )..show();
                           }),
                 (editMode &&
                         (_piece.piece == PieceType.avoirClient ||
@@ -960,6 +964,141 @@ class _AddPiecePageState extends State<AddPiecePage>
     ]);
   }
 
+  //dialog de save
+  Widget printChoicesDialog() {
+    return StatefulBuilder(builder: (context, StateSetter setState) {
+      return Builder(
+          builder: (context) => SingleChildScrollView(
+            child: Padding(
+              padding: const EdgeInsets.all(15),
+              child: Wrap(spacing: 13, runSpacing: 13, children: [
+                Center(
+                    child: Padding(
+                      padding: const EdgeInsets.only(bottom: 20),
+                      child: Text(
+                        "${S.current.choisir_action}: ",
+                        style: TextStyle(
+                          fontSize: 22,
+                          fontWeight: FontWeight.w400,
+                        ),
+                      ),
+                    )),
+                SizedBox(
+                  width: 320.0,
+                  child: Padding(
+                    padding: EdgeInsetsDirectional.only(end: 0, start: 0),
+                    child: RaisedButton(
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(18.0),
+                      ),
+                      onPressed: () async {
+                        Navigator.pop(context);
+                        await showDialog(
+                            context: context,
+                            builder: (BuildContext context) {
+                              return previewItem(_piece , 80 , null);
+                            });
+                        if (_ticket != null) {
+                          await printItem(_ticket);
+                        }
+                      },
+                      child: Text(
+                        S.current.format_80,
+                        style: TextStyle(color: Colors.white, fontSize: 16),
+                      ),
+                      color: Colors.blueAccent,
+                    ),
+                  ),
+                ),
+                SizedBox(
+                  width: 320.0,
+                  child: Padding(
+                    padding: EdgeInsetsDirectional.only(end: 0, start: 0),
+                    child: RaisedButton(
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(18.0),
+                      ),
+                      onPressed: () async {
+                        Navigator.pop(context);
+                        await showDialog(
+                            context: context,
+                            builder: (BuildContext context) {
+                              return previewItem(_piece , 58 ,null);
+                            });
+                        if (_ticket != null) {
+                          await printItem(_ticket);
+                          setState(() {
+                            _ticket = null;
+                          });
+                        }
+                      },
+                      child: Text(
+                          S.current.format_58,
+                        style: TextStyle(color: Colors.white, fontSize: 16),
+                      ),
+                      color: Colors.green,
+                    ),
+                  ),
+                ),
+                SizedBox(
+                  width: 320.0,
+                  child: Padding(
+                    padding: EdgeInsetsDirectional.only(end: 0, start: 0),
+                    child: RaisedButton(
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(18.0),
+                      ),
+                      onPressed: () async {
+                        Navigator.pop(context);
+                        await _saveLanPrinter();
+                        var formatPrint = await _queryCtr.getFormatPrint();
+                        final doc = await _makePdfDocument(formatPrint);
+                        await Printing.layoutPdf(
+                            onLayout: (PdfPageFormat format) async => doc.save());
+                      },
+                      child: Text(
+                        "Lan Printer",
+                        style: TextStyle(color: Colors.white, fontSize: 16),
+                      ),
+                      color: Colors.deepOrange,
+                    ),
+                  ),
+                ),
+
+                SizedBox(
+                  width: 320.0,
+                  child: Padding(
+                    padding: EdgeInsetsDirectional.only(end: 0, start: 0),
+                    child: RaisedButton(
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(18.0),
+                      ),
+                      onPressed: () async {
+                        Navigator.pop(context);
+                        var formatPrint = await _queryCtr.getFormatPrint();
+                        final doc = await _makePdfDocument(formatPrint);
+                        await showDialog(
+                            context: context,
+                            builder: (BuildContext context) {
+                              return previewItem(_piece , 45, doc);
+                            });
+
+                      },
+                      child: Text(
+                        "Export as Pdf",
+                        style:
+                        TextStyle(color: Colors.white, fontSize: 16),
+                      ),
+                      color: Colors.red,
+                    ),
+                  ),
+                ),
+              ]),
+            ),
+          ));
+    });
+  }
+
   //remove item from piece in update mode
   void removeItemfromPiece(selectedItem) {
     if (selectedItem != null) {
@@ -1103,17 +1242,20 @@ class _AddPiecePageState extends State<AddPiecePage>
                             int mov = getMovForPiece();
                             await saveItem(mov);
                             Navigator.pop(context);
-                            await showDialog(
-                                context: context,
-                                builder: (BuildContext context) {
-                                  return previewItem(_piece);
-                                });
-                            if (_ticket != null) {
-                              await printItem(_ticket);
-                              setState(() {
-                                _ticket = null;
-                              });
-                            }
+                            AwesomeDialog(
+                              context: context,
+                              dialogType: DialogType.QUESTION,
+                              animType: AnimType.BOTTOMSLIDE,
+
+                              body: printChoicesDialog(),
+                              closeIcon: Icon(
+                                Icons.remove_circle_outline_sharp,
+                                color: Colors.red,
+                                size: 26,
+                              ),
+                              showCloseIcon: true,
+                            )..show();
+
                           },
                           child: Text(
                             S.current.save_imp_btn,
@@ -1204,7 +1346,7 @@ class _AddPiecePageState extends State<AddPiecePage>
     saveItem(2);
   }
 
-  previewItem(item) {
+  previewItem(item , int format , doc) {
     return PreviewPiece(
       piece: item,
       articles: _selectedItems,
@@ -1214,6 +1356,8 @@ class _AddPiecePageState extends State<AddPiecePage>
           _ticket = ticket;
         });
       },
+      format: format,
+      pdfDoc : doc
     );
   }
 
@@ -1223,7 +1367,11 @@ class _AddPiecePageState extends State<AddPiecePage>
       builder: (BuildContext context) {
         return Print(ticket);
       },
-    );
+    ).then((value) {
+      setState(() {
+        _ticket = null ;
+      });
+    });
   }
 
   //**********************************************************************************************************************************************
@@ -1682,7 +1830,6 @@ class _AddPiecePageState extends State<AddPiecePage>
   //****************************************quik print****************************************************************************************
   quikPrintTicket() async {
     var defaultPrinter = await _queryCtr.getPrinter();
-
     if (defaultPrinter != null) {
       if (defaultPrinter.adress == "192.168.1.1" && defaultPrinter.type == 0) {
         var formatPrint = await _queryCtr.getFormatPrint();
@@ -1790,7 +1937,7 @@ class _AddPiecePageState extends State<AddPiecePage>
         ]);
       }
       ticket.hr(ch:'-');
-      if (formatPrint.totalHt == 1) {
+      if (_piece.total_tva > 0 && _myParams.tva) {
         input = "${S.current.total_ht}";
         encArabic = await CharsetConverter.encode("ISO-8859-6", "${_piece.total_ht.toStringAsFixed(2)}: ${input.split('').reversed.join()}");
         ticket.textEncoded(encArabic,
@@ -1800,7 +1947,7 @@ class _AddPiecePageState extends State<AddPiecePage>
                     ? PosAlign.center
                     : PosAlign.left));
       }
-      if (formatPrint.remise == 1) {
+      if (_piece.remise > 0) {
         input = "${S.current.remise}";
         encArabic = await CharsetConverter.encode("ISO-8859-6", "(% ${_piece.remise}) ${((_piece.total_ht*_piece.remise)/100).toStringAsFixed(2)}: ${input.split('').reversed.join()}");
         ticket.textEncoded(encArabic,
@@ -1809,8 +1956,7 @@ class _AddPiecePageState extends State<AddPiecePage>
                 align: (formatPrint.default_format == PaperSize.mm80)
                     ? PosAlign.center
                     : PosAlign.left));
-      }
-      if (formatPrint.netHt == 1) {
+
         input = "${S.current.net_ht}";
         encArabic = await CharsetConverter.encode("ISO-8859-6", "${_piece.net_ht.toStringAsFixed(2)}: ${input.split('').reversed.join()}");
         ticket.textEncoded(encArabic,
@@ -1820,28 +1966,36 @@ class _AddPiecePageState extends State<AddPiecePage>
                     ? PosAlign.center
                     : PosAlign.left));
       }
-      if (formatPrint.totalTva == 1) {
+      if (_piece.total_tva > 0 && _myParams.tva) {
         input = "${S.current.total_tva}";
-        encArabic = await CharsetConverter.encode("ISO-8859-6", "${_piece.total_tva.toStringAsFixed(2)}: ${input.split('').reversed.join()}");
+        encArabic = await CharsetConverter.encode(
+            "ISO-8859-6", "${_piece.total_tva.toStringAsFixed(2)}: ${input
+            .split('')
+            .reversed
+            .join()}");
         ticket.textEncoded(encArabic,
             styles: PosStyles(
                 codeTable: PosCodeTable.arabic,
                 align: (formatPrint.default_format == PaperSize.mm80)
                     ? PosAlign.center
                     : PosAlign.left));
+
+        input = "${S.current.total}";
+        encArabic = await CharsetConverter.encode(
+            "ISO-8859-6", "${_piece.total_ttc.toStringAsFixed(2)}: ${input
+            .split('')
+            .reversed
+            .join()}");
+        ticket.textEncoded(encArabic,
+            styles: PosStyles(
+                codeTable: PosCodeTable.arabic,
+                align: (formatPrint.default_format == PaperSize.mm80)
+                    ? PosAlign.center
+                    : PosAlign.left)
+        );
       }
 
-      input = "${S.current.total}";
-      encArabic = await CharsetConverter.encode("ISO-8859-6", "${_piece.total_ttc.toStringAsFixed(2)}: ${input.split('').reversed.join()}");
-      ticket.textEncoded(encArabic,
-          styles: PosStyles(
-              codeTable: PosCodeTable.arabic,
-              align: (formatPrint.default_format == PaperSize.mm80)
-                  ? PosAlign.center
-                  : PosAlign.left)
-      );
-
-      if (formatPrint.timbre == 1) {
+      if (_myParams.timbre) {
         input = "${S.current.timbre}";
         encArabic = await CharsetConverter.encode("ISO-8859-6", "${(_piece.total_ttc < _piece.net_a_payer) ? _piece.timbre.toStringAsFixed(2) : 0.0}: ${input.split('').reversed.join()}");
         ticket.textEncoded(
@@ -1872,10 +2026,10 @@ class _AddPiecePageState extends State<AddPiecePage>
             textEncoded: await CharsetConverter.encode("ISO-8859-6", "${_piece.regler.toStringAsFixed(2)}: ${S.current.regler.split('').reversed.join()}"),
             width: 6
         ),
-        (formatPrint.reste == 1)?PosColumn(
+        (_piece.reste > 0)?PosColumn(
             textEncoded: await CharsetConverter.encode("ISO-8859-6", "${_piece.reste.toStringAsFixed(2)}: ${S.current.reste.split('').reversed.join()}"),
             width: 6
-        ):null,
+        ):PosColumn(width: 6),
       ]);
       if (formatPrint.credit == 1) {
         input = "${S.current.credit}";
@@ -1939,42 +2093,43 @@ class _AddPiecePageState extends State<AddPiecePage>
         ]);
       });
       ticket.hr(ch: '-');
-      if (formatPrint.totalHt == 1) {
+      if (_piece.total_tva > 0 && _myParams.tva) {
         ticket.text("${S.current.total_ht} : ${_piece.total_ht.toStringAsFixed(2)}",
             styles: PosStyles(
                 align: (formatPrint.default_format == PaperSize.mm80)
                     ? PosAlign.center
                     : PosAlign.left));
       }
-      if (formatPrint.remise == 1) {
+      if (_piece.remise > 0) {
         ticket.text("${S.current.remise} : ${((_piece.total_ht * _piece.remise)/100).toStringAsFixed(2)} (${_piece.remise} %)",
             styles: PosStyles(
                 align: (formatPrint.default_format == PaperSize.mm80)
                     ? PosAlign.center
                     : PosAlign.left));
-      }
-      if (formatPrint.netHt == 1) {
+
         ticket.text("${S.current.net_ht} : ${_piece.net_ht.toStringAsFixed(2)}",
             styles: PosStyles(
                 align: (formatPrint.default_format == PaperSize.mm80)
                     ? PosAlign.center
                     : PosAlign.left));
       }
-      if (formatPrint.totalTva == 1) {
-        ticket.text("${S.current.total_tva} : ${_piece.total_tva.toStringAsFixed(2)}",
+      if (_piece.total_tva > 0 && _myParams.tva) {
+        ticket.text(
+            "${S.current.total_tva} : ${_piece.total_tva.toStringAsFixed(2)}",
+            styles: PosStyles(
+                align: (formatPrint.default_format == PaperSize.mm80)
+                    ? PosAlign.center
+                    : PosAlign.left));
+
+        ticket.text(
+            "${S.current.total} : ${_piece.total_ttc.toStringAsFixed(2)}",
             styles: PosStyles(
                 align: (formatPrint.default_format == PaperSize.mm80)
                     ? PosAlign.center
                     : PosAlign.left));
       }
 
-      ticket.text("${S.current.total} : ${_piece.total_ttc.toStringAsFixed(2)}",
-          styles: PosStyles(
-              align: (formatPrint.default_format == PaperSize.mm80)
-                  ? PosAlign.center
-                  : PosAlign.left));
-
-      if (formatPrint.timbre == 1 ) {
+      if (_myParams.timbre ) {
         ticket.text(
             "${S.current.timbre} : ${(_piece.total_ttc < _piece.net_a_payer) ? _piece.timbre.toStringAsFixed(2) : 0.0}",
             styles: PosStyles(
@@ -1999,10 +2154,10 @@ class _AddPiecePageState extends State<AddPiecePage>
             text: "${S.current.regler} : ${_piece.regler.toStringAsFixed(2)}",
             width: 6
         ),
-        (formatPrint.reste == 1)? PosColumn(
+        (_piece.reste > 0)? PosColumn(
             text: "${S.current.reste} : ${_piece.reste.toStringAsFixed(2)}",
             width: 6
-        ):null,
+        ):PosColumn(width: 6),
       ]);
       if (formatPrint.credit == 1) {
         ticket.text("${S.current.credit} : ${_selectedClient.credit.toStringAsFixed(2)}");
@@ -2067,7 +2222,9 @@ class _AddPiecePageState extends State<AddPiecePage>
           pw.SizedBox(height: 20),
           pw.Table(children: [
             pw.TableRow(
-                decoration: pw.BoxDecoration(color: PdfColors.grey),
+              decoration: pw.BoxDecoration(
+                  border: pw.Border(bottom: pw.BorderSide(width: 2))
+              ),
                 children: [
                   pw.Text("${S.current.referance}",
                       style: pw.TextStyle(
@@ -2086,13 +2243,18 @@ class _AddPiecePageState extends State<AddPiecePage>
                           fontWeight: pw.FontWeight.bold, font: ttf))
                 ]),
             for (var e in _selectedItems)
-              pw.TableRow(children: [
-                pw.Text("${e.ref}",style: pw.TextStyle(font: ttf)),
-                pw.Text("${e.designation}",style: pw.TextStyle(font: ttf)),
-                pw.Text("${e.selectedQuantite.toStringAsFixed(2)}"),
-                pw.Text("${e.selectedPrice.toStringAsFixed(2)}"),
-                pw.Text("${(e.selectedPrice * e.selectedQuantite).toStringAsFixed(2)}"),
-              ]),
+              pw.TableRow(
+                  decoration: pw.BoxDecoration(
+                    border: pw.Border(bottom: pw.BorderSide(width: 1 ,color: PdfColors.grey))
+                  ),
+                  children: [
+                    pw.Text("${e.ref}",style: pw.TextStyle(font: ttf)),
+                    pw.Text("${e.designation}",style: pw.TextStyle(font: ttf)),
+                    pw.Text("${e.selectedQuantite.toStringAsFixed(2)}"),
+                    pw.Text("${e.selectedPrice.toStringAsFixed(2)}"),
+                    pw.Text("${(e.selectedPrice * e.selectedQuantite).toStringAsFixed(2)}"),
+                  ]
+              ),
           ]),
           pw.SizedBox(height: 10),
           pw.Divider(height: 2),
@@ -2104,7 +2266,7 @@ class _AddPiecePageState extends State<AddPiecePage>
                   pw.Text(
                       "${S.current.regler}\t ${_piece.regler.toStringAsFixed(2)} ${S.current.da}",
                       style: pw.TextStyle(font: ttf)),
-                  (formatPrint.reste == 1)
+                  (_piece.reste > 0)
                       ? pw.Text(
                           "${S.current.reste}\t ${_piece.reste.toStringAsFixed(2)} ${S.current.da}",
                           style: pw.TextStyle(font: ttf))
@@ -2129,31 +2291,33 @@ class _AddPiecePageState extends State<AddPiecePage>
                 child: pw.Column(
                     crossAxisAlignment: pw.CrossAxisAlignment.start,
                     children: [
-                      (formatPrint.totalHt == 1)
+                      (_piece.total_tva > 0 && _myParams.tva)
                           ? pw.Text(
                               "${S.current.total_ht}\t  ${_piece.total_ht.toStringAsFixed(2)}\t ${S.current.da}",
                               style: pw.TextStyle(font: ttf))
                           : pw.SizedBox(),
-                      (formatPrint.remise == 1)
+                      (_piece.remise > 0)
                           ? pw.Text(
                               "${S.current.remise}\t  ${((_piece.total_ht*_piece.remise)/100).toStringAsFixed(2)}  (${_piece.remise}\t  %)\t ${S.current.da}",
                               style: pw.TextStyle(font: ttf))
                           : pw.SizedBox(),
-                      (formatPrint.netHt == 1)
+                      (_piece.remise > 0)
                           ? pw.Text(
                               "${S.current.net_ht}\t  ${_piece.net_ht.toStringAsFixed(2)}\t  ${S.current.da}",
                               style: pw.TextStyle(font: ttf))
                           : pw.SizedBox(),
-                      (formatPrint.totalTva == 1)
+                      (_piece.total_tva > 0 && _myParams.tva)
                           ? pw.Text(
                               "${S.current.total_tva}\t  ${_piece.total_tva.toStringAsFixed(2)}\t  ${S.current.da}",
                               style: pw.TextStyle(font: ttf))
                           : pw.SizedBox(),
-                      pw.Text(
+                      (_piece.total_tva > 0 && _myParams.tva)
+                          ? pw.Text(
                           "${S.current.total}\t  ${_piece.total_ttc.toStringAsFixed(2)}\t  ${S.current.da}",
-                          style: pw.TextStyle(font: ttf)),
+                          style: pw.TextStyle(font: ttf))
+                          : pw.SizedBox(),
                       pw.Divider(height: 2),
-                      (formatPrint.timbre == 1)
+                      (_myParams.timbre)
                           ? pw.Text(
                               "${S.current.timbre}\t  ${(_piece.total_ttc < _piece.net_a_payer) ? _piece.timbre.toStringAsFixed(2) : 0.0}\t  ${S.current.da}",
                               style: pw.TextStyle(font: ttf))
@@ -2170,6 +2334,14 @@ class _AddPiecePageState extends State<AddPiecePage>
     );
 
     return doc;
+  }
+
+  Future _saveLanPrinter() async {
+    defaultPrinter.name = "lan printer";
+    defaultPrinter.adress = "192.168.1.1";
+    defaultPrinter.type = 0;
+    await _queryCtr.addItemToTable(
+        DbTablesNames.defaultPrinter, defaultPrinter);
   }
 
   String getPiecetype(){

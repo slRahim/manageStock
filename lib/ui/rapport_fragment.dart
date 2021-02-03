@@ -17,6 +17,7 @@ class Rapport extends StatefulWidget {
 
 class _RapportState extends State<Rapport> {
   TextEditingController _dateControl = new TextEditingController();
+  TextEditingController _yearControl = new TextEditingController();
   DateTimeRange _dateRange;
 
   List<DropdownMenuItem<String>> _parentDropdownItems;
@@ -31,7 +32,7 @@ class _RapportState extends State<Rapport> {
   List<DropdownMenuItem<String>> _subDropdownItems;
   String _selectedSubItem;
 
-  QueryCtr _queryCtr = new QueryCtr() ;
+  QueryCtr _queryCtr = new QueryCtr();
 
   @override
   void initState() {
@@ -39,7 +40,7 @@ class _RapportState extends State<Rapport> {
     futurInit();
   }
 
-  futurInit(){
+  futurInit() {
     _parentDropdownItems = utils.buildDropStatutTier(Statics.rapportItems);
     _selectedParent = Statics.rapportItems[0];
 
@@ -57,7 +58,7 @@ class _RapportState extends State<Rapport> {
       _dateRange = new DateTimeRange(
           start: DateTime.now(), end: DateTime.now().add(Duration(days: 30)));
       _dateControl.text =
-      "${Helpers.dateToText(DateTime.now())} / ${Helpers.dateToText(DateTime.now().add(Duration(days: 30)))}";
+          "${Helpers.dateToText(DateTime.now())} / ${Helpers.dateToText(DateTime.now().add(Duration(days: 30)))}";
     });
   }
 
@@ -99,8 +100,8 @@ class _RapportState extends State<Rapport> {
                         mainAxisAlignment: MainAxisAlignment.start,
                         children: [
                           Container(
-                              margin:
-                                  EdgeInsetsDirectional.only(start: 20, bottom: 8),
+                              margin: EdgeInsetsDirectional.only(
+                                  start: 20, bottom: 8),
                               child: Text("Categorie Rapport :"))
                         ],
                       ),
@@ -108,8 +109,8 @@ class _RapportState extends State<Rapport> {
                         children: [
                           Expanded(
                             child: Container(
-                                margin:
-                                    EdgeInsetsDirectional.only(start: 10, end: 10),
+                                margin: EdgeInsetsDirectional.only(
+                                    start: 10, end: 10),
                                 padding: EdgeInsets.all(5),
                                 decoration: BoxDecoration(
                                   border: Border.all(
@@ -124,8 +125,8 @@ class _RapportState extends State<Rapport> {
                                       items: _parentDropdownItems,
                                       onChanged: (value) {
                                         setState(() {
-                                          generateSubList(
-                                              Statics.rapportItems.indexOf(value));
+                                          generateSubList(Statics.rapportItems
+                                              .indexOf(value));
                                           _selectedParent = value;
                                         });
                                       }),
@@ -140,8 +141,8 @@ class _RapportState extends State<Rapport> {
                         mainAxisAlignment: MainAxisAlignment.start,
                         children: [
                           Container(
-                              margin:
-                                  EdgeInsetsDirectional.only(start: 20, bottom: 8),
+                              margin: EdgeInsetsDirectional.only(
+                                  start: 20, bottom: 8),
                               child: Text("Type Rapport :"))
                         ],
                       ),
@@ -149,8 +150,8 @@ class _RapportState extends State<Rapport> {
                         children: [
                           Expanded(
                             child: Container(
-                                margin:
-                                    EdgeInsetsDirectional.only(start: 10, end: 10),
+                                margin: EdgeInsetsDirectional.only(
+                                    start: 10, end: 10),
                                 padding: EdgeInsets.all(5),
                                 decoration: BoxDecoration(
                                   border: Border.all(
@@ -176,63 +177,117 @@ class _RapportState extends State<Rapport> {
                         height: 15,
                       ),
                       Visibility(
-                        visible: (Statics.rapportItems.indexOf(_selectedParent)!= 2 && Statics.rapportItems.indexOf(_selectedParent)!= 3),
+                        visible:  ((Statics.rapportItems.indexOf(_selectedParent) != 2 &&
+                            Statics.rapportItems.indexOf(_selectedParent) != 3 ) &&
+                            (Statics.rapportGeneralItems
+                                .indexOf(_selectedSubItem) !=
+                                2)
+                        ),
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.start,
                           children: [
                             Container(
-                                margin:
-                                    EdgeInsetsDirectional.only(start: 20, bottom: 8),
-                                child: Text("Date (Debut / Fin) :"))
+                                margin: EdgeInsetsDirectional.only(
+                                    start: 20, bottom: 8),
+                                child:(Statics.rapportItems.indexOf(_selectedParent) ==
+                                    4 &&
+                                    Statics.rapportGeneralItems
+                                        .indexOf(_selectedSubItem) ==
+                                        1)
+                                    ?Text("Années : "):Text("Date (Debut / Fin) :")
+                            ),
                           ],
                         ),
                       ),
                       Visibility(
-                        visible: (Statics.rapportItems.indexOf(_selectedParent)!= 2 && Statics.rapportItems.indexOf(_selectedParent)!= 3),
+                        visible: ((Statics.rapportItems
+                                    .indexOf(_selectedParent) !=
+                                2 &&
+                            Statics.rapportItems.indexOf(_selectedParent) != 3 ) &&
+                            (Statics.rapportGeneralItems
+                                    .indexOf(_selectedSubItem) !=
+                                    2)
+                        ),
                         child: Row(
                           children: [
-                            Expanded(
-                              child: InkWell(
-                                onTap: () {
-                                  callDatePicker();
-                                },
-                                child: Container(
-                                  margin:
-                                      EdgeInsetsDirectional.only(start: 10, end: 10),
-                                  padding: const EdgeInsets.all(5),
-                                  decoration: BoxDecoration(
-                                    border: Border.all(
-                                      color: Colors.blueAccent,
-                                    ),
-                                    borderRadius: BorderRadius.circular(20.0),
-                                  ),
-                                  child: TextField(
-                                    controller: _dateControl,
-                                    decoration: InputDecoration(
-                                      prefixIcon: Icon(
-                                        Icons.date_range,
-                                        color: Colors.blue,
+                            (Statics.rapportItems.indexOf(_selectedParent) ==
+                                        4 &&
+                                    Statics.rapportGeneralItems
+                                            .indexOf(_selectedSubItem) ==
+                                        1)
+                                ? Expanded(
+                                  child: Container(
+                                    margin: EdgeInsetsDirectional.only(
+                                        start: 8, end: 8),
+                                    padding: const EdgeInsets.all(5),
+                                    child: TextField(
+                                        controller: _yearControl,
+                                        decoration: InputDecoration(
+                                          prefixIcon: Icon(
+                                            Icons.date_range,
+                                            color: Colors.blue,
+                                          ),
+                                          focusedBorder: OutlineInputBorder(
+                                              borderSide:
+                                                  BorderSide(color: Colors.blue),
+                                              borderRadius:
+                                                  BorderRadius.circular(20)),
+                                          enabledBorder: OutlineInputBorder(
+                                              borderSide:
+                                              BorderSide(color: Colors.blue),
+                                              borderRadius:
+                                              BorderRadius.circular(20))
+                                        ),
+                                        keyboardType: TextInputType.number,
                                       ),
-                                      focusedBorder: OutlineInputBorder(
-                                          borderSide: BorderSide(color: Colors.blue),
-                                          borderRadius: BorderRadius.circular(20)),
-                                    ),
-                                    enabled: false,
-                                    keyboardType: TextInputType.text,
                                   ),
-                                ),
-                              ),
-                            ),
+                                )
+                                : Expanded(
+                                    child: InkWell(
+                                      onTap: () {
+                                        callDatePicker();
+                                      },
+                                      child: Container(
+                                        margin: EdgeInsetsDirectional.only(
+                                            start: 10, end: 10),
+                                        padding: const EdgeInsets.all(5),
+                                        decoration: BoxDecoration(
+                                          border: Border.all(
+                                            color: Colors.blueAccent,
+                                          ),
+                                          borderRadius:
+                                              BorderRadius.circular(20.0),
+                                        ),
+                                        child: TextField(
+                                          controller: _dateControl,
+                                          decoration: InputDecoration(
+                                            prefixIcon: Icon(
+                                              Icons.date_range,
+                                              color: Colors.blue,
+                                            ),
+                                            focusedBorder: OutlineInputBorder(
+                                                borderSide: BorderSide(
+                                                    color: Colors.blue),
+                                                borderRadius:
+                                                    BorderRadius.circular(20)),
+                                          ),
+                                          enabled: false,
+                                          keyboardType: TextInputType.text,
+                                        ),
+                                      ),
+                                    ),
+                                  ),
                           ],
                         ),
                       ),
                       SizedBox(
                         height: 30,
                       ),
-
                     ]),
               ),
-              SizedBox(height: 20,),
+              SizedBox(
+                height: 20,
+              ),
               Container(
                 margin: EdgeInsets.all(10),
                 height: 100,
@@ -255,46 +310,49 @@ class _RapportState extends State<Rapport> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Expanded(
-                        child: Container(
-                          padding: EdgeInsets.all(5),
-                          decoration: BoxDecoration(
-                              color: Colors.green, shape: BoxShape.circle),
-                          child: IconButton(
-                            icon: Icon(
-                              Icons.save_alt_rounded,
-                              size: 30,
-                              color: Colors.white,
-                            ),
-                            onPressed: () async{
-                              print("save rapport");
-                              var doc01 = await _makePdfDocument().then((value){
-                                var message = "rapport bien été créer";
-                                Helpers.showFlushBar(context, message);
-                              });
-
-                              await Printing.sharePdf(
-                                  bytes: await doc01.save(), filename: 'my-document.pdf');
-                            },
+                      child: Container(
+                        padding: EdgeInsets.all(5),
+                        decoration: BoxDecoration(
+                          color: Colors.green, shape: BoxShape.circle),
+                        child: IconButton(
+                          icon: Icon(
+                            Icons.save_alt_rounded,
+                            size: 30,
+                            color: Colors.white,
                           ),
-                        )),
-                    Expanded(
-                        child: Container(
-                          padding: EdgeInsets.all(5),
-                          decoration: BoxDecoration(
-                              color: Colors.blue, shape: BoxShape.circle),
-                          child: IconButton(
-                            icon: Icon(
-                              Icons.print,
-                              size: 30,
-                              color: Colors.white,
-                            ),
-                            onPressed: () {
-                              print("print rapport");
+                          onPressed: () async {
+                            print("save rapport");
+                            var doc01 = await _makePdfDocument().then((value) {
                               var message = "rapport bien été créer";
                               Helpers.showFlushBar(context, message);
-                            },
+                            });
+
+                            await Printing.sharePdf(
+                                bytes: await doc01.save(),
+                                filename: 'my-document.pdf');
+                          },
+                        ),
+                      )
+                    ),
+                    Expanded(
+                      child: Container(
+                        padding: EdgeInsets.all(5),
+                        decoration: BoxDecoration(
+                          color: Colors.blue, shape: BoxShape.circle),
+                        child: IconButton(
+                          icon: Icon(
+                            Icons.print,
+                            size: 30,
+                            color: Colors.white,
                           ),
-                        )),
+                          onPressed: () {
+                            print("print rapport");
+                            var message = "rapport bien été créer";
+                            Helpers.showFlushBar(context, message);
+                          },
+                        ),
+                      )
+                    ),
                   ],
                 ),
               )
@@ -367,7 +425,7 @@ class _RapportState extends State<Rapport> {
     var data = await rootBundle.load("assets/arial.ttf");
     final ttf = pw.Font.ttf(data);
 
-    final item = await _getData() ;
+    final item = await _getData();
 
     final doc = pw.Document();
     // doc.addPage(
@@ -513,31 +571,44 @@ class _RapportState extends State<Rapport> {
     //   ),
     // );
 
-
     return doc;
   }
 
-  Future _getData()async{
-      var res ;
-      switch(Statics.rapportItems.indexOf(_selectedParent)){
-        case 0 :
-          res = await _queryCtr.rapportVente(Statics.rapportVenteItems.indexOf(_selectedSubItem),_dateRange.start ,_dateRange.end);
-          break ;
-        case 1 :
-          res =  await _queryCtr.rapportAchat(Statics.rapportAchatItems.indexOf(_selectedSubItem),_dateRange.start ,_dateRange.end);
-          break ;
-        case 2 :
-          res =  await _queryCtr.rapportStock(Statics.rapportStocktockItems.indexOf(_selectedSubItem));
-          break ;
-        case 3 :
-          res =  await _queryCtr.rapportTier(Statics.rapportTierItems.indexOf(_selectedSubItem));
-          break ;
-        case 4 :
-          res =  await _queryCtr.rapportGeneral(Statics.rapportGeneralItems.indexOf(_selectedSubItem),_dateRange.start ,_dateRange.end);
-          break ;
-      }
+  Future _getData() async {
+    var res;
+    switch (Statics.rapportItems.indexOf(_selectedParent)) {
+      case 0:
+        res = await _queryCtr.rapportVente(
+            Statics.rapportVenteItems.indexOf(_selectedSubItem),
+            _dateRange.start,
+            _dateRange.end);
+        break;
+      case 1:
+        res = await _queryCtr.rapportAchat(
+            Statics.rapportAchatItems.indexOf(_selectedSubItem),
+            _dateRange.start,
+            _dateRange.end);
+        break;
+      case 2:
+        res = await _queryCtr.rapportStock(
+            Statics.rapportStocktockItems.indexOf(_selectedSubItem));
+        break;
+      case 3:
+        res = await _queryCtr
+            .rapportTier(Statics.rapportTierItems.indexOf(_selectedSubItem));
+        break;
+      case 4:
+        if( Statics.rapportGeneralItems.indexOf(_selectedSubItem) == 1){
+          _dateRange = new DateTimeRange(start: DateTime(int.parse(_yearControl.text)), end: DateTime(int.parse(_yearControl.text),12,31));
+        }
+        res = await _queryCtr.rapportGeneral(
+            Statics.rapportGeneralItems.indexOf(_selectedSubItem),
+            _dateRange.start,
+            _dateRange.end);
+        break;
+    }
 
-      print(res);
-      return res ;
+    print(res);
+    return res;
   }
 }

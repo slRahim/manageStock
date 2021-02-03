@@ -22,7 +22,7 @@ import 'models/MyParams.dart';
 
 
 void main() async{
-  Crashlytics.instance.enableInDevMode = true;
+  Crashlytics.instance.enableInDevMode = false;
   FlutterError.onError = Crashlytics.instance.recordFlutterError;
 
   runZoned(() {
