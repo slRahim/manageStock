@@ -192,31 +192,31 @@ class _PreviewPieceState extends State<PreviewPiece> {
                               "---------------------------------------------------------------------------------------"),
                           (widget.piece.total_tva > 0)
                               ? Text(
-                                  "\n ${S.current.total_ht}:${widget.piece.total_ht}")
+                                  "\n ${S.current.total_ht}:${Helpers.numberFormat(widget.piece.total_ht)}")
                               : SizedBox(),
                           (widget.piece.remise > 0)
                               ? Text(
-                                  "${S.current.remise}:${((widget.piece.total_ht * widget.piece.remise) / 100)}(${widget.piece.remise}%)")
+                                  "${S.current.remise}:${Helpers.numberFormat((widget.piece.total_ht * widget.piece.remise) / 100)}(${Helpers.numberFormat(widget.piece.remise)}%)")
                               : SizedBox(),
                           (widget.piece.remise > 0)
                               ? Text(
-                                  "${S.current.net_ht}:${widget.piece.net_ht}")
+                                  "${S.current.net_ht}:${Helpers.numberFormat(widget.piece.net_ht)}")
                               : SizedBox(),
                           (widget.piece.total_tva > 0)
                               ? Text(
-                                  "${S.current.total_tva} :${widget.piece.total_tva}")
+                                  "${S.current.total_tva} :${Helpers.numberFormat(widget.piece.total_tva)}")
                               : SizedBox(),
                           (widget.piece.total_tva > 0)
                               ? Text(
-                                  "${S.current.total} :${widget.piece.total_ttc}")
+                                  "${S.current.total} :${Helpers.numberFormat(widget.piece.total_ttc)}")
                               : SizedBox(),
                           (_myParams.timbre)
                               ? Text(
-                                  "${S.current.timbre} :${widget.piece.timbre}")
+                                  "${S.current.timbre} :${Helpers.numberFormat(widget.piece.timbre)}")
                               : SizedBox(),
                           Text("============================================"),
                           Text(
-                            "${S.current.net_payer} :${widget.piece.net_a_payer}",
+                            "${S.current.net_payer} :${Helpers.numberFormat(widget.piece.net_a_payer)}",
                             style: TextStyle(fontSize: 20),
                           ),
                           Text("============================================"),
@@ -227,12 +227,12 @@ class _PreviewPieceState extends State<PreviewPiece> {
                             children: [
                               Expanded(
                                 child: Text(
-                                    "${S.current.regler} :${widget.piece.regler}"),
+                                    "${S.current.regler} :${Helpers.numberFormat(widget.piece.regler)}"),
                               ),
                               Expanded(
                                 child: (widget.piece.reste > 0)
                                     ? Text(
-                                        "${S.current.reste} :${widget.piece.reste}")
+                                        "${S.current.reste} :${Helpers.numberFormat(widget.piece.reste)}")
                                     : SizedBox(),
                               )
                             ],
@@ -242,7 +242,7 @@ class _PreviewPieceState extends State<PreviewPiece> {
                                   mainAxisAlignment: MainAxisAlignment.start,
                                   children: [
                                     Text(
-                                      "${S.current.credit} :${widget.tier.credit} \n",
+                                      "${S.current.credit} :${Helpers.numberFormat(widget.tier.credit)} \n",
                                     ),
                                   ],
                                 )
@@ -365,12 +365,12 @@ class _PreviewPieceState extends State<PreviewPiece> {
                       "${element.designation.substring(0, ((element.designation.length < 10 ? element.designation.length : 10)))}"),
                   width: 6),
           PosColumn(
-              text: '${element.selectedQuantite.toStringAsFixed(2)}', width: 2),
+              text: '${Helpers.numberFormat(element.selectedQuantite)}', width: 2),
           PosColumn(
-              text: '${element.selectedPrice.toStringAsFixed(2)}', width: 2),
+              text: '${Helpers.numberFormat(element.selectedPrice)}', width: 2),
           PosColumn(
               text:
-                  '${(element.selectedPrice * element.selectedQuantite).toStringAsFixed(3)}',
+                  '${Helpers.numberFormat((element.selectedPrice * element.selectedQuantite))}',
               width: 2),
         ]);
       }
@@ -378,7 +378,7 @@ class _PreviewPieceState extends State<PreviewPiece> {
       if (widget.piece.total_tva > 0) {
         input = "${S.current.total_ht}";
         encArabic = await CharsetConverter.encode("ISO-8859-6",
-            "${widget.piece.total_ht.toStringAsFixed(2)}: ${input.split('').reversed.join()}");
+            "${Helpers.numberFormat(widget.piece.total_ht)}: ${input.split('').reversed.join()}");
         ticket.textEncoded(encArabic,
             styles: PosStyles(
                 codeTable: PosCodeTable.arabic,
@@ -389,7 +389,7 @@ class _PreviewPieceState extends State<PreviewPiece> {
       if (widget.piece.remise > 0) {
         input = "${S.current.remise}";
         encArabic = await CharsetConverter.encode("ISO-8859-6",
-            "(% ${widget.piece.remise}) ${((widget.piece.total_ht * widget.piece.remise) / 100).toStringAsFixed(2)}: ${input.split('').reversed.join()}");
+            "(% ${Helpers.numberFormat(widget.piece.remise)}) ${Helpers.numberFormat(((widget.piece.total_ht * widget.piece.remise) / 100))}: ${input.split('').reversed.join()}");
         ticket.textEncoded(encArabic,
             styles: PosStyles(
                 codeTable: PosCodeTable.arabic,
@@ -399,7 +399,7 @@ class _PreviewPieceState extends State<PreviewPiece> {
 
         input = "${S.current.net_ht}";
         encArabic = await CharsetConverter.encode("ISO-8859-6",
-            "${widget.piece.net_ht.toStringAsFixed(2)}: ${input.split('').reversed.join()}");
+            "${Helpers.numberFormat(widget.piece.net_ht)}: ${input.split('').reversed.join()}");
         ticket.textEncoded(encArabic,
             styles: PosStyles(
                 codeTable: PosCodeTable.arabic,
@@ -411,7 +411,7 @@ class _PreviewPieceState extends State<PreviewPiece> {
       if (widget.piece.total_tva > 0) {
         input = "${S.current.total_tva}";
         encArabic = await CharsetConverter.encode("ISO-8859-6",
-            "${widget.piece.total_tva.toStringAsFixed(2)}: ${input.split('').reversed.join()}");
+            "${Helpers.numberFormat(widget.piece.total_tva)}: ${input.split('').reversed.join()}");
         ticket.textEncoded(encArabic,
             styles: PosStyles(
                 codeTable: PosCodeTable.arabic,
@@ -421,7 +421,7 @@ class _PreviewPieceState extends State<PreviewPiece> {
 
         input = "${S.current.total}";
         encArabic = await CharsetConverter.encode("ISO-8859-6",
-            "${widget.piece.total_ttc.toStringAsFixed(2)}: ${input.split('').reversed.join()}");
+            "${Helpers.numberFormat(widget.piece.total_ttc)}: ${input.split('').reversed.join()}");
         ticket.textEncoded(encArabic,
             styles: PosStyles(
                 codeTable: PosCodeTable.arabic,
@@ -433,7 +433,7 @@ class _PreviewPieceState extends State<PreviewPiece> {
       if (_myParams.timbre) {
         input = "${S.current.timbre}";
         encArabic = await CharsetConverter.encode("ISO-8859-6",
-            "${(widget.piece.total_ttc < widget.piece.net_a_payer) ? widget.piece.timbre.toStringAsFixed(2) : 0.0}: ${input.split('').reversed.join()}");
+            "${(widget.piece.total_ttc < widget.piece.net_a_payer) ? Helpers.numberFormat(widget.piece.timbre) : Helpers.numberFormat(0.0)}: ${input.split('').reversed.join()}");
         ticket.textEncoded(encArabic,
             styles: PosStyles(
                 codeTable: PosCodeTable.arabic,
@@ -445,7 +445,7 @@ class _PreviewPieceState extends State<PreviewPiece> {
       ticket.hr(ch: '=');
       input = "${S.current.net_payer}";
       encArabic = await CharsetConverter.encode("ISO-8859-6",
-          "${widget.piece.net_a_payer.toStringAsFixed(2)}: ${input.split('').reversed.join()}");
+          "${Helpers.numberFormat(widget.piece.net_a_payer)}: ${input.split('').reversed.join()}");
       ticket.textEncoded(encArabic,
           styles: PosStyles(
             codeTable: PosCodeTable.arabic,
@@ -460,19 +460,19 @@ class _PreviewPieceState extends State<PreviewPiece> {
       ticket.row([
         PosColumn(
             textEncoded: await CharsetConverter.encode("ISO-8859-6",
-                "${widget.piece.regler.toStringAsFixed(2)}: ${S.current.regler.split('').reversed.join()}"),
+                "${Helpers.numberFormat(widget.piece.regler)}: ${S.current.regler.split('').reversed.join()}"),
             width: 6),
         (widget.piece.reste > 0)
             ? PosColumn(
                 textEncoded: await CharsetConverter.encode("ISO-8859-6",
-                    "${widget.piece.reste.toStringAsFixed(2)}: ${S.current.reste.split('').reversed.join()}"),
+                    "${Helpers.numberFormat(widget.piece.reste)}: ${S.current.reste.split('').reversed.join()}"),
                 width: 6)
             : null,
       ]);
       if (_formatPrint.credit == 1) {
         input = "${S.current.credit}";
         encArabic = await CharsetConverter.encode("ISO-8859-6",
-            "${widget.tier.credit.toStringAsFixed(2)}: ${input.split('').reversed.join()}");
+            "${Helpers.numberFormat(widget.tier.credit)}: ${input.split('').reversed.join()}");
         ticket.textEncoded(encArabic,
             styles: PosStyles(codeTable: PosCodeTable.arabic));
       }
@@ -486,7 +486,8 @@ class _PreviewPieceState extends State<PreviewPiece> {
               bold: true));
       ticket.feed(1);
       ticket.cut();
-    } else {
+    }
+    else {
       ticket.text("${S.current.n} ${getPiecetype()}: ${widget.piece.num_piece}",
           styles: PosStyles(
               codeTable: PosCodeTable.arabic,
@@ -531,19 +532,19 @@ class _PreviewPieceState extends State<PreviewPiece> {
                       '${element.designation.substring(0, (element.designation.length < 10 ? element.designation.length : 10))}',
                   width: 6),
           PosColumn(
-              text: '${element.selectedQuantite.toStringAsFixed(2)}', width: 2),
+              text: '${Helpers.numberFormat(element.selectedQuantite)}', width: 2),
           PosColumn(
-              text: '${element.selectedPrice.toStringAsFixed(2)}', width: 2),
+              text: '${Helpers.numberFormat(element.selectedPrice)}', width: 2),
           PosColumn(
               text:
-                  '${(element.selectedPrice * element.selectedQuantite).toStringAsFixed(2)}',
+                  '${Helpers.numberFormat((element.selectedPrice * element.selectedQuantite))}',
               width: 2),
         ]);
       });
       ticket.hr(ch: '-');
       if (widget.piece.total_tva > 0) {
         ticket.text(
-            "${S.current.total_ht} : ${widget.piece.total_ht.toStringAsFixed(2)}",
+            "${S.current.total_ht} : ${Helpers.numberFormat(widget.piece.total_ht)}",
             styles: PosStyles(
                 align: (_default_format == PaperSize.mm80)
                     ? PosAlign.center
@@ -551,14 +552,14 @@ class _PreviewPieceState extends State<PreviewPiece> {
       }
       if (widget.piece.remise > 0) {
         ticket.text(
-            "${S.current.remise} : ${((widget.piece.total_ht * widget.piece.remise) / 100).toStringAsFixed(2)} (${widget.piece.remise} %)",
+            "${S.current.remise} : ${Helpers.numberFormat(((widget.piece.total_ht * widget.piece.remise) / 100))} (${Helpers.numberFormat(widget.piece.remise)} %)",
             styles: PosStyles(
                 align: (_default_format == PaperSize.mm80)
                     ? PosAlign.center
                     : PosAlign.left));
 
         ticket.text(
-            "${S.current.net_ht} : ${widget.piece.net_ht.toStringAsFixed(2)}",
+            "${S.current.net_ht} : ${Helpers.numberFormat(widget.piece.net_ht)}",
             styles: PosStyles(
                 align: (_default_format == PaperSize.mm80)
                     ? PosAlign.center
@@ -566,14 +567,14 @@ class _PreviewPieceState extends State<PreviewPiece> {
       }
       if (widget.piece.total_tva > 0) {
         ticket.text(
-            "${S.current.total_tva} : ${widget.piece.total_tva.toStringAsFixed(2)}",
+            "${S.current.total_tva} : ${Helpers.numberFormat(widget.piece.total_tva)}",
             styles: PosStyles(
                 align: (_default_format == PaperSize.mm80)
                     ? PosAlign.center
                     : PosAlign.left));
 
         ticket.text(
-            "${S.current.total} : ${widget.piece.total_ttc.toStringAsFixed(2)}",
+            "${S.current.total} : ${Helpers.numberFormat(widget.piece.total_ttc)}",
             styles: PosStyles(
                 align: (_default_format == PaperSize.mm80)
                     ? PosAlign.center
@@ -582,7 +583,7 @@ class _PreviewPieceState extends State<PreviewPiece> {
 
       if (_myParams.timbre) {
         ticket.text(
-            "${S.current.timbre} : ${(widget.piece.total_ttc < widget.piece.net_a_payer) ? widget.piece.timbre.toStringAsFixed(2) : 0.0}",
+            "${S.current.timbre} : ${(widget.piece.total_ttc < widget.piece.net_a_payer) ? Helpers.numberFormat(widget.piece.timbre) : Helpers.numberFormat(0.0)}",
             styles: PosStyles(
                 align: (_default_format == PaperSize.mm80)
                     ? PosAlign.center
@@ -591,7 +592,7 @@ class _PreviewPieceState extends State<PreviewPiece> {
 
       ticket.hr(ch: '=');
       ticket.text(
-          "${S.current.net_payer} : ${widget.piece.net_a_payer.toStringAsFixed(2)}",
+          "${S.current.net_payer} : ${Helpers.numberFormat(widget.piece.net_a_payer)}",
           styles: PosStyles(
             align: (_default_format == PaperSize.mm80)
                 ? PosAlign.center
@@ -603,19 +604,19 @@ class _PreviewPieceState extends State<PreviewPiece> {
       ticket.row([
         PosColumn(
             text:
-                "${S.current.regler} : ${widget.piece.regler.toStringAsFixed(2)}",
+                "${S.current.regler} : ${Helpers.numberFormat(widget.piece.regler)}",
             width: 6),
         (widget.piece.reste > 0)
             ? PosColumn(
                 text:
-                    "${S.current.reste} : ${widget.piece.reste.toStringAsFixed(2)}",
+                    "${S.current.reste} : ${Helpers.numberFormat(widget.piece.reste)}",
                 width: 6)
             : PosColumn(width: 6),
       ]);
 
       if (_formatPrint.credit == 1) {
         ticket.text(
-            "${S.current.credit} : ${widget.tier.credit.toStringAsFixed(2)}");
+            "${S.current.credit} : ${Helpers.numberFormat(widget.tier.credit)}");
       }
 
       ticket.feed(1);

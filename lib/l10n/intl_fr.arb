@@ -304,5 +304,37 @@
   "ff" : "FF",
   "af" : "AF",
   "rf" : "RF",
-  "tr" : "TR"
+  "tr" : "TR",
+
+  "reg_cl" : "Reg.Cli",
+  "reg_four" : "Reg.Four",
+  "dette" : "Dette",
+  "qte_min" : "Qte Min",
+
+  "stock" : "Stocke",
+  "recap_vente_article" : "Recap.des ventes par article",
+  "recap_cmd_article" : "Recap.des commandes par article",
+  "jour_vente" : "Journal des ventes",
+  "jour_cmd" : "Journal des commandes",
+  "recap_achat_article" : "Recap.des achats par article",
+  "jour_achat" : "Journal des achats",
+  "inventaire" : "Inventaire",
+  "prod_repture" : "Produit en repture",
+  "zakat": "Zakat",
+  "etat_jour" : "Etat Journalier",
+  "etat_mensu" : "Etat Mensuel",
+  "etat_annuel" : "Etat Annuel",
+
+  "cat_rapport" : "Categorie Rapport :",
+  "type_rapport" : "Type Rapport :",
+  "annee" : "Année :",
+  "date_d_f" : "Date (Debut / Fin) :",
+  "msg_rapport_vide" : "Le rapport est vide",
+  "demonstration" : "Demonstration le",
+  "rapport_date" : "Date du rapport",
+
+  "creance_cl" : "Créance Client",
+  "creance_four" : "Créance Fournisseur"
+
+
 }

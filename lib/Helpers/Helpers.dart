@@ -16,6 +16,7 @@ import 'package:gestmob/models/FormatPiece.dart';
 import 'package:gestmob/models/HomeItem.dart';
 import 'package:gestmob/models/Piece.dart';
 import 'package:gestmob/ui/home.dart';
+import 'package:intl/intl.dart';
 import 'package:map_launcher/map_launcher.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -297,8 +298,11 @@ class Helpers {
   }
 
 //  *********************************************************************************************************************************************************************
-//**************************************************************************ticket****************************************************************************************
-
+//**************************************************************************number format****************************************************************************************
+ static dynamic numberFormat(dynamic number){
+   var f = new NumberFormat("#,###.0#");
+   return f.format(number);
+ }
 
 
 }

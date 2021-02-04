@@ -2,6 +2,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_icons/flutter_icons.dart';
 import 'package:gestmob/Helpers/SqlLiteDatabaseHelper.dart';
 import 'package:gestmob/Helpers/Statics.dart';
+import 'package:gestmob/generated/l10n.dart';
 import 'package:gestmob/models/Article.dart';
 import 'package:gestmob/models/ArticleFamille.dart';
 import 'package:gestmob/models/ArticleMarque.dart';
@@ -699,7 +700,7 @@ class QueryCtr {
 
 //**********************************************************************************************************************************************************************************
 //************************************************************************special statistique****************************************************************************************
-   //ok
+
   Future rapportVente(int rapport , DateTime start , DateTime end ) async {
     var dbClient = await _databaseHelper.db;
      String query="" ;
@@ -708,9 +709,9 @@ class QueryCtr {
      switch(rapport){
        case 0 :
          query = """
-         Select Articles.Ref , Articles.Designation , Sum(Journaux.Qte) as qte , 
-                Sum(Journaux.Marge*Journaux.Qte)/Sum(Journaux.Qte) as Marge_u ,
-                (Sum(Journaux.Marge*Journaux.Qte)/Sum(Journaux.Qte)*Sum(Journaux.Qte)) as Marge_total
+         Select Articles.Ref as referance, Articles.Designation as designation, Sum(Journaux.Qte) as qte , 
+                Sum(Journaux.Marge*Journaux.Qte)/Sum(Journaux.Qte) as marge ,
+                (Sum(Journaux.Marge*Journaux.Qte)/Sum(Journaux.Qte)*Sum(Journaux.Qte)) as total
          From Journaux 
          Join Articles ON Journaux.Article_id = Articles.id 
          Where Journaux.Mov = 1 AND (Piece_type like 'BL' OR Piece_type like 'FC') AND  Journaux.Date Between ${dateStart} AND ${dateEnd}
@@ -720,9 +721,9 @@ class QueryCtr {
          break;
        case 1 :
          query = """
-         Select Articles.Ref , Articles.Designation , Sum(Journaux.Qte) as qte , 
-                Sum(Journaux.Prix_ht*Journaux.Qte)/Sum(Journaux.Qte) as Prix_ht,
-                (Sum(Journaux.Prix_ht*Journaux.Qte)/Sum(Journaux.Qte)*Sum(Journaux.Qte)) as Montant
+         Select Articles.Ref as referance , Articles.Designation as designation, Sum(Journaux.Qte) as qte , 
+                Sum(Journaux.Prix_ht*Journaux.Qte)/Sum(Journaux.Qte) as prix,
+                (Sum(Journaux.Prix_ht*Journaux.Qte)/Sum(Journaux.Qte)*Sum(Journaux.Qte)) as montant
          From Journaux 
          Join Articles ON Journaux.Article_id = Articles.id 
          Where Journaux.Mov = 1 AND Piece_type like 'CC'  AND  Journaux.Date Between ${dateStart} AND ${dateEnd}
@@ -732,20 +733,23 @@ class QueryCtr {
          break;
        case 2 :
          query = """
-         Select Journaux.Piece_type ,Pieces.Num_piece ,Pieces.Date ,Articles.Ref ,Articles.Designation ,Tiers.RaisonSociale as Client ,
-                Journaux.Qte ,Journaux.Prix_ht , (Journaux.Prix_ht * Journaux.Qte) as Montant
+         Select Journaux.Piece_type as piece_titre ,Pieces.Num_piece as n,
+                strftime('%d-%m-%Y', datetime(Pieces.Date/1000, 'unixepoch')) as date ,
+                Articles.Ref as referance ,Articles.Designation designation ,Tiers.RaisonSociale as client ,
+                Journaux.Qte as qte ,Journaux.Prix_ht as prix, (Journaux.Prix_ht * Journaux.Qte) as montant
          From Journaux 
          Left Join Pieces ON Journaux.Piece_id = Pieces.id 
          Left Join Tiers ON Pieces.Tier_id = Tiers.id 
          Left Join Articles ON Journaux.Article_id = Articles.id 
          Where Journaux.Mov = 1 AND (Piece_type like 'BL' OR Piece_type like 'FC')  AND  Journaux.Date Between ${dateStart} AND ${dateEnd}
-         order by Pieces.Num_piece
+         Order by Pieces.Num_piece
          """;
          break;
        case 3 :
          query = """
-         Select Journaux.Piece_type ,Pieces.Num_piece ,Pieces.Date ,Articles.Ref ,Articles.Designation ,Tiers.RaisonSociale as Client ,
-                Journaux.Qte ,Journaux.Prix_ht , (Journaux.Prix_ht * Journaux.Qte) as Montant
+         Select Journaux.Piece_type as piece_titre ,Pieces.Num_piece as n ,Pieces.Date as date ,
+                Articles.Ref as  referance ,Articles.Designation as designation,Tiers.RaisonSociale as client ,
+                Journaux.Qte as qte ,Journaux.Prix_ht as prix , (Journaux.Prix_ht * Journaux.Qte) as montant
          From Journaux 
          Left Join Pieces ON Journaux.Piece_id = Pieces.id 
          Left Join Tiers ON Pieces.Tier_id = Tiers.id 
@@ -760,7 +764,6 @@ class QueryCtr {
      return res ;
   }
 
-  //ok
   Future rapportAchat(int rapport , DateTime start , DateTime end ) async {
     var dbClient = await _databaseHelper.db;
     String query="" ;
@@ -769,9 +772,9 @@ class QueryCtr {
     switch(rapport){
       case 0 :
         query = """
-         Select Articles.Ref , Articles.Designation , Sum(Journaux.Qte) as qte , 
-                Sum(Journaux.Marge*Journaux.Qte)/Sum(Journaux.Qte) as Marge_u ,
-                (Sum(Journaux.Marge*Journaux.Qte)/Sum(Journaux.Qte)*Sum(Journaux.Qte)) as Marge_total
+         Select Articles.Ref as referance, Articles.Designation as designation, Sum(Journaux.Qte) as qte , 
+                Sum(Journaux.Marge*Journaux.Qte)/Sum(Journaux.Qte) as  marge,
+                (Sum(Journaux.Marge*Journaux.Qte)/Sum(Journaux.Qte)*Sum(Journaux.Qte)) as total
          From Journaux 
          Join Articles ON Journaux.Article_id = Articles.id 
          Where Journaux.Mov = 1 AND (Piece_type like 'BR' OR Piece_type like 'FF') AND  Journaux.Date Between ${dateStart} AND ${dateEnd}
@@ -781,9 +784,9 @@ class QueryCtr {
         break;
       case 1 :
         query = """
-         Select Articles.Ref , Articles.Designation , Sum(Journaux.Qte) as qte , 
-                Sum(Journaux.Prix_ht*Journaux.Qte)/Sum(Journaux.Qte) as Prix_ht,
-                (Sum(Journaux.Prix_ht*Journaux.Qte)/Sum(Journaux.Qte)*Sum(Journaux.Qte)) as Montant
+         Select Articles.Ref as referance, Articles.Designation as designation, Sum(Journaux.Qte) as qte , 
+                Sum(Journaux.Prix_ht*Journaux.Qte)/Sum(Journaux.Qte) as prix,
+                (Sum(Journaux.Prix_ht*Journaux.Qte)/Sum(Journaux.Qte)*Sum(Journaux.Qte)) as montant
          From Journaux 
          Join Articles ON Journaux.Article_id = Articles.id 
          Where Journaux.Mov = 0 AND Piece_type like 'BC'  AND  Journaux.Date Between ${dateStart} AND ${dateEnd}
@@ -793,8 +796,11 @@ class QueryCtr {
         break;
       case 2 :
         query = """
-         Select Journaux.Piece_type ,Pieces.Num_piece ,Pieces.Date ,Articles.Ref ,Articles.Designation ,Tiers.RaisonSociale as Client ,
-                Journaux.Qte ,Journaux.Prix_ht , (Journaux.Prix_ht * Journaux.Qte) as Montant
+         Select Journaux.Piece_type  as piece_titre,Pieces.Num_piece as n,Pieces.Date as date,
+                Articles.Ref as referance,
+                Articles.Designation as designation,Tiers.RaisonSociale as fournisseur ,
+                Journaux.Qte as qte,Journaux.Prix_ht as prix, 
+                (Journaux.Prix_ht * Journaux.Qte) as montant
          From Journaux 
          Left Join Pieces ON Journaux.Piece_id = Pieces.id 
          Left Join Tiers ON Pieces.Tier_id = Tiers.id 
@@ -805,8 +811,10 @@ class QueryCtr {
         break;
       case 3 :
         query = """
-         Select Journaux.Piece_type ,Pieces.Num_piece ,Pieces.Date ,Articles.Ref ,Articles.Designation ,Tiers.RaisonSociale as Client ,
-                Journaux.Qte ,Journaux.Prix_ht , (Journaux.Prix_ht * Journaux.Qte) as Montant
+         Select Journaux.Piece_type as piece_titre ,Pieces.Num_piece as n,Pieces.Date as date,
+                Articles.Ref as referance,Articles.Designation as designation,
+                Tiers.RaisonSociale as fournisseur ,
+                Journaux.Qte as qte,Journaux.Prix_ht as prix, (Journaux.Prix_ht * Journaux.Qte) as montant
          From Journaux 
          Left Join Pieces ON Journaux.Piece_id = Pieces.id 
          Left Join Tiers ON Pieces.Tier_id = Tiers.id 
@@ -821,7 +829,6 @@ class QueryCtr {
     return res ;
   }
 
-  // ok
   Future rapportStock(int rapport) async {
     var dbClient = await _databaseHelper.db;
     String query="" ;
@@ -829,19 +836,22 @@ class QueryCtr {
     switch(rapport){
       case 0 :
         query = """
-        Select Ref ,Designation , Qte , PMP , (Qte*PMP) as Valeur_Stock
+        Select Ref as referance ,Designation as designation, Qte as qte, 
+                PMP as pmp, (Qte*PMP) as montant
         From Articles where Qte > 0
         """;
         break;
       case 1 :
         query = """
-        Select Ref ,Designation , Qte , Qte_Min, PMP , (Qte*PMP) as Valeur_Stock
+        Select Ref as referance ,Designation as designation, Qte as qte, Qte_Min as qte_min, PMP as pmp, 
+              (Qte*PMP) as montant
         From Articles where Qte < 1 OR Qte < Qte_Min
         """;
         break;
       case 2 :
         query = """
-        Select Ref ,Designation , Qte , PrixVente1, (Qte*PrixVente1) as chifre_affaire
+        Select Ref as referance,Designation as designation, Qte as qte, 
+              PrixVente1 as prix, (Qte*PrixVente1) as chifre_affaire
         From Articles where Qte > 0
         """;
         break;
@@ -851,7 +861,6 @@ class QueryCtr {
     return res ;
   }
 
-  // ok
   Future rapportTier(int rapport) async {
     var dbClient = await _databaseHelper.db;
     String query="" ;
@@ -859,13 +868,15 @@ class QueryCtr {
     switch(rapport){
       case 0 :
         query = """
-        Select RaisonSociale , Mobile , Chiffre_affaires , Regler , Credit 
+        Select RaisonSociale as rs, Mobile as mobile, Chiffre_affaires as chifre_affaire, 
+              Regler as regler, Credit as credit
         From Tiers where Clientfour = 0 
         """;
         break;
       case 1 :
         query = """
-        Select RaisonSociale , Mobile , Chiffre_affaires , Regler , Credit 
+        Select RaisonSociale as rs , Mobile as mobile, Chiffre_affaires  as chifre_affaire, 
+              Regler as regler, Credit as credit 
         From Tiers where Clientfour = 2 
         """;
         break;
@@ -875,7 +886,6 @@ class QueryCtr {
     return res ;
   }
 
-  // ok
   Future rapportGeneral(int rapport , DateTime start , DateTime end ) async {
     var dbClient = await _databaseHelper.db;
     String query="" ;
@@ -884,9 +894,9 @@ class QueryCtr {
     switch(rapport){
       case 0 :
         query = """
-        Select date , Sum(vente) as vente , Sum(Reg_cl) as Reg_cl , Sum(Creance) as Creance , 
-              Sum(Achat) as Achat , Sum(Reg_four) as Reg_four , Sum(dette)  as dette , 
-              Sum(charge) as charge ,Sum(marge) as marge ,(Sum(marge)-Sum(charge)) as net
+        Select date , Sum(vente) as vente , Sum(Reg_cl) as reg_cl , Sum(Creance) as credit , 
+              Sum(Achat) as achat , Sum(Reg_four) as reg_four , Sum(dette)  as dette , 
+              Sum(charge) as charge ,Sum(marge) as marge ,(Sum(marge)-Sum(charge)) as total
         from (
             Select  strftime('%d-%m-%Y', datetime(Date/1000, 'unixepoch')) date , Sum(Net_a_payer) as vente , Sum(Regler) as Reg_cl ,Sum(Reste) as Creance ,
                    0 as Achat , 0 as Reg_four , 0 as dette , 
@@ -918,9 +928,9 @@ class QueryCtr {
         break;
       case 1 :
         query = """
-        Select date , Sum(vente) as vente , Sum(Reg_cl) as Reg_cl , Sum(Creance) as Creance , 
-              Sum(Achat) as Achat , Sum(Reg_four) as Reg_four , Sum(dette)  as dette , 
-              Sum(charge) as charge ,Sum(marge) as marge ,(Sum(marge)-Sum(charge)) as net
+        Select date , Sum(vente) as vente , Sum(Reg_cl) as reg_cl , Sum(Creance) as credit , 
+              Sum(Achat) as achat , Sum(Reg_four) as reg_four , Sum(dette)  as dette , 
+              Sum(charge) as charge ,Sum(marge) as marge ,(Sum(marge)-Sum(charge)) as total
         from (
             Select  strftime('%m-%Y', datetime(Date/1000, 'unixepoch')) date , Sum(Net_a_payer) as vente , Sum(Regler) as Reg_cl ,Sum(Reste) as Creance ,
                    0 as Achat , 0 as Reg_four , 0 as dette , 
@@ -952,9 +962,9 @@ class QueryCtr {
         break;
       case 2 :
         query = """
-        Select date , Sum(vente) as vente , Sum(Reg_cl) as Reg_cl , Sum(Creance) as Creance , 
-              Sum(Achat) as Achat , Sum(Reg_four) as Reg_four , Sum(dette)  as dette , 
-              Sum(charge) as charge ,Sum(marge) as marge ,(Sum(marge)-Sum(charge)) as net
+        Select date , Sum(vente) as vente , Sum(Reg_cl) as reg_cl , Sum(Creance) as credit , 
+              Sum(Achat) as achat , Sum(Reg_four) as reg_four , Sum(dette)  as dette , 
+              Sum(charge) as charge ,Sum(marge) as marge ,(Sum(marge)-Sum(charge)) as total
         from (
             Select  strftime('%Y', datetime(Date/1000, 'unixepoch')) date , Sum(Net_a_payer) as vente , Sum(Regler) as Reg_cl ,Sum(Reste) as Creance ,
                    0 as Achat , 0 as Reg_four , 0 as dette , 

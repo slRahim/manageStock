@@ -418,12 +418,6 @@ class SqlLiteDatabaseHelper {
         id INTEGER PRIMARY KEY AUTOINCREMENT, 
         Default_format VARCHAR(4),
         Default_display VARCHAR(25),
-        Total_ht integer , 
-        Remise integer ,
-        Net_ht integer ,
-        Total_tva integer , 
-        Timbre integer ,
-        Reste integer , 
         Credit integer  
         )''');
 

@@ -41,32 +41,35 @@ class Statics {
   static List<String> rapportItems = [
     S.current.vente,
     S.current.achat,
-    "Stock",
+    S.current.stock,
     S.current.cl_four,
     S.current.generale
   ];
   static List<String> rapportAchatItems = [
-    "Recap.des achats par article",
-    "Recap.des commandes par article",
-    "Journal des achats",
-    "Journal des commandes"
+    S.current.recap_achat_article,
+    S.current.recap_cmd_article,
+    S.current.jour_achat,
+    S.current.jour_cmd,
   ];
   static List<String> rapportVenteItems = [
-    "Recap.des ventes par article",
-    "Recap.des commandes par article",
-    "Journal des ventes",
-    "Journal des commandes"
+    S.current.recap_vente_article,
+    S.current.recap_cmd_article,
+    S.current.jour_vente,
+    S.current.jour_cmd,
   ];
   static List<String> rapportStocktockItems = [
-    "Inventaire",
-    "Produit en repture",
-    "Zakat"
+    S.current.inventaire,
+    S.current.prod_repture,
+    S.current.zakat,
   ];
-  static List<String> rapportTierItems = ["Creance Client", "Creance fournisseur"];
+  static List<String> rapportTierItems = [
+    S.current.creance_cl,
+    S.current.creance_four
+  ];
   static List<String> rapportGeneralItems = [
-    "Etat journalier",
-    "Etat mensuel",
-    "Etat annuel"
+    S.current.etat_jour,
+    S.current.etat_mensu,
+    S.current.etat_annuel,
   ];
 }
 

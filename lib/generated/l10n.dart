@@ -2725,20 +2725,20 @@ class S {
     );
   }
 
-  /// `Ventes`
+  /// `Sales`
   String get vente {
     return Intl.message(
-      'Ventes',
+      'Sales',
       name: 'vente',
       desc: '',
       args: [],
     );
   }
 
-  /// `Achats`
+  /// `Purchases`
   String get achat {
     return Intl.message(
-      'Achats',
+      'Purchases',
       name: 'achat',
       desc: '',
       args: [],
@@ -2765,140 +2765,140 @@ class S {
     );
   }
 
-  /// `Meilleur Cinq`
+  /// `Best five`
   String get best_5 {
     return Intl.message(
-      'Meilleur Cinq',
+      'Best five',
       name: 'best_5',
       desc: '',
       args: [],
     );
   }
 
-  /// `éléments`
+  /// `items`
   String get item {
     return Intl.message(
-      'éléments',
+      'items',
       name: 'item',
       desc: '',
       args: [],
     );
   }
 
-  /// `Cl/Four`
+  /// `Cus/Prov`
   String get cl_four {
     return Intl.message(
-      'Cl/Four',
+      'Cus/Prov',
       name: 'cl_four',
       desc: '',
       args: [],
     );
   }
 
-  /// `FP`
+  /// `QT`
   String get fp {
     return Intl.message(
-      'FP',
+      'QT',
       name: 'fp',
       desc: '',
       args: [],
     );
   }
 
-  /// `CC`
+  /// `CO`
   String get cc {
     return Intl.message(
-      'CC',
+      'CO',
       name: 'cc',
       desc: '',
       args: [],
     );
   }
 
-  /// `BL`
+  /// `DF`
   String get bl {
     return Intl.message(
-      'BL',
+      'DF',
       name: 'bl',
       desc: '',
       args: [],
     );
   }
 
-  /// `FC`
+  /// `SI`
   String get fc {
     return Intl.message(
-      'FC',
+      'SI',
       name: 'fc',
       desc: '',
       args: [],
     );
   }
 
-  /// `AC`
+  /// `CIF`
   String get ac {
     return Intl.message(
-      'AC',
+      'CIF',
       name: 'ac',
       desc: '',
       args: [],
     );
   }
 
-  /// `RC`
+  /// `CF`
   String get rc {
     return Intl.message(
-      'RC',
+      'CF',
       name: 'rc',
       desc: '',
       args: [],
     );
   }
 
-  /// `BC`
+  /// `PO`
   String get bc {
     return Intl.message(
-      'BC',
+      'PO',
       name: 'bc',
       desc: '',
       args: [],
     );
   }
 
-  /// `BR`
+  /// `RE`
   String get br {
     return Intl.message(
-      'BR',
+      'RE',
       name: 'br',
       desc: '',
       args: [],
     );
   }
 
-  /// `FF`
+  /// `PI`
   String get ff {
     return Intl.message(
-      'FF',
+      'PI',
       name: 'ff',
       desc: '',
       args: [],
     );
   }
 
-  /// `AF`
+  /// `PIF`
   String get af {
     return Intl.message(
-      'AF',
+      'PIF',
       name: 'af',
       desc: '',
       args: [],
     );
   }
 
-  /// `RF`
+  /// `PF`
   String get rf {
     return Intl.message(
-      'RF',
+      'PF',
       name: 'rf',
       desc: '',
       args: [],
@@ -2910,6 +2910,266 @@ class S {
     return Intl.message(
       'TR',
       name: 'tr',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Pay.Cust`
+  String get reg_cl {
+    return Intl.message(
+      'Pay.Cust',
+      name: 'reg_cl',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Pay.Prov`
+  String get reg_four {
+    return Intl.message(
+      'Pay.Prov',
+      name: 'reg_four',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Debts`
+  String get dette {
+    return Intl.message(
+      'Debts',
+      name: 'dette',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Min Qte`
+  String get qte_min {
+    return Intl.message(
+      'Min Qte',
+      name: 'qte_min',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Stock`
+  String get stock {
+    return Intl.message(
+      'Stock',
+      name: 'stock',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Summary of sales by product`
+  String get recap_vente_article {
+    return Intl.message(
+      'Summary of sales by product',
+      name: 'recap_vente_article',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Summary of orders by product`
+  String get recap_cmd_article {
+    return Intl.message(
+      'Summary of orders by product',
+      name: 'recap_cmd_article',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Sales Journal`
+  String get jour_vente {
+    return Intl.message(
+      'Sales Journal',
+      name: 'jour_vente',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Orders log`
+  String get jour_cmd {
+    return Intl.message(
+      'Orders log',
+      name: 'jour_cmd',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Summary of purchases by product`
+  String get recap_achat_article {
+    return Intl.message(
+      'Summary of purchases by product',
+      name: 'recap_achat_article',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Purchasing Journal`
+  String get jour_achat {
+    return Intl.message(
+      'Purchasing Journal',
+      name: 'jour_achat',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Inventory`
+  String get inventaire {
+    return Intl.message(
+      'Inventory',
+      name: 'inventaire',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Out of stock product`
+  String get prod_repture {
+    return Intl.message(
+      'Out of stock product',
+      name: 'prod_repture',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Zakat`
+  String get zakat {
+    return Intl.message(
+      'Zakat',
+      name: 'zakat',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Daily Status`
+  String get etat_jour {
+    return Intl.message(
+      'Daily Status',
+      name: 'etat_jour',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Monthly Status`
+  String get etat_mensu {
+    return Intl.message(
+      'Monthly Status',
+      name: 'etat_mensu',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Annual Status`
+  String get etat_annuel {
+    return Intl.message(
+      'Annual Status',
+      name: 'etat_annuel',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Report Category :`
+  String get cat_rapport {
+    return Intl.message(
+      'Report Category :',
+      name: 'cat_rapport',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Report Type :`
+  String get type_rapport {
+    return Intl.message(
+      'Report Type :',
+      name: 'type_rapport',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Year :`
+  String get annee {
+    return Intl.message(
+      'Year :',
+      name: 'annee',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Date (Start / End :)`
+  String get date_d_f {
+    return Intl.message(
+      'Date (Start / End :)',
+      name: 'date_d_f',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Report is empty`
+  String get msg_rapport_vide {
+    return Intl.message(
+      'Report is empty',
+      name: 'msg_rapport_vide',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Edit on`
+  String get demonstration {
+    return Intl.message(
+      'Edit on',
+      name: 'demonstration',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Report Date`
+  String get rapport_date {
+    return Intl.message(
+      'Report Date',
+      name: 'rapport_date',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Customer fee`
+  String get creance_cl {
+    return Intl.message(
+      'Customer fee',
+      name: 'creance_cl',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Supplier debt`
+  String get creance_four {
+    return Intl.message(
+      'Supplier debt',
+      name: 'creance_four',
       desc: '',
       args: [],
     );

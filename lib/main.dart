@@ -21,20 +21,27 @@ import 'Helpers/route_generator.dart';
 import 'models/MyParams.dart';
 
 
-void main() async{
-  Crashlytics.instance.enableInDevMode = false;
-  FlutterError.onError = Crashlytics.instance.recordFlutterError;
+void main() {
+  // Crashlytics.instance.enableInDevMode = false;
+  // FlutterError.onError = Crashlytics.instance.recordFlutterError;
+  //
+  // runZoned(() {
+  //   runApp(
+  //       Phoenix(
+  //           child: PushNotificationsManager (
+  //               child: MyApp()
+  //           )
+  //       )
+  //   );
+  // }, onError: Crashlytics.instance.recordError);
 
-  runZoned(() {
-    runApp(
-        Phoenix(
-            child: PushNotificationsManager (
-                child: MyApp()
-            )
-        )
-    );
-  }, onError: Crashlytics.instance.recordError);
-
+  runApp(
+      Phoenix(
+          child: PushNotificationsManager (
+              child: MyApp()
+          )
+      )
+  );
 
 }
 

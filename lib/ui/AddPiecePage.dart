@@ -336,9 +336,10 @@ class _AddPiecePageState extends State<AddPiecePage>
           ),
           // extendBody: true,
           bottomNavigationBar: BottomExpandableAppBar(
+            appBarHeight: 70,
             expandedHeight: 180,
             controller: bottomBarControler,
-            horizontalMargin: 15,
+            horizontalMargin: 10,
             shape: AutomaticNotchedShape(
                 RoundedRectangleBorder(), StadiumBorder(side: BorderSide())),
             expandedBackColor: Colors.lightBlueAccent,
@@ -353,57 +354,58 @@ class _AddPiecePageState extends State<AddPiecePage>
               timbre: _piece.timbre,
               myParams: _myParams,
             ),
-            bottomAppBarBody: Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Row(
-                mainAxisSize: MainAxisSize.max,
-                children: <Widget>[
-                  Expanded(
-                    child: InkWell(
-                      onTap: () async {
-                        if(editMode){
-                          if (_selectedItems.isNotEmpty) {
-                            AwesomeDialog(
-                                context: context,
-                                dialogType: DialogType.INFO,
-                                animType: AnimType.BOTTOMSLIDE,
-                                title: S.current.supp,
-                                body: addRemisedialogue(),
-                                btnCancelText: S.current.annuler,
-                                btnCancelOnPress: () {},
-                                btnOkText: S.current.confirme,
-                                btnOkOnPress: () {
-                                  setState(() {
-                                    _pourcentremise = double.parse(
-                                        _pourcentremiseControler.text);
-                                    _remisepiece =
-                                        double.parse(_remisepieceControler.text);
-                                  });
-                                  calculPiece();
-                                })
-                              ..show();
-                          } else {
-                            Helpers.showFlushBar(
-                                context, S.current.msg_select_art);
-                          }
-                        }else {
-                          Helpers.showFlushBar(context, S.current.msg_no_dispo);
+            bottomAppBarBody:  Row(
+              mainAxisSize: MainAxisSize.max,
+              children: <Widget>[
+                Expanded(
+                  flex: 4,
+                  child: InkWell(
+                    onTap: () async {
+                      if(editMode){
+                        if (_selectedItems.isNotEmpty) {
+                          AwesomeDialog(
+                              context: context,
+                              dialogType: DialogType.INFO,
+                              animType: AnimType.BOTTOMSLIDE,
+                              title: S.current.supp,
+                              body: addRemisedialogue(),
+                              btnCancelText: S.current.annuler,
+                              btnCancelOnPress: () {},
+                              btnOkText: S.current.confirme,
+                              btnOkOnPress: () {
+                                setState(() {
+                                  _pourcentremise = double.parse(
+                                      _pourcentremiseControler.text);
+                                  _remisepiece =
+                                      double.parse(_remisepieceControler.text);
+                                });
+                                calculPiece();
+                              })
+                            ..show();
+                        } else {
+                          Helpers.showFlushBar(
+                              context, S.current.msg_select_art);
                         }
-                      },
+                      }else {
+                        Helpers.showFlushBar(context, S.current.msg_no_dispo);
+                      }
+                    },
+                    child: Container(
+                      color : Colors.green ,
                       child: Text(
-                        '${S.current.total}: ' +
-                            _net_a_payer.toString() +
+                        Helpers.numberFormat(_net_a_payer).toString() +
                             " ${S.current.da}",
                         textAlign: TextAlign.center,
                         style: TextStyle(
-                            fontWeight: FontWeight.bold, color: (editMode)?Colors.blue:Colors.black54),
+                            fontWeight: FontWeight.bold, color: (editMode)?Colors.blue:Colors.black54 , fontSize: 14),
                       ),
                     ),
                   ),
-                  Spacer(
-                    flex: 1,
-                  ),
-                  InkWell(
+                ),
+                Spacer(flex: 1,),
+                Expanded(
+                  flex: 4,
+                  child: InkWell(
                     onTap: () async {
                       if (editMode) {
                         if (_piece.piece != PieceType.devis &&
@@ -442,27 +444,31 @@ class _AddPiecePageState extends State<AddPiecePage>
                     },
                     child: Container(
                         padding: EdgeInsetsDirectional.only(end: 30),
-                        child: Text(
-                          "${S.current.reste} : " + _restepiece.toString(),
-                          textAlign: TextAlign.center,
-                          style: TextStyle(
-                              fontWeight: FontWeight.bold,
-                              color: (_piece.piece != PieceType.devis &&
-                                      _piece.piece != PieceType.bonCommande &&
-                                      _piece.piece != PieceType.retourClient &&
-                                      _piece.piece != PieceType.avoirClient &&
-                                      _piece.piece != PieceType.retourFournisseur &&
-                                      _piece.piece != PieceType.avoirFournisseur && editMode)
-                                  ? Colors.blue
-                                  : Colors.black54),
+                        child: Container(
+                          color : Colors.red ,
+                          child: Text(
+                            Helpers.numberFormat( _restepiece).toString(),
+                            textAlign: TextAlign.center,
+                            style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                                color: (_piece.piece != PieceType.devis &&
+                                    _piece.piece != PieceType.bonCommande &&
+                                    _piece.piece != PieceType.retourClient &&
+                                    _piece.piece != PieceType.avoirClient &&
+                                    _piece.piece != PieceType.retourFournisseur &&
+                                    _piece.piece != PieceType.avoirFournisseur && editMode)
+                                    ? Colors.blue
+                                    : Colors.black54),
+                          ),
                         )),
                   ),
-                ],
-              ),
+                ),
+              ],
             ),
-          ),
-          floatingActionButtonLocation:
-              FloatingActionButtonLocation.centerDocked,
+
+            ),
+
+          floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
           floatingActionButton: GestureDetector(
             // Set onVerticalDrag event to drag handlers of controller for swipe effect
             onVerticalDragUpdate: bottomBarControler.onDrag,
@@ -1124,7 +1130,7 @@ class _AddPiecePageState extends State<AddPiecePage>
       _net_ht = _total_ht - ((_total_ht * _pourcentremise) / 100);
       _total_ttc = _net_ht + _total_tva;
       _net_a_payer =
-          (_myParams.timbre) ? _total_ttc + _piece.timbre : _total_ttc + 0.0;
+          ((_myParams.timbre) ? _total_ttc + _piece.timbre : _total_ttc + 0.0);
 
       if (_piece.id != null) {
         if (_net_a_payer <= _piece.net_a_payer) {
@@ -1929,17 +1935,17 @@ class _AddPiecePageState extends State<AddPiecePage>
           (formatPrint.default_display == "Referance")
               ? PosColumn(textEncoded: await CharsetConverter.encode("ISO-8859-6", "${element.ref.substring(0,(element.ref.length<10 ? element.ref.length : 10 ))}"), width: 6)
               : PosColumn(textEncoded: await CharsetConverter.encode("ISO-8859-6", "${element.designation.substring(0,(element.designation.length<10 ? element.designation.length : 10 ))}"), width: 6),
-          PosColumn(text: '${element.selectedQuantite.toStringAsFixed(2)}', width: 2),
-          PosColumn(text: '${element.selectedPrice.toStringAsFixed(2)}', width: 2),
+          PosColumn(text: '${Helpers.numberFormat(element.selectedQuantite)}', width: 2),
+          PosColumn(text: '${Helpers.numberFormat(element.selectedPrice)}', width: 2),
           PosColumn(
-              text: '${(element.selectedPrice * element.selectedQuantite).toStringAsFixed(2)}',
+              text: '${Helpers.numberFormat((element.selectedPrice * element.selectedQuantite))}',
               width: 2),
         ]);
       }
       ticket.hr(ch:'-');
       if (_piece.total_tva > 0 && _myParams.tva) {
         input = "${S.current.total_ht}";
-        encArabic = await CharsetConverter.encode("ISO-8859-6", "${_piece.total_ht.toStringAsFixed(2)}: ${input.split('').reversed.join()}");
+        encArabic = await CharsetConverter.encode("ISO-8859-6", "${Helpers.numberFormat(_piece.total_ht)}: ${input.split('').reversed.join()}");
         ticket.textEncoded(encArabic,
             styles: PosStyles(
                 codeTable: PosCodeTable.arabic,
@@ -1949,7 +1955,7 @@ class _AddPiecePageState extends State<AddPiecePage>
       }
       if (_piece.remise > 0) {
         input = "${S.current.remise}";
-        encArabic = await CharsetConverter.encode("ISO-8859-6", "(% ${_piece.remise}) ${((_piece.total_ht*_piece.remise)/100).toStringAsFixed(2)}: ${input.split('').reversed.join()}");
+        encArabic = await CharsetConverter.encode("ISO-8859-6", "(% ${Helpers.numberFormat(_piece.remise)}) ${Helpers.numberFormat((_piece.total_ht*_piece.remise)/100)}: ${input.split('').reversed.join()}");
         ticket.textEncoded(encArabic,
             styles: PosStyles(
                 codeTable: PosCodeTable.arabic,
@@ -1958,7 +1964,7 @@ class _AddPiecePageState extends State<AddPiecePage>
                     : PosAlign.left));
 
         input = "${S.current.net_ht}";
-        encArabic = await CharsetConverter.encode("ISO-8859-6", "${_piece.net_ht.toStringAsFixed(2)}: ${input.split('').reversed.join()}");
+        encArabic = await CharsetConverter.encode("ISO-8859-6", "${Helpers.numberFormat(_piece.net_ht)}: ${input.split('').reversed.join()}");
         ticket.textEncoded(encArabic,
             styles: PosStyles(
                 codeTable: PosCodeTable.arabic,
@@ -1969,7 +1975,7 @@ class _AddPiecePageState extends State<AddPiecePage>
       if (_piece.total_tva > 0 && _myParams.tva) {
         input = "${S.current.total_tva}";
         encArabic = await CharsetConverter.encode(
-            "ISO-8859-6", "${_piece.total_tva.toStringAsFixed(2)}: ${input
+            "ISO-8859-6", "${Helpers.numberFormat(_piece.total_tva)}: ${input
             .split('')
             .reversed
             .join()}");
@@ -1982,7 +1988,7 @@ class _AddPiecePageState extends State<AddPiecePage>
 
         input = "${S.current.total}";
         encArabic = await CharsetConverter.encode(
-            "ISO-8859-6", "${_piece.total_ttc.toStringAsFixed(2)}: ${input
+            "ISO-8859-6", "${Helpers.numberFormat(_piece.total_ttc)}: ${input
             .split('')
             .reversed
             .join()}");
@@ -1997,7 +2003,7 @@ class _AddPiecePageState extends State<AddPiecePage>
 
       if (_myParams.timbre) {
         input = "${S.current.timbre}";
-        encArabic = await CharsetConverter.encode("ISO-8859-6", "${(_piece.total_ttc < _piece.net_a_payer) ? _piece.timbre.toStringAsFixed(2) : 0.0}: ${input.split('').reversed.join()}");
+        encArabic = await CharsetConverter.encode("ISO-8859-6", "${(_piece.total_ttc < _piece.net_a_payer) ? Helpers.numberFormat(_piece.timbre ): Helpers.numberFormat(0.0)}: ${input.split('').reversed.join()}");
         ticket.textEncoded(
             encArabic,
             styles: PosStyles(
@@ -2009,7 +2015,7 @@ class _AddPiecePageState extends State<AddPiecePage>
 
       ticket.hr(ch: '=');
       input = "${S.current.net_payer}";
-      encArabic = await CharsetConverter.encode("ISO-8859-6", "${_piece.net_a_payer.toStringAsFixed(2)}: ${input.split('').reversed.join()}");
+      encArabic = await CharsetConverter.encode("ISO-8859-6", "${Helpers.numberFormat(_piece.net_a_payer)}: ${input.split('').reversed.join()}");
       ticket.textEncoded(encArabic,
           styles: PosStyles(
             codeTable: PosCodeTable.arabic,
@@ -2023,17 +2029,17 @@ class _AddPiecePageState extends State<AddPiecePage>
       ticket.hr(ch: '=');
       ticket.row([
         PosColumn(
-            textEncoded: await CharsetConverter.encode("ISO-8859-6", "${_piece.regler.toStringAsFixed(2)}: ${S.current.regler.split('').reversed.join()}"),
+            textEncoded: await CharsetConverter.encode("ISO-8859-6", "${Helpers.numberFormat(_piece.regler)}: ${S.current.regler.split('').reversed.join()}"),
             width: 6
         ),
         (_piece.reste > 0)?PosColumn(
-            textEncoded: await CharsetConverter.encode("ISO-8859-6", "${_piece.reste.toStringAsFixed(2)}: ${S.current.reste.split('').reversed.join()}"),
+            textEncoded: await CharsetConverter.encode("ISO-8859-6", "${Helpers.numberFormat(_piece.reste)}: ${S.current.reste.split('').reversed.join()}"),
             width: 6
         ):PosColumn(width: 6),
       ]);
       if (formatPrint.credit == 1) {
         input = "${S.current.credit}";
-        encArabic = await CharsetConverter.encode("ISO-8859-6", "${_selectedClient.credit.toStringAsFixed(2)}: ${input.split('').reversed.join()}");
+        encArabic = await CharsetConverter.encode("ISO-8859-6", "${Helpers.numberFormat(_selectedClient.credit)}: ${input.split('').reversed.join()}");
         ticket.textEncoded(encArabic,
             styles: PosStyles(
                 codeTable: PosCodeTable.arabic));
@@ -2049,7 +2055,8 @@ class _AddPiecePageState extends State<AddPiecePage>
       ticket.feed(1);
       ticket.cut();
 
-    }else{
+    }
+    else{
       ticket.text("${S.current.n} ${_piece.piece}: ${_piece.num_piece}",
           styles: PosStyles(
               align: (formatPrint.default_format == PaperSize.mm80)
@@ -2085,29 +2092,29 @@ class _AddPiecePageState extends State<AddPiecePage>
           (formatPrint.default_display == "Referance")
               ? PosColumn(text: '${element.ref.substring(0,(element.ref.length<10 ? element.ref.length : 10))}', width: 6)
               : PosColumn(text: '${element.designation.substring(0,(element.designation.length<10 ? element.designation.length : 10))}', width: 6),
-          PosColumn(text: '${element.selectedQuantite.toStringAsFixed(2)}', width: 2),
-          PosColumn(text: '${element.selectedPrice.toStringAsFixed(2)}', width: 2),
+          PosColumn(text: '${Helpers.numberFormat(element.selectedQuantite)}', width: 2),
+          PosColumn(text: '${Helpers.numberFormat(element.selectedPrice)}', width: 2),
           PosColumn(
-              text: '${(element.selectedPrice * element.selectedQuantite).toStringAsFixed(2)}',
+              text: '${Helpers.numberFormat((element.selectedPrice * element.selectedQuantite))}',
               width: 2),
         ]);
       });
       ticket.hr(ch: '-');
       if (_piece.total_tva > 0 && _myParams.tva) {
-        ticket.text("${S.current.total_ht} : ${_piece.total_ht.toStringAsFixed(2)}",
+        ticket.text("${S.current.total_ht} : ${Helpers.numberFormat(_piece.total_ht)}",
             styles: PosStyles(
                 align: (formatPrint.default_format == PaperSize.mm80)
                     ? PosAlign.center
                     : PosAlign.left));
       }
       if (_piece.remise > 0) {
-        ticket.text("${S.current.remise} : ${((_piece.total_ht * _piece.remise)/100).toStringAsFixed(2)} (${_piece.remise} %)",
+        ticket.text("${S.current.remise} : ${Helpers.numberFormat((_piece.total_ht * _piece.remise)/100)} (${Helpers.numberFormat(_piece.remise)} %)",
             styles: PosStyles(
                 align: (formatPrint.default_format == PaperSize.mm80)
                     ? PosAlign.center
                     : PosAlign.left));
 
-        ticket.text("${S.current.net_ht} : ${_piece.net_ht.toStringAsFixed(2)}",
+        ticket.text("${S.current.net_ht} : ${Helpers.numberFormat(_piece.net_ht)}",
             styles: PosStyles(
                 align: (formatPrint.default_format == PaperSize.mm80)
                     ? PosAlign.center
@@ -2115,14 +2122,14 @@ class _AddPiecePageState extends State<AddPiecePage>
       }
       if (_piece.total_tva > 0 && _myParams.tva) {
         ticket.text(
-            "${S.current.total_tva} : ${_piece.total_tva.toStringAsFixed(2)}",
+            "${S.current.total_tva} : ${Helpers.numberFormat(_piece.total_tva)}",
             styles: PosStyles(
                 align: (formatPrint.default_format == PaperSize.mm80)
                     ? PosAlign.center
                     : PosAlign.left));
 
         ticket.text(
-            "${S.current.total} : ${_piece.total_ttc.toStringAsFixed(2)}",
+            "${S.current.total} : ${Helpers.numberFormat(_piece.total_ttc)}",
             styles: PosStyles(
                 align: (formatPrint.default_format == PaperSize.mm80)
                     ? PosAlign.center
@@ -2131,7 +2138,7 @@ class _AddPiecePageState extends State<AddPiecePage>
 
       if (_myParams.timbre ) {
         ticket.text(
-            "${S.current.timbre} : ${(_piece.total_ttc < _piece.net_a_payer) ? _piece.timbre.toStringAsFixed(2) : 0.0}",
+            "${S.current.timbre} : ${(_piece.total_ttc < _piece.net_a_payer) ? Helpers.numberFormat(_piece.timbre) : Helpers.numberFormat(0.0)}",
             styles: PosStyles(
                 align: (formatPrint.default_format == PaperSize.mm80)
                     ? PosAlign.center
@@ -2139,7 +2146,7 @@ class _AddPiecePageState extends State<AddPiecePage>
       }
 
       ticket.hr(ch: '=');
-      ticket.text("${S.current.net_payer} : ${_piece.net_a_payer.toStringAsFixed(2)}",
+      ticket.text("${S.current.net_payer} : ${Helpers.numberFormat(_piece.net_a_payer)})",
           styles: PosStyles(
             align: (formatPrint.default_format == PaperSize.mm80)
                 ? PosAlign.center
@@ -2151,16 +2158,16 @@ class _AddPiecePageState extends State<AddPiecePage>
 
       ticket.row([
         PosColumn(
-            text: "${S.current.regler} : ${_piece.regler.toStringAsFixed(2)}",
+            text: "${S.current.regler} : ${Helpers.numberFormat(_piece.regler)}",
             width: 6
         ),
         (_piece.reste > 0)? PosColumn(
-            text: "${S.current.reste} : ${_piece.reste.toStringAsFixed(2)}",
+            text: "${S.current.reste} : ${Helpers.numberFormat(_piece.reste)}",
             width: 6
         ):PosColumn(width: 6),
       ]);
       if (formatPrint.credit == 1) {
-        ticket.text("${S.current.credit} : ${_selectedClient.credit.toStringAsFixed(2)}");
+        ticket.text("${S.current.credit} : ${Helpers.numberFormat(_selectedClient.credit)}");
       }
       ticket.feed(1);
       ticket.text('***BY CIRTA IT***',
@@ -2226,33 +2233,64 @@ class _AddPiecePageState extends State<AddPiecePage>
                   border: pw.Border(bottom: pw.BorderSide(width: 2))
               ),
                 children: [
-                  pw.Text("${S.current.referance}",
-                      style: pw.TextStyle(
-                          fontWeight: pw.FontWeight.bold, font: ttf)),
-                  pw.Text("${S.current.designation}",
-                      style: pw.TextStyle(
-                          fontWeight: pw.FontWeight.bold, font: ttf)),
-                  pw.Text("${S.current.qte}",
-                      style: pw.TextStyle(
-                          fontWeight: pw.FontWeight.bold, font: ttf)),
-                  pw.Text("${S.current.prix}",
-                      style: pw.TextStyle(
-                          fontWeight: pw.FontWeight.bold, font: ttf)),
-                  pw.Text("${S.current.montant}",
-                      style: pw.TextStyle(
-                          fontWeight: pw.FontWeight.bold, font: ttf))
+                  pw.Container(
+                    padding: pw.EdgeInsets.only(left: 5 , right: 5),
+                    child:pw.Text("${S.current.referance}",
+                        style: pw.TextStyle(
+                            fontWeight: pw.FontWeight.bold, font: ttf , fontSize: 10)),
+                  ),
+                  pw.Container(
+                    padding: pw.EdgeInsets.only(left: 5 , right: 5),
+                    child:pw.Text("${S.current.designation}",
+                        style: pw.TextStyle(
+                            fontWeight: pw.FontWeight.bold, font: ttf, fontSize: 10)),
+                  ),
+                  pw.Container(
+                    padding: pw.EdgeInsets.only(left: 5 , right: 5),
+                    child: pw.Text("${S.current.qte}",
+                        style: pw.TextStyle(
+                            fontWeight: pw.FontWeight.bold, font: ttf, fontSize: 10)),
+                  ),
+                  pw.Container(
+                    padding: pw.EdgeInsets.only(left: 5 , right: 5),
+                    child: pw.Text("${S.current.prix}",
+                        style: pw.TextStyle(
+                            fontWeight: pw.FontWeight.bold, font: ttf, fontSize: 10)),
+                  ),
+                  pw.Container(
+                    padding: pw.EdgeInsets.only(left: 5 , right: 5),
+                    child: pw.Text("${S.current.montant}",
+                        style: pw.TextStyle(
+                            fontWeight: pw.FontWeight.bold, font: ttf, fontSize: 10))
+                  ),
+
                 ]),
             for (var e in _selectedItems)
               pw.TableRow(
                   decoration: pw.BoxDecoration(
-                    border: pw.Border(bottom: pw.BorderSide(width: 1 ,color: PdfColors.grey))
+                      border: pw.Border(top: pw.BorderSide(width: 0.5 , color: PdfColors.grey))
                   ),
                   children: [
-                    pw.Text("${e.ref}",style: pw.TextStyle(font: ttf)),
-                    pw.Text("${e.designation}",style: pw.TextStyle(font: ttf)),
-                    pw.Text("${e.selectedQuantite.toStringAsFixed(2)}"),
-                    pw.Text("${e.selectedPrice.toStringAsFixed(2)}"),
-                    pw.Text("${(e.selectedPrice * e.selectedQuantite).toStringAsFixed(2)}"),
+                    pw.Container(
+                        padding: pw.EdgeInsets.only(left: 5 , right: 5),
+                        child: pw.Text("${e.ref}",style: pw.TextStyle(font: ttf , fontSize: 9)),
+                    ),
+                    pw.Container(
+                      padding: pw.EdgeInsets.only(left: 5 , right: 5),
+                      child: pw.Text("${e.designation}",style: pw.TextStyle(font: ttf ,fontSize: 9)),
+                    ),
+                    pw.Container(
+                      padding: pw.EdgeInsets.only(left: 5 , right: 5),
+                      child: pw.Text("${Helpers.numberFormat(e.selectedQuantite)}",style: pw.TextStyle(fontSize: 9)),
+                    ),
+                    pw.Container(
+                      padding: pw.EdgeInsets.only(left: 5 , right: 5),
+                      child:pw.Text("${Helpers.numberFormat(e.selectedPrice)}",style: pw.TextStyle(fontSize: 9)),
+                    ),
+                    pw.Container(
+                      padding: pw.EdgeInsets.only(left: 5 , right: 5),
+                      child:pw.Text("${Helpers.numberFormat((e.selectedPrice * e.selectedQuantite))}",style: pw.TextStyle(fontSize: 9)),
+                    ),
                   ]
               ),
           ]),
@@ -2264,16 +2302,16 @@ class _AddPiecePageState extends State<AddPiecePage>
                 flex: 6,
                 child: pw.Column(children: [
                   pw.Text(
-                      "${S.current.regler}\t ${_piece.regler.toStringAsFixed(2)} ${S.current.da}",
+                      "${S.current.regler}\t ${Helpers.numberFormat(_piece.regler)} ${S.current.da}",
                       style: pw.TextStyle(font: ttf)),
                   (_piece.reste > 0)
                       ? pw.Text(
-                          "${S.current.reste}\t ${_piece.reste.toStringAsFixed(2)} ${S.current.da}",
+                          "${S.current.reste}\t ${Helpers.numberFormat(_piece.reste)} ${S.current.da}",
                           style: pw.TextStyle(font: ttf))
                       : pw.SizedBox(),
                   (formatPrint.credit == 1)
                       ? pw.Text(
-                          "${S.current.credit}\t ${_selectedClient.credit.toStringAsFixed(2)} ${S.current.da}",
+                          "${S.current.credit}\t ${Helpers.numberFormat(_selectedClient.credit)} ${S.current.da}",
                           style: pw.TextStyle(font: ttf))
                       : pw.SizedBox(),
                   pw.Divider(height: 2),
@@ -2293,7 +2331,7 @@ class _AddPiecePageState extends State<AddPiecePage>
                     children: [
                       (_piece.total_tva > 0 && _myParams.tva)
                           ? pw.Text(
-                              "${S.current.total_ht}\t  ${_piece.total_ht.toStringAsFixed(2)}\t ${S.current.da}",
+                              "${S.current.total_ht}\t  ${Helpers.numberFormat(_piece.total_ht)}\t ${S.current.da}",
                               style: pw.TextStyle(font: ttf))
                           : pw.SizedBox(),
                       (_piece.remise > 0)
@@ -2303,27 +2341,27 @@ class _AddPiecePageState extends State<AddPiecePage>
                           : pw.SizedBox(),
                       (_piece.remise > 0)
                           ? pw.Text(
-                              "${S.current.net_ht}\t  ${_piece.net_ht.toStringAsFixed(2)}\t  ${S.current.da}",
+                              "${S.current.net_ht}\t  ${Helpers.numberFormat(_piece.net_ht)}\t  ${S.current.da}",
                               style: pw.TextStyle(font: ttf))
                           : pw.SizedBox(),
                       (_piece.total_tva > 0 && _myParams.tva)
                           ? pw.Text(
-                              "${S.current.total_tva}\t  ${_piece.total_tva.toStringAsFixed(2)}\t  ${S.current.da}",
+                              "${S.current.total_tva}\t  ${Helpers.numberFormat(_piece.total_tva)}\t  ${S.current.da}",
                               style: pw.TextStyle(font: ttf))
                           : pw.SizedBox(),
                       (_piece.total_tva > 0 && _myParams.tva)
                           ? pw.Text(
-                          "${S.current.total}\t  ${_piece.total_ttc.toStringAsFixed(2)}\t  ${S.current.da}",
+                          "${S.current.total}\t  ${Helpers.numberFormat(_piece.total_ttc)}\t  ${S.current.da}",
                           style: pw.TextStyle(font: ttf))
                           : pw.SizedBox(),
                       pw.Divider(height: 2),
                       (_myParams.timbre)
                           ? pw.Text(
-                              "${S.current.timbre}\t  ${(_piece.total_ttc < _piece.net_a_payer) ? _piece.timbre.toStringAsFixed(2) : 0.0}\t  ${S.current.da}",
+                              "${S.current.timbre}\t  ${(_piece.total_ttc < _piece.net_a_payer) ? Helpers.numberFormat(_piece.timbre) : Helpers.numberFormat(0.0)}\t  ${S.current.da}",
                               style: pw.TextStyle(font: ttf))
                           : pw.SizedBox(),
                       pw.Text(
-                          "${S.current.net_payer}\t  ${_piece.net_a_payer.toStringAsFixed(2)}\t  ${S.current.da}",
+                          "${S.current.net_payer}\t  ${Helpers.numberFormat(_piece.net_a_payer)}\t  ${S.current.da}",
                           style: pw.TextStyle(font: ttf)),
                       pw.Divider(height: 2),
                     ])),

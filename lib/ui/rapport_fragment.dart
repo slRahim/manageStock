@@ -6,6 +6,8 @@ import 'package:gestmob/Helpers/Statics.dart';
 import 'package:gestmob/Widgets/CustomWidgets/search_bar.dart';
 import 'package:gestmob/generated/l10n.dart';
 import 'package:gestmob/Widgets/utils.dart' as utils;
+import 'package:gestmob/models/Piece.dart';
+import 'package:gestmob/ui/preview_piece.dart';
 import 'package:pdf/pdf.dart';
 import 'package:pdf/widgets.dart' as pw;
 import 'package:printing/printing.dart';
@@ -33,6 +35,7 @@ class _RapportState extends State<Rapport> {
   String _selectedSubItem;
 
   QueryCtr _queryCtr = new QueryCtr();
+  bool directionRtl = false;
 
   @override
   void initState() {
@@ -41,9 +44,36 @@ class _RapportState extends State<Rapport> {
   }
 
   futurInit() {
+    Statics.rapportItems[0] = S.current.vente;
+    Statics.rapportItems[1] = S.current.achat ;
+    Statics.rapportItems[2] = S.current.stock;
+    Statics.rapportItems[3] = S.current.cl_four ;
+    Statics.rapportItems[4] = S.current.generale ;
+
+    Statics.rapportVenteItems[0] = S.current.recap_vente_article;
+    Statics.rapportVenteItems[1] = S.current.recap_cmd_article ;
+    Statics.rapportVenteItems[2] = S.current.jour_vente;
+    Statics.rapportVenteItems[3] = S.current.jour_cmd ;
+
+    Statics.rapportAchatItems[0] = S.current.recap_achat_article;
+    Statics.rapportAchatItems[1] = S.current.recap_cmd_article ;
+    Statics.rapportAchatItems[2] = S.current.jour_achat;
+    Statics.rapportAchatItems[3] = S.current.jour_cmd ;
+
+    Statics.rapportStocktockItems[0] = S.current.inventaire;
+    Statics.rapportStocktockItems[1] = S.current.prod_repture ;
+    Statics.rapportStocktockItems[2] = S.current.zakat;
+
+    Statics.rapportTierItems[0] = S.current.creance_cl;
+    Statics.rapportTierItems[1] = S.current.creance_four ;
+
+    Statics.rapportGeneralItems[0] = S.current.etat_jour;
+    Statics.rapportGeneralItems[1] = S.current.etat_mensu ;
+    Statics.rapportGeneralItems[2] = S.current.etat_annuel;
+
     _parentDropdownItems = utils.buildDropStatutTier(Statics.rapportItems);
     _selectedParent = Statics.rapportItems[0];
-
+    print(_selectedParent);
     _venteDropdownItems = utils.buildDropStatutTier(Statics.rapportVenteItems);
     _achatDropdownItems = utils.buildDropStatutTier(Statics.rapportAchatItems);
     _stockDropdownItems =
@@ -64,9 +94,10 @@ class _RapportState extends State<Rapport> {
 
   @override
   Widget build(BuildContext context) {
+    directionRtl = Helpers.isDirectionRTL(context);
     return Scaffold(
       appBar: SearchBar(
-        title: "Rapports",
+        title: S.current.rapports,
         isFilterOn: false,
         mainContext: context,
       ),
@@ -76,7 +107,8 @@ class _RapportState extends State<Rapport> {
             children: [
               Container(
                 margin: EdgeInsets.all(10),
-                height: 350,
+                padding: EdgeInsets.all(5),
+                height: 400,
                 decoration: BoxDecoration(
                   color: Colors.white,
                   borderRadius: BorderRadius.circular(10),
@@ -102,7 +134,11 @@ class _RapportState extends State<Rapport> {
                           Container(
                               margin: EdgeInsetsDirectional.only(
                                   start: 20, bottom: 8),
-                              child: Text("Categorie Rapport :"))
+                              child: Icon(Icons.category , color:Colors.blue)),
+                          Container(
+                              margin: EdgeInsetsDirectional.only(
+                                  start: 20, bottom: 8),
+                              child: Text("${S.current.cat_rapport}"))
                         ],
                       ),
                       Row(
@@ -143,7 +179,11 @@ class _RapportState extends State<Rapport> {
                           Container(
                               margin: EdgeInsetsDirectional.only(
                                   start: 20, bottom: 8),
-                              child: Text("Type Rapport :"))
+                              child: Icon(Icons.list , color:Colors.blue)),
+                          Container(
+                              margin: EdgeInsetsDirectional.only(
+                                  start: 20, bottom: 8),
+                              child: Text("${S.current.type_rapport}"))
                         ],
                       ),
                       Row(
@@ -189,12 +229,16 @@ class _RapportState extends State<Rapport> {
                             Container(
                                 margin: EdgeInsetsDirectional.only(
                                     start: 20, bottom: 8),
+                                child: Icon(Icons.date_range , color:Colors.blue)),
+                            Container(
+                                margin: EdgeInsetsDirectional.only(
+                                    start: 20, bottom: 8),
                                 child:(Statics.rapportItems.indexOf(_selectedParent) ==
                                     4 &&
                                     Statics.rapportGeneralItems
                                         .indexOf(_selectedSubItem) ==
                                         1)
-                                    ?Text("Années : "):Text("Date (Debut / Fin) :")
+                                    ?Text("${S.current.annee}"):Text("${S.current.date_d_f}")
                             ),
                           ],
                         ),
@@ -223,10 +267,6 @@ class _RapportState extends State<Rapport> {
                                     child: TextField(
                                         controller: _yearControl,
                                         decoration: InputDecoration(
-                                          prefixIcon: Icon(
-                                            Icons.date_range,
-                                            color: Colors.blue,
-                                          ),
                                           focusedBorder: OutlineInputBorder(
                                               borderSide:
                                                   BorderSide(color: Colors.blue),
@@ -261,10 +301,6 @@ class _RapportState extends State<Rapport> {
                                         child: TextField(
                                           controller: _dateControl,
                                           decoration: InputDecoration(
-                                            prefixIcon: Icon(
-                                              Icons.date_range,
-                                              color: Colors.blue,
-                                            ),
                                             focusedBorder: OutlineInputBorder(
                                                 borderSide: BorderSide(
                                                     color: Colors.blue),
@@ -286,34 +322,16 @@ class _RapportState extends State<Rapport> {
                     ]),
               ),
               SizedBox(
-                height: 20,
+                height: 40,
               ),
-              Container(
-                margin: EdgeInsets.all(10),
-                height: 100,
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.circular(10),
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.grey.withOpacity(.5),
-                      blurRadius: 20.0, // soften the shadow
-                      spreadRadius: 0.0, //extend the shadow
-                      offset: Offset(
-                        5.0, // Move to right 10  horizontally
-                        5.0, // Move to bottom 10 Vertically
-                      ),
-                    )
-                  ],
-                ),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Expanded(
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Expanded(
                       child: Container(
                         padding: EdgeInsets.all(5),
                         decoration: BoxDecoration(
-                          color: Colors.green, shape: BoxShape.circle),
+                            color: Colors.green, shape: BoxShape.circle),
                         child: IconButton(
                           icon: Icon(
                             Icons.save_alt_rounded,
@@ -321,41 +339,48 @@ class _RapportState extends State<Rapport> {
                             color: Colors.white,
                           ),
                           onPressed: () async {
-                            print("save rapport");
-                            var doc01 = await _makePdfDocument().then((value) {
-                              var message = "rapport bien été créer";
+                            var doc01 = await _makePdfDocument();
+                            if(doc01 != null){
+                              await showDialog(
+                                  context: context,
+                                  builder: (BuildContext context) {
+                                    return previewItem(45, doc01);
+                                  });
+                            }else{
+                              var message = "${S.current.msg_rapport_vide}";
                               Helpers.showFlushBar(context, message);
-                            });
+                            }
 
-                            await Printing.sharePdf(
-                                bytes: await doc01.save(),
-                                filename: 'my-document.pdf');
                           },
                         ),
                       )
-                    ),
-                    Expanded(
+                  ),
+                  Expanded(
                       child: Container(
                         padding: EdgeInsets.all(5),
                         decoration: BoxDecoration(
-                          color: Colors.blue, shape: BoxShape.circle),
+                            color: Colors.blue, shape: BoxShape.circle),
                         child: IconButton(
                           icon: Icon(
                             Icons.print,
                             size: 30,
                             color: Colors.white,
                           ),
-                          onPressed: () {
-                            print("print rapport");
-                            var message = "rapport bien été créer";
-                            Helpers.showFlushBar(context, message);
+                          onPressed: () async{
+                            var doc = await _makePdfDocument();
+                            if(doc != null){
+                              await Printing.layoutPdf(
+                                  onLayout: (PdfPageFormat format) async => doc.save());
+                            }else{
+                              var message = "${S.current.msg_rapport_vide}";
+                              Helpers.showFlushBar(context, message);
+                            }
                           },
                         ),
                       )
-                    ),
-                  ],
-                ),
-              )
+                  ),
+                ],
+              ),
             ],
           ),
         ),
@@ -419,157 +444,95 @@ class _RapportState extends State<Rapport> {
     );
   }
 
+  previewItem(int format , doc) {
+    return PreviewPiece(
+        piece: null,
+        format: format,
+        pdfDoc : doc
+    );
+  }
   //***************************************************************************************************************************************************************************
   //**************************************************************************get data & make pdf*******************************************************************************
   Future _makePdfDocument() async {
     var data = await rootBundle.load("assets/arial.ttf");
     final ttf = pw.Font.ttf(data);
 
-    final item = await _getData();
+    final _resultList = await _getData();
+    if(_resultList.length < 1){
+      return ;
+    }
 
     final doc = pw.Document();
-    // doc.addPage(
-    //   pw.MultiPage(
-    //     // textDirection: (directionRtl)?pw.TextDirection.rtl:pw.TextDirection.ltr,
-    //     build: (context) => [
-    //       pw.Row(children: [
-    //         pw.Expanded(
-    //             flex: 6,
-    //             child: pw.Column(
-    //                 crossAxisAlignment: pw.CrossAxisAlignment.start,
-    //                 children: [
-    //                   pw.Text("${S.current.rs}\t  ${widget.tier.raisonSociale}",
-    //                       style: pw.TextStyle(font: ttf)),
-    //                   pw.Divider(height: 2),
-    //                   pw.Text("${S.current.adresse}\t  ${widget.tier.adresse} ",
-    //                       style: pw.TextStyle(font: ttf)),
-    //                   pw.Text("${S.current.ville}\t  ${widget.tier.ville}",
-    //                       style: pw.TextStyle(font: ttf)),
-    //                 ])),
-    //         pw.SizedBox(width: 3),
-    //         pw.Expanded(
-    //             flex: 6,
-    //             child: pw.Column(children: [
-    //               pw.Text("|||||||||||||||||||||||||||||||"),
-    //               pw.Text("${Helpers.getPieceTitle(widget.piece.piece)}",
-    //                   style: pw.TextStyle(
-    //                       fontWeight: pw.FontWeight.bold, font: ttf)),
-    //               pw.Text("${S.current.n}\t  ${widget.piece.num_piece}",
-    //                   style: pw.TextStyle(
-    //                       fontWeight: pw.FontWeight.bold, font: ttf)),
-    //               pw.Text(
-    //                   "${S.current.date}\t  ${Helpers.dateToText(widget.piece.date)}",
-    //                   style: pw.TextStyle(font: ttf)),
-    //             ]))
-    //       ]),
-    //       pw.SizedBox(height: 20),
-    //       pw.Table(children: [
-    //         pw.TableRow(
-    //             decoration: pw.BoxDecoration(color: PdfColors.grey),
-    //             children: [
-    //               pw.Text("${S.current.referance}",
-    //                   style: pw.TextStyle(
-    //                       fontWeight: pw.FontWeight.bold, font: ttf)),
-    //               pw.Text("${S.current.designation}",
-    //                   style: pw.TextStyle(
-    //                       fontWeight: pw.FontWeight.bold, font: ttf)),
-    //               pw.Text("${S.current.qte}",
-    //                   style: pw.TextStyle(
-    //                       fontWeight: pw.FontWeight.bold, font: ttf)),
-    //               pw.Text("${S.current.prix}",
-    //                   style: pw.TextStyle(
-    //                       fontWeight: pw.FontWeight.bold, font: ttf)),
-    //               pw.Text("${S.current.montant}",
-    //                   style: pw.TextStyle(
-    //                       fontWeight: pw.FontWeight.bold, font: ttf))
-    //             ]),
-    //         for (var e in widget.articles)
-    //           pw.TableRow(children: [
-    //             pw.Text("${e.ref}",style: pw.TextStyle(font: ttf)),
-    //             pw.Text("${e.designation}",style: pw.TextStyle(font: ttf)),
-    //             pw.Text("${e.selectedQuantite.toStringAsFixed(2)}",),
-    //             pw.Text("${e.selectedPrice.toStringAsFixed(2)}",),
-    //             pw.Text("${(e.selectedPrice * e.selectedQuantite).toStringAsFixed(2)}",),
-    //           ]),
-    //       ]),
-    //       pw.SizedBox(height: 10),
-    //       pw.Divider(height: 2),
-    //       pw.SizedBox(height: 10),
-    //       pw.Row(children: [
-    //         pw.Expanded(
-    //             flex: 6,
-    //             child: pw.Column(children: [
-    //               pw.Text(
-    //                   "${S.current.regler}\t  ${widget.piece.regler.toStringAsFixed(2)}\t  ${S.current.da}",
-    //                   style: pw.TextStyle(font: ttf)),
-    //               (_controlReste)
-    //                   ? pw.Text(
-    //                 "${S.current.reste}\t   ${widget.piece.reste.toStringAsFixed(2)}\t  ${S.current.da}",
-    //                 style: pw.TextStyle(font: ttf),)
-    //                   : pw.SizedBox(),
-    //               (_controlCredit)
-    //                   ? pw.Text(
-    //                 "${S.current.credit}\t  ${widget.tier.credit.toStringAsFixed(2)}\t ${S.current.da}",
-    //                 style: pw.TextStyle(font: ttf),)
-    //                   : pw.SizedBox(),
-    //               pw.Divider(height: 2),
-    //               pw.SizedBox(height: 4),
-    //               pw.Text("${S.current.msg_visite}",
-    //                 style: pw.TextStyle(
-    //                     fontWeight: pw.FontWeight.bold, font: ttf),),
-    //               pw.Text("****BY Ciratit****",
-    //                 style: pw.TextStyle(
-    //                     fontWeight: pw.FontWeight.bold, font: ttf),),
-    //             ])),
-    //         pw.SizedBox(width: 10),
-    //         pw.Expanded(
-    //             flex: 6,
-    //             child: pw.Column(
-    //                 crossAxisAlignment: pw.CrossAxisAlignment.start,
-    //                 children: [
-    //                   (_controlTotalHT)
-    //                       ? pw.Text(
-    //                     "${S.current.total_ht}\t ${widget.piece.total_ht.toStringAsFixed(2)}\t ${S.current.da}",
-    //                     style: pw.TextStyle(font: ttf),
-    //                   )
-    //                       : pw.SizedBox(),
-    //                   (_controlRemise)
-    //                       ? pw.Text(
-    //                     "${S.current.remise}\t  ${((widget.piece.total_ht*widget.piece.remise)/100).toStringAsFixed(2)} (${widget.piece.remise}\t %)\t ${S.current.da} ",
-    //                     style: pw.TextStyle(font: ttf),
-    //                   )
-    //                       : pw.SizedBox(),
-    //                   (_controlNetHt)
-    //                       ? pw.Text(
-    //                     "${S.current.net_ht}\t ${widget.piece.net_ht.toStringAsFixed(2)}\t ${S.current.da}",
-    //                     style: pw.TextStyle(font: ttf),
-    //                   )
-    //                       : pw.SizedBox(),
-    //                   (_controlTotalTva)
-    //                       ? pw.Text(
-    //                     "${S.current.total_tva}\t ${widget.piece.total_tva.toStringAsFixed(2)}\t ${S.current.da}",
-    //                     style: pw.TextStyle(font: ttf),
-    //                   )
-    //                       : pw.SizedBox(),
-    //                   pw.Text(
-    //                       "${S.current.total}\t  ${widget.piece.total_ttc.toStringAsFixed(2)}\t  ${S.current.da}",
-    //                       style: pw.TextStyle(font: ttf)),
-    //                   pw.Divider(height: 2),
-    //                   (_controlTimbre)
-    //                       ? pw.Text(
-    //                       "${S.current.timbre}\t ${(widget.piece.total_ttc < widget.piece.net_a_payer) ? widget.piece.timbre.toStringAsFixed(2) : 0.0}\t ${S.current.da}",
-    //                       style: pw.TextStyle(font: ttf))
-    //                       : pw.SizedBox(),
-    //                   pw.Text(
-    //                       "${S.current.net_payer}\t  ${widget.piece.net_a_payer.toStringAsFixed(2)}\t  ${S.current.da}",
-    //                       style: pw.TextStyle(font: ttf)),
-    //                   pw.Divider(height: 2),
-    //                 ])),
-    //         pw.SizedBox(width: 3),
-    //       ]),
-    //     ],
-    //   ),
-    // );
+    doc.addPage(
+      pw.MultiPage(
+        textDirection: (directionRtl)?pw.TextDirection.rtl:pw.TextDirection.ltr,
+        build: (context) => [
+          pw.Row(children: [
+            pw.Expanded(
+                flex: 6,
+                child: pw.Column(
+                    crossAxisAlignment: pw.CrossAxisAlignment.start,
+                    children: [
+                      pw.Text("${_selectedSubItem}",
+                          style: pw.TextStyle(font: ttf , fontWeight: pw.FontWeight.bold)),
+                      pw.Divider(height: 2),
+                      pw.Text("${S.current.demonstration}\t  ${Helpers.dateToText(DateTime.now())}",
+                          style: pw.TextStyle(font: ttf)),
+                    ])),
+            pw.SizedBox(width: 3),
+            pw.Expanded(
+                flex: 6,
+                child: pw.Column(children: [
+                  pw.Text("${S.current.rapport_date}",
+                      style: pw.TextStyle(font: ttf , fontWeight: pw.FontWeight.bold)),
+                  pw.Text("${_dateControl.text}",
+                      style: pw.TextStyle(
+                          fontWeight: pw.FontWeight.bold, font: ttf)),
+                ]))
+          ]),
+          pw.SizedBox(height: 20),
+          pw.Table(children: [
+            pw.TableRow(
+                decoration: pw.BoxDecoration(
+                    border: pw.Border(bottom: pw.BorderSide(width: 2))
+                ),
+                children: [
+                  for(var key in _resultList.first.keys)
+                    pw.Container(
+                      padding: pw.EdgeInsets.only(left: 5 , right: 5),
+                      child: pw.Text("${getTitle(key)}",
+                          style: pw.TextStyle(
+                              fontWeight: pw.FontWeight.bold, font: ttf ,fontSize: 10)),
+                    )
+
+                ]
+            ),
+            for(var map in _resultList)
+              pw.TableRow(
+                  decoration: pw.BoxDecoration(
+                      border: pw.Border(top: pw.BorderSide(width: 0.5 , color: PdfColors.grey))
+                  ),
+                  children: [
+                    for(var value in map.values)
+                      pw.Container(
+                        padding: pw.EdgeInsets.only(left: 5 , right: 5),
+                        child: (value is double )
+                            ?pw.Text("${Helpers.numberFormat(value)}",
+                            style: pw.TextStyle(font: ttf , fontSize: 9))
+                            :pw.Text("${getValue(value)}",
+                            style: pw.TextStyle(font: ttf ,fontSize: 9)
+                        ),
+                      )
+
+                  ]
+              ),
+
+          ]
+          ),
+
+        ],
+      ),
+    );
 
     return doc;
   }
@@ -610,5 +573,126 @@ class _RapportState extends State<Rapport> {
 
     print(res);
     return res;
+  }
+
+//  **********************************************************************************************************************************************************************
+//****************************************************************************traduction**********************************************************************************
+
+  String getTitle(value){
+    switch(value){
+      case "referance":
+        return S.current.referance ;
+        break ;
+      case "designation":
+        return S.current.designation ;
+        break ;
+      case "qte":
+        return S.current.qte ;
+        break ;
+      case "marge":
+        return S.current.marge ;
+        break ;
+      case "total":
+        return S.current.total ;
+        break ;
+      case "prix":
+        return S.current.prix ;
+        break ;
+      case "n":
+        return S.current.n ;
+        break ;
+      case "date":
+        return S.current.date ;
+        break ;
+      case "client":
+        return S.current.client ;
+        break ;
+      case "montant":
+        return S.current.montant ;
+        break ;
+      case "piece_titre":
+        return S.current.piece_titre ;
+        break ;
+      case "fournisseur":
+        return S.current.fournisseur ;
+        break ;
+      case "qte_min":
+        return S.current.qte_min ;
+        break ;
+      case "pmp":
+        return S.current.pmp ;
+        break ;
+      case "rs":
+        return S.current.rs ;
+        break ;
+      case "mobile":
+        return S.current.mobile ;
+        break ;
+      case "chifre_affaire":
+        return S.current.chifre_affaire ;
+        break ;
+      case "regler":
+        return S.current.regler ;
+        break ;
+      case "vente":
+        return S.current.vente ;
+        break ;
+      case "reg_cl":
+        return S.current.reg_cl ;
+        break ;
+      case "achat":
+        return S.current.achat ;
+        break ;
+      case "reg_four":
+        return S.current.reg_four ;
+        break ;
+      case "dette":
+        return S.current.dette ;
+        break ;
+      case "charge":
+        return S.current.charge ;
+        break ;
+    }
+  }
+
+  String getValue(value){
+    switch(value){
+      case "FP":
+        return S.current.fp;
+        break ;
+      case "CC":
+        return S.current.cc;
+        break ;
+      case "BL":
+        return S.current.bl;
+        break ;
+      case "FC":
+        return S.current.fc;
+        break ;
+      case "RC":
+        return S.current.rc;
+        break ;
+      case "AC":
+        return S.current.ac;
+        break ;
+      case "BC":
+        return S.current.bc;
+        break ;
+      case "BR":
+        return S.current.br;
+        break ;
+      case "FF":
+        return S.current.ff;
+        break ;
+      case "RF":
+        return S.current.rf;
+        break ;
+      case "AF":
+        return S.current.af;
+        break ;
+      default:
+        return value ;
+        break ;
+    }
   }
 }

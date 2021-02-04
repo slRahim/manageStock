@@ -304,6 +304,36 @@
   "ff" : "ف م",
   "af" : "فع م",
   "rf" : "وع م",
-  "tr" : "TR"
+  "tr" : "TR",
+
+  "reg_cl" : "دفع.ز",
+  "reg_four" : "دفع.م",
+  "dette" : "الدين",
+  "qte_min" : "ك م دن",
+
+  "stock" : "المخزون",
+  "recap_vente_article" : "ملخص البيع لكل منتج",
+  "recap_cmd_article" : "ملخص الطلبات لكل منتج",
+  "jour_vente" : "صحيفة البيع",
+  "jour_cmd" : "صحيفة الطلبات",
+  "recap_achat_article" : "ملخص الشراء لكل منتج",
+  "jour_achat" : "صحيفة الشراء",
+  "inventaire" : "الجرد",
+  "prod_repture" : "المنتجات غير مخزنة",
+  "zakat": "الزكاة",
+  "etat_jour" : "الحالة اليومية",
+  "etat_mensu" : "الحالة الشهرية",
+  "etat_annuel" : "الحالة السنوية",
+
+  "cat_rapport" : "فئة التقرير",
+  "type_rapport" : "نوع التقرير",
+  "annee" : "السنة :",
+  "date_d_f" : "التاريخ (من / الى) :",
+  "msg_rapport_vide" : "التقرير فارغ",
+  "demonstration" : "حرر بتاريخ",
+  "rapport_date" : "تاريخ التقرير",
+
+  "creance_cl" : "دين الزبون",
+  "creance_four" : "ديون المورد"
 
 }
