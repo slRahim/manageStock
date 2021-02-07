@@ -79,8 +79,39 @@ class _PieceListItemState extends State<PieceListItem> {
               foregroundColor: Colors.black,
             ),
           ),
-          subtitle: Helpers.dateToText(widget.piece.date),
-          title:(widget.piece.raisonSociale != null) ? ("${S.current.rs}: " + widget.piece.raisonSociale) : null,
+          subtitle: Row(
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: <Widget>[
+              Icon(Icons.access_time,
+                size: SizeConfig.safeBlockHorizontal * 4,
+                color: Colors.white,
+              ),
+              SizedBox(
+                width: 10,
+              ),
+              Text(
+                "${Helpers.dateToText(widget.piece.date)}",
+                style: TextStyle(
+                    fontSize: SizeConfig.safeBlockHorizontal * 4.7,
+                    color: Colors.white70),
+              ),
+            ],
+          ),
+          title:(widget.piece.raisonSociale != null)
+              ? Row(
+                  children: [
+                    Icon(Icons.person_sharp , color: Colors.white,size: SizeConfig.safeBlockHorizontal * 5),
+                    SizedBox(
+                      width: 10,
+                    ),
+                    Text("${widget.piece.raisonSociale}" ,
+                      style: TextStyle(
+                            fontSize: SizeConfig.safeBlockHorizontal * 4.5,
+                            color: Colors.white)
+                    )
+                  ],
+              )
+              : null,
           trailingChildren: [
             Text(
              "${S.current.n}: ${widget.piece.num_piece}",
@@ -89,19 +120,19 @@ class _PieceListItemState extends State<PieceListItem> {
                   fontSize: 16.0),
             ),
             Text(
-              "${S.current.regler}: ${widget.piece.regler} ${S.current.da}",
+              "${S.current.regler}: ${Helpers.numberFormat(widget.piece.regler)} (${S.current.da})",
               style: TextStyle(
                   color: Colors.black,
                   fontSize: 16.0),
             ),
             (widget.piece.net_a_payer < 0)
-                ? Text('${S.current.prix} : '+(widget.piece.net_a_payer * -1).toString()+" ${S.current.da}",
+                ? Text("${Helpers.numberFormat(widget.piece.net_a_payer * -1).toString() } (${S.current.da})",
               style: TextStyle(
                   fontSize: 16.0,
                   fontWeight: FontWeight.bold ,
                   color: (widget.piece.reste < 0)?Colors.redAccent : Colors.black ),
             )
-                : Text('${S.current.prix}  : '+(widget.piece.net_a_payer).toString()+" ${S.current.da}",
+                : Text('${Helpers.numberFormat(widget.piece.net_a_payer).toString()} (${S.current.da})',
               style: TextStyle(
                   fontSize: 16.0,
                   fontWeight: FontWeight.bold ,
@@ -116,7 +147,7 @@ class _PieceListItemState extends State<PieceListItem> {
                         style: TextStyle(fontSize: 15 , fontWeight: FontWeight.bold,color: Colors.red)
                     ),
                     TextSpan(
-                      text:"${widget.piece.reste} ${S.current.da}",
+                      text:"${Helpers.numberFormat(widget.piece.reste)} (${S.current.da})",
                       style: TextStyle(
                           color: Colors.black,
                           fontSize: 15.0),
@@ -132,7 +163,7 @@ class _PieceListItemState extends State<PieceListItem> {
                     style: TextStyle(fontSize: 15 , fontWeight: FontWeight.bold,color: Colors.green)
                   ),
                   TextSpan(
-                    text:"${widget.piece.marge} ${S.current.da}",
+                    text:"${Helpers.numberFormat(widget.piece.marge)} (${S.current.da})",
                     style: TextStyle(
                         color: Colors.black,
                         fontSize: 15.0),

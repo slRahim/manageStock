@@ -1,3 +1,4 @@
+import 'package:esc_pos_utils/esc_pos_utils.dart';
 
 class MyParams {
 
@@ -5,6 +6,9 @@ class MyParams {
   int _tarification ;
   bool _tva ;
   bool _timbre ;
+  int _printDisplay ;
+  bool _creditTier ;
+  PaperSize _defaultFormatPrint ;
   bool _notifications ;
   String _notificationTime ;
   int _notificationDay ;
@@ -12,14 +16,17 @@ class MyParams {
 
   MyParams.init();
 
-  MyParams(this._id, this._tarification, this._tva , this._timbre ,
-      this._notifications , this._notificationTime , this._notificationDay , this._echeance);
+  MyParams(this._id, this._tarification, this._tva , this._timbre , this._printDisplay , this._creditTier,
+      this._defaultFormatPrint,this._notifications , this._notificationTime , this._notificationDay , this._echeance);
 
   MyParams.frommMap(dynamic map){
     this._id=map["id"];
     this._tarification=map["Tarification"];
     this._tva=(map["Tva"] == 1)?true:false;
     this._timbre = (map["Timbre"] == 1)?true : false;
+    this._printDisplay=map["Print_display"];
+    this._creditTier = (map["Credit_tier"] == 1)?true : false;
+    this._defaultFormatPrint = (map["Default_format_print"] == "80")?PaperSize.mm80 : PaperSize.mm58 ;
     this._notifications=(map["Notifications"] == 1)? true :false;
     this._notificationTime=map["Notification_time"];
     this._notificationDay = map["Notification_day"];
@@ -32,6 +39,9 @@ class MyParams {
     map["tarification"]=this._tarification;
     map["Tva"] = (this._tva)?1:0;
     map["Timbre"]=(this._timbre)?1:0;
+    map["Print_display"]=this._printDisplay;
+    map["Credit_tier"] = (this._creditTier)?1:0 ;
+    map["Default_format_print"]=(this._defaultFormatPrint == PaperSize.mm80) ? "80" : "58" ;
     map["Notifications"]=(this._notifications)?1:0;
     map["Notification_time"]=this._notificationTime;
     map["Notification_day"]=this._notificationDay;
@@ -40,6 +50,18 @@ class MyParams {
     return map ;
   }
 
+
+  PaperSize get defaultFormatPrint => _defaultFormatPrint;
+
+  set defaultFormatPrint(PaperSize value) {
+    _defaultFormatPrint = value;
+  }
+
+  int get printDisplay => _printDisplay;
+
+  set printDisplay(int value) {
+    _printDisplay = value;
+  }
 
   int get echeance => _echeance;
 
@@ -101,4 +123,10 @@ class MyParams {
 
   @override
   int get hashCode => _id.hashCode;
+
+  bool get creditTier => _creditTier;
+
+  set creditTier(bool value) {
+    _creditTier = value;
+  }
 }

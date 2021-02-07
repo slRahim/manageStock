@@ -17,8 +17,8 @@ class ListTileCard extends StatefulWidget {
 
   final bool itemSelected;
   final Widget leading;
-  final String title;
-  final String subtitle;
+  final Widget title;
+  final Widget subtitle;
   final List<Widget> trailingChildren;
   final GestureTapCallback onTap;
   final GestureLongPressCallback onLongPress;
@@ -93,9 +93,9 @@ class _ListTileCardState extends State<ListTileCard> {
 //**********************************************************************************************************************************************************************
 //********************************************************************front card******************************************************************************************
 class ListFrontCard extends StatefulWidget {
-  final String title;
+  final Widget title;
 
-  final String subtitle;
+  final Widget subtitle;
 
   final from;
 
@@ -132,7 +132,7 @@ class _ListFrontCardState extends State<ListFrontCard> {
         Flexible(
           flex: 1,
           child: Container(
-            padding: const EdgeInsetsDirectional.only(top: 0, start: 20),
+            padding:  EdgeInsetsDirectional.only(top: 0, start: 20),
             decoration: BoxDecoration(
                 color: (widget.itemSelected != null && widget.itemSelected)
                     ? Colors.green
@@ -140,81 +140,62 @@ class _ListFrontCardState extends State<ListFrontCard> {
                 borderRadius: BorderRadius.only(
                     topLeft: Radius.circular(25),
                     topRight: Radius.circular(25))),
-            child: ListView(
-              children: <Widget>[
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: <Widget>[
-                    Padding(
-                      padding: const EdgeInsets.only(top: 8.0),
-                      child: Text(
-                        widget.title,
-                        style: TextStyle(
-                            fontSize: SizeConfig.safeBlockHorizontal * 4.5,
-                            color: Colors.white),
+            child: SingleChildScrollView(
+              padding: EdgeInsets.only(bottom: 5),
+              child: Column(
+                children: <Widget>[
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: <Widget>[
+                      Padding(
+                        padding: const EdgeInsets.only(top: 8.0),
+                        child: widget.title,
                       ),
-                    ),
-                    (widget.from is Piece ||
-                            widget.from is Tiers ||
-                            widget.from is Article)
-                        ? InkWell(
-                            onTap: () {
-                              if (isinfoPressed == true) {
-                                isinfoPressed = false;
-                                widget.onHideInfoTapped();
-                                setState(() {});
-                              } else {
-                                isinfoPressed = true;
-                                widget.onShowInfoTapped();
-                                setState(() {});
-                              }
-                            },
-                            child: Container(
-                              padding: EdgeInsets.all(10),
-                              child: isinfoPressed
-                                  ? Transform.rotate(
-                                      angle: 0,
-                                      child: Icon(
-                                        Icons.keyboard_arrow_up,
-                                        size:
-                                            SizeConfig.safeBlockHorizontal * 9,
+                      (widget.from is Piece ||
+                              widget.from is Tiers ||
+                              widget.from is Article)
+                          ? InkWell(
+                              onTap: () {
+                                if (isinfoPressed == true) {
+                                  isinfoPressed = false;
+                                  widget.onHideInfoTapped();
+                                  setState(() {});
+                                } else {
+                                  isinfoPressed = true;
+                                  widget.onShowInfoTapped();
+                                  setState(() {});
+                                }
+                              },
+                              child: Container(
+                                padding: EdgeInsets.all(10),
+                                child: isinfoPressed
+                                    ? Transform.rotate(
+                                        angle: 0,
+                                        child: Icon(
+                                          Icons.keyboard_arrow_up,
+                                          size:
+                                              SizeConfig.safeBlockHorizontal * 9,
+                                          color: Colors.white,
+                                        ),
+                                      )
+                                    : Icon(
+                                        Icons.keyboard_arrow_down,
+                                        size: SizeConfig.safeBlockHorizontal * 9,
                                         color: Colors.white,
                                       ),
-                                    )
-                                  : Icon(
-                                      Icons.keyboard_arrow_down,
-                                      size: SizeConfig.safeBlockHorizontal * 9,
-                                      color: Colors.white,
-                                    ),
-                            ),
-                          )
-                        : SizedBox(
-                            width: 0,
+                              ),
+                            )
+                          : Container(
+                              padding: EdgeInsets.all(10),
+                              child: SizedBox(
+                                height: SizeConfig.safeBlockHorizontal * 9,
+                              ),
                           ),
-                  ],
-                ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  children: <Widget>[
-                    Icon(
-                      (widget.from is Article)
-                          ? MdiIcons.barcode
-                          : Icons.access_time,
-                      size: SizeConfig.safeBlockHorizontal * 6,
-                      color: Colors.white,
-                    ),
-                    SizedBox(
-                      width: 10,
-                    ),
-                    Text(
-                      widget.subtitle,
-                      style: TextStyle(
-                          fontSize: SizeConfig.safeBlockHorizontal * 4.7,
-                          color: Colors.white70),
-                    ),
-                  ],
-                ),
-              ],
+                    ],
+                  ),
+                  widget.subtitle
+                ],
+              ),
             ),
           ),
         ),
@@ -227,11 +208,9 @@ class _ListFrontCardState extends State<ListFrontCard> {
                 borderRadius: BorderRadius.only(
                     bottomLeft: Radius.circular(25),
                     bottomRight: Radius.circular(25))),
-            child: ListView(
-              padding: EdgeInsetsDirectional.only(start: 20, end: 20),
-              scrollDirection: Axis.vertical,
-              children: <Widget>[
-                Container(
+            child: SingleChildScrollView(
+              padding: EdgeInsetsDirectional.only(start: 20, end: 20,top: 10),
+              child :Container(
                   width: SizeConfig.safeBlockHorizontal * 90,
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.start,
@@ -271,7 +250,6 @@ class _ListFrontCardState extends State<ListFrontCard> {
                     ],
                   ),
                 ),
-              ],
             ),
           ),
         ),
@@ -297,63 +275,49 @@ class ListBackCard extends StatelessWidget {
     return Container(
       decoration: BoxDecoration(
           color: Colors.white, borderRadius: BorderRadius.circular(25)),
-      child: ListView(
-        padding: EdgeInsetsDirectional.only(start: 20, end: 20, top: 8),
-        scrollDirection: Axis.vertical,
-        children: <Widget>[
-          Text(
-            '${S.current.details}:',
-            style: TextStyle(
-              fontSize: SizeConfig.safeBlockHorizontal * 5,
-              fontWeight: FontWeight.bold,
-              color: Colors.blue[500],
-            ),
-          ),
-          Padding(
-            padding: EdgeInsets.only(bottom: 5.0),
-            child: Container(
-              width: SizeConfig.safeBlockHorizontal * 90,
-              child: Row(
-                children: <Widget>[
-                  Expanded(
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: <Widget>[
-                        trailingChildren[4],
-                        SizedBox(
-                          height: 5,
-                        ),
-                        trailingChildren[5],
-                        SizedBox(
-                          height: 5,
-                        ),
-                        trailingChildren[6],
-                      ],
+      child: SingleChildScrollView(
+         padding: EdgeInsetsDirectional.only(start: 20, end: 20, top: 15),
+         child: Container(
+            width: SizeConfig.safeBlockHorizontal * 90,
+            child: Row(
+              children: <Widget>[
+                Expanded(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: <Widget>[
+                      trailingChildren[4],
+                      SizedBox(
+                        height: 5,
+                      ),
+                      trailingChildren[5],
+                      SizedBox(
+                        height: 5,
+                      ),
+                      trailingChildren[6],
+                    ],
+                  ),
+                ),
+                Padding(
+                  padding: EdgeInsets.all(1),
+                  child: InkWell(
+                    onTap: onTap,
+                    child: Container(
+                      padding: EdgeInsets.all(5),
+                      decoration: BoxDecoration(
+                          color: Colors.blue[500], shape: BoxShape.circle),
+                      child: Center(
+                          child: Icon(
+                        Icons.remove_red_eye,
+                        size: SizeConfig.safeBlockHorizontal * 8,
+                        color: Colors.white,
+                      )),
                     ),
                   ),
-                  Padding(
-                    padding: EdgeInsets.all(1),
-                    child: InkWell(
-                      onTap: onTap,
-                      child: Container(
-                        padding: EdgeInsets.all(5),
-                        decoration: BoxDecoration(
-                            color: Colors.blue[500], shape: BoxShape.circle),
-                        child: Center(
-                            child: Icon(
-                          Icons.remove_red_eye,
-                          size: SizeConfig.safeBlockHorizontal * 8,
-                          color: Colors.white,
-                        )),
-                      ),
-                    ),
-                  )
-                ],
-              ),
+                )
+              ],
             ),
           ),
-        ],
       ),
     );
   }

@@ -244,7 +244,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "piece_titre" : MessageLookupByLibrary.simpleMessage("Piece (s)"),
     "pmp" : MessageLookupByLibrary.simpleMessage("PMP"),
     "pourcentage" : MessageLookupByLibrary.simpleMessage("Pourcentage"),
-    "preview_titre" : MessageLookupByLibrary.simpleMessage("Aperçu Piece"),
+    "preview_titre" : MessageLookupByLibrary.simpleMessage("Aperçu"),
     "printer_titre" : MessageLookupByLibrary.simpleMessage("Imprimante (s)"),
     "prix" : MessageLookupByLibrary.simpleMessage("Prix"),
     "prix_achat" : MessageLookupByLibrary.simpleMessage("Prix d\'achat"),

@@ -30,6 +30,8 @@ class _SettingsPageState extends State<SettingsPage> {
   int _tarification;
   bool _tva;
   bool _timbre;
+  bool _credit ;
+  String _formatPrintDisplay ;
   String _language;
   bool _notifications;
   String _dayTime;
@@ -39,6 +41,7 @@ class _SettingsPageState extends State<SettingsPage> {
 
   QueryCtr _queryCtr = new QueryCtr();
   MyParams _myParams;
+
 
   @override
   Future<void> initState() {
@@ -52,6 +55,18 @@ class _SettingsPageState extends State<SettingsPage> {
   }
 
   Future<void> futureInit() async {
+    Statics.repeateNotifications[0] = S.current.ev_day ;
+    Statics.repeateNotifications[1] = S.current.ev_sun ;
+    Statics.repeateNotifications[2] = S.current.ev_mon ;
+    Statics.repeateNotifications[3] = S.current.ev_tue ;
+    Statics.repeateNotifications[4] = S.current.ev_wedn ;
+    Statics.repeateNotifications[5] = S.current.ev_thur ;
+    Statics.repeateNotifications[6] = S.current.ev_fri ;
+    Statics.repeateNotifications[7] = S.current.ev_sat ;
+
+    Statics.printDisplayItems[0] = S.current.referance ;
+    Statics.printDisplayItems[1] = S.current.designation ;
+
     _myParams = await _queryCtr.getAllParams();
     _prefs = await SharedPreferences.getInstance();
     switch (_prefs.getString("myLocale")) {
@@ -80,10 +95,12 @@ class _SettingsPageState extends State<SettingsPage> {
     await setDataFromItem(_myParams);
   }
 
-  setDataFromItem(item) async {
+  setDataFromItem(MyParams item) async {
     _tarification = item.tarification ;
     _tva = item.tva;
     _timbre = item.timbre;
+    _credit = item.creditTier ;
+    _formatPrintDisplay = Statics.printDisplayItems[item.printDisplay] ;
     _notifications = item.notifications;
     _dayTime = item.notificationTime;
     _repeateNotification = Statics.repeateNotifications[item.notificationDay];
@@ -216,6 +233,43 @@ class _SettingsPageState extends State<SettingsPage> {
                 ],
               ),
               SettingsSection(
+                title: 'Impression',
+                tiles: [
+                  SettingsTile(
+                    title: 'Print Display',
+                    subtitle:("${_formatPrintDisplay}"),
+                    leading: Icon(Icons.list_alt_outlined),
+                    onTap: () async {
+                      AwesomeDialog(
+                          context: context,
+                          dialogType: DialogType.QUESTION,
+                          animType: AnimType.BOTTOMSLIDE,
+                          title: "Ticket Format",
+                          body: _formatPrintDialog(),
+                          btnCancelText: S.current.non,
+                          btnCancelOnPress: () {},
+                          btnOkText: S.current.oui,
+                          btnOkOnPress: () async {
+                            setState(() {
+                               _formatPrintDisplay;
+                            });
+                          })
+                        ..show();
+                    },
+                  ),
+                  SettingsTile.switchTile(
+                    title: 'Afficher crédit tier',
+                    leading: Icon(Icons.person_sharp),
+                    switchValue: _credit,
+                    onToggle: (bool value) {
+                      setState(() {
+                        _credit = value;
+                      });
+                    },
+                  ),
+                ],
+              ),
+              SettingsSection(
                 title: '${S.current.param_notif_title}',
                 tiles: [
                   SettingsTile.switchTile(
@@ -321,6 +375,8 @@ class _SettingsPageState extends State<SettingsPage> {
     }
   }
 
+  //************************************************************************************************************************************************
+  //***********************************************************************dialogs***************************************************************
   _languageDialog() {
     return StatefulBuilder(
         builder: (context, setState) => Wrap(
@@ -366,21 +422,6 @@ class _SettingsPageState extends State<SettingsPage> {
             ));
   }
 
-  _savelocale() async {
-    switch (_language) {
-      case ("English (ENG)"):
-        _prefs.setString("myLocale", "en");
-        break;
-      case ("French (FR)"):
-        _prefs.setString("myLocale", "fr");
-        break;
-
-      case ("Arabic (AR)"):
-        _prefs.setString("myLocale", "ar");
-        break;
-    }
-  }
-
   _tarificationDialog() {
     ScrollController _controller = new ScrollController();
     return StatefulBuilder(
@@ -421,6 +462,47 @@ class _SettingsPageState extends State<SettingsPage> {
                       onChanged: (value) {
                         setState(() {
                           _tarification = value;
+                        });
+                      },
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ],
+        ));
+  }
+
+  _formatPrintDialog() {
+    ScrollController _controller = new ScrollController();
+    return StatefulBuilder(
+        builder: (context, setState) => Wrap(
+          children: [
+            Container(
+              height: 100,
+              child: Scrollbar(
+                isAlwaysShown: true,
+                controller: _controller,
+                child: ListView(
+                  controller: _controller,
+                  children: [
+                    RadioListTile(
+                      value: Statics.printDisplayItems[0],
+                      groupValue: _formatPrintDisplay,
+                      title: Text('${S.current.referance}'),
+                      onChanged: (value) {
+                        setState(() {
+                          _formatPrintDisplay = value;
+                        });
+                      },
+                    ),
+                    RadioListTile(
+                      value: Statics.printDisplayItems[1],
+                      groupValue: _formatPrintDisplay,
+                      title: Text('${S.current.designation}'),
+                      onChanged: (value) {
+                        setState(() {
+                          _formatPrintDisplay = value;
                         });
                       },
                     ),
@@ -614,10 +696,30 @@ class _SettingsPageState extends State<SettingsPage> {
         ));
   }
 
+  //************************************************************************************************************************************************
+  //***********************************************************************save data ***************************************************************
+
+  _savelocale() async {
+    switch (_language) {
+      case ("English (ENG)"):
+        _prefs.setString("myLocale", "en");
+        break;
+      case ("French (FR)"):
+        _prefs.setString("myLocale", "fr");
+        break;
+
+      case ("Arabic (AR)"):
+        _prefs.setString("myLocale", "ar");
+        break;
+    }
+  }
+
   Future<void> _updateItem() async {
     _myParams.tarification = _tarification ;
     _myParams.tva = _tva;
     _myParams.timbre = _timbre;
+    _myParams.printDisplay = Statics.printDisplayItems.indexOf(_formatPrintDisplay);
+    _myParams.creditTier = _credit ;
     _myParams.notificationDay = Statics.repeateNotifications.indexOf(_repeateNotification);
     _myParams.notifications = _notifications;
     _myParams.notificationTime = _dayTime;

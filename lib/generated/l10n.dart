@@ -1745,10 +1745,10 @@ class S {
     );
   }
 
-  /// `Piece Preciew`
+  /// `Preview`
   String get preview_titre {
     return Intl.message(
-      'Piece Preciew',
+      'Preview',
       name: 'preview_titre',
       desc: '',
       args: [],

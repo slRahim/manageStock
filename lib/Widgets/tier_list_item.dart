@@ -81,24 +81,53 @@ class _TierListItemState extends State<TierListItem> {
 
             ),
           ),
-          title: ("${S.current.rs}: "+widget.tier.raisonSociale),
-          subtitle: ("${S.current.statut}: " + Statics.statutItems[widget.tier.statut]),
+          subtitle: Row(
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: <Widget>[
+              Icon(Icons.home_work_outlined,
+                size: SizeConfig.safeBlockHorizontal * 4,
+                color: Colors.white,
+              ),
+              SizedBox(
+                width: 10,
+              ),
+              Text(
+                "${Statics.statutItems[widget.tier.statut]}",
+                style: TextStyle(
+                    fontSize: SizeConfig.safeBlockHorizontal * 4.7,
+                    color: Colors.white70),
+              ),
+            ],
+          ),
+          title:(widget.tier.raisonSociale != null)
+              ? Row(
+            children: [
+              Icon(Icons.person_sharp , color: Colors.white,size: SizeConfig.safeBlockHorizontal * 5),
+              SizedBox(
+                width: 10,
+              ),
+              Text("${widget.tier.raisonSociale}" ,
+                  style: TextStyle(
+                      fontSize: SizeConfig.safeBlockHorizontal * 4.5,
+                      color: Colors.white)
+              )
+            ],
+          )
+              : null,
           trailingChildren: [
             Text(
-              "${S.current.mobile} : "+widget.tier.mobile.toString(),
-              style: TextStyle(fontSize: 16.0),
-            ),
-            Text(
-              "${S.current.regler} : "+widget.tier.regler.toString(),
+              "${S.current.regler}: ${Helpers.numberFormat(widget.tier.regler).toString()} (${S.current.da})",
               style: TextStyle(
                   fontSize: 16.0),
             ),
             Text(
-             "${S.current.credit} : "+widget.tier.credit.toString(),
+             "${Helpers.numberFormat(widget.tier.credit).toString()} (${S.current.da})",
               style: TextStyle(
                   color: widget.tier.credit > 0 ? Colors.redAccent : Colors.black,
                   fontSize: 16.0, fontWeight: FontWeight.bold),
             ),
+            SizedBox(),
+            SizedBox(),
             SizedBox(),
             RichText(
               text: TextSpan(
@@ -108,7 +137,7 @@ class _TierListItemState extends State<TierListItem> {
                         style: TextStyle(fontSize: 15,fontWeight: FontWeight.bold,color: Colors.black)
                     ),
                     TextSpan(
-                      text:"${widget.tier.chiffre_affaires} ${S.current.da}",
+                      text:"${Helpers.numberFormat(widget.tier.chiffre_affaires)} (${S.current.da})",
                       style: TextStyle(
                           color: Colors.black,
                           fontSize: 15.0),
@@ -116,7 +145,7 @@ class _TierListItemState extends State<TierListItem> {
                   ]
               ),
             ),
-            SizedBox(),
+
             RichText(
               text: TextSpan(
                   children: [
@@ -125,7 +154,7 @@ class _TierListItemState extends State<TierListItem> {
                         style: TextStyle(fontSize: 15 , fontWeight: FontWeight.bold,color: Colors.black)
                     ),
                     TextSpan(
-                      text:"${widget.tier.adresse} :",
+                      text:"${widget.tier.adresse}",
                       style: TextStyle(
                           color: Colors.black,
                           fontSize: 15.0),

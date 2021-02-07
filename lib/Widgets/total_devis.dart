@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:gestmob/Helpers/Helpers.dart';
 import 'package:gestmob/generated/l10n.dart';
 import 'package:gestmob/models/MyParams.dart';
 import 'package:gestmob/models/Piece.dart';
@@ -31,7 +32,7 @@ class TotalDevis extends StatelessWidget{
                   Text("${S.current.total_ht}= "),
                   Expanded(child: Text(".............................................................................................................",
                     maxLines: 1,)),
-                  Text(total_ht.toString() + " ${S.current.da}"),
+                  Text(Helpers.numberFormat(total_ht).toString() + " ${S.current.da}"),
                 ],
               ),
               SizedBox(height: 5),
@@ -41,7 +42,7 @@ class TotalDevis extends StatelessWidget{
                   Text("${S.current.remise}= "),
                   Expanded(child: Text(".............................................................................................................",
                     maxLines: 1,)),
-                  Text(remise.toString() + " %"),
+                  Text("${Helpers.numberFormat((total_ht*remise)/100)} ${S.current.da} (${Helpers.numberFormat(remise)} %)"),
                 ],
               ),
               SizedBox(height: 5),
@@ -68,14 +69,17 @@ class TotalDevis extends StatelessWidget{
                 ),
               ),
               SizedBox(height: 5),
-              Row(
-                mainAxisSize: MainAxisSize.max,
-                children: [
-                  Text("${S.current.total}= "),
-                  Expanded(child: Text(".............................................................................................................",
-                    maxLines: 1,)),
-                  Text(total_ttc.toString() + " ${S.current.da}"),
-                ],
+              Visibility(
+                visible: (myParams.tva),
+                child: Row(
+                  mainAxisSize: MainAxisSize.max,
+                  children: [
+                    Text("${S.current.total}= "),
+                    Expanded(child: Text(".............................................................................................................",
+                      maxLines: 1,)),
+                    Text(total_ttc.toString() + " ${S.current.da}"),
+                  ],
+                ),
               ),
               SizedBox(height: 5),
               Visibility(

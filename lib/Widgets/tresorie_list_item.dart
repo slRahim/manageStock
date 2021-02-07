@@ -74,8 +74,41 @@ class _TresorieListItemState extends State<TresorieListItem> {
               backgroundColor: Colors.grey[100],
             ),
           ),
-          subtitle: Helpers.dateToText(widget.tresorie.date),
-          title: (widget.tresorie.tierRS != null)?("${S.current.rs}: " + widget.tresorie.tierRS):("${S.current.rs} : ___ "),
+          subtitle: Row(
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: <Widget>[
+              Icon(Icons.access_time,
+                size: SizeConfig.safeBlockHorizontal * 4,
+                color: Colors.white,
+              ),
+              SizedBox(
+                width: 10,
+              ),
+              Text(
+                "${Helpers.dateToText(widget.tresorie.date)}",
+                style: TextStyle(
+                    fontSize: SizeConfig.safeBlockHorizontal * 4.7,
+                    color: Colors.white70),
+              ),
+            ],
+          ),
+          title: Row(
+            children: [
+              Icon(Icons.person_sharp , color: Colors.white,size: SizeConfig.safeBlockHorizontal * 5),
+              SizedBox(
+                width: 10,
+              ),
+              (widget.tresorie.tierRS != null) ? Text("${widget.tresorie.tierRS}" ,
+                  style: TextStyle(
+                      fontSize: SizeConfig.safeBlockHorizontal * 4.5,
+                      color: Colors.white)
+              ):Text("__" ,
+                  style: TextStyle(
+                      fontSize: SizeConfig.safeBlockHorizontal * 4.5,
+                      color: Colors.white)
+              )
+            ],
+          ),
           trailingChildren: [
             Text(
               "${S.current.n}: ${widget.tresorie.numTresorie}",
@@ -84,16 +117,16 @@ class _TresorieListItemState extends State<TresorieListItem> {
                   fontSize: 16.0),
             ),
             Text(
-              "${S.current.objet} : ${widget.tresorie.objet}",
+              "${widget.tresorie.objet}",
               style: TextStyle(
                   color: Colors.black,
                   fontSize: 16.0),
             ),
             (widget.tresorie.montant >= 0) ? Text(
-              '${S.current.montant} : ' + widget.tresorie.montant.toString(),
+              '${Helpers.numberFormat(widget.tresorie.montant).toString()} (${S.current.da})',
               style: TextStyle(fontSize: 16.0, fontWeight: FontWeight.bold),)
                 : Text(
-              '${S.current.montant} : ' + (widget.tresorie.montant * -1).toString(),
+              '${Helpers.numberFormat(widget.tresorie.montant * -1).toString()} (${S.current.da})',
               style: TextStyle(fontSize: 16.0, fontWeight: FontWeight.bold),),
             getIcon(),
           ],

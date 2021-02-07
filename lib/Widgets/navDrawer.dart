@@ -54,7 +54,7 @@ class NavDrawer extends StatelessWidget {
                   RoutesKeys.profilePage,
               );
             },
-            child: new Container(
+            child: Container(
               width: 500.0,
               padding: new EdgeInsetsDirectional.fromSTEB(20.0, 40.0, 20.0, 40.0),
               child: Row(

@@ -11,7 +11,6 @@ import 'package:gestmob/models/ChargeTresorie.dart';
 import 'package:gestmob/models/CompteTresorie.dart';
 import 'package:gestmob/models/DefaultPrinter.dart';
 import 'package:gestmob/models/FormatPiece.dart';
-import 'package:gestmob/models/FormatPrint.dart';
 import 'package:gestmob/models/Journaux.dart';
 import 'package:gestmob/models/MyParams.dart';
 import 'package:gestmob/models/Piece.dart';
@@ -283,7 +282,7 @@ class QueryCtr {
 
   Future<List<Article>> getJournalPiece(Piece piece , {bool local,String searchTerm,Map<String, dynamic> filters}) async{
     var dbClient = await _databaseHelper.db ;
-    String query = 'SELECT Journaux.*,Articles.*'
+    String query = 'SELECT Journaux.*, Articles.BytesImageString ,Articles.Designation , Articles.Ref ,Articles.CodeBar ,Articles.Id_Famille ,Articles.Id_Marque'
         ' FROM Journaux JOIN Articles ON Journaux.Article_id = Articles.id AND Journaux.Mov <> -2 AND Journaux.Piece_id='+piece.id.toString();
 
     if(local && filters != null){
@@ -305,7 +304,7 @@ class QueryCtr {
     for(int i=0 ; i<res.length ; i++){
       Article article = Article.fromMapJournaux(res[i]);
       if(local){
-        article.setquantite(article.selectedQuantite ) ;
+        article.setquantite(article.selectedQuantite) ;
         article.selectedQuantite = -1 ;
         article.setQteMin(-1);
         article.cmdClient = 0 ;
@@ -515,12 +514,6 @@ class QueryCtr {
     return null ;
   }
 
-  Future<FormatPrint> getFormatPrint() async {
-    Database dbClient = await _databaseHelper.db;
-    var res = await dbClient.query(DbTablesNames.formatPrint);
-
-    return new FormatPrint.fromMap(res.last);
-  }
 
   Future<dynamic> addItemToTable(String tableName, item) async {
     var dbClient = await _databaseHelper.db;

@@ -408,18 +408,15 @@ class SqlLiteDatabaseHelper {
         Tarification integer DEFAULT 1, 
         Tva integer DEFAULT 0,
         Timbre integer DEFAULT 0,
+        Print_display integer ,
+        Credit_tier integer,
+        Default_format_print Varchar(5),
         Notifications integer DEFAULT 1,
         Notification_time Varchar(10),
         Notification_day integer,
         Echeance integer
         )""");
 
-    await db.execute('''CREATE TABLE IF NOT EXISTS FormatPrints (
-        id INTEGER PRIMARY KEY AUTOINCREMENT, 
-        Default_format VARCHAR(4),
-        Default_display VARCHAR(25),
-        Credit integer  
-        )''');
 
     await db.execute('''CREATE TABLE IF NOT EXISTS DefaultPrinters (
         id INTEGER PRIMARY KEY AUTOINCREMENT, 
@@ -1209,14 +1206,14 @@ class SqlLiteDatabaseHelper {
     batch.rawInsert('INSERT INTO FormatPiece(Format , Piece , Current_index) VALUES("XXXX/YYYY"  , "AC" , 0)');
     batch.rawInsert('INSERT INTO FormatPiece(Format , Piece , Current_index) VALUES("XXXX/YYYY"  , "TR" , 0)');
 
-    batch.rawInsert("INSERT INTO MyParams VALUES(1,2,0,0,1,'9:01',0,0)");
+    batch.rawInsert("INSERT INTO MyParams VALUES(1,2,0,0,1,1,'80',1,'9:01',0,0)");
 
     Uint8List image = await Helpers.getDefaultImageUint8List(from: "tier");
-    Tiers tier0 = new Tiers(image ,"Client Passagé", null, 1, 0, 0, "adresse", "ville", "telephone", "000000", "fax", "email", 1000, 0, 0, false);
+    Tiers tier0 = new Tiers(image ,"Client Passagé", null, 1, 0, 0, "adresse", "ville", "telephone", "000000", "fax", "email", 0.0, 0, 0, false);
     tier0.clientFour = 0 ;
     batch.insert(DbTablesNames.tiers, tier0.toMap());
 
-    Tiers tier2 = new Tiers(image,"Fournisseur Passagé", null, 1, 0, 0, "adresse", "ville", "telephone", "000000", "fax", "email", 0, 0, 0, false);
+    Tiers tier2 = new Tiers(image,"Fournisseur Passagé", null, 1, 0, 0, "adresse", "ville", "telephone", "000000", "fax", "email", 0.0, 0, 0, false);
     tier2.clientFour = 2 ;
     batch.insert(DbTablesNames.tiers, tier2.toMap());
 

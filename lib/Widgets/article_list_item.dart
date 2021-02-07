@@ -92,11 +92,42 @@ class _ArticleListItemState extends State<ArticleListItem> {
           backgroundImage: MemoryImage(widget.article.imageUint8List),
         ),
       ),
-      subtitle: (widget.article.codeBar != null)?widget.article.codeBar : null,
-      title: ("${S.current.ref}: " + widget.article.ref),
+      subtitle: Row(
+        mainAxisAlignment: MainAxisAlignment.start,
+        children: <Widget>[
+          Icon(MdiIcons.barcode,
+            size: SizeConfig.safeBlockHorizontal * 4,
+            color: Colors.white,
+          ),
+          SizedBox(
+            width: 10,
+          ),
+          (widget.article.codeBar != null) ?Text(
+            "${widget.article.codeBar}",
+            style: TextStyle(
+                fontSize: SizeConfig.safeBlockHorizontal * 4.7,
+                color: Colors.white70),
+          ):SizedBox(),
+        ],
+      ),
+      title:(widget.article.ref != null)
+          ? Row(
+        children: [
+          Icon(Icons.widgets , color: Colors.white,size: SizeConfig.safeBlockHorizontal * 5),
+          SizedBox(
+            width: 10,
+          ),
+          Text("${widget.article.ref}" ,
+              style: TextStyle(
+                  fontSize: SizeConfig.safeBlockHorizontal * 4.5,
+                  color: Colors.white)
+          )
+        ],
+      )
+          : null,
       trailingChildren: widget.article.selectedQuantite > 0 ? [
         Text(
-          "${S.current.designation} : "+widget.article.designation,
+           widget.article.designation,
           style: TextStyle(fontSize: 16.0,),
         ),
         Text(
@@ -108,14 +139,14 @@ class _ArticleListItemState extends State<ArticleListItem> {
           ),
         ),
         Text(
-          "${S.current.prix} : "+
-              (widget.article.selectedQuantite * widget.article.selectedPrice).toString()+" ${S.current.da}",
+          "${Helpers.numberFormat(widget.article.selectedQuantite * widget.article.selectedPrice).toString()} (${S.current.da})",
           style: TextStyle(
               color: Colors.black,
               fontSize: 16.0,
               fontWeight: FontWeight.bold
           ),
         ),
+        SizedBox(),
         SizedBox(),
         RichText(
           text: TextSpan(
@@ -149,12 +180,11 @@ class _ArticleListItemState extends State<ArticleListItem> {
               ]
           ),
         ),
-        SizedBox(),
       ]:
       // listing des articles ds le fragement article
       [
         Text(
-          "${S.current.designation} : "+widget.article.designation,
+           widget.article.designation,
           style: TextStyle(fontSize: 16.0,),
         ),
         Text(
@@ -168,6 +198,7 @@ class _ArticleListItemState extends State<ArticleListItem> {
         ),
         trailingChildrenOnArticleFragment(),
         SizedBox(),
+        SizedBox(),
         RichText(
           text: TextSpan(
               children: [
@@ -200,7 +231,6 @@ class _ArticleListItemState extends State<ArticleListItem> {
               ]
           ),
         ),
-        SizedBox(),
       ],
     );
   }
@@ -210,24 +240,21 @@ class _ArticleListItemState extends State<ArticleListItem> {
     switch (widget.tarification){
       case 1 :
         return Text(
-          "${S.current.prix} : "+
-          widget.article.prixVente1.toString()+" ${S.current.da}",
+          "${Helpers.numberFormat(widget.article.prixVente1).toString()} (${S.current.da})",
           style: TextStyle(fontSize: 16.0, fontWeight: FontWeight.bold),
         );
         break ;
 
       case 2:
         return Text(
-          "${S.current.prix}  : "+
-          widget.article.prixVente2.toString()+" ${S.current.da}",
+          "${Helpers.numberFormat(widget.article.prixVente2).toString()} (${S.current.da})",
           style: TextStyle(fontSize: 16.0, fontWeight: FontWeight.bold),
         );
         break ;
 
       case 3 :
         return Text(
-          "${S.current.prix}  : "+
-          widget.article.prixVente3.toString()+" ${S.current.da}",
+          "${Helpers.numberFormat(widget.article.prixVente3).toString()} (${S.current.da})",
           style: TextStyle(fontSize: 16.0, fontWeight: FontWeight.bold),
         );
         break ;
@@ -235,14 +262,12 @@ class _ArticleListItemState extends State<ArticleListItem> {
       default :
         if(widget.article.selectedPrice > 0){
           return Text(
-            "${S.current.prix}  : "+
-                widget.article.selectedPrice.toString()+" ${S.current.da}",
+            "${Helpers.numberFormat(widget.article.selectedPrice).toString()} (${S.current.da})",
             style: TextStyle(fontSize: 16.0, fontWeight: FontWeight.bold),
           );
         }
         return Text(
-          "${S.current.prix}  : "+
-          widget.article.prixVente1.toString()+" ${S.current.da}",
+          "${Helpers.numberFormat(widget.article.prixVente1).toString()} (${S.current.da})",
           style: TextStyle(fontSize: 16.0, fontWeight: FontWeight.bold),
         );
         break ;

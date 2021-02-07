@@ -16,6 +16,7 @@ class Statics {
     S.current.statut_etp
   ];
   static List<int> tarificationItems = [1, 2, 3];
+  static List<String> printDisplayItems = [S.current.referance , S.current.designation] ;
   static List<String> tiersItems = [
     S.current.client,
     S.current.cl_four,

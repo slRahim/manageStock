@@ -2,6 +2,7 @@ import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:gestmob/Helpers/Helpers.dart';
 import 'package:gestmob/Helpers/Statics.dart';
 import 'package:flutter_icons/flutter_icons.dart';
 import 'package:gestmob/generated/l10n.dart';
@@ -38,7 +39,9 @@ class _ArticleListItemSelectedState extends State<ArticleListItemSelected> {
   @override
   Widget build(BuildContext context) {
     return SelectableListItem(
-      onLongPress: () {
+      key_id: Key(widget.article.id.toString()),
+      isListing: widget.fromListing,
+      onDismiss: (direction) {
         if(widget.onItemSelected != null){
           selectThisItem();
         }
@@ -61,18 +64,17 @@ class _ArticleListItemSelectedState extends State<ArticleListItemSelected> {
           }
         }
       },
-
       itemSelected: widget.article.selectedQuantite > 0,
       leading: CircleAvatar(
         radius: 20,
+        backgroundColor: Colors.white,
         backgroundImage: MemoryImage(widget.article.imageUint8List),
       ),
       title: Text(widget.article.designation),
       subtitle: Text("${S.current.ref}: " + widget.article.ref),
-      trailingChildren: widget.article.selectedQuantite > 0 ? [
+      trailingChildren: [
         Text(
-          "${S.current.prix} : "+
-              (widget.article.selectedQuantite * widget.article.selectedPrice).toString()+" ${S.current.da}",
+          "${Helpers.numberFormat((widget.article.selectedQuantite * widget.article.selectedPrice))} ${S.current.da}",
           style: TextStyle(
               color: Colors.black,
               fontSize: 15.0,
@@ -81,73 +83,14 @@ class _ArticleListItemSelectedState extends State<ArticleListItemSelected> {
         ),
         SizedBox(height: 5),
         Text(
-          "${S.current.qte} : "+
-              widget.article.selectedQuantite.toString(),
+          Helpers.numberFormat(widget.article.selectedQuantite).toString(),
           style: TextStyle(
               color: Colors.black,
               fontSize: 15.0),
         )
-      ]:
-      // listing des articles ds le fragement article
-      [
-        trailingChildrenOnArticleFragment(),
-        SizedBox(height: 5),
-        Text(
-          "${S.current.qte} : "+
-              (widget.article.quantite - widget.article.cmdClient).toString(),
-          style: TextStyle(
-              color: widget.article.quantite <= widget.article.quantiteMinimum
-                  ? Colors.redAccent
-                  : Colors.black,
-              fontSize: 15.0),
-        )
-      ],
+      ]
+
     );
-  }
-
-  //afficher le prix de vente selon la tarification
-  Widget trailingChildrenOnArticleFragment(){
-    switch (widget.tarification){
-      case 1 :
-        return Text(
-          "${S.current.prix} : "+
-              widget.article.prixVente1.toString()+" ${S.current.da}",
-          style: TextStyle(fontSize: 16.0, fontWeight: FontWeight.bold),
-        );
-        break ;
-
-      case 2:
-        return Text(
-          "${S.current.prix}  : "+
-              widget.article.prixVente2.toString()+" ${S.current.da}",
-          style: TextStyle(fontSize: 16.0, fontWeight: FontWeight.bold),
-        );
-        break ;
-
-      case 3 :
-        return Text(
-          "${S.current.prix}  : "+
-              widget.article.prixVente3.toString()+" ${S.current.da}",
-          style: TextStyle(fontSize: 16.0, fontWeight: FontWeight.bold),
-        );
-        break ;
-
-      default :
-        if(widget.article.selectedPrice > 0){
-          return Text(
-            "${S.current.prix}  : "+
-                widget.article.selectedPrice.toString()+" ${S.current.da}",
-            style: TextStyle(fontSize: 16.0, fontWeight: FontWeight.bold),
-          );
-        }
-        return Text(
-          "${S.current.prix}  : "+
-              widget.article.prixVente1.toString()+" ${S.current.da}",
-          style: TextStyle(fontSize: 16.0, fontWeight: FontWeight.bold),
-        );
-        break ;
-    }
-
   }
 
   //dialog pour modifier le prix et la quantité
@@ -356,6 +299,7 @@ class _ArticleListItemSelectedState extends State<ArticleListItemSelected> {
         }
         break;
     }
+
     widget.onItemSelected(widget.article);
   }
 }
@@ -363,16 +307,17 @@ class _ArticleListItemSelectedState extends State<ArticleListItemSelected> {
 //****************************************************************************************************************************************************************
 //*********************************************************************card generic style******************************************************************************
 class SelectableListItem extends StatelessWidget {
-  final from ;
+  final key_id ;
+  final bool isListing ;
   final bool itemSelected;
   final Widget leading;
   final Widget title;
   final Widget subtitle;
   final List<Widget> trailingChildren;
   final GestureTapCallback onTap;
-  final GestureLongPressCallback onLongPress;
+  final  onDismiss;
 
-  const SelectableListItem({Key key, this.from ,this.leading, this.title, this.subtitle, this.trailingChildren, this.onTap, this.itemSelected, this.onLongPress}) : super(key: key);
+  const SelectableListItem({Key key ,this.key_id,this.isListing,this.leading, this.title, this.subtitle, this.trailingChildren, this.onTap, this.itemSelected, this.onDismiss}) : super(key: key);
 
   @override
   Widget build(BuildContext context) => Card(
@@ -383,23 +328,41 @@ class SelectableListItem extends StatelessWidget {
   );
 
   Widget listTile(){
-    return Container(
-        color: (itemSelected != null && itemSelected) ? Colors.greenAccent : null,
-        child: ListTile(
-          onTap: onTap,
-          onLongPress: onLongPress,
-          leading: leading,
-          title: title,
-          subtitle: subtitle,
-          trailing: Container(
-              child: Wrap(
-                direction: Axis.vertical,
-                alignment: WrapAlignment.center,
-                runSpacing: 10.0,
-                crossAxisAlignment:  WrapCrossAlignment.end,
-                children: trailingChildren,
-              )),
-        )
+    var tileItem = Container(
+      color: (itemSelected != null && itemSelected) ? Colors.blue[100] : null,
+      child:  ListTile(
+        onTap: onTap,
+        leading: leading,
+        title: title,
+        subtitle: subtitle,
+        trailing: Container(
+            child: Wrap(
+              direction: Axis.vertical,
+              alignment: WrapAlignment.center,
+              runSpacing: 10.0,
+              crossAxisAlignment:  WrapCrossAlignment.end,
+              children: trailingChildren,
+            )),
+      ),
+    );
+    if(isListing){
+      return tileItem ;
+    }
+    return Dismissible(
+      key: key_id,
+      onDismissed:onDismiss,
+      direction: DismissDirection.endToStart,
+      background: Container(
+        padding: EdgeInsets.all(12),
+        color: Colors.redAccent,
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.end,
+          children: [
+            Icon(Icons.delete_forever , color: Colors.white , size: 30,),
+          ],
+        ),
+      ),
+      child: tileItem
     );
   }
 }

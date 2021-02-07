@@ -11,7 +11,6 @@ import 'package:gestmob/Helpers/Statics.dart';
 import 'package:gestmob/generated/l10n.dart';
 import 'package:gestmob/models/Article.dart';
 import 'package:gestmob/models/DefaultPrinter.dart';
-import 'package:gestmob/models/FormatPrint.dart';
 import 'package:gestmob/models/MyParams.dart';
 import 'package:gestmob/models/Piece.dart';
 import 'package:esc_pos_utils/esc_pos_utils.dart';
@@ -49,7 +48,6 @@ class _PreviewPieceState extends State<PreviewPiece> {
   bool _finishedLoading = false;
   PaperSize _default_format;
   QueryCtr _queryCtr = new QueryCtr();
-  FormatPrint _formatPrint ;
   MyParams _myParams ;
   PDFDocument _doc;
 
@@ -75,8 +73,6 @@ class _PreviewPieceState extends State<PreviewPiece> {
       _doc = await PDFDocument.fromFile(file);
 
     }else{
-       _formatPrint = await _queryCtr.getFormatPrint();
-       await updateFormatPrint();
        _myParams = await _queryCtr.getAllParams() ;
 
     }
@@ -85,13 +81,13 @@ class _PreviewPieceState extends State<PreviewPiece> {
   Future updateFormatPrint() async{
     switch(widget.format){
       case 80 :
-        _formatPrint.default_format = PaperSize.mm80 ;
+        _myParams.defaultFormatPrint = PaperSize.mm80 ;
         break ;
       case 58 :
-        _formatPrint.default_format = PaperSize.mm58 ;
+        _myParams.defaultFormatPrint = PaperSize.mm58 ;
         break ;
     }
-    await _queryCtr.updateItemInDb(DbTablesNames.formatPrint, _formatPrint);
+    await _queryCtr.updateItemInDb(DbTablesNames.myparams, _myParams);
   }
 
   @override
@@ -171,7 +167,7 @@ class _PreviewPieceState extends State<PreviewPiece> {
                                 ),
                               ]),
                               TableRow(children: [
-                                (_formatPrint.default_display != "Referance")
+                                (_myParams.printDisplay != 0)
                                     ? Text("Article1")
                                     : Text("Ref01"),
                                 Text("XXX"),
@@ -179,7 +175,7 @@ class _PreviewPieceState extends State<PreviewPiece> {
                                 Text("XXX"),
                               ]),
                               TableRow(children: [
-                                (_formatPrint.default_display  != "Referance")
+                                (_myParams.printDisplay  != 0)
                                     ? Text("Article2")
                                     : Text("Ref02"),
                                 Text("XXX"),
@@ -237,7 +233,7 @@ class _PreviewPieceState extends State<PreviewPiece> {
                               )
                             ],
                           ),
-                          (_formatPrint.credit == 1 )
+                          (_myParams.creditTier)
                               ? Row(
                                   mainAxisAlignment: MainAxisAlignment.start,
                                   children: [
@@ -270,6 +266,7 @@ class _PreviewPieceState extends State<PreviewPiece> {
                 )
               : FloatingActionButton(
                   onPressed: () async {
+                    await updateFormatPrint();
                     Ticket ticket = await _ticket(_default_format);
                     Navigator.pop(context);
                     widget.ticket(ticket);
@@ -355,22 +352,22 @@ class _PreviewPieceState extends State<PreviewPiece> {
       for (int i = 0; i < widget.articles.length; i++) {
         var element = widget.articles[i];
         ticket.row([
-          (_formatPrint.default_display  == "Referance")
+          (_myParams.printDisplay == 0)
               ? PosColumn(
                   textEncoded: await CharsetConverter.encode("ISO-8859-6",
-                      "${element.ref.substring(0, (element.ref.length < 10 ? element.ref.length : 10))}"),
+                      "${element.ref.substring(0, (element.ref.length < 8 ? element.ref.length : 8))}"),
                   width: 6)
               : PosColumn(
                   textEncoded: await CharsetConverter.encode("ISO-8859-6",
-                      "${element.designation.substring(0, ((element.designation.length < 10 ? element.designation.length : 10)))}"),
+                      "${element.designation.substring(0, ((element.designation.length < 8 ? element.designation.length : 8)))}"),
                   width: 6),
           PosColumn(
-              text: '${Helpers.numberFormat(element.selectedQuantite)}', width: 2),
+              text: '${Helpers.numberFormat(element.selectedQuantite).toString()}', width: 2),
           PosColumn(
-              text: '${Helpers.numberFormat(element.selectedPrice)}', width: 2),
+              text: '${Helpers.numberFormat(element.selectedPrice).toString()}', width: 2),
           PosColumn(
               text:
-                  '${Helpers.numberFormat((element.selectedPrice * element.selectedQuantite))}',
+                  '${Helpers.numberFormat((element.selectedPrice * element.selectedQuantite)).toString()}',
               width: 2),
         ]);
       }
@@ -378,7 +375,7 @@ class _PreviewPieceState extends State<PreviewPiece> {
       if (widget.piece.total_tva > 0) {
         input = "${S.current.total_ht}";
         encArabic = await CharsetConverter.encode("ISO-8859-6",
-            "${Helpers.numberFormat(widget.piece.total_ht)}: ${input.split('').reversed.join()}");
+            "${Helpers.numberFormat(widget.piece.total_ht).toString()}: ${input.split('').reversed.join()}");
         ticket.textEncoded(encArabic,
             styles: PosStyles(
                 codeTable: PosCodeTable.arabic,
@@ -389,7 +386,7 @@ class _PreviewPieceState extends State<PreviewPiece> {
       if (widget.piece.remise > 0) {
         input = "${S.current.remise}";
         encArabic = await CharsetConverter.encode("ISO-8859-6",
-            "(% ${Helpers.numberFormat(widget.piece.remise)}) ${Helpers.numberFormat(((widget.piece.total_ht * widget.piece.remise) / 100))}: ${input.split('').reversed.join()}");
+            "(% ${Helpers.numberFormat(widget.piece.remise).toString()}) ${Helpers.numberFormat(((widget.piece.total_ht * widget.piece.remise) / 100)).toString()}: ${input.split('').reversed.join()}");
         ticket.textEncoded(encArabic,
             styles: PosStyles(
                 codeTable: PosCodeTable.arabic,
@@ -399,7 +396,7 @@ class _PreviewPieceState extends State<PreviewPiece> {
 
         input = "${S.current.net_ht}";
         encArabic = await CharsetConverter.encode("ISO-8859-6",
-            "${Helpers.numberFormat(widget.piece.net_ht)}: ${input.split('').reversed.join()}");
+            "${Helpers.numberFormat(widget.piece.net_ht).toString()}: ${input.split('').reversed.join()}");
         ticket.textEncoded(encArabic,
             styles: PosStyles(
                 codeTable: PosCodeTable.arabic,
@@ -411,7 +408,7 @@ class _PreviewPieceState extends State<PreviewPiece> {
       if (widget.piece.total_tva > 0) {
         input = "${S.current.total_tva}";
         encArabic = await CharsetConverter.encode("ISO-8859-6",
-            "${Helpers.numberFormat(widget.piece.total_tva)}: ${input.split('').reversed.join()}");
+            "${Helpers.numberFormat(widget.piece.total_tva).toString()}: ${input.split('').reversed.join()}");
         ticket.textEncoded(encArabic,
             styles: PosStyles(
                 codeTable: PosCodeTable.arabic,
@@ -421,7 +418,7 @@ class _PreviewPieceState extends State<PreviewPiece> {
 
         input = "${S.current.total}";
         encArabic = await CharsetConverter.encode("ISO-8859-6",
-            "${Helpers.numberFormat(widget.piece.total_ttc)}: ${input.split('').reversed.join()}");
+            "${Helpers.numberFormat(widget.piece.total_ttc).toString()}: ${input.split('').reversed.join()}");
         ticket.textEncoded(encArabic,
             styles: PosStyles(
                 codeTable: PosCodeTable.arabic,
@@ -433,7 +430,7 @@ class _PreviewPieceState extends State<PreviewPiece> {
       if (_myParams.timbre) {
         input = "${S.current.timbre}";
         encArabic = await CharsetConverter.encode("ISO-8859-6",
-            "${(widget.piece.total_ttc < widget.piece.net_a_payer) ? Helpers.numberFormat(widget.piece.timbre) : Helpers.numberFormat(0.0)}: ${input.split('').reversed.join()}");
+            "${(widget.piece.total_ttc < widget.piece.net_a_payer) ? Helpers.numberFormat(widget.piece.timbre).toString() : Helpers.numberFormat(0.0).toString()}: ${input.split('').reversed.join()}");
         ticket.textEncoded(encArabic,
             styles: PosStyles(
                 codeTable: PosCodeTable.arabic,
@@ -445,7 +442,7 @@ class _PreviewPieceState extends State<PreviewPiece> {
       ticket.hr(ch: '=');
       input = "${S.current.net_payer}";
       encArabic = await CharsetConverter.encode("ISO-8859-6",
-          "${Helpers.numberFormat(widget.piece.net_a_payer)}: ${input.split('').reversed.join()}");
+          "${Helpers.numberFormat(widget.piece.net_a_payer).toString()}: ${input.split('').reversed.join()}");
       ticket.textEncoded(encArabic,
           styles: PosStyles(
             codeTable: PosCodeTable.arabic,
@@ -460,19 +457,19 @@ class _PreviewPieceState extends State<PreviewPiece> {
       ticket.row([
         PosColumn(
             textEncoded: await CharsetConverter.encode("ISO-8859-6",
-                "${Helpers.numberFormat(widget.piece.regler)}: ${S.current.regler.split('').reversed.join()}"),
+                "${Helpers.numberFormat(widget.piece.regler).toString()}: ${S.current.regler.split('').reversed.join()}"),
             width: 6),
         (widget.piece.reste > 0)
             ? PosColumn(
                 textEncoded: await CharsetConverter.encode("ISO-8859-6",
-                    "${Helpers.numberFormat(widget.piece.reste)}: ${S.current.reste.split('').reversed.join()}"),
+                    "${Helpers.numberFormat(widget.piece.reste).toString()}: ${S.current.reste.split('').reversed.join()}"),
                 width: 6)
-            : null,
+            : PosColumn(width: 6),
       ]);
-      if (_formatPrint.credit == 1) {
+      if (_myParams.creditTier) {
         input = "${S.current.credit}";
         encArabic = await CharsetConverter.encode("ISO-8859-6",
-            "${Helpers.numberFormat(widget.tier.credit)}: ${input.split('').reversed.join()}");
+            "${Helpers.numberFormat(widget.tier.credit).toString()}: ${input.split('').reversed.join()}");
         ticket.textEncoded(encArabic,
             styles: PosStyles(codeTable: PosCodeTable.arabic));
       }
@@ -520,61 +517,70 @@ class _PreviewPieceState extends State<PreviewPiece> {
             width: 2,
             styles: PosStyles(bold: true)),
       ]);
-      widget.articles.forEach((element) {
+      widget.articles.forEach((element) async{
         ticket.row([
-          (_formatPrint.default_display  == "Referance")
+          (_myParams.printDisplay  == 0)
               ? PosColumn(
                   text:
-                      '${element.ref.substring(0, (element.ref.length < 10 ? element.ref.length : 10))}',
+                      '${element.ref.substring(0, (element.ref.length < 8 ? element.ref.length : 8))}',
                   width: 6)
               : PosColumn(
                   text:
-                      '${element.designation.substring(0, (element.designation.length < 10 ? element.designation.length : 10))}',
+                      '${element.designation.substring(0, (element.designation.length < 8 ? element.designation.length : 8))}',
                   width: 6),
           PosColumn(
-              text: '${Helpers.numberFormat(element.selectedQuantite)}', width: 2),
+              textEncoded:await CharsetConverter.encode("ISO-8859-6", '${Helpers.numberFormat(element.selectedQuantite).toString()}'), width: 2),
           PosColumn(
-              text: '${Helpers.numberFormat(element.selectedPrice)}', width: 2),
+              textEncoded: await CharsetConverter.encode("ISO-8859-6",'${Helpers.numberFormat(element.selectedPrice).toString()}'),
+              width: 2
+          ),
           PosColumn(
-              text:
-                  '${Helpers.numberFormat((element.selectedPrice * element.selectedQuantite))}',
+              textEncoded:
+                await CharsetConverter.encode("ISO-8859-6",'${Helpers.numberFormat((element.selectedPrice*element.selectedQuantite)).toString()}'),
               width: 2),
         ]);
       });
       ticket.hr(ch: '-');
+      var encode ;
       if (widget.piece.total_tva > 0) {
-        ticket.text(
-            "${S.current.total_ht} : ${Helpers.numberFormat(widget.piece.total_ht)}",
+        encode = await CharsetConverter.encode("ISO-8859-6", "${S.current.total_ht} : ${Helpers.numberFormat(widget.piece.total_ht).toString()}");
+        ticket.textEncoded(
+            encode,
             styles: PosStyles(
                 align: (_default_format == PaperSize.mm80)
                     ? PosAlign.center
                     : PosAlign.left));
       }
       if (widget.piece.remise > 0) {
-        ticket.text(
-            "${S.current.remise} : ${Helpers.numberFormat(((widget.piece.total_ht * widget.piece.remise) / 100))} (${Helpers.numberFormat(widget.piece.remise)} %)",
+        encode = await CharsetConverter.encode("ISO-8859-6",
+            "${S.current.remise} : ${Helpers.numberFormat(((widget.piece.total_ht * widget.piece.remise) / 100)).toString()} (${Helpers.numberFormat(widget.piece.remise).toString()} %)");
+        ticket.textEncoded(
+            encode,
             styles: PosStyles(
                 align: (_default_format == PaperSize.mm80)
                     ? PosAlign.center
                     : PosAlign.left));
 
-        ticket.text(
-            "${S.current.net_ht} : ${Helpers.numberFormat(widget.piece.net_ht)}",
+        encode = await CharsetConverter.encode("ISO-8859-6", "${S.current.net_ht} : ${Helpers.numberFormat(widget.piece.net_ht).toString()}");
+        ticket.textEncoded(
+            encode,
             styles: PosStyles(
                 align: (_default_format == PaperSize.mm80)
                     ? PosAlign.center
                     : PosAlign.left));
       }
       if (widget.piece.total_tva > 0) {
-        ticket.text(
-            "${S.current.total_tva} : ${Helpers.numberFormat(widget.piece.total_tva)}",
+        encode = await CharsetConverter.encode("ISO-8859-6", "${S.current.total_tva} : ${Helpers.numberFormat(widget.piece.total_tva).toString()}");
+        ticket.textEncoded(
+            encode,
             styles: PosStyles(
                 align: (_default_format == PaperSize.mm80)
                     ? PosAlign.center
                     : PosAlign.left));
 
-        ticket.text(
-            "${S.current.total} : ${Helpers.numberFormat(widget.piece.total_ttc)}",
+        encode = await CharsetConverter.encode("ISO-8859-6", "${S.current.total} : ${Helpers.numberFormat(widget.piece.total_ttc).toString()}");
+        ticket.textEncoded(
+            encode,
             styles: PosStyles(
                 align: (_default_format == PaperSize.mm80)
                     ? PosAlign.center
@@ -582,8 +588,10 @@ class _PreviewPieceState extends State<PreviewPiece> {
       }
 
       if (_myParams.timbre) {
-        ticket.text(
-            "${S.current.timbre} : ${(widget.piece.total_ttc < widget.piece.net_a_payer) ? Helpers.numberFormat(widget.piece.timbre) : Helpers.numberFormat(0.0)}",
+        encode = await CharsetConverter.encode("ISO-8859-6",
+            "${S.current.timbre} : ${(widget.piece.total_ttc < widget.piece.net_a_payer) ? Helpers.numberFormat(widget.piece.timbre).toString() : Helpers.numberFormat(0.0).toString()}");
+        ticket.textEncoded(
+            encode,
             styles: PosStyles(
                 align: (_default_format == PaperSize.mm80)
                     ? PosAlign.center
@@ -591,8 +599,9 @@ class _PreviewPieceState extends State<PreviewPiece> {
       }
 
       ticket.hr(ch: '=');
-      ticket.text(
-          "${S.current.net_payer} : ${Helpers.numberFormat(widget.piece.net_a_payer)}",
+      encode = await CharsetConverter.encode("ISO-8859-6", "${S.current.net_payer} : ${Helpers.numberFormat(widget.piece.net_a_payer).toString()}");
+      ticket.textEncoded(
+          encode,
           styles: PosStyles(
             align: (_default_format == PaperSize.mm80)
                 ? PosAlign.center
@@ -603,20 +612,21 @@ class _PreviewPieceState extends State<PreviewPiece> {
       ticket.hr(ch: '=');
       ticket.row([
         PosColumn(
-            text:
-                "${S.current.regler} : ${Helpers.numberFormat(widget.piece.regler)}",
+            textEncoded:
+               await CharsetConverter.encode("ISO-8859-6","${S.current.regler} : ${Helpers.numberFormat(widget.piece.regler).toString()}"),
             width: 6),
         (widget.piece.reste > 0)
             ? PosColumn(
-                text:
-                    "${S.current.reste} : ${Helpers.numberFormat(widget.piece.reste)}",
+                textEncoded:
+                  await CharsetConverter.encode("ISO-8859-6", "${S.current.reste} : ${Helpers.numberFormat(widget.piece.reste).toString()}"),
                 width: 6)
             : PosColumn(width: 6),
       ]);
 
-      if (_formatPrint.credit == 1) {
-        ticket.text(
-            "${S.current.credit} : ${Helpers.numberFormat(widget.tier.credit)}");
+      if (_myParams.creditTier) {
+        encode = await CharsetConverter.encode("ISO-8859-6", "${S.current.credit} : ${Helpers.numberFormat(widget.tier.credit).toString()}");
+        ticket.textEncoded(
+            encode);
       }
 
       ticket.feed(1);
