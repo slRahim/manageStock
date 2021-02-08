@@ -113,13 +113,12 @@ class _TresorieListItemState extends State<TresorieListItem> {
             Text(
               "${S.current.n}: ${widget.tresorie.numTresorie}",
               style: TextStyle(
-                  color: Colors.black,
+
                   fontSize: 16.0),
             ),
             Text(
               "${widget.tresorie.objet}",
               style: TextStyle(
-                  color: Colors.black,
                   fontSize: 16.0),
             ),
             (widget.tresorie.montant >= 0) ? Text(

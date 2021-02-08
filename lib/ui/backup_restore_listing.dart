@@ -119,14 +119,18 @@ class _SelectfromdriveState extends State<Selectfromdrive> {
       margin: EdgeInsets.only(bottom: 5),
       padding: EdgeInsets.all(5),
       decoration: BoxDecoration(
-          color: Colors.blue[100],
-          borderRadius: BorderRadius.all(Radius.circular(20))
+          color: Colors.blue[300],
+          borderRadius: BorderRadius.all(Radius.circular(15))
       ),
       child: ListTile(
         leading: CircleAvatar(
-          radius: 20,
-          child: Icon(Icons.restore , color: Colors.white, size: 26,),
-          backgroundColor: Colors.green,
+          radius: 23,
+          backgroundColor: Colors.yellow[700],
+          child: CircleAvatar(
+            radius: 20,
+            child: Icon(Icons.restore , color: Colors.white, size: 26,),
+            backgroundColor: Colors.green,
+          ),
         ),
         onTap: ()async{
           AwesomeDialog(
@@ -156,12 +160,12 @@ class _SelectfromdriveState extends State<Selectfromdrive> {
             ..show();
         },
         title: Text(
-            '${file.name.replaceAll('.txt', '')}',
+            '${file.name.replaceAll('.bkp', '')}',
             style: TextStyle(
                 color: Colors.black,
                 fontSize: 16,)),
         subtitle: Text(
-            ".bkp",
+            ".bkp" , style: TextStyle(color: Colors.black),
         ),
       ),
     );

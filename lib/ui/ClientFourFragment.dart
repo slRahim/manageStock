@@ -122,6 +122,9 @@ class _ClientFourFragmentState extends State<ClientFourFragment> {
             startingAngleInRadian:(Helpers.isDirectionRTL(context))? 1.6 * pi : 1.1 * pi,
             endingAngleInRadian: (Helpers.isDirectionRTL(context))? 1.9 * pi :1.4 * pi,
             radius: 90,
+            toggleButtonColor: Theme.of(context).floatingActionButtonTheme.backgroundColor,
+            toggleButtonIconColor: Theme.of(context).floatingActionButtonTheme.foregroundColor,
+            toggleButtonSize: 35,
             toggleButtonBoxShadow: [
               BoxShadow(
                 color: Colors.white10,

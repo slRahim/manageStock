@@ -237,7 +237,7 @@ class _AddTresoriePageState extends State<AddTresoriePage>
     } else {
       return Scaffold(
           key: _scaffoldKey,
-          backgroundColor: Color(0xFFF1F8FA),
+          backgroundColor: Theme.of(context).backgroundColor,
           appBar: AddEditBar(
             editMode: editMode,
             modification: modification,
@@ -282,43 +282,81 @@ class _AddTresoriePageState extends State<AddTresoriePage>
           // extendBody: true,
           bottomNavigationBar: BottomExpandableAppBar(
             controller: bottomBarControler,
-            horizontalMargin: 15,
+            horizontalMargin: 10,
             shape: AutomaticNotchedShape(
                 RoundedRectangleBorder(), StadiumBorder(side: BorderSide())),
-            expandedBackColor: Colors.lightBlueAccent,
+            expandedBackColor: Colors.blue,
             expandedBody: Container(),
+            appBarHeight: 60,
             bottomAppBarBody: Padding(
               padding: const EdgeInsets.all(8.0),
               child: Row(
                 mainAxisSize: MainAxisSize.max,
                 children: <Widget>[
                   Expanded(
+                    flex: 4,
                     child: (_selectedClient != null)
-                        ? Text(
-                            '${S.current.credit} : ' +
-                                _selectedClient.credit.toString() +
-                                " ${S.current.da}",
-                            textAlign: TextAlign.center,
-                            style: TextStyle(fontWeight: FontWeight.bold),
-                          )
-                        : Text(
-                            '${S.current.reste} : 0.0 ${S.current.da}',
-                            textAlign: TextAlign.center,
-                            style: TextStyle(fontWeight: FontWeight.bold),
+                        ? Container(
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                                children: [
+                                  Icon(
+                                    Icons.person_sharp,
+                                    color:
+                                    (editMode) ? Colors.blue : Theme.of(context).primaryColorDark,
+                                    size: 18,
+                                  ),
+                                  Text(
+                                    "(${S.current.da})",
+                                    style: TextStyle(
+                                        fontSize: 12, fontWeight: FontWeight.bold),
+                                  ),
+                                ],
+                              ),
+                              SizedBox(height: 2,),
+                              Text(
+                                  '${Helpers.numberFormat(_selectedClient.credit).toString()}',
+                                  textAlign: TextAlign.center,
+                                  style: TextStyle(fontWeight: FontWeight.bold,fontSize: 14),
+                                ),
+                            ],
                           ),
+                        )
+                        : SizedBox(),
                   ),
                   Spacer(
                     flex: 1,
                   ),
-                  Container(
-                      padding: EdgeInsets.only(right: 30),
-                      child: Text(
-                        "${S.current.reste}: " +
-                            _restepiece.toString() +
-                            " ${S.current.da}",
-                        textAlign: TextAlign.center,
-                        style: TextStyle(fontWeight: FontWeight.bold),
-                      )),
+                  Expanded(
+                    flex: 4,
+                    child: Container(
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceAround,
+                              children: [
+                                Icon(Icons.attach_money,
+                                    size: 20,
+                                    color: Theme.of(context).primaryColorDark),
+                                Text(
+                                  "(${S.current.da})",
+                                  style: TextStyle(
+                                      fontSize: 12, fontWeight: FontWeight.bold),
+                                ),
+                              ],
+                            ),
+                            Text(
+                              "${Helpers.numberFormat(_restepiece).toString()}",
+                              textAlign: TextAlign.center,
+                              style: TextStyle(fontWeight: FontWeight.bold),
+                            ),
+                          ],
+                        )),
+                  ),
                 ],
               ),
             ),
@@ -494,7 +532,7 @@ class _AddTresoriePageState extends State<AddTresoriePage>
                             padding:
                                 EdgeInsets.symmetric(vertical: 10, horizontal: 10),
                             decoration: BoxDecoration(
-                                color: Colors.green[200],
+                                color: Colors.green[300],
                                 borderRadius: BorderRadius.circular(10)),
                             child: ListTile(
                               title: Text(
@@ -505,7 +543,7 @@ class _AddTresoriePageState extends State<AddTresoriePage>
                               ),
                               leading: Container(
                                 child: Center(
-                                  child: Text("TR"),
+                                  child: Text("TR",style: TextStyle(color: Colors.black),),
                                 ),
                                 height: 50,
                                 width: 50,

@@ -141,6 +141,7 @@ class _TresorieFragmentState extends State<TresorieFragment> {
   Widget build(BuildContext context) {
     return Scaffold(
         floatingActionButton: FloatingActionButton(
+          backgroundColor: Theme.of(context).floatingActionButtonTheme.backgroundColor,
           onPressed: () {
             Navigator.of(context).pushNamed(RoutesKeys.addTresorie, arguments: new Tresorie.init())
                 .then((value){

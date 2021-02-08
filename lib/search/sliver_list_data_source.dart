@@ -6,12 +6,12 @@ import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 class SliverListDataSource extends PagedDataSource<int, Object> {
 
   var filterMap;
+  final String listType;
 
   SliverListDataSource(this.listType, this.filterMap) : super(0);
 
-  final String listType;
 
-  static const _pageSize = 15;
+  static const _pageSize = 10;
   Object _activeCallbackIdentity;
 
   QueryCtr _queryCtr = QueryCtr();
@@ -22,7 +22,6 @@ class SliverListDataSource extends PagedDataSource<int, Object> {
   @override
   void fetchItems(int pageKey) {
     final callbackIdentity = Object();
-
     _activeCallbackIdentity = callbackIdentity;
 
     getList(pageKey, _pageSize, searchTerm: _searchTerm, filters: filterMap)

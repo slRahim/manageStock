@@ -215,7 +215,7 @@ class _ChartBarState extends State<ChartBar> {
         Container(
           width: width,
           height: 10,
-          color: Colors.black.withOpacity(0.4),
+          color: Theme.of(context).primaryColorDark.withOpacity(0.4),
         ),
         const SizedBox(
           width: space,
@@ -223,7 +223,7 @@ class _ChartBarState extends State<ChartBar> {
         Container(
           width: width,
           height: 28,
-          color: Colors.black.withOpacity(0.8),
+          color: Theme.of(context).primaryColorDark.withOpacity(0.8),
         ),
         const SizedBox(
           width: space,
@@ -231,7 +231,7 @@ class _ChartBarState extends State<ChartBar> {
         Container(
           width: width,
           height: 42,
-          color: Colors.black.withOpacity(1),
+          color: Theme.of(context).primaryColorDark.withOpacity(1),
         ),
         const SizedBox(
           width: space,
@@ -239,7 +239,7 @@ class _ChartBarState extends State<ChartBar> {
         Container(
           width: width,
           height: 28,
-          color: Colors.black.withOpacity(0.8),
+          color: Theme.of(context).primaryColorDark.withOpacity(0.8),
         ),
         const SizedBox(
           width: space,
@@ -247,7 +247,7 @@ class _ChartBarState extends State<ChartBar> {
         Container(
           width: width,
           height: 10,
-          color: Colors.black.withOpacity(0.4),
+          color: Theme.of(context).primaryColorDark.withOpacity(0.4),
         ),
       ],
     );

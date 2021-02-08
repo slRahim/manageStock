@@ -138,84 +138,85 @@ class _PreviewPieceState extends State<PreviewPiece> {
                             : CrossAxisAlignment.start,
                         children: [
                           Text(
-                              "${S.current.n} ${getPiecetype()} : ${widget.piece.num_piece}"),
+                              "${S.current.n} ${getPiecetype()} : ${widget.piece.num_piece}" , style: TextStyle(color: Colors.black),),
                           Text(
-                              "${S.current.date} :${Helpers.dateToText(widget.piece.date)}"),
+                              "${S.current.date} :${Helpers.dateToText(widget.piece.date)}", style: TextStyle(color: Colors.black),),
                           Text(
-                              "${S.current.rs} : ${widget.tier.raisonSociale}"),
+                              "${S.current.rs} : ${widget.tier.raisonSociale}", style: TextStyle(color: Colors.black),),
                           Text(
-                              "----------------------------------------------------------------------------------------"),
+                              "----------------------------------------------------------------------------------------", style: TextStyle(color: Colors.black),),
                           Table(
                             columnWidths: {0: FractionColumnWidth(.4)},
                             children: [
                               TableRow(children: [
                                 Text(
                                   "${S.current.articles}",
-                                  style: TextStyle(fontWeight: FontWeight.bold),
+                                  style: TextStyle(fontWeight: FontWeight.bold ,color: Colors.black),
                                 ),
                                 Text(
                                   "${S.current.qte}",
-                                  style: TextStyle(fontWeight: FontWeight.bold),
+                                  style: TextStyle(fontWeight: FontWeight.bold , color: Colors.black),
                                 ),
                                 Text(
                                   "${S.current.prix}",
-                                  style: TextStyle(fontWeight: FontWeight.bold),
+                                  style: TextStyle(fontWeight: FontWeight.bold,color: Colors.black),
                                 ),
                                 Text(
                                   "${S.current.montant}",
-                                  style: TextStyle(fontWeight: FontWeight.bold),
+                                  style: TextStyle(fontWeight: FontWeight.bold,color: Colors.black),
                                 ),
                               ]),
                               TableRow(children: [
                                 (_myParams.printDisplay != 0)
-                                    ? Text("Article1")
-                                    : Text("Ref01"),
-                                Text("XXX"),
-                                Text("XXX"),
-                                Text("XXX"),
+                                    ? Text("Article1", style: TextStyle(color: Colors.black),)
+                                    : Text("Ref01", style: TextStyle(color: Colors.black),),
+                                Text("XXX", style: TextStyle(color: Colors.black),),
+                                Text("XXX", style: TextStyle(color: Colors.black),),
+                                Text("XXX", style: TextStyle(color: Colors.black),),
                               ]),
                               TableRow(children: [
                                 (_myParams.printDisplay  != 0)
-                                    ? Text("Article2")
-                                    : Text("Ref02"),
-                                Text("XXX"),
-                                Text("XXX"),
-                                Text("XXX"),
+                                    ? Text("Article2", style: TextStyle(color: Colors.black),)
+                                    : Text("Ref02", style: TextStyle(color: Colors.black),),
+                                Text("XXX", style: TextStyle(color: Colors.black),),
+                                Text("XXX", style: TextStyle(color: Colors.black),),
+                                Text("XXX", style: TextStyle(color: Colors.black),),
                               ]),
                             ],
                           ),
                           Text(
-                              "---------------------------------------------------------------------------------------"),
+                              "---------------------------------------------------------------------------------------", style: TextStyle(color: Colors.black),),
                           (widget.piece.total_tva > 0)
                               ? Text(
-                                  "\n ${S.current.total_ht}:${Helpers.numberFormat(widget.piece.total_ht)}")
+                                  "\n ${S.current.total_ht}:${Helpers.numberFormat(widget.piece.total_ht)}", style: TextStyle(color: Colors.black),)
                               : SizedBox(),
                           (widget.piece.remise > 0)
                               ? Text(
-                                  "${S.current.remise}:${Helpers.numberFormat((widget.piece.total_ht * widget.piece.remise) / 100)}(${Helpers.numberFormat(widget.piece.remise)}%)")
+                                  "${S.current.remise}:${Helpers.numberFormat((widget.piece.total_ht * widget.piece.remise) / 100)}(${Helpers.numberFormat(widget.piece.remise)}%)"
+                            , style: TextStyle(color: Colors.black),)
                               : SizedBox(),
                           (widget.piece.remise > 0)
                               ? Text(
-                                  "${S.current.net_ht}:${Helpers.numberFormat(widget.piece.net_ht)}")
+                                  "${S.current.net_ht}:${Helpers.numberFormat(widget.piece.net_ht)}", style: TextStyle(color: Colors.black),)
                               : SizedBox(),
                           (widget.piece.total_tva > 0)
                               ? Text(
-                                  "${S.current.total_tva} :${Helpers.numberFormat(widget.piece.total_tva)}")
+                                  "${S.current.total_tva} :${Helpers.numberFormat(widget.piece.total_tva)}", style: TextStyle(color: Colors.black),)
                               : SizedBox(),
                           (widget.piece.total_tva > 0)
                               ? Text(
-                                  "${S.current.total} :${Helpers.numberFormat(widget.piece.total_ttc)}")
+                                  "${S.current.total} :${Helpers.numberFormat(widget.piece.total_ttc)}", style: TextStyle(color: Colors.black),)
                               : SizedBox(),
                           (_myParams.timbre)
                               ? Text(
-                                  "${S.current.timbre} :${Helpers.numberFormat(widget.piece.timbre)}")
+                                  "${S.current.timbre} :${Helpers.numberFormat(widget.piece.timbre)}", style: TextStyle(color: Colors.black),)
                               : SizedBox(),
-                          Text("============================================"),
+                          Text("============================================", style: TextStyle(color: Colors.black),),
                           Text(
                             "${S.current.net_payer} :${Helpers.numberFormat(widget.piece.net_a_payer)}",
-                            style: TextStyle(fontSize: 20),
+                            style: TextStyle(fontSize: 20,color: Colors.black),
                           ),
-                          Text("============================================"),
+                          Text("============================================", style: TextStyle(color: Colors.black),),
                           SizedBox(
                             height: 17,
                           ),
@@ -223,12 +224,12 @@ class _PreviewPieceState extends State<PreviewPiece> {
                             children: [
                               Expanded(
                                 child: Text(
-                                    "${S.current.regler} :${Helpers.numberFormat(widget.piece.regler)}"),
+                                    "${S.current.regler} :${Helpers.numberFormat(widget.piece.regler)}", style: TextStyle(color: Colors.black),),
                               ),
                               Expanded(
                                 child: (widget.piece.reste > 0)
                                     ? Text(
-                                        "${S.current.reste} :${Helpers.numberFormat(widget.piece.reste)}")
+                                        "${S.current.reste} :${Helpers.numberFormat(widget.piece.reste)}", style: TextStyle(color: Colors.black),)
                                     : SizedBox(),
                               )
                             ],
@@ -239,13 +240,14 @@ class _PreviewPieceState extends State<PreviewPiece> {
                                   children: [
                                     Text(
                                       "${S.current.credit} :${Helpers.numberFormat(widget.tier.credit)} \n",
+                                      style: TextStyle(color: Colors.black),
                                     ),
                                   ],
                                 )
                               : SizedBox(),
                           Text(
                             "***BY CIRTA IT***",
-                            style: TextStyle(fontWeight: FontWeight.bold),
+                            style: TextStyle(fontWeight: FontWeight.bold,color: Colors.black),
                           ),
                         ],
                       ),
@@ -273,7 +275,7 @@ class _PreviewPieceState extends State<PreviewPiece> {
                   },
                   child: Icon(
                     Icons.print_rounded,
-                    color: Colors.white,
+                    color: Theme.of(context).floatingActionButtonTheme.foregroundColor,
                     size: 30,
                   ),
                 ));

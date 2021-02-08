@@ -108,12 +108,12 @@ class NavDrawer extends StatelessWidget {
   Widget build(BuildContext context) {
     return Drawer(
         child: Container(
-      color: Colors.indigo[500],
-      child: ListView(
-        physics: const AlwaysScrollableScrollPhysics(),
-        padding: EdgeInsets.zero,
-        children: getNavDrawerWidgetList(context),
-      ),
+          color: Theme.of(context).secondaryHeaderColor,
+          child: ListView(
+            physics: const AlwaysScrollableScrollPhysics(),
+            padding: EdgeInsets.zero,
+            children: getNavDrawerWidgetList(context),
+          ),
     ));
   }
 }

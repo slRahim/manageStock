@@ -342,7 +342,7 @@ class _AddPiecePageState extends State<AddPiecePage>
             horizontalMargin: 10,
             shape: AutomaticNotchedShape(
                 RoundedRectangleBorder(), StadiumBorder(side: BorderSide())),
-            expandedBackColor: Colors.lightBlueAccent,
+            expandedBackColor: Colors.blue,
             expandedBody: TotalDevis(
               total_ht: _total_ht,
               total_tva: _total_tva,
@@ -399,7 +399,7 @@ class _AddPiecePageState extends State<AddPiecePage>
                               Icon(
                                 Icons.point_of_sale,
                                 color:
-                                    (editMode) ? Colors.blue : Colors.black54,
+                                    (editMode) ? Colors.blue : Theme.of(context).primaryColorDark,
                                 size: 18,
                               ),
                               Text(
@@ -487,7 +487,7 @@ class _AddPiecePageState extends State<AddPiecePage>
                                               PieceType.avoirFournisseur &&
                                           editMode)
                                       ? Colors.blue
-                                      : Colors.black54),
+                                      : Theme.of(context).primaryColorDark),
                               Text(
                                 "(${S.current.da})",
                                 style: TextStyle(
@@ -503,7 +503,7 @@ class _AddPiecePageState extends State<AddPiecePage>
                             textAlign: TextAlign.center,
                             style: TextStyle(
                                 fontWeight: FontWeight.bold,
-                                color: Colors.black),
+                            ),
                           ),
                         ],
                       ),
@@ -599,11 +599,11 @@ class _AddPiecePageState extends State<AddPiecePage>
   Widget fichetab() {
     return SingleChildScrollView(
         physics: ScrollPhysics(),
-        padding: const EdgeInsetsDirectional.fromSTEB(15, 25, 15, 40),
+        padding: const EdgeInsetsDirectional.fromSTEB(15, 18, 15, 40),
         child: Column(mainAxisSize: MainAxisSize.max, children: [
           Wrap(
-            spacing: 13,
-            runSpacing: 13,
+            spacing: 10,
+            runSpacing: 10,
             children: [
               Row(
                 children: [
@@ -716,13 +716,12 @@ class _AddPiecePageState extends State<AddPiecePage>
               ),
             ],
           ),
-          SizedBox(height: 15),
+          SizedBox(height: 8),
           Center(
               child: _selectedItems.length > 0
                   ? Container(
                       child: Column(
                       children: [
-                        SizedBox(height: 10),
                         ListView.builder(
                             physics: NeverScrollableScrollPhysics(),
                             shrinkWrap: true,

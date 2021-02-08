@@ -37,12 +37,13 @@ class HomeDraggableItem extends DraggableItem {
         height: 92.0,
         decoration: BoxDecoration(
           color: colorSet(id),
+          borderRadius: BorderRadius.circular(10),
           boxShadow: [
             BoxShadow(
               color: Colors.grey.withOpacity(0.5),
               spreadRadius: 1,
               blurRadius: 2,
-              offset: Offset(0, 2), // changes position of shadow
+              offset: Offset(2, 1), // changes position of shadow
             ),
           ],
         ),

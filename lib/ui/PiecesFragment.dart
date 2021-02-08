@@ -149,6 +149,7 @@ class _PiecesFragmentState extends State<PiecesFragment> {
   Widget build(BuildContext context) {
     return Scaffold(
         floatingActionButton: FloatingActionButton(
+          backgroundColor: Theme.of(context).floatingActionButtonTheme.backgroundColor,
           onPressed: () {
              Navigator.of(context).pushNamed(RoutesKeys.addPiece, arguments: new Piece.typePiece(widget.peaceType))
                  .then((value){

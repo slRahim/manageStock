@@ -110,7 +110,7 @@ class _RapportState extends State<Rapport> {
                 padding: EdgeInsets.all(5),
                 height: 400,
                 decoration: BoxDecoration(
-                  color: Colors.white,
+                  color: Theme.of(context).disabledColor,
                   borderRadius: BorderRadius.circular(10),
                   boxShadow: [
                     BoxShadow(

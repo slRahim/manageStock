@@ -79,6 +79,7 @@ class QueryCtr {
     var res;
 
     query += ' ORDER BY id DESC';
+    query += " LIMIT ${limit} OFFSET ${offset}";
 
     res = await dbClient.rawQuery(query);
 
@@ -120,6 +121,7 @@ class QueryCtr {
     var res;
 
     query += ' ORDER BY id DESC';
+    query += " LIMIT ${limit} OFFSET ${offset}";
 
     res = await dbClient.rawQuery(query);
 
@@ -199,6 +201,7 @@ class QueryCtr {
     query += _creditFilter ;
 
     query += ' ORDER BY id DESC';
+    query += " LIMIT ${limit} OFFSET ${offset}";
 
 
     res = await dbClient.rawQuery(query);
@@ -318,7 +321,7 @@ class QueryCtr {
      Database dbClient = await _databaseHelper.db;
      List<Piece> pieces = new List<Piece>();
 
-     var res = await dbClient.query(DbTablesNames.pieces , where: "Tier_id = ?" , whereArgs: [filters["idTier"].id]);
+     var res = await dbClient.query(DbTablesNames.pieces , where: "Tier_id = ?" , whereArgs: [filters["idTier"].id] ,limit: limit ,offset: offset);
      for (var i = 0, j = res.length; i < j; i++) {
        Piece piece = Piece.fromMap(res[i]);
        pieces.add(piece);
@@ -358,6 +361,7 @@ class QueryCtr {
     }
 
     query += ' ORDER BY id DESC';
+    query += " LIMIT ${limit} OFFSET ${offset}";
 
     Database dbClient = await _databaseHelper.db;
 
@@ -370,6 +374,7 @@ class QueryCtr {
       Tresorie tresorie = new Tresorie.fromMap(res[i]);
       list.add(tresorie);
     }
+
 
     return list;
   }

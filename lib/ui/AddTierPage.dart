@@ -258,6 +258,7 @@ class _AddTierPageState extends State<AddTierPage>
       return DefaultTabController(
             length: 4,
             child: Scaffold(
+                backgroundColor: Theme.of(context).backgroundColor,
                 floatingActionButton: Padding(
                   padding: const EdgeInsetsDirectional.fromSTEB(40, 10, 10, 10),
                   child: Column(
@@ -269,6 +270,7 @@ class _AddTierPageState extends State<AddTierPage>
                         visible: _tabSelectedIndex == 2 && editMode,
                         child: FloatingActionButton(
                           backgroundColor: Colors.green,
+                          foregroundColor: Theme.of(context).primaryColorDark,
                           onPressed: () async {
                             GeoPoint geoPoint = await osmKey.currentState.selectPosition();
                             if(geoPoint != null){
@@ -288,6 +290,7 @@ class _AddTierPageState extends State<AddTierPage>
                           Visibility(
                             visible: _tabSelectedIndex == 2 && !editMode,
                             child: FloatingActionButton(
+                              foregroundColor: Theme.of(context).primaryColorDark,
                               backgroundColor: Colors.blueAccent,
                               onPressed: () async {
                                 Helpers.openMapsSheet(context, new Coords(_latitude, _longitude));
@@ -310,7 +313,6 @@ class _AddTierPageState extends State<AddTierPage>
                   ),
                 ),
                 key: _scaffoldKey,
-                backgroundColor: Theme.of(context).backgroundColor,
                 appBar: AddEditBar(
                   editMode: editMode,
                   modification: modification,

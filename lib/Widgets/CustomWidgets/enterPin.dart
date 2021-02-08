@@ -26,11 +26,13 @@ class _EnterPinState extends State<EnterPin> {
     return Container(
       decoration: BoxDecoration(
           gradient: LinearGradient(
-              colors: [Colors.lightBlueAccent, Colors.blueAccent],
+            // colors: [Color(0xFF088787), Color(0xFF1FC877)],
+              colors: [Colors.indigo[300], Colors.indigo[600]],
               begin: FractionalOffset.topLeft,
               end: FractionalOffset.bottomRight,
               stops: [0.0, 1.0],
-              tileMode: TileMode.clamp)),
+              tileMode: TileMode.clamp)
+      ),
       child: widget.onCodePinChanged == null? buildNotEditMode()
           : Column(
         children: <Widget>[

@@ -136,7 +136,7 @@ class _ListFrontCardState extends State<ListFrontCard> {
             decoration: BoxDecoration(
                 color: (widget.itemSelected != null && widget.itemSelected)
                     ? Colors.green
-                    : Colors.purple,
+                    : Theme.of(context).selectedRowColor,
                 borderRadius: BorderRadius.only(
                     topLeft: Radius.circular(25),
                     topRight: Radius.circular(25))),
@@ -204,7 +204,6 @@ class _ListFrontCardState extends State<ListFrontCard> {
           flex: 1,
           child: Container(
             decoration: BoxDecoration(
-                color: Colors.white,
                 borderRadius: BorderRadius.only(
                     bottomLeft: Radius.circular(25),
                     bottomRight: Radius.circular(25))),
@@ -274,7 +273,7 @@ class ListBackCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       decoration: BoxDecoration(
-          color: Colors.white, borderRadius: BorderRadius.circular(25)),
+          borderRadius: BorderRadius.circular(25)),
       child: SingleChildScrollView(
          padding: EdgeInsetsDirectional.only(start: 20, end: 20, top: 15),
          child: Container(

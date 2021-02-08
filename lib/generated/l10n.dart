@@ -2175,10 +2175,10 @@ class S {
     );
   }
 
-  /// `Veuillez remplir les champs obligatoire`
+  /// `Please fill in the required fields`
   String get msg_champs_obg {
     return Intl.message(
-      'Veuillez remplir les champs obligatoire',
+      'Please fill in the required fields',
       name: 'msg_champs_obg',
       desc: '',
       args: [],
@@ -2195,160 +2195,160 @@ class S {
     );
   }
 
-  /// `Merci pour votre visite`
+  /// `Thank you for your visit`
   String get msg_visite {
     return Intl.message(
-      'Merci pour votre visite',
+      'Thank you for your visit',
       name: 'msg_visite',
       desc: '',
       args: [],
     );
   }
 
-  /// `Compte`
+  /// `Account`
   String get compte {
     return Intl.message(
-      'Compte',
+      'Account',
       name: 'compte',
       desc: '',
       args: [],
     );
   }
 
-  /// `Restoration`
+  /// `Restore`
   String get restore_data {
     return Intl.message(
-      'Restoration',
+      'Restore',
       name: 'restore_data',
       desc: '',
       args: [],
     );
   }
 
-  /// `la restoration de votre data va ecrasser toutes les données non sauvgarder`
+  /// `restoring your data will remove all unsaved data`
   String get restore_msg {
     return Intl.message(
-      'la restoration de votre data va ecrasser toutes les données non sauvgarder',
+      'restoring your data will remove all unsaved data',
       name: 'restore_msg',
       desc: '',
       args: [],
     );
   }
 
-  /// `Succer, restoration a bien terminé`
+  /// `Success, restoration completed`
   String get msg_succes_restoration {
     return Intl.message(
-      'Succer, restoration a bien terminé',
+      'Success, restoration completed',
       name: 'msg_succes_restoration',
       desc: '',
       args: [],
     );
   }
 
-  /// `Ereure, à la restoration`
+  /// `Error, in restore data`
   String get msg_err_restoration {
     return Intl.message(
-      'Ereure, à la restoration',
+      'Error, in restore data',
       name: 'msg_err_restoration',
       desc: '',
       args: [],
     );
   }
 
-  /// `Mes Sauvegardes`
+  /// `Backups`
   String get backups {
     return Intl.message(
-      'Mes Sauvegardes',
+      'Backups',
       name: 'backups',
       desc: '',
       args: [],
     );
   }
 
-  /// `Indice`
+  /// `Index`
   String get indice {
     return Intl.message(
-      'Indice',
+      'Index',
       name: 'indice',
       desc: '',
       args: [],
     );
   }
 
-  /// `financiere`
+  /// `financial`
   String get financiere {
     return Intl.message(
-      'financiere',
+      'financial',
       name: 'financiere',
       desc: '',
       args: [],
     );
   }
 
-  /// `Repartition des charges`
+  /// `Charges distribution`
   String get dash_charge_title {
     return Intl.message(
-      'Repartition des charges',
+      'Charges distribution',
       name: 'dash_charge_title',
       desc: '',
       args: [],
     );
   }
 
-  /// `Mes Comptes`
+  /// `My Accounts`
   String get dash_compte_title {
     return Intl.message(
-      'Mes Comptes',
+      'My Accounts',
       name: 'dash_compte_title',
       desc: '',
       args: [],
     );
   }
 
-  /// `Classement des Ventes par article`
+  /// `Sales ranking by item`
   String get dash_vente_art_title {
     return Intl.message(
-      'Classement des Ventes par article',
+      'Sales ranking by item',
       name: 'dash_vente_art_title',
       desc: '',
       args: [],
     );
   }
 
-  /// `Classement des Ventes par client`
+  /// `Sales ranking by customer`
   String get dash_vente_cl_title {
     return Intl.message(
-      'Classement des Ventes par client',
+      'Sales ranking by customer',
       name: 'dash_vente_cl_title',
       desc: '',
       args: [],
     );
   }
 
-  /// `Classement des Ventes par famille`
+  /// `Sales classification by family`
   String get dash_vente_fam_title {
     return Intl.message(
-      'Classement des Ventes par famille',
+      'Sales classification by family',
       name: 'dash_vente_fam_title',
       desc: '',
       args: [],
     );
   }
 
-  /// `Classement des Achats par article`
+  /// `Ranking of Purchases by item`
   String get dash_achat_art_title {
     return Intl.message(
-      'Classement des Achats par article',
+      'Ranking of Purchases by item',
       name: 'dash_achat_art_title',
       desc: '',
       args: [],
     );
   }
 
-  /// `Classement des Achats par fournisseur`
+  /// `Ranking of Purchases by supplier`
   String get dash_achat_four_title {
     return Intl.message(
-      'Classement des Achats par fournisseur',
+      'Ranking of Purchases by supplier',
       name: 'dash_achat_four_title',
       desc: '',
       args: [],
@@ -2375,10 +2375,10 @@ class S {
     );
   }
 
-  /// `Imprimante Bluetooth`
+  /// `Bluetooth Printers`
   String get blue_device {
     return Intl.message(
-      'Imprimante Bluetooth',
+      'Bluetooth Printers',
       name: 'blue_device',
       desc: '',
       args: [],
@@ -2415,50 +2415,50 @@ class S {
     );
   }
 
-  /// `Langue`
+  /// `Language`
   String get param_lang {
     return Intl.message(
-      'Langue',
+      'Language',
       name: 'param_lang',
       desc: '',
       args: [],
     );
   }
 
-  /// `Choisir une langue`
+  /// `Choose a language`
   String get param_lang_title {
     return Intl.message(
-      'Choisir une langue',
+      'Choose a language',
       name: 'param_lang_title',
       desc: '',
       args: [],
     );
   }
 
-  /// `Choisir Tarification`
+  /// `Choose Pricing`
   String get param_lang_tarif_title {
     return Intl.message(
-      'Choisir Tarification',
+      'Choose Pricing',
       name: 'param_lang_tarif_title',
       desc: '',
       args: [],
     );
   }
 
-  /// `Activer Tva`
+  /// `Enable Tva`
   String get param_tva {
     return Intl.message(
-      'Activer Tva',
+      'Enable Tva',
       name: 'param_tva',
       desc: '',
       args: [],
     );
   }
 
-  /// `Activer timbre`
+  /// `Enable stamped`
   String get param_timbre {
     return Intl.message(
-      'Activer timbre',
+      'Enable stamped',
       name: 'param_timbre',
       desc: '',
       args: [],
@@ -2475,250 +2475,250 @@ class S {
     );
   }
 
-  /// `Activer notification`
+  /// `Enable notifications`
   String get param_notif {
     return Intl.message(
-      'Activer notification',
+      'Enable notifications',
       name: 'param_notif',
       desc: '',
       args: [],
     );
   }
 
-  /// `Heure Notification`
+  /// `Notification time`
   String get param_notif_time {
     return Intl.message(
-      'Heure Notification',
+      'Notification time',
       name: 'param_notif_time',
       desc: '',
       args: [],
     );
   }
 
-  /// `Repeter Notification`
+  /// `Repeat notification`
   String get param_notif_repeat {
     return Intl.message(
-      'Repeter Notification',
+      'Repeat notification',
       name: 'param_notif_repeat',
       desc: '',
       args: [],
     );
   }
 
-  /// `Echeance`
+  /// `Deadline`
   String get param_echeance {
     return Intl.message(
-      'Echeance',
+      'Deadline',
       name: 'param_echeance',
       desc: '',
       args: [],
     );
   }
 
-  /// `Jour`
+  /// `day`
   String get day {
     return Intl.message(
-      'Jour',
+      'day',
       name: 'day',
       desc: '',
       args: [],
     );
   }
 
-  /// `Sauvgarde Restauration`
+  /// `Backup & Restore`
   String get param_back_title {
     return Intl.message(
-      'Sauvgarde Restauration',
+      'Backup & Restore',
       name: 'param_back_title',
       desc: '',
       args: [],
     );
   }
 
-  /// `Créer Sauvegarde`
+  /// `Create Backup`
   String get param_backup {
     return Intl.message(
-      'Créer Sauvegarde',
+      'Create Backup',
       name: 'param_backup',
       desc: '',
       args: [],
     );
   }
 
-  /// `Succer,Backup a bien été créer`
+  /// `Success, Backup has been created`
   String get msg_back_suce {
     return Intl.message(
-      'Succer,Backup a bien été créer',
+      'Success, Backup has been created',
       name: 'msg_back_suce',
       desc: '',
       args: [],
     );
   }
 
-  /// `Ereure,Backup n'a pas été créer`
+  /// `Error, Backup was not created`
   String get msg_back_err {
     return Intl.message(
-      'Ereure,Backup n\'a pas été créer',
+      'Error, Backup was not created',
       name: 'msg_back_err',
       desc: '',
       args: [],
     );
   }
 
-  /// `Restaurer Données`
+  /// `Restore Data `
   String get param_resto_data {
     return Intl.message(
-      'Restaurer Données',
+      'Restore Data ',
       name: 'param_resto_data',
       desc: '',
       args: [],
     );
   }
 
-  /// `Chaque Jour`
+  /// `Daily`
   String get ev_day {
     return Intl.message(
-      'Chaque Jour',
+      'Daily',
       name: 'ev_day',
       desc: '',
       args: [],
     );
   }
 
-  /// `Chaque Dimanche`
+  /// `Every Sunday`
   String get ev_sun {
     return Intl.message(
-      'Chaque Dimanche',
+      'Every Sunday',
       name: 'ev_sun',
       desc: '',
       args: [],
     );
   }
 
-  /// `Chaque Lundi`
+  /// `Every Monday`
   String get ev_mon {
     return Intl.message(
-      'Chaque Lundi',
+      'Every Monday',
       name: 'ev_mon',
       desc: '',
       args: [],
     );
   }
 
-  /// `Chaque Mardi`
+  /// `Every Tuesday`
   String get ev_tue {
     return Intl.message(
-      'Chaque Mardi',
+      'Every Tuesday',
       name: 'ev_tue',
       desc: '',
       args: [],
     );
   }
 
-  /// `Chaque Mercredi`
+  /// `Every Wednesday`
   String get ev_wedn {
     return Intl.message(
-      'Chaque Mercredi',
+      'Every Wednesday',
       name: 'ev_wedn',
       desc: '',
       args: [],
     );
   }
 
-  /// `Chaque Jeudi`
+  /// `Every Thursday`
   String get ev_thur {
     return Intl.message(
-      'Chaque Jeudi',
+      'Every Thursday',
       name: 'ev_thur',
       desc: '',
       args: [],
     );
   }
 
-  /// `Chaque Vendredi`
+  /// `Every Friday`
   String get ev_fri {
     return Intl.message(
-      'Chaque Vendredi',
+      'Every Friday',
       name: 'ev_fri',
       desc: '',
       args: [],
     );
   }
 
-  /// `Chaque Samedi`
+  /// `Every Saturday`
   String get ev_sat {
     return Intl.message(
-      'Chaque Samedi',
+      'Every Saturday',
       name: 'ev_sat',
       desc: '',
       args: [],
     );
   }
 
-  /// `Paramétres ont bien été modifier`
+  /// `Settings have been modified,Successfully`
   String get msg_upd_param {
     return Intl.message(
-      'Paramétres ont bien été modifier',
+      'Settings have been modified,Successfully',
       name: 'msg_upd_param',
       desc: '',
       args: [],
     );
   }
 
-  /// `Ereure à la modifications des paramétres`
+  /// `Error when modifying settings`
   String get msg_err_upd_param {
     return Intl.message(
-      'Ereure à la modifications des paramétres',
+      'Error when modifying settings',
       name: 'msg_err_upd_param',
       desc: '',
       args: [],
     );
   }
 
-  /// `utiliser`
+  /// `Use`
   String get use {
     return Intl.message(
-      'utiliser',
+      'Use',
       name: 'use',
       desc: '',
       args: [],
     );
   }
 
-  /// `Détails`
+  /// `Details`
   String get details {
     return Intl.message(
-      'Détails',
+      'Details',
       name: 'details',
       desc: '',
       args: [],
     );
   }
 
-  /// `Marge`
+  /// `Profit`
   String get marge {
     return Intl.message(
-      'Marge',
+      'Profit',
       name: 'marge',
       desc: '',
       args: [],
     );
   }
 
-  /// `C'est une piece transformer`
+  /// `It's a transforming item`
   String get msg_piece_transfo {
     return Intl.message(
-      'C\'est une piece transformer',
+      'It\'s a transforming item',
       name: 'msg_piece_transfo',
       desc: '',
       args: [],
     );
   }
 
-  /// `C'est une piece d'origine`
+  /// `it's original item`
   String get msg_piece_origin {
     return Intl.message(
-      'C\'est une piece d\'origine',
+      'it\'s original item',
       name: 'msg_piece_origin',
       desc: '',
       args: [],
@@ -3170,6 +3170,46 @@ class S {
     return Intl.message(
       'Supplier debt',
       name: 'creance_four',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Impression`
+  String get impression_titre {
+    return Intl.message(
+      'Impression',
+      name: 'impression_titre',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Afficher Par`
+  String get imp_affichage {
+    return Intl.message(
+      'Afficher Par',
+      name: 'imp_affichage',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Format du ticket`
+  String get format_ticket {
+    return Intl.message(
+      'Format du ticket',
+      name: 'format_ticket',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Afficher le crédit du tier`
+  String get credit_tier {
+    return Intl.message(
+      'Afficher le crédit du tier',
+      name: 'credit_tier',
       desc: '',
       args: [],
     );

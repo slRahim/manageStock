@@ -116,13 +116,11 @@ class _PieceListItemState extends State<PieceListItem> {
             Text(
              "${S.current.n}: ${widget.piece.num_piece}",
               style: TextStyle(
-                  color: Colors.black,
                   fontSize: 16.0),
             ),
             Text(
               "${S.current.regler}: ${Helpers.numberFormat(widget.piece.regler)} (${S.current.da})",
               style: TextStyle(
-                  color: Colors.black,
                   fontSize: 16.0),
             ),
             (widget.piece.net_a_payer < 0)
@@ -130,13 +128,13 @@ class _PieceListItemState extends State<PieceListItem> {
               style: TextStyle(
                   fontSize: 16.0,
                   fontWeight: FontWeight.bold ,
-                  color: (widget.piece.reste < 0)?Colors.redAccent : Colors.black ),
+                  color: (widget.piece.reste < 0)?Colors.redAccent : Theme.of(context).primaryColorDark ),
             )
                 : Text('${Helpers.numberFormat(widget.piece.net_a_payer).toString()} (${S.current.da})',
               style: TextStyle(
                   fontSize: 16.0,
                   fontWeight: FontWeight.bold ,
-                  color: (widget.piece.reste > 0)?Colors.redAccent : Colors.black ),
+                  color: (widget.piece.reste > 0)?Colors.redAccent : Theme.of(context).primaryColorDark ),
             ) ,
             getIcon(),
             RichText(
@@ -144,12 +142,12 @@ class _PieceListItemState extends State<PieceListItem> {
                   children: [
                     TextSpan(
                         text: "${S.current.reste} : ",
-                        style: TextStyle(fontSize: 15 , fontWeight: FontWeight.bold,color: Colors.red)
+                        style: TextStyle(fontSize: 15 , fontWeight: FontWeight.bold,color: Colors.redAccent)
                     ),
                     TextSpan(
                       text:"${Helpers.numberFormat(widget.piece.reste)} (${S.current.da})",
                       style: TextStyle(
-                          color: Colors.black,
+                          color: Theme.of(context).primaryColorDark,
                           fontSize: 15.0),
                     ),
                   ]
@@ -165,7 +163,7 @@ class _PieceListItemState extends State<PieceListItem> {
                   TextSpan(
                     text:"${Helpers.numberFormat(widget.piece.marge)} (${S.current.da})",
                     style: TextStyle(
-                        color: Colors.black,
+                        color: Theme.of(context).primaryColorDark,
                         fontSize: 15.0),
                   ),
                 ]
@@ -174,7 +172,6 @@ class _PieceListItemState extends State<PieceListItem> {
             Text(
                 (widget.piece.transformer == 1)? "${S.current.msg_piece_transfo}":"${S.current.msg_piece_origin}",
               style: TextStyle(
-                  color: Colors.black,
                   fontSize: 16.0),
             ),
           ],

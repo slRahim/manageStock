@@ -37,7 +37,6 @@ class SqlLiteDatabaseHelper {
     DbTablesNames.categorieTresorie,
     DbTablesNames.reglementTresorie,
     DbTablesNames.formatPiece,
-    DbTablesNames.formatPrint,
     DbTablesNames.journaux,
     DbTablesNames.transformer,
     DbTablesNames.defaultPrinter,

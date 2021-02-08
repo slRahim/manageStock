@@ -123,7 +123,7 @@ class _TierListItemState extends State<TierListItem> {
             Text(
              "${Helpers.numberFormat(widget.tier.credit).toString()} (${S.current.da})",
               style: TextStyle(
-                  color: widget.tier.credit > 0 ? Colors.redAccent : Colors.black,
+                  color: widget.tier.credit > 0 ? Colors.redAccent : Theme.of(context).primaryColorDark,
                   fontSize: 16.0, fontWeight: FontWeight.bold),
             ),
             SizedBox(),
@@ -134,12 +134,12 @@ class _TierListItemState extends State<TierListItem> {
                   children: [
                     TextSpan(
                         text: "${S.current.chifre_affaire} : ",
-                        style: TextStyle(fontSize: 15,fontWeight: FontWeight.bold,color: Colors.black)
+                        style: TextStyle(fontSize: 15,fontWeight: FontWeight.bold,color: Theme.of(context).primaryColorDark,)
                     ),
                     TextSpan(
                       text:"${Helpers.numberFormat(widget.tier.chiffre_affaires)} (${S.current.da})",
                       style: TextStyle(
-                          color: Colors.black,
+                          color: Theme.of(context).primaryColorDark,
                           fontSize: 15.0),
                     ),
                   ]
@@ -151,12 +151,12 @@ class _TierListItemState extends State<TierListItem> {
                   children: [
                     TextSpan(
                         text: "${S.current.adresse} : ",
-                        style: TextStyle(fontSize: 15 , fontWeight: FontWeight.bold,color: Colors.black)
+                        style: TextStyle(fontSize: 15 , fontWeight: FontWeight.bold,color: Theme.of(context).primaryColorDark,)
                     ),
                     TextSpan(
                       text:"${widget.tier.adresse}",
                       style: TextStyle(
-                          color: Colors.black,
+                          color: Theme.of(context).primaryColorDark,
                           fontSize: 15.0),
                     ),
                   ]

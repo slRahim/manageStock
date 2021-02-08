@@ -127,8 +127,8 @@ class _DashboardState extends State<Dashboard> {
         Container(
           height: 400,
           child: ChartBar(
-            backgroundColor: Colors.white,
-            textColor: Colors.black,
+            backgroundColor: Theme.of(context).disabledColor,
+            textColor: Theme.of(context).primaryColorDark,
             chartTitle: "indiceFinanciere",
             data: _indiceFinanciere,
           ),
@@ -142,8 +142,8 @@ class _DashboardState extends State<Dashboard> {
         Container(
           height: 400,
           child: ChartPie(
-            backgroundColor: Colors.white,
-            textColor: Colors.black,
+            backgroundColor: Theme.of(context).disabledColor,
+            textColor: Theme.of(context).primaryColorDark,
             data: _statCharge,
             typeData: "charge",
           ),
@@ -157,8 +157,8 @@ class _DashboardState extends State<Dashboard> {
         Container(
           height: 400,
           child: ChartBar(
-            backgroundColor: Colors.white,
-            textColor: Colors.black,
+            backgroundColor: Theme.of(context).disabledColor,
+            textColor: Theme.of(context).primaryColorDark,
             data: _soldeCompte,
           ),
         ),
@@ -179,8 +179,8 @@ class _DashboardState extends State<Dashboard> {
         Container(
           height: 400,
           child: ChartPie(
-            backgroundColor: Colors.white,
-            textColor: Colors.black,
+            backgroundColor: Theme.of(context).disabledColor,
+            textColor: Theme.of(context).primaryColorDark,
               data: _caArticle,
               typeData: "article",
           ),
@@ -194,8 +194,8 @@ class _DashboardState extends State<Dashboard> {
         Container(
           height: 400,
           child: ChartPie(
-            backgroundColor: Colors.white,
-            textColor: Colors.black,
+            backgroundColor: Theme.of(context).disabledColor,
+            textColor: Theme.of(context).primaryColorDark,
               data: _caClient,
               typeData: "tiers",
           ),
@@ -209,8 +209,8 @@ class _DashboardState extends State<Dashboard> {
         Container(
           height: 400,
           child: ChartPie(
-            backgroundColor: Colors.white,
-            textColor: Colors.black,
+            backgroundColor: Theme.of(context).disabledColor,
+            textColor: Theme.of(context).primaryColorDark,
             data: _caFamilleArticle,
             typeData: "famille",
           ),
@@ -232,8 +232,8 @@ class _DashboardState extends State<Dashboard> {
         Container(
           height: 400,
           child: ChartPie(
-            backgroundColor: Colors.white,
-            textColor: Colors.black,
+            backgroundColor: Theme.of(context).disabledColor,
+            textColor: Theme.of(context).primaryColorDark,
             data: _achatArticle,
             typeData: "article",
           ),
@@ -247,8 +247,8 @@ class _DashboardState extends State<Dashboard> {
         Container(
           height: 400,
           child: ChartPie(
-            backgroundColor: Colors.white,
-            textColor: Colors.black,
+            backgroundColor: Theme.of(context).disabledColor,
+            textColor: Theme.of(context).primaryColorDark,
             data: _caFournisseur,
             typeData: "tiers",
           ),

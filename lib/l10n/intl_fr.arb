@@ -334,7 +334,12 @@
   "rapport_date" : "Date du rapport",
 
   "creance_cl" : "Créance Client",
-  "creance_four" : "Créance Fournisseur"
+  "creance_four" : "Créance Fournisseur",
+
+  "impression_titre" : "Impression",
+  "imp_affichage" : "Afficher Par",
+  "format_ticket" : "Format du ticket",
+  "credit_tier" : "Afficher le crédit du tier"
 
 
 }

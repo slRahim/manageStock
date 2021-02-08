@@ -198,9 +198,6 @@ class _PrintState extends State<Print> {
               margin: EdgeInsets.only(top: 5 , bottom: 5),
               padding: EdgeInsets.all(5),
               height: 600,
-              decoration: BoxDecoration(
-                color: Colors.white,
-              ),
               child: (_devices.isEmpty)
                   ? Center(
                       child: Column(

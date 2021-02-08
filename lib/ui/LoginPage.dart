@@ -69,11 +69,12 @@ class _LoginAppState extends State<LoginApp> {
         decoration: BoxDecoration(
             gradient: LinearGradient(
                 // colors: [Color(0xFF088787), Color(0xFF1FC877)],
-                colors: [Colors.indigo[200], Colors.indigo[500]],
+                colors: [Colors.indigo[300], Colors.indigo[600]],
                 begin: FractionalOffset.topLeft,
                 end: FractionalOffset.bottomRight,
                 stops: [0.0, 1.0],
-                tileMode: TileMode.clamp)),
+                tileMode: TileMode.clamp)
+        ),
         child: FutureBuilder<bool>(
           future: _futureInitState,
           builder: (context, snapshot) {

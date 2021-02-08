@@ -18,6 +18,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'Helpers/Statics.dart';
 import 'Helpers/TouchIdUtil.dart';
 import 'Helpers/route_generator.dart';
+import 'Widgets/CustomWidgets/bottom_tab_bar.dart';
 import 'models/MyParams.dart';
 
 
@@ -103,6 +104,20 @@ class _MyAppState extends State<MyApp> {
             brightness: Brightness.light,
             primarySwatch: Colors.red,
             backgroundColor: Color(0xFFF1F8FA),
+            floatingActionButtonTheme: FloatingActionButtonThemeData(
+                backgroundColor: Colors.redAccent
+            ),
+            secondaryHeaderColor: Colors.indigo[500],
+            selectedRowColor: Colors.purple,
+            primaryColorDark: Colors.black,
+            bottomAppBarColor: Colors.white,
+            disabledColor: Colors.white,
+            hoverColor: Colors.blue[200],
+            tabBarTheme: TabBarTheme(
+              labelColor: Colors.blue,
+              unselectedLabelStyle: TextStyle(color: Colors.black54, fontSize: 12),
+              unselectedLabelColor: Colors.black54,
+            ),
             appBarTheme: AppBarTheme(
               color: Colors.indigoAccent,
             )
@@ -110,7 +125,25 @@ class _MyAppState extends State<MyApp> {
           darkTheme: ThemeData(
             brightness: Brightness.dark,
             primarySwatch: Colors.red,
-            primaryColorDark: Colors.white10
+            backgroundColor: Colors.white10,
+            floatingActionButtonTheme: FloatingActionButtonThemeData(
+              backgroundColor: Colors.greenAccent,
+              foregroundColor: Colors.black
+            ),
+            secondaryHeaderColor: Colors.blueGrey[900],
+            selectedRowColor: Colors.deepPurple,
+            primaryColorDark: Colors.white,
+            disabledColor: Colors.black26,
+            hoverColor: Colors.black12,
+            tabBarTheme: TabBarTheme(
+              labelColor: Colors.blue,
+              unselectedLabelStyle: TextStyle(color: Colors.white60, fontSize: 12),
+              unselectedLabelColor: Colors.white60,
+            ),
+            bottomAppBarColor: Colors.black,
+            appBarTheme: AppBarTheme(
+              color: Colors.black,
+            )
           ),
           themeMode: ThemeMode.light,
           localizationsDelegates: [

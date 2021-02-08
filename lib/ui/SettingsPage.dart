@@ -233,10 +233,10 @@ class _SettingsPageState extends State<SettingsPage> {
                 ],
               ),
               SettingsSection(
-                title: 'Impression',
+                title: '${S.current.impression_titre}',
                 tiles: [
                   SettingsTile(
-                    title: 'Print Display',
+                    title: '${S.current.imp_affichage}',
                     subtitle:("${_formatPrintDisplay}"),
                     leading: Icon(Icons.list_alt_outlined),
                     onTap: () async {
@@ -244,7 +244,7 @@ class _SettingsPageState extends State<SettingsPage> {
                           context: context,
                           dialogType: DialogType.QUESTION,
                           animType: AnimType.BOTTOMSLIDE,
-                          title: "Ticket Format",
+                          title: "${S.current.format_ticket}",
                           body: _formatPrintDialog(),
                           btnCancelText: S.current.non,
                           btnCancelOnPress: () {},
@@ -258,7 +258,7 @@ class _SettingsPageState extends State<SettingsPage> {
                     },
                   ),
                   SettingsTile.switchTile(
-                    title: 'Afficher crédit tier',
+                    title: '${S.current.credit_tier}',
                     leading: Icon(Icons.person_sharp),
                     switchValue: _credit,
                     onToggle: (bool value) {

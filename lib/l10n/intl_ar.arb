@@ -334,6 +334,11 @@
   "rapport_date" : "تاريخ التقرير",
 
   "creance_cl" : "دين الزبون",
-  "creance_four" : "ديون المورد"
+  "creance_four" : "ديون المورد",
+
+  "impression_titre" : "طباعة",
+  "imp_affichage" : "عرض ب",
+  "format_ticket" : "شكل التذكرة",
+  "credit_tier" : "عرض الدين الإجمالي"
 
 }
