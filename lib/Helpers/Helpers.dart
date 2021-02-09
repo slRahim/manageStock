@@ -301,7 +301,7 @@ class Helpers {
 //**************************************************************************number format****************************************************************************************
  static dynamic numberFormat(dynamic number){
    var f = new NumberFormat("#,##0.0#");
-   return f.format(number);
+   return f.format(number) ;
  }
 
  static double calcTimber (ttc , myparams){

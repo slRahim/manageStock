@@ -54,7 +54,9 @@ class MyApp extends StatefulWidget {
 
 class _MyAppState extends State<MyApp> {
   int index = 0;
+
   List<Locale> localeList = [Locale('en'), Locale('fr'), Locale('ar')];
+  var themeMode ;
 
   @override
   void initState() {
@@ -64,6 +66,7 @@ class _MyAppState extends State<MyApp> {
 
   futureInit()async{
     SharedPreferences prefs = await SharedPreferences.getInstance();
+
     String _locale = prefs.getString("myLocale");
     switch(_locale){
       case ("en") :
@@ -87,6 +90,31 @@ class _MyAppState extends State<MyApp> {
         });
         break ;
     }
+
+    String _theme = prefs.getString("myStyle");
+    switch(_theme){
+      case ("light") :
+        setState(() {
+          themeMode = ThemeMode.light ;
+        });
+        break ;
+      case ("dark") :
+        setState(() {
+          themeMode = ThemeMode.dark ;
+        });
+        break ;
+      case ("system") :
+        setState(() {
+          themeMode = ThemeMode.system ;
+        });
+        break ;
+      default:
+        setState(() {
+          themeMode = ThemeMode.system ;
+        });
+        break ;
+    }
+
   }
 
   @override
@@ -134,7 +162,7 @@ class _MyAppState extends State<MyApp> {
             selectedRowColor: Colors.deepPurple,
             primaryColorDark: Colors.white,
             disabledColor: Colors.black26,
-            hoverColor: Colors.black12,
+            hoverColor: Colors.black26,
             tabBarTheme: TabBarTheme(
               labelColor: Colors.blue,
               unselectedLabelStyle: TextStyle(color: Colors.white60, fontSize: 12),
@@ -145,7 +173,7 @@ class _MyAppState extends State<MyApp> {
               color: Colors.black,
             )
           ),
-          themeMode: ThemeMode.light,
+          themeMode: themeMode,
           localizationsDelegates: [
             S.delegate,
             GlobalMaterialLocalizations.delegate,

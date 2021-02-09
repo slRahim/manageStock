@@ -13,11 +13,14 @@ class MyParams {
   String _notificationTime ;
   int _notificationDay ;
   int _echeance ;
+  String _pays;
+  String _devise ;
 
   MyParams.init();
 
   MyParams(this._id, this._tarification, this._tva , this._timbre , this._printDisplay , this._creditTier,
-      this._defaultFormatPrint,this._notifications , this._notificationTime , this._notificationDay , this._echeance);
+      this._defaultFormatPrint,this._notifications , this._notificationTime , this._notificationDay , this._echeance
+      ,this._pays ,this._devise);
 
   MyParams.frommMap(dynamic map){
     this._id=map["id"];
@@ -31,6 +34,8 @@ class MyParams {
     this._notificationTime=map["Notification_time"];
     this._notificationDay = map["Notification_day"];
     this._echeance = map["Echeance"];
+    this._pays = map["Pays"];
+    this._devise = map["Devise"];
   }
 
   Map<String , dynamic> toMap(){
@@ -46,10 +51,18 @@ class MyParams {
     map["Notification_time"]=this._notificationTime;
     map["Notification_day"]=this._notificationDay;
     map["Echeance"] = this._echeance ;
+    map["Pays"]=this._pays ;
+    map["Devise"]=this._devise ;
 
     return map ;
   }
 
+
+  String get pays => _pays;
+
+  set pays(String value) {
+    _pays = value;
+  }
 
   PaperSize get defaultFormatPrint => _defaultFormatPrint;
 
@@ -128,5 +141,11 @@ class MyParams {
 
   set creditTier(bool value) {
     _creditTier = value;
+  }
+
+  String get devise => _devise;
+
+  set devise(String value) {
+    _devise = value;
   }
 }

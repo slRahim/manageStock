@@ -339,6 +339,12 @@
   "impression_titre" : "طباعة",
   "imp_affichage" : "عرض ب",
   "format_ticket" : "شكل التذكرة",
-  "credit_tier" : "عرض الدين الإجمالي"
+  "credit_tier" : "عرض الدين الإجمالي",
+
+  "app_theme" : "نمط العرض",
+  "light_theme" : "ساطع",
+  "dark_them" : "داكن",
+  "sys_theme" : "التظام",
+  "selec_pays" : "إختر البلد"
 
 }

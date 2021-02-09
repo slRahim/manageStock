@@ -328,8 +328,7 @@ class SelectableListItem extends StatelessWidget {
   Widget build(BuildContext context) => Container(
       margin: EdgeInsets.all(2),
       decoration: BoxDecoration(
-          // color: (itemSelected != null && itemSelected) ? Theme.of(context).hoverColor : null,
-         border: Border.all(color: Colors.black26 ,width: 1),
+         border: Border.all(color: (itemSelected != null && itemSelected) ? Theme.of(context).tabBarTheme.unselectedLabelColor : null ,width: 1),
           borderRadius: BorderRadius.circular(15)
       ),
       child: listTile(context)
@@ -361,7 +360,10 @@ class SelectableListItem extends StatelessWidget {
       direction: DismissDirection.endToStart,
       background: Container(
         padding: EdgeInsets.all(12),
-        color: Colors.red,
+        decoration: BoxDecoration(
+            color: Colors.red,
+            borderRadius: BorderRadius.circular(15)
+        ),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.end,
           children: [

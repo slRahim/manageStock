@@ -101,6 +101,7 @@ dependencies:
 
   charset_converter:
   advance_pdf_viewer:
+  currency_pickers: ^1.0.6
 
   flutter_localizations:
     sdk: flutter

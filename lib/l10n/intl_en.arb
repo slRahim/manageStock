@@ -91,7 +91,7 @@
   "solde_depart" : "Starting Balance",
   "chifre_affaire" : "Sales Number ",
   "regler" : "Pay",
-  "credit": "Crédit",
+  "credit": "Credit",
   "client_four" : "Customer/Provider",
   "bloquer" : "Bloqued",
   "msg_no_qr" : "No QrCode was associate to the tier ",
@@ -336,10 +336,16 @@
   "creance_cl" : "Customer fee",
   "creance_four" : "Supplier debt",
 
-  "impression_titre" : "Impression",
-  "imp_affichage" : "Afficher Par",
-  "format_ticket" : "Format du ticket",
-  "credit_tier" : "Afficher le crédit du tier"
+  "impression_titre" : "Print",
+  "imp_affichage" : "Display by",
+  "format_ticket" : "Ticket Format",
+  "credit_tier" : "Show client credit",
+
+  "app_theme" : "Theme Style",
+  "light_theme" : "Light",
+  "dark_them" : "Dark",
+  "sys_theme" : "System",
+  "selec_pays" : "Select country"
 
 
 }

@@ -339,7 +339,13 @@
   "impression_titre" : "Impression",
   "imp_affichage" : "Afficher Par",
   "format_ticket" : "Format du ticket",
-  "credit_tier" : "Afficher le crédit du tier"
+  "credit_tier" : "Afficher le crédit du tier",
+
+  "app_theme" : "Style du théme",
+  "light_theme" : "Clair",
+  "dark_them" : "Sombre",
+  "sys_theme" : "Système",
+  "selec_pays" : "Choisir le pays"
 
 
 }

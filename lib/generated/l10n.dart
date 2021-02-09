@@ -915,10 +915,10 @@ class S {
     );
   }
 
-  /// `Crédit`
+  /// `Credit`
   String get credit {
     return Intl.message(
-      'Crédit',
+      'Credit',
       name: 'credit',
       desc: '',
       args: [],
@@ -3175,41 +3175,91 @@ class S {
     );
   }
 
-  /// `Impression`
+  /// `Print`
   String get impression_titre {
     return Intl.message(
-      'Impression',
+      'Print',
       name: 'impression_titre',
       desc: '',
       args: [],
     );
   }
 
-  /// `Afficher Par`
+  /// `Display by`
   String get imp_affichage {
     return Intl.message(
-      'Afficher Par',
+      'Display by',
       name: 'imp_affichage',
       desc: '',
       args: [],
     );
   }
 
-  /// `Format du ticket`
+  /// `Ticket Format`
   String get format_ticket {
     return Intl.message(
-      'Format du ticket',
+      'Ticket Format',
       name: 'format_ticket',
       desc: '',
       args: [],
     );
   }
 
-  /// `Afficher le crédit du tier`
+  /// `Show client credit`
   String get credit_tier {
     return Intl.message(
-      'Afficher le crédit du tier',
+      'Show client credit',
       name: 'credit_tier',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Theme Style`
+  String get app_theme {
+    return Intl.message(
+      'Theme Style',
+      name: 'app_theme',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Light`
+  String get light_theme {
+    return Intl.message(
+      'Light',
+      name: 'light_theme',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Dark`
+  String get dark_them {
+    return Intl.message(
+      'Dark',
+      name: 'dark_them',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `System`
+  String get sys_theme {
+    return Intl.message(
+      'System',
+      name: 'sys_theme',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Select country`
+  String get selec_pays {
+    return Intl.message(
+      'Select country',
+      name: 'selec_pays',
       desc: '',
       args: [],
     );

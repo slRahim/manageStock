@@ -1,4 +1,7 @@
 import 'package:awesome_dialog/awesome_dialog.dart';
+import 'package:currency_pickers/country.dart';
+import 'package:currency_pickers/currency_picker_dialog.dart';
+import 'package:currency_pickers/utils/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:gestmob/Helpers/Helpers.dart';
@@ -12,6 +15,7 @@ import 'package:gestmob/search/search_input_sliver.dart';
 import 'package:gestmob/services/local_notification.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 import 'package:intl/intl.dart';
+import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:settings_ui/settings_ui.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -33,8 +37,11 @@ class _SettingsPageState extends State<SettingsPage> {
   bool _credit ;
   String _formatPrintDisplay ;
   String _language;
+  String _themStyle ;
   bool _notifications;
   String _dayTime;
+  String _countryname;
+  String _currencycode;
 
   String _repeateNotification;
   int _echeance;
@@ -55,6 +62,10 @@ class _SettingsPageState extends State<SettingsPage> {
   }
 
   Future<void> futureInit() async {
+    Statics.themeStyle[0] = S.current.light_theme ;
+    Statics.themeStyle[1] = S.current.dark_them ;
+    Statics.themeStyle[2] = S.current.sys_theme ;
+
     Statics.repeateNotifications[0] = S.current.ev_day ;
     Statics.repeateNotifications[1] = S.current.ev_sun ;
     Statics.repeateNotifications[2] = S.current.ev_mon ;
@@ -91,6 +102,28 @@ class _SettingsPageState extends State<SettingsPage> {
         });
         break;
     }
+    switch (_prefs.getString("myStyle")) {
+      case ("light"):
+        setState(() {
+          _themStyle = Statics.themeStyle[0];
+        });
+        break;
+      case ("dark"):
+        setState(() {
+          _themStyle = Statics.themeStyle[1];
+        });
+        break;
+      case ("system"):
+        setState(() {
+          _themStyle = Statics.themeStyle[2];
+        });
+        break;
+      default:
+        setState(() {
+          _themStyle = Statics.themeStyle[2];
+        });
+        break;
+    }
 
     await setDataFromItem(_myParams);
   }
@@ -105,7 +138,7 @@ class _SettingsPageState extends State<SettingsPage> {
     _dayTime = item.notificationTime;
     _repeateNotification = Statics.repeateNotifications[item.notificationDay];
     _echeance = Statics.echeances[item.echeance];
-
+    _countryname = item.pays ;
   }
 
   @override
@@ -186,6 +219,65 @@ class _SettingsPageState extends State<SettingsPage> {
                             });
                           })
                         ..show();
+                    },
+                  ),
+                  SettingsTile(
+                    title: '${S.current.app_theme}',
+                    subtitle: _themStyle,
+                    leading: Icon(Icons.style_sharp),
+                    onTap: () async {
+                      AwesomeDialog(
+                          context: context,
+                          dialogType: DialogType.QUESTION,
+                          animType: AnimType.BOTTOMSLIDE,
+                          title: "${S.current.param_lang_title}",
+                          body: _themStyleDialog(),
+                          btnCancelText: S.current.non,
+                          btnCancelOnPress: () {},
+                          btnOkText: S.current.oui,
+                          btnOkOnPress: () async {
+                            setState(() {
+                              _themStyle;
+                            });
+                          })
+                        ..show();
+                    },
+                  ),
+                  SettingsTile(
+                    title: S.current.pays,
+                    subtitle: _countryname,
+                    leading: Icon(Icons.pin_drop),
+                    onTap: () async {
+                      await showDialog(
+                        context: context,
+                        builder: (context) => CurrencyPickerDialog(
+                                titlePadding: EdgeInsets.all(10.0),
+                                searchInputDecoration: InputDecoration(
+                                  focusedBorder: OutlineInputBorder(
+                                      borderSide: BorderSide(color: Colors.blue[600]),
+                                      borderRadius: BorderRadius.circular(20)),
+                                  contentPadding: EdgeInsets.only(left: 20, top: 20, bottom: 20),
+                                  labelText: S.current.pays,
+                                  labelStyle: TextStyle(color: Colors.blue[600]),
+                                  alignLabelWithHint: true,
+                                  hintText: S.current.msg_search,
+                                  enabledBorder: OutlineInputBorder(
+                                    gapPadding: 3.3,
+                                    borderRadius: BorderRadius.circular(20),
+                                    borderSide: BorderSide(color: Colors.blue[600]),
+                                  ),
+                                ),
+                                isSearchable: true,
+                                title: Text('${S.current.selec_pays}'),
+                                itemBuilder: _countryDialog,
+                                onValuePicked: (Country country) {
+                                  setState(() {
+                                    _countryname = country.name ;
+                                    _currencycode = country.currencyCode ;
+                                  });
+                                },
+                        ),
+                      );
                     },
                   ),
                   SettingsTile(
@@ -421,6 +513,61 @@ class _SettingsPageState extends State<SettingsPage> {
               ],
             ));
   }
+
+  _themStyleDialog() {
+    return StatefulBuilder(
+        builder: (context, setState) => Wrap(
+          children: [
+            Container(
+              height: 180,
+              child: Column(
+                children: [
+                  RadioListTile(
+                    value: Statics.themeStyle[0],
+                    groupValue: _themStyle,
+                    title: Text(Statics.themeStyle[0]),
+                    onChanged: (value) {
+                      setState(() {
+                        _themStyle = value;
+                      });
+                    },
+                  ),
+                  RadioListTile(
+                    value: Statics.themeStyle[1],
+                    groupValue: _themStyle,
+                    title: Text(Statics.themeStyle[1]),
+                    onChanged: (value) {
+                      setState(() {
+                        _themStyle = value;
+                      });
+                    },
+                  ),
+                  RadioListTile(
+                    value: Statics.themeStyle[2],
+                    groupValue: _themStyle,
+                    title: Text(Statics.themeStyle[2]),
+                    onChanged: (value) {
+                      setState(() {
+                        _themStyle = value;
+                      });
+                    },
+                  )
+                ],
+              ),
+            ),
+          ],
+        ));
+  }
+
+  Widget _countryDialog(Country country) => Row(
+    children: <Widget>[
+      CurrencyPickerUtils.getDefaultFlagImage(country),
+      SizedBox(width: 8.0),
+      Text("(${country.currencyCode})"),
+      SizedBox(width: 8.0),
+      Flexible(child: Text(country.name))
+    ],
+  );
 
   _tarificationDialog() {
     ScrollController _controller = new ScrollController();
@@ -712,6 +859,23 @@ class _SettingsPageState extends State<SettingsPage> {
         _prefs.setString("myLocale", "ar");
         break;
     }
+
+    _prefs.setString("myDevise", "${_currencycode}");
+  }
+
+  _saveStyle() async {
+    switch (Statics.themeStyle.indexOf(_themStyle)) {
+      case (0):
+        _prefs.setString("myStyle", "light");
+        break;
+      case (1):
+        _prefs.setString("myStyle", "dark");
+        break;
+
+      case (2):
+        _prefs.setString("myStyle", "system");
+        break;
+    }
   }
 
   Future<void> _updateItem() async {
@@ -724,8 +888,12 @@ class _SettingsPageState extends State<SettingsPage> {
     _myParams.notifications = _notifications;
     _myParams.notificationTime = _dayTime;
     _myParams.echeance = Statics.echeances.indexOf(_echeance);
+    _myParams.pays = _countryname ;
+    _myParams.devise = _currencycode ;
 
     int id = -1;
+    await _savelocale();
+    await _saveStyle();
     id = await _queryCtr.updateItemInDb(DbTablesNames.myparams, _myParams);
     // await showNotification();
     var message = "";

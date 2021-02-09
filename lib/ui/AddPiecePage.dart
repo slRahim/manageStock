@@ -397,7 +397,7 @@ class _AddPiecePageState extends State<AddPiecePage>
                             mainAxisAlignment: MainAxisAlignment.spaceAround,
                             children: [
                               Icon(
-                                Icons.point_of_sale,
+                                MdiIcons.percent,
                                 color:
                                     (editMode) ? Colors.blue : Theme.of(context).primaryColorDark,
                                 size: 18,
@@ -472,7 +472,7 @@ class _AddPiecePageState extends State<AddPiecePage>
                           Row(
                             mainAxisAlignment: MainAxisAlignment.spaceAround,
                             children: [
-                              Icon(Icons.add,
+                              Icon(MdiIcons.cashMultiple,
                                   size: 20,
                                   color: (_piece.piece != PieceType.devis &&
                                           _piece.piece !=

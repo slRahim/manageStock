@@ -39,6 +39,12 @@ class Statics {
     "French (FR)",
     "Arabic (AR)"
   ];
+  static List<String> themeStyle = [
+    S.current.light_theme,
+    S.current.dark_them,
+    S.current.sys_theme
+  ];
+
   static List<String> rapportItems = [
     S.current.vente,
     S.current.achat,

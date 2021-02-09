@@ -519,7 +519,6 @@ class QueryCtr {
     return null ;
   }
 
-
   Future<dynamic> addItemToTable(String tableName, item) async {
     var dbClient = await _databaseHelper.db;
     int res = await dbClient.insert(tableName, item.toMap());
@@ -581,6 +580,24 @@ class QueryCtr {
 
   //*****************************************************************************************************************************************************************
   //************************************************************************special statistique**********************************************************************
+
+  Future<Map<int , dynamic>> statHomePage() async{
+    var dbClient = await _databaseHelper.db;
+    int startDate = DateTime(DateTime.now().year , DateTime.now().month , 1).millisecondsSinceEpoch;
+    int endDate = DateTime.now().millisecondsSinceEpoch;
+    Map<int , dynamic> result = new Map<int , dynamic>();
+    String query1="Select Sum(Net_a_payer) as chf From Pieces Where Mov=1 AND (Piece LIKE 'BL' OR Piece LIKE 'FC') AND Date Between ${startDate} AND ${endDate} ";
+    String query2="Select Sum(Net_a_payer) as achat From Pieces Where Mov=1 AND (Piece LIKE 'BR' OR Piece LIKE 'FF') AND Date Between ${startDate} AND ${endDate} ";
+    var res1 = await dbClient.rawQuery(query1);
+    var res2 = await dbClient.rawQuery(query2);
+    result={
+      0 :  res1.first["chf"],
+      1 :  res2.first["achat"],
+    };
+
+    return result ;
+  }
+
   Future<Map<int , dynamic>> statIndiceFinanciere() async{
     var dbClient = await _databaseHelper.db;
     Map<int , dynamic> result = new Map<int , dynamic>();
