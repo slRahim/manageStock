@@ -737,8 +737,8 @@ class QueryCtr {
        case 1 :
          query = """
          Select Articles.Ref as referance , Articles.Designation as designation, Sum(Journaux.Qte) as qte , 
-                Sum(Journaux.Prix_ht*Journaux.Qte)/Sum(Journaux.Qte) as prix,
-                (Sum(Journaux.Prix_ht*Journaux.Qte)/Sum(Journaux.Qte)*Sum(Journaux.Qte)) as montant
+                Sum(Journaux.Net_ht*Journaux.Qte)/Sum(Journaux.Qte) as prix,
+                (Sum(Journaux.Net_ht*Journaux.Qte)/Sum(Journaux.Qte)*Sum(Journaux.Qte)) as montant
          From Journaux 
          Join Articles ON Journaux.Article_id = Articles.id 
          Where Journaux.Mov = 1 AND Piece_type like 'CC'  AND  Journaux.Date Between ${dateStart} AND ${dateEnd}
@@ -751,7 +751,7 @@ class QueryCtr {
          Select Journaux.Piece_type as piece_titre ,Pieces.Num_piece as n,
                 strftime('%d-%m-%Y', datetime(Pieces.Date/1000, 'unixepoch')) as date ,
                 Articles.Ref as referance ,Articles.Designation designation ,Tiers.RaisonSociale as client ,
-                Journaux.Qte as qte ,Journaux.Prix_ht as prix, (Journaux.Prix_ht * Journaux.Qte) as montant
+                Journaux.Qte as qte ,Journaux.Net_ht as prix, (Journaux.Net_ht * Journaux.Qte) as montant
          From Journaux 
          Left Join Pieces ON Journaux.Piece_id = Pieces.id 
          Left Join Tiers ON Pieces.Tier_id = Tiers.id 
@@ -764,7 +764,7 @@ class QueryCtr {
          query = """
          Select Journaux.Piece_type as piece_titre ,Pieces.Num_piece as n ,Pieces.Date as date ,
                 Articles.Ref as  referance ,Articles.Designation as designation,Tiers.RaisonSociale as client ,
-                Journaux.Qte as qte ,Journaux.Prix_ht as prix , (Journaux.Prix_ht * Journaux.Qte) as montant
+                Journaux.Qte as qte ,Journaux.Net_ht as prix , (Journaux.Net_ht * Journaux.Qte) as montant
          From Journaux 
          Left Join Pieces ON Journaux.Piece_id = Pieces.id 
          Left Join Tiers ON Pieces.Tier_id = Tiers.id 
@@ -800,8 +800,8 @@ class QueryCtr {
       case 1 :
         query = """
          Select Articles.Ref as referance, Articles.Designation as designation, Sum(Journaux.Qte) as qte , 
-                Sum(Journaux.Prix_ht*Journaux.Qte)/Sum(Journaux.Qte) as prix,
-                (Sum(Journaux.Prix_ht*Journaux.Qte)/Sum(Journaux.Qte)*Sum(Journaux.Qte)) as montant
+                Sum(Journaux.Net_ht*Journaux.Qte)/Sum(Journaux.Qte) as prix,
+                (Sum(Journaux.Net_ht*Journaux.Qte)/Sum(Journaux.Qte)*Sum(Journaux.Qte)) as montant
          From Journaux 
          Join Articles ON Journaux.Article_id = Articles.id 
          Where Journaux.Mov = 0 AND Piece_type like 'BC'  AND  Journaux.Date Between ${dateStart} AND ${dateEnd}
@@ -814,8 +814,8 @@ class QueryCtr {
          Select Journaux.Piece_type  as piece_titre,Pieces.Num_piece as n,Pieces.Date as date,
                 Articles.Ref as referance,
                 Articles.Designation as designation,Tiers.RaisonSociale as fournisseur ,
-                Journaux.Qte as qte,Journaux.Prix_ht as prix, 
-                (Journaux.Prix_ht * Journaux.Qte) as montant
+                Journaux.Qte as qte,Journaux.Net_ht as prix, 
+                (Journaux.Net_ht * Journaux.Qte) as montant
          From Journaux 
          Left Join Pieces ON Journaux.Piece_id = Pieces.id 
          Left Join Tiers ON Pieces.Tier_id = Tiers.id 
@@ -829,7 +829,7 @@ class QueryCtr {
          Select Journaux.Piece_type as piece_titre ,Pieces.Num_piece as n,Pieces.Date as date,
                 Articles.Ref as referance,Articles.Designation as designation,
                 Tiers.RaisonSociale as fournisseur ,
-                Journaux.Qte as qte,Journaux.Prix_ht as prix, (Journaux.Prix_ht * Journaux.Qte) as montant
+                Journaux.Qte as qte,Journaux.Net_ht as prix, (Journaux.Net_ht * Journaux.Qte) as montant
          From Journaux 
          Left Join Pieces ON Journaux.Piece_id = Pieces.id 
          Left Join Tiers ON Pieces.Tier_id = Tiers.id 

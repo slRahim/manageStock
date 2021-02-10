@@ -115,6 +115,9 @@ class _MyAppState extends State<MyApp> {
         break ;
     }
 
+    // if(prefs.getString("myDevise") == null ){
+    //   prefs.setString("myDevise", "DZD");
+    // }
   }
 
   @override

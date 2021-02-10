@@ -5,6 +5,7 @@ import 'package:flutter_icons/flutter_icons.dart';
 import 'package:gestmob/generated/l10n.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 
+
 const String homeItemAccueilId = "homeItemAccueilId";
 const String homeItemTableauDeBordId = "homeItemTableauDeBordId";
 const String homeItemArticlesId = "homeItemArticlesId";
@@ -26,6 +27,7 @@ const String drawerItemAvoirFournisseurId = "drawerItemAvoirFournisseurId";
 const String drawerItemBonDeCommandeId = "drawerItemBonDeCommandeId";
 const String drawerItemHelpId = "drawerItemHelpId";
 const String drawerItemExitId = "drawerItemExitId";
+const String drawerItemPurchaseId = "drawerItemPurchaseId";
 
 class HomeItem {
   String id;
@@ -176,6 +178,14 @@ HomeItem drawerItemExit = new HomeItem(
     active: true
 );
 
+HomeItem drawerItemPurchase= new HomeItem(
+    id: drawerItemPurchaseId,
+    title:S.current.abonnement,
+    img: "assets/setting.png",
+    active: true
+);
+
+
 
 
 Widget iconsSet(String itemId, double iconSize){
@@ -263,6 +273,9 @@ Widget iconsSet(String itemId, double iconSize){
     case drawerItemExitId:
       return Icon(Icons.exit_to_app,size: iconSize,color: Colors.red,);
       break;
+
+    case drawerItemPurchaseId:
+      return Icon(Icons.backpack ,size: iconSize,color: Colors.white,);
 
     default:
       return Icon(Icons.assignment,size: iconSize,color: Colors.white,);

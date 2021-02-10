@@ -36,6 +36,7 @@ class _ArticleListItemSelectedState extends State<ArticleListItemSelected> {
   String _validateQteError;
   String _validatePriceError;
 
+
   @override
   Widget build(BuildContext context) {
     return SelectableListItem(
@@ -78,7 +79,7 @@ class _ArticleListItemSelectedState extends State<ArticleListItemSelected> {
       subtitle: Text("${S.current.ref}: " + widget.article.ref),
       trailingChildren: [
         Text(
-          "${Helpers.numberFormat((widget.article.selectedQuantite * widget.article.selectedPrice))} ${S.current.da}",
+          "${Helpers.numberFormat((widget.article.selectedQuantite * widget.article.selectedPrice))}",
           style: TextStyle(
               fontSize: 15.0,
               fontWeight: FontWeight.bold

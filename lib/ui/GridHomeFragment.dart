@@ -20,6 +20,7 @@ import 'package:material_design_icons_flutter/material_design_icons_flutter.dart
 import 'package:reorderables/reorderables.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'AddArticlePage.dart';
+import 'package:gestmob/services/push_notifications.dart';
 
 class GridHomeWidget extends StatefulWidget {
   static bool Global_Draggable_Mode = false;
@@ -56,16 +57,20 @@ class _GridHomeWidgetState extends State<GridHomeWidget> {
     homeItemParametres
   ];
 
-  QueryCtr _queryCtr = new QueryCtr() ;
-  var _indiceFinanciere ;
-  bool _finishLoading = false ;
+  QueryCtr _queryCtr = new QueryCtr();
+
+  var _indiceFinanciere;
+
+  String _devise;
+
+  bool _finishLoading = false;
 
   @override
   Future<void> initState() {
     super.initState();
-    futurInit().then((value){
+    futurInit().then((value) {
       setState(() {
-        _finishLoading = true ;
+        _finishLoading = true;
       });
     });
     _addButton = DraggableItem(
@@ -103,6 +108,9 @@ class _GridHomeWidgetState extends State<GridHomeWidget> {
   @override
   void didChangeDependencies() async {
     final newLocale = Localizations.localeOf(context);
+
+    PushNotificationsManagerState data = PushNotificationsManager.of(context);
+    _devise = getDeviseTranslate(data.myParams.devise);
 
     if (newLocale != _userLocale) {
       homeItemList[0].title = S.current.tableau_bord;
@@ -145,14 +153,26 @@ class _GridHomeWidgetState extends State<GridHomeWidget> {
     ));
   }
 
+  String getDeviseTranslate(devise) {
+    switch (devise) {
+      case "DZD":
+        return S.current.da;
+        break;
+      default:
+        return devise;
+        break;
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
-    if(!_finishLoading){
+    if (!_finishLoading) {
       return Center(child: CircularProgressIndicator());
-    }else{
+    } else {
       return Scaffold(
         appBar: PreferredSize(
-          preferredSize: Size.fromHeight(MediaQuery.of(context).size.height / 7),
+          preferredSize:
+              Size.fromHeight(MediaQuery.of(context).size.height / 5),
           child: Container(
             decoration: BoxDecoration(
                 color: Theme.of(context).appBarTheme.color,
@@ -163,8 +183,7 @@ class _GridHomeWidgetState extends State<GridHomeWidget> {
                     blurRadius: 2,
                     offset: Offset(2, 1), // changes position of shadow
                   ),
-                ]
-            ),
+                ]),
             child: Column(
               children: [
                 AppBar(
@@ -177,63 +196,112 @@ class _GridHomeWidgetState extends State<GridHomeWidget> {
                   centerTitle: true,
                   elevation: 0,
                 ),
-                SizedBox(
-                  height: 15,
-                ),
-                Container(
-                  padding: EdgeInsetsDirectional.only(start: 20),
-                  child: Row(
-                    children: [
-                      Expanded(
-                        child: Row(
-                          children: [
-                            Icon(
-                              MdiIcons.cashMultiple,
-                              color: Colors.white,
+                Expanded(
+                  child: Container(
+                    padding: EdgeInsets.only(left: 25, right: 25),
+                    child: Row(
+                      children: [
+                        Expanded(
+                          child: Container(
+                            padding: EdgeInsets.all(5),
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Row(
+                                  children: [
+                                    Icon(
+                                      Icons.arrow_upward,
+                                      color: Colors.white,
+                                      size: 40,
+                                    ),
+                                    SizedBox(
+                                      width: 5,
+                                    ),
+                                    Container(
+                                      child: Wrap(
+                                        direction: Axis.vertical,
+                                        children: [Text("C.A Mensuel",
+                                            style: TextStyle(
+                                                fontWeight: FontWeight.bold,
+                                                color: Colors.white))],
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                                Container(
+                                  child: Wrap(
+                                    direction: Axis.horizontal,
+                                    children: [
+                                      Text(
+                                          "${Helpers.numberFormat((_indiceFinanciere[0] != null) ? _indiceFinanciere[0]: 0.0)}",
+                                          style: TextStyle(
+                                              fontWeight:
+                                              FontWeight.bold,
+                                              color: Colors.white,fontSize: 18)),
+                                      Text(" (${_devise})",
+                                          style: TextStyle(
+                                              fontWeight:
+                                              FontWeight.bold,
+                                              color: Colors.white)),
+                                    ],
+                                  ),
+                                ),
+                              ],
                             ),
-                            SizedBox(
-                              width: 5,
-                            ),
-                            Expanded(
-                              child: Wrap(
-                                direction: Axis.horizontal,
-                                children: [
-                                  Text("${Helpers.numberFormat((_indiceFinanciere[0] != null)?_indiceFinanciere[0]:0.0)}",
-                                      style: TextStyle(fontWeight: FontWeight.bold ,color: Colors.white)),
-                                  Text("(${S.current.da})",
-                                      style: TextStyle(fontWeight: FontWeight.bold,color: Colors.white)),
-                                ],
-                              ),
-                            ),
-                          ],
+                          ),
                         ),
-                      ),
-                      SizedBox(width: 0.1,),
-                      Expanded(
-                        child: Row(
-                          children: [
-                            Icon(
-                              MdiIcons.basketFill,
-                              color: Colors.white,
-                            ),
-                            SizedBox(
-                              width: 5,
-                            ),
-                            Expanded(
-                              child: Wrap(
-                                direction: Axis.horizontal,
-                                children: [
-                                  Text("${Helpers.numberFormat((_indiceFinanciere[1] != null)?_indiceFinanciere[1]:0.0)}",
-                                      style: TextStyle(fontWeight: FontWeight.bold,color:Colors.white)),
-                                  Text("(${S.current.da})",
-                                      style: TextStyle(fontWeight: FontWeight.bold,color:Colors.white)),
-                                ],
-                              ),
-                            ),
-                          ],
+                        SizedBox(
+                          width: 5,
                         ),
-                      ),
-                    ],
+                        Expanded(
+                          child: Container(
+                            padding: EdgeInsets.all(5),
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Row(
+                                  children: [
+                                    Icon(
+                                      Icons.arrow_downward,
+                                      color: Colors.white,
+                                      size: 40,
+                                    ),
+                                    SizedBox(
+                                      width: 5,
+                                    ),
+                                    Container(
+                                      child: Wrap(
+                                        direction: Axis.vertical,
+                                        children: [Text("Achat Mensuel",
+                                            style: TextStyle(
+                                                fontWeight: FontWeight.bold,
+                                                color: Colors.white))],
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                                Container(
+                                  child: Wrap(
+                                    direction: Axis.horizontal,
+                                    children: [
+                                      Text(
+                                          "${Helpers.numberFormat((_indiceFinanciere[1] != null) ? _indiceFinanciere[1] : 0.0)}",
+                                          style: TextStyle(
+                                              fontWeight: FontWeight.bold,fontSize: 18,
+                                              color: Colors.white)),
+                                      Text(" (${_devise})",
+                                          style: TextStyle(
+                                              fontWeight: FontWeight.bold,
+                                              color: Colors.white)),
+                                    ],
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
                   ),
                 ),
               ],
@@ -251,8 +319,8 @@ class _GridHomeWidgetState extends State<GridHomeWidget> {
                     return SingleChildScrollView(
                       child: Container(
                         alignment: Alignment.center,
-                        padding:
-                        const EdgeInsetsDirectional.only(start: 20, end: 20),
+                        padding: const EdgeInsetsDirectional.only(
+                            start: 20, end: 20),
                         child: DraggableContainer(
                           key: _containerKey,
                           draggableMode: false,
@@ -276,7 +344,8 @@ class _GridHomeWidgetState extends State<GridHomeWidget> {
                             height: 20,
                             decoration: BoxDecoration(
                               color: Colors.redAccent,
-                              borderRadius: BorderRadius.all(Radius.circular(8)),
+                              borderRadius:
+                                  BorderRadius.all(Radius.circular(8)),
                             ),
                             child: Icon(
                               Icons.delete_forever,
@@ -285,7 +354,8 @@ class _GridHomeWidgetState extends State<GridHomeWidget> {
                             ),
                           ),
                           onDraggableModeChanged: (bool draggableMode) {
-                            GridHomeWidget.Global_Draggable_Mode = draggableMode;
+                            GridHomeWidget.Global_Draggable_Mode =
+                                draggableMode;
 
                             final items = _containerKey.currentState.items;
                             if (draggableMode) {
@@ -308,7 +378,6 @@ class _GridHomeWidgetState extends State<GridHomeWidget> {
                 })),
       );
     }
-
   }
 
   //get items list +order +

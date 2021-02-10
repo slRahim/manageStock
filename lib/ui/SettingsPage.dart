@@ -139,6 +139,7 @@ class _SettingsPageState extends State<SettingsPage> {
     _repeateNotification = Statics.repeateNotifications[item.notificationDay];
     _echeance = Statics.echeances[item.echeance];
     _countryname = item.pays ;
+    _currencycode = item.devise ;
   }
 
   @override

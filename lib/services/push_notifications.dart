@@ -7,20 +7,27 @@ import 'package:gestmob/models/HomeItem.dart';
 import 'package:gestmob/models/MyParams.dart';
 import 'local_notification.dart';
 
+
 class PushNotificationsManager extends StatefulWidget {
   Widget child;
 
   PushNotificationsManager({Key key,this.child}):super(key: key);
 
+  static PushNotificationsManagerState of(BuildContext context) {
+    return context.dependOnInheritedWidgetOfExactType<MyInheritedWidget>().data;
+  }
+
   @override
-  _PushNotificationsManagerState createState() => _PushNotificationsManagerState();
+  PushNotificationsManagerState createState() => PushNotificationsManagerState();
 }
 
-class _PushNotificationsManagerState extends State<PushNotificationsManager> {
+class PushNotificationsManagerState extends State<PushNotificationsManager> {
   final FirebaseMessaging _firebaseMessaging = FirebaseMessaging();
   MyParams _myParams ;
   bool _pieceHasCredit ;
   QueryCtr _queryCtr=new QueryCtr() ;
+
+  MyParams get myParams => _myParams ;
 
   @override
   void initState() {
@@ -37,7 +44,10 @@ class _PushNotificationsManagerState extends State<PushNotificationsManager> {
 
   @override
   Widget build(BuildContext context) {
-    return widget.child ;
+    return  MyInheritedWidget(
+        data: this,
+        child: widget.child
+    ) ;
   }
 
   configureCloudMessaginCallbacks() async {
@@ -97,5 +107,22 @@ class _PushNotificationsManagerState extends State<PushNotificationsManager> {
     print('taped notification from service: $payload');
   }
 }
+
+class MyInheritedWidget extends InheritedWidget {
+  final PushNotificationsManagerState data;
+
+  MyInheritedWidget({
+    Key key,
+    @required Widget child,
+    @required this.data,
+  }) : super(key: key, child: child);
+
+  @override
+  bool updateShouldNotify(InheritedWidget oldWidget) {
+    return true;
+  }
+}
+
+
 
 

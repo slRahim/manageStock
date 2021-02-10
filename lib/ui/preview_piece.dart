@@ -52,6 +52,7 @@ class _PreviewPieceState extends State<PreviewPiece> {
   PDFDocument _doc;
 
   bool directionRtl = false;
+  String _devise ;
 
   @override
   void initState() {
@@ -74,7 +75,7 @@ class _PreviewPieceState extends State<PreviewPiece> {
 
     }else{
        _myParams = await _queryCtr.getAllParams() ;
-
+       _devise = getDeviseTranslate(_myParams.devise) ;
     }
   }
 
@@ -88,6 +89,17 @@ class _PreviewPieceState extends State<PreviewPiece> {
         break ;
     }
     await _queryCtr.updateItemInDb(DbTablesNames.myparams, _myParams);
+  }
+
+  String getDeviseTranslate(devise){
+    switch(devise){
+      case "DZD" :
+        return S.current.da ;
+        break;
+      default :
+        return devise ;
+        break ;
+    }
   }
 
   @override
@@ -444,7 +456,7 @@ class _PreviewPieceState extends State<PreviewPiece> {
       ticket.hr(ch: '=');
       input = "${S.current.net_payer}";
       encArabic = await CharsetConverter.encode("ISO-8859-6",
-          "${Helpers.numberFormat(widget.piece.net_a_payer).toString()}: ${input.split('').reversed.join()}");
+          "${_devise} ${Helpers.numberFormat(widget.piece.net_a_payer).toString()}: ${input.split('').reversed.join()}");
       ticket.textEncoded(encArabic,
           styles: PosStyles(
             codeTable: PosCodeTable.arabic,
@@ -485,8 +497,7 @@ class _PreviewPieceState extends State<PreviewPiece> {
               bold: true));
       ticket.feed(1);
       ticket.cut();
-    }
-    else {
+    } else {
       ticket.text("${S.current.n} ${getPiecetype()}: ${widget.piece.num_piece}",
           styles: PosStyles(
               codeTable: PosCodeTable.arabic,
@@ -601,7 +612,7 @@ class _PreviewPieceState extends State<PreviewPiece> {
       }
 
       ticket.hr(ch: '=');
-      encode = await CharsetConverter.encode("ISO-8859-6", "${S.current.net_payer} : ${Helpers.numberFormat(widget.piece.net_a_payer).toString()}");
+      encode = await CharsetConverter.encode("ISO-8859-6", "${S.current.net_payer} : ${Helpers.numberFormat(widget.piece.net_a_payer).toString()} ${_devise}");
       ticket.textEncoded(
           encode,
           styles: PosStyles(

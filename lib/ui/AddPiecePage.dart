@@ -115,6 +115,7 @@ class _AddPiecePageState extends State<AddPiecePage>
   BottomBarController bottomBarControler;
   Ticket _ticket;
   MyParams _myParams;
+  String _devise ;
 
   bool directionRtl = false;
   DefaultPrinter defaultPrinter = new DefaultPrinter.init();
@@ -159,6 +160,7 @@ class _AddPiecePageState extends State<AddPiecePage>
       editMode = true;
     }
     _myParams = await _queryCtr.getAllParams();
+    _devise = getDeviseTranslate(_myParams.devise );
     return Future<bool>.value(editMode);
   }
 
@@ -231,6 +233,17 @@ class _AddPiecePageState extends State<AddPiecePage>
     setState(() {
       _numeroControl.text = Helpers.generateNumPiece(list.first);
     });
+  }
+
+  String getDeviseTranslate(devise){
+    switch(devise){
+      case "DZD" :
+        return S.current.da ;
+        break;
+      default :
+        return devise ;
+        break ;
+    }
   }
 
   //************************************************************************************************************************************
@@ -403,7 +416,7 @@ class _AddPiecePageState extends State<AddPiecePage>
                                 size: 18,
                               ),
                               Text(
-                                "(${S.current.da})",
+                                "(${_devise})",
                                 style: TextStyle(
                                     fontSize: 12, fontWeight: FontWeight.bold),
                               ),
@@ -489,7 +502,7 @@ class _AddPiecePageState extends State<AddPiecePage>
                                       ? Colors.blue
                                       : Theme.of(context).primaryColorDark),
                               Text(
-                                "(${S.current.da})",
+                                "(${_devise})",
                                 style: TextStyle(
                                     fontSize: 12, fontWeight: FontWeight.bold),
                               ),
@@ -2081,7 +2094,7 @@ class _AddPiecePageState extends State<AddPiecePage>
       ticket.hr(ch: '=');
       input = "${S.current.net_payer}";
       encArabic = await CharsetConverter.encode("ISO-8859-6",
-          "${Helpers.numberFormat(_piece.net_a_payer).toString()}: ${input.split('').reversed.join()}");
+          "${_devise} ${Helpers.numberFormat(_piece.net_a_payer).toString()}: ${input.split('').reversed.join()}");
       ticket.textEncoded(encArabic,
           styles: PosStyles(
             codeTable: PosCodeTable.arabic,
@@ -2234,7 +2247,7 @@ class _AddPiecePageState extends State<AddPiecePage>
       }
 
       ticket.hr(ch: '=');
-      encode = await CharsetConverter.encode("ISO-8859-6", "${S.current.net_payer} : ${Helpers.numberFormat(_piece.net_a_payer).toString()}");
+      encode = await CharsetConverter.encode("ISO-8859-6", "${S.current.net_payer} : ${Helpers.numberFormat(_piece.net_a_payer).toString()} ${_devise}");
       ticket.textEncoded(
           encode,
           styles: PosStyles(
@@ -2409,16 +2422,16 @@ class _AddPiecePageState extends State<AddPiecePage>
                 flex: 6,
                 child: pw.Column(children: [
                   pw.Text(
-                      "${S.current.regler}\t ${Helpers.numberFormat(_piece.regler)} ${S.current.da}",
+                      "${S.current.regler}\t ${Helpers.numberFormat(_piece.regler)} ${_devise}",
                       style: pw.TextStyle(font: ttf)),
                   (_piece.reste > 0)
                       ? pw.Text(
-                          "${S.current.reste}\t ${Helpers.numberFormat(_piece.reste)} ${S.current.da}",
+                          "${S.current.reste}\t ${Helpers.numberFormat(_piece.reste)} ${_devise}",
                           style: pw.TextStyle(font: ttf))
                       : pw.SizedBox(),
                   (_myParams.creditTier)
                       ? pw.Text(
-                          "${S.current.credit}\t ${Helpers.numberFormat(_selectedClient.credit)} ${S.current.da}",
+                          "${S.current.credit}\t ${Helpers.numberFormat(_selectedClient.credit)} ${_devise}",
                           style: pw.TextStyle(font: ttf))
                       : pw.SizedBox(),
                   pw.Divider(height: 2),
@@ -2438,37 +2451,37 @@ class _AddPiecePageState extends State<AddPiecePage>
                     children: [
                       (_piece.total_tva > 0 && _myParams.tva)
                           ? pw.Text(
-                              "${S.current.total_ht}\t  ${Helpers.numberFormat(_piece.total_ht)}\t ${S.current.da}",
+                              "${S.current.total_ht}\t  ${Helpers.numberFormat(_piece.total_ht)}\t ${_devise}",
                               style: pw.TextStyle(font: ttf))
                           : pw.SizedBox(),
                       (_piece.remise > 0)
                           ? pw.Text(
-                              "${S.current.remise}\t  ${((_piece.total_ht * _piece.remise) / 100).toStringAsFixed(2)}  (${_piece.remise}\t  %)\t ${S.current.da}",
+                              "${S.current.remise}\t  ${((_piece.total_ht * _piece.remise) / 100).toStringAsFixed(2)}  (${_piece.remise}\t  %)\t ${_devise}",
                               style: pw.TextStyle(font: ttf))
                           : pw.SizedBox(),
                       (_piece.remise > 0)
                           ? pw.Text(
-                              "${S.current.net_ht}\t  ${Helpers.numberFormat(_piece.net_ht)}\t  ${S.current.da}",
+                              "${S.current.net_ht}\t  ${Helpers.numberFormat(_piece.net_ht)}\t  ${_devise}",
                               style: pw.TextStyle(font: ttf))
                           : pw.SizedBox(),
                       (_piece.total_tva > 0 && _myParams.tva)
                           ? pw.Text(
-                              "${S.current.total_tva}\t  ${Helpers.numberFormat(_piece.total_tva)}\t  ${S.current.da}",
+                              "${S.current.total_tva}\t  ${Helpers.numberFormat(_piece.total_tva)}\t  ${_devise}",
                               style: pw.TextStyle(font: ttf))
                           : pw.SizedBox(),
                       (_piece.total_tva > 0 && _myParams.tva)
                           ? pw.Text(
-                              "${S.current.total}\t  ${Helpers.numberFormat(_piece.total_ttc)}\t  ${S.current.da}",
+                              "${S.current.total}\t  ${Helpers.numberFormat(_piece.total_ttc)}\t  ${_devise}",
                               style: pw.TextStyle(font: ttf))
                           : pw.SizedBox(),
                       pw.Divider(height: 2),
                       (_myParams.timbre)
                           ? pw.Text(
-                              "${S.current.timbre}\t  ${(_piece.total_ttc < _piece.net_a_payer) ? Helpers.numberFormat(_piece.timbre) : Helpers.numberFormat(0.0)}\t  ${S.current.da}",
+                              "${S.current.timbre}\t  ${(_piece.total_ttc < _piece.net_a_payer) ? Helpers.numberFormat(_piece.timbre) : Helpers.numberFormat(0.0)}\t  ${_devise}",
                               style: pw.TextStyle(font: ttf))
                           : pw.SizedBox(),
                       pw.Text(
-                          "${S.current.net_payer}\t  ${Helpers.numberFormat(_piece.net_a_payer)}\t  ${S.current.da}",
+                          "${S.current.net_payer}\t  ${Helpers.numberFormat(_piece.net_a_payer)}\t  ${_devise}",
                           style: pw.TextStyle(font: ttf)),
                       pw.Divider(height: 2),
                     ])),

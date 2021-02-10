@@ -6,14 +6,12 @@ import 'package:gestmob/ui/ArticlesFragment.dart';
 import 'package:gestmob/ui/ClientFourFragment.dart';
 import 'package:gestmob/ui/GridHomeFragment.dart';
 import 'package:gestmob/ui/PiecesFragment.dart';
-import 'package:gestmob/ui/SettingsPage.dart';
 import 'package:gestmob/ui/TresorieFragment.dart';
 import 'package:gestmob/ui/dashboard_fragment.dart';
 import 'package:gestmob/ui/rapport_fragment.dart';
 import 'package:meta/meta.dart';
 import 'package:gestmob/models/HomeItem.dart';
-import 'package:gestmob/ui/AddArticlePage.dart';
-
+import 'package:gestmob/ui/purchase_page.dart';
 part 'home_state.dart';
 
 class HomeCubit extends Cubit<HomeState> {
@@ -95,6 +93,10 @@ class HomeCubit extends Cubit<HomeState> {
 
       case homeItemTresorerieId:
         emit(new FragmentLoaded(TresorieFragment()));
+        break;
+
+      case drawerItemPurchaseId:
+        emit(new FragmentLoaded(PurchasePage()));
         break;
 
 

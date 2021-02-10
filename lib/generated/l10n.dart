@@ -3264,6 +3264,16 @@ class S {
       args: [],
     );
   }
+
+  /// `Abonnement`
+  String get abonnement {
+    return Intl.message(
+      'Abonnement',
+      name: 'abonnement',
+      desc: '',
+      args: [],
+    );
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<S> {

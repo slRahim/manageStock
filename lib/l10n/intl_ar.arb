@@ -345,6 +345,8 @@
   "light_theme" : "ساطع",
   "dark_them" : "داكن",
   "sys_theme" : "التظام",
-  "selec_pays" : "إختر البلد"
+  "selec_pays" : "إختر البلد",
+
+  "abonnement" : "Abonnement"
 
 }

@@ -15,6 +15,7 @@ import 'package:sliding_card/sliding_card.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import 'CustomWidgets/list_tile_card.dart';
+import 'package:gestmob/services/push_notifications.dart';
 
 // element à afficher lors de listing des factures
 class PieceListItem extends StatefulWidget {
@@ -38,12 +39,32 @@ class _PieceListItemState extends State<PieceListItem> {
   bool _confirmDell = false ;
   bool _visible = true ;
   SlidingCardController controller ;
+  String _devise ;
 
   @override
   void initState() {
     super.initState();
     controller = SlidingCardController();
   }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    PushNotificationsManagerState data = PushNotificationsManager.of(context);
+    _devise = getDeviseTranslate(data.myParams.devise) ;
+  }
+
+  String getDeviseTranslate(devise){
+    switch(devise){
+      case "DZD" :
+        return S.current.da ;
+        break;
+      default :
+        return devise ;
+        break ;
+    }
+  }
+
 
   @override
   Widget build(BuildContext context) {
@@ -119,18 +140,18 @@ class _PieceListItemState extends State<PieceListItem> {
                   fontSize: 16.0),
             ),
             Text(
-              "${S.current.regler}: ${Helpers.numberFormat(widget.piece.regler)} (${S.current.da})",
+              "${S.current.regler}: ${Helpers.numberFormat(widget.piece.regler)} (${_devise})",
               style: TextStyle(
                   fontSize: 16.0),
             ),
             (widget.piece.net_a_payer < 0)
-                ? Text("${Helpers.numberFormat(widget.piece.net_a_payer * -1).toString() } (${S.current.da})",
+                ? Text("${Helpers.numberFormat(widget.piece.net_a_payer * -1).toString() } (${_devise})",
               style: TextStyle(
                   fontSize: 16.0,
                   fontWeight: FontWeight.bold ,
                   color: (widget.piece.reste < 0)?Colors.redAccent : Theme.of(context).primaryColorDark ),
             )
-                : Text('${Helpers.numberFormat(widget.piece.net_a_payer).toString()} (${S.current.da})',
+                : Text('${Helpers.numberFormat(widget.piece.net_a_payer).toString()} (${_devise})',
               style: TextStyle(
                   fontSize: 16.0,
                   fontWeight: FontWeight.bold ,
@@ -145,7 +166,7 @@ class _PieceListItemState extends State<PieceListItem> {
                         style: TextStyle(fontSize: 15 , fontWeight: FontWeight.bold,color: Colors.redAccent)
                     ),
                     TextSpan(
-                      text:"${Helpers.numberFormat(widget.piece.reste)} (${S.current.da})",
+                      text:"${Helpers.numberFormat(widget.piece.reste)} (${_devise})",
                       style: TextStyle(
                           color: Theme.of(context).primaryColorDark,
                           fontSize: 15.0),
@@ -161,7 +182,7 @@ class _PieceListItemState extends State<PieceListItem> {
                     style: TextStyle(fontSize: 15 , fontWeight: FontWeight.bold,color: Colors.green)
                   ),
                   TextSpan(
-                    text:"${Helpers.numberFormat(widget.piece.marge)} (${S.current.da})",
+                    text:"${Helpers.numberFormat(widget.piece.marge)} (${_devise})",
                     style: TextStyle(
                         color: Theme.of(context).primaryColorDark,
                         fontSize: 15.0),

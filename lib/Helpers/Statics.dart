@@ -99,6 +99,7 @@ class RoutesKeys {
   static const allPieces = "/all_pieces";
   static const settingsPage = '/settingsPage';
   static const driveListing = '/drivePage';
+  static const appPurchase = '/purchasePage';
   static const helpPage = '/helpPage';
 }
 

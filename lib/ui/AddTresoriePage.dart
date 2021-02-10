@@ -33,8 +33,8 @@ import 'package:image_picker/image_picker.dart';
 import 'package:gestmob/Widgets/utils.dart' as utils;
 import 'package:map_launcher/map_launcher.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
-
 import 'ArticlesFragment.dart';
+import 'package:gestmob/services/push_notifications.dart';
 
 class AddTresoriePage extends StatefulWidget {
   var arguments;
@@ -53,14 +53,10 @@ class _AddTresoriePageState extends State<AddTresoriePage>
 
   bool editMode = true;
   bool modification = false;
-
   bool finishedLoading = false;
   bool _showTierController = true;
-
   String appBarTitle = S.current.tresorie_titre;
-
   List<Piece> _selectedPieces = new List<Piece>();
-
   Tiers _selectedClient;
 
 
@@ -73,7 +69,6 @@ class _AddTresoriePageState extends State<AddTresoriePage>
   TextEditingController _montantControl = new TextEditingController();
 
   double _restepiece = 0.0;
-
   double _verssementpiece;
 
   List<DropdownMenuItem<String>> _tiersDropdownItems;
@@ -92,10 +87,9 @@ class _AddTresoriePageState extends State<AddTresoriePage>
   ChargeTresorie _selectedCharge;
 
   QueryCtr _queryCtr = new QueryCtr();
-
   BottomBarController bottomBarControler;
-
   final _formKey = GlobalKey<FormState>();
+  String _devise ;
 
   void initState() {
     super.initState();
@@ -106,6 +100,13 @@ class _AddTresoriePageState extends State<AddTresoriePage>
         finishedLoading = true;
       });
     });
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    PushNotificationsManagerState data = PushNotificationsManager.of(context);
+    _devise = getDeviseTranslate(data.myParams.devise) ;
   }
 
   @override
@@ -214,6 +215,17 @@ class _AddTresoriePageState extends State<AddTresoriePage>
     });
   }
 
+  String getDeviseTranslate(devise){
+    switch(devise){
+      case "DZD" :
+        return S.current.da ;
+        break;
+      default :
+        return devise ;
+        break ;
+    }
+  }
+
   //****************************************************************************************************************************************************************
   //***********************************************************************build de l'affichage***************************************************************************
   @override
@@ -310,7 +322,7 @@ class _AddTresoriePageState extends State<AddTresoriePage>
                                     size: 18,
                                   ),
                                   Text(
-                                    "(${S.current.da})",
+                                    "(${_devise})",
                                     style: TextStyle(
                                         fontSize: 12, fontWeight: FontWeight.bold),
                                   ),
@@ -343,7 +355,7 @@ class _AddTresoriePageState extends State<AddTresoriePage>
                                     size: 20,
                                     color: Theme.of(context).primaryColorDark),
                                 Text(
-                                  "(${S.current.da})",
+                                  "(${_devise})",
                                   style: TextStyle(
                                       fontSize: 12, fontWeight: FontWeight.bold),
                                 ),

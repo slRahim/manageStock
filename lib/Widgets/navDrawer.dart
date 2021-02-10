@@ -21,6 +21,7 @@ class NavDrawer extends StatelessWidget {
 
   List<Widget> homeItemWidgetList;
   List<HomeItem> homeItemList = [
+    drawerItemPurchase ,
     homeItemAccueil,
     homeItemTableauDeBord,
     homeItemArticles,

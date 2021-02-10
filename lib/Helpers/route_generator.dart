@@ -16,7 +16,7 @@ import 'package:gestmob/ui/AddArticlePage.dart';
 import 'package:gestmob/ui/all_piece_listing.dart';
 import 'package:gestmob/ui/backup_restore_listing.dart';
 import 'package:gestmob/ui/home.dart';
-
+import 'package:gestmob/ui/purchase_page.dart';
 import 'QueryCtr.dart';
 import 'Statics.dart';
 

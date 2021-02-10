@@ -10,8 +10,8 @@ import 'package:gestmob/models/Tresorie.dart';
 import 'package:intl/intl.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:sliding_card/sliding_card.dart';
-
 import 'CustomWidgets/list_tile_card.dart';
+import 'package:gestmob/services/push_notifications.dart';
 
 // element à afficher lors de listing des tresorie
 class TresorieListItem extends StatefulWidget {
@@ -32,11 +32,30 @@ class _TresorieListItemState extends State<TresorieListItem> {
   bool _confirmDell = false ;
   bool _visible = true ;
   SlidingCardController controller ;
+  String _devise ;
 
   @override
   void initState() {
     super.initState();
     controller = SlidingCardController();
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    PushNotificationsManagerState data = PushNotificationsManager.of(context);
+    _devise = getDeviseTranslate(data.myParams.devise) ;
+  }
+
+  String getDeviseTranslate(devise){
+    switch(devise){
+      case "DZD" :
+        return S.current.da ;
+        break;
+      default :
+        return devise ;
+        break ;
+    }
   }
 
   @override
@@ -122,10 +141,10 @@ class _TresorieListItemState extends State<TresorieListItem> {
                   fontSize: 16.0),
             ),
             (widget.tresorie.montant >= 0) ? Text(
-              '${Helpers.numberFormat(widget.tresorie.montant).toString()} (${S.current.da})',
+              '${Helpers.numberFormat(widget.tresorie.montant).toString()} (${_devise})',
               style: TextStyle(fontSize: 16.0, fontWeight: FontWeight.bold),)
                 : Text(
-              '${Helpers.numberFormat(widget.tresorie.montant * -1).toString()} (${S.current.da})',
+              '${Helpers.numberFormat(widget.tresorie.montant * -1).toString()} (${_devise})',
               style: TextStyle(fontSize: 16.0, fontWeight: FontWeight.bold),),
             getIcon(),
           ],

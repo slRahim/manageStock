@@ -11,6 +11,8 @@ import 'package:material_design_icons_flutter/material_design_icons_flutter.dart
 import 'package:sliding_card/sliding_card.dart';
 
 import 'CustomWidgets/list_tile_card.dart';
+import 'package:gestmob/services/push_notifications.dart';
+
 
 // element à afficher lors de listing des articles
 class ArticleListItem extends StatefulWidget {
@@ -39,15 +41,36 @@ class _ArticleListItemState extends State<ArticleListItem> {
   String _validateQteError;
   String _validatePriceError;
   SlidingCardController controller ;
+  String _devise ;
 
   @override
   void initState() {
     super.initState();
     controller = SlidingCardController();
+
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    PushNotificationsManagerState data = PushNotificationsManager.of(context);
+    _devise = getDeviseTranslate(data.myParams.devise) ;
+  }
+
+  String getDeviseTranslate(devise){
+    switch(devise){
+      case "DZD" :
+        return S.current.da ;
+        break;
+      default :
+        return devise ;
+        break ;
+    }
   }
 
   @override
   Widget build(BuildContext context) {
+
     SizeConfig().init(context);
     return ListTileCard(
       from:  widget.article,
@@ -138,7 +161,7 @@ class _ArticleListItemState extends State<ArticleListItem> {
           ),
         ),
         Text(
-          "${Helpers.numberFormat(widget.article.selectedQuantite * widget.article.selectedPrice).toString()} (${S.current.da})",
+          "${Helpers.numberFormat(widget.article.selectedQuantite * widget.article.selectedPrice).toString()} (${_devise})",
           style: TextStyle(
               fontSize: 16.0,
               fontWeight: FontWeight.bold
@@ -236,21 +259,21 @@ class _ArticleListItemState extends State<ArticleListItem> {
     switch (widget.tarification){
       case 1 :
         return Text(
-          "${Helpers.numberFormat(widget.article.prixVente1).toString()} (${S.current.da})",
+          "${Helpers.numberFormat(widget.article.prixVente1).toString()} (${_devise})",
           style: TextStyle(fontSize: 16.0, fontWeight: FontWeight.bold),
         );
         break ;
 
       case 2:
         return Text(
-          "${Helpers.numberFormat(widget.article.prixVente2).toString()} (${S.current.da})",
+          "${Helpers.numberFormat(widget.article.prixVente2).toString()} (${_devise})",
           style: TextStyle(fontSize: 16.0, fontWeight: FontWeight.bold),
         );
         break ;
 
       case 3 :
         return Text(
-          "${Helpers.numberFormat(widget.article.prixVente3).toString()} (${S.current.da})",
+          "${Helpers.numberFormat(widget.article.prixVente3).toString()} (${_devise})",
           style: TextStyle(fontSize: 16.0, fontWeight: FontWeight.bold),
         );
         break ;
@@ -258,12 +281,12 @@ class _ArticleListItemState extends State<ArticleListItem> {
       default :
         if(widget.article.selectedPrice > 0){
           return Text(
-            "${Helpers.numberFormat(widget.article.selectedPrice).toString()} (${S.current.da})",
+            "${Helpers.numberFormat(widget.article.selectedPrice).toString()} (${_devise})",
             style: TextStyle(fontSize: 16.0, fontWeight: FontWeight.bold),
           );
         }
         return Text(
-          "${Helpers.numberFormat(widget.article.prixVente1).toString()} (${S.current.da})",
+          "${Helpers.numberFormat(widget.article.prixVente1).toString()} (${_devise})",
           style: TextStyle(fontSize: 16.0, fontWeight: FontWeight.bold),
         );
         break ;

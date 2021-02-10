@@ -15,11 +15,25 @@ class TotalDevis extends StatelessWidget{
   final double net_payer ;
   final MyParams myParams;
 
+
   const TotalDevis({Key key, this.total_ttc , this.total_tva , this.total_ht
     , this.timbre ,this.net_ht ,this.remise , this.net_payer , this.myParams}) : super(key: key);
 
+
+  String getDeviseTranslate(devise){
+    switch(devise){
+      case "DZD" :
+        return S.current.da ;
+        break;
+      default :
+        return devise ;
+        break ;
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
+    String _devise = getDeviseTranslate(myParams.devise);
     return Container(
       margin: EdgeInsetsDirectional.fromSTEB(20, 0, 20, 10),
       child: Center(
@@ -32,7 +46,7 @@ class TotalDevis extends StatelessWidget{
                   Text("${S.current.total_ht}= "),
                   Expanded(child: Text(".............................................................................................................",
                     maxLines: 1,)),
-                  Text(Helpers.numberFormat(total_ht).toString() + " ${S.current.da}"),
+                  Text(Helpers.numberFormat(total_ht).toString() + " ${(_devise)}"),
                 ],
               ),
               SizedBox(height: 5),
@@ -42,7 +56,7 @@ class TotalDevis extends StatelessWidget{
                   Text("${S.current.remise}= "),
                   Expanded(child: Text(".............................................................................................................",
                     maxLines: 1,)),
-                  Text("${Helpers.numberFormat((total_ht*remise)/100)} ${S.current.da} (${Helpers.numberFormat(remise)} %)"),
+                  Text("${Helpers.numberFormat((total_ht*remise)/100)} ${_devise} (${Helpers.numberFormat(remise)} %)"),
                 ],
               ),
               SizedBox(height: 5),
@@ -52,7 +66,7 @@ class TotalDevis extends StatelessWidget{
                   Text("${S.current.net_ht}== "),
                   Expanded(child: Text(".............................................................................................................",
                     maxLines: 1,)),
-                  Text(net_ht.toString() + " ${S.current.da}"),
+                  Text(net_ht.toString() + " ${_devise}"),
                 ],
               ),
               SizedBox(height: 5),
@@ -64,7 +78,7 @@ class TotalDevis extends StatelessWidget{
                     Text("${S.current.total_tva}= "),
                     Expanded(child: Text(".............................................................................................................",
                       maxLines: 1,)),
-                    Text(total_tva.toString() + " ${S.current.da}"),
+                    Text(total_tva.toString() + " ${_devise}"),
                   ],
                 ),
               ),
@@ -77,7 +91,7 @@ class TotalDevis extends StatelessWidget{
                     Text("${S.current.total}= "),
                     Expanded(child: Text(".............................................................................................................",
                       maxLines: 1,)),
-                    Text(total_ttc.toString() + " ${S.current.da}"),
+                    Text(total_ttc.toString() + " ${_devise}"),
                   ],
                 ),
               ),
@@ -90,7 +104,7 @@ class TotalDevis extends StatelessWidget{
                     Text("${S.current.timbre}= "),
                     Expanded(child: Text(".............................................................................................................",
                       maxLines: 1,)),
-                    Text(timbre.toString() + " ${S.current.da}"),
+                    Text(timbre.toString() + " ${_devise}"),
                   ],
                 ),
               ),
@@ -101,7 +115,7 @@ class TotalDevis extends StatelessWidget{
                   Text("${S.current.net_payer}= "),
                   Expanded(child: Text(".............................................................................................................",
                     maxLines: 1,)),
-                  Text(net_payer.toString() + " ${S.current.da}"),
+                  Text(net_payer.toString() + " ${_devise}"),
                 ],
               ),
               SizedBox(height: 20),

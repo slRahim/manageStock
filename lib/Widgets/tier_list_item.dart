@@ -16,6 +16,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:sliding_card/sliding_card.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'CustomWidgets/list_tile_card.dart';
+import 'package:gestmob/services/push_notifications.dart';
 
 // element à afficher lors de listing des clients ou des fournisseurs
 class TierListItem extends StatefulWidget {
@@ -37,11 +38,31 @@ class _TierListItemState extends State<TierListItem> {
   bool _confirmDell = false ;
   bool _visible = true ;
   SlidingCardController controller ;
+  String _devise ;
 
   @override
   void initState() {
     super.initState();
     controller = SlidingCardController();
+
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    PushNotificationsManagerState data = PushNotificationsManager.of(context);
+    _devise = getDeviseTranslate(data.myParams.devise) ;
+  }
+
+  String getDeviseTranslate(devise){
+    switch(devise){
+      case "DZD" :
+        return S.current.da ;
+        break;
+      default :
+        return devise ;
+        break ;
+    }
   }
 
   @override
@@ -116,12 +137,12 @@ class _TierListItemState extends State<TierListItem> {
               : null,
           trailingChildren: [
             Text(
-              "${S.current.regler}: ${Helpers.numberFormat(widget.tier.regler).toString()} (${S.current.da})",
+              "${S.current.regler}: ${Helpers.numberFormat(widget.tier.regler).toString()} (${_devise})",
               style: TextStyle(
                   fontSize: 16.0),
             ),
             Text(
-             "${Helpers.numberFormat(widget.tier.credit).toString()} (${S.current.da})",
+             "${Helpers.numberFormat(widget.tier.credit).toString()} (${_devise})",
               style: TextStyle(
                   color: widget.tier.credit > 0 ? Colors.redAccent : Theme.of(context).primaryColorDark,
                   fontSize: 16.0, fontWeight: FontWeight.bold),
@@ -137,7 +158,7 @@ class _TierListItemState extends State<TierListItem> {
                         style: TextStyle(fontSize: 15,fontWeight: FontWeight.bold,color: Theme.of(context).primaryColorDark,)
                     ),
                     TextSpan(
-                      text:"${Helpers.numberFormat(widget.tier.chiffre_affaires)} (${S.current.da})",
+                      text:"${Helpers.numberFormat(widget.tier.chiffre_affaires)} (${_devise})",
                       style: TextStyle(
                           color: Theme.of(context).primaryColorDark,
                           fontSize: 15.0),

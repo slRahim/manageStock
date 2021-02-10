@@ -345,7 +345,10 @@
   "light_theme" : "Clair",
   "dark_them" : "Sombre",
   "sys_theme" : "Système",
-  "selec_pays" : "Choisir le pays"
+  "selec_pays" : "Choisir le pays",
+
+  "abonnement" : "Abonnement"
+
 
 
 }
