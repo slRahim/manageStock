@@ -1,6 +1,5 @@
 
 import 'dart:async';
-
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -11,16 +10,15 @@ import 'package:gestmob/cubit/home_cubit.dart';
 import 'package:gestmob/generated/l10n.dart';
 import 'package:gestmob/services/local_notification.dart';
 import 'package:gestmob/services/push_notifications.dart';
+import 'package:gestmob/ui/LoginPage.dart';
 import 'package:gestmob/ui/home.dart';
 import 'package:get_it/get_it.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-
 import 'Helpers/Statics.dart';
 import 'Helpers/TouchIdUtil.dart';
 import 'Helpers/route_generator.dart';
 import 'Widgets/CustomWidgets/bottom_tab_bar.dart';
 import 'models/MyParams.dart';
-
 
 void main() {
   // Crashlytics.instance.enableInDevMode = false;
@@ -64,7 +62,7 @@ class _MyAppState extends State<MyApp> {
     futureInit() ;
   }
 
-  futureInit()async{
+ Future futureInit()async{
     SharedPreferences prefs = await SharedPreferences.getInstance();
 
     String _locale = prefs.getString("myLocale");
@@ -115,22 +113,11 @@ class _MyAppState extends State<MyApp> {
         break ;
     }
 
-    // if(prefs.getString("myDevise") == null ){
-    //   prefs.setString("myDevise", "DZD");
-    // }
   }
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
-        onTap: () {
-          FocusScopeNode currentFocus = FocusScope.of(context);
-
-          if (!currentFocus.hasPrimaryFocus && currentFocus.focusedChild != null) {
-            FocusManager.instance.primaryFocus.unfocus();
-          }
-        },
-        child: MaterialApp(
+    return  MaterialApp(
           theme: ThemeData(
             brightness: Brightness.light,
             primarySwatch: Colors.red,
@@ -188,7 +175,7 @@ class _MyAppState extends State<MyApp> {
           title: "GestMob",
           initialRoute: RoutesKeys.loginPage,
           onGenerateRoute: RouteGenerator.generateRoute,
-        )
+
     );
 
   }

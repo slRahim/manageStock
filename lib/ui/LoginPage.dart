@@ -64,35 +64,37 @@ class _LoginAppState extends State<LoginApp> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: Container(
-        decoration: BoxDecoration(
-            gradient: LinearGradient(
+      return Scaffold(
+        body: Container(
+          decoration: BoxDecoration(
+              gradient: LinearGradient(
                 // colors: [Color(0xFF088787), Color(0xFF1FC877)],
-                colors: [Colors.indigo[300], Colors.indigo[600]],
-                begin: FractionalOffset.topLeft,
-                end: FractionalOffset.bottomRight,
-                stops: [0.0, 1.0],
-                tileMode: TileMode.clamp)
-        ),
-        child: FutureBuilder<bool>(
-          future: _futureInitState,
-          builder: (context, snapshot) {
-            if (snapshot.hasData) {
-              return Column(children: <Widget>[
-                Expanded(
-                  child: OtpSceern(startTime),
-                ),
-                fingerPrintIcon(snapshot),
-                SizedBox(height: 10),
-              ]);
-            }
-            return Container();
-          },
-        ),
-      ),
-    );
+                  colors: [Colors.indigo[300], Colors.indigo[600]],
+                  begin: FractionalOffset.topLeft,
+                  end: FractionalOffset.bottomRight,
+                  stops: [0.0, 1.0],
+                  tileMode: TileMode.clamp)
+          ),
+          child: FutureBuilder<bool>(
+            future: _futureInitState,
+            builder: (context, snapshot) {
+              if (snapshot.hasData) {
+                return Column(children: <Widget>[
+                  Expanded(
+                    child: OtpSceern(startTime),
+                  ),
+                  fingerPrintIcon(snapshot),
+                  SizedBox(height: 10),
+                ]);
+              }
+              return Container();
+
+            },
+          ),
+        )
+      );
   }
+
 
   Widget fingerPrintIcon(AsyncSnapshot<bool> snapshot) {
     if (snapshot.data) {

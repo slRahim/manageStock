@@ -6,7 +6,6 @@ import 'package:gestmob/Helpers/Helpers.dart';
 import 'package:gestmob/Widgets/CustomWidgets/search_bar.dart';
 import 'package:gestmob/generated/l10n.dart';
 import 'package:in_app_purchase/in_app_purchase.dart';
-import 'package:progress_button/progress_button.dart';
 import 'package:provider/provider.dart';
 
 

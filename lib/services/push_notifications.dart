@@ -5,49 +5,109 @@ import 'package:gestmob/Helpers/QueryCtr.dart';
 import 'package:gestmob/Helpers/Statics.dart';
 import 'package:gestmob/models/HomeItem.dart';
 import 'package:gestmob/models/MyParams.dart';
+import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
+import 'package:splashscreen/splashscreen.dart';
 import 'local_notification.dart';
-
 
 class PushNotificationsManager extends StatefulWidget {
   Widget child;
 
-  PushNotificationsManager({Key key,this.child}):super(key: key);
+  PushNotificationsManager({Key key, this.child}) : super(key: key);
 
   static PushNotificationsManagerState of(BuildContext context) {
     return context.dependOnInheritedWidgetOfExactType<MyInheritedWidget>().data;
   }
 
   @override
-  PushNotificationsManagerState createState() => PushNotificationsManagerState();
+  PushNotificationsManagerState createState() =>
+      PushNotificationsManagerState();
 }
 
 class PushNotificationsManagerState extends State<PushNotificationsManager> {
   final FirebaseMessaging _firebaseMessaging = FirebaseMessaging();
-  MyParams _myParams ;
-  bool _pieceHasCredit ;
-  QueryCtr _queryCtr=new QueryCtr() ;
+  MyParams _myParams;
 
-  MyParams get myParams => _myParams ;
+  bool _pieceHasCredit;
+
+  QueryCtr _queryCtr = new QueryCtr();
+
+  bool _finishLoading = false;
+
+  MyParams get myParams => _myParams;
 
   @override
   void initState() {
     super.initState();
-    futurinit();
+    futurinit().then((value) => {
+          Future.delayed(Duration(seconds: 2),(){
+              setState((){
+              _finishLoading = true ;
+              });
+          })
+        });
   }
 
-  futurinit() async {
+  Future futurinit() async {
     notificationPlugin.setOnNotificationClick(onNotificationClick);
-    notificationPlugin.setListenerForLowerVersions(onNotificationInLowerVersions);
+    notificationPlugin
+        .setListenerForLowerVersions(onNotificationInLowerVersions);
     await configureCloudMessaginCallbacks();
-    await configureLocalNotification() ;
+    await configureLocalNotification();
   }
 
   @override
   Widget build(BuildContext context) {
-    return  MyInheritedWidget(
-        data: this,
-        child: widget.child
-    ) ;
+    if (!_finishLoading) {
+      return MaterialApp(
+          home: Scaffold(
+              body: Container(
+                  color: Colors.blue,
+                  child: Center(
+                    child: Column(
+                        children: [
+                          Expanded(
+                            flex: 7,
+                            child: Container(
+                              padding: EdgeInsets.only(top: 50),
+                              child:Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Icon(MdiIcons.packageVariant,size: 150, color: Colors.white,),
+                                  SizedBox(height: 10,),
+                                  Text("GESTMOB" ,
+                                    style: TextStyle(
+                                      color: Colors.white,
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 25
+                                    ),
+                                  )
+                                ],
+                              ),
+                            ),
+                          ),
+                          Expanded(
+                            flex: 5,
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                              children: [
+                                CircularProgressIndicator(
+                                  backgroundColor: Colors.white,
+                                ),
+                                Container(
+                                    child: Image.asset('assets/logos/PowerByCirta.png')
+                                ),
+                              ],
+                            ),
+                          )
+
+                        ],
+                      ),
+                    ),
+                  )));
+    } else {
+      return MyInheritedWidget(data: this, child: widget.child);
+    }
+
   }
 
   configureCloudMessaginCallbacks() async {
@@ -59,8 +119,7 @@ class PushNotificationsManagerState extends State<PushNotificationsManager> {
               body: message['notification']['body'],
               title: message['notification']['title'],
               payload: message['data']['type']);
-
-        } else{
+        } else {
           notificationPlugin.showNotification(
               body: message['notification']['body'],
               title: message['notification']['title']);
@@ -75,28 +134,29 @@ class PushNotificationsManagerState extends State<PushNotificationsManager> {
     );
   }
 
-  configureLocalNotification()async{
+  configureLocalNotification() async {
     _myParams = await _queryCtr.getAllParams();
     _pieceHasCredit = await _queryCtr.pieceHasCredit();
 
-    if(_pieceHasCredit){
-      if(_myParams.notifications){
+    if (_pieceHasCredit) {
+      if (_myParams.notifications) {
         await notificationPlugin.cancelAllNotification();
-        switch(_myParams.notificationDay){
-          case 0 :
-            await notificationPlugin.showDailyAtTime(_myParams.notificationTime);
+        switch (_myParams.notificationDay) {
+          case 0:
+            await notificationPlugin
+                .showDailyAtTime(_myParams.notificationTime);
             break;
-          default :
-            await notificationPlugin.showWeeklyAtDayTime(_myParams.notificationTime , _myParams.notificationDay);
+          default:
+            await notificationPlugin.showWeeklyAtDayTime(
+                _myParams.notificationTime, _myParams.notificationDay);
             break;
         }
-      }else{
+      } else {
         await notificationPlugin.cancelAllNotification();
       }
-    }else{
+    } else {
       await notificationPlugin.cancelAllNotification();
     }
-
   }
 
   onNotificationInLowerVersions(ReceivedNotification receivedNotification) {
@@ -122,7 +182,3 @@ class MyInheritedWidget extends InheritedWidget {
     return true;
   }
 }
-
-
-
-

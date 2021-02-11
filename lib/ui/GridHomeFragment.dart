@@ -106,12 +106,10 @@ class _GridHomeWidgetState extends State<GridHomeWidget> {
   }
 
   @override
-  void didChangeDependencies() async {
+  void didChangeDependencies() {
     final newLocale = Localizations.localeOf(context);
-
     PushNotificationsManagerState data = PushNotificationsManager.of(context);
     _devise = getDeviseTranslate(data.myParams.devise);
-
     if (newLocale != _userLocale) {
       homeItemList[0].title = S.current.tableau_bord;
       homeItemList[1].title = S.current.articles;
@@ -139,7 +137,6 @@ class _GridHomeWidgetState extends State<GridHomeWidget> {
 
       _appBarTitle = S.current.app_name;
     }
-    super.didChangeDependencies();
   }
 
   Future futurInit() async {

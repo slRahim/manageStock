@@ -75,6 +75,8 @@ dependencies:
   esc_pos_bluetooth:
   flutter_bluetooth_basic:
   image:
+  charset_converter:
+  advance_pdf_viewer:
 
   flutter_phoenix:
   circular_menu:
@@ -99,12 +101,9 @@ dependencies:
   printing: ^4.0.0
   pdf: ^2.0.0
 
-  charset_converter:
-  advance_pdf_viewer:
-
   currency_pickers: ^1.0.6
   in_app_purchase: ^0.3.4
-  progress_button: 0.0.2
+  splashscreen:
 
   flutter_localizations:
     sdk: flutter
@@ -141,6 +140,7 @@ flutter:
   assets:
     - assets/article.png
     - assets/logos/profile_logo.png
+    - assets/logos/PowerByCirta.png
     - assets/bonLivraison.png
     - assets/box.png
     - assets/BonReception.png
