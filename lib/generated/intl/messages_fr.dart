@@ -37,7 +37,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "ajouter" : MessageLookupByLibrary.simpleMessage("Ajout "),
     "annee" : MessageLookupByLibrary.simpleMessage("Année :"),
     "annuler" : MessageLookupByLibrary.simpleMessage("Annuler"),
-    "app_name" : MessageLookupByLibrary.simpleMessage("gestionstock FR"),
+    "app_name" : MessageLookupByLibrary.simpleMessage("GESTMOB"),
     "app_theme" : MessageLookupByLibrary.simpleMessage("Style du théme"),
     "appeler" : MessageLookupByLibrary.simpleMessage("Appeler"),
     "art_imp" : MessageLookupByLibrary.simpleMessage("ART.IMP"),

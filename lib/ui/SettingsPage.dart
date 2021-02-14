@@ -205,18 +205,18 @@ class _SettingsPageState extends State<SettingsPage> {
                             await _savelocale();
                             setState(() {
                               _language;
-                              switch (_language) {
-                                case ("English (ENG)"):
-                                  S.load(Locale("en"));
-                                  break;
-                                case ("French (FR)"):
-                                  S.load(Locale("fr"));
-                                  break;
-
-                                case ("Arabic (AR)"):
-                                  S.load(Locale("ar"));
-                                  break;
-                              }
+                              // switch (_language) {
+                              //   case ("English (ENG)"):
+                              //     S.load(Locale("en"));
+                              //     break;
+                              //   case ("French (FR)"):
+                              //     S.load(Locale("fr"));
+                              //     break;
+                              //
+                              //   case ("Arabic (AR)"):
+                              //     S.load(Locale("ar"));
+                              //     break;
+                              // }
                             });
                           })
                         ..show();
@@ -444,14 +444,24 @@ class _SettingsPageState extends State<SettingsPage> {
                     title: '${S.current.param_backup}',
                     leading: Icon(Icons.backup),
                     onTap: () async{
-                      _queryCtr.createBackup()
-                          .then((value){
-                        if(value["name"] != null){
-                          Helpers.showFlushBar(context, "${S.current.msg_back_suce}");
-                        }else{
-                          Helpers.showFlushBar(context, "${S.current.msg_back_err}");
+                      await showDialog(
+                        context: context,
+                        builder: (context){
+                          return Dialog(
+                            child: CircularProgressIndicator(),
+                          );
+                          // _queryCtr.createBackup()
+                          //     .then((value){
+                          //   Navigator.pop(context);
+                          //   if(value["name"] != null){
+                          //     Helpers.showFlushBar(context, "${S.current.msg_back_suce}");
+                          //   }else{
+                          //     Helpers.showFlushBar(context, "${S.current.msg_back_err}");
+                          //   }
+                          // });
                         }
-                      });
+                      );
+
                     },
                   ),
                   SettingsTile(

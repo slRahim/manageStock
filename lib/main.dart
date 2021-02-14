@@ -52,66 +52,55 @@ class MyApp extends StatefulWidget {
 
 class _MyAppState extends State<MyApp> {
   int index = 0;
-
   List<Locale> localeList = [Locale('en'), Locale('fr'), Locale('ar')];
   var themeMode ;
+  bool firstLaunch ;
 
   @override
   void initState() {
     super.initState();
+    PushNotificationsManagerState data = PushNotificationsManager.of(context);
+    firstLaunch = data.firstlaunch ;
     futureInit() ;
   }
 
- Future futureInit()async{
+
+  Future futureInit()async{
     SharedPreferences prefs = await SharedPreferences.getInstance();
-
     String _locale = prefs.getString("myLocale");
-    switch(_locale){
-      case ("en") :
-        setState(() {
-          index = 0 ;
-        });
-        break ;
-      case ("fr") :
-        setState(() {
-          index = 1 ;
-        });
-        break ;
-      case ("ar") :
-        setState(() {
-          index = 2 ;
-        });
-        break ;
-      default:
-        setState(() {
-          index = 0 ;
-        });
-        break ;
-    }
-
     String _theme = prefs.getString("myStyle");
-    switch(_theme){
-      case ("light") :
-        setState(() {
+
+    setState(() {
+      switch(_locale){
+        case ("en") :
+          index = 0 ;
+          break ;
+        case ("fr") :
+          index = 1 ;
+          break ;
+        case ("ar") :
+          index = 2 ;
+          break ;
+        default:
+          index = 0 ;
+          break ;
+      }
+      switch(_theme){
+        case ("light") :
           themeMode = ThemeMode.light ;
-        });
-        break ;
-      case ("dark") :
-        setState(() {
+          break ;
+        case ("dark") :
           themeMode = ThemeMode.dark ;
-        });
-        break ;
-      case ("system") :
-        setState(() {
+          break ;
+        case ("system") :
           themeMode = ThemeMode.system ;
-        });
-        break ;
-      default:
-        setState(() {
+          break ;
+        default:
           themeMode = ThemeMode.system ;
-        });
-        break ;
-    }
+          break ;
+      }
+
+    });
 
   }
 
@@ -173,9 +162,8 @@ class _MyAppState extends State<MyApp> {
           supportedLocales: S.delegate.supportedLocales,
           locale: localeList[index],
           title: "GestMob",
-          initialRoute: RoutesKeys.loginPage,
+          initialRoute: (firstLaunch == null) ? RoutesKeys.introPage : RoutesKeys.loginPage,
           onGenerateRoute: RouteGenerator.generateRoute,
-
     );
 
   }

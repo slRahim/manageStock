@@ -103,7 +103,7 @@ dependencies:
 
   currency_pickers: ^1.0.6
   in_app_purchase: ^0.3.4
-  splashscreen:
+  introduction_screen: ^1.0.7
 
   flutter_localizations:
     sdk: flutter
@@ -158,6 +158,9 @@ flutter:
     - assets/setting.png
     - assets/Tresorerie.png
     - assets/addArticle.png
+    - assets/planet.png
+    - assets/map_pin.png
+    - assets/edit_pen.png
     - assets/arial.ttf
 
 

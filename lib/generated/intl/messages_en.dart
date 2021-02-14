@@ -37,7 +37,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "ajouter" : MessageLookupByLibrary.simpleMessage("Add "),
     "annee" : MessageLookupByLibrary.simpleMessage("Year :"),
     "annuler" : MessageLookupByLibrary.simpleMessage("Cancel"),
-    "app_name" : MessageLookupByLibrary.simpleMessage("GestMob"),
+    "app_name" : MessageLookupByLibrary.simpleMessage("GESTMOB"),
     "app_theme" : MessageLookupByLibrary.simpleMessage("Theme Style"),
     "appeler" : MessageLookupByLibrary.simpleMessage("Call"),
     "art_imp" : MessageLookupByLibrary.simpleMessage("ART.IMP"),

@@ -1157,21 +1157,16 @@ class SqlLiteDatabaseHelper {
   Future<void> setInitialData(Database db, int version) async {
     Batch batch = db.batch();
 
-    Uint8List image01 = await Helpers.getDefaultImageUint8List(from: "profile");
-
-    batch.rawInsert('INSERT INTO Profile(BytesImageString, Raison, CodePin, CodePinEnabled, Statut, Adresse, AdresseWeb, Ville, Departement, Pays, Cp, Telephone, Telephone2, Fax, Mobile, Mobile2,'
-        'Mail, Site, Rc, Nif, Ai, Capital, Activite, Nis, Codedouane, Maposition) '
-        'VALUES("${Helpers.getEncodedByteStringFromUint8List(image01)}", "Raison", "", 0, 1, "Adresse", "AdresseWeb", "Ville", "Departement", "Pays", "Cp", "Telephone", "Telephone2", "Fax", "Mobile", "Mobile2",'
-        '"Mail", "Site", "Rc", "Nif", "Ai", "25", "Activite", "Nis", "Codedouane", "Maposition")');
+    // Uint8List image01 = await Helpers.getDefaultImageUint8List(from: "profile");
+    //
+    // batch.rawInsert('INSERT INTO Profile(BytesImageString, Raison, CodePin, CodePinEnabled, Statut, Adresse, AdresseWeb, Ville, Departement, Pays, Cp, Telephone, Telephone2, Fax, Mobile, Mobile2,'
+    //     'Mail, Site, Rc, Nif, Ai, Capital, Activite, Nis, Codedouane, Maposition) '
+    //     'VALUES("${Helpers.getEncodedByteStringFromUint8List(image01)}", "Raison", "", 0, 1, "Adresse", "AdresseWeb", "Ville", "Departement", "Pays", "Cp", "Telephone", "Telephone2", "Fax", "Mobile", "Mobile2",'
+    //     '"Mail", "Site", "Rc", "Nif", "Ai", "25", "Activite", "Nis", "Codedouane", "Maposition")');
 
     batch.rawInsert('INSERT INTO ArticlesMarques(Libelle, BytesImageString) VALUES("No Marque", "")');
-    batch.rawInsert('INSERT INTO ArticlesMarques(Libelle, BytesImageString) VALUES("Marque 1", "")');
-
     batch.rawInsert('INSERT INTO ArticlesFamilles(Libelle, BytesImageString) VALUES("No Famille", "")');
-    batch.rawInsert('INSERT INTO ArticlesFamilles(Libelle, BytesImageString) VALUES("Famille 1", "")');
-
     batch.rawInsert('INSERT INTO TiersFamilles(Libelle) VALUES("No Famille")');
-    batch.rawInsert('INSERT INTO TiersFamilles(Libelle) VALUES("Famille 1")');
 
     batch.rawInsert('INSERT INTO ArticlesTva(Tva) VALUES(0)');
     batch.rawInsert('INSERT INTO ArticlesTva(Tva) VALUES(10)');
@@ -1207,7 +1202,7 @@ class SqlLiteDatabaseHelper {
     batch.rawInsert('INSERT INTO FormatPiece(Format , Piece , Current_index) VALUES("XXXX/YYYY"  , "AC" , 0)');
     batch.rawInsert('INSERT INTO FormatPiece(Format , Piece , Current_index) VALUES("XXXX/YYYY"  , "TR" , 0)');
 
-    batch.rawInsert("INSERT INTO MyParams VALUES(1,2,0,0,1,1,'80',1,'9:01',0,0,'Algeria','DZD')");
+    // batch.rawInsert("INSERT INTO MyParams VALUES(1,2,0,0,1,1,'80',1,'9:01',0,0,'Algeria','DZD')");
 
     Uint8List image = await Helpers.getDefaultImageUint8List(from: "tier");
     Tiers tier0 = new Tiers(image ,"Client Passagé", null, 1, 0, 0, "adresse", "ville", "telephone", "000000", "fax", "email", 0.0, 0, 0, false);

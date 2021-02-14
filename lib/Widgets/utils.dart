@@ -143,6 +143,19 @@ List<DropdownMenuItem<String>> buildDropStatutDownMenuItems(List listItems) {
   return items;
 }
 
+List<DropdownMenuItem<String>> buildDropLanguageDownMenuItems(List listItems) {
+  List<DropdownMenuItem<String>> items = List();
+  for (String listItem in listItems) {
+    items.add(
+      DropdownMenuItem(
+        child: Text(listItem),
+        value: listItem,
+      ),
+    );
+  }
+  return items;
+}
+
 List<DropdownMenuItem<TresorieCategories>> buildDropTresorieCategoriesDownMenuItems(List listItems) {
   List<DropdownMenuItem<TresorieCategories>> items = List();
   for (TresorieCategories listItem in listItems) {

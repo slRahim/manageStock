@@ -6,8 +6,8 @@ import 'package:gestmob/Helpers/Statics.dart';
 import 'package:gestmob/models/HomeItem.dart';
 import 'package:gestmob/models/MyParams.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
-import 'package:splashscreen/splashscreen.dart';
 import 'local_notification.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class PushNotificationsManager extends StatefulWidget {
   Widget child;
@@ -26,28 +26,24 @@ class PushNotificationsManager extends StatefulWidget {
 class PushNotificationsManagerState extends State<PushNotificationsManager> {
   final FirebaseMessaging _firebaseMessaging = FirebaseMessaging();
   MyParams _myParams;
-
   bool _pieceHasCredit;
-
   QueryCtr _queryCtr = new QueryCtr();
-
+  bool _firstlaunch ;
   bool _finishLoading = false;
 
   MyParams get myParams => _myParams;
+  bool get firstlaunch => _firstlaunch;
+
 
   @override
   void initState() {
     super.initState();
-    futurinit().then((value) => {
-          Future.delayed(Duration(seconds: 2),(){
-              setState((){
-              _finishLoading = true ;
-              });
-          })
-        });
+    futurinit();
   }
 
   Future futurinit() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    _firstlaunch = prefs.getBool("intro") ;
     notificationPlugin.setOnNotificationClick(onNotificationClick);
     notificationPlugin
         .setListenerForLowerVersions(onNotificationInLowerVersions);
@@ -57,57 +53,7 @@ class PushNotificationsManagerState extends State<PushNotificationsManager> {
 
   @override
   Widget build(BuildContext context) {
-    if (!_finishLoading) {
-      return MaterialApp(
-          home: Scaffold(
-              body: Container(
-                  color: Colors.blue,
-                  child: Center(
-                    child: Column(
-                        children: [
-                          Expanded(
-                            flex: 7,
-                            child: Container(
-                              padding: EdgeInsets.only(top: 50),
-                              child:Column(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  Icon(MdiIcons.packageVariant,size: 150, color: Colors.white,),
-                                  SizedBox(height: 10,),
-                                  Text("GESTMOB" ,
-                                    style: TextStyle(
-                                      color: Colors.white,
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: 25
-                                    ),
-                                  )
-                                ],
-                              ),
-                            ),
-                          ),
-                          Expanded(
-                            flex: 5,
-                            child: Column(
-                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                              children: [
-                                CircularProgressIndicator(
-                                  backgroundColor: Colors.white,
-                                ),
-                                Container(
-                                    child: Image.asset('assets/logos/PowerByCirta.png')
-                                ),
-                              ],
-                            ),
-                          )
-
-                        ],
-                      ),
-                    ),
-                  )));
-    } else {
-      return MyInheritedWidget(data: this, child: widget.child);
-    }
-
+    return MyInheritedWidget(data: this, child: widget.child);
   }
 
   configureCloudMessaginCallbacks() async {

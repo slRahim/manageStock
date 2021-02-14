@@ -169,7 +169,9 @@ class _GridHomeWidgetState extends State<GridHomeWidget> {
       return Scaffold(
         appBar: PreferredSize(
           preferredSize:
-              Size.fromHeight(MediaQuery.of(context).size.height / 5),
+          (MediaQuery.of(context).orientation == Orientation.portrait)
+              ? Size.fromHeight(MediaQuery.of(context).size.height / 5)
+              :Size.fromHeight(MediaQuery.of(context).size.height / 2),
           child: Container(
             decoration: BoxDecoration(
                 color: Theme.of(context).appBarTheme.color,
@@ -189,115 +191,129 @@ class _GridHomeWidgetState extends State<GridHomeWidget> {
                     // change this size and style
                     onPressed: () => Scaffold.of(context).openDrawer(),
                   ),
-                  title: Text(_appBarTitle),
+                  title: Text(_appBarTitle , style: GoogleFonts.anton(fontSize: 28, )),
                   centerTitle: true,
                   elevation: 0,
                 ),
                 Expanded(
-                  child: Container(
-                    padding: EdgeInsets.only(left: 25, right: 25),
-                    child: Row(
-                      children: [
-                        Expanded(
-                          child: Container(
-                            padding: EdgeInsets.all(5),
-                            child: Column(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Row(
-                                  children: [
-                                    Icon(
-                                      Icons.arrow_upward,
-                                      color: Colors.white,
-                                      size: 40,
+                  child: SingleChildScrollView(
+                    child: Container(
+                      padding: EdgeInsets.only(left: 25, right: 25),
+                      child: Row(
+                        children: [
+                          Expanded(
+                            child: Container(
+                              padding: EdgeInsets.all(5),
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  SingleChildScrollView(
+                                    scrollDirection: Axis.horizontal,
+                                    child: Row(
+                                      children: [
+                                        Icon(
+                                          Icons.arrow_upward,
+                                          color: Colors.white,
+                                          size: 40,
+                                        ),
+                                        SizedBox(
+                                          width: 5,
+                                        ),
+                                        Container(
+                                          child: Wrap(
+                                            direction: Axis.vertical,
+                                            children: [Text("C.A Mensuel",
+                                                style: TextStyle(
+                                                    fontWeight: FontWeight.bold,
+                                                    color: Colors.white))],
+                                          ),
+                                        ),
+                                      ],
                                     ),
-                                    SizedBox(
-                                      width: 5,
-                                    ),
-                                    Container(
+                                  ),
+                                  SingleChildScrollView(
+                                    scrollDirection: Axis.horizontal,
+                                    child: Container(
                                       child: Wrap(
-                                        direction: Axis.vertical,
-                                        children: [Text("C.A Mensuel",
-                                            style: TextStyle(
-                                                fontWeight: FontWeight.bold,
-                                                color: Colors.white))],
+                                        direction: Axis.horizontal,
+                                        children: [
+                                          Text(
+                                              "${Helpers.numberFormat((_indiceFinanciere[0] != null) ? _indiceFinanciere[0]: 0.0)}",
+                                              style: TextStyle(
+                                                  fontWeight:
+                                                  FontWeight.bold,
+                                                  color: Colors.white,fontSize: 18)),
+                                          Text(" (${_devise})",
+                                              style: TextStyle(
+                                                  fontWeight:
+                                                  FontWeight.bold,
+                                                  color: Colors.white)),
+                                        ],
                                       ),
                                     ),
-                                  ],
-                                ),
-                                Container(
-                                  child: Wrap(
-                                    direction: Axis.horizontal,
-                                    children: [
-                                      Text(
-                                          "${Helpers.numberFormat((_indiceFinanciere[0] != null) ? _indiceFinanciere[0]: 0.0)}",
-                                          style: TextStyle(
-                                              fontWeight:
-                                              FontWeight.bold,
-                                              color: Colors.white,fontSize: 18)),
-                                      Text(" (${_devise})",
-                                          style: TextStyle(
-                                              fontWeight:
-                                              FontWeight.bold,
-                                              color: Colors.white)),
-                                    ],
                                   ),
-                                ),
-                              ],
+                                ],
+                              ),
                             ),
                           ),
-                        ),
-                        SizedBox(
-                          width: 5,
-                        ),
-                        Expanded(
-                          child: Container(
-                            padding: EdgeInsets.all(5),
-                            child: Column(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Row(
-                                  children: [
-                                    Icon(
-                                      Icons.arrow_downward,
-                                      color: Colors.white,
-                                      size: 40,
+                          SizedBox(
+                            width: 5,
+                          ),
+                          Expanded(
+                            child: Container(
+                              padding: EdgeInsets.all(5),
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  SingleChildScrollView(
+                                    scrollDirection: Axis.horizontal,
+                                    child: Row(
+                                      children: [
+                                        Icon(
+                                          Icons.arrow_downward,
+                                          color: Colors.white,
+                                          size: 40,
+                                        ),
+                                        SizedBox(
+                                          width: 5,
+                                        ),
+                                        Container(
+                                          child: Wrap(
+                                            direction: Axis.vertical,
+                                            children: [Text("Achat Mensuel",
+                                                style: TextStyle(
+                                                    fontWeight: FontWeight.bold,
+                                                    color: Colors.white))],
+                                          ),
+                                        ),
+                                      ],
                                     ),
-                                    SizedBox(
-                                      width: 5,
-                                    ),
-                                    Container(
+                                  ),
+                                  SingleChildScrollView(
+                                    scrollDirection: Axis.horizontal,
+                                    child: Container(
                                       child: Wrap(
-                                        direction: Axis.vertical,
-                                        children: [Text("Achat Mensuel",
-                                            style: TextStyle(
-                                                fontWeight: FontWeight.bold,
-                                                color: Colors.white))],
+                                        direction: Axis.horizontal,
+                                        children: [
+                                          Text(
+                                              "${Helpers.numberFormat((_indiceFinanciere[1] != null) ? _indiceFinanciere[1] : 0.0)}",
+                                              style: TextStyle(
+                                                  fontWeight: FontWeight.bold,fontSize: 18,
+                                                  color: Colors.white)),
+                                          Text(" (${_devise})",
+                                              style: TextStyle(
+                                                  fontWeight: FontWeight.bold,
+                                                  color: Colors.white)),
+                                        ],
                                       ),
                                     ),
-                                  ],
-                                ),
-                                Container(
-                                  child: Wrap(
-                                    direction: Axis.horizontal,
-                                    children: [
-                                      Text(
-                                          "${Helpers.numberFormat((_indiceFinanciere[1] != null) ? _indiceFinanciere[1] : 0.0)}",
-                                          style: TextStyle(
-                                              fontWeight: FontWeight.bold,fontSize: 18,
-                                              color: Colors.white)),
-                                      Text(" (${_devise})",
-                                          style: TextStyle(
-                                              fontWeight: FontWeight.bold,
-                                              color: Colors.white)),
-                                    ],
                                   ),
-                                ),
-                              ],
+                                ],
+                              ),
                             ),
                           ),
-                        ),
-                      ],
+                        ],
+                      ),
                     ),
                   ),
                 ),

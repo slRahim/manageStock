@@ -88,7 +88,7 @@ class Profiles {
 
 class RoutesKeys {
   const RoutesKeys();
-
+  static const introPage = '/intro' ;
   static const homePage = '/home_page';
   static const profilePage = '/profilePage';
   static const loginPage = '/loginPage';

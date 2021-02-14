@@ -27,7 +27,7 @@ class _EnterPinState extends State<EnterPin> {
       decoration: BoxDecoration(
           gradient: LinearGradient(
             // colors: [Color(0xFF088787), Color(0xFF1FC877)],
-              colors: [Colors.indigo[300], Colors.indigo[600]],
+              colors: [Colors.blue[400], Colors.blue[600]],
               begin: FractionalOffset.topLeft,
               end: FractionalOffset.bottomRight,
               stops: [0.0, 1.0],

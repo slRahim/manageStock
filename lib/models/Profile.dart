@@ -8,6 +8,35 @@ class Profile{
   Profile.init(this._id);
   Profile.empty();
 
+
+  Profile(
+      this._imageUint8List,
+      this._codepin,
+      this._raisonSociale,
+      this._statut,
+      this._adresse,
+      this._addressWeb,
+      this._ville,
+      this._departement,
+      this._pays,
+      this._cp,
+      this._telephone,
+      this._telephone2,
+      this._fax,
+      this._mobile,
+      this._mobile2,
+      this._email,
+      this._site,
+      this._rc,
+      this._nif,
+      this._ai,
+      this._capital,
+      this._activite,
+      this._nis,
+      this._codedouane,
+      this._maposition,
+      this._codePinEnabled);
+
   int _id;
   Uint8List _imageUint8List;
   String _codepin;

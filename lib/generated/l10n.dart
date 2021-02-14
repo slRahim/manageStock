@@ -35,10 +35,10 @@ class S {
     return Localizations.of<S>(context, S);
   }
 
-  /// `GestMob`
+  /// `GESTMOB`
   String get app_name {
     return Intl.message(
-      'GestMob',
+      'GESTMOB',
       name: 'app_name',
       desc: '',
       args: [],
