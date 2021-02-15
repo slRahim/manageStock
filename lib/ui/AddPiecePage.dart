@@ -1113,7 +1113,7 @@ class _AddPiecePageState extends State<AddPiecePage>
                           ),
                           onPressed: () async {
                             Navigator.pop(context);
-                            if(_myParams.codeAbonnement != "demo"){
+                            if(_myParams.versionType != "demo"){
                               await _saveLanPrinter();
                               final doc = await _makePdfDocument();
                               await Printing.layoutPdf(

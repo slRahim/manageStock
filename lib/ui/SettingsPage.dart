@@ -443,7 +443,7 @@ class _SettingsPageState extends State<SettingsPage> {
                   SettingsTile(
                     title: '${S.current.param_backup}',
                     leading: Icon(Icons.backup),
-                    enabled: (_myParams.codeAbonnement != "demo"),
+                    enabled: (_myParams.versionType != "demo"),
                     onTap: () async{
                       await showDialog(
                         context: context,
@@ -465,7 +465,7 @@ class _SettingsPageState extends State<SettingsPage> {
                   ),
                   SettingsTile(
                     title: '${S.current.param_resto_data}',
-                    enabled: (_myParams.codeAbonnement != "demo"),
+                    enabled: (_myParams.versionType != "demo"),
                     leading: Icon(Icons.restore),
                     onTap: () async {
                       Navigator.pushNamed(context, RoutesKeys.driveListing);

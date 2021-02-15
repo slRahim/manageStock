@@ -292,7 +292,7 @@ class _PreviewPieceState extends State<PreviewPiece> {
   }
 
   _sharePdfFile(context) async {
-    if(_myParams.codeAbonnement != "demo"){
+    if(_myParams.versionType != "demo"){
       await Printing.sharePdf(bytes: await widget.pdfDoc.save(), filename: 'my-document.pdf');
     }else{
     var message = "This option doesn't available for evaluation version";
@@ -301,7 +301,7 @@ class _PreviewPieceState extends State<PreviewPiece> {
   }
 
   _printTicket(context)async{
-    if(_myParams.codeAbonnement != "demo"){
+    if(_myParams.versionType != "demo"){
       await updateFormatPrint();
       Ticket ticket = await _ticket(_default_format);
       Navigator.pop(context);
