@@ -38,9 +38,7 @@ class _GridHomeWidgetState extends State<GridHomeWidget> {
   int _count = 0;
 
   String _appBarTitle;
-
   Locale _userLocale;
-
   List<HomeItem> homeItemList = [
     homeItemTableauDeBord,
     homeItemArticles,
@@ -58,11 +56,8 @@ class _GridHomeWidgetState extends State<GridHomeWidget> {
   ];
 
   QueryCtr _queryCtr = new QueryCtr();
-
   var _indiceFinanciere;
-
   String _devise;
-
   bool _finishLoading = false;
 
   @override

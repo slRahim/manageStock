@@ -1,4 +1,3 @@
-
 import 'dart:async';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/material.dart';
@@ -19,6 +18,7 @@ import 'Helpers/TouchIdUtil.dart';
 import 'Helpers/route_generator.dart';
 import 'Widgets/CustomWidgets/bottom_tab_bar.dart';
 import 'models/MyParams.dart';
+import 'package:gestmob/ui/intro_page.dart';
 
 void main() {
   // Crashlytics.instance.enableInDevMode = false;
@@ -54,23 +54,29 @@ class _MyAppState extends State<MyApp> {
   int index = 0;
   List<Locale> localeList = [Locale('en'), Locale('fr'), Locale('ar')];
   var themeMode ;
-  bool firstLaunch ;
+  int introScreen ;
+  bool finishLoading = false ;
 
   @override
   void initState() {
     super.initState();
-    PushNotificationsManagerState data = PushNotificationsManager.of(context);
-    firstLaunch = data.firstlaunch ;
-    futureInit() ;
+    futureInit().then((value){
+      setState(() {
+        finishLoading = true ;
+      });
+    }) ;
   }
-
 
   Future futureInit()async{
     SharedPreferences prefs = await SharedPreferences.getInstance();
+
+
     String _locale = prefs.getString("myLocale");
     String _theme = prefs.getString("myStyle");
+    int _intro = prefs.getInt("intro");
 
     setState(() {
+      introScreen = _intro ;
       switch(_locale){
         case ("en") :
           index = 0 ;
@@ -99,7 +105,6 @@ class _MyAppState extends State<MyApp> {
           themeMode = ThemeMode.system ;
           break ;
       }
-
     });
 
   }
@@ -107,7 +112,7 @@ class _MyAppState extends State<MyApp> {
   @override
   Widget build(BuildContext context) {
     return  MaterialApp(
-          theme: ThemeData(
+        theme: ThemeData(
             brightness: Brightness.light,
             primarySwatch: Colors.red,
             backgroundColor: Color(0xFFF1F8FA),
@@ -128,14 +133,14 @@ class _MyAppState extends State<MyApp> {
             appBarTheme: AppBarTheme(
               color: Colors.indigoAccent,
             )
-          ),
-          darkTheme: ThemeData(
+        ),
+        darkTheme: ThemeData(
             brightness: Brightness.dark,
             primarySwatch: Colors.red,
             backgroundColor: Colors.white10,
             floatingActionButtonTheme: FloatingActionButtonThemeData(
-              backgroundColor: Colors.greenAccent,
-              foregroundColor: Colors.black
+                backgroundColor: Colors.greenAccent,
+                foregroundColor: Colors.black
             ),
             secondaryHeaderColor: Colors.blueGrey[900],
             selectedRowColor: Colors.deepPurple,
@@ -151,22 +156,36 @@ class _MyAppState extends State<MyApp> {
             appBarTheme: AppBarTheme(
               color: Colors.black,
             )
-          ),
-          themeMode: themeMode,
-          localizationsDelegates: [
-            S.delegate,
-            GlobalMaterialLocalizations.delegate,
-            GlobalWidgetsLocalizations.delegate,
-            GlobalCupertinoLocalizations.delegate,
-          ],
-          supportedLocales: S.delegate.supportedLocales,
-          locale: localeList[index],
-          title: "GestMob",
-          initialRoute: (firstLaunch == null) ? RoutesKeys.introPage : RoutesKeys.loginPage,
-          onGenerateRoute: RouteGenerator.generateRoute,
-    );
+        ),
+        themeMode: themeMode,
+        localizationsDelegates: [
+          S.delegate,
+          GlobalMaterialLocalizations.delegate,
+          GlobalWidgetsLocalizations.delegate,
+          GlobalCupertinoLocalizations.delegate,
+        ],
+        supportedLocales: S.delegate.supportedLocales,
+        locale: localeList[index],
+        title: "GestMob",
+        home: _getHome(),
+        onGenerateRoute: RouteGenerator.generateRoute,
+
+      );
 
   }
+
+  _getHome(){
+    if(!finishLoading){
+      return Scaffold(
+        body: Center(child: Container(color: Colors.blue,),),
+      );
+    }
+    if(introScreen == null){
+      return IntroPage() ;
+    }
+    return LoginApp() ;
+  }
+
 }
 
 

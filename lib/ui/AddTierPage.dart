@@ -410,7 +410,7 @@ class _AddTierPageState extends State<AddTierPage>
                       labelText: S.current.rs,
                       prefixIcon: Icon(
                         MdiIcons.idCard,
-                        color: Colors.blue[700],
+                        color: Colors.blue,
                       ),
                       focusedBorder: OutlineInputBorder(
                           borderSide: BorderSide(color: Colors.green),
@@ -463,17 +463,18 @@ class _AddTierPageState extends State<AddTierPage>
               },
               decoration: InputDecoration(
                 labelText: S.current.adresse,
+                labelStyle: TextStyle(color: Colors.blue),
                 prefixIcon: Icon(
                   MdiIcons.homeCityOutline,
-                  color: Colors.blue[700],
+                  color: Colors.blue,
                 ),
                 focusedBorder: OutlineInputBorder(
-                    borderSide: BorderSide(color: Colors.blue[700]),
+                    borderSide: BorderSide(color: Colors.blue),
                     borderRadius: BorderRadius.circular(20)),
                 enabledBorder: OutlineInputBorder(
                   gapPadding: 3.3,
                   borderRadius: BorderRadius.circular(20),
-                  borderSide: BorderSide(color: Colors.blue[700]),
+                  borderSide: BorderSide(color: Colors.blue),
                 ),
                 errorBorder:  OutlineInputBorder(
                   gapPadding: 3.3,
@@ -494,17 +495,18 @@ class _AddTierPageState extends State<AddTierPage>
               // },
               decoration: InputDecoration(
                 labelText: S.current.ville,
+                labelStyle: TextStyle(color: Colors.blue),
                 prefixIcon: Icon(
                   Icons.add_location,
-                  color: Colors.blue[700],
+                  color: Colors.blue,
                 ),
                 focusedBorder: OutlineInputBorder(
-                    borderSide: BorderSide(color: Colors.blue[700]),
+                    borderSide: BorderSide(color: Colors.blue),
                     borderRadius: BorderRadius.circular(20)),
                 enabledBorder: OutlineInputBorder(
                   gapPadding: 3.3,
                   borderRadius: BorderRadius.circular(20),
-                  borderSide: BorderSide(color: Colors.blue[700]),
+                  borderSide: BorderSide(color: Colors.blue),
                 ),
                 errorBorder:  OutlineInputBorder(
                   gapPadding: 3.3,
@@ -525,17 +527,18 @@ class _AddTierPageState extends State<AddTierPage>
               // },
               decoration: InputDecoration(
                 labelText: S.current.telephone,
+                labelStyle: TextStyle(color: Colors.blue),
                 prefixIcon: Icon(
                   Icons.phone,
-                  color: Colors.blue[700],
+                  color: Colors.blue,
                 ),
                 focusedBorder: OutlineInputBorder(
-                    borderSide: BorderSide(color: Colors.blue[700]),
+                    borderSide: BorderSide(color: Colors.blue),
                     borderRadius: BorderRadius.circular(20)),
                 enabledBorder: OutlineInputBorder(
                   gapPadding: 3.3,
                   borderRadius: BorderRadius.circular(20),
-                  borderSide: BorderSide(color: Colors.blue[700]),
+                  borderSide: BorderSide(color: Colors.blue),
                 ),
                 errorBorder:  OutlineInputBorder(
                   gapPadding: 3.3,
@@ -556,17 +559,18 @@ class _AddTierPageState extends State<AddTierPage>
               },
               decoration: InputDecoration(
                 labelText: S.current.mobile,
+                labelStyle: TextStyle(color: Colors.blue),
                 prefixIcon: Icon(
                   Icons.phone_android,
-                  color: Colors.blue[700],
+                  color: Colors.blue,
                 ),
                 focusedBorder: OutlineInputBorder(
-                    borderSide: BorderSide(color: Colors.blue[700]),
+                    borderSide: BorderSide(color: Colors.blue),
                     borderRadius: BorderRadius.circular(20)),
                 enabledBorder: OutlineInputBorder(
                   gapPadding: 3.3,
                   borderRadius: BorderRadius.circular(20),
-                  borderSide: BorderSide(color: Colors.blue[700]),
+                  borderSide: BorderSide(color: Colors.blue),
                 ),
                 errorBorder:  OutlineInputBorder(
                   gapPadding: 3.3,
@@ -587,17 +591,18 @@ class _AddTierPageState extends State<AddTierPage>
               // },
               decoration: InputDecoration(
                 labelText: S.current.fax,
+                labelStyle: TextStyle(color: Colors.blue),
                 prefixIcon: Icon(
                   MdiIcons.fax,
-                  color: Colors.blue[700],
+                  color: Colors.blue,
                 ),
                 focusedBorder: OutlineInputBorder(
-                    borderSide: BorderSide(color: Colors.blue[700]),
+                    borderSide: BorderSide(color: Colors.blue),
                     borderRadius: BorderRadius.circular(20)),
                 enabledBorder: OutlineInputBorder(
                   gapPadding: 3.3,
                   borderRadius: BorderRadius.circular(20),
-                  borderSide: BorderSide(color: Colors.blue[700]),
+                  borderSide: BorderSide(color: Colors.blue),
                 ),
                 errorBorder:  OutlineInputBorder(
                   gapPadding: 3.3,
@@ -618,17 +623,18 @@ class _AddTierPageState extends State<AddTierPage>
               // },
               decoration: InputDecoration(
                 labelText: S.current.mail,
+                labelStyle: TextStyle(color: Colors.blue),
                 prefixIcon: Icon(
                   Icons.email,
-                  color: Colors.blue[700],
+                  color: Colors.blue,
                 ),
                 focusedBorder: OutlineInputBorder(
-                    borderSide: BorderSide(color: Colors.blue[700]),
+                    borderSide: BorderSide(color: Colors.blue),
                     borderRadius: BorderRadius.circular(20)),
                 enabledBorder: OutlineInputBorder(
                   gapPadding: 3.3,
                   borderRadius: BorderRadius.circular(20),
-                  borderSide: BorderSide(color: Colors.blue[700]),
+                  borderSide: BorderSide(color: Colors.blue),
                 ),
                 errorBorder:  OutlineInputBorder(
                   gapPadding: 3.3,
@@ -649,17 +655,18 @@ class _AddTierPageState extends State<AddTierPage>
               },
               decoration: InputDecoration(
                 labelText: S.current.solde_depart,
+                labelStyle: TextStyle(color: Colors.blue),
                 prefixIcon: Icon(
                   Icons.monetization_on,
-                  color: Colors.blue[700],
+                  color: Colors.blue,
                 ),
                 focusedBorder: OutlineInputBorder(
-                    borderSide: BorderSide(color: Colors.blue[700]),
+                    borderSide: BorderSide(color: Colors.blue),
                     borderRadius: BorderRadius.circular(20)),
                 enabledBorder: OutlineInputBorder(
                   gapPadding: 3.3,
                   borderRadius: BorderRadius.circular(20),
-                  borderSide: BorderSide(color: Colors.blue[700]),
+                  borderSide: BorderSide(color: Colors.blue),
                 ),
                 errorBorder:  OutlineInputBorder(
                   gapPadding: 3.3,
@@ -680,17 +687,18 @@ class _AddTierPageState extends State<AddTierPage>
               },
               decoration: InputDecoration(
                 labelText: S.current.chifre_affaire,
+                labelStyle: TextStyle(color: Colors.blue),
                 prefixIcon: Icon(
                   Icons.monetization_on,
-                  color: Colors.blue[700],
+                  color: Colors.blue,
                 ),
                 focusedBorder: OutlineInputBorder(
-                    borderSide: BorderSide(color: Colors.blue[700]),
+                    borderSide: BorderSide(color: Colors.blue),
                     borderRadius: BorderRadius.circular(20)),
                 enabledBorder: OutlineInputBorder(
                   gapPadding: 3.3,
                   borderRadius: BorderRadius.circular(20),
-                  borderSide: BorderSide(color: Colors.blue[700]),
+                  borderSide: BorderSide(color: Colors.blue),
                 ),
                 errorBorder:  OutlineInputBorder(
                   gapPadding: 3.3,
@@ -711,17 +719,18 @@ class _AddTierPageState extends State<AddTierPage>
               },
               decoration: InputDecoration(
                 labelText: S.current.regler,
+                labelStyle: TextStyle(color: Colors.blue),
                 prefixIcon: Icon(
                   Icons.monetization_on,
-                  color: Colors.blue[700],
+                  color: Colors.blue,
                 ),
                 focusedBorder: OutlineInputBorder(
-                    borderSide: BorderSide(color: Colors.blue[700]),
+                    borderSide: BorderSide(color: Colors.blue),
                     borderRadius: BorderRadius.circular(20)),
                 enabledBorder: OutlineInputBorder(
                   gapPadding: 3.3,
                   borderRadius: BorderRadius.circular(20),
-                  borderSide: BorderSide(color: Colors.blue[700]),
+                  borderSide: BorderSide(color: Colors.blue),
                 ),
                 errorBorder:  OutlineInputBorder(
                   gapPadding: 3.3,
@@ -739,16 +748,17 @@ class _AddTierPageState extends State<AddTierPage>
                 decoration: InputDecoration(
                   prefixIcon: Icon(
                     Icons.account_balance_wallet,
-                    color: Colors.blue[700],
+                    color: Colors.blue,
                   ),
                   focusedBorder: OutlineInputBorder(
-                      borderSide: BorderSide(color: Colors.blue[700]),
+                      borderSide: BorderSide(color: Colors.blue),
                       borderRadius: BorderRadius.circular(20)),
                   labelText: S.current.credit,
+                  labelStyle: TextStyle(color: Colors.blue),
                   enabledBorder: OutlineInputBorder(
                     gapPadding: 3.3,
                     borderRadius: BorderRadius.circular(20),
-                    borderSide: BorderSide(color: Colors.blue[700]),
+                    borderSide: BorderSide(color: Colors.blue),
                   ),
                 ),
               ),
@@ -760,7 +770,9 @@ class _AddTierPageState extends State<AddTierPage>
                 borderRadius: BorderRadius.circular(20.0),
               ) : null,
               child: CheckboxListTile(
-                title: Text(S.current.client_four),
+                title: Text(S.current.client_four,
+                  style: TextStyle(color: editMode ? Theme.of(context).primaryColorDark : Theme.of(context).tabBarTheme.unselectedLabelColor ),
+                ),
                 value: _clientFournBool,
                 onChanged: editMode? (bool value) {
                   setState(() {
@@ -867,7 +879,7 @@ class _AddTierPageState extends State<AddTierPage>
                     icon: new Icon(
                       MdiIcons.qrcodeScan,
                       size: 30,
-                      color: Colors.blue[700],
+                      color: Colors.blue,
                     ),
                     onPressed: editMode
                         ? () async{
@@ -934,7 +946,7 @@ class _AddTierPageState extends State<AddTierPage>
                     icon: new Icon(
                       Icons.share,
                       size: 30,
-                      color:(_qrCodeControl.text != "")? Colors.blue[700]:Colors.black54,
+                      color:(_qrCodeControl.text != "")? Colors.blue:Colors.black54,
                     ),
                     onPressed:(_qrCodeControl.text != "")? () async{
                       if(_qrCodeControl.text != "")
@@ -960,7 +972,7 @@ class _AddTierPageState extends State<AddTierPage>
                       icon: new Icon(
                         Icons.print_rounded,
                         size: 30,
-                        color:(_qrCodeControl.text != "")? Colors.blue[700]:Colors.black54,
+                        color:(_qrCodeControl.text != "")? Colors.blue:Colors.black54,
                       ),
                       onPressed:(_qrCodeControl.text != "")? () async{
                         if(_qrCodeControl.text != ""){

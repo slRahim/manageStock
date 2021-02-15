@@ -248,7 +248,7 @@ class _ProfilePageState extends State<ProfilePage> with TickerProviderStateMixin
                       labelStyle: TextStyle(color: Colors.green),
                       prefixIcon: Icon(
                         MdiIcons.idCard,
-                        color: Colors.blue[700],
+                        color: Colors.blue,
                       ),
                       focusedBorder: OutlineInputBorder(
                           borderSide: BorderSide(color: Colors.green),
@@ -300,17 +300,18 @@ class _ProfilePageState extends State<ProfilePage> with TickerProviderStateMixin
               },
               decoration: InputDecoration(
                 labelText:  S.current.activite,
+                labelStyle: TextStyle(color: Colors.blue),
                 prefixIcon: Icon(
                   MdiIcons.homeCityOutline,
-                  color: Colors.blue[700],
+                  color: Colors.blue,
                 ),
                 focusedBorder: OutlineInputBorder(
-                    borderSide: BorderSide(color: Colors.blue[700]),
+                    borderSide: BorderSide(color: Colors.blue),
                     borderRadius: BorderRadius.circular(20)),
                 enabledBorder: OutlineInputBorder(
                   gapPadding: 3.3,
                   borderRadius: BorderRadius.circular(20),
-                  borderSide: BorderSide(color: Colors.blue[700]),
+                  borderSide: BorderSide(color: Colors.blue),
                 ),
                 errorBorder:  OutlineInputBorder(
                   gapPadding: 3.3,
@@ -331,17 +332,18 @@ class _ProfilePageState extends State<ProfilePage> with TickerProviderStateMixin
               },
               decoration: InputDecoration(
                 labelText:  S.current.adresse,
+                labelStyle: TextStyle(color: Colors.blue),
                 prefixIcon: Icon(
                   MdiIcons.homeCityOutline,
-                  color: Colors.blue[700],
+                  color: Colors.blue,
                 ),
                 focusedBorder: OutlineInputBorder(
-                    borderSide: BorderSide(color: Colors.blue[700]),
+                    borderSide: BorderSide(color: Colors.blue),
                     borderRadius: BorderRadius.circular(20)),
                 enabledBorder: OutlineInputBorder(
                   gapPadding: 3.3,
                   borderRadius: BorderRadius.circular(20),
-                  borderSide: BorderSide(color: Colors.blue[700]),
+                  borderSide: BorderSide(color: Colors.blue),
                 ),
                 errorBorder:  OutlineInputBorder(
                   gapPadding: 3.3,
@@ -362,17 +364,18 @@ class _ProfilePageState extends State<ProfilePage> with TickerProviderStateMixin
               // },
               decoration: InputDecoration(
                 labelText:  S.current.ville,
+                labelStyle: TextStyle(color: Colors.blue),
                 prefixIcon: Icon(
                   Icons.add_location,
-                  color: Colors.blue[700],
+                  color: Colors.blue,
                 ),
                 focusedBorder: OutlineInputBorder(
-                    borderSide: BorderSide(color: Colors.blue[700]),
+                    borderSide: BorderSide(color: Colors.blue),
                     borderRadius: BorderRadius.circular(20)),
                 enabledBorder: OutlineInputBorder(
                   gapPadding: 3.3,
                   borderRadius: BorderRadius.circular(20),
-                  borderSide: BorderSide(color: Colors.blue[700]),
+                  borderSide: BorderSide(color: Colors.blue),
                 ),
                 errorBorder:  OutlineInputBorder(
                   gapPadding: 3.3,
@@ -393,17 +396,18 @@ class _ProfilePageState extends State<ProfilePage> with TickerProviderStateMixin
               // },
               decoration: InputDecoration(
                 labelText:  S.current.pays,
+                labelStyle: TextStyle(color: Colors.blue),
                 prefixIcon: Icon(
                   Icons.add_location,
                   color: Colors.blue[700],
                 ),
                 focusedBorder: OutlineInputBorder(
-                    borderSide: BorderSide(color: Colors.blue[700]),
+                    borderSide: BorderSide(color: Colors.blue),
                     borderRadius: BorderRadius.circular(20)),
                 enabledBorder: OutlineInputBorder(
                   gapPadding: 3.3,
                   borderRadius: BorderRadius.circular(20),
-                  borderSide: BorderSide(color: Colors.blue[700]),
+                  borderSide: BorderSide(color: Colors.blue),
                 ),
                 errorBorder:  OutlineInputBorder(
                   gapPadding: 3.3,
@@ -424,17 +428,18 @@ class _ProfilePageState extends State<ProfilePage> with TickerProviderStateMixin
               // },
               decoration: InputDecoration(
                 labelText:  S.current.telephone,
+                labelStyle: TextStyle(color: Colors.blue),
                 prefixIcon: Icon(
                   Icons.phone,
                   color: Colors.blue[700],
                 ),
                 focusedBorder: OutlineInputBorder(
-                    borderSide: BorderSide(color: Colors.blue[700]),
+                    borderSide: BorderSide(color: Colors.blue),
                     borderRadius: BorderRadius.circular(20)),
                 enabledBorder: OutlineInputBorder(
                   gapPadding: 3.3,
                   borderRadius: BorderRadius.circular(20),
-                  borderSide: BorderSide(color: Colors.blue[700]),
+                  borderSide: BorderSide(color: Colors.blue),
                 ),
                 errorBorder:  OutlineInputBorder(
                   gapPadding: 3.3,
@@ -455,17 +460,18 @@ class _ProfilePageState extends State<ProfilePage> with TickerProviderStateMixin
               // },
               decoration: InputDecoration(
                 labelText:  S.current.telephone2,
+                labelStyle: TextStyle(color: Colors.blue),
                 prefixIcon: Icon(
                   Icons.phone,
                   color: Colors.blue[700],
                 ),
                 focusedBorder: OutlineInputBorder(
-                    borderSide: BorderSide(color: Colors.blue[700]),
+                    borderSide: BorderSide(color: Colors.blue),
                     borderRadius: BorderRadius.circular(20)),
                 enabledBorder: OutlineInputBorder(
                   gapPadding: 3.3,
                   borderRadius: BorderRadius.circular(20),
-                  borderSide: BorderSide(color: Colors.blue[700]),
+                  borderSide: BorderSide(color: Colors.blue),
                 ),
                 errorBorder:  OutlineInputBorder(
                   gapPadding: 3.3,
@@ -486,17 +492,18 @@ class _ProfilePageState extends State<ProfilePage> with TickerProviderStateMixin
               },
               decoration: InputDecoration(
                 labelText:  S.current.mobile,
+                labelStyle: TextStyle(color: Colors.blue),
                 prefixIcon: Icon(
                   Icons.phone_android,
                   color: Colors.blue[700],
                 ),
                 focusedBorder: OutlineInputBorder(
-                    borderSide: BorderSide(color: Colors.blue[700]),
+                    borderSide: BorderSide(color: Colors.blue),
                     borderRadius: BorderRadius.circular(20)),
                 enabledBorder: OutlineInputBorder(
                   gapPadding: 3.3,
                   borderRadius: BorderRadius.circular(20),
-                  borderSide: BorderSide(color: Colors.blue[700]),
+                  borderSide: BorderSide(color: Colors.blue),
                 ),
                 errorBorder:  OutlineInputBorder(
                   gapPadding: 3.3,
@@ -517,17 +524,18 @@ class _ProfilePageState extends State<ProfilePage> with TickerProviderStateMixin
               // },
               decoration: InputDecoration(
                 labelText:  S.current.mobile2,
+                labelStyle: TextStyle(color: Colors.blue),
                 prefixIcon: Icon(
                   Icons.phone_android,
                   color: Colors.blue[700],
                 ),
                 focusedBorder: OutlineInputBorder(
-                    borderSide: BorderSide(color: Colors.blue[700]),
+                    borderSide: BorderSide(color: Colors.blue),
                     borderRadius: BorderRadius.circular(20)),
                 enabledBorder: OutlineInputBorder(
                   gapPadding: 3.3,
                   borderRadius: BorderRadius.circular(20),
-                  borderSide: BorderSide(color: Colors.blue[700]),
+                  borderSide: BorderSide(color: Colors.blue),
                 ),
                 errorBorder:  OutlineInputBorder(
                   gapPadding: 3.3,
@@ -548,17 +556,18 @@ class _ProfilePageState extends State<ProfilePage> with TickerProviderStateMixin
               // },
               decoration: InputDecoration(
                 labelText:  S.current.fax,
+                labelStyle: TextStyle(color: Colors.blue),
                 prefixIcon: Icon(
                   MdiIcons.fax,
                   color: Colors.blue[700],
                 ),
                 focusedBorder: OutlineInputBorder(
-                    borderSide: BorderSide(color: Colors.blue[700]),
+                    borderSide: BorderSide(color: Colors.blue),
                     borderRadius: BorderRadius.circular(20)),
                 enabledBorder: OutlineInputBorder(
                   gapPadding: 3.3,
                   borderRadius: BorderRadius.circular(20),
-                  borderSide: BorderSide(color: Colors.blue[700]),
+                  borderSide: BorderSide(color: Colors.blue),
                 ),
                 errorBorder:  OutlineInputBorder(
                   gapPadding: 3.3,
@@ -579,12 +588,13 @@ class _ProfilePageState extends State<ProfilePage> with TickerProviderStateMixin
               // },
               decoration: InputDecoration(
                 labelText:  S.current.mail,
+                labelStyle: TextStyle(color: Colors.blue),
                 prefixIcon: Icon(
                   Icons.email,
-                  color: Colors.blue[700],
+                  color: Colors.blue,
                 ),
                 focusedBorder: OutlineInputBorder(
-                    borderSide: BorderSide(color: Colors.blue[700]),
+                    borderSide: BorderSide(color: Colors.blue),
                     borderRadius: BorderRadius.circular(20)),
                 enabledBorder: OutlineInputBorder(
                   gapPadding: 3.3,
@@ -610,17 +620,18 @@ class _ProfilePageState extends State<ProfilePage> with TickerProviderStateMixin
               // },
               decoration: InputDecoration(
                 labelText:  S.current.adresse_web,
+                labelStyle: TextStyle(color: Colors.blue),
                 prefixIcon: Icon(
                   Icons.email,
                   color: Colors.blue[700],
                 ),
                 focusedBorder: OutlineInputBorder(
-                    borderSide: BorderSide(color: Colors.blue[700]),
+                    borderSide: BorderSide(color: Colors.blue),
                     borderRadius: BorderRadius.circular(20)),
                 enabledBorder: OutlineInputBorder(
                   gapPadding: 3.3,
                   borderRadius: BorderRadius.circular(20),
-                  borderSide: BorderSide(color: Colors.blue[700]),
+                  borderSide: BorderSide(color: Colors.blue),
                 ),
                 errorBorder:  OutlineInputBorder(
                   gapPadding: 3.3,
@@ -641,17 +652,18 @@ class _ProfilePageState extends State<ProfilePage> with TickerProviderStateMixin
               },
               decoration: InputDecoration(
                 labelText:  S.current.n_rc,
+                labelStyle: TextStyle(color: Colors.blue),
                 prefixIcon: Icon(
                   Icons.email,
-                  color: Colors.blue[700],
+                  color: Colors.blue,
                 ),
                 focusedBorder: OutlineInputBorder(
-                    borderSide: BorderSide(color: Colors.blue[700]),
+                    borderSide: BorderSide(color: Colors.blue),
                     borderRadius: BorderRadius.circular(20)),
                 enabledBorder: OutlineInputBorder(
                   gapPadding: 3.3,
                   borderRadius: BorderRadius.circular(20),
-                  borderSide: BorderSide(color: Colors.blue[700]),
+                  borderSide: BorderSide(color: Colors.blue),
                 ),
                 errorBorder:  OutlineInputBorder(
                   gapPadding: 3.3,
@@ -672,17 +684,18 @@ class _ProfilePageState extends State<ProfilePage> with TickerProviderStateMixin
               // },
               decoration: InputDecoration(
                 labelText:  S.current.art_imp,
+                labelStyle: TextStyle(color: Colors.blue),
                 prefixIcon: Icon(
                   Icons.email,
-                  color: Colors.blue[700],
+                  color: Colors.blue,
                 ),
                 focusedBorder: OutlineInputBorder(
-                    borderSide: BorderSide(color: Colors.blue[700]),
+                    borderSide: BorderSide(color: Colors.blue),
                     borderRadius: BorderRadius.circular(20)),
                 enabledBorder: OutlineInputBorder(
                   gapPadding: 3.3,
                   borderRadius: BorderRadius.circular(20),
-                  borderSide: BorderSide(color: Colors.blue[700]),
+                  borderSide: BorderSide(color: Colors.blue),
                 ),
                 errorBorder:  OutlineInputBorder(
                   gapPadding: 3.3,
@@ -703,17 +716,18 @@ class _ProfilePageState extends State<ProfilePage> with TickerProviderStateMixin
               },
               decoration: InputDecoration(
                 labelText:  S.current.nif,
+                labelStyle: TextStyle(color: Colors.blue),
                 prefixIcon: Icon(
                   Icons.email,
-                  color: Colors.blue[700],
+                  color: Colors.blue,
                 ),
                 focusedBorder: OutlineInputBorder(
-                    borderSide: BorderSide(color: Colors.blue[700]),
+                    borderSide: BorderSide(color: Colors.blue),
                     borderRadius: BorderRadius.circular(20)),
                 enabledBorder: OutlineInputBorder(
                   gapPadding: 3.3,
                   borderRadius: BorderRadius.circular(20),
-                  borderSide: BorderSide(color: Colors.blue[700]),
+                  borderSide: BorderSide(color: Colors.blue),
                 ),
                 errorBorder:  OutlineInputBorder(
                   gapPadding: 3.3,
@@ -734,17 +748,18 @@ class _ProfilePageState extends State<ProfilePage> with TickerProviderStateMixin
               // },
               decoration: InputDecoration(
                 labelText:  S.current.nis,
+                labelStyle: TextStyle(color: Colors.blue),
                 prefixIcon: Icon(
                   Icons.email,
-                  color: Colors.blue[700],
+                  color: Colors.blue,
                 ),
                 focusedBorder: OutlineInputBorder(
-                    borderSide: BorderSide(color: Colors.blue[700]),
+                    borderSide: BorderSide(color: Colors.blue),
                     borderRadius: BorderRadius.circular(20)),
                 enabledBorder: OutlineInputBorder(
                   gapPadding: 3.3,
                   borderRadius: BorderRadius.circular(20),
-                  borderSide: BorderSide(color: Colors.blue[700]),
+                  borderSide: BorderSide(color: Colors.blue),
                 ),
                 errorBorder:  OutlineInputBorder(
                   gapPadding: 3.3,
@@ -765,17 +780,18 @@ class _ProfilePageState extends State<ProfilePage> with TickerProviderStateMixin
               },
               decoration: InputDecoration(
                 labelText:  S.current.capitale_sociale,
+                labelStyle: TextStyle(color: Colors.blue),
                 prefixIcon: Icon(
                   Icons.monetization_on,
-                  color: Colors.blue[700],
+                  color: Colors.blue,
                 ),
                 focusedBorder: OutlineInputBorder(
-                    borderSide: BorderSide(color: Colors.blue[700]),
+                    borderSide: BorderSide(color: Colors.blue),
                     borderRadius: BorderRadius.circular(20)),
                 enabledBorder: OutlineInputBorder(
                   gapPadding: 3.3,
                   borderRadius: BorderRadius.circular(20),
-                  borderSide: BorderSide(color: Colors.blue[700]),
+                  borderSide: BorderSide(color: Colors.blue),
                 ),
                 errorBorder:  OutlineInputBorder(
                   gapPadding: 3.3,
@@ -801,7 +817,7 @@ class _ProfilePageState extends State<ProfilePage> with TickerProviderStateMixin
                 children: [
                   SizedBox(width: 6),
                   Icon(
-                    Icons.security, color: Colors.blue[700],),
+                    Icons.security, color: Colors.blue,),
                   SizedBox(width: 13),
                   Expanded(
                     child: GestureDetector(
@@ -812,7 +828,7 @@ class _ProfilePageState extends State<ProfilePage> with TickerProviderStateMixin
                         style: TextStyle(
                             fontSize: 16,
                             color:
-                            editMode ? Colors.black : Colors.black54)),
+                            editMode ? Theme.of(context).primaryColorDark : Theme.of(context).tabBarTheme.unselectedLabelColor)),
                     ),
                   ),
 

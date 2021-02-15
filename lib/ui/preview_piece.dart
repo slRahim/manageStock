@@ -269,8 +269,8 @@ class _PreviewPieceState extends State<PreviewPiece> {
           floatingActionButton: (widget.format == 45)
               ? FloatingActionButton(
                   backgroundColor: Colors.blue,
-                  onPressed: ()async {
-                    await Printing.sharePdf(bytes: await widget.pdfDoc.save(), filename: 'my-document.pdf');
+                  onPressed: (){
+                      _sharePdfFile(context);
                   },
                   child: Icon(
                     Icons.share,
@@ -279,11 +279,8 @@ class _PreviewPieceState extends State<PreviewPiece> {
                   ),
                 )
               : FloatingActionButton(
-                  onPressed: () async {
-                    await updateFormatPrint();
-                    Ticket ticket = await _ticket(_default_format);
-                    Navigator.pop(context);
-                    widget.ticket(ticket);
+                  onPressed: () {
+                      _printTicket(context);
                   },
                   child: Icon(
                     Icons.print_rounded,
@@ -291,6 +288,27 @@ class _PreviewPieceState extends State<PreviewPiece> {
                     size: 30,
                   ),
                 ));
+    }
+  }
+
+  _sharePdfFile(context) async {
+    if(_myParams.codeAbonnement != "demo"){
+      await Printing.sharePdf(bytes: await widget.pdfDoc.save(), filename: 'my-document.pdf');
+    }else{
+    var message = "This option doesn't available for evaluation version";
+    Helpers.showFlushBar(context, message);
+    }
+  }
+
+  _printTicket(context)async{
+    if(_myParams.codeAbonnement != "demo"){
+      await updateFormatPrint();
+      Ticket ticket = await _ticket(_default_format);
+      Navigator.pop(context);
+      widget.ticket(ticket);
+    }else{
+      var message = "This option doesn't available for evaluation version";
+      Helpers.showFlushBar(context, message);
     }
   }
 

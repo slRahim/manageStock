@@ -1,42 +1,42 @@
 {
   "project_info": {
-    "project_number": "941860635685",
-    "project_id": "fluttergestmob",
-    "storage_bucket": "fluttergestmob.appspot.com"
+    "project_number": "29868595195",
+    "firebase_url": "https://gestmob-348a8.firebaseio.com",
+    "project_id": "gestmob-348a8",
+    "storage_bucket": "gestmob-348a8.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:941860635685:android:ee19879d5ea44977242bcc",
+        "mobilesdk_app_id": "1:29868595195:android:07e80b733e90bac1461d5e",
         "android_client_info": {
-          "package_name": "com.cirtait.flutter.gestmob"
+          "package_name": "com.cirtait.mobile.gestmob"
         }
       },
       "oauth_client": [
         {
-          "client_id": "941860635685-l5j6ehn2s1rvgd2r9jnjviiqkjpt3kmu.apps.googleusercontent.com",
-          "client_type": 1,
-          "android_info": {
-            "package_name": "com.cirtait.flutter.gestmob",
-            "certificate_hash": "0349856eed4546ef975ad293d0c42a80dd748106"
-          }
-        },
-        {
-          "client_id": "941860635685-lkgsncs3678kfb3iv7u0n7ks1gj536vt.apps.googleusercontent.com",
+          "client_id": "29868595195-fo6bnoi82rn2lji1b1nv46tvb8br6gpc.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyD3Nd4EafLOkDi77tVeK0WqQ1v064sAYEo"
+          "current_key": "AIzaSyBF3NOZcjgVBR577pzvVbBcU-l6yfVNNJs"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "941860635685-lkgsncs3678kfb3iv7u0n7ks1gj536vt.apps.googleusercontent.com",
+              "client_id": "29868595195-fo6bnoi82rn2lji1b1nv46tvb8br6gpc.apps.googleusercontent.com",
               "client_type": 3
+            },
+            {
+              "client_id": "29868595195-673cfrasan12qamnrfdmei7eg8r3a9ij.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.cirtait.gestmob"
+              }
             }
           ]
         }

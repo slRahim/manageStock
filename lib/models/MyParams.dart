@@ -15,12 +15,15 @@ class MyParams {
   int _echeance ;
   String _pays;
   String _devise ;
+  String _versionType ;
+  DateTime _startDate ;
+  String _codeAbonnement ;
 
   MyParams.init();
 
   MyParams(this._id, this._tarification, this._tva , this._timbre , this._printDisplay , this._creditTier,
       this._defaultFormatPrint,this._notifications , this._notificationTime , this._notificationDay , this._echeance
-      ,this._pays ,this._devise);
+      ,this._pays ,this._devise , this._versionType , this._startDate , this._codeAbonnement);
 
   MyParams.frommMap(dynamic map){
     this._id=map["id"];
@@ -36,6 +39,9 @@ class MyParams {
     this._echeance = map["Echeance"];
     this._pays = map["Pays"];
     this._devise = map["Devise"];
+    this._versionType = map["Verssion_type"];
+    this._startDate = DateTime.fromMillisecondsSinceEpoch(map["Start_date"]);
+    this._codeAbonnement = map["Code_abonnement"];
   }
 
   Map<String , dynamic> toMap(){
@@ -53,10 +59,42 @@ class MyParams {
     map["Echeance"] = this._echeance ;
     map["Pays"]=this._pays ;
     map["Devise"]=this._devise ;
+    map["Verssion_type"]=this._versionType ;
+    map["Start_date"]=this._startDate.millisecondsSinceEpoch ;
+    map["Code_abonnement"]=this._codeAbonnement ;
 
     return map ;
   }
 
+  bool get creditTier => _creditTier;
+
+  set creditTier(bool value) {
+    _creditTier = value;
+  }
+
+  String get devise => _devise;
+
+  set devise(String value) {
+    _devise = value;
+  }
+
+  DateTime get startDate => _startDate;
+
+  set startDate(DateTime value) {
+    _startDate = value;
+  }
+
+  String get codeAbonnement => _codeAbonnement;
+
+  set codeAbonnement(String value) {
+    _codeAbonnement = value;
+  }
+
+  String get versionType => _versionType;
+
+  set versionType(String value) {
+    _versionType = value;
+  }
 
   String get pays => _pays;
 
@@ -137,15 +175,5 @@ class MyParams {
   @override
   int get hashCode => _id.hashCode;
 
-  bool get creditTier => _creditTier;
 
-  set creditTier(bool value) {
-    _creditTier = value;
-  }
-
-  String get devise => _devise;
-
-  set devise(String value) {
-    _devise = value;
-  }
 }

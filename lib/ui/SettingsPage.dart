@@ -443,22 +443,21 @@ class _SettingsPageState extends State<SettingsPage> {
                   SettingsTile(
                     title: '${S.current.param_backup}',
                     leading: Icon(Icons.backup),
+                    enabled: (_myParams.codeAbonnement != "demo"),
                     onTap: () async{
                       await showDialog(
                         context: context,
-                        builder: (context){
-                          return Dialog(
-                            child: CircularProgressIndicator(),
-                          );
-                          // _queryCtr.createBackup()
-                          //     .then((value){
-                          //   Navigator.pop(context);
-                          //   if(value["name"] != null){
-                          //     Helpers.showFlushBar(context, "${S.current.msg_back_suce}");
-                          //   }else{
-                          //     Helpers.showFlushBar(context, "${S.current.msg_back_err}");
-                          //   }
-                          // });
+                        builder: (context)  {
+                          _queryCtr.createBackup()
+                              .then((value){
+                            Navigator.pop(context);
+                            if(value["name"] != null){
+                              Helpers.showFlushBar(context, "${S.current.msg_back_suce}");
+                            }else{
+                              Helpers.showFlushBar(context, "${S.current.msg_back_err}");
+                            }
+                          });
+                          return Center(child: CircularProgressIndicator());
                         }
                       );
 
@@ -466,6 +465,7 @@ class _SettingsPageState extends State<SettingsPage> {
                   ),
                   SettingsTile(
                     title: '${S.current.param_resto_data}',
+                    enabled: (_myParams.codeAbonnement != "demo"),
                     leading: Icon(Icons.restore),
                     onTap: () async {
                       Navigator.pushNamed(context, RoutesKeys.driveListing);

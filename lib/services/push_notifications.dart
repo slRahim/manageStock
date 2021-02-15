@@ -28,12 +28,6 @@ class PushNotificationsManagerState extends State<PushNotificationsManager> {
   MyParams _myParams;
   bool _pieceHasCredit;
   QueryCtr _queryCtr = new QueryCtr();
-  bool _firstlaunch ;
-  bool _finishLoading = false;
-
-  MyParams get myParams => _myParams;
-  bool get firstlaunch => _firstlaunch;
-
 
   @override
   void initState() {
@@ -42,14 +36,14 @@ class PushNotificationsManagerState extends State<PushNotificationsManager> {
   }
 
   Future futurinit() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    _firstlaunch = prefs.getBool("intro") ;
     notificationPlugin.setOnNotificationClick(onNotificationClick);
     notificationPlugin
         .setListenerForLowerVersions(onNotificationInLowerVersions);
     await configureCloudMessaginCallbacks();
     await configureLocalNotification();
   }
+
+  MyParams get myParams => _myParams;
 
   @override
   Widget build(BuildContext context) {

@@ -24,13 +24,17 @@ import 'package:gestmob/Widgets/utils.dart' as utils;
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 
 import 'AddArticlePage.dart';
+import 'package:gestmob/services/push_notifications.dart';
+import 'package:gestmob/models/MyParams.dart';
 
 class ArticlesFragment extends StatefulWidget {
   final Function(List<dynamic>) onConfirmSelectedItems;
-  final int tarification ;
+  final int tarification;
 
+  const ArticlesFragment(
+      {Key key, this.onConfirmSelectedItems, this.tarification})
+      : super(key: key);
 
-  const ArticlesFragment({Key key, this.onConfirmSelectedItems , this.tarification}) : super(key: key);
   @override
   _ArticlesFragmentState createState() => _ArticlesFragmentState();
 }
@@ -53,13 +57,12 @@ class _ArticlesFragmentState extends State<ArticlesFragment> {
   ArticleFamille _selectedFamille;
   bool _filterInStock = false;
 
-
   int _savedSelectedMarque = 0;
   int _savedSelectedFamille = 0;
   bool _savedFilterInStock = false;
 
-
   SliverListDataSource _dataSource;
+  MyParams _myParams;
 
   @override
   Future<void> initState() {
@@ -70,6 +73,12 @@ class _ArticlesFragmentState extends State<ArticlesFragment> {
     _dataSource = SliverListDataSource(ItemsListTypes.articlesList, _filterMap);
   }
 
+  @override
+  void didChangeDependencies() {
+    PushNotificationsManagerState data = PushNotificationsManager.of(context);
+    _myParams = data.myParams;
+  }
+
   //***************************************************partie speciale pour le filtre de recherche***************************************
   void fillFilter(Map<String, dynamic> filter) {
     filter["Id_Marque"] = _savedSelectedMarque;
@@ -78,12 +87,11 @@ class _ArticlesFragmentState extends State<ArticlesFragment> {
   }
 
   Future<Widget> futureInitState() async {
-
     _marqueItems = await _dataSource.queryCtr.getAllArticleMarques();
-    _marqueItems[0].setLibelle( S.current.no_marque) ;
+    _marqueItems[0].setLibelle(S.current.no_marque);
 
     _familleItems = await _dataSource.queryCtr.getAllArticleFamilles();
-    _familleItems[0].setLibelle( S.current.no_famille) ;
+    _familleItems[0].setLibelle(S.current.no_famille);
 
     _marqueDropdownItems = utils.buildMarqueDropDownMenuItems(_marqueItems);
     _familleDropdownItems = utils.buildDropFamilleArticle(_familleItems);
@@ -91,7 +99,6 @@ class _ArticlesFragmentState extends State<ArticlesFragment> {
     _selectedMarque = _marqueItems[_savedSelectedMarque];
     _selectedFamille = _familleItems[_savedSelectedFamille];
     _filterInStock = _savedFilterInStock;
-
 
     final tile = StatefulBuilder(builder: (context, StateSetter _setState) {
       return Builder(
@@ -111,25 +118,21 @@ class _ArticlesFragmentState extends State<ArticlesFragment> {
       );
     });
 
-    return Wrap(
-      children: [
-        Padding(
-          padding: const EdgeInsets.all(6.0),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Padding(
-                padding: EdgeInsetsDirectional.only(start: 5, end: 5, bottom: 5),
-                child: tile,
-              ),
-            ],
-          ),
+    return Wrap(children: [
+      Padding(
+        padding: const EdgeInsets.all(6.0),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Padding(
+              padding: EdgeInsetsDirectional.only(start: 5, end: 5, bottom: 5),
+              child: tile,
+            ),
+          ],
         ),
-      ]
-    );
-
-
+      ),
+    ]);
   }
 
   Widget addFilterdialogue() {
@@ -143,8 +146,7 @@ class _ArticlesFragmentState extends State<ArticlesFragment> {
                   width: 100.0,
                   child: Center(
                     child: CircularProgressIndicator(),
-                  )
-              ),
+                  )),
             );
           } else {
             return snapshot.data;
@@ -182,7 +184,7 @@ class _ArticlesFragmentState extends State<ArticlesFragment> {
     return CheckboxListTile(
       title: Text(S.current.stockable),
       value: _filterInStock,
-      onChanged: (bool value){
+      onChanged: (bool value) {
         _setState(() {
           _filterInStock = value;
         });
@@ -190,18 +192,16 @@ class _ArticlesFragmentState extends State<ArticlesFragment> {
     );
   }
 
-
-
   //********************************************listing des pieces**********************************************************************
-  Widget getAppBar(setState){
-    if(_selectedItems.length > 0){
+  Widget getAppBar(setState) {
+    if (_selectedItems.length > 0) {
       return SelectItemsBar(
         itemsCount: _selectedItems.length,
         onConfirm: () => {
           widget.onConfirmSelectedItems(_selectedItems),
           Navigator.pop(context)
         },
-        onCancel:  () => {
+        onCancel: () => {
           setState(() {
             _selectedItems.forEach((item) {
               item.selectedQuantite = -1.0;
@@ -210,13 +210,14 @@ class _ArticlesFragmentState extends State<ArticlesFragment> {
           })
         },
       );
-    } else{
+    } else {
       return SearchBar(
         searchController: searchController,
         mainContext: widget.onConfirmSelectedItems != null ? null : context,
         title: S.of(context).articles,
         isFilterOn: isFilterOn,
-        onSearchChanged: (String search) => _dataSource.updateSearchTerm(search),
+        onSearchChanged: (String search) =>
+            _dataSource.updateSearchTerm(search),
         onFilterPressed: () async {
           AwesomeDialog(
               context: context,
@@ -225,25 +226,30 @@ class _ArticlesFragmentState extends State<ArticlesFragment> {
               title: S.current.supp,
               body: addFilterdialogue(),
               btnOkText: S.current.filtrer_btn,
-              closeIcon: Icon(Icons.remove_circle_outline_sharp , color: Colors.red , size: 26,),
+              closeIcon: Icon(
+                Icons.remove_circle_outline_sharp,
+                color: Colors.red,
+                size: 26,
+              ),
               showCloseIcon: true,
-              btnOkOnPress: () async{
+              btnOkOnPress: () async {
                 setState(() {
                   _savedSelectedMarque = _marqueItems.indexOf(_selectedMarque);
-                  _savedSelectedFamille = _familleItems.indexOf(_selectedFamille);
+                  _savedSelectedFamille =
+                      _familleItems.indexOf(_selectedFamille);
                   _savedFilterInStock = _filterInStock;
 
                   fillFilter(_filterMap);
 
-                  if( _filterMap.toString() == _emptyFilterMap.toString()){
+                  if (_filterMap.toString() == _emptyFilterMap.toString()) {
                     isFilterOn = false;
-                  } else{
+                  } else {
                     isFilterOn = true;
                   }
                   _dataSource.updateFilters(_filterMap);
                 });
-              }
-          )..show();
+              })
+            ..show();
         },
       );
     }
@@ -253,12 +259,18 @@ class _ArticlesFragmentState extends State<ArticlesFragment> {
   Widget build(BuildContext context) {
     return Scaffold(
         floatingActionButton: CircularMenu(
-            alignment: (Helpers.isDirectionRTL(context))?Alignment.bottomLeft:Alignment.bottomRight,
-            startingAngleInRadian:(Helpers.isDirectionRTL(context))? 1.6 * pi : 1.1 * pi,
-            endingAngleInRadian: (Helpers.isDirectionRTL(context))? 1.9 * pi :1.4 * pi,
+            alignment: (Helpers.isDirectionRTL(context))
+                ? Alignment.bottomLeft
+                : Alignment.bottomRight,
+            startingAngleInRadian:
+                (Helpers.isDirectionRTL(context)) ? 1.6 * pi : 1.1 * pi,
+            endingAngleInRadian:
+                (Helpers.isDirectionRTL(context)) ? 1.9 * pi : 1.4 * pi,
             radius: 90,
-            toggleButtonColor: Theme.of(context).floatingActionButtonTheme.backgroundColor,
-            toggleButtonIconColor: Theme.of(context).floatingActionButtonTheme.foregroundColor,
+            toggleButtonColor:
+                Theme.of(context).floatingActionButtonTheme.backgroundColor,
+            toggleButtonIconColor:
+                Theme.of(context).floatingActionButtonTheme.foregroundColor,
             toggleButtonSize: 35,
             toggleButtonBoxShadow: [
               BoxShadow(
@@ -268,17 +280,14 @@ class _ArticlesFragmentState extends State<ArticlesFragment> {
             ],
             items: [
               CircularMenuItem(
-                icon:(Icons.add),
-                color: Colors.green,
-                iconSize: 30.0,
-                margin: 10.0,
-                padding: 10.0,
-                onTap: () {
-                  Navigator.of(context).pushNamed(RoutesKeys.addArticle,arguments: new Article.init())
-                      .then((value){
-                      _dataSource.refresh();
-                  });
-                },
+                  icon: (Icons.add),
+                  color: Colors.green,
+                  iconSize: 30.0,
+                  margin: 10.0,
+                  padding: 10.0,
+                  onTap: () {
+                    _addNewArticle(context) ;
+                  },
               ),
               CircularMenuItem(
                 icon: (MdiIcons.barcode),
@@ -287,26 +296,58 @@ class _ArticlesFragmentState extends State<ArticlesFragment> {
                 padding: 10.0,
                 color: Colors.blue,
                 onTap: () {
-                  scanBarCode() ;
+                  scanBarCode();
                 },
-
               )
-            ]
-        ),
+            ]),
         appBar: getAppBar(setState),
         body: ItemsSliverList(
             dataSource: _dataSource,
             canRefresh: _selectedItems.length <= 0,
             tarification: widget.tarification,
-            onItemSelected: widget.onConfirmSelectedItems != null ? (selectedItem) {
-              onItemSelected(setState, selectedItem);
-            } : null
-        ));
+            onItemSelected: widget.onConfirmSelectedItems != null
+                ? (selectedItem) {
+                    onItemSelected(setState, selectedItem);
+                  }
+                : null));
   }
 
-  onItemSelected(setState, selectedItem){
+  _addNewArticle(context){
+    if (_myParams.versionType != "demo" &&
+        _myParams.startDate
+            .isBefore(Helpers.getDateExpiration(_myParams))) {
+      Navigator.of(context)
+          .pushNamed(RoutesKeys.addArticle,
+          arguments: new Article.init())
+          .then((value) {
+        _dataSource.refresh();
+      });
+    } else {
+      if (_myParams.versionType == "demo") {
+        if (_myParams.startDate.isBefore(
+            _myParams.startDate.add(Duration(days: 30)))) {
+          Navigator.of(context)
+              .pushNamed(RoutesKeys.addArticle,
+              arguments: new Article.init())
+              .then((value) {
+            _dataSource.refresh();
+          });
+        } else {
+          var message = "Evaluation period has expired you can't add more items";
+          Helpers.showFlushBar(context, message);
+          Navigator.pushNamed(context, RoutesKeys.appPurchase);
+        }
+      } else {
+        var message = "Your licence has expired you can't add more items";
+        Helpers.showFlushBar(context, message);
+        Navigator.pushNamed(context, RoutesKeys.appPurchase);
+      }
+    }
+  }
+
+  onItemSelected(setState, selectedItem) {
     setState(() {
-      if(selectedItem != null){
+      if (selectedItem != null) {
         if (_selectedItems.contains(selectedItem)) {
           _selectedItems.remove(selectedItem);
         } else {
@@ -327,14 +368,13 @@ class _ArticlesFragmentState extends State<ArticlesFragment> {
       );
 
       var result = await BarcodeScanner.scan(options: options);
-      if(result.rawContent.isNotEmpty){
+      if (result.rawContent.isNotEmpty) {
         setState(() {
           searchController.text = result.rawContent;
           _dataSource.updateSearchTerm(result.rawContent);
           FocusScope.of(context).requestFocus(null);
         });
       }
-
     } catch (e) {
       var result = ScanResult(
         type: ResultType.Error,
@@ -351,6 +391,4 @@ class _ArticlesFragmentState extends State<ArticlesFragment> {
       Helpers.showToast(result.rawContent);
     }
   }
-
-
 }

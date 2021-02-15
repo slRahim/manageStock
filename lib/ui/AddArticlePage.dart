@@ -331,19 +331,19 @@ class _AddArticlePageState extends State<AddArticlePage> with TickerProviderStat
               },
               decoration: InputDecoration(
                 labelText: S.current.referance,
-                labelStyle: TextStyle(color: Colors.blue[700]),
+                labelStyle: TextStyle(color: Colors.blue),
                 prefixIcon: Icon(
                   Icons.archive,
-                  color: Colors.blue[700],
+                  color: Colors.blue,
                 ),
                 focusedBorder: OutlineInputBorder(
-                    borderSide: BorderSide(color: Colors.blue[700]),
+                    borderSide: BorderSide(color: Colors.blue),
                     borderRadius: BorderRadius.circular(20)
                 ),
                 enabledBorder: OutlineInputBorder(
                   gapPadding: 3.3,
                   borderRadius: BorderRadius.circular(20),
-                  borderSide: BorderSide(color: Colors.blue[700]),
+                  borderSide: BorderSide(color: Colors.blue),
                 ),
                 errorBorder:  OutlineInputBorder(
                   gapPadding: 3.3,
@@ -368,18 +368,18 @@ class _AddArticlePageState extends State<AddArticlePage> with TickerProviderStat
                 },
                 decoration: InputDecoration(
                   labelText: S.current.msg_scan_barcode,
-                  labelStyle: TextStyle(color: Colors.blue[700]),
+                  labelStyle: TextStyle(color: Colors.blue),
                   prefixIcon: Icon(
                     MdiIcons.barcode,
-                    color: Colors.blue[700],
+                    color: Colors.blue,
                   ),
                   focusedBorder: OutlineInputBorder(
-                      borderSide: BorderSide(color: Colors.blue[700]),
+                      borderSide: BorderSide(color: Colors.blue),
                       borderRadius: BorderRadius.circular(20)),
                   enabledBorder: OutlineInputBorder(
                     gapPadding: 3.3,
                     borderRadius: BorderRadius.circular(20),
-                    borderSide: BorderSide(color: Colors.blue[700]),
+                    borderSide: BorderSide(color: Colors.blue),
                   ),
                   errorBorder:  OutlineInputBorder(
                     gapPadding: 3.3,
@@ -407,18 +407,18 @@ class _AddArticlePageState extends State<AddArticlePage> with TickerProviderStat
                       },
                       decoration: InputDecoration(
                         labelText: S.current.prix_achat,
-                        labelStyle: TextStyle(color: Colors.blue[700]),
+                        labelStyle: TextStyle(color: Colors.blue),
                         prefixIcon: Icon(
                           Icons.attach_money,
-                          color: Colors.blue[700],
+                          color: Colors.blue,
                         ),
                         focusedBorder: OutlineInputBorder(
-                            borderSide: BorderSide(color: Colors.blue[700]),
+                            borderSide: BorderSide(color: Colors.blue),
                             borderRadius: BorderRadius.circular(20)),
                         enabledBorder: OutlineInputBorder(
                           gapPadding: 3.3,
                           borderRadius: BorderRadius.circular(20),
-                          borderSide: BorderSide(color: Colors.blue[700]),
+                          borderSide: BorderSide(color: Colors.blue),
                         ),
                         errorBorder:  OutlineInputBorder(
                           gapPadding: 3.3,
@@ -468,18 +468,18 @@ class _AddArticlePageState extends State<AddArticlePage> with TickerProviderStat
                 },
                 decoration: InputDecoration(
                   labelText: (modification) ? S.current.pmp : "${S.current.pmp} ${S.current.init}",
-                  labelStyle: TextStyle(color: Colors.blue[700]),
+                  labelStyle: TextStyle(color: Colors.blue),
                   prefixIcon: Icon(
                     Icons.archive,
-                    color: Colors.blue[700],
+                    color: Colors.blue,
                   ),
                   focusedBorder: OutlineInputBorder(
-                      borderSide: BorderSide(color: Colors.blue[700]),
+                      borderSide: BorderSide(color: Colors.blue),
                       borderRadius: BorderRadius.circular(20)),
                   enabledBorder: OutlineInputBorder(
                     gapPadding: 3.3,
                     borderRadius: BorderRadius.circular(20),
-                    borderSide: BorderSide(color: Colors.blue[700]),
+                    borderSide: BorderSide(color: Colors.blue),
                   ),
                   errorBorder:  OutlineInputBorder(
                     gapPadding: 3.3,
@@ -505,19 +505,19 @@ class _AddArticlePageState extends State<AddArticlePage> with TickerProviderStat
                     },
                     decoration: InputDecoration(
                       labelText: modification? S.current.quantit:S.current.stock_init,
-                      labelStyle: TextStyle(color: Colors.blue[700]),
+                      labelStyle: TextStyle(color: Colors.blue),
                       prefixIcon: Icon(
                         Icons.apps,
-                        color: Colors.blue[700],
+                        color: Colors.blue,
                       ),
                       focusedBorder: OutlineInputBorder(
-                          borderSide: BorderSide(color: Colors.blue[700]),
+                          borderSide: BorderSide(color: Colors.blue),
                           borderRadius: BorderRadius.circular(20)
                       ),
                       enabledBorder: OutlineInputBorder(
                         gapPadding: 3.3,
                         borderRadius: BorderRadius.circular(20),
-                        borderSide: BorderSide(color: Colors.blue[700]),
+                        borderSide: BorderSide(color: Colors.blue),
                       ),
                       errorBorder:  OutlineInputBorder(
                         gapPadding: 3.3,
@@ -541,18 +541,18 @@ class _AddArticlePageState extends State<AddArticlePage> with TickerProviderStat
                     },
                     decoration: InputDecoration(
                       labelText: S.current.stock_min,
-                      labelStyle: TextStyle(color: Colors.blue[700]),
+                      labelStyle: TextStyle(color: Colors.blue),
                       prefixIcon: Icon(
                         Icons.apps,
-                        color: Colors.blue[700],
+                        color: Colors.blue,
                       ),
                       focusedBorder: OutlineInputBorder(
-                          borderSide: BorderSide(color: Colors.blue[700]),
+                          borderSide: BorderSide(color: Colors.blue),
                           borderRadius: BorderRadius.circular(20)),
                       enabledBorder: OutlineInputBorder(
                         gapPadding: 3.3,
                         borderRadius: BorderRadius.circular(20),
-                        borderSide: BorderSide(color: Colors.blue[700]),
+                        borderSide: BorderSide(color: Colors.blue),
                       ),
                       errorBorder:  OutlineInputBorder(
                         gapPadding: 3.3,
@@ -582,18 +582,18 @@ class _AddArticlePageState extends State<AddArticlePage> with TickerProviderStat
                       },
                       decoration: InputDecoration(
                         labelText: S.current.qte_colis,
-                        labelStyle: TextStyle(color: Colors.blue[700]),
+                        labelStyle: TextStyle(color: Colors.blue),
                         prefixIcon: Icon(
                           Icons.shopping_bag_rounded,
                           color: Colors.blue[700],
                         ),
                         focusedBorder: OutlineInputBorder(
-                            borderSide: BorderSide(color: Colors.blue[700]),
+                            borderSide: BorderSide(color: Colors.blue),
                             borderRadius: BorderRadius.circular(20)),
                         enabledBorder: OutlineInputBorder(
                           gapPadding: 3.3,
                           borderRadius: BorderRadius.circular(20),
-                          borderSide: BorderSide(color: Colors.blue[700]),
+                          borderSide: BorderSide(color: Colors.blue),
                         ),
                         errorBorder:  OutlineInputBorder(
                           gapPadding: 3.3,
@@ -622,17 +622,17 @@ class _AddArticlePageState extends State<AddArticlePage> with TickerProviderStat
                       decoration: InputDecoration(
                         prefixIcon: Icon(
                           Icons.archive,
-                          color: Colors.blue[700],
+                          color: Colors.blue,
                         ),
                         focusedBorder: OutlineInputBorder(
-                            borderSide: BorderSide(color: Colors.blue[700]),
+                            borderSide: BorderSide(color: Colors.blue),
                             borderRadius: BorderRadius.circular(20)),
                         labelText: S.current.colis,
-                        labelStyle: TextStyle(color: Colors.blue[700]),
+                        labelStyle: TextStyle(color: Colors.blue),
                         enabledBorder:OutlineInputBorder(
                           gapPadding: 3.3,
                           borderRadius: BorderRadius.circular(20),
-                          borderSide: BorderSide(color: Colors.blue[700]),
+                          borderSide: BorderSide(color: Colors.blue),
                         ),
                         errorBorder:  OutlineInputBorder(
                           gapPadding: 3.3,
@@ -658,18 +658,18 @@ class _AddArticlePageState extends State<AddArticlePage> with TickerProviderStat
               },
               decoration: InputDecoration(
                 labelText: S.current.prix_v1,
-                labelStyle: TextStyle(color: Colors.blue[700]),
+                labelStyle: TextStyle(color: Colors.blue),
                 prefixIcon: Icon(
                   Icons.monetization_on,
-                  color: Colors.blue[700],
+                  color: Colors.blue,
                 ),
                 focusedBorder: OutlineInputBorder(
-                    borderSide: BorderSide(color: Colors.blue[700]),
+                    borderSide: BorderSide(color: Colors.blue),
                     borderRadius: BorderRadius.circular(20)),
                 enabledBorder: OutlineInputBorder(
                   gapPadding: 3.3,
                   borderRadius: BorderRadius.circular(20),
-                  borderSide: BorderSide(color: Colors.blue[700]),
+                  borderSide: BorderSide(color: Colors.blue),
                 ),
                 errorBorder:  OutlineInputBorder(
                   gapPadding: 3.3,
@@ -692,18 +692,18 @@ class _AddArticlePageState extends State<AddArticlePage> with TickerProviderStat
                 },
                 decoration: InputDecoration(
                   labelText: S.current.prix_v2,
-                  labelStyle: TextStyle(color: Colors.blue[700]),
+                  labelStyle: TextStyle(color: Colors.blue),
                   prefixIcon: Icon(
                     Icons.monetization_on,
                     color: Colors.blueGrey[700],
                   ),
                   focusedBorder: OutlineInputBorder(
-                      borderSide: BorderSide(color: Colors.blue[700]),
+                      borderSide: BorderSide(color: Colors.blue),
                       borderRadius: BorderRadius.circular(20)),
                   enabledBorder: OutlineInputBorder(
                     gapPadding: 3.3,
                     borderRadius: BorderRadius.circular(20),
-                    borderSide: BorderSide(color: Colors.blue[700]),
+                    borderSide: BorderSide(color: Colors.blue),
                   ),
                   errorBorder:  OutlineInputBorder(
                     gapPadding: 3.3,
@@ -727,18 +727,18 @@ class _AddArticlePageState extends State<AddArticlePage> with TickerProviderStat
                 },
                 decoration: InputDecoration(
                   labelText: S.current.prix_v3,
-                  labelStyle: TextStyle(color: Colors.blue[700]),
+                  labelStyle: TextStyle(color: Colors.blue),
                   prefixIcon: Icon(
                     Icons.monetization_on,
                     color: Colors.blueGrey[500],
                   ),
                   focusedBorder: OutlineInputBorder(
-                      borderSide: BorderSide(color: Colors.blue[700]),
+                      borderSide: BorderSide(color: Colors.blue),
                       borderRadius: BorderRadius.circular(20)),
                   enabledBorder: OutlineInputBorder(
                     gapPadding: 3.3,
                     borderRadius: BorderRadius.circular(20),
-                    borderSide: BorderSide(color: Colors.blue[700]),
+                    borderSide: BorderSide(color: Colors.blue),
                   ),
                   errorBorder:  OutlineInputBorder(
                     gapPadding: 3.3,
@@ -778,17 +778,17 @@ class _AddArticlePageState extends State<AddArticlePage> with TickerProviderStat
                   keyboardType: TextInputType.multiline,
                   decoration: InputDecoration(
                     focusedBorder: OutlineInputBorder(
-                        borderSide: BorderSide(color: Colors.blue[700]),
+                        borderSide: BorderSide(color: Colors.blue),
                         borderRadius: BorderRadius.circular(20)),
                     contentPadding: EdgeInsets.only(left: 20, top: 20, bottom: 20),
                     labelText: S.current.description,
-                    labelStyle: TextStyle(color: Colors.blue[700]),
+                    labelStyle: TextStyle(color: Colors.blue),
                     alignLabelWithHint: true,
                     hintText: S.current.msg_description,
                     enabledBorder: OutlineInputBorder(
                       gapPadding: 3.3,
                       borderRadius: BorderRadius.circular(20),
-                      borderSide: BorderSide(color: Colors.blue[700]),
+                      borderSide: BorderSide(color: Colors.blue),
                     ),
                   ),
                 )),

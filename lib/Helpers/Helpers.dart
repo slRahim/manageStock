@@ -25,7 +25,7 @@ import 'package:flutter/widgets.dart';
 import 'Statics.dart';
 import 'package:intl/intl.dart' as intl;
 import 'package:archive/archive.dart';
-
+import 'package:gestmob/models/MyParams.dart';
 
 class Helpers {
 
@@ -36,7 +36,7 @@ class Helpers {
   static void showToast(String message) {
     Fluttertoast.showToast(
         msg: message,
-        toastLength: Toast.LENGTH_SHORT,
+        toastLength: Toast.LENGTH_LONG,
         gravity: ToastGravity.BOTTOM,
         timeInSecForIosWeb: 1);
   }
@@ -304,11 +304,23 @@ class Helpers {
    return f.format(number);
 
  }
-
-
+ 
  static double calcTimber (ttc , myparams){
     return (ttc >= 1000000) ? 2500 : ttc * 0.01 ;
  }
 
+ static DateTime getDateExpiration(MyParams myParam){
+    switch (myParam.codeAbonnement){
+      case ('mensuel'):
+        return myParam.startDate.add(Duration(days: 30));
+        break ;
+      case('trimestre'):
+        return myParam.startDate.add(Duration(days: 180));
+        break;
+      case('illimit'):
+        return DateTime(2100 , 1 , 1);
+        break ;
+    }
+ }
 
 }

@@ -410,7 +410,7 @@ class _AddPiecePageState extends State<AddPiecePage>
                             mainAxisAlignment: MainAxisAlignment.spaceAround,
                             children: [
                               Icon(
-                                MdiIcons.percent,
+                                MdiIcons.sigma,
                                 color:
                                     (editMode) ? Colors.blue : Theme.of(context).primaryColorDark,
                                 size: 18,
@@ -1113,11 +1113,16 @@ class _AddPiecePageState extends State<AddPiecePage>
                           ),
                           onPressed: () async {
                             Navigator.pop(context);
-                            await _saveLanPrinter();
-                            final doc = await _makePdfDocument();
-                            await Printing.layoutPdf(
-                                onLayout: (PdfPageFormat format) async =>
-                                    doc.save());
+                            if(_myParams.codeAbonnement != "demo"){
+                              await _saveLanPrinter();
+                              final doc = await _makePdfDocument();
+                              await Printing.layoutPdf(
+                                  onLayout: (PdfPageFormat format) async =>
+                                      doc.save());
+                            }else{
+                              var message = "This option doesn't available for evaluation version";
+                              Helpers.showFlushBar(context, message);
+                            }
                           },
                           child: Text(
                             "Lan Printer",

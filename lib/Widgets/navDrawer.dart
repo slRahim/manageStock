@@ -51,6 +51,7 @@ class NavDrawer extends StatelessWidget {
       DrawerHeader(
         child: InkWell(
             onTap: (){
+              Navigator.pop(context);
               Navigator.of(context).pushNamed(
                   RoutesKeys.profilePage,
               );

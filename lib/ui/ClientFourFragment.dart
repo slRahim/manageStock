@@ -24,6 +24,8 @@ import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 import 'package:gestmob/Widgets/utils.dart' as utils;
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'AddArticlePage.dart';
+import 'package:gestmob/services/push_notifications.dart';
+import 'package:gestmob/models/MyParams.dart';
 
 class ClientFourFragment extends StatefulWidget {
   final int clientFourn;
@@ -55,6 +57,7 @@ class _ClientFourFragmentState extends State<ClientFourFragment> {
 
   SliverListDataSource _dataSource;
   int _clientFour;
+  MyParams _myParams;
 
   @override
   Future<void> initState() {
@@ -63,6 +66,12 @@ class _ClientFourFragmentState extends State<ClientFourFragment> {
     fillFilter(_filterMap);
     fillFilter(_emptyFilterMap);
     _dataSource = SliverListDataSource(widget.clientFourn == 0? ItemsListTypes.clientsList : ItemsListTypes.fournisseursList, _filterMap);
+  }
+
+  @override
+  void didChangeDependencies() {
+    PushNotificationsManagerState data = PushNotificationsManager.of(context);
+    _myParams = data.myParams;
   }
 
   void fillFilter(Map<String, dynamic> filter) {
@@ -139,10 +148,7 @@ class _ClientFourFragmentState extends State<ClientFourFragment> {
                   margin: 10.0,
                   padding: 10.0,
                   onTap: () {
-                    Navigator.of(context).pushNamed(RoutesKeys.addTier,arguments: new Tiers.init(widget.clientFourn))
-                        .then((value){
-                      _dataSource.refresh();
-                    });
+                      _addNewTier(context);
                   },
               ),
               CircularMenuItem(
@@ -259,6 +265,37 @@ class _ClientFourFragmentState extends State<ClientFourFragment> {
     );
   }
 
+  //********************************************************************************************************************************************************
+  //******************************************************************************************************************************************************************
+
+  _addNewTier (context){
+    if (_myParams.versionType != "demo" &&
+        _myParams.startDate
+            .isBefore(Helpers.getDateExpiration(_myParams))) {
+      Navigator.of(context).pushNamed(RoutesKeys.addTier,arguments: new Tiers.init(widget.clientFourn))
+          .then((value){
+        _dataSource.refresh();
+      });
+    } else {
+      if (_myParams.versionType == "demo") {
+        if (_myParams.startDate.isBefore(
+            _myParams.startDate.add(Duration(days: 30)))) {
+          Navigator.of(context).pushNamed(RoutesKeys.addTier,arguments: new Tiers.init(widget.clientFourn))
+              .then((value){
+            _dataSource.refresh();
+          });
+        } else {
+          var message = "Evaluation period has expired you can't add more items";
+          Helpers.showFlushBar(context, message);
+          Navigator.pushNamed(context, RoutesKeys.appPurchase);
+        }
+      } else {
+        var message = "Your licence has expired you can't add more items";
+        Helpers.showFlushBar(context, message);
+        Navigator.pushNamed(context, RoutesKeys.appPurchase);
+      }
+    }
+  }
 
   Future scanQRCode() async {
     try {

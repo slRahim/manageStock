@@ -1,4 +1,4 @@
-package com.cirtait.flutter.gestmob
+package com.cirtait.mobile.gestmob
 
 import androidx.annotation.NonNull;
 import io.flutter.embedding.android.FlutterFragmentActivity

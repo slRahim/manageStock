@@ -614,7 +614,7 @@ class _AddTresoriePageState extends State<AddTresoriePage>
                             enabledBorder: OutlineInputBorder(
                               gapPadding: 3.3,
                               borderRadius: BorderRadius.circular(20),
-                              borderSide: BorderSide(color: Colors.blue[700]),
+                              borderSide: BorderSide(color: Colors.blue),
                             ),
                             errorBorder:  OutlineInputBorder(
                               gapPadding: 3.3,
@@ -659,17 +659,18 @@ class _AddTresoriePageState extends State<AddTresoriePage>
                         },
                         decoration: InputDecoration(
                           labelText: S.current.objet,
+                          labelStyle: TextStyle(color: Colors.blue),
                           prefixIcon: Icon(
                             Icons.subject,
-                            color: Colors.blue[700],
+                            color: Colors.blue,
                           ),
                           focusedBorder: OutlineInputBorder(
-                              borderSide: BorderSide(color: Colors.blue[700]),
+                              borderSide: BorderSide(color: Colors.blue),
                               borderRadius: BorderRadius.circular(20)),
                           enabledBorder: OutlineInputBorder(
                             gapPadding: 3.3,
                             borderRadius: BorderRadius.circular(20),
-                            borderSide: BorderSide(color: Colors.blue[700]),
+                            borderSide: BorderSide(color: Colors.blue),
                           ),
                           errorBorder:  OutlineInputBorder(
                             gapPadding: 3.3,
@@ -690,17 +691,18 @@ class _AddTresoriePageState extends State<AddTresoriePage>
                         },
                         decoration: InputDecoration(
                           labelText: S.current.modalite,
+                          labelStyle: TextStyle(color: Colors.blue),
                           prefixIcon: Icon(
                             Icons.merge_type,
-                            color: Colors.blue[700],
+                            color: Colors.blue,
                           ),
                           focusedBorder: OutlineInputBorder(
-                              borderSide: BorderSide(color: Colors.blue[700]),
+                              borderSide: BorderSide(color: Colors.blue),
                               borderRadius: BorderRadius.circular(20)),
                           enabledBorder: OutlineInputBorder(
                             gapPadding: 3.3,
                             borderRadius: BorderRadius.circular(20),
-                            borderSide: BorderSide(color: Colors.blue[700]),
+                            borderSide: BorderSide(color: Colors.blue),
                           ),
                           errorBorder:  OutlineInputBorder(
                             gapPadding: 3.3,
@@ -741,17 +743,18 @@ class _AddTresoriePageState extends State<AddTresoriePage>
                         },
                         decoration: InputDecoration(
                           labelText: S.current.montant,
+                          labelStyle: TextStyle(color: Colors.blue),
                           prefixIcon: Icon(
                             Icons.monetization_on,
-                            color: Colors.blue[700],
+                            color: Colors.blue,
                           ),
                           focusedBorder: OutlineInputBorder(
-                              borderSide: BorderSide(color: Colors.blue[700]),
+                              borderSide: BorderSide(color: Colors.blue),
                               borderRadius: BorderRadius.circular(20)),
                           enabledBorder: OutlineInputBorder(
                             gapPadding: 3.3,
                             borderRadius: BorderRadius.circular(20),
-                            borderSide: BorderSide(color: Colors.blue[700]),
+                            borderSide: BorderSide(color: Colors.blue),
                           ),
                           errorBorder:  OutlineInputBorder(
                             gapPadding: 3.3,

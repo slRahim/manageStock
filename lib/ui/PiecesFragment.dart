@@ -19,6 +19,8 @@ import 'package:gestmob/Widgets/utils.dart' as utils;
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 
 import 'AddArticlePage.dart';
+import 'package:gestmob/services/push_notifications.dart';
+import 'package:gestmob/models/MyParams.dart';
 
 class PiecesFragment extends StatefulWidget {
   final int clientFourn;
@@ -48,6 +50,7 @@ class _PiecesFragmentState extends State<PiecesFragment> {
   bool _savedFilterIsDraft = false;
 
   SliverListDataSource _dataSource;
+  MyParams _myParams;
 
   @override
   Future<void> initState() {
@@ -56,6 +59,12 @@ class _PiecesFragmentState extends State<PiecesFragment> {
     fillFilter(_filterMap);
     fillFilter(_emptyFilterMap);
     _dataSource = SliverListDataSource(ItemsListTypes.pieceList, _filterMap);
+  }
+
+  @override
+  void didChangeDependencies() {
+    PushNotificationsManagerState data = PushNotificationsManager.of(context);
+    _myParams = data.myParams;
   }
 
   //***************************************************partie speciale pour le filtre de recherche***************************************
@@ -151,10 +160,7 @@ class _PiecesFragmentState extends State<PiecesFragment> {
         floatingActionButton: FloatingActionButton(
           backgroundColor: Theme.of(context).floatingActionButtonTheme.backgroundColor,
           onPressed: () {
-             Navigator.of(context).pushNamed(RoutesKeys.addPiece, arguments: new Piece.typePiece(widget.peaceType))
-                 .then((value){
-               _dataSource.refresh();
-             });
+              _addNewPiece(context);
           },
           child: Icon(Icons.add),
         ),
@@ -205,6 +211,35 @@ class _PiecesFragmentState extends State<PiecesFragment> {
             } : null
         )
     );
+  }
+
+  _addNewPiece(context){
+    if (_myParams.versionType != "demo" &&
+        _myParams.startDate
+            .isBefore(Helpers.getDateExpiration(_myParams))) {
+      Navigator.of(context).pushNamed(RoutesKeys.addPiece, arguments: new Piece.typePiece(widget.peaceType))
+          .then((value){
+        _dataSource.refresh();
+      });
+    } else {
+      if (_myParams.versionType == "demo") {
+        if (_myParams.startDate.isBefore(
+            _myParams.startDate.add(Duration(days: 30)))) {
+          Navigator.of(context).pushNamed(RoutesKeys.addPiece, arguments: new Piece.typePiece(widget.peaceType))
+              .then((value){
+            _dataSource.refresh();
+          });
+        } else {
+          var message = "Evaluation period has expired you can't add more items";
+          Helpers.showFlushBar(context, message);
+          Navigator.pushNamed(context, RoutesKeys.appPurchase);
+        }
+      } else {
+        var message = "Your licence has expired you can't add more items";
+        Helpers.showFlushBar(context, message);
+        Navigator.pushNamed(context, RoutesKeys.appPurchase);
+      }
+    }
   }
 
 

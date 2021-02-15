@@ -14,8 +14,10 @@ import 'package:gestmob/generated/l10n.dart';
 import 'package:gestmob/models/HomeItem.dart';
 import 'package:gestmob/services/local_notification.dart';
 import 'package:gestmob/ui/AddArticlePage.dart';
-
+import 'package:gestmob/services/push_notifications.dart';
 import 'GridHomeFragment.dart';
+import 'package:gestmob/models/MyParams.dart';
+
 
 class home extends StatefulWidget {
   @override
@@ -27,10 +29,18 @@ HomeState _currentHomeState = null;
 DateTime currentBackPressTime;
 
 class _homeState extends State<home> {
+  MyParams _myParams;
+  DateTime now ;
 
   @override
   void initState() {
     notificationPlugin.setOnNotificationClick(onNotificationClick);
+  }
+
+  @override
+  void didChangeDependencies() {
+    PushNotificationsManagerState data = PushNotificationsManager.of(context);
+    _myParams = data.myParams;
   }
 
   onNotificationClick(String payload) {
@@ -38,27 +48,62 @@ class _homeState extends State<home> {
     Navigator.pushNamed(context, RoutesKeys.allPieces);
   }
 
+
+
   @override
   Widget build(BuildContext context) {
-    return WillPopScope(
-      onWillPop: _onWillPop,
-      child: Scaffold(
-        key: _globalKey,
-        drawer: NavDrawer(),
-        body: BlocConsumer<HomeCubit, HomeState>(
-          listener: (context, state){
-            if (state is HomeError) {
-              Scaffold.of(context).showSnackBar(SnackBar(
-                content: Text(state.message),
-              ));
-            }
-          },
-          builder: (context, state) {
-            return handleHomeState(context, state);
-          },
+    if (_myParams.versionType == "beta" && _myParams.startDate.isBefore(DateTime(2021,6,1))){
+      return WillPopScope(
+        onWillPop: _onWillPop,
+        child: Scaffold(
+          key: _globalKey,
+          drawer: NavDrawer(),
+          body: BlocConsumer<HomeCubit, HomeState>(
+            listener: (context, state) {
+              if (state is HomeError) {
+                Scaffold.of(context).showSnackBar(SnackBar(
+                  content: Text(state.message),
+                ));
+              }
+            },
+            builder: (context, state) {
+              return handleHomeState(context, state);
+            },
+          ),
         ),
-      ),
-    );
+      );
+    } else {
+      return Scaffold(
+        appBar: AppBar(
+          centerTitle: true,
+          title: Text('Error'),
+        ),
+        body: Center(
+          child: Container(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                Icon(
+                  Icons.error,
+                  color: Colors.red,
+                  size: 60,
+                ),
+                SizedBox(
+                  height: 15,
+                ),
+                Text(
+                  'Beta version is depricated',
+                  style: TextStyle(
+                    fontSize: 20,
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
+      );
+    }
   }
 
   Future<bool> _onWillPop() async {
@@ -90,11 +135,9 @@ class _homeState extends State<home> {
         title: S.current.quitter,
         desc: S.current.msg_quitter,
         btnCancelText: S.current.non,
-        btnCancelOnPress: (){
-
-        },
+        btnCancelOnPress: () {},
         btnOkText: S.current.oui,
-        btnOkOnPress: () async{
+        btnOkOnPress: () async {
           exit(0);
         },
       )..show();
@@ -120,6 +163,4 @@ class _homeState extends State<home> {
   Widget buildLoading() {
     return Center(child: CircularProgressIndicator());
   }
-
-
 }
