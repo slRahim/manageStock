@@ -1120,7 +1120,7 @@ class _AddPiecePageState extends State<AddPiecePage>
                                   onLayout: (PdfPageFormat format) async =>
                                       doc.save());
                             }else{
-                              var message = "This option doesn't available for evaluation version";
+                              var message = S.current.msg_demo_exp;
                               Helpers.showFlushBar(context, message);
                             }
                           },

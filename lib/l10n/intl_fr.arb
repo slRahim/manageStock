@@ -347,7 +347,17 @@
   "sys_theme" : "Système",
   "selec_pays" : "Choisir le pays",
 
-  "abonnement" : "Abonnement"
+  "abonnement" : "Abonnement",
+  "msg_demo_option" : "Cette option n'est pas disponible pour la verssion évaluation",
+  "msg_demo_exp" : "Votre licence d'éssaie a été éxpirer, Abonnez vous pour continuer",
+  "msg_premium_exp" : "Votre licence commercial a été éxpirer, Abonnez vous pour continuer",
+  "ca_mois" : "C.A (Mois)",
+  "achat_mois" : "Achat (Mois)",
+  "start" : "Commencer",
+  "intro_select_lang" : "Veuillez Choisir Votre Langue",
+  "intro_select_region" : "Veuillez Choisir Votre Pays",
+  "intro_infor" : "Vos Informations"
+
 
 
 

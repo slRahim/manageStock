@@ -3274,6 +3274,96 @@ class S {
       args: [],
     );
   }
+
+  /// `Cette option n'est pas disponible pour la verssion évaluation`
+  String get msg_demo_option {
+    return Intl.message(
+      'Cette option n\'est pas disponible pour la verssion évaluation',
+      name: 'msg_demo_option',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Votre licence d'éssaie a été éxpirer, Abonnez vous pour continuer`
+  String get msg_demo_exp {
+    return Intl.message(
+      'Votre licence d\'éssaie a été éxpirer, Abonnez vous pour continuer',
+      name: 'msg_demo_exp',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Votre licence commercial a été éxpirer, Abonnez vous pour continuer`
+  String get msg_premium_exp {
+    return Intl.message(
+      'Votre licence commercial a été éxpirer, Abonnez vous pour continuer',
+      name: 'msg_premium_exp',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `C.A (Mois)`
+  String get ca_mois {
+    return Intl.message(
+      'C.A (Mois)',
+      name: 'ca_mois',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Achat (Mois)`
+  String get achat_mois {
+    return Intl.message(
+      'Achat (Mois)',
+      name: 'achat_mois',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Start`
+  String get start {
+    return Intl.message(
+      'Start',
+      name: 'start',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Please Select Your Language`
+  String get intro_select_lang {
+    return Intl.message(
+      'Please Select Your Language',
+      name: 'intro_select_lang',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Please Select Country`
+  String get intro_select_region {
+    return Intl.message(
+      'Please Select Country',
+      name: 'intro_select_region',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Your Informations`
+  String get intro_infor {
+    return Intl.message(
+      'Your Informations',
+      name: 'intro_infor',
+      desc: '',
+      args: [],
+    );
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<S> {

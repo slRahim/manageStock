@@ -60,6 +60,7 @@ class _TresorieFragmentState extends State<TresorieFragment> {
     _myParams = data.myParams;
   }
 
+  //*************************************************************************************************************************************
   //***************************************************partie speciale pour le filtre de recherche***************************************
   void fillFilter(Map<String, dynamic> filter) {
     filter["Categorie"] = _savedSelectedCategorie+1 ;
@@ -144,6 +145,7 @@ class _TresorieFragmentState extends State<TresorieFragment> {
   }
 
 
+  //**************************************************************************************************************************************
   //********************************************listing des pieces**********************************************************************
   @override
   Widget build(BuildContext context) {
@@ -194,32 +196,30 @@ class _TresorieFragmentState extends State<TresorieFragment> {
   }
 
   _addNewTresorie (context){
-    if (_myParams.versionType != "demo" &&
-        _myParams.startDate
-            .isBefore(Helpers.getDateExpiration(_myParams))) {
-      Navigator.of(context).pushNamed(RoutesKeys.addTresorie, arguments: new Tresorie.init())
-          .then((value){
-        _dataSource.refresh();
-      });
-    } else {
-      if (_myParams.versionType == "demo") {
-        if (_myParams.startDate.isBefore(
-            _myParams.startDate.add(Duration(days: 30)))) {
-          Navigator.of(context).pushNamed(RoutesKeys.addTresorie, arguments: new Tresorie.init())
-              .then((value){
-            _dataSource.refresh();
-          });
-        } else {
-          var message = "Evaluation period has expired you can't add more items";
-          Helpers.showFlushBar(context, message);
-          Navigator.pushNamed(context, RoutesKeys.appPurchase);
-        }
-      } else {
-        var message = "Your licence has expired you can't add more items";
-        Helpers.showFlushBar(context, message);
+    if(_myParams.versionType == "demo"){
+      if(_dataSource.itemCount < 10){
+        Navigator.of(context).pushNamed(RoutesKeys.addTresorie, arguments: new Tresorie.init())
+            .then((value){
+          _dataSource.refresh();
+        });
+      }else{
         Navigator.pushNamed(context, RoutesKeys.appPurchase);
+        var message = S.current.msg_demo_exp;
+        Helpers.showFlushBar(context, message);
+      }
+    }else{
+      if(DateTime.now().isBefore(Helpers.getDateExpiration(_myParams))){
+        Navigator.of(context).pushNamed(RoutesKeys.addTresorie, arguments: new Tresorie.init())
+            .then((value){
+          _dataSource.refresh();
+        });
+      }else{
+        Navigator.pushNamed(context, RoutesKeys.appPurchase);
+        var message = S.current.msg_premium_exp;
+        Helpers.showFlushBar(context, message);
       }
     }
+
   }
 
 

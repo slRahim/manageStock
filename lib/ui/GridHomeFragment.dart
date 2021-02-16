@@ -217,7 +217,7 @@ class _GridHomeWidgetState extends State<GridHomeWidget> {
                                         Container(
                                           child: Wrap(
                                             direction: Axis.vertical,
-                                            children: [Text("C.A Mensuel",
+                                            children: [Text("${S.current.ca_mois}",
                                                 style: TextStyle(
                                                     fontWeight: FontWeight.bold,
                                                     color: Colors.white))],
@@ -238,7 +238,7 @@ class _GridHomeWidgetState extends State<GridHomeWidget> {
                                                   fontWeight:
                                                   FontWeight.bold,
                                                   color: Colors.white,fontSize: 18)),
-                                          Text(" (${_devise})",
+                                          Text(" ${_devise}",
                                               style: TextStyle(
                                                   fontWeight:
                                                   FontWeight.bold,
@@ -275,7 +275,7 @@ class _GridHomeWidgetState extends State<GridHomeWidget> {
                                         Container(
                                           child: Wrap(
                                             direction: Axis.vertical,
-                                            children: [Text("Achat Mensuel",
+                                            children: [Text("${S.current.achat_mois}",
                                                 style: TextStyle(
                                                     fontWeight: FontWeight.bold,
                                                     color: Colors.white))],
@@ -295,7 +295,7 @@ class _GridHomeWidgetState extends State<GridHomeWidget> {
                                               style: TextStyle(
                                                   fontWeight: FontWeight.bold,fontSize: 18,
                                                   color: Colors.white)),
-                                          Text(" (${_devise})",
+                                          Text(" ${_devise}",
                                               style: TextStyle(
                                                   fontWeight: FontWeight.bold,
                                                   color: Colors.white)),

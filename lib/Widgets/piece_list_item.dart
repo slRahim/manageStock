@@ -91,73 +91,65 @@ class _PieceListItemState extends State<PieceListItem> {
             }
           },
           leading: CircleAvatar(
-            radius: 28,
-            backgroundColor: Colors.green,
+            radius: 23,
+            backgroundColor: getColor(),
             child: CircleAvatar(
               child: Text(getPiecetype()),
-              radius:25,
+              radius:20,
               backgroundColor: Colors.grey[200],
               foregroundColor: Colors.black,
             ),
           ),
-          subtitle: Row(
-            mainAxisAlignment: MainAxisAlignment.start,
-            children: <Widget>[
-              Icon(Icons.access_time,
-                size: SizeConfig.safeBlockHorizontal * 4,
-                color: Colors.white,
-              ),
-              SizedBox(
-                width: 10,
-              ),
-              Text(
-                "${Helpers.dateToText(widget.piece.date)}",
-                style: TextStyle(
-                    fontSize: SizeConfig.safeBlockHorizontal * 4.7,
-                    color: Colors.white70),
-              ),
-            ],
-          ),
           title:(widget.piece.raisonSociale != null)
               ? Row(
                   children: [
-                    Icon(Icons.person_sharp , color: Colors.white,size: SizeConfig.safeBlockHorizontal * 5),
+                    Icon(Icons.home_work_outlined , color: Theme.of(context).accentColor ,size: 20,),
                     SizedBox(
                       width: 10,
                     ),
-                    Text("${widget.piece.raisonSociale}" ,
+                    Text("(${S.current.n}: ${widget.piece.num_piece}) ${widget.piece.raisonSociale}" ,
                       style: TextStyle(
-                            fontSize: SizeConfig.safeBlockHorizontal * 4.5,
-                            color: Colors.white)
+                            fontSize: 16,)
                     )
                   ],
               )
               : null,
           trailingChildren: [
             Text(
-             "${S.current.n}: ${widget.piece.num_piece}",
-              style: TextStyle(
-                  fontSize: 16.0),
-            ),
-            Text(
-              "${S.current.regler}: ${Helpers.numberFormat(widget.piece.regler)} (${_devise})",
+              "${S.current.regler}: ${Helpers.numberFormat(widget.piece.regler)} ${_devise}",
               style: TextStyle(
                   fontSize: 16.0),
             ),
             (widget.piece.net_a_payer < 0)
-                ? Text("${Helpers.numberFormat(widget.piece.net_a_payer * -1).toString() } (${_devise})",
+                ? Text("${Helpers.numberFormat(widget.piece.net_a_payer * -1).toString() } ${_devise}",
               style: TextStyle(
                   fontSize: 16.0,
                   fontWeight: FontWeight.bold ,
                   color: (widget.piece.reste < 0)?Colors.redAccent : Theme.of(context).primaryColorDark ),
             )
-                : Text('${Helpers.numberFormat(widget.piece.net_a_payer).toString()} (${_devise})',
+                : Text('${Helpers.numberFormat(widget.piece.net_a_payer).toString()} ${_devise}',
               style: TextStyle(
                   fontSize: 16.0,
                   fontWeight: FontWeight.bold ,
                   color: (widget.piece.reste > 0)?Colors.redAccent : Theme.of(context).primaryColorDark ),
             ) ,
-            getIcon(),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: <Widget>[
+                Icon(Icons.access_time,
+                  size: 16,
+                  color: Theme.of(context).primaryColorDark,
+                ),
+                SizedBox(
+                  width: 10,
+                ),
+                Text(
+                  "${Helpers.dateToText(widget.piece.date)}",
+                  style: TextStyle(
+                      fontSize: 15 , color: Theme.of(context).primaryColorDark),
+                ),
+              ],
+            ),
             RichText(
               text: TextSpan(
                   children: [
@@ -166,7 +158,7 @@ class _PieceListItemState extends State<PieceListItem> {
                         style: TextStyle(fontSize: 15 , fontWeight: FontWeight.bold,color: Colors.redAccent)
                     ),
                     TextSpan(
-                      text:"${Helpers.numberFormat(widget.piece.reste)} (${_devise})",
+                      text:"${Helpers.numberFormat(widget.piece.reste)} ${_devise}",
                       style: TextStyle(
                           color: Theme.of(context).primaryColorDark,
                           fontSize: 15.0),
@@ -182,18 +174,13 @@ class _PieceListItemState extends State<PieceListItem> {
                     style: TextStyle(fontSize: 15 , fontWeight: FontWeight.bold,color: Colors.green)
                   ),
                   TextSpan(
-                    text:"${Helpers.numberFormat(widget.piece.marge)} (${_devise})",
+                    text:"${Helpers.numberFormat(widget.piece.marge)} ${_devise}",
                     style: TextStyle(
                         color: Theme.of(context).primaryColorDark,
                         fontSize: 15.0),
                   ),
                 ]
               ),
-            ),
-            Text(
-                (widget.piece.transformer == 1)? "${S.current.msg_piece_transfo}":"${S.current.msg_piece_origin}",
-              style: TextStyle(
-                  fontSize: 16.0),
             ),
           ],
         ),
@@ -258,16 +245,16 @@ class _PieceListItemState extends State<PieceListItem> {
     }
   }
 
-  Widget getIcon() {
+  Color getColor() {
     switch (widget.piece.mov){
       case 1 :
-        return Icon(Icons.check_circle , color: Colors.blue,size: 26,);
+        return Colors.green;
         break;
       case 2 :
-        return Icon(Icons.broken_image , color: Colors.black45,size: 26,);
+        return Colors.red;
         break;
       case 0 :
-        return Icon(Icons.check_circle_outline , color: Colors.black45,size: 26,);
+        return Colors.black26;
         break;
     }
   }

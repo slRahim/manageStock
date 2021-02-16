@@ -52,27 +52,7 @@ class _homeState extends State<home> {
 
   @override
   Widget build(BuildContext context) {
-    if (_myParams.versionType == "beta" && _myParams.startDate.isBefore(DateTime(2021,6,1))){
-      return WillPopScope(
-        onWillPop: _onWillPop,
-        child: Scaffold(
-          key: _globalKey,
-          drawer: NavDrawer(),
-          body: BlocConsumer<HomeCubit, HomeState>(
-            listener: (context, state) {
-              if (state is HomeError) {
-                Scaffold.of(context).showSnackBar(SnackBar(
-                  content: Text(state.message),
-                ));
-              }
-            },
-            builder: (context, state) {
-              return handleHomeState(context, state);
-            },
-          ),
-        ),
-      );
-    } else {
+    if (_myParams.versionType == "beta" && _myParams.startDate.isAfter(DateTime(2021,6,1))){
       return Scaffold(
         appBar: AppBar(
           centerTitle: true,
@@ -100,6 +80,26 @@ class _homeState extends State<home> {
                 ),
               ],
             ),
+          ),
+        ),
+      );
+    } else {
+      return WillPopScope(
+        onWillPop: _onWillPop,
+        child: Scaffold(
+          key: _globalKey,
+          drawer: NavDrawer(),
+          body: BlocConsumer<HomeCubit, HomeState>(
+            listener: (context, state) {
+              if (state is HomeError) {
+                Scaffold.of(context).showSnackBar(SnackBar(
+                  content: Text(state.message),
+                ));
+              }
+            },
+            builder: (context, state) {
+              return handleHomeState(context, state);
+            },
           ),
         ),
       );

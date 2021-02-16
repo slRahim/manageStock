@@ -27,6 +27,8 @@ import 'package:intl/intl.dart' as intl;
 import 'package:archive/archive.dart';
 import 'package:gestmob/models/MyParams.dart';
 
+
+
 class Helpers {
 
   static Widget buildLoading() {
@@ -310,17 +312,19 @@ class Helpers {
  }
 
  static DateTime getDateExpiration(MyParams myParam){
-    switch (myParam.codeAbonnement){
+    switch (myParam.codeAbonnement) {
       case ('mensuel'):
         return myParam.startDate.add(Duration(days: 30));
-        break ;
+        break;
       case('trimestre'):
         return myParam.startDate.add(Duration(days: 180));
         break;
       case('illimit'):
-        return DateTime(2100 , 1 , 1);
-        break ;
+        return DateTime(2100, 1, 1);
+        break;
     }
+
  }
+
 
 }

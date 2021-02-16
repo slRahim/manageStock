@@ -78,6 +78,10 @@ class RouteGenerator {
         return MaterialPageRoute(
           builder: (_) => PiecesScreen(),
         );
+      case RoutesKeys.appPurchase:
+        return MaterialPageRoute(
+          builder: (_) => PurchasePage(),
+        );
       case RoutesKeys.settingsPage:
         return MaterialPageRoute(
           builder: (_) => SettingsPage(),

@@ -52,14 +52,15 @@ class _ListTileCardState extends State<ListTileCard> {
         onTap: widget.onTap,
         onLongPress: widget.onLongPress,
         child: Padding(
-          padding: const EdgeInsets.only(top: 5),
+          padding: const EdgeInsets.only(top: 2),
           child: SlidingCard(
-            slimeCardElevation: 2,
+            slimeCardElevation: 8,
+            slimeCardBorderRadius: 10,
             cardsGap: SizeConfig.safeBlockVertical,
             controller: widget.slidingCardController,
             slidingCardWidth: SizeConfig.horizontalBloc * 95,
-            visibleCardHeight: SizeConfig.safeBlockVertical * 22,
-            hiddenCardHeight: SizeConfig.safeBlockVertical * 15,
+            visibleCardHeight: SizeConfig.safeBlockVertical * 13,
+            hiddenCardHeight: SizeConfig.safeBlockVertical * 11,
             showColors: false,
             frontCardWidget: ListFrontCard(
               title: widget.title,
@@ -130,83 +131,74 @@ class _ListFrontCardState extends State<ListFrontCard> {
       children: <Widget>[
         //en tete de la carte
         Flexible(
-          flex: 1,
+          flex: 2,
           child: Container(
-            padding:  EdgeInsetsDirectional.only(top: 0, start: 20),
+            padding:  EdgeInsetsDirectional.only(start: 20),
             decoration: BoxDecoration(
                 color: (widget.itemSelected != null && widget.itemSelected)
                     ? Colors.green
                     : Theme.of(context).selectedRowColor,
                 borderRadius: BorderRadius.only(
-                    topLeft: Radius.circular(25),
-                    topRight: Radius.circular(25))),
+                    topLeft: Radius.circular(10),
+                    topRight: Radius.circular(10))
+            ),
             child: SingleChildScrollView(
-              padding: EdgeInsets.only(bottom: 5),
-              child: Column(
+              padding: EdgeInsetsDirectional.only(start: 3 , end: 3),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: <Widget>[
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: <Widget>[
-                      Padding(
-                        padding: const EdgeInsets.only(top: 8.0),
-                        child: widget.title,
+                  widget.title,
+                  (widget.from is Piece ||
+                      widget.from is Tiers ||
+                      widget.from is Article)
+                      ? InkWell(
+                    onTap: () {
+                      if (isinfoPressed == true) {
+                        isinfoPressed = false;
+                        widget.onHideInfoTapped();
+                        setState(() {});
+                      } else {
+                        isinfoPressed = true;
+                        widget.onShowInfoTapped();
+                        setState(() {});
+                      }
+                    },
+                    child: Container(
+                      padding: EdgeInsetsDirectional.only(end: 10),
+                      child: isinfoPressed
+                          ? Transform.rotate(
+                        angle: 0,
+                        child: Icon(
+                          Icons.keyboard_arrow_up,
+                          size:24,
+                        ),
+                      )
+                          : Icon(
+                        Icons.keyboard_arrow_down,
+                        size: 24,
                       ),
-                      (widget.from is Piece ||
-                              widget.from is Tiers ||
-                              widget.from is Article)
-                          ? InkWell(
-                              onTap: () {
-                                if (isinfoPressed == true) {
-                                  isinfoPressed = false;
-                                  widget.onHideInfoTapped();
-                                  setState(() {});
-                                } else {
-                                  isinfoPressed = true;
-                                  widget.onShowInfoTapped();
-                                  setState(() {});
-                                }
-                              },
-                              child: Container(
-                                padding: EdgeInsets.all(10),
-                                child: isinfoPressed
-                                    ? Transform.rotate(
-                                        angle: 0,
-                                        child: Icon(
-                                          Icons.keyboard_arrow_up,
-                                          size:
-                                              SizeConfig.safeBlockHorizontal * 9,
-                                          color: Colors.white,
-                                        ),
-                                      )
-                                    : Icon(
-                                        Icons.keyboard_arrow_down,
-                                        size: SizeConfig.safeBlockHorizontal * 9,
-                                        color: Colors.white,
-                                      ),
-                              ),
-                            )
-                          : Container(
-                              padding: EdgeInsets.all(10),
-                              child: SizedBox(
-                                height: SizeConfig.safeBlockHorizontal * 9,
-                              ),
-                          ),
-                    ],
+                    ),
+                  )
+                      : Container(
+                    padding: EdgeInsetsDirectional.only(end: 10),
+                    child: SizedBox(
+                      height: SizeConfig.safeBlockHorizontal * 7,
+                    ),
                   ),
-                  widget.subtitle
                 ],
               ),
             ),
           ),
         ),
+        Divider(height: 1, color: Theme.of(context).primaryColorDark,),
         //corp de la carte
         Flexible(
-          flex: 1,
+          flex: 3,
           child: Container(
             decoration: BoxDecoration(
                 borderRadius: BorderRadius.only(
-                    bottomLeft: Radius.circular(25),
-                    bottomRight: Radius.circular(25))),
+                    bottomLeft: Radius.circular(5),
+                    bottomRight: Radius.circular(5))),
             child: SingleChildScrollView(
               padding: EdgeInsetsDirectional.only(start: 20, end: 20,top: 10),
               child :Container(
@@ -216,7 +208,7 @@ class _ListFrontCardState extends State<ListFrontCard> {
                     children: <Widget>[
                       Expanded(flex: 3, child: widget.leading),
                       SizedBox(
-                        width: 16,
+                        width: 5,
                       ),
                       Expanded(
                         flex: 9,
@@ -229,20 +221,6 @@ class _ListFrontCardState extends State<ListFrontCard> {
                               height: 5,
                             ),
                             widget.trailingChildren[1],
-                            SizedBox(
-                              height: 5,
-                            ),
-                            widget.trailingChildren[2],
-                          ],
-                        ),
-                      ),
-                      Expanded(
-                        flex: 1,
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: <Widget>[
-                            widget.trailingChildren[3],
                           ],
                         ),
                       ),
@@ -273,7 +251,7 @@ class ListBackCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(25)),
+          borderRadius: BorderRadius.circular(10)),
       child: SingleChildScrollView(
          padding: EdgeInsetsDirectional.only(start: 20, end: 20, top: 15),
          child: Container(
@@ -285,15 +263,15 @@ class ListBackCard extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.center,
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: <Widget>[
+                      trailingChildren[2],
+                      SizedBox(
+                        height: 5,
+                      ),
+                      trailingChildren[3],
+                      SizedBox(
+                        height: 5,
+                      ),
                       trailingChildren[4],
-                      SizedBox(
-                        height: 5,
-                      ),
-                      trailingChildren[5],
-                      SizedBox(
-                        height: 5,
-                      ),
-                      trailingChildren[6],
                     ],
                   ),
                 ),

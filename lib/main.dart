@@ -119,8 +119,8 @@ class _MyAppState extends State<MyApp> {
             floatingActionButtonTheme: FloatingActionButtonThemeData(
                 backgroundColor: Colors.redAccent
             ),
-            secondaryHeaderColor: Colors.indigo[500],
-            selectedRowColor: Colors.purple,
+            secondaryHeaderColor: Colors.blue[800],
+            selectedRowColor: Colors.white,
             primaryColorDark: Colors.black,
             bottomAppBarColor: Colors.white,
             disabledColor: Colors.white,
@@ -131,7 +131,7 @@ class _MyAppState extends State<MyApp> {
               unselectedLabelColor: Colors.black54,
             ),
             appBarTheme: AppBarTheme(
-              color: Colors.indigoAccent,
+              color: Colors.blue[600],
             )
         ),
         darkTheme: ThemeData(
@@ -143,7 +143,7 @@ class _MyAppState extends State<MyApp> {
                 foregroundColor: Colors.black
             ),
             secondaryHeaderColor: Colors.blueGrey[900],
-            selectedRowColor: Colors.deepPurple,
+            selectedRowColor: Colors.black12,
             primaryColorDark: Colors.white,
             disabledColor: Colors.black26,
             hoverColor: Colors.black26,

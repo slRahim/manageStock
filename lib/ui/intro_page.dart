@@ -40,6 +40,7 @@ class _IntroPageState extends State<IntroPage> {
   QueryCtr _queryCtr = new QueryCtr();
 
   SharedPreferences _prefs;
+  final _formKey = GlobalKey<FormState>();
 
   @override
   void initState() {
@@ -63,10 +64,13 @@ class _IntroPageState extends State<IntroPage> {
       body: IntroductionScreen(
         pages: _getPageViews(context),
         next: const Icon(Icons.navigate_next),
-        done:
-            const Text("Start", style: TextStyle(fontWeight: FontWeight.w600)),
+        done: Text(S.current.start , style: TextStyle(fontWeight: FontWeight.w600)),
         onDone: () async {
-          await saveConfig().then((value) => Phoenix.rebirth(context));
+          if(_formKey.currentState.validate()){
+            await saveConfig().then((value) => Phoenix.rebirth(context));
+          } else {
+            Helpers.showFlushBar(context, "${S.current.msg_champs_obg}");
+          }
         },
         dotsDecorator: DotsDecorator(
             size: const Size.square(10.0),
@@ -92,7 +96,7 @@ class _IntroPageState extends State<IntroPage> {
                 height: 30,
               ),
               Text(
-                "Please Select Your Language",
+                S.current.intro_select_lang,
                 style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
               )
             ],
@@ -158,7 +162,7 @@ class _IntroPageState extends State<IntroPage> {
                 height: 30,
               ),
               Text(
-                "Please Select Country",
+                S.current.intro_select_region,
                 style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
               )
             ],
@@ -235,96 +239,105 @@ class _IntroPageState extends State<IntroPage> {
                   height: 30,
                 ),
                 Text(
-                  "Your Informations",
+                  S.current.intro_infor,
                   style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
                 )
               ],
             ),
           ),
-          bodyWidget: Column(
-            children: [
-              TextFormField(
-                controller: _raisonSocialeControl,
-                keyboardType: TextInputType.text,
-                decoration: InputDecoration(
-                  labelText: S.current.rs,
-                  prefixIcon: Icon(
-                    MdiIcons.idCard,
-                    color: Theme.of(context).accentColor,
-                  ),
-                  focusedBorder: OutlineInputBorder(
-                      borderSide: BorderSide(color: Colors.blue),
-                      borderRadius: BorderRadius.circular(20)),
-                  enabledBorder: OutlineInputBorder(
-                    gapPadding: 3.3,
-                    borderRadius: BorderRadius.circular(20),
-                    borderSide: BorderSide(color: Colors.blue),
-                  ),
-                ),
-              ),
-              SizedBox(
-                height: 10,
-              ),
-              Container(
-                padding: EdgeInsetsDirectional.only(
-                    start: 8, end: 8, top: 4, bottom: 4),
-                decoration: BoxDecoration(
-                  border: Border.all(
-                    color: Colors.blue,
-                  ),
-                  borderRadius: BorderRadius.circular(20.0),
-                ),
-                child: Row(
-                  children: [
-                    Icon(
-                      Icons.home_work_outlined,
+          bodyWidget: Form(
+            key: _formKey,
+            child: Column(
+              children: [
+                TextFormField(
+                  controller: _raisonSocialeControl,
+                  keyboardType: TextInputType.text,
+                  validator: (value) {
+                    if (value.isEmpty) {
+                      return S.current.msg_champ_oblg;
+                    }
+                    return null;
+                  },
+                  decoration: InputDecoration(
+                    labelText: S.current.rs,
+                    prefixIcon: Icon(
+                      MdiIcons.idCard,
                       color: Theme.of(context).accentColor,
                     ),
-                    SizedBox(
-                      width: 15,
-                    ),
-                    DropdownButtonHideUnderline(
-                        child: DropdownButton<String>(
-                            disabledHint: Text(_selectedStatut),
-                            value: _selectedStatut,
-                            items: _statutDropdownItems,
-                            onChanged: (value) {
-                              setState(() {
-                                _selectedStatut = value;
-                              });
-                            })),
-                  ],
-                ),
-              ),
-              SizedBox(
-                height: 10,
-              ),
-              TextFormField(
-                controller: _mobileControl,
-                keyboardType: TextInputType.number,
-                validator: (value) {
-                  if (value.isEmpty) {
-                    return S.current.msg_champ_oblg;
-                  }
-                  return null;
-                },
-                decoration: InputDecoration(
-                  labelText: S.current.mobile,
-                  prefixIcon: Icon(
-                    Icons.phone_android,
-                    color: Theme.of(context).accentColor,
-                  ),
-                  focusedBorder: OutlineInputBorder(
+                    focusedBorder: OutlineInputBorder(
+                        borderSide: BorderSide(color: Colors.blue),
+                        borderRadius: BorderRadius.circular(20)),
+                    enabledBorder: OutlineInputBorder(
+                      gapPadding: 3.3,
+                      borderRadius: BorderRadius.circular(20),
                       borderSide: BorderSide(color: Colors.blue),
-                      borderRadius: BorderRadius.circular(20)),
-                  enabledBorder: OutlineInputBorder(
-                    gapPadding: 3.3,
-                    borderRadius: BorderRadius.circular(20),
-                    borderSide: BorderSide(color: Colors.blue),
+                    ),
                   ),
                 ),
-              ),
-            ],
+                SizedBox(
+                  height: 10,
+                ),
+                Container(
+                  padding: EdgeInsetsDirectional.only(
+                      start: 8, end: 8, top: 4, bottom: 4),
+                  decoration: BoxDecoration(
+                    border: Border.all(
+                      color: Colors.blue,
+                    ),
+                    borderRadius: BorderRadius.circular(20.0),
+                  ),
+                  child: Row(
+                    children: [
+                      Icon(
+                        Icons.home_work_outlined,
+                        color: Theme.of(context).accentColor,
+                      ),
+                      SizedBox(
+                        width: 15,
+                      ),
+                      DropdownButtonHideUnderline(
+                          child: DropdownButton<String>(
+                              disabledHint: Text(_selectedStatut),
+                              value: _selectedStatut,
+                              items: _statutDropdownItems,
+                              onChanged: (value) {
+                                setState(() {
+                                  _selectedStatut = value;
+                                });
+                              })),
+                    ],
+                  ),
+                ),
+                SizedBox(
+                  height: 10,
+                ),
+                TextFormField(
+                  controller: _mobileControl,
+                  keyboardType: TextInputType.number,
+                  validator: (value) {
+                    if (value.isEmpty) {
+                      return S.current.msg_champ_oblg;
+                    }
+                    return null;
+                  },
+                  decoration: InputDecoration(
+                    labelText: S.current.mobile,
+                    prefixIcon: Icon(
+                      Icons.phone_android,
+                      color: Theme.of(context).accentColor,
+                    ),
+                    focusedBorder: OutlineInputBorder(
+                        borderSide: BorderSide(color: Colors.blue),
+                        borderRadius: BorderRadius.circular(20)),
+                    enabledBorder: OutlineInputBorder(
+                      gapPadding: 3.3,
+                      borderRadius: BorderRadius.circular(20),
+                      borderSide: BorderSide(color: Colors.blue),
+                    ),
+                  ),
+                ),
+              ],
+            ),
           )),
     ];
   }
@@ -345,6 +358,7 @@ class _IntroPageState extends State<IntroPage> {
 //****************************************************************************save config*******************************************************************************************
 
   Future saveConfig() async {
+
     try{
       DateTime startDate = await getDateFromServer();
       Uint8List image01 = await Helpers.getDefaultImageUint8List(from: "profile");

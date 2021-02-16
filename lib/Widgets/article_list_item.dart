@@ -107,52 +107,29 @@ class _ArticleListItemState extends State<ArticleListItem> {
       },
       itemSelected: widget.article.selectedQuantite > 0,
       leading: CircleAvatar(
-        radius: 28,
+        radius: 23,
         backgroundColor: Colors.yellow[700],
         child: CircleAvatar(
           backgroundColor: Colors.white,
-          radius: 25,
+          radius: 20,
           backgroundImage: MemoryImage(widget.article.imageUint8List),
         ),
       ),
-      subtitle: Row(
-        mainAxisAlignment: MainAxisAlignment.start,
-        children: <Widget>[
-          Icon(MdiIcons.barcode,
-            size: SizeConfig.safeBlockHorizontal * 4,
-            color: Colors.white,
-          ),
-          SizedBox(
-            width: 10,
-          ),
-          (widget.article.codeBar != null) ?Text(
-            "${widget.article.codeBar}",
-            style: TextStyle(
-                fontSize: SizeConfig.safeBlockHorizontal * 4.7,
-                color: Colors.white70),
-          ):SizedBox(),
-        ],
-      ),
-      title:(widget.article.ref != null)
+      title:(widget.article.designation != null)
           ? Row(
         children: [
-          Icon(Icons.widgets , color: Colors.white,size: SizeConfig.safeBlockHorizontal * 5),
+          Icon(Icons.widgets , color: Theme.of(context).accentColor ,size: 20),
           SizedBox(
             width: 10,
           ),
-          Text("${widget.article.ref}" ,
+          Text("${widget.article.designation} (${widget.article.ref.substring(0,(4))}...)" ,
               style: TextStyle(
-                  fontSize: SizeConfig.safeBlockHorizontal * 4.5,
-                  color: Colors.white)
+                  fontSize: 16,)
           )
         ],
       )
           : null,
       trailingChildren: widget.article.selectedQuantite > 0 ? [
-        Text(
-           widget.article.designation,
-          style: TextStyle(fontSize: 16.0,),
-        ),
         Text(
            "${S.current.qte} : "+
                widget.article.selectedQuantite.toString(),
@@ -161,13 +138,12 @@ class _ArticleListItemState extends State<ArticleListItem> {
           ),
         ),
         Text(
-          "${Helpers.numberFormat(widget.article.selectedQuantite * widget.article.selectedPrice).toString()} (${_devise})",
+          "${Helpers.numberFormat(widget.article.selectedQuantite * widget.article.selectedPrice).toString()} ${_devise}",
           style: TextStyle(
               fontSize: 16.0,
               fontWeight: FontWeight.bold
           ),
         ),
-        SizedBox(),
         SizedBox(),
         RichText(
           text: TextSpan(
@@ -203,10 +179,6 @@ class _ArticleListItemState extends State<ArticleListItem> {
       // listing des articles ds le fragement article
       [
         Text(
-           widget.article.designation,
-          style: TextStyle(fontSize: 16.0,),
-        ),
-        Text(
           "${S.current.qte} : "+
           (widget.article.quantite - widget.article.cmdClient).toString(),
           style: TextStyle(
@@ -216,7 +188,6 @@ class _ArticleListItemState extends State<ArticleListItem> {
               fontSize: 15.0),
         ),
         trailingChildrenOnArticleFragment(),
-        SizedBox(),
         SizedBox(),
         RichText(
           text: TextSpan(
@@ -259,21 +230,21 @@ class _ArticleListItemState extends State<ArticleListItem> {
     switch (widget.tarification){
       case 1 :
         return Text(
-          "${Helpers.numberFormat(widget.article.prixVente1).toString()} (${_devise})",
+          "${Helpers.numberFormat(widget.article.prixVente1).toString()} ${_devise}",
           style: TextStyle(fontSize: 16.0, fontWeight: FontWeight.bold),
         );
         break ;
 
       case 2:
         return Text(
-          "${Helpers.numberFormat(widget.article.prixVente2).toString()} (${_devise})",
+          "${Helpers.numberFormat(widget.article.prixVente2).toString()} ${_devise}",
           style: TextStyle(fontSize: 16.0, fontWeight: FontWeight.bold),
         );
         break ;
 
       case 3 :
         return Text(
-          "${Helpers.numberFormat(widget.article.prixVente3).toString()} (${_devise})",
+          "${Helpers.numberFormat(widget.article.prixVente3).toString()} ${_devise}",
           style: TextStyle(fontSize: 16.0, fontWeight: FontWeight.bold),
         );
         break ;
@@ -281,12 +252,12 @@ class _ArticleListItemState extends State<ArticleListItem> {
       default :
         if(widget.article.selectedPrice > 0){
           return Text(
-            "${Helpers.numberFormat(widget.article.selectedPrice).toString()} (${_devise})",
+            "${Helpers.numberFormat(widget.article.selectedPrice).toString()} ${_devise}",
             style: TextStyle(fontSize: 16.0, fontWeight: FontWeight.bold),
           );
         }
         return Text(
-          "${Helpers.numberFormat(widget.article.prixVente1).toString()} (${_devise})",
+          "${Helpers.numberFormat(widget.article.prixVente1).toString()} ${_devise}",
           style: TextStyle(fontSize: 16.0, fontWeight: FontWeight.bold),
         );
         break ;

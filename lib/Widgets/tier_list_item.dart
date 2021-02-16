@@ -94,62 +94,56 @@ class _TierListItemState extends State<TierListItem> {
           },
           leading: CircleAvatar(
             backgroundColor: Colors.yellow[700],
-            radius: 28,
+            radius: 23,
             child: CircleAvatar(
               backgroundColor: Colors.white,
-              radius: 25,
+              radius: 20,
               backgroundImage:  MemoryImage(widget.tier.imageUint8List),
 
             ),
           ),
-          subtitle: Row(
-            mainAxisAlignment: MainAxisAlignment.start,
-            children: <Widget>[
-              Icon(Icons.home_work_outlined,
-                size: SizeConfig.safeBlockHorizontal * 4,
-                color: Colors.white,
-              ),
-              SizedBox(
-                width: 10,
-              ),
-              Text(
-                "${Statics.statutItems[widget.tier.statut]}",
-                style: TextStyle(
-                    fontSize: SizeConfig.safeBlockHorizontal * 4.7,
-                    color: Colors.white70),
-              ),
-            ],
-          ),
           title:(widget.tier.raisonSociale != null)
               ? Row(
             children: [
-              Icon(Icons.person_sharp , color: Colors.white,size: SizeConfig.safeBlockHorizontal * 5),
+              Icon(Icons.home_work_outlined , color: Theme.of(context).accentColor ,size: 20),
               SizedBox(
                 width: 10,
               ),
-              Text("${widget.tier.raisonSociale}" ,
+              Text("(${Statics.statutItems[widget.tier.statut]}) ${widget.tier.raisonSociale}" ,
                   style: TextStyle(
-                      fontSize: SizeConfig.safeBlockHorizontal * 4.5,
-                      color: Colors.white)
+                      fontSize: 16,)
               )
             ],
           )
               : null,
           trailingChildren: [
             Text(
-              "${S.current.regler}: ${Helpers.numberFormat(widget.tier.regler).toString()} (${_devise})",
+              "${S.current.regler}: ${Helpers.numberFormat(widget.tier.regler).toString()} ${_devise}",
               style: TextStyle(
                   fontSize: 16.0),
             ),
             Text(
-             "${Helpers.numberFormat(widget.tier.credit).toString()} (${_devise})",
+             "${Helpers.numberFormat(widget.tier.credit).toString()} ${_devise}",
               style: TextStyle(
                   color: widget.tier.credit > 0 ? Colors.redAccent : Theme.of(context).primaryColorDark,
                   fontSize: 16.0, fontWeight: FontWeight.bold),
             ),
-            SizedBox(),
-            SizedBox(),
-            SizedBox(),
+            RichText(
+              text: TextSpan(
+                  children: [
+                    TextSpan(
+                        text: "${S.current.mobile} : ",
+                        style: TextStyle(fontSize: 15,fontWeight: FontWeight.bold,color: Theme.of(context).primaryColorDark,)
+                    ),
+                    TextSpan(
+                      text:"${widget.tier.mobile} ",
+                      style: TextStyle(
+                          color: Theme.of(context).primaryColorDark,
+                          fontSize: 15.0),
+                    ),
+                  ]
+              ),
+            ),
             RichText(
               text: TextSpan(
                   children: [
@@ -158,7 +152,7 @@ class _TierListItemState extends State<TierListItem> {
                         style: TextStyle(fontSize: 15,fontWeight: FontWeight.bold,color: Theme.of(context).primaryColorDark,)
                     ),
                     TextSpan(
-                      text:"${Helpers.numberFormat(widget.tier.chiffre_affaires)} (${_devise})",
+                      text:"${Helpers.numberFormat(widget.tier.chiffre_affaires)} ${_devise}",
                       style: TextStyle(
                           color: Theme.of(context).primaryColorDark,
                           fontSize: 15.0),
@@ -166,7 +160,6 @@ class _TierListItemState extends State<TierListItem> {
                   ]
               ),
             ),
-
             RichText(
               text: TextSpan(
                   children: [

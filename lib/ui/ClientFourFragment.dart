@@ -74,13 +74,6 @@ class _ClientFourFragmentState extends State<ClientFourFragment> {
     _myParams = data.myParams;
   }
 
-  void fillFilter(Map<String, dynamic> filter) {
-    filter["Id_Famille"] = _savedSelectedFamille;
-    filter["hasCredit"] = _savedFilterHasCredit;
-    filter["Clientfour"] = _clientFour;
-    filter["tierBloquer"] = _savedFilterTierBloquer ;
-  }
-
   Future<Widget> futureInitState() async {
     _familleItems = await _dataSource.queryCtr.getAllTierFamilles();
     _familleItems[0].libelle = S.current.no_famille ;
@@ -123,6 +116,74 @@ class _ClientFourFragmentState extends State<ClientFourFragment> {
     ]);
   }
 
+  //*****************************************************************************************************************************************************
+  //*************************************************************************filtre**********************************************************************
+  void fillFilter(Map<String, dynamic> filter) {
+    filter["Id_Famille"] = _savedSelectedFamille;
+    filter["hasCredit"] = _savedFilterHasCredit;
+    filter["Clientfour"] = _clientFour;
+    filter["tierBloquer"] = _savedFilterTierBloquer ;
+  }
+
+  Widget addFilterdialogue() {
+    return FutureBuilder(
+        future: futureInitState(),
+        builder: (context, snapshot) {
+          if (!snapshot.hasData) {
+            return Dialog(
+              child: Container(
+                  height: 100.0,
+                  width: 100.0,
+                  child: Center(
+                    child: CircularProgressIndicator(),
+                  )
+              ),
+            );
+          } else {
+            return snapshot.data;
+          }
+        });
+  }
+
+  Widget famillesDropDown(StateSetter _setState) {
+    return DropdownButtonHideUnderline(
+      child: DropdownButton<Object>(
+          value: _selectedFamille,
+          items: _familleDropdownItems,
+          onChanged: (value) {
+            _setState(() {
+              _selectedFamille = value;
+            });
+          }),
+    );
+  }
+
+  Widget hasCreditCheckBox(StateSetter _setState) {
+    return CheckboxListTile(
+      title: Text(S.current.a_credit),
+      value: _filterInHasCredit,
+      onChanged: (bool value){
+        _setState(() {
+          _filterInHasCredit = value;
+        });
+      },
+    );
+  }
+
+  Widget tierBloquer(StateSetter _setState) {
+    return CheckboxListTile(
+      title: Text(S.current.aff_bloquer),
+      value: _filterTierBloquer,
+      onChanged: (bool value){
+        _setState(() {
+          _filterTierBloquer = value;
+        });
+      },
+    );
+  }
+
+  //***************************************************************************************************************************************************
+  //***************************************************************************affichage***************************************************************
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -208,93 +269,34 @@ class _ClientFourFragmentState extends State<ClientFourFragment> {
         ));
   }
 
-  Widget addFilterdialogue() {
-    return FutureBuilder(
-        future: futureInitState(),
-        builder: (context, snapshot) {
-          if (!snapshot.hasData) {
-            return Dialog(
-              child: Container(
-                height: 100.0,
-                width: 100.0,
-                child: Center(
-                  child: CircularProgressIndicator(),
-                )
-              ),
-            );
-          } else {
-            return snapshot.data;
-          }
-        });
-  }
-
-  Widget famillesDropDown(StateSetter _setState) {
-    return DropdownButtonHideUnderline(
-      child: DropdownButton<Object>(
-          value: _selectedFamille,
-          items: _familleDropdownItems,
-          onChanged: (value) {
-            _setState(() {
-              _selectedFamille = value;
-            });
-          }),
-    );
-  }
-
-  Widget hasCreditCheckBox(StateSetter _setState) {
-    return CheckboxListTile(
-      title: Text(S.current.a_credit),
-      value: _filterInHasCredit,
-      onChanged: (bool value){
-        _setState(() {
-          _filterInHasCredit = value;
-        });
-      },
-    );
-  }
-
-  Widget tierBloquer(StateSetter _setState) {
-    return CheckboxListTile(
-      title: Text(S.current.aff_bloquer),
-      value: _filterTierBloquer,
-      onChanged: (bool value){
-        _setState(() {
-          _filterTierBloquer = value;
-        });
-      },
-    );
-  }
-
   //********************************************************************************************************************************************************
   //******************************************************************************************************************************************************************
 
   _addNewTier (context){
-    if (_myParams.versionType != "demo" &&
-        _myParams.startDate
-            .isBefore(Helpers.getDateExpiration(_myParams))) {
-      Navigator.of(context).pushNamed(RoutesKeys.addTier,arguments: new Tiers.init(widget.clientFourn))
-          .then((value){
-        _dataSource.refresh();
-      });
-    } else {
-      if (_myParams.versionType == "demo") {
-        if (_myParams.startDate.isBefore(
-            _myParams.startDate.add(Duration(days: 30)))) {
-          Navigator.of(context).pushNamed(RoutesKeys.addTier,arguments: new Tiers.init(widget.clientFourn))
-              .then((value){
-            _dataSource.refresh();
-          });
-        } else {
-          var message = "Evaluation period has expired you can't add more items";
-          Helpers.showFlushBar(context, message);
-          Navigator.pushNamed(context, RoutesKeys.appPurchase);
-        }
-      } else {
-        var message = "Your licence has expired you can't add more items";
-        Helpers.showFlushBar(context, message);
+    if(_myParams.versionType == "demo"){
+      if(_dataSource.itemCount < 10){
+        Navigator.of(context).pushNamed(RoutesKeys.addTier,arguments: new Tiers.init(widget.clientFourn))
+            .then((value){
+          _dataSource.refresh();
+        });
+      }else{
         Navigator.pushNamed(context, RoutesKeys.appPurchase);
+        var message = S.current.msg_demo_exp;
+        Helpers.showFlushBar(context, message);
+      }
+    }else{
+      if(DateTime.now().isBefore(Helpers.getDateExpiration(_myParams))){
+        Navigator.of(context).pushNamed(RoutesKeys.addTier,arguments: new Tiers.init(widget.clientFourn))
+            .then((value){
+          _dataSource.refresh();
+        });
+      }else{
+        Navigator.pushNamed(context, RoutesKeys.appPurchase);
+        var message = S.current.msg_premium_exp;
+        Helpers.showFlushBar(context, message);
       }
     }
+
   }
 
   Future scanQRCode() async {

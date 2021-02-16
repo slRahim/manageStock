@@ -82,71 +82,44 @@ class _TresorieListItemState extends State<TresorieListItem> {
             }
           },
           leading: CircleAvatar(
-            radius: 28,
-            backgroundColor: Colors.yellow[700],
+            radius: 23,
+            backgroundColor: getColor(),
             child: CircleAvatar(
               child: (widget.tresorie.categorie == 2 ||
                   widget.tresorie.categorie == 7) ? Icon(
                 Icons.arrow_upward_outlined, color: Colors.green,)
                   : Icon(Icons.arrow_downward_outlined, color: Colors.red,),
-              radius: 25,
+              radius: 20,
               backgroundColor: Colors.grey[100],
             ),
           ),
-          subtitle: Row(
-            mainAxisAlignment: MainAxisAlignment.start,
-            children: <Widget>[
-              Icon(Icons.access_time,
-                size: SizeConfig.safeBlockHorizontal * 4,
-                color: Colors.white,
-              ),
-              SizedBox(
-                width: 10,
-              ),
-              Text(
-                "${Helpers.dateToText(widget.tresorie.date)}",
-                style: TextStyle(
-                    fontSize: SizeConfig.safeBlockHorizontal * 4.7,
-                    color: Colors.white70),
-              ),
-            ],
-          ),
           title: Row(
             children: [
-              Icon(Icons.person_sharp , color: Colors.white,size: SizeConfig.safeBlockHorizontal * 5),
+              Icon(Icons.home_work_outlined , color: Theme.of(context).accentColor,size: 20),
               SizedBox(
                 width: 10,
               ),
-              (widget.tresorie.tierRS != null) ? Text("${widget.tresorie.tierRS}" ,
+              (widget.tresorie.tierRS != null) ? Text("(${S.current.n}: ${widget.tresorie.numTresorie}) ${widget.tresorie.tierRS}" ,
                   style: TextStyle(
-                      fontSize: SizeConfig.safeBlockHorizontal * 4.5,
-                      color: Colors.white)
-              ):Text("__" ,
+                      fontSize: 16,)
+              ):Text("(${S.current.n}: ${widget.tresorie.numTresorie}) __" ,
                   style: TextStyle(
-                      fontSize: SizeConfig.safeBlockHorizontal * 4.5,
-                      color: Colors.white)
+                      fontSize: 16,)
               )
             ],
           ),
           trailingChildren: [
             Text(
-              "${S.current.n}: ${widget.tresorie.numTresorie}",
-              style: TextStyle(
-
-                  fontSize: 16.0),
-            ),
-            Text(
-              "${widget.tresorie.objet}",
+              "${S.current.objet}: ${widget.tresorie.objet}",
               style: TextStyle(
                   fontSize: 16.0),
             ),
             (widget.tresorie.montant >= 0) ? Text(
-              '${Helpers.numberFormat(widget.tresorie.montant).toString()} (${_devise})',
+              '${Helpers.numberFormat(widget.tresorie.montant).toString()} ${_devise}',
               style: TextStyle(fontSize: 16.0, fontWeight: FontWeight.bold),)
                 : Text(
-              '${Helpers.numberFormat(widget.tresorie.montant * -1).toString()} (${_devise})',
+              '${Helpers.numberFormat(widget.tresorie.montant * -1).toString()} ${_devise}',
               style: TextStyle(fontSize: 16.0, fontWeight: FontWeight.bold),),
-            getIcon(),
           ],
         ),
         actions: <Widget>[
@@ -162,16 +135,16 @@ class _TresorieListItemState extends State<TresorieListItem> {
     );
   }
 
-  Widget getIcon() {
+  Color getColor() {
     switch (widget.tresorie.mov){
       case 1 :
-        return Icon(Icons.check_circle , color: Colors.blue,size: 26,);
+        return Colors.green;
         break;
       case 2 :
-        return Icon(Icons.broken_image , color: Colors.black45,size: 26,);
+        return Colors.red;
         break;
       case 0 :
-        return Icon(Icons.check_circle_outline , color: Colors.black45,size: 26,);
+        return Colors.black26;
         break;
     }
   }

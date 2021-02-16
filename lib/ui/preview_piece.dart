@@ -295,8 +295,8 @@ class _PreviewPieceState extends State<PreviewPiece> {
     if(_myParams.versionType != "demo"){
       await Printing.sharePdf(bytes: await widget.pdfDoc.save(), filename: 'my-document.pdf');
     }else{
-    var message = "This option doesn't available for evaluation version";
-    Helpers.showFlushBar(context, message);
+      var message = S.current.msg_demo_option;
+      Helpers.showFlushBar(context, message);
     }
   }
 
@@ -307,7 +307,7 @@ class _PreviewPieceState extends State<PreviewPiece> {
       Navigator.pop(context);
       widget.ticket(ticket);
     }else{
-      var message = "This option doesn't available for evaluation version";
+      var message = S.current.msg_demo_option;
       Helpers.showFlushBar(context, message);
     }
   }
