@@ -51,10 +51,8 @@ class _ListTileCardState extends State<ListTileCard> {
       child: InkWell(
         onTap: widget.onTap,
         onLongPress: widget.onLongPress,
-        child: Padding(
-          padding: const EdgeInsets.only(top: 2),
-          child: SlidingCard(
-            slimeCardElevation: 8,
+        child: SlidingCard(
+            slimeCardElevation: 2,
             slimeCardBorderRadius: 10,
             cardsGap: SizeConfig.safeBlockVertical,
             controller: widget.slidingCardController,
@@ -86,7 +84,6 @@ class _ListTileCardState extends State<ListTileCard> {
                 : null,
           ),
         ),
-      ),
     );
   }
 }
@@ -127,110 +124,109 @@ class _ListFrontCardState extends State<ListFrontCard> {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: <Widget>[
-        //en tete de la carte
-        Flexible(
-          flex: 2,
-          child: Container(
-            padding:  EdgeInsetsDirectional.only(start: 20),
-            decoration: BoxDecoration(
-                color: (widget.itemSelected != null && widget.itemSelected)
-                    ? Colors.green
-                    : Theme.of(context).selectedRowColor,
-                borderRadius: BorderRadius.only(
-                    topLeft: Radius.circular(10),
-                    topRight: Radius.circular(10))
-            ),
-            child: SingleChildScrollView(
-              padding: EdgeInsetsDirectional.only(start: 3 , end: 3),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: <Widget>[
-                  widget.title,
-                  (widget.from is Piece ||
-                      widget.from is Tiers ||
-                      widget.from is Article)
-                      ? InkWell(
-                    onTap: () {
-                      if (isinfoPressed == true) {
-                        isinfoPressed = false;
-                        widget.onHideInfoTapped();
-                        setState(() {});
-                      } else {
-                        isinfoPressed = true;
-                        widget.onShowInfoTapped();
-                        setState(() {});
-                      }
-                    },
-                    child: Container(
-                      padding: EdgeInsetsDirectional.only(end: 10),
-                      child: isinfoPressed
-                          ? Transform.rotate(
-                        angle: 0,
-                        child: Icon(
-                          Icons.keyboard_arrow_up,
-                          size:24,
+    return Container(
+      decoration: BoxDecoration(
+          color: (widget.itemSelected != null && widget.itemSelected)
+              ? Colors.blue[200]
+              : Theme.of(context).selectedRowColor,
+          borderRadius: BorderRadius.circular(10)
+      ),
+      child: Column(
+        children: <Widget>[
+          //en tete de la carte
+          (widget.from is Piece || widget.from is Tiers || widget.from is Article)
+              ? Flexible(
+            flex: 1,
+            child: Container(
+              decoration: BoxDecoration(
+                  color: (widget.itemSelected != null && widget.itemSelected)
+                      ? Colors.blue[200]
+                      : Theme.of(context).selectedRowColor,
+                  borderRadius: BorderRadius.only(
+                      topLeft: Radius.circular(10),
+                      topRight: Radius.circular(10))
+              ),
+              child: SingleChildScrollView(
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: <Widget>[
+                   InkWell(
+                      onTap: () {
+                        if (isinfoPressed == true) {
+                          isinfoPressed = false;
+                          widget.onHideInfoTapped();
+                          setState(() {});
+                        } else {
+                          isinfoPressed = true;
+                          widget.onShowInfoTapped();
+                          setState(() {});
+                        }
+                      },
+                      child: Container(
+                        padding: EdgeInsetsDirectional.only(end: 10),
+                        child: isinfoPressed
+                            ? Transform.rotate(
+                          angle: 0,
+                          child: Icon(
+                            Icons.keyboard_arrow_up,
+                            size:24,
+                          ),
+                        )
+                            : Icon(
+                          Icons.keyboard_arrow_down,
+                          size: 24,
                         ),
-                      )
-                          : Icon(
-                        Icons.keyboard_arrow_down,
-                        size: 24,
                       ),
-                    ),
-                  )
-                      : Container(
-                    padding: EdgeInsetsDirectional.only(end: 10),
-                    child: SizedBox(
-                      height: SizeConfig.safeBlockHorizontal * 7,
-                    ),
-                  ),
-                ],
+                    )
+                  ],
+                ),
               ),
             ),
-          ),
-        ),
-        Divider(height: 1, color: Theme.of(context).primaryColorDark,),
-        //corp de la carte
-        Flexible(
-          flex: 3,
-          child: Container(
-            decoration: BoxDecoration(
-                borderRadius: BorderRadius.only(
-                    bottomLeft: Radius.circular(5),
-                    bottomRight: Radius.circular(5))),
-            child: SingleChildScrollView(
-              padding: EdgeInsetsDirectional.only(start: 20, end: 20,top: 10),
-              child :Container(
-                  width: SizeConfig.safeBlockHorizontal * 90,
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    children: <Widget>[
-                      Expanded(flex: 3, child: widget.leading),
-                      SizedBox(
-                        width: 5,
-                      ),
-                      Expanded(
-                        flex: 9,
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: <Widget>[
-                            widget.trailingChildren[0],
-                            SizedBox(
-                              height: 5,
+          ):SizedBox(height: 18,),
+          //corp de la carte
+          Flexible(
+            flex: 3,
+            child: Container(
+              decoration: BoxDecoration(
+                  borderRadius: BorderRadius.only(
+                      bottomLeft: Radius.circular(5),
+                      bottomRight: Radius.circular(5))),
+              child:  SingleChildScrollView(
+                  padding: EdgeInsetsDirectional.only(start: 5, end: 5),
+                  child :Container(
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        children: <Widget>[
+                          Expanded(flex: 3, child: widget.leading),
+                          SizedBox(
+                            width: 1,
+                          ),
+                          Expanded(
+                            flex: 9,
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: <Widget>[
+                                widget.title,
+                                SizedBox(
+                                  height: 5,
+                                ),
+                                widget.trailingChildren[0],
+                                SizedBox(
+                                  height: 5,
+                                ),
+                                widget.trailingChildren[1],
+                              ],
                             ),
-                            widget.trailingChildren[1],
-                          ],
-                        ),
+                          ),
+                        ],
                       ),
-                    ],
-                  ),
+                    ),
                 ),
+              ),
             ),
-          ),
-        ),
-      ],
+        ],
+      ),
     );
   }
 }
@@ -253,9 +249,8 @@ class ListBackCard extends StatelessWidget {
       decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(10)),
       child: SingleChildScrollView(
-         padding: EdgeInsetsDirectional.only(start: 20, end: 20, top: 15),
+         padding: EdgeInsetsDirectional.only(start: 15, end: 15, top: 10),
          child: Container(
-            width: SizeConfig.safeBlockHorizontal * 90,
             child: Row(
               children: <Widget>[
                 Expanded(

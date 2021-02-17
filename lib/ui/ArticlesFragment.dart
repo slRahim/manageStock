@@ -27,6 +27,7 @@ import 'AddArticlePage.dart';
 import 'package:gestmob/services/push_notifications.dart';
 import 'package:gestmob/models/MyParams.dart';
 
+
 class ArticlesFragment extends StatefulWidget {
   final Function(List<dynamic>) onConfirmSelectedItems;
   final int tarification;
@@ -227,7 +228,7 @@ class _ArticlesFragmentState extends State<ArticlesFragment> {
               body: addFilterdialogue(),
               btnOkText: S.current.filtrer_btn,
               closeIcon: Icon(
-                Icons.remove_circle_outline_sharp,
+                Icons.close,
                 color: Colors.red,
                 size: 26,
               ),

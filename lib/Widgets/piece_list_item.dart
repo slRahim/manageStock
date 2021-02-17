@@ -91,28 +91,20 @@ class _PieceListItemState extends State<PieceListItem> {
             }
           },
           leading: CircleAvatar(
-            radius: 23,
+            radius: 28,
             backgroundColor: getColor(),
             child: CircleAvatar(
               child: Text(getPiecetype()),
-              radius:20,
+              radius:25,
               backgroundColor: Colors.grey[200],
               foregroundColor: Colors.black,
             ),
           ),
           title:(widget.piece.raisonSociale != null)
-              ? Row(
-                  children: [
-                    Icon(Icons.home_work_outlined , color: Theme.of(context).accentColor ,size: 20,),
-                    SizedBox(
-                      width: 10,
-                    ),
-                    Text("(${S.current.n}: ${widget.piece.num_piece}) ${widget.piece.raisonSociale}" ,
-                      style: TextStyle(
-                            fontSize: 16,)
-                    )
-                  ],
-              )
+              ?Text("(${S.current.n}: ${widget.piece.num_piece}) ${widget.piece.raisonSociale}" ,
+                  style: TextStyle(
+                        fontSize: 16,)
+                )
               : null,
           trailingChildren: [
             Text(

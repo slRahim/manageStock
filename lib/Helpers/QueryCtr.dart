@@ -166,17 +166,19 @@ class QueryCtr {
     String _piece = filters["Piece"];
     int _mov = filters["Mov"] != null? filters["Mov"] : 0;
     int _tier_id = filters["Tierid"] != null ? filters["Tierid"] : null ;
+    int _startDate = filters["Start_date"] != null ? filters["Start_date"].millisecondsSinceEpoch : null ;
+    int _endDate = filters["End_date"] != null ? filters["End_date"].millisecondsSinceEpoch : null ;
 
     String _pieceFilter = _piece != null? " AND Piece like '$_piece'" : " AND (Piece like 'BL' OR Piece like 'FC')";
     String _movFilter = " AND Mov >= $_mov";
-
+    String _startDateFilter = ' AND Date >= $_startDate' ;
+    String _endDateFilter = ' AND Date <= $_endDate' ;
 
     if(filters["Draft"]){
       _movFilter = " AND Mov >= 2";
     }
 
-
-    String _creditFilter =""  ;
+    String _creditFilter ="" ;
     if(filters["Credit"]){
       _creditFilter =" AND Reste > 0"  ;
     }
@@ -197,6 +199,12 @@ class QueryCtr {
 
     query += _pieceFilter;
     query += _movFilter;
+    if(_startDate != null ){
+      query += _startDateFilter ;
+    }
+    if(_endDate != null ){
+      query += _endDateFilter ;
+    }
     query+=_tierFilter ;
     query += _creditFilter ;
 
@@ -291,14 +299,23 @@ class QueryCtr {
     if(local && filters != null){
       int marque = filters["Id_Marque"] != null? filters["Id_Marque"] : -1;
       int famille = filters["Id_Famille"] != null? filters["Id_Famille"] : -1;
+      int _startDate = filters["Start_date"] != null ? filters["Start_date"].millisecondsSinceEpoch : null ;
+      int _endDate = filters["End_date"] != null ? filters["End_date"].millisecondsSinceEpoch : null ;
 
       String marqueFilter = marque > 0 ? " AND Articles.Id_Marque = $marque" : "";
       String familleFilter = famille > 0 ? " AND Articles.Id_Famille = $famille" : "";
-
-      query += marqueFilter;
-      query += familleFilter;
+      String _startDateFilter = ' AND Date >= $_startDate' ;
+      String _endDateFilter = ' AND Date <= $_endDate' ;
 
       query += " where (Designation like '%${searchTerm??''}%' OR CodeBar like '%${searchTerm??''}%' OR Ref like '%${searchTerm??''}%')";
+      query += marqueFilter;
+      query += familleFilter;
+      if(_startDate != null ){
+        query += _startDateFilter ;
+      }
+      if(_endDate != null ){
+        query += _endDateFilter ;
+      }
     }
 
     var res = await dbClient.rawQuery(query);
@@ -358,6 +375,19 @@ class QueryCtr {
 
       query += " AND (Num_tresorie LIKE '%${searchTerm??''}%' OR Tier_rs LIKE '%${searchTerm??''}%' OR Objet LIKE '%${searchTerm??''}%')";
       query += categorieFilter;
+    }
+
+    int _startDate = filters["Start_date"] != null ? filters["Start_date"].millisecondsSinceEpoch : null ;
+    int _endDate = filters["End_date"] != null ? filters["End_date"].millisecondsSinceEpoch : null ;
+
+    String _startDateFilter = ' AND Date >= $_startDate' ;
+    String _endDateFilter = ' AND Date <= $_endDate' ;
+
+    if(_startDate != null ){
+      query += _startDateFilter ;
+    }
+    if(_endDate != null ){
+      query += _endDateFilter ;
     }
 
     query += ' ORDER BY id DESC';

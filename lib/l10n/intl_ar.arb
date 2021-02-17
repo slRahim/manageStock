@@ -356,6 +356,9 @@
   "start" : "Commencer",
   "intro_select_lang" : "Veuillez Choisir Votre Langue",
   "intro_select_region" : "Veuillez Choisir Votre Pays",
-  "intro_infor" : "Vos Informations"
+  "intro_infor" : "Vos Informations",
+
+  "start_date" : "Date du début",
+  "end_date" : "Date de fin"
 
 }

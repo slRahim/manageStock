@@ -107,27 +107,19 @@ class _ArticleListItemState extends State<ArticleListItem> {
       },
       itemSelected: widget.article.selectedQuantite > 0,
       leading: CircleAvatar(
-        radius: 23,
+        radius: 28,
         backgroundColor: Colors.yellow[700],
         child: CircleAvatar(
           backgroundColor: Colors.white,
-          radius: 20,
+          radius: 25,
           backgroundImage: MemoryImage(widget.article.imageUint8List),
         ),
       ),
       title:(widget.article.designation != null)
-          ? Row(
-        children: [
-          Icon(Icons.widgets , color: Theme.of(context).accentColor ,size: 20),
-          SizedBox(
-            width: 10,
-          ),
-          Text("${widget.article.designation} (${widget.article.ref.substring(0,(4))}...)" ,
+          ?Text("${widget.article.designation} (${widget.article.ref.substring(0,(4))}...)" ,
               style: TextStyle(
-                  fontSize: 16,)
-          )
-        ],
-      )
+                  fontSize: 16.0,)
+            )
           : null,
       trailingChildren: widget.article.selectedQuantite > 0 ? [
         Text(

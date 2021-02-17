@@ -48,29 +48,65 @@ class RouteGenerator {
        break;
       case RoutesKeys.addArticle:
         if (args is Article){
-          return MaterialPageRoute(
-            builder: (_) => AddArticlePage(arguments: args,),
+          return PageRouteBuilder(
+            transitionDuration: Duration(milliseconds: 200),
+            transitionsBuilder: (context,Animation<double> animation,Animation<double>  secondeAnimation , Widget child){
+              animation = CurvedAnimation(parent: animation ,curve: Curves.bounceInOut);
+              return ScaleTransition(
+                alignment: Alignment.center,
+                scale: animation,
+                child: child,
+              );
+            },
+            pageBuilder: (context,Animation<double> animation,Animation<double>  secondeAnimation) =>AddArticlePage(arguments: args,),
           );
         }
        break;
       case RoutesKeys.addTier:
         if (args is Tiers){
-          return MaterialPageRoute(
-            builder: (_) => AddTierPage(arguments: args,),
+          return PageRouteBuilder(
+            transitionDuration: Duration(milliseconds: 200),
+            transitionsBuilder: (context,Animation<double> animation,Animation<double>  secondeAnimation , Widget child){
+              animation = CurvedAnimation(parent: animation ,curve: Curves.bounceInOut);
+              return ScaleTransition(
+                alignment: Alignment.center,
+                scale: animation,
+                child: child,
+              );
+            },
+            pageBuilder: (context,Animation<double> animation,Animation<double>  secondeAnimation) => AddTierPage(arguments: args,),
           );
         }
        break;
       case RoutesKeys.addPiece:
         if (args is Piece){
-          return MaterialPageRoute(
-            builder: (_) => AddPiecePage(arguments: args,),
+          return PageRouteBuilder(
+            transitionDuration: Duration(milliseconds: 200),
+            transitionsBuilder: (context,Animation<double> animation,Animation<double>  secondeAnimation , Widget child){
+              animation = CurvedAnimation(parent: animation ,curve: Curves.bounceInOut);
+              return ScaleTransition(
+                alignment: Alignment.center,
+                scale: animation,
+                child: child,
+              );
+            },
+            pageBuilder: (context,Animation<double> animation,Animation<double>  secondeAnimation) => AddPiecePage(arguments: args,),
           );
         }
        break;
       case RoutesKeys.addTresorie:
         if (args is Tresorie){
-          return MaterialPageRoute(
-            builder: (_) => AddTresoriePage(arguments: args,),
+          return PageRouteBuilder(
+            transitionDuration: Duration(milliseconds: 200),
+            transitionsBuilder: (context,Animation<double> animation,Animation<double>  secondeAnimation , Widget child){
+              animation = CurvedAnimation(parent: animation ,curve: Curves.bounceInOut);
+              return ScaleTransition(
+                alignment: Alignment.center,
+                scale: animation,
+                child: child,
+              );
+            },
+            pageBuilder: (context,Animation<double> animation,Animation<double>  secondeAnimation) => AddTresoriePage(arguments: args,),
           );
         }
         break;

@@ -94,27 +94,19 @@ class _TierListItemState extends State<TierListItem> {
           },
           leading: CircleAvatar(
             backgroundColor: Colors.yellow[700],
-            radius: 23,
+            radius: 28,
             child: CircleAvatar(
               backgroundColor: Colors.white,
-              radius: 20,
+              radius: 25,
               backgroundImage:  MemoryImage(widget.tier.imageUint8List),
 
             ),
           ),
           title:(widget.tier.raisonSociale != null)
-              ? Row(
-            children: [
-              Icon(Icons.home_work_outlined , color: Theme.of(context).accentColor ,size: 20),
-              SizedBox(
-                width: 10,
-              ),
-              Text("(${Statics.statutItems[widget.tier.statut]}) ${widget.tier.raisonSociale}" ,
+              ? Text("(${Statics.statutItems[widget.tier.statut]}) ${widget.tier.raisonSociale}" ,
                   style: TextStyle(
                       fontSize: 16,)
               )
-            ],
-          )
               : null,
           trailingChildren: [
             Text(

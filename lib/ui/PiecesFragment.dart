@@ -17,7 +17,6 @@ import 'package:gestmob/search/sliver_list_data_source.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 import 'package:gestmob/Widgets/utils.dart' as utils;
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
-
 import 'AddArticlePage.dart';
 import 'package:gestmob/services/push_notifications.dart';
 import 'package:gestmob/models/MyParams.dart';
@@ -49,6 +48,14 @@ class _PiecesFragmentState extends State<PiecesFragment> {
   bool _filterIsDraft = false;
   bool _savedFilterIsDraft = false;
 
+  TextEditingController _startDateControl = new TextEditingController();
+  DateTime _filterStartDate ;
+  DateTime _savedFilterStartDate ;
+
+  TextEditingController _endDateControl = new TextEditingController();
+  DateTime _filterEndDate ;
+  DateTime _savedFilterEndDate ;
+
   SliverListDataSource _dataSource;
   MyParams _myParams;
 
@@ -67,6 +74,7 @@ class _PiecesFragmentState extends State<PiecesFragment> {
     _myParams = data.myParams;
   }
 
+  //*************************************************************************************************************************************
   //***************************************************partie speciale pour le filtre de recherche***************************************
   void fillFilter(Map<String, dynamic> filter) {
     filter["Piece"] = widget.peaceType ;
@@ -74,16 +82,22 @@ class _PiecesFragmentState extends State<PiecesFragment> {
     filter["Credit"] = _savedFilterHasCredit ;
     filter["Draft"] = _savedFilterIsDraft ;
     filter["Tierid"] = _tier_id ;
+    filter["Start_date"] = _savedFilterStartDate ;
+    filter["End_date"] = _savedFilterEndDate ;
   }
 
   Future<Widget> futureInitState() async {
     _filterInHasCredit = _savedFilterHasCredit;
     _filterIsDraft = _savedFilterIsDraft ;
+    _filterStartDate = _savedFilterEndDate ;
+    _filterEndDate = _savedFilterEndDate ;
 
     final tile = StatefulBuilder(builder: (context, StateSetter _setState) {
       return Builder(
         builder: (context) => Column(
           children: [
+            startDate(_setState),
+            endDate(_setState),
             isDraftCheckBox(_setState),
             hasCreditCheckBox(_setState)
           ],
@@ -128,6 +142,92 @@ class _PiecesFragmentState extends State<PiecesFragment> {
         });
   }
 
+  Widget startDate(StateSetter _setState){
+      return InkWell(
+        onTap: () async {
+          DateTime order = await getDate(DateTime.now());
+          if (order != null) {
+            DateTime time = new DateTime(
+                order.year, order.month, order.day);
+            _setState(() {
+              _startDateControl.text = Helpers.dateToText(time);
+              _filterStartDate = order ;
+            });
+          }
+        },
+        onLongPress: (){
+          _setState(() {
+            _startDateControl.text = "";
+            _filterStartDate = _emptyFilterMap["Start_date"] ;
+          });
+        },
+        child: TextField(
+          decoration: InputDecoration(
+            prefixIcon: Icon(
+              Icons.calendar_today,
+              color: Colors.blue,
+            ),
+            focusedBorder: OutlineInputBorder(
+                borderSide: BorderSide(color: Colors.blue),
+                borderRadius: BorderRadius.circular(20)),
+            labelText: S.current.start_date,
+            labelStyle: TextStyle(color: Colors.blue),
+            enabledBorder: OutlineInputBorder(
+              gapPadding: 3.3,
+              borderRadius: BorderRadius.circular(20),
+              borderSide: BorderSide(color: Colors.blue),
+            ),
+          ),
+          enabled: false,
+          controller: _startDateControl,
+          keyboardType: TextInputType.text,
+        ),
+      ) ;
+  }
+
+  Widget endDate(StateSetter _setState){
+    return InkWell(
+      onTap: () async {
+        DateTime order = await getDate(DateTime.now());
+        if (order != null) {
+          DateTime time = new DateTime(
+              order.year, order.month, order.day);
+          _setState(() {
+            _endDateControl.text = Helpers.dateToText(time);
+            _filterEndDate = order ;
+          });
+        }
+      },
+      onLongPress: (){
+        _setState(() {
+          _endDateControl.text = "";
+          _filterEndDate = _emptyFilterMap["End_date"];
+        });
+      },
+      child: TextField(
+        decoration: InputDecoration(
+          prefixIcon: Icon(
+            Icons.calendar_today,
+            color: Colors.blue,
+          ),
+          focusedBorder: OutlineInputBorder(
+              borderSide: BorderSide(color: Colors.blue),
+              borderRadius: BorderRadius.circular(20)),
+          labelText: S.current.end_date,
+          labelStyle: TextStyle(color: Colors.blue),
+          enabledBorder: OutlineInputBorder(
+            gapPadding: 3.3,
+            borderRadius: BorderRadius.circular(20),
+            borderSide: BorderSide(color: Colors.blue),
+          ),
+        ),
+        enabled: false,
+        controller: _endDateControl,
+        keyboardType: TextInputType.text,
+      ),
+    ) ;
+  }
+
   Widget isDraftCheckBox(StateSetter _setState) {
     return CheckboxListTile(
       title: Text(S.current.aff_draft),
@@ -148,6 +248,21 @@ class _PiecesFragmentState extends State<PiecesFragment> {
         _setState(() {
           _filterInHasCredit = value;
         });
+      },
+    );
+  }
+
+  //*********************************************************************************************************************************************************************************
+  //********************************************************************** partie de la date ****************************************************************************************
+
+  Future<DateTime> getDate(DateTime dateTime) {
+    return showDatePicker(
+      context: context,
+      initialDate: dateTime,
+      firstDate: DateTime(2020),
+      lastDate: DateTime(2050),
+      builder: (BuildContext context, Widget child) {
+        return child;
       },
     );
   }
@@ -179,15 +294,16 @@ class _PiecesFragmentState extends State<PiecesFragment> {
                   context: context,
                   dialogType: DialogType.INFO,
                   animType: AnimType.BOTTOMSLIDE,
-                  title: S.current.supp,
                   body: addFilterdialogue(),
                   btnOkText: S.current.filtrer_btn,
-                  closeIcon: Icon(Icons.remove_circle_outline_sharp , color: Colors.red , size: 26,),
+                  closeIcon: Icon(Icons.close , color: Colors.red , size: 26,),
                   showCloseIcon: true,
                   btnOkOnPress: () async{
                     setState(() {
                       _savedFilterIsDraft = _filterIsDraft ;
                       _savedFilterHasCredit = _filterInHasCredit;
+                      _savedFilterStartDate = _filterStartDate ;
+                      _savedFilterEndDate = _filterEndDate ;
 
                       fillFilter(_filterMap);
 

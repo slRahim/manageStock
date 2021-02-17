@@ -143,7 +143,7 @@ class _MyAppState extends State<MyApp> {
                 foregroundColor: Colors.black
             ),
             secondaryHeaderColor: Colors.blueGrey[900],
-            selectedRowColor: Colors.black12,
+            selectedRowColor: Colors.black.withOpacity(0),
             primaryColorDark: Colors.white,
             disabledColor: Colors.black26,
             hoverColor: Colors.black26,

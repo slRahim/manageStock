@@ -42,6 +42,14 @@ class _TresorieFragmentState extends State<TresorieFragment> {
   TresorieCategories  _selectedCategorie;
   int _savedSelectedCategorie = 0;
 
+  TextEditingController _startDateControl = new TextEditingController();
+  DateTime _filterStartDate ;
+  DateTime _savedFilterStartDate ;
+
+  TextEditingController _endDateControl = new TextEditingController();
+  DateTime _filterEndDate ;
+  DateTime _savedFilterEndDate ;
+
   SliverListDataSource _dataSource;
   MyParams _myParams;
 
@@ -64,6 +72,8 @@ class _TresorieFragmentState extends State<TresorieFragment> {
   //***************************************************partie speciale pour le filtre de recherche***************************************
   void fillFilter(Map<String, dynamic> filter) {
     filter["Categorie"] = _savedSelectedCategorie+1 ;
+    filter["Start_date"] = _savedFilterStartDate ;
+    filter["End_date"] = _savedFilterEndDate ;
   }
 
   Future<Widget> futureInitState() async {
@@ -80,12 +90,16 @@ class _TresorieFragmentState extends State<TresorieFragment> {
 
     _categorieDropdownItems= utils.buildDropTresorieCategoriesDownMenuItems(_categorieItems);
     _selectedCategorie = _categorieItems[_savedSelectedCategorie];
+    _filterStartDate = _savedFilterEndDate ;
+    _filterEndDate = _savedFilterEndDate ;
 
     final tile = StatefulBuilder(builder: (context, StateSetter _setState) {
       return Builder(
         builder: (context) => Column(
           children: [
-            new ListTile(
+            startDate(_setState),
+            endDate(_setState),
+            ListTile(
               trailing: categorieDropDown(_setState),
             ),
           ],
@@ -131,6 +145,92 @@ class _TresorieFragmentState extends State<TresorieFragment> {
         });
   }
 
+  Widget startDate(StateSetter _setState){
+    return InkWell(
+      onTap: () async {
+        DateTime order = await getDate(DateTime.now());
+        if (order != null) {
+          DateTime time = new DateTime(
+              order.year, order.month, order.day);
+          _setState(() {
+            _startDateControl.text = Helpers.dateToText(time);
+            _filterStartDate = order ;
+          });
+        }
+      },
+      onLongPress: (){
+        _setState(() {
+          _startDateControl.text = "";
+          _filterStartDate = _emptyFilterMap["Start_date"] ;
+        });
+      },
+      child: TextField(
+        decoration: InputDecoration(
+          prefixIcon: Icon(
+            Icons.calendar_today,
+            color: Colors.blue,
+          ),
+          focusedBorder: OutlineInputBorder(
+              borderSide: BorderSide(color: Colors.blue),
+              borderRadius: BorderRadius.circular(20)),
+          labelText: S.current.start_date,
+          labelStyle: TextStyle(color: Colors.blue),
+          enabledBorder: OutlineInputBorder(
+            gapPadding: 3.3,
+            borderRadius: BorderRadius.circular(20),
+            borderSide: BorderSide(color: Colors.blue),
+          ),
+        ),
+        enabled: false,
+        controller: _startDateControl,
+        keyboardType: TextInputType.text,
+      ),
+    ) ;
+  }
+
+  Widget endDate(StateSetter _setState){
+    return InkWell(
+      onTap: () async {
+        DateTime order = await getDate(DateTime.now());
+        if (order != null) {
+          DateTime time = new DateTime(
+              order.year, order.month, order.day);
+          _setState(() {
+            _endDateControl.text = Helpers.dateToText(time);
+            _filterEndDate = order ;
+          });
+        }
+      },
+      onLongPress: (){
+        _setState(() {
+          _endDateControl.text = "";
+          _filterEndDate = _emptyFilterMap["End_date"];
+        });
+      },
+      child: TextField(
+        decoration: InputDecoration(
+          prefixIcon: Icon(
+            Icons.calendar_today,
+            color: Colors.blue,
+          ),
+          focusedBorder: OutlineInputBorder(
+              borderSide: BorderSide(color: Colors.blue),
+              borderRadius: BorderRadius.circular(20)),
+          labelText: S.current.end_date,
+          labelStyle: TextStyle(color: Colors.blue),
+          enabledBorder: OutlineInputBorder(
+            gapPadding: 3.3,
+            borderRadius: BorderRadius.circular(20),
+            borderSide: BorderSide(color: Colors.blue),
+          ),
+        ),
+        enabled: false,
+        controller: _endDateControl,
+        keyboardType: TextInputType.text,
+      ),
+    ) ;
+  }
+
   Widget categorieDropDown(StateSetter _setState) {
     return DropdownButtonHideUnderline(
       child: DropdownButton<TresorieCategories>(
@@ -144,6 +244,20 @@ class _TresorieFragmentState extends State<TresorieFragment> {
     );
   }
 
+  //*********************************************************************************************************************************************************************************
+  //********************************************************************** partie de la date ****************************************************************************************
+
+  Future<DateTime> getDate(DateTime dateTime) {
+    return showDatePicker(
+      context: context,
+      initialDate: dateTime,
+      firstDate: DateTime(2020),
+      lastDate: DateTime(2050),
+      builder: (BuildContext context, Widget child) {
+        return child;
+      },
+    );
+  }
 
   //**************************************************************************************************************************************
   //********************************************listing des pieces**********************************************************************
@@ -171,11 +285,13 @@ class _TresorieFragmentState extends State<TresorieFragment> {
                 title: S.current.supp,
                 body: addFilterdialogue(),
                 btnOkText: S.current.filtrer_btn,
-                closeIcon: Icon(Icons.remove_circle_outline_sharp , color: Colors.red , size: 26,),
+                closeIcon: Icon(Icons.close , color: Colors.red , size: 26,),
                 showCloseIcon: true,
                 btnOkOnPress: () async{
                   setState(() {
                     _savedSelectedCategorie = _categorieItems.indexOf(_selectedCategorie) ;
+                    _savedFilterStartDate = _filterStartDate ;
+                    _savedFilterEndDate = _filterEndDate ;
                     fillFilter(_filterMap);
 
                     if( _filterMap.toString() == _emptyFilterMap.toString()){

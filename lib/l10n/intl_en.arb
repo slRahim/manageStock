@@ -356,7 +356,10 @@
   "start" : "Start",
   "intro_select_lang" : "Please Select Your Language",
   "intro_select_region" : "Please Select Country",
-  "intro_infor" : "Your Informations"
+  "intro_infor" : "Your Informations",
+
+  "start_date" : "Date du début",
+  "end_date" : "Date de fin"
 
 
 }

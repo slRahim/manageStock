@@ -54,6 +54,14 @@ class _JournalFragmentState extends State<JournalFragment> {
   int _savedSelectedMarque = 0;
   int _savedSelectedFamille = 0;
 
+  TextEditingController _startDateControl = new TextEditingController();
+  DateTime _filterStartDate ;
+  DateTime _savedFilterStartDate ;
+
+  TextEditingController _endDateControl = new TextEditingController();
+  DateTime _filterEndDate ;
+  DateTime _savedFilterEndDate ;
+
   SliverListDataSource _dataSource;
 
   @override
@@ -80,15 +88,20 @@ class _JournalFragmentState extends State<JournalFragment> {
     _selectedMarque = _marqueItems[_savedSelectedMarque];
     _selectedFamille = _familleItems[_savedSelectedFamille];
 
+    _filterStartDate = _savedFilterEndDate ;
+    _filterEndDate = _savedFilterEndDate ;
+
     final tile = StatefulBuilder(builder: (context, StateSetter _setState) {
       return Builder(
         builder: (context) => Column(
           children: [
-            new ListTile(
+            startDate(_setState),
+            endDate(_setState),
+            ListTile(
               title: new Text(S.current.marque),
               trailing: marquesDropDown(_setState),
             ),
-            new ListTile(
+            ListTile(
               title: new Text(S.current.famile),
               trailing: famillesDropDown(_setState),
             ),
@@ -135,6 +148,92 @@ class _JournalFragmentState extends State<JournalFragment> {
         });
   }
 
+  Widget startDate(StateSetter _setState){
+    return InkWell(
+      onTap: () async {
+        DateTime order = await getDate(DateTime.now());
+        if (order != null) {
+          DateTime time = new DateTime(
+              order.year, order.month, order.day);
+          _setState(() {
+            _startDateControl.text = Helpers.dateToText(time);
+            _filterStartDate = order ;
+          });
+        }
+      },
+      onLongPress: (){
+        _setState(() {
+          _startDateControl.text = "";
+          _filterStartDate = _emptyFilterMap["Start_date"] ;
+        });
+      },
+      child: TextField(
+        decoration: InputDecoration(
+          prefixIcon: Icon(
+            Icons.calendar_today,
+            color: Colors.blue,
+          ),
+          focusedBorder: OutlineInputBorder(
+              borderSide: BorderSide(color: Colors.blue),
+              borderRadius: BorderRadius.circular(20)),
+          labelText: S.current.start_date,
+          labelStyle: TextStyle(color: Colors.blue),
+          enabledBorder: OutlineInputBorder(
+            gapPadding: 3.3,
+            borderRadius: BorderRadius.circular(20),
+            borderSide: BorderSide(color: Colors.blue),
+          ),
+        ),
+        enabled: false,
+        controller: _startDateControl,
+        keyboardType: TextInputType.text,
+      ),
+    ) ;
+  }
+
+  Widget endDate(StateSetter _setState){
+    return InkWell(
+      onTap: () async {
+        DateTime order = await getDate(DateTime.now());
+        if (order != null) {
+          DateTime time = new DateTime(
+              order.year, order.month, order.day);
+          _setState(() {
+            _endDateControl.text = Helpers.dateToText(time);
+            _filterEndDate = order ;
+          });
+        }
+      },
+      onLongPress: (){
+        _setState(() {
+          _endDateControl.text = "";
+          _filterEndDate = _emptyFilterMap["End_date"];
+        });
+      },
+      child: TextField(
+        decoration: InputDecoration(
+          prefixIcon: Icon(
+            Icons.calendar_today,
+            color: Colors.blue,
+          ),
+          focusedBorder: OutlineInputBorder(
+              borderSide: BorderSide(color: Colors.blue),
+              borderRadius: BorderRadius.circular(20)),
+          labelText: S.current.end_date,
+          labelStyle: TextStyle(color: Colors.blue),
+          enabledBorder: OutlineInputBorder(
+            gapPadding: 3.3,
+            borderRadius: BorderRadius.circular(20),
+            borderSide: BorderSide(color: Colors.blue),
+          ),
+        ),
+        enabled: false,
+        controller: _endDateControl,
+        keyboardType: TextInputType.text,
+      ),
+    ) ;
+  }
+
   Widget marquesDropDown(StateSetter _setState) {
     return DropdownButtonHideUnderline(
       child: DropdownButton<ArticleMarque>(
@@ -179,8 +278,24 @@ class _JournalFragmentState extends State<JournalFragment> {
     }
     filter["Id_Marque"] = _savedSelectedMarque;
     filter["Id_Famille"] = _savedSelectedFamille;
+    filter["Start_date"] = _savedFilterStartDate ;
+    filter["End_date"] = _savedFilterEndDate ;
 
+  }
 
+  //*********************************************************************************************************************************************************************************
+  //********************************************************************** partie de la date ****************************************************************************************
+
+  Future<DateTime> getDate(DateTime dateTime) {
+    return showDatePicker(
+      context: context,
+      initialDate: dateTime,
+      firstDate: DateTime(2020),
+      lastDate: DateTime(2050),
+      builder: (BuildContext context, Widget child) {
+        return child;
+      },
+    );
   }
 
   //********************************************listing des pieces**********************************************************************
@@ -248,12 +363,15 @@ class _JournalFragmentState extends State<JournalFragment> {
               title: S.current.supp,
               body: addFilterdialogue(),
               btnOkText: S.current.filtrer_btn,
-              closeIcon: Icon(Icons.remove_circle_outline_sharp , color: Colors.red , size: 26,),
+              closeIcon: Icon(Icons.close , color: Colors.red , size: 26,),
               showCloseIcon: true,
               btnOkOnPress: () async{
                 setState(() {
                   _savedSelectedMarque = _marqueItems.indexOf(_selectedMarque);
                   _savedSelectedFamille = _familleItems.indexOf(_selectedFamille);
+                  _savedFilterStartDate = _filterStartDate ;
+                  _savedFilterEndDate = _filterEndDate ;
+
                   fillFilter(_filterMap);
 
                   if( _filterMap.toString() == _emptyFilterMap.toString()){

@@ -239,7 +239,7 @@ class _ClientFourFragmentState extends State<ClientFourFragment> {
                 title: S.current.supp,
                 body: addFilterdialogue(),
                 btnOkText: S.current.filtrer_btn,
-                closeIcon: Icon(Icons.remove_circle_outline_sharp , color: Colors.red , size: 26,),
+                closeIcon: Icon(Icons.close , color: Colors.red , size: 26,),
                 showCloseIcon: true,
                 btnOkOnPress: () async{
                   setState(() {

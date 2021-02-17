@@ -310,7 +310,7 @@ class _AddPiecePageState extends State<AddPiecePage>
                   title: S.current.supp,
                   body: addChoicesDialog(),
                   closeIcon: Icon(
-                    Icons.remove_circle_outline_sharp,
+                    Icons.close,
                     color: Colors.red,
                     size: 26,
                   ),
@@ -337,7 +337,7 @@ class _AddPiecePageState extends State<AddPiecePage>
                         title: S.current.supp,
                         body: transferPieceDialog(),
                         closeIcon: Icon(
-                          Icons.remove_circle_outline_sharp,
+                          Icons.close,
                           color: Colors.red,
                           size: 26,
                         ),
@@ -573,7 +573,7 @@ class _AddPiecePageState extends State<AddPiecePage>
                               animType: AnimType.BOTTOMSLIDE,
                               body: printChoicesDialog(),
                               closeIcon: Icon(
-                                Icons.remove_circle_outline_sharp,
+                                Icons.close,
                                 color: Colors.red,
                                 size: 26,
                               ),
@@ -586,7 +586,7 @@ class _AddPiecePageState extends State<AddPiecePage>
                             _piece.piece == PieceType.retourFournisseur ||
                             _piece.piece == PieceType.avoirFournisseur))
                     ? FloatingActionRowButton(
-                        icon: Icon(Icons.insert_drive_file_outlined),
+                        icon: Icon(Icons.insert_drive_file_outlined,color: Colors.white,),
                         color: Colors.redAccent,
                         onTap: () async {
                           await showDialog(
@@ -1244,10 +1244,7 @@ class _AddPiecePageState extends State<AddPiecePage>
       firstDate: DateTime(2020),
       lastDate: DateTime(2050),
       builder: (BuildContext context, Widget child) {
-        return Theme(
-          data: ThemeData.light(),
-          child: child,
-        );
+        return child;
       },
     );
   }
@@ -1313,7 +1310,7 @@ class _AddPiecePageState extends State<AddPiecePage>
                               animType: AnimType.BOTTOMSLIDE,
                               body: printChoicesDialog(),
                               closeIcon: Icon(
-                                Icons.remove_circle_outline_sharp,
+                                Icons.close,
                                 color: Colors.red,
                                 size: 26,
                               ),

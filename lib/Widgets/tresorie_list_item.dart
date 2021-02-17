@@ -82,32 +82,24 @@ class _TresorieListItemState extends State<TresorieListItem> {
             }
           },
           leading: CircleAvatar(
-            radius: 23,
+            radius: 28,
             backgroundColor: getColor(),
             child: CircleAvatar(
               child: (widget.tresorie.categorie == 2 ||
                   widget.tresorie.categorie == 7) ? Icon(
                 Icons.arrow_upward_outlined, color: Colors.green,)
                   : Icon(Icons.arrow_downward_outlined, color: Colors.red,),
-              radius: 20,
+              radius: 25,
               backgroundColor: Colors.grey[100],
             ),
           ),
-          title: Row(
-            children: [
-              Icon(Icons.home_work_outlined , color: Theme.of(context).accentColor,size: 20),
-              SizedBox(
-                width: 10,
+          title: (widget.tresorie.tierRS != null)
+              ? Text("(${S.current.n}: ${widget.tresorie.numTresorie}) ${widget.tresorie.tierRS}" ,
+                  style: TextStyle(fontSize: 16,)
+                )
+              :Text("(${S.current.n}: ${widget.tresorie.numTresorie}) __" ,
+                  style: TextStyle(fontSize: 16,)
               ),
-              (widget.tresorie.tierRS != null) ? Text("(${S.current.n}: ${widget.tresorie.numTresorie}) ${widget.tresorie.tierRS}" ,
-                  style: TextStyle(
-                      fontSize: 16,)
-              ):Text("(${S.current.n}: ${widget.tresorie.numTresorie}) __" ,
-                  style: TextStyle(
-                      fontSize: 16,)
-              )
-            ],
-          ),
           trailingChildren: [
             Text(
               "${S.current.objet}: ${widget.tresorie.objet}",

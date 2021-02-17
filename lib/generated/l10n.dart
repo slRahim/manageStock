@@ -3364,6 +3364,26 @@ class S {
       args: [],
     );
   }
+
+  /// `Date du début`
+  String get start_date {
+    return Intl.message(
+      'Date du début',
+      name: 'start_date',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Date de fin`
+  String get end_date {
+    return Intl.message(
+      'Date de fin',
+      name: 'end_date',
+      desc: '',
+      args: [],
+    );
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<S> {
