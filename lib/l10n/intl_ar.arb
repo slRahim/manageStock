@@ -64,11 +64,8 @@
   "statut_mme": "السيدة.",
   "statut_dr": "د.",
   "statut_pr": "برو.",
-  "statut_eurl": "ش ف م م.",
-  "statut_sarl": "ش د م م.",
-  "statut_spa" : "ش د أ.",
-  "statut_epic": "م ع إ.",
-  "statut_etp" : "م ص.",
+  "statut_eurl": "شركة.",
+
 
   "famile": "الفئة",
   "filtrer_btn" : "تفعيل",

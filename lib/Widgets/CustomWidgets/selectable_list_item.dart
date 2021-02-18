@@ -67,16 +67,28 @@ class _ArticleListItemSelectedState extends State<ArticleListItemSelected> {
       },
       itemSelected: widget.article.selectedQuantite > 0,
       leading: CircleAvatar(
-        radius: 20,
+        radius: 23,
         backgroundColor: Colors.yellow[700],
         child: CircleAvatar(
-          radius: 18,
+          radius: 20,
           backgroundColor: Colors.white,
           backgroundImage: MemoryImage(widget.article.imageUint8List),
         ),
       ),
-      title: Text(widget.article.designation),
-      subtitle: Text("${S.current.ref}: " + widget.article.ref),
+      title: Row(
+        children: [
+          Icon(Icons.assignment,size: 14, color: Theme.of(context).primaryColorDark,),
+          SizedBox(width: 2,),
+          Text(widget.article.designation),
+        ],
+      ),
+      subtitle: Row(
+        children: [
+          Icon(MdiIcons.pound,size: 14, color: Theme.of(context).primaryColorDark,),
+          SizedBox(width: 2,),
+          Text(widget.article.ref),
+        ],
+      ),
       trailingChildren: [
         Text(
           "${Helpers.numberFormat((widget.article.selectedQuantite * widget.article.selectedPrice))}",
@@ -326,13 +338,12 @@ class SelectableListItem extends StatelessWidget {
   const SelectableListItem({Key key ,this.key_id,this.isListing,this.leading, this.title, this.subtitle, this.trailingChildren, this.onTap, this.itemSelected, this.onDismiss}) : super(key: key);
 
   @override
-  Widget build(BuildContext context) => Container(
-      margin: EdgeInsets.all(2),
-      decoration: BoxDecoration(
-         border: Border.all(color: (itemSelected != null && itemSelected) ? Theme.of(context).tabBarTheme.unselectedLabelColor : null ,width: 1),
-          borderRadius: BorderRadius.circular(15)
-      ),
-      child: listTile(context)
+  Widget build(BuildContext context) => Card(
+    elevation: 4,
+    margin: EdgeInsetsDirectional.fromSTEB(3, 0, 3, 5),
+    child: Container(
+        child: listTile(context)
+    ),
   );
 
   Widget listTile(context){

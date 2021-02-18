@@ -11,6 +11,7 @@ import 'package:gestmob/models/Article.dart';
 import 'package:gestmob/models/Piece.dart';
 import 'package:intl/intl.dart';
 import 'package:intl/date_symbol_data_local.dart';
+import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:sliding_card/sliding_card.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -101,46 +102,79 @@ class _PieceListItemState extends State<PieceListItem> {
             ),
           ),
           title:(widget.piece.raisonSociale != null)
-              ?Text("(${S.current.n}: ${widget.piece.num_piece}) ${widget.piece.raisonSociale}" ,
+              ?Text("(# : ${widget.piece.num_piece}) ${widget.piece.raisonSociale}" ,
                   style: TextStyle(
                         fontSize: 16,)
                 )
               : null,
           trailingChildren: [
-            Text(
-              "${S.current.regler}: ${Helpers.numberFormat(widget.piece.regler)} ${_devise}",
-              style: TextStyle(
-                  fontSize: 16.0),
-            ),
-            (widget.piece.net_a_payer < 0)
-                ? Text("${Helpers.numberFormat(widget.piece.net_a_payer * -1).toString() } ${_devise}",
-              style: TextStyle(
-                  fontSize: 16.0,
-                  fontWeight: FontWeight.bold ,
-                  color: (widget.piece.reste < 0)?Colors.redAccent : Theme.of(context).primaryColorDark ),
-            )
-                : Text('${Helpers.numberFormat(widget.piece.net_a_payer).toString()} ${_devise}',
-              style: TextStyle(
-                  fontSize: 16.0,
-                  fontWeight: FontWeight.bold ,
-                  color: (widget.piece.reste > 0)?Colors.redAccent : Theme.of(context).primaryColorDark ),
-            ) ,
             Row(
               mainAxisAlignment: MainAxisAlignment.start,
               children: <Widget>[
-                Icon(Icons.access_time,
-                  size: 16,
+                Icon(Icons.date_range,
+                  size: 14,
                   color: Theme.of(context).primaryColorDark,
                 ),
                 SizedBox(
-                  width: 10,
+                  width: 3,
                 ),
                 Text(
                   "${Helpers.dateToText(widget.piece.date)}",
                   style: TextStyle(
-                      fontSize: 15 , color: Theme.of(context).primaryColorDark),
+                      fontSize: 16 , color: Theme.of(context).primaryColorDark),
                 ),
               ],
+            ),
+            (widget.piece.net_a_payer < 0)
+                ? Row(
+                  children: [
+                    Icon(MdiIcons.sigma,
+                      size: 16,
+                      color: Theme.of(context).primaryColorDark,
+                    ),
+                    SizedBox(
+                      width: 3,
+                    ),
+                    Text("${Helpers.numberFormat(widget.piece.net_a_payer * -1).toString() } ${_devise}",
+                      style: TextStyle(
+                        fontSize: 16.0,
+                        fontWeight: FontWeight.bold ,
+                        color: (widget.piece.reste < 0)?Colors.redAccent : Theme.of(context).primaryColorDark ),
+                    ),
+                  ],
+                )
+                : Row(
+                  children: [
+                    Icon(MdiIcons.sigma,
+                      size: 16,
+                      color: Theme.of(context).primaryColorDark,
+                    ),
+                    SizedBox(
+                      width: 3,
+                    ),
+                    Text('${Helpers.numberFormat(widget.piece.net_a_payer).toString()} ${_devise}',
+                      style: TextStyle(
+                        fontSize: 16.0,
+                        fontWeight: FontWeight.bold ,
+                        color: (widget.piece.reste > 0)?Colors.redAccent : Theme.of(context).primaryColorDark ),
+                    ),
+                  ],
+                ) ,
+            RichText(
+              text: TextSpan(
+                  children: [
+                    TextSpan(
+                        text: "${S.current.regler} : ",
+                        style: TextStyle(fontSize: 15 , fontWeight: FontWeight.bold,color: Colors.blue)
+                    ),
+                    TextSpan(
+                      text:"${Helpers.numberFormat(widget.piece.regler)} ${_devise}",
+                      style: TextStyle(
+                          color: Theme.of(context).primaryColorDark,
+                          fontSize: 15.0),
+                    ),
+                  ]
+              ),
             ),
             RichText(
               text: TextSpan(
@@ -238,17 +272,33 @@ class _PieceListItemState extends State<PieceListItem> {
   }
 
   Color getColor() {
-    switch (widget.piece.mov){
-      case 1 :
-        return Colors.green;
-        break;
-      case 2 :
-        return Colors.red;
-        break;
-      case 0 :
-        return Colors.black26;
-        break;
+    if(widget.piece.piece == "FP"){
+      if(widget.piece.etat == 1){
+        return Colors.green ;
+      }else{
+        switch (widget.piece.mov){
+          case 2 :
+            return Colors.black26;
+            break;
+          case 0 :
+            return Colors.red;
+            break;
+        }
+      }
+    }else{
+      switch (widget.piece.mov){
+        case 1 :
+          return Colors.green;
+          break;
+        case 2 :
+          return Colors.black26;
+          break;
+        case 0 :
+          return Colors.red;
+          break;
+      }
     }
+
   }
 
   Future<void> _makePhoneCall(String phone) async {

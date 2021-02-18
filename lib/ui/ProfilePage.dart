@@ -46,7 +46,6 @@ class _ProfilePageState extends State<ProfilePage> with TickerProviderStateMixin
   String _selectedStatut;
 
 
-
   TextEditingController _raisonSocialeControl = new TextEditingController();
   TextEditingController _activiteControl = new TextEditingController();
   TextEditingController _adresseControl = new TextEditingController();

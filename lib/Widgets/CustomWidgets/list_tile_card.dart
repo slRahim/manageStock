@@ -75,8 +75,7 @@ class _ListTileCardState extends State<ListTileCard> {
               },
             ),
             backCardWidget: (widget.from is Piece ||
-                    widget.from is Tiers ||
-                    widget.from is Article)
+                    widget.from is Tiers)
                 ? ListBackCard(
                     trailingChildren: widget.trailingChildren,
                     onTap: widget.onTap,
@@ -134,7 +133,7 @@ class _ListFrontCardState extends State<ListFrontCard> {
       child: Column(
         children: <Widget>[
           //en tete de la carte
-          (widget.from is Piece || widget.from is Tiers || widget.from is Article)
+          (widget.from is Piece || widget.from is Tiers)
               ? Flexible(
             flex: 1,
             child: Container(
@@ -215,7 +214,18 @@ class _ListFrontCardState extends State<ListFrontCard> {
                                 SizedBox(
                                   height: 5,
                                 ),
-                                widget.trailingChildren[1],
+                                Row(
+                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      widget.trailingChildren[1],
+                                      (widget.from is Article)
+                                          ? Container(
+                                            padding:EdgeInsetsDirectional.only(end: 15),
+                                            child: widget.trailingChildren[2]
+                                           )
+                                          :SizedBox(),
+                                    ],
+                                )
                               ],
                             ),
                           ),

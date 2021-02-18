@@ -10,10 +10,6 @@ class Statics {
     S.current.statut_dr,
     S.current.statut_pr,
     S.current.statut_eurl,
-    S.current.statut_sarl,
-    S.current.statut_spa,
-    S.current.statut_epic,
-    S.current.statut_etp
   ];
   static List<int> tarificationItems = [1, 2, 3];
   static List<String> printDisplayItems = [S.current.referance , S.current.designation] ;

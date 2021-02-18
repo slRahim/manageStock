@@ -310,7 +310,7 @@ class _AddPiecePageState extends State<AddPiecePage>
                   title: S.current.supp,
                   body: addChoicesDialog(),
                   closeIcon: Icon(
-                    Icons.close,
+                    Icons.cancel_sharp,
                     color: Colors.red,
                     size: 26,
                   ),
@@ -337,7 +337,7 @@ class _AddPiecePageState extends State<AddPiecePage>
                         title: S.current.supp,
                         body: transferPieceDialog(),
                         closeIcon: Icon(
-                          Icons.close,
+                          Icons.cancel_sharp,
                           color: Colors.red,
                           size: 26,
                         ),
@@ -416,7 +416,7 @@ class _AddPiecePageState extends State<AddPiecePage>
                                 size: 18,
                               ),
                               Text(
-                                "(${_devise})",
+                                "${_devise}",
                                 style: TextStyle(
                                     fontSize: 12, fontWeight: FontWeight.bold),
                               ),
@@ -502,7 +502,7 @@ class _AddPiecePageState extends State<AddPiecePage>
                                       ? Colors.blue
                                       : Theme.of(context).primaryColorDark),
                               Text(
-                                "(${_devise})",
+                                "${_devise}",
                                 style: TextStyle(
                                     fontSize: 12, fontWeight: FontWeight.bold),
                               ),
@@ -573,7 +573,7 @@ class _AddPiecePageState extends State<AddPiecePage>
                               animType: AnimType.BOTTOMSLIDE,
                               body: printChoicesDialog(),
                               closeIcon: Icon(
-                                Icons.close,
+                                Icons.cancel_sharp,
                                 color: Colors.red,
                                 size: 26,
                               ),
@@ -612,124 +612,130 @@ class _AddPiecePageState extends State<AddPiecePage>
   Widget fichetab() {
     return SingleChildScrollView(
         physics: ScrollPhysics(),
-        padding: const EdgeInsetsDirectional.fromSTEB(15, 18, 15, 40),
+        padding: const EdgeInsets.all(10),
         child: Column(mainAxisSize: MainAxisSize.max, children: [
-          Wrap(
-            spacing: 10,
-            runSpacing: 10,
-            children: [
-              Row(
+          Card(
+            elevation: 4,
+            child: Container(
+              padding: EdgeInsets.all(15),
+              child: Wrap(
+                spacing: 10,
+                runSpacing: 10,
                 children: [
-                  Flexible(
-                    flex: 4,
-                    child: TextField(
-                      decoration: InputDecoration(
-                        prefixIcon: Icon(
-                          MdiIcons.idCard,
-                          color: Colors.orange[900],
-                        ),
-                        focusedBorder: OutlineInputBorder(
-                            borderSide: BorderSide(color: Colors.orange[900]),
-                            borderRadius: BorderRadius.circular(20)),
-                        labelText: "${S.current.n}",
-                        labelStyle: TextStyle(color: Colors.orange[900]),
-                        enabledBorder: OutlineInputBorder(
-                          gapPadding: 3.3,
-                          borderRadius: BorderRadius.circular(20),
-                          borderSide: BorderSide(color: Colors.orange[900]),
+                  Row(
+                    children: [
+                      Flexible(
+                        flex: 4,
+                        child: TextField(
+                          decoration: InputDecoration(
+                            prefixIcon: Icon(
+                              MdiIcons.idCard,
+                              color: Colors.orange[900],
+                            ),
+                            focusedBorder: OutlineInputBorder(
+                                borderSide: BorderSide(color: Colors.orange[900]),
+                                borderRadius: BorderRadius.circular(20)),
+                            labelText: "${S.current.n}",
+                            labelStyle: TextStyle(color: Colors.orange[900]),
+                            enabledBorder: OutlineInputBorder(
+                              gapPadding: 3.3,
+                              borderRadius: BorderRadius.circular(20),
+                              borderSide: BorderSide(color: Colors.orange[900]),
+                            ),
+                          ),
+                          enabled: editMode,
+                          controller: _numeroControl,
+                          keyboardType: TextInputType.text,
                         ),
                       ),
-                      enabled: editMode,
-                      controller: _numeroControl,
-                      keyboardType: TextInputType.text,
-                    ),
+                      Padding(padding: EdgeInsets.fromLTRB(5, 5, 5, 5)),
+                      Flexible(
+                        flex: 6,
+                        child: GestureDetector(
+                          onTap: editMode
+                              ? () {
+                                  callDatePicker();
+                                }
+                              : null,
+                          child: TextField(
+                            decoration: InputDecoration(
+                              prefixIcon: Icon(
+                                Icons.date_range,
+                                color: Colors.blue,
+                              ),
+                              focusedBorder: OutlineInputBorder(
+                                  borderSide: BorderSide(color: Colors.blue),
+                                  borderRadius: BorderRadius.circular(20)),
+                              labelText: S.current.date,
+                              labelStyle: TextStyle(color: Colors.blue),
+                              enabledBorder: OutlineInputBorder(
+                                gapPadding: 3.3,
+                                borderRadius: BorderRadius.circular(20),
+                                borderSide: BorderSide(color: Colors.blue),
+                              ),
+                            ),
+                            enabled: false,
+                            controller: _dateControl,
+                            keyboardType: TextInputType.text,
+                          ),
+                        ),
+                      ),
+                    ],
                   ),
-                  Padding(padding: EdgeInsets.fromLTRB(5, 5, 5, 5)),
-                  Flexible(
-                    flex: 6,
-                    child: GestureDetector(
-                      onTap: editMode
-                          ? () {
-                              callDatePicker();
-                            }
-                          : null,
-                      child: TextField(
-                        decoration: InputDecoration(
-                          prefixIcon: Icon(
-                            Icons.date_range,
-                            color: Colors.blue,
-                          ),
-                          focusedBorder: OutlineInputBorder(
-                              borderSide: BorderSide(color: Colors.blue),
-                              borderRadius: BorderRadius.circular(20)),
-                          labelText: S.current.date,
-                          labelStyle: TextStyle(color: Colors.blue),
-                          enabledBorder: OutlineInputBorder(
-                            gapPadding: 3.3,
-                            borderRadius: BorderRadius.circular(20),
-                            borderSide: BorderSide(color: Colors.blue),
+                  Row(
+                    children: [
+                      Flexible(
+                        flex: 4,
+                        child: ListDropDown(
+                          editMode: editMode,
+                          value: _selectedTarification,
+                          items: _tarificationDropdownItems,
+                          libelle: "${S.current.tarif}",
+                          onChanged: (value) {
+                            setState(() {
+                              _selectedTarification = value;
+                            });
+                          },
+                        ),
+                      ),
+                      Flexible(
+                        flex: 6,
+                        child: GestureDetector(
+                          onTap: editMode
+                              ? () {
+                                  chooseClientDialog();
+                                }
+                              : null,
+                          child: TextField(
+                            decoration: InputDecoration(
+                              prefixIcon: Icon(
+                                Icons.people,
+                                color: Colors.blue,
+                              ),
+                              focusedBorder: OutlineInputBorder(
+                                  borderSide: BorderSide(color: Colors.blue),
+                                  borderRadius: BorderRadius.circular(20)),
+                              labelText: S.current.client_titre,
+                              labelStyle: TextStyle(color: Colors.blue),
+                              enabledBorder: OutlineInputBorder(
+                                gapPadding: 3.3,
+                                borderRadius: BorderRadius.circular(20),
+                                borderSide: BorderSide(color: Colors.blue),
+                              ),
+                            ),
+                            enabled: false,
+                            controller: _clientControl,
+                            keyboardType: TextInputType.text,
                           ),
                         ),
-                        enabled: false,
-                        controller: _dateControl,
-                        keyboardType: TextInputType.text,
                       ),
-                    ),
+                    ],
                   ),
                 ],
               ),
-              Row(
-                children: [
-                  Flexible(
-                    flex: 4,
-                    child: ListDropDown(
-                      editMode: editMode,
-                      value: _selectedTarification,
-                      items: _tarificationDropdownItems,
-                      libelle: "${S.current.tarif}",
-                      onChanged: (value) {
-                        setState(() {
-                          _selectedTarification = value;
-                        });
-                      },
-                    ),
-                  ),
-                  Flexible(
-                    flex: 6,
-                    child: GestureDetector(
-                      onTap: editMode
-                          ? () {
-                              chooseClientDialog();
-                            }
-                          : null,
-                      child: TextField(
-                        decoration: InputDecoration(
-                          prefixIcon: Icon(
-                            Icons.people,
-                            color: Colors.blue,
-                          ),
-                          focusedBorder: OutlineInputBorder(
-                              borderSide: BorderSide(color: Colors.blue),
-                              borderRadius: BorderRadius.circular(20)),
-                          labelText: S.current.client_titre,
-                          labelStyle: TextStyle(color: Colors.blue),
-                          enabledBorder: OutlineInputBorder(
-                            gapPadding: 3.3,
-                            borderRadius: BorderRadius.circular(20),
-                            borderSide: BorderSide(color: Colors.blue),
-                          ),
-                        ),
-                        enabled: false,
-                        controller: _clientControl,
-                        keyboardType: TextInputType.text,
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-            ],
+            ),
           ),
-          SizedBox(height: 8),
+          SizedBox(height: 5),
           Center(
               child: _selectedItems.length > 0
                   ? Container(
@@ -760,7 +766,9 @@ class _AddPiecePageState extends State<AddPiecePage>
                   : SizedBox(
                       height: 5,
                     ))
-        ]));
+        ]
+        )
+    );
   }
 
   //afficher le fragment des artciles
@@ -1310,7 +1318,7 @@ class _AddPiecePageState extends State<AddPiecePage>
                               animType: AnimType.BOTTOMSLIDE,
                               body: printChoicesDialog(),
                               closeIcon: Icon(
-                                Icons.close,
+                                Icons.cancel_sharp,
                                 color: Colors.red,
                                 size: 26,
                               ),

@@ -9,6 +9,7 @@ import 'package:gestmob/generated/l10n.dart';
 import 'package:gestmob/models/Tresorie.dart';
 import 'package:intl/intl.dart';
 import 'package:intl/date_symbol_data_local.dart';
+import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:sliding_card/sliding_card.dart';
 import 'CustomWidgets/list_tile_card.dart';
 import 'package:gestmob/services/push_notifications.dart';
@@ -94,10 +95,10 @@ class _TresorieListItemState extends State<TresorieListItem> {
             ),
           ),
           title: (widget.tresorie.tierRS != null)
-              ? Text("(${S.current.n}: ${widget.tresorie.numTresorie}) ${widget.tresorie.tierRS}" ,
+              ? Text("(# : ${widget.tresorie.numTresorie}) ${widget.tresorie.tierRS}" ,
                   style: TextStyle(fontSize: 16,)
                 )
-              :Text("(${S.current.n}: ${widget.tresorie.numTresorie}) __" ,
+              :Text("(# : ${widget.tresorie.numTresorie}) __" ,
                   style: TextStyle(fontSize: 16,)
               ),
           trailingChildren: [
@@ -106,12 +107,35 @@ class _TresorieListItemState extends State<TresorieListItem> {
               style: TextStyle(
                   fontSize: 16.0),
             ),
-            (widget.tresorie.montant >= 0) ? Text(
-              '${Helpers.numberFormat(widget.tresorie.montant).toString()} ${_devise}',
-              style: TextStyle(fontSize: 16.0, fontWeight: FontWeight.bold),)
-                : Text(
-              '${Helpers.numberFormat(widget.tresorie.montant * -1).toString()} ${_devise}',
-              style: TextStyle(fontSize: 16.0, fontWeight: FontWeight.bold),),
+            (widget.tresorie.montant >= 0)
+              ? Row(
+                children: [
+                  Icon(MdiIcons.cashMultiple,
+                    size: 16,
+                    color: Theme.of(context).primaryColorDark,
+                  ),
+                  SizedBox(
+                    width: 3,
+                  ),
+                  Text(
+                    '${Helpers.numberFormat(widget.tresorie.montant).toString()} ${_devise}',
+                    style: TextStyle(fontSize: 16.0, fontWeight: FontWeight.bold),),
+                ],
+              )
+              : Row(
+                children: [
+                  Icon(MdiIcons.cashMultiple,
+                    size: 16,
+                    color: Theme.of(context).primaryColorDark,
+                  ),
+                  SizedBox(
+                    width: 3,
+                  ),
+                  Text(
+                  '${Helpers.numberFormat(widget.tresorie.montant * -1).toString()} ${_devise}',
+                  style: TextStyle(fontSize: 16.0, fontWeight: FontWeight.bold),),
+                ],
+              ),
           ],
         ),
         actions: <Widget>[

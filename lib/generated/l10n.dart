@@ -655,51 +655,11 @@ class S {
     );
   }
 
-  /// `Eurl.`
+  /// `Company.`
   String get statut_eurl {
     return Intl.message(
-      'Eurl.',
+      'Company.',
       name: 'statut_eurl',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Sarl.`
-  String get statut_sarl {
-    return Intl.message(
-      'Sarl.',
-      name: 'statut_sarl',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Spa.`
-  String get statut_spa {
-    return Intl.message(
-      'Spa.',
-      name: 'statut_spa',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Epic.`
-  String get statut_epic {
-    return Intl.message(
-      'Epic.',
-      name: 'statut_epic',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Etp.`
-  String get statut_etp {
-    return Intl.message(
-      'Etp.',
-      name: 'statut_etp',
       desc: '',
       args: [],
     );

@@ -64,11 +64,7 @@
   "statut_mme": "Mme.",
   "statut_dr": "Dr.",
   "statut_pr": "Pr.",
-  "statut_eurl": "Eurl.",
-  "statut_sarl": "Sarl.",
-  "statut_spa" : "Spa.",
-  "statut_epic": "Epic.",
-  "statut_etp" : "Etp.",
+  "statut_eurl": "Company.",
 
   "famile": "Familly",
   "filtrer_btn" : "Filer",

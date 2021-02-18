@@ -17,6 +17,7 @@ import 'package:material_design_icons_flutter/material_design_icons_flutter.dart
 import 'package:esc_pos_utils/esc_pos_utils.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:ntp/ntp.dart';
+import 'dart:io';
 
 class IntroPage extends StatefulWidget {
   @override
@@ -26,12 +27,16 @@ class IntroPage extends StatefulWidget {
 class _IntroPageState extends State<IntroPage> {
   String _selectedLanguage;
   List<DropdownMenuItem<String>> _languages;
-
   String _countryname;
   String _currencycode;
+  String defaultLocale = Platform.localeName;
 
   TextEditingController _raisonSocialeControl = new TextEditingController();
   TextEditingController _mobileControl = new TextEditingController();
+  TextEditingController _activiteControl = new TextEditingController();
+  TextEditingController _adresseControl = new TextEditingController();
+  TextEditingController _rcControl = new TextEditingController();
+
   List<DropdownMenuItem<String>> _statutDropdownItems;
   String _selectedStatut;
 
@@ -48,9 +53,32 @@ class _IntroPageState extends State<IntroPage> {
     futureInit();
   }
 
+  @override
+  void didChangeDependencies() {
+    Statics.statutItems[0] = S.current.statut_m ;
+    Statics.statutItems[1] = S.current.statut_mlle ;
+    Statics.statutItems[2] = S.current.statut_mme;
+    Statics.statutItems[3] = S.current.statut_dr ;
+    Statics.statutItems[4] = S.current.statut_pr ;
+    Statics.statutItems[5] = S.current.statut_eurl ;
+  }
+
   Future futureInit() async {
     _languages = utils.buildDropLanguageDownMenuItems(Statics.languages);
-    _selectedLanguage = Statics.languages[0];
+    switch(defaultLocale.substring(0,(2))){
+      case "en":
+        _selectedLanguage = Statics.languages[0];
+        break;
+      case "fr":
+        _selectedLanguage = Statics.languages[1];
+        break;
+      case "ar":
+        _selectedLanguage = Statics.languages[2];
+        break;
+      default :
+        _selectedLanguage = Statics.languages[0];
+        break;
+    }
     _countryname = "Algeria";
     _currencycode = "DZD";
     _statutDropdownItems = utils.buildDropStatutTier(Statics.statutItems);
@@ -96,13 +124,14 @@ class _IntroPageState extends State<IntroPage> {
                 height: 30,
               ),
               Text(
-                S.current.intro_select_lang,
+                S.current.intro_select_lang ,
                 style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
               )
             ],
           ),
         ),
         bodyWidget: Container(
+          margin: EdgeInsetsDirectional.only(start: 25 , end: 25),
           padding: const EdgeInsets.all(8),
           decoration: BoxDecoration(
             border: Border.all(
@@ -116,31 +145,32 @@ class _IntroPageState extends State<IntroPage> {
                 Icons.language,
                 color: Theme.of(context).accentColor,
               ),
-              SizedBox(
-                width: 20,
-              ),
-              DropdownButtonHideUnderline(
-                child: DropdownButton<String>(
-                    disabledHint: Text(S.current.param_lang_title),
-                    value: _selectedLanguage,
-                    items: _languages,
-                    onChanged: (value) {
-                      setState(() {
-                        _selectedLanguage = value;
-                        switch (_selectedLanguage) {
-                          case ("English (ENG)"):
-                            S.load(Locale("en"));
-                            break;
-                          case ("French (FR)"):
-                            S.load(Locale("fr"));
-                            break;
+              Expanded(
+                child: Center(
+                  child: DropdownButtonHideUnderline(
+                    child: DropdownButton<String>(
+                        disabledHint: Text(S.current.param_lang_title),
+                        value: _selectedLanguage,
+                        items: _languages,
+                        onChanged: (value) {
+                          setState(() {
+                            _selectedLanguage = value;
+                            switch (_selectedLanguage) {
+                              case ("English (ENG)"):
+                                S.load(Locale("en"));
+                                break;
+                              case ("French (FR)"):
+                                S.load(Locale("fr"));
+                                break;
 
-                          case ("Arabic (AR)"):
-                            S.load(Locale("ar"));
-                            break;
-                        }
-                      });
-                    }),
+                              case ("Arabic (AR)"):
+                                S.load(Locale("ar"));
+                                break;
+                            }
+                          });
+                        }),
+                  ),
+                ),
               ),
             ],
           ),
@@ -204,6 +234,7 @@ class _IntroPageState extends State<IntroPage> {
           child: Container(
             padding: const EdgeInsetsDirectional.only(
                 start: 8, end: 8, top: 20.5, bottom: 20.5),
+            margin: EdgeInsetsDirectional.only(start: 25 , end: 25),
             decoration: BoxDecoration(
               border: Border.all(
                 color: Colors.blueAccent,
@@ -216,12 +247,13 @@ class _IntroPageState extends State<IntroPage> {
                   Icons.pin_drop,
                   color: Theme.of(context).accentColor,
                 ),
-                SizedBox(
-                  width: 20,
-                ),
-                Text(
-                  "${_countryname}",
-                  style: TextStyle(fontSize: 18),
+                Expanded(
+                  child: Center(
+                    child: Text(
+                      "${_countryname}",
+                      style: TextStyle(fontSize: 18),
+                    ),
+                  ),
                 )
               ],
             ),
@@ -230,7 +262,7 @@ class _IntroPageState extends State<IntroPage> {
       ),
       PageViewModel(
           titleWidget: Container(
-            margin: EdgeInsets.only(top: 100),
+            margin: EdgeInsets.only(top: 10),
             padding: EdgeInsets.all(20),
             child: Column(
               children: [
@@ -249,37 +281,10 @@ class _IntroPageState extends State<IntroPage> {
             key: _formKey,
             child: Column(
               children: [
-                TextFormField(
-                  controller: _raisonSocialeControl,
-                  keyboardType: TextInputType.text,
-                  validator: (value) {
-                    if (value.isEmpty) {
-                      return S.current.msg_champ_oblg;
-                    }
-                    return null;
-                  },
-                  decoration: InputDecoration(
-                    labelText: S.current.rs,
-                    prefixIcon: Icon(
-                      MdiIcons.idCard,
-                      color: Theme.of(context).accentColor,
-                    ),
-                    focusedBorder: OutlineInputBorder(
-                        borderSide: BorderSide(color: Colors.blue),
-                        borderRadius: BorderRadius.circular(20)),
-                    enabledBorder: OutlineInputBorder(
-                      gapPadding: 3.3,
-                      borderRadius: BorderRadius.circular(20),
-                      borderSide: BorderSide(color: Colors.blue),
-                    ),
-                  ),
-                ),
-                SizedBox(
-                  height: 10,
-                ),
                 Container(
                   padding: EdgeInsetsDirectional.only(
                       start: 8, end: 8, top: 4, bottom: 4),
+                  margin: EdgeInsetsDirectional.only(start:25 ,end: 25),
                   decoration: BoxDecoration(
                     border: Border.all(
                       color: Colors.blue,
@@ -292,47 +297,151 @@ class _IntroPageState extends State<IntroPage> {
                         Icons.home_work_outlined,
                         color: Theme.of(context).accentColor,
                       ),
-                      SizedBox(
-                        width: 15,
+                      Expanded(
+                        child: Center(
+                          child: DropdownButtonHideUnderline(
+                              child: DropdownButton<String>(
+                                  disabledHint: Text(_selectedStatut),
+                                  value: _selectedStatut,
+                                  items: _statutDropdownItems,
+                                  onChanged: (value) {
+                                    setState(() {
+                                      _selectedStatut = value;
+                                    });
+                                  })),
+                        ),
                       ),
-                      DropdownButtonHideUnderline(
-                          child: DropdownButton<String>(
-                              disabledHint: Text(_selectedStatut),
-                              value: _selectedStatut,
-                              items: _statutDropdownItems,
-                              onChanged: (value) {
-                                setState(() {
-                                  _selectedStatut = value;
-                                });
-                              })),
                     ],
                   ),
                 ),
                 SizedBox(
                   height: 10,
                 ),
-                TextFormField(
-                  controller: _mobileControl,
-                  keyboardType: TextInputType.number,
-                  validator: (value) {
-                    if (value.isEmpty) {
-                      return S.current.msg_champ_oblg;
-                    }
-                    return null;
-                  },
-                  decoration: InputDecoration(
-                    labelText: S.current.mobile,
-                    prefixIcon: Icon(
-                      Icons.phone_android,
-                      color: Theme.of(context).accentColor,
-                    ),
-                    focusedBorder: OutlineInputBorder(
+                Container(
+                  margin: EdgeInsetsDirectional.only(start:25 ,end: 25),
+                  child: TextFormField(
+                    controller: _raisonSocialeControl,
+                    keyboardType: TextInputType.text,
+                    validator: (value) {
+                      if (value.isEmpty) {
+                        return S.current.msg_champ_oblg;
+                      }
+                      return null;
+                    },
+                    decoration: InputDecoration(
+                      labelText: S.current.rs,
+                      prefixIcon: Icon(
+                        MdiIcons.idCard,
+                        color: Theme.of(context).accentColor,
+                      ),
+                      focusedBorder: OutlineInputBorder(
+                          borderSide: BorderSide(color: Colors.blue),
+                          borderRadius: BorderRadius.circular(20)),
+                      enabledBorder: OutlineInputBorder(
+                        gapPadding: 3.3,
+                        borderRadius: BorderRadius.circular(20),
                         borderSide: BorderSide(color: Colors.blue),
-                        borderRadius: BorderRadius.circular(20)),
-                    enabledBorder: OutlineInputBorder(
-                      gapPadding: 3.3,
-                      borderRadius: BorderRadius.circular(20),
-                      borderSide: BorderSide(color: Colors.blue),
+                      ),
+                    ),
+                  ),
+                ),
+                SizedBox(
+                  height: 10,
+                ),
+                Container(
+                  margin: EdgeInsetsDirectional.only(start: 25 ,end: 25),
+                  child: TextFormField(
+                    controller: _activiteControl,
+                    keyboardType: TextInputType.text,
+                    decoration: InputDecoration(
+                      labelText: S.current.activite,
+                      prefixIcon: Icon(
+                        Icons.local_activity,
+                        color: Theme.of(context).accentColor,
+                      ),
+                      focusedBorder: OutlineInputBorder(
+                          borderSide: BorderSide(color: Colors.blue),
+                          borderRadius: BorderRadius.circular(20)),
+                      enabledBorder: OutlineInputBorder(
+                        gapPadding: 3.3,
+                        borderRadius: BorderRadius.circular(20),
+                        borderSide: BorderSide(color: Colors.blue),
+                      ),
+                    ),
+                  ),
+                ),
+                SizedBox(
+                  height: 10,
+                ),
+                Container(
+                  margin: EdgeInsetsDirectional.only(start: 25 ,end: 25),
+                  child: TextFormField(
+                    controller: _mobileControl,
+                    keyboardType: TextInputType.number,
+                    decoration: InputDecoration(
+                      labelText: S.current.telephone,
+                      prefixIcon: Icon(
+                        Icons.phone_enabled,
+                        color: Theme.of(context).accentColor,
+                      ),
+                      focusedBorder: OutlineInputBorder(
+                          borderSide: BorderSide(color: Colors.blue),
+                          borderRadius: BorderRadius.circular(20)),
+                      enabledBorder: OutlineInputBorder(
+                        gapPadding: 3.3,
+                        borderRadius: BorderRadius.circular(20),
+                        borderSide: BorderSide(color: Colors.blue),
+                      ),
+                    ),
+                  ),
+                ),
+                SizedBox(
+                  height: 10,
+                ),
+                Container(
+                  margin: EdgeInsetsDirectional.only(start: 25 ,end: 25),
+                  child: TextFormField(
+                    controller: _adresseControl,
+                    keyboardType: TextInputType.text,
+                    decoration: InputDecoration(
+                      labelText: S.current.adresse,
+                      prefixIcon: Icon(
+                        Icons.map,
+                        color: Theme.of(context).accentColor,
+                      ),
+                      focusedBorder: OutlineInputBorder(
+                          borderSide: BorderSide(color: Colors.blue),
+                          borderRadius: BorderRadius.circular(20)),
+                      enabledBorder: OutlineInputBorder(
+                        gapPadding: 3.3,
+                        borderRadius: BorderRadius.circular(20),
+                        borderSide: BorderSide(color: Colors.blue),
+                      ),
+                    ),
+                  ),
+                ),
+                SizedBox(
+                  height: 10,
+                ),
+                Container(
+                  margin: EdgeInsetsDirectional.only(start: 25 ,end: 25),
+                  child: TextFormField(
+                    controller: _rcControl,
+                    keyboardType: TextInputType.text,
+                    decoration: InputDecoration(
+                      labelText: S.current.rc,
+                      prefixIcon: Icon(
+                        Icons.backup_table_outlined,
+                        color: Theme.of(context).accentColor,
+                      ),
+                      focusedBorder: OutlineInputBorder(
+                          borderSide: BorderSide(color: Colors.blue),
+                          borderRadius: BorderRadius.circular(20)),
+                      enabledBorder: OutlineInputBorder(
+                        gapPadding: 3.3,
+                        borderRadius: BorderRadius.circular(20),
+                        borderSide: BorderSide(color: Colors.blue),
+                      ),
                     ),
                   ),
                 ),
@@ -385,24 +494,24 @@ class _IntroPageState extends State<IntroPage> {
           "_codepin",
           _raisonSocialeControl.text,
           Statics.statutItems.indexOf(_selectedStatut),
-          "_adresse",
+          _adresseControl.text,
           "_addressWeb",
           "_ville",
           "_departement",
           "_pays",
           "_cp",
-          "_telephone",
+          _mobileControl.text,
           "_telephone2",
           "_fax",
-          _mobileControl.text,
+          "_mobileControl",
           "_mobile2",
           "_email",
           "_site",
-          "_rc",
+          _rcControl.text,
           "_nif",
           "_ai",
           0.0,
-          "_activite",
+          _activiteControl.text,
           "_nis",
           "_codedouane",
           "_maposition",

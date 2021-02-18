@@ -43,30 +43,30 @@ class TotalDevis extends StatelessWidget{
               Row(
                 mainAxisSize: MainAxisSize.max,
                 children: [
-                  Text("${S.current.total_ht}= "),
+                  Text("${S.current.total_ht}= ",style: TextStyle(color: Colors.white),),
                   Expanded(child: Text(".............................................................................................................",
-                    maxLines: 1,)),
-                  Text(Helpers.numberFormat(total_ht).toString() + " ${(_devise)}"),
+                    maxLines: 1,style: TextStyle(color: Colors.white),)),
+                  Text(Helpers.numberFormat(total_ht).toString() + " ${(_devise)}",style: TextStyle(color: Colors.white),),
                 ],
               ),
               SizedBox(height: 5),
               Row(
                 mainAxisSize: MainAxisSize.max,
                 children: [
-                  Text("${S.current.remise}= "),
+                  Text("${S.current.remise}= ",style: TextStyle(color: Colors.white),),
                   Expanded(child: Text(".............................................................................................................",
-                    maxLines: 1,)),
-                  Text("${Helpers.numberFormat((total_ht*remise)/100)} ${_devise} (${Helpers.numberFormat(remise)} %)"),
+                    maxLines: 1,style: TextStyle(color: Colors.white),)),
+                  Text("${Helpers.numberFormat((total_ht*remise)/100)} ${_devise} (${Helpers.numberFormat(remise)} %)",style: TextStyle(color: Colors.white),),
                 ],
               ),
               SizedBox(height: 5),
               Row(
                 mainAxisSize: MainAxisSize.max,
                 children: [
-                  Text("${S.current.net_ht}== "),
+                  Text("${S.current.net_ht}= ",style: TextStyle(color: Colors.white),),
                   Expanded(child: Text(".............................................................................................................",
-                    maxLines: 1,)),
-                  Text(net_ht.toString() + " ${_devise}"),
+                    maxLines: 1,style: TextStyle(color: Colors.white),)),
+                  Text(net_ht.toString() + " ${_devise}",style: TextStyle(color: Colors.white),),
                 ],
               ),
               SizedBox(height: 5),
@@ -75,10 +75,10 @@ class TotalDevis extends StatelessWidget{
                 child: Row(
                   mainAxisSize: MainAxisSize.max,
                   children: [
-                    Text("${S.current.total_tva}= "),
+                    Text("${S.current.total_tva}= ",style: TextStyle(color: Colors.white),),
                     Expanded(child: Text(".............................................................................................................",
-                      maxLines: 1,)),
-                    Text(total_tva.toString() + " ${_devise}"),
+                      maxLines: 1,style: TextStyle(color: Colors.white),)),
+                    Text(total_tva.toString() + " ${_devise}",style: TextStyle(color: Colors.white),),
                   ],
                 ),
               ),
@@ -88,10 +88,10 @@ class TotalDevis extends StatelessWidget{
                 child: Row(
                   mainAxisSize: MainAxisSize.max,
                   children: [
-                    Text("${S.current.total}= "),
+                    Text("${S.current.total}= ",style: TextStyle(color: Colors.white),),
                     Expanded(child: Text(".............................................................................................................",
-                      maxLines: 1,)),
-                    Text(total_ttc.toString() + " ${_devise}"),
+                      maxLines: 1,style: TextStyle(color: Colors.white),)),
+                    Text(total_ttc.toString() + " ${_devise}",style: TextStyle(color: Colors.white),),
                   ],
                 ),
               ),
@@ -101,10 +101,10 @@ class TotalDevis extends StatelessWidget{
                 child: Row(
                   mainAxisSize: MainAxisSize.max,
                   children: [
-                    Text("${S.current.timbre}= "),
+                    Text("${S.current.timbre}= ",style: TextStyle(color: Colors.white),),
                     Expanded(child: Text(".............................................................................................................",
-                      maxLines: 1,)),
-                    Text(timbre.toString() + " ${_devise}"),
+                      maxLines: 1,style: TextStyle(color: Colors.white),)),
+                    Text(timbre.toString() + " ${_devise}",style: TextStyle(color: Colors.white),),
                   ],
                 ),
               ),
@@ -112,10 +112,10 @@ class TotalDevis extends StatelessWidget{
               Row(
                 mainAxisSize: MainAxisSize.max,
                 children: [
-                  Text("${S.current.net_payer}= "),
+                  Text("${S.current.net_payer}= ",style: TextStyle(color: Colors.white),),
                   Expanded(child: Text(".............................................................................................................",
-                    maxLines: 1,)),
-                  Text(net_payer.toString() + " ${_devise}"),
+                    maxLines: 1,style: TextStyle(color: Colors.white),)),
+                  Text(net_payer.toString() + " ${_devise}",style: TextStyle(color: Colors.white),),
                 ],
               ),
               SizedBox(height: 20),
