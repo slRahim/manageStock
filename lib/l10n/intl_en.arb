@@ -178,6 +178,7 @@
 
   "prix" : "Price",
   "qte" : "QTE",
+  "qte_cmd" : "Reserved Quantity",
 
   "msg_err_transfer" : "You can't transform a draft",
   "msg_info_article" : "Attention you maybe add inassociate articles",
@@ -355,7 +356,11 @@
   "intro_infor" : "Your Informations",
 
   "start_date" : "Date du début",
-  "end_date" : "Date de fin"
+  "end_date" : "Date de fin",
+
+  "choix_province" : "Choose City",
+  "choix_city" : "Choose Department",
+  "department" : "Departement"
 
 
 }

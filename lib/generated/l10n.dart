@@ -1735,6 +1735,16 @@ class S {
     );
   }
 
+  /// `Reserved Quantity`
+  String get qte_cmd {
+    return Intl.message(
+      'Reserved Quantity',
+      name: 'qte_cmd',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `You can't transform a draft`
   String get msg_err_transfer {
     return Intl.message(
@@ -3340,6 +3350,36 @@ class S {
     return Intl.message(
       'Date de fin',
       name: 'end_date',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Choose City`
+  String get choix_province {
+    return Intl.message(
+      'Choose City',
+      name: 'choix_province',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Choose Department`
+  String get choix_city {
+    return Intl.message(
+      'Choose Department',
+      name: 'choix_city',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Departement`
+  String get department {
+    return Intl.message(
+      'Departement',
+      name: 'department',
       desc: '',
       args: [],
     );

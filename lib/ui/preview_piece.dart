@@ -14,6 +14,7 @@ import 'package:gestmob/models/DefaultPrinter.dart';
 import 'package:gestmob/models/MyParams.dart';
 import 'package:gestmob/models/Piece.dart';
 import 'package:esc_pos_utils/esc_pos_utils.dart';
+import 'package:gestmob/models/Profile.dart';
 import 'package:gestmob/models/Tiers.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:path_provider/path_provider.dart';
@@ -53,6 +54,7 @@ class _PreviewPieceState extends State<PreviewPiece> {
 
   bool directionRtl = false;
   String _devise ;
+  Profile _profile ;
 
   @override
   void initState() {
@@ -74,6 +76,7 @@ class _PreviewPieceState extends State<PreviewPiece> {
       _doc = await PDFDocument.fromFile(file);
 
     }else{
+       _profile = await _queryCtr.getProfileById(1);
        _myParams = await _queryCtr.getAllParams() ;
        _devise = getDeviseTranslate(_myParams.devise) ;
     }
@@ -149,6 +152,18 @@ class _PreviewPieceState extends State<PreviewPiece> {
                             ? CrossAxisAlignment.center
                             : CrossAxisAlignment.start,
                         children: [
+                          Text(
+                            "${_profile.raisonSociale}" , style: TextStyle(color: Colors.black),),
+                          (_profile.activite != null)?Text(
+                            "${_profile.activite}", style: TextStyle(color: Colors.black),):SizedBox(),
+                          (_profile.adresse != null)?Text(
+                            "${_profile.adresse}", style: TextStyle(color: Colors.black),):SizedBox(),
+                          (_profile.ville != null)?Text(
+                            "${_profile.ville}", style: TextStyle(color: Colors.black),):SizedBox(),
+                          (_profile.telephone != null)?Text(
+                            "${_profile.telephone}", style: TextStyle(color: Colors.black),):SizedBox(),
+                          Text(
+                            "----------------------------------------------------------------------------------------", style: TextStyle(color: Colors.black),),
                           Text(
                               "${S.current.n} ${getPiecetype()} : ${widget.piece.num_piece}" , style: TextStyle(color: Colors.black),),
                           Text(
@@ -257,10 +272,6 @@ class _PreviewPieceState extends State<PreviewPiece> {
                                   ],
                                 )
                               : SizedBox(),
-                          Text(
-                            "***BY CIRTA IT***",
-                            style: TextStyle(fontWeight: FontWeight.bold,color: Colors.black),
-                          ),
                         ],
                       ),
                     ),
@@ -316,8 +327,63 @@ class _PreviewPieceState extends State<PreviewPiece> {
     final ticket = Ticket(paper);
 
     if (directionRtl) {
-      var input = "${S.current.n} ${getPiecetype()}";
+      var input = "${_profile.raisonSociale}";
       Uint8List encArabic = await CharsetConverter.encode("ISO-8859-6",
+          "${input.split('').reversed.join()}");
+      ticket.textEncoded(encArabic,
+          styles: PosStyles(
+              codeTable: PosCodeTable.arabic,
+              align: (_default_format == PaperSize.mm80)
+                  ? PosAlign.center
+                  : PosAlign.left));
+      if(_profile.activite != null){
+        input = "${_profile.activite}";
+        encArabic = await CharsetConverter.encode("ISO-8859-6",
+            "${input.split('').reversed.join()}");
+        ticket.textEncoded(encArabic,
+            styles: PosStyles(
+                codeTable: PosCodeTable.arabic,
+                align: (_default_format == PaperSize.mm80)
+                    ? PosAlign.center
+                    : PosAlign.left));
+      }
+      if(_profile.adresse != null){
+        input = "${_profile.adresse}";
+        encArabic = await CharsetConverter.encode("ISO-8859-6",
+            "${input.split('').reversed.join()}");
+        ticket.textEncoded(encArabic,
+            styles: PosStyles(
+                codeTable: PosCodeTable.arabic,
+                align: (_default_format == PaperSize.mm80)
+                    ? PosAlign.center
+                    : PosAlign.left));
+      }
+      if(_profile.ville != null){
+        input = "${_profile.ville}";
+        encArabic = await CharsetConverter.encode("ISO-8859-6",
+            "${input.split('').reversed.join()}");
+        ticket.textEncoded(encArabic,
+            styles: PosStyles(
+                codeTable: PosCodeTable.arabic,
+                align: (_default_format == PaperSize.mm80)
+                    ? PosAlign.center
+                    : PosAlign.left));
+      }
+      if(_profile.telephone != null){
+        input = "${_profile.telephone}";
+        encArabic = await CharsetConverter.encode("ISO-8859-6",
+            "${input.split('').reversed.join()}");
+        ticket.textEncoded(encArabic,
+            styles: PosStyles(
+                codeTable: PosCodeTable.arabic,
+                align: (_default_format == PaperSize.mm80)
+                    ? PosAlign.center
+                    : PosAlign.left));
+      }
+      ticket.hr(ch: '=');
+
+       input = "${S.current.n} ${getPiecetype()}";
+       encArabic = await CharsetConverter.encode("ISO-8859-6",
           "${widget.piece.num_piece}: ${input.split('').reversed.join()}");
       ticket.textEncoded(encArabic,
           styles: PosStyles(
@@ -507,15 +573,42 @@ class _PreviewPieceState extends State<PreviewPiece> {
       }
 
       ticket.feed(1);
-      ticket.text('***BY CIRTA IT***',
+      ticket.cut();
+    } else {
+      ticket.text("${_profile.raisonSociale}",
           styles: PosStyles(
               align: (_default_format == PaperSize.mm80)
                   ? PosAlign.center
-                  : PosAlign.left,
-              bold: true));
-      ticket.feed(1);
-      ticket.cut();
-    } else {
+                  : PosAlign.left));
+      if(_profile.activite != null){
+        ticket.text("${_profile.activite}",
+            styles: PosStyles(
+                align: (_default_format == PaperSize.mm80)
+                    ? PosAlign.center
+                    : PosAlign.left));
+      }
+      if(_profile.adresse != null){
+        ticket.text("${_profile.adresse}",
+            styles: PosStyles(
+                align: (_default_format == PaperSize.mm80)
+                    ? PosAlign.center
+                    : PosAlign.left));
+      }
+      if(_profile.ville != null){
+        ticket.text("${_profile.ville}",
+            styles: PosStyles(
+                align: (_default_format == PaperSize.mm80)
+                    ? PosAlign.center
+                    : PosAlign.left));
+      }
+      if(_profile.telephone != null){
+        ticket.text("${_profile.telephone}",
+            styles: PosStyles(
+                align: (_default_format == PaperSize.mm80)
+                    ? PosAlign.center
+                    : PosAlign.left));
+      }
+      ticket.hr(ch: '=');
       ticket.text("${S.current.n} ${getPiecetype()}: ${widget.piece.num_piece}",
           styles: PosStyles(
               codeTable: PosCodeTable.arabic,
@@ -660,13 +753,6 @@ class _PreviewPieceState extends State<PreviewPiece> {
             encode);
       }
 
-      ticket.feed(1);
-      ticket.text('***BY CIRTA IT***',
-          styles: PosStyles(
-              align: (_default_format == PaperSize.mm80)
-                  ? PosAlign.center
-                  : PosAlign.left,
-              bold: true));
       ticket.feed(1);
       ticket.cut();
     }

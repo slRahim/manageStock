@@ -139,7 +139,7 @@ class _PieceListItemState extends State<PieceListItem> {
                       style: TextStyle(
                         fontSize: 16.0,
                         fontWeight: FontWeight.bold ,
-                        color: (widget.piece.reste < 0)?Colors.redAccent : Theme.of(context).primaryColorDark ),
+                        color:Theme.of(context).primaryColorDark ),
                     ),
                   ],
                 )
@@ -156,7 +156,7 @@ class _PieceListItemState extends State<PieceListItem> {
                       style: TextStyle(
                         fontSize: 16.0,
                         fontWeight: FontWeight.bold ,
-                        color: (widget.piece.reste > 0)?Colors.redAccent : Theme.of(context).primaryColorDark ),
+                        color: Theme.of(context).primaryColorDark ),
                     ),
                   ],
                 ) ,
@@ -288,13 +288,17 @@ class _PieceListItemState extends State<PieceListItem> {
     }else{
       switch (widget.piece.mov){
         case 1 :
-          return Colors.green;
+          if(widget.piece.reste > 0){
+            return Colors.green;
+          }else{
+            return Colors.red;
+          }
           break;
         case 2 :
           return Colors.black26;
           break;
         case 0 :
-          return Colors.red;
+          return Colors.yellow[700];
           break;
       }
     }

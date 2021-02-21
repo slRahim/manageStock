@@ -179,6 +179,7 @@
 
   "prix" : "الثمن",
   "qte" : "ك م",
+  "qte_cmd" : "الكمية المحجوزة",
 
   "msg_err_transfer" : "تحويل مسودة غير ممكن",
   "msg_info_article" : "خطر! إمكانية اضافة عنصر لم يتم بيعه",
@@ -356,6 +357,10 @@
   "intro_infor" : "Vos Informations",
 
   "start_date" : "Date du début",
-  "end_date" : "Date de fin"
+  "end_date" : "Date de fin",
+
+  "choix_province" : "إختر المدينة",
+  "choix_city" : "إختر البلدية",
+  "department" : "البلدية"
 
 }

@@ -1,13 +1,16 @@
+import 'dart:convert';
 import 'dart:typed_data';
 
 import 'package:currency_pickers/country.dart';
 import 'package:currency_pickers/currency_picker_dialog.dart';
 import 'package:currency_pickers/utils/utils.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_phoenix/flutter_phoenix.dart';
 import 'package:gestmob/Helpers/Helpers.dart';
 import 'package:gestmob/Helpers/QueryCtr.dart';
 import 'package:gestmob/Helpers/Statics.dart';
+import 'package:gestmob/Helpers/country_utils.dart';
 import 'package:gestmob/models/MyParams.dart';
 import 'package:gestmob/models/Profile.dart';
 import 'package:introduction_screen/introduction_screen.dart';
@@ -29,6 +32,10 @@ class _IntroPageState extends State<IntroPage> {
   List<DropdownMenuItem<String>> _languages;
   String _countryname;
   String _currencycode;
+  List<String> _cities = ["Choose City"];
+  String _selectedCity = "Choose City";
+  String _selectedProvince = "Choose State";
+  List<String> _provinces = ["Choose State"];
   String defaultLocale = Platform.localeName;
 
   TextEditingController _raisonSocialeControl = new TextEditingController();
@@ -36,6 +43,7 @@ class _IntroPageState extends State<IntroPage> {
   TextEditingController _activiteControl = new TextEditingController();
   TextEditingController _adresseControl = new TextEditingController();
   TextEditingController _rcControl = new TextEditingController();
+  TextEditingController _nifControl = new TextEditingController();
 
   List<DropdownMenuItem<String>> _statutDropdownItems;
   String _selectedStatut;
@@ -53,15 +61,7 @@ class _IntroPageState extends State<IntroPage> {
     futureInit();
   }
 
-  @override
-  void didChangeDependencies() {
-    Statics.statutItems[0] = S.current.statut_m ;
-    Statics.statutItems[1] = S.current.statut_mlle ;
-    Statics.statutItems[2] = S.current.statut_mme;
-    Statics.statutItems[3] = S.current.statut_dr ;
-    Statics.statutItems[4] = S.current.statut_pr ;
-    Statics.statutItems[5] = S.current.statut_eurl ;
-  }
+
 
   Future futureInit() async {
     _languages = utils.buildDropLanguageDownMenuItems(Statics.languages);
@@ -81,9 +81,65 @@ class _IntroPageState extends State<IntroPage> {
     }
     _countryname = "Algeria";
     _currencycode = "DZD";
-    _statutDropdownItems = utils.buildDropStatutTier(Statics.statutItems);
-    _selectedStatut = Statics.statutItems[0];
+
     _prefs = await SharedPreferences.getInstance();
+  }
+
+  Future getResponse() async {
+    var res = await rootBundle.loadString(
+        'assets/data/country.json');
+    return jsonDecode(res);
+  }
+
+  Future getProvince() async {
+    var response = await getResponse();
+
+    var takeProvince = response
+        .map((map) => CountryModel.fromJson(map))
+        .where((item) => item.name == _countryname)
+        .map((item) => item.province)
+        .toList();
+
+    var provinces = takeProvince as List;
+    provinces.forEach((f) {
+      if (!mounted) return;
+      setState(() {
+        var name = f.map((item) => item.name).toList();
+        for (var statename in name) {
+          print(statename.toString());
+
+          _provinces.add(statename.toString());
+        }
+      });
+    });
+
+    return _provinces;
+  }
+
+  Future getCity() async {
+    var response = await getResponse();
+    var takestate = response
+        .map((map) => CountryModel.fromJson(map))
+        .where((item) => item.name == _countryname)
+        .map((item) => item.province)
+        .toList();
+    var states = takestate as List;
+    states.forEach((f) {
+      var name = f.where((item) => item.name == _selectedProvince);
+      var cityname = name.map((item) => item.city).toList();
+      cityname.forEach((ci) {
+        if (!mounted) return;
+        setState(() {
+          var citiesname = ci.map((item) => item.name).toList();
+          for (var citynames in citiesname) {
+            print(citynames.toString());
+
+            _cities.add(citynames.toString());
+          }
+        });
+      });
+    });
+    return _cities;
   }
 
   @override
@@ -198,66 +254,155 @@ class _IntroPageState extends State<IntroPage> {
             ],
           ),
         ),
-        bodyWidget: InkWell(
-          onTap: () async {
-            await showDialog(
-              context: context,
-              builder: (context) => CurrencyPickerDialog(
-                titlePadding: EdgeInsets.all(10.0),
-                searchInputDecoration: InputDecoration(
-                  focusedBorder: OutlineInputBorder(
-                      borderSide: BorderSide(color: Colors.blue),
-                      borderRadius: BorderRadius.circular(20)),
-                  contentPadding:
+        bodyWidget: Column(
+          children: [
+            InkWell(
+              onTap: () async {
+                await showDialog(
+                  context: context,
+                  builder: (context) => CurrencyPickerDialog(
+                    titlePadding: EdgeInsets.all(10.0),
+                    searchInputDecoration: InputDecoration(
+                      focusedBorder: OutlineInputBorder(
+                          borderSide: BorderSide(color: Colors.blue),
+                          borderRadius: BorderRadius.circular(20)),
+                      contentPadding:
                       EdgeInsets.only(left: 20, top: 20, bottom: 20),
-                  labelText: S.current.pays,
-                  alignLabelWithHint: true,
-                  hintText: S.current.msg_search,
-                  enabledBorder: OutlineInputBorder(
-                    gapPadding: 3.3,
-                    borderRadius: BorderRadius.circular(20),
-                    borderSide: BorderSide(color: Colors.blue[600]),
+                      labelText: S.current.pays,
+                      alignLabelWithHint: true,
+                      hintText: S.current.msg_search,
+                      enabledBorder: OutlineInputBorder(
+                        gapPadding: 3.3,
+                        borderRadius: BorderRadius.circular(20),
+                        borderSide: BorderSide(color: Colors.blue[600]),
+                      ),
+                    ),
+                    isSearchable: true,
+                    title: Text('${S.current.selec_pays}'),
+                    itemBuilder: _countryDialog,
+                    onValuePicked: (Country country) {
+                      setState(() {
+                        _provinces = ["${S.current.choix_province}"];
+                        _countryname = country.name;
+                        _currencycode = country.currencyCode;
+                      });
+                      getProvince();
+                    },
                   ),
+                );
+              },
+              child: Container(
+                padding: const EdgeInsetsDirectional.only(
+                    start: 8, end: 8, top: 20.5, bottom: 20.5),
+                margin: EdgeInsetsDirectional.only(start: 25 , end: 25),
+                decoration: BoxDecoration(
+                  border: Border.all(
+                    color: Colors.blueAccent,
+                  ),
+                  borderRadius: BorderRadius.circular(20.0),
                 ),
-                isSearchable: true,
-                title: Text('${S.current.selec_pays}'),
-                itemBuilder: _countryDialog,
-                onValuePicked: (Country country) {
-                  setState(() {
-                    _countryname = country.name;
-                    _currencycode = country.currencyCode;
-                  });
-                },
+                child: Row(
+                  children: [
+                    Icon(
+                      Icons.pin_drop,
+                      color: Theme.of(context).accentColor,
+                    ),
+                    Expanded(
+                      child: Center(
+                        child: Text(
+                          "${_countryname}",
+                          style: TextStyle(fontSize: 18),
+                        ),
+                      ),
+                    )
+                  ],
+                ),
               ),
-            );
-          },
-          child: Container(
-            padding: const EdgeInsetsDirectional.only(
-                start: 8, end: 8, top: 20.5, bottom: 20.5),
-            margin: EdgeInsetsDirectional.only(start: 25 , end: 25),
-            decoration: BoxDecoration(
-              border: Border.all(
-                color: Colors.blueAccent,
-              ),
-              borderRadius: BorderRadius.circular(20.0),
             ),
-            child: Row(
-              children: [
-                Icon(
-                  Icons.pin_drop,
-                  color: Theme.of(context).accentColor,
+            SizedBox(height: 10,),
+            Container(
+              margin: EdgeInsetsDirectional.only(start: 25 , end: 25),
+              padding: const EdgeInsets.all(8),
+              decoration: BoxDecoration(
+                border: Border.all(
+                  color: Colors.blueAccent,
                 ),
-                Expanded(
-                  child: Center(
-                    child: Text(
-                      "${_countryname}",
-                      style: TextStyle(fontSize: 18),
+                borderRadius: BorderRadius.circular(20.0),
+              ),
+              child: Row(
+                children: [
+                  Icon(
+                    Icons.pin_drop,
+                    color: Theme.of(context).accentColor,
+                  ),
+                  Expanded(
+                    child: Center(
+                      child: DropdownButtonHideUnderline(
+                        child: DropdownButton<String>(
+                          items: _provinces.map((String dropDownStringItem) {
+                            return DropdownMenuItem<String>(
+                              value: dropDownStringItem,
+                              child: Text(dropDownStringItem,),
+                            );
+                          }).toList(),
+                          onChanged: (value){
+                            if (!mounted) return;
+                            setState(() {
+                              _selectedProvince = value;
+                              _cities = ["${S.current.choix_city}"];
+                              getCity();
+                            });
+                          },
+                          value: _selectedProvince,
+                        ),
+                      ),
                     ),
                   ),
-                )
-              ],
+                ],
+              ),
             ),
-          ),
+            SizedBox(height: 10,),
+            Container(
+              margin: EdgeInsetsDirectional.only(start: 25 , end: 25),
+              padding: const EdgeInsets.all(8),
+              decoration: BoxDecoration(
+                border: Border.all(
+                  color: Colors.blueAccent,
+                ),
+                borderRadius: BorderRadius.circular(20.0),
+              ),
+              child: Row(
+                children: [
+                  Icon(
+                    Icons.pin_drop,
+                    color: Theme.of(context).accentColor,
+                  ),
+                  Expanded(
+                    child: Center(
+                      child: DropdownButtonHideUnderline(
+                        child: DropdownButton<String>(
+                          items: _cities.map((String dropDownStringItem) {
+                            return DropdownMenuItem<String>(
+                              value: dropDownStringItem,
+                              child: Text(dropDownStringItem),
+                            );
+                          }).toList(),
+                          onChanged: (value) {
+                            if (!mounted) return;
+                            setState(() {
+                              _selectedCity = value;
+                            });
+                          },
+                          value: _selectedCity,
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+
+          ],
         ),
       ),
       PageViewModel(
@@ -281,42 +426,6 @@ class _IntroPageState extends State<IntroPage> {
             key: _formKey,
             child: Column(
               children: [
-                Container(
-                  padding: EdgeInsetsDirectional.only(
-                      start: 8, end: 8, top: 4, bottom: 4),
-                  margin: EdgeInsetsDirectional.only(start:25 ,end: 25),
-                  decoration: BoxDecoration(
-                    border: Border.all(
-                      color: Colors.blue,
-                    ),
-                    borderRadius: BorderRadius.circular(20.0),
-                  ),
-                  child: Row(
-                    children: [
-                      Icon(
-                        Icons.home_work_outlined,
-                        color: Theme.of(context).accentColor,
-                      ),
-                      Expanded(
-                        child: Center(
-                          child: DropdownButtonHideUnderline(
-                              child: DropdownButton<String>(
-                                  disabledHint: Text(_selectedStatut),
-                                  value: _selectedStatut,
-                                  items: _statutDropdownItems,
-                                  onChanged: (value) {
-                                    setState(() {
-                                      _selectedStatut = value;
-                                    });
-                                  })),
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-                SizedBox(
-                  height: 10,
-                ),
                 Container(
                   margin: EdgeInsetsDirectional.only(start:25 ,end: 25),
                   child: TextFormField(
@@ -445,6 +554,31 @@ class _IntroPageState extends State<IntroPage> {
                     ),
                   ),
                 ),
+                SizedBox(
+                  height: 10,
+                ),
+                Container(
+                  margin: EdgeInsetsDirectional.only(start: 25 ,end: 25),
+                  child: TextFormField(
+                    controller: _nifControl,
+                    keyboardType: TextInputType.text,
+                    decoration: InputDecoration(
+                      labelText: S.current.nif,
+                      prefixIcon: Icon(
+                        Icons.list_alt_outlined,
+                        color: Theme.of(context).accentColor,
+                      ),
+                      focusedBorder: OutlineInputBorder(
+                          borderSide: BorderSide(color: Colors.blue),
+                          borderRadius: BorderRadius.circular(20)),
+                      enabledBorder: OutlineInputBorder(
+                        gapPadding: 3.3,
+                        borderRadius: BorderRadius.circular(20),
+                        borderSide: BorderSide(color: Colors.blue),
+                      ),
+                    ),
+                  ),
+                ),
               ],
             ),
           )),
@@ -488,27 +622,28 @@ class _IntroPageState extends State<IntroPage> {
           "beta",
           startDate,
           'illimit');
+
       _profile = new Profile(
           1,
           image01,
           "_codepin",
           _raisonSocialeControl.text,
-          Statics.statutItems.indexOf(_selectedStatut),
+          5,
           _adresseControl.text,
           "_addressWeb",
-          "_ville",
-          "_departement",
-          "_pays",
+          "${_selectedProvince.split(' ').first}",
+          "${_selectedCity}",
+          "${_countryname}",
           "_cp",
           _mobileControl.text,
           "_telephone2",
           "_fax",
-          "_mobileControl",
+          "_mobile1",
           "_mobile2",
           "_email",
           "_site",
           _rcControl.text,
-          "_nif",
+          _nifControl.text,
           "_ai",
           0.0,
           _activiteControl.text,

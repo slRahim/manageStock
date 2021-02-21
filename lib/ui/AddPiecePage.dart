@@ -29,6 +29,7 @@ import 'package:gestmob/models/FormatPiece.dart';
 import 'package:gestmob/models/Journaux.dart';
 import 'package:gestmob/models/MyParams.dart';
 import 'package:gestmob/models/Piece.dart';
+import 'package:gestmob/models/Profile.dart';
 import 'package:gestmob/models/ReglementTresorie.dart';
 import 'package:gestmob/models/Tiers.dart';
 import 'package:gestmob/models/TiersFamille.dart';
@@ -82,7 +83,6 @@ class _AddPiecePageState extends State<AddPiecePage>
   List<int> _tarificationItems = Statics.tarificationItems;
   List<DropdownMenuItem<int>> _tarificationDropdownItems;
   int _selectedTarification;
-
   bool _validateRaison = false;
 
   TextEditingController _numeroControl = new TextEditingController();
@@ -103,7 +103,6 @@ class _AddPiecePageState extends State<AddPiecePage>
   double _timbre;
 
   double _net_a_payer;
-
   double _remisepiece;
   double _pourcentremise;
 
@@ -115,7 +114,9 @@ class _AddPiecePageState extends State<AddPiecePage>
   BottomBarController bottomBarControler;
   Ticket _ticket;
   MyParams _myParams;
-  String _devise ;
+  Profile _profile;
+
+  String _devise;
 
   bool directionRtl = false;
   DefaultPrinter defaultPrinter = new DefaultPrinter.init();
@@ -159,8 +160,9 @@ class _AddPiecePageState extends State<AddPiecePage>
       _dateControl.text = Helpers.dateToText(DateTime.now());
       editMode = true;
     }
+    _profile = await _queryCtr.getProfileById(1);
     _myParams = await _queryCtr.getAllParams();
-    _devise = getDeviseTranslate(_myParams.devise );
+    _devise = getDeviseTranslate(_myParams.devise);
     return Future<bool>.value(editMode);
   }
 
@@ -187,7 +189,7 @@ class _AddPiecePageState extends State<AddPiecePage>
       _total_tva = _piece.total_tva;
       _total_ttc =
           (_piece.total_ttc < 0) ? _piece.total_ttc * -1 : _piece.total_ttc;
-      _timbre = _piece.timbre ;
+      _timbre = _piece.timbre;
       _net_a_payer = _piece.net_a_payer;
       _remisepiece = (_piece.remise * _total_ht) / 100;
       _pourcentremise = _piece.remise;
@@ -220,7 +222,7 @@ class _AddPiecePageState extends State<AddPiecePage>
       _net_ht = 0.0;
       _total_tva = 0.0;
       _total_ttc = 0.0;
-      _timbre = 0.0 ;
+      _timbre = 0.0;
       _net_a_payer = _total_ttc;
       _remisepiece = 0;
       _pourcentremise = 0;
@@ -235,14 +237,14 @@ class _AddPiecePageState extends State<AddPiecePage>
     });
   }
 
-  String getDeviseTranslate(devise){
-    switch(devise){
-      case "DZD" :
-        return S.current.da ;
+  String getDeviseTranslate(devise) {
+    switch (devise) {
+      case "DZD":
+        return S.current.da;
         break;
-      default :
-        return devise ;
-        break ;
+      default:
+        return devise;
+        break;
     }
   }
 
@@ -411,8 +413,9 @@ class _AddPiecePageState extends State<AddPiecePage>
                             children: [
                               Icon(
                                 MdiIcons.sigma,
-                                color:
-                                    (editMode) ? Colors.blue : Theme.of(context).primaryColorDark,
+                                color: (editMode)
+                                    ? Colors.blue
+                                    : Theme.of(context).primaryColorDark,
                                 size: 18,
                               ),
                               Text(
@@ -515,7 +518,7 @@ class _AddPiecePageState extends State<AddPiecePage>
                             Helpers.numberFormat(_restepiece).toString(),
                             textAlign: TextAlign.center,
                             style: TextStyle(
-                                fontWeight: FontWeight.bold,
+                              fontWeight: FontWeight.bold,
                             ),
                           ),
                         ],
@@ -586,7 +589,10 @@ class _AddPiecePageState extends State<AddPiecePage>
                             _piece.piece == PieceType.retourFournisseur ||
                             _piece.piece == PieceType.avoirFournisseur))
                     ? FloatingActionRowButton(
-                        icon: Icon(Icons.insert_drive_file_outlined,color: Colors.white,),
+                        icon: Icon(
+                          Icons.insert_drive_file_outlined,
+                          color: Colors.white,
+                        ),
                         color: Colors.redAccent,
                         onTap: () async {
                           await showDialog(
@@ -633,7 +639,8 @@ class _AddPiecePageState extends State<AddPiecePage>
                               color: Colors.orange[900],
                             ),
                             focusedBorder: OutlineInputBorder(
-                                borderSide: BorderSide(color: Colors.orange[900]),
+                                borderSide:
+                                    BorderSide(color: Colors.orange[900]),
                                 borderRadius: BorderRadius.circular(20)),
                             labelText: "${S.current.n}",
                             labelStyle: TextStyle(color: Colors.orange[900]),
@@ -766,9 +773,7 @@ class _AddPiecePageState extends State<AddPiecePage>
                   : SizedBox(
                       height: 5,
                     ))
-        ]
-        )
-    );
+        ]));
   }
 
   //afficher le fragment des artciles
@@ -1121,13 +1126,13 @@ class _AddPiecePageState extends State<AddPiecePage>
                           ),
                           onPressed: () async {
                             Navigator.pop(context);
-                            if(_myParams.versionType != "demo"){
+                            if (_myParams.versionType != "demo") {
                               await _saveLanPrinter();
                               final doc = await _makePdfDocument();
                               await Printing.layoutPdf(
                                   onLayout: (PdfPageFormat format) async =>
                                       doc.save());
-                            }else{
+                            } else {
                               var message = S.current.msg_demo_exp;
                               Helpers.showFlushBar(context, message);
                             }
@@ -1944,8 +1949,63 @@ class _AddPiecePageState extends State<AddPiecePage>
     final ticket = Ticket(formatPrint);
 
     if (directionRtl) {
-      var input = "${S.current.n} ${getPiecetype()}";
+      var input = "${_profile.raisonSociale}";
       Uint8List encArabic = await CharsetConverter.encode("ISO-8859-6",
+          "${input.split('').reversed.join()}");
+      ticket.textEncoded(encArabic,
+          styles: PosStyles(
+              codeTable: PosCodeTable.arabic,
+              align: (formatPrint == PaperSize.mm80)
+                  ? PosAlign.center
+                  : PosAlign.left));
+      if(_profile.activite != null){
+        input = "${_profile.activite}";
+        encArabic = await CharsetConverter.encode("ISO-8859-6",
+            "${input.split('').reversed.join()}");
+        ticket.textEncoded(encArabic,
+            styles: PosStyles(
+                codeTable: PosCodeTable.arabic,
+                align: (formatPrint == PaperSize.mm80)
+                    ? PosAlign.center
+                    : PosAlign.left));
+      }
+      if(_profile.adresse != null){
+        input = "${_profile.adresse}";
+        encArabic = await CharsetConverter.encode("ISO-8859-6",
+            "${input.split('').reversed.join()}");
+        ticket.textEncoded(encArabic,
+            styles: PosStyles(
+                codeTable: PosCodeTable.arabic,
+                align: (formatPrint == PaperSize.mm80)
+                    ? PosAlign.center
+                    : PosAlign.left));
+      }
+      if(_profile.ville != null){
+        input = "${_profile.ville}";
+        encArabic = await CharsetConverter.encode("ISO-8859-6",
+            "${input.split('').reversed.join()}");
+        ticket.textEncoded(encArabic,
+            styles: PosStyles(
+                codeTable: PosCodeTable.arabic,
+                align: (formatPrint == PaperSize.mm80)
+                    ? PosAlign.center
+                    : PosAlign.left));
+      }
+      if(_profile.telephone != null){
+        input = "${_profile.telephone}";
+        encArabic = await CharsetConverter.encode("ISO-8859-6",
+            "${input.split('').reversed.join()}");
+        ticket.textEncoded(encArabic,
+            styles: PosStyles(
+                codeTable: PosCodeTable.arabic,
+                align: (formatPrint == PaperSize.mm80)
+                    ? PosAlign.center
+                    : PosAlign.left));
+      }
+      ticket.hr(ch: '=');
+
+      input = "${S.current.n} ${getPiecetype()}";
+      encArabic = await CharsetConverter.encode("ISO-8859-6",
           "${_piece.num_piece}: ${input.split('').reversed.join()}");
       ticket.textEncoded(encArabic,
           styles: PosStyles(
@@ -2137,15 +2197,42 @@ class _AddPiecePageState extends State<AddPiecePage>
       }
 
       ticket.feed(1);
-      ticket.text('***BY CIRTA IT***',
+      ticket.cut();
+    } else {
+      ticket.text("${_profile.raisonSociale}",
           styles: PosStyles(
               align: (formatPrint == PaperSize.mm80)
                   ? PosAlign.center
-                  : PosAlign.left,
-              bold: true));
-      ticket.feed(1);
-      ticket.cut();
-    } else {
+                  : PosAlign.left));
+      if(_profile.activite != null){
+        ticket.text("${_profile.activite}",
+            styles: PosStyles(
+                align: (formatPrint == PaperSize.mm80)
+                    ? PosAlign.center
+                    : PosAlign.left));
+      }
+      if(_profile.adresse != null){
+        ticket.text("${_profile.adresse}",
+            styles: PosStyles(
+                align: (formatPrint == PaperSize.mm80)
+                    ? PosAlign.center
+                    : PosAlign.left));
+      }
+      if(_profile.ville != null){
+        ticket.text("${_profile.ville}",
+            styles: PosStyles(
+                align: (formatPrint == PaperSize.mm80)
+                    ? PosAlign.center
+                    : PosAlign.left));
+      }
+      if(_profile.telephone != null){
+        ticket.text("${_profile.telephone}",
+            styles: PosStyles(
+                align: (formatPrint == PaperSize.mm80)
+                    ? PosAlign.center
+                    : PosAlign.left));
+      }
+      ticket.hr(ch: '=');
       ticket.text("${S.current.n} ${_piece.piece}: ${_piece.num_piece}",
           styles: PosStyles(
               align: (formatPrint == PaperSize.mm80)
@@ -2176,7 +2263,7 @@ class _AddPiecePageState extends State<AddPiecePage>
             width: 2,
             styles: PosStyles(bold: true)),
       ]);
-      _selectedItems.forEach((element) async{
+      _selectedItems.forEach((element) async {
         ticket.row([
           (_myParams.printDisplay == 0)
               ? PosColumn(
@@ -2188,58 +2275,59 @@ class _AddPiecePageState extends State<AddPiecePage>
                       '${element.designation.substring(0, (element.designation.length < 8 ? element.designation.length : 8))}',
                   width: 6),
           PosColumn(
-              textEncoded:
-                await CharsetConverter.encode("ISO-8859-6",'${Helpers.numberFormat(element.selectedQuantite).toString()}'),
+              textEncoded: await CharsetConverter.encode("ISO-8859-6",
+                  '${Helpers.numberFormat(element.selectedQuantite).toString()}'),
               width: 2),
           PosColumn(
-              textEncoded:await CharsetConverter.encode("ISO-8859-6", '${Helpers.numberFormat(element.selectedPrice).toString()}'),
+              textEncoded: await CharsetConverter.encode("ISO-8859-6",
+                  '${Helpers.numberFormat(element.selectedPrice).toString()}'),
               width: 2),
           PosColumn(
-              textEncoded:
-                    await CharsetConverter.encode("ISO-8859-6",'${Helpers.numberFormat((element.selectedPrice * element.selectedQuantite)).toString()}'),
+              textEncoded: await CharsetConverter.encode("ISO-8859-6",
+                  '${Helpers.numberFormat((element.selectedPrice * element.selectedQuantite)).toString()}'),
               width: 2),
         ]);
       });
       ticket.hr(ch: '-');
-      var encode ;
+      var encode;
       if (_piece.total_tva > 0 && _myParams.tva) {
-        encode = await CharsetConverter.encode("ISO-8859-6","${S.current.total_ht} : ${Helpers.numberFormat(_piece.total_ht).toString()}");
-        ticket.textEncoded(
-            encode,
+        encode = await CharsetConverter.encode("ISO-8859-6",
+            "${S.current.total_ht} : ${Helpers.numberFormat(_piece.total_ht).toString()}");
+        ticket.textEncoded(encode,
             styles: PosStyles(
                 align: (formatPrint == PaperSize.mm80)
                     ? PosAlign.center
                     : PosAlign.left));
       }
       if (_piece.remise > 0) {
-        encode = await CharsetConverter.encode("ISO-8859-6","${S.current.remise} : ${Helpers.numberFormat((_piece.total_ht * _piece.remise) / 100).toString()} (${Helpers.numberFormat(_piece.remise).toString()} %)");
-        ticket.textEncoded(
-            encode,
+        encode = await CharsetConverter.encode("ISO-8859-6",
+            "${S.current.remise} : ${Helpers.numberFormat((_piece.total_ht * _piece.remise) / 100).toString()} (${Helpers.numberFormat(_piece.remise).toString()} %)");
+        ticket.textEncoded(encode,
             styles: PosStyles(
                 align: (formatPrint == PaperSize.mm80)
                     ? PosAlign.center
                     : PosAlign.left));
 
-        encode = await CharsetConverter.encode("ISO-8859-6","${S.current.net_ht} : ${Helpers.numberFormat(_piece.net_ht).toString()}");
-        ticket.textEncoded(
-            encode,
+        encode = await CharsetConverter.encode("ISO-8859-6",
+            "${S.current.net_ht} : ${Helpers.numberFormat(_piece.net_ht).toString()}");
+        ticket.textEncoded(encode,
             styles: PosStyles(
                 align: (formatPrint == PaperSize.mm80)
                     ? PosAlign.center
                     : PosAlign.left));
       }
       if (_piece.total_tva > 0 && _myParams.tva) {
-        encode = await CharsetConverter.encode("ISO-8859-6","${S.current.total_tva} : ${Helpers.numberFormat(_piece.total_tva).toString()}");
-        ticket.textEncoded(
-            encode,
+        encode = await CharsetConverter.encode("ISO-8859-6",
+            "${S.current.total_tva} : ${Helpers.numberFormat(_piece.total_tva).toString()}");
+        ticket.textEncoded(encode,
             styles: PosStyles(
                 align: (formatPrint == PaperSize.mm80)
                     ? PosAlign.center
                     : PosAlign.left));
 
-        encode = await CharsetConverter.encode("ISO-8859-6","${S.current.total} : ${Helpers.numberFormat(_piece.total_ttc).toString()}");
-        ticket.textEncoded(
-            encode,
+        encode = await CharsetConverter.encode("ISO-8859-6",
+            "${S.current.total} : ${Helpers.numberFormat(_piece.total_ttc).toString()}");
+        ticket.textEncoded(encode,
             styles: PosStyles(
                 align: (formatPrint == PaperSize.mm80)
                     ? PosAlign.center
@@ -2247,9 +2335,9 @@ class _AddPiecePageState extends State<AddPiecePage>
       }
 
       if (_myParams.timbre) {
-        encode = await CharsetConverter.encode("ISO-8859-6","${S.current.timbre} : ${(_piece.total_ttc < _piece.net_a_payer) ? Helpers.numberFormat(_piece.timbre).toString() : Helpers.numberFormat(0.0).toString()}");
-        ticket.textEncoded(
-            encode,
+        encode = await CharsetConverter.encode("ISO-8859-6",
+            "${S.current.timbre} : ${(_piece.total_ttc < _piece.net_a_payer) ? Helpers.numberFormat(_piece.timbre).toString() : Helpers.numberFormat(0.0).toString()}");
+        ticket.textEncoded(encode,
             styles: PosStyles(
                 align: (formatPrint == PaperSize.mm80)
                     ? PosAlign.center
@@ -2257,9 +2345,9 @@ class _AddPiecePageState extends State<AddPiecePage>
       }
 
       ticket.hr(ch: '=');
-      encode = await CharsetConverter.encode("ISO-8859-6", "${S.current.net_payer} : ${Helpers.numberFormat(_piece.net_a_payer).toString()} ${_devise}");
-      ticket.textEncoded(
-          encode,
+      encode = await CharsetConverter.encode("ISO-8859-6",
+          "${S.current.net_payer} : ${Helpers.numberFormat(_piece.net_a_payer).toString()} ${_devise}");
+      ticket.textEncoded(encode,
           styles: PosStyles(
             align: (formatPrint == PaperSize.mm80)
                 ? PosAlign.center
@@ -2271,28 +2359,21 @@ class _AddPiecePageState extends State<AddPiecePage>
 
       ticket.row([
         PosColumn(
-            textEncoded:
-              await CharsetConverter.encode("ISO-8859-6","${S.current.regler} : ${Helpers.numberFormat(_piece.regler).toString()}"),
+            textEncoded: await CharsetConverter.encode("ISO-8859-6",
+                "${S.current.regler} : ${Helpers.numberFormat(_piece.regler).toString()}"),
             width: 6),
         (_piece.reste > 0)
             ? PosColumn(
-                textEncoded:
-                  await CharsetConverter.encode("ISO-8859-6","${S.current.reste} : ${Helpers.numberFormat(_piece.reste).toString()}"),
+                textEncoded: await CharsetConverter.encode("ISO-8859-6",
+                    "${S.current.reste} : ${Helpers.numberFormat(_piece.reste).toString()}"),
                 width: 6)
             : PosColumn(width: 6),
       ]);
       if (_myParams.creditTier) {
-        encode = await CharsetConverter.encode("ISO-8859-6", "${S.current.credit} : ${Helpers.numberFormat(_selectedClient.credit).toString()}");
-        ticket.textEncoded(
-            encode);
+        encode = await CharsetConverter.encode("ISO-8859-6",
+            "${S.current.credit} : ${Helpers.numberFormat(_selectedClient.credit).toString()}");
+        ticket.textEncoded(encode);
       }
-      ticket.feed(1);
-      ticket.text('***BY CIRTA IT***',
-          styles: PosStyles(
-              align: (formatPrint == PaperSize.mm80)
-                  ? PosAlign.center
-                  : PosAlign.left,
-              bold: true));
       ticket.feed(1);
       ticket.cut();
     }
@@ -2310,6 +2391,69 @@ class _AddPiecePageState extends State<AddPiecePage>
         textDirection:
             (directionRtl) ? pw.TextDirection.rtl : pw.TextDirection.ltr,
         build: (context) => [
+          pw.Row(
+              mainAxisAlignment: pw.MainAxisAlignment.spaceBetween,
+              children: [
+                pw.Column(
+                  crossAxisAlignment: pw.CrossAxisAlignment.start,
+                  children: [
+                    (_profile.raisonSociale != null)
+                        ? pw.Text(
+                        "${_profile.raisonSociale} ",
+                        style: pw.TextStyle(font: ttf , fontWeight: pw.FontWeight.bold))
+                        : pw.SizedBox(),
+                    (_profile.activite != null)
+                        ? pw.Text(
+                        "${_profile.activite} ",
+                        style: pw.TextStyle(font: ttf, fontWeight: pw.FontWeight.bold))
+                        : pw.SizedBox(),
+                    (_profile.adresse != null)
+                        ? pw.Text(
+                        "${_profile.adresse} ${_profile.departement} ${_profile.ville} ${_profile.pays}",
+                        style: pw.TextStyle(font: ttf, fontWeight: pw.FontWeight.bold))
+                        : pw.SizedBox(),
+                    (_profile.telephone != null)
+                        ? pw.Text(
+                        "${S.current.telephone}\t ${_profile.telephone}",
+                        style: pw.TextStyle(font: ttf, fontWeight: pw.FontWeight.bold))
+                        : pw.SizedBox(),
+                    (_profile.fax != null)
+                        ? pw.Text(
+                        "${S.current.fax}\t ${_profile.fax}",
+                        style: pw.TextStyle(font: ttf, fontWeight: pw.FontWeight.bold))
+                        : pw.SizedBox(),
+                    (_profile.mobile != null)
+                        ? pw.Text(
+                        "${S.current.mobile}\t ${_profile.mobile}",
+                        style: pw.TextStyle(font: ttf, fontWeight: pw.FontWeight.bold))
+                        : pw.SizedBox(),
+                    (_profile.email != null)
+                        ? pw.Text(
+                        "${S.current.mail}\t ${_profile.email}",
+                        style: pw.TextStyle(font: ttf, fontWeight: pw.FontWeight.bold))
+                        : pw.SizedBox(),
+                    (_profile.rc != null)
+                        ? pw.Text(
+                        "${S.current.rc}\t ${_profile.rc}",
+                        style: pw.TextStyle(font: ttf, fontWeight: pw.FontWeight.bold))
+                        : pw.SizedBox(),
+                    (_profile.nif != null)
+                        ? pw.Text(
+                        "${S.current.rc}\t ${_profile.nif}",
+                        style: pw.TextStyle(font: ttf, fontWeight: pw.FontWeight.bold))
+                        : pw.SizedBox(),
+                    (_profile.capital != null)
+                        ? pw.Text(
+                        "${S.current.capitale_sociale}\t ${_profile.capital}",
+                        style: pw.TextStyle(font: ttf, fontWeight: pw.FontWeight.bold))
+                        : pw.SizedBox(),
+                  ]
+                ),
+                (_profile.imageUint8List != null)
+                    ? pw.Image(pw.MemoryImage(_profile.imageUint8List),height: 100 , width: 100)
+                    : pw.SizedBox(),
+              ]),
+          pw.SizedBox(height: 20),
           pw.Row(children: [
             pw.Expanded(
                 flex: 6,

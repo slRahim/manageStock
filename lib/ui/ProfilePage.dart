@@ -49,6 +49,7 @@ class _ProfilePageState extends State<ProfilePage> with TickerProviderStateMixin
   TextEditingController _raisonSocialeControl = new TextEditingController();
   TextEditingController _activiteControl = new TextEditingController();
   TextEditingController _adresseControl = new TextEditingController();
+  TextEditingController _departmentControl = new TextEditingController();
   TextEditingController _villeControl = new TextEditingController();
   TextEditingController _paysControl = new TextEditingController();
   TextEditingController _telephoneControl = new TextEditingController();
@@ -113,6 +114,7 @@ class _ProfilePageState extends State<ProfilePage> with TickerProviderStateMixin
     _selectedStatut = Statics.statutItems[item.statut];
     _activiteControl.text = item.activite;
     _adresseControl.text = item.adresse;
+    _departmentControl.text = item.departement ;
     _villeControl.text = item.ville;
     _paysControl.text = item.pays;
     _telephoneControl.text = item.telephone;
@@ -334,6 +336,38 @@ class _ProfilePageState extends State<ProfilePage> with TickerProviderStateMixin
                 labelStyle: TextStyle(color: Colors.blue),
                 prefixIcon: Icon(
                   MdiIcons.homeCityOutline,
+                  color: Colors.blue,
+                ),
+                focusedBorder: OutlineInputBorder(
+                    borderSide: BorderSide(color: Colors.blue),
+                    borderRadius: BorderRadius.circular(20)),
+                enabledBorder: OutlineInputBorder(
+                  gapPadding: 3.3,
+                  borderRadius: BorderRadius.circular(20),
+                  borderSide: BorderSide(color: Colors.blue),
+                ),
+                errorBorder:  OutlineInputBorder(
+                  gapPadding: 3.3,
+                  borderRadius: BorderRadius.circular(20),
+                  borderSide: BorderSide(color: Colors.red),
+                ),
+              ),
+            ),
+            TextFormField(
+              enabled: editMode,
+              controller: _departmentControl,
+              keyboardType: TextInputType.text,
+              validator: (value) {
+                if (value.isEmpty) {
+                  return S.current.msg_champ_oblg;
+                }
+                return null;
+              },
+              decoration: InputDecoration(
+                labelText: S.current.department,
+                labelStyle: TextStyle(color: Colors.blue),
+                prefixIcon: Icon(
+                  Icons.pin_drop,
                   color: Colors.blue,
                 ),
                 focusedBorder: OutlineInputBorder(
@@ -925,6 +959,7 @@ class _ProfilePageState extends State<ProfilePage> with TickerProviderStateMixin
     item.statut = Statics.statutItems.indexOf(_selectedStatut);
     item.activite = _activiteControl.text;
     item.adresse = _adresseControl.text;
+    item.departement = _departmentControl.text ;
     item.ville = _villeControl.text;
     item.pays = _paysControl.text;
     item.telephone = _telephoneControl.text;

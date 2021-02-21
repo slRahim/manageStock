@@ -39,111 +39,13 @@ class _PurchasePageState extends State<PurchasePage> {
         title: "Purchase",
         isFilterOn: false,
       ),
-      body: IntroductionScreen(
-        pages: [
-          _buildCard(context, Colors.orange[400], Colors.orange[200],
-              Colors.orange[100]),
-          _buildCard(
-              context, Colors.blue[300], Colors.blue[200], Colors.blue[100]),
-          _buildCard(context, Colors.deepPurple[400], Colors.deepPurple[200],
-              Colors.deepPurple[100]),
-        ],
-        next: const Icon(
-          Icons.navigate_next,
-          size: 35,
-        ),
-        done: SizedBox(),
-        onDone: () => null,
-        dotsDecorator: DotsDecorator(
-            size: const Size.square(10.0),
-            activeSize: const Size(20.0, 10.0),
-            color: Colors.black26,
-            spacing: const EdgeInsets.symmetric(horizontal: 3.0),
-            activeShape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(25.0))),
+      body: Center(
+        child: Text("Purchase")
       ),
     );
   }
 
-  PageViewModel _buildCard(context, color1, color2, color3) {
-    return PageViewModel(
-      title: "",
-      bodyWidget: FlipCard(
-        front: Center(
-          child: Stack(
-            children: [
-              Container(
-                  height: 500,
-                  width: 500,
-                  decoration: BoxDecoration(color: Colors.white, boxShadow: [
-                    BoxShadow(
-                        offset: Offset(1, 2),
-                        color: Colors.black12,
-                        spreadRadius: 3,
-                        blurRadius: 5),
-                  ]),
-                  child: Column(
-                    children: [
-                      Container(
-                        child: CustomPaint(
-                          child: Container(
-                            height: 300.0,
-                          ),
-                          painter: CurvePainter(color1, color2, color3),
-                        ),
-                      ),
-                      Expanded(
-                        child: Container(
-                          color: Colors.yellow,
-                        ),
-                      )
-                    ],
-                  )),
-              InkWell(
-                child: Center(
-                  child: Column(
-                    children: [
-                      Container(
-                        padding: EdgeInsetsDirectional.fromSTEB(40, 20, 40, 20),
-                        child: Text(
-                          "BUY NOW",
-                          style: TextStyle(
-                              fontSize: 22,
-                              fontWeight: FontWeight.bold,
-                              color: Colors.white),
-                        ),
-                        decoration: BoxDecoration(
-                          gradient: LinearGradient(
-                              colors: [color3, color1],
-                              begin: FractionalOffset.topLeft,
-                              end: FractionalOffset.bottomRight,
-                              stops: [0.0, 1.0],
-                              tileMode: TileMode.clamp),
-                          borderRadius: BorderRadius.circular(50),
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              )
-            ],
-          ),
-        ),
-        back: Container(
-            height: 500,
-            width: 500,
-            padding: const EdgeInsets.all(8),
-            decoration: BoxDecoration(color: Colors.grey[200], boxShadow: [
-              BoxShadow(
-                  offset: Offset(1, 2),
-                  color: Colors.black12,
-                  spreadRadius: 3,
-                  blurRadius: 5),
-            ]),
-            child: Center(child: Text("back card"))),
-      ),
-    );
-  }
+
 }
 
 class CurvePainter extends CustomPainter {

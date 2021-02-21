@@ -25,13 +25,15 @@ class AddArticlePage extends StatefulWidget {
   final QueryCtr _queryCtr = QueryCtr();
 
   Article arguments;
+
   AddArticlePage({Key key, @required this.arguments}) : super(key: key);
 
   @override
   _AddArticlePageState createState() => _AddArticlePageState();
 }
 
-class _AddArticlePageState extends State<AddArticlePage> with TickerProviderStateMixin , AutomaticKeepAliveClientMixin {
+class _AddArticlePageState extends State<AddArticlePage>
+    with TickerProviderStateMixin, AutomaticKeepAliveClientMixin {
   @override
   bool get wantKeepAlive => true;
 
@@ -59,9 +61,11 @@ class _AddArticlePageState extends State<AddArticlePage> with TickerProviderStat
   List<DropdownMenuItem<ArticleTva>> _tvaDropdownItems;
   ArticleTva _selectedTva;
 
-  bool _price2 = false ;
-  bool _price3 = false ;
-  bool _tva=false ;
+  bool _price2 = false;
+
+  bool _price3 = false;
+
+  bool _tva = false;
 
   TextEditingController _designationControl = new TextEditingController();
   TextEditingController _stockInitialControl = new TextEditingController();
@@ -79,12 +83,14 @@ class _AddArticlePageState extends State<AddArticlePage> with TickerProviderStat
   TextEditingController _tauxTVAControl = new TextEditingController();
   TextEditingController _colisControl = new TextEditingController();
   TextEditingController _qteColisCotrol = new TextEditingController();
+  TextEditingController _qteCmdCotrol = new TextEditingController();
 
   ArticleFamille _famille = new ArticleFamille.init();
   ArticleMarque _marque = new ArticleMarque.init();
   File _articleImage;
 
-  MyParams _myParams ;
+  MyParams _myParams;
+
   QueryCtr _queryCtr = new QueryCtr();
 
   final _formKey = GlobalKey<FormState>();
@@ -125,7 +131,9 @@ class _AddArticlePageState extends State<AddArticlePage> with TickerProviderStat
     _selectedFamille = _familleItems[0];
     _selectedTva = new ArticleTva(0);
 
-    if (widget.arguments is Article && widget.arguments.id != null && widget.arguments.id > -1) {
+    if (widget.arguments is Article &&
+        widget.arguments.id != null &&
+        widget.arguments.id > -1) {
       editMode = false;
       modification = true;
       await setDataFromArticle(widget.arguments);
@@ -150,10 +158,11 @@ class _AddArticlePageState extends State<AddArticlePage> with TickerProviderStat
     _refControl.text = article.ref;
     _stockable = article.stockable;
     _codeBarControl.text = article.codeBar;
-    _qteColisCotrol.text=article.quantiteColis.toString();
-    _colisControl.text=article.colis.toString();
+    _qteColisCotrol.text = article.quantiteColis.toString();
+    _qteCmdCotrol.text = article.cmdClient.toString();
+    _colisControl.text = article.colis.toString();
 
-    if(_pmpControl.text != null){
+    if (_pmpControl.text != null) {
       _pmpControl.text = article.pmp.toString();
     }
 
@@ -168,22 +177,21 @@ class _AddArticlePageState extends State<AddArticlePage> with TickerProviderStat
 
   void getParams() async {
     _myParams = await _queryCtr.getAllParams();
-    switch(_myParams.tarification){
-      case 1 :
+    switch (_myParams.tarification) {
+      case 1:
         _price2Control.text = "0.0";
         _price3Control.text = "0.0";
         break;
-      case 2 :
-        _price2 = true ;
+      case 2:
+        _price2 = true;
         _price3Control.text = "0.0";
         break;
-      case 3 :
-        _price2 = true ;
-        _price3 = true ;
+      case 3:
+        _price2 = true;
+        _price3 = true;
         break;
     }
-    _tva = _myParams.tva ;
-
+    _tva = _myParams.tva;
   }
 
   //*************************************************************************************************************************************************************************
@@ -217,16 +225,23 @@ class _AddArticlePageState extends State<AddArticlePage> with TickerProviderStat
                 modification: modification,
                 title: appBarTitle,
                 onCancelPressed: () => {
-                  if(modification){
-                    if(editMode){
-                      Navigator.of(context)
-                          .pushReplacementNamed(RoutesKeys.addArticle, arguments: widget.arguments)
-                    } else{
+                  if (modification)
+                    {
+                      if (editMode)
+                        {
+                          Navigator.of(context).pushReplacementNamed(
+                              RoutesKeys.addArticle,
+                              arguments: widget.arguments)
+                        }
+                      else
+                        {
+                          Navigator.pop(context),
+                        }
+                    }
+                  else
+                    {
                       Navigator.pop(context),
                     }
-                  } else{
-                    Navigator.pop(context),
-                  }
                 },
                 onEditPressed: () {
                   setState(() {
@@ -234,7 +249,7 @@ class _AddArticlePageState extends State<AddArticlePage> with TickerProviderStat
                   });
                 },
                 onSavePressed: () async {
-                  if(_formKey.currentState != null){
+                  if (_formKey.currentState != null) {
                     if (_formKey.currentState.validate()) {
                       int id = await addArticleToDb();
                       if (id > -1) {
@@ -243,13 +258,14 @@ class _AddArticlePageState extends State<AddArticlePage> with TickerProviderStat
                           editMode = false;
                         });
                       }
-                    }else{
-                      Helpers.showFlushBar(context, "${S.current.msg_champs_obg}");
+                    } else {
+                      Helpers.showFlushBar(
+                          context, "${S.current.msg_champs_obg}");
                     }
-                  }else{
+                  } else {
                     setState(() {
-                      _tabSelectedIndex = 0 ;
-                      _tabController.index = _tabSelectedIndex ;
+                      _tabSelectedIndex = 0;
+                      _tabController.index = _tabSelectedIndex;
                     });
                   }
                 },
@@ -258,9 +274,30 @@ class _AddArticlePageState extends State<AddArticlePage> with TickerProviderStat
                 selectedIndex: _tabSelectedIndex,
                 controller: _tabController,
                 tabs: [
-                  Tab(child: Column( children: [ Icon(Icons.insert_drive_file),SizedBox(height: 1), Text("${S.current.fiche_art}"), ], )),
-                  Tab(child: Column( children: [ Icon(Icons.image), SizedBox(height: 1), Text(S.current.photo), ], )),
-                  Tab(child: Column( children: [ Icon(Icons.description), SizedBox(height: 1), Text(S.current.description), ], )),
+                  Tab(
+                      child: Column(
+                    children: [
+                      Icon(Icons.insert_drive_file),
+                      SizedBox(height: 1),
+                      Text("${S.current.fiche_art}"),
+                    ],
+                  )),
+                  Tab(
+                      child: Column(
+                    children: [
+                      Icon(Icons.image),
+                      SizedBox(height: 1),
+                      Text(S.current.photo),
+                    ],
+                  )),
+                  Tab(
+                      child: Column(
+                    children: [
+                      Icon(Icons.description),
+                      SizedBox(height: 1),
+                      Text(S.current.description),
+                    ],
+                  )),
                 ],
               ),
               body: Builder(
@@ -305,14 +342,13 @@ class _AddArticlePageState extends State<AddArticlePage> with TickerProviderStat
                 ),
                 focusedBorder: OutlineInputBorder(
                     borderSide: BorderSide(color: Colors.green),
-                    borderRadius: BorderRadius.circular(20)
-                ),
+                    borderRadius: BorderRadius.circular(20)),
                 enabledBorder: OutlineInputBorder(
                   gapPadding: 3.3,
                   borderRadius: BorderRadius.circular(20),
                   borderSide: BorderSide(color: Colors.green),
                 ),
-                errorBorder:  OutlineInputBorder(
+                errorBorder: OutlineInputBorder(
                   gapPadding: 3.3,
                   borderRadius: BorderRadius.circular(20),
                   borderSide: BorderSide(color: Colors.red),
@@ -338,14 +374,13 @@ class _AddArticlePageState extends State<AddArticlePage> with TickerProviderStat
                 ),
                 focusedBorder: OutlineInputBorder(
                     borderSide: BorderSide(color: Colors.blue),
-                    borderRadius: BorderRadius.circular(20)
-                ),
+                    borderRadius: BorderRadius.circular(20)),
                 enabledBorder: OutlineInputBorder(
                   gapPadding: 3.3,
                   borderRadius: BorderRadius.circular(20),
                   borderSide: BorderSide(color: Colors.blue),
                 ),
-                errorBorder:  OutlineInputBorder(
+                errorBorder: OutlineInputBorder(
                   gapPadding: 3.3,
                   borderRadius: BorderRadius.circular(20),
                   borderSide: BorderSide(color: Colors.red),
@@ -381,7 +416,7 @@ class _AddArticlePageState extends State<AddArticlePage> with TickerProviderStat
                     borderRadius: BorderRadius.circular(20),
                     borderSide: BorderSide(color: Colors.blue),
                   ),
-                  errorBorder:  OutlineInputBorder(
+                  errorBorder: OutlineInputBorder(
                     gapPadding: 3.3,
                     borderRadius: BorderRadius.circular(20),
                     borderSide: BorderSide(color: Colors.red),
@@ -392,7 +427,7 @@ class _AddArticlePageState extends State<AddArticlePage> with TickerProviderStat
             Row(
               children: [
                 Visibility(
-                  visible: _stockable,
+                  visible: true,
                   child: Flexible(
                     flex: 5,
                     child: TextFormField(
@@ -406,54 +441,67 @@ class _AddArticlePageState extends State<AddArticlePage> with TickerProviderStat
                         return null;
                       },
                       decoration: InputDecoration(
-                        labelText: S.current.prix_achat,
-                        labelStyle: TextStyle(color: Colors.blue),
-                        prefixIcon: Icon(
-                          Icons.attach_money,
-                          color: Colors.blue,
-                        ),
-                        focusedBorder: OutlineInputBorder(
+                          labelText: S.current.prix_achat,
+                          labelStyle: TextStyle(color: Colors.blue),
+                          prefixIcon: Icon(
+                            Icons.attach_money,
+                            color: Colors.blue,
+                          ),
+                          focusedBorder: OutlineInputBorder(
+                              borderSide: BorderSide(color: Colors.blue),
+                              borderRadius: BorderRadius.circular(20)),
+                          enabledBorder: OutlineInputBorder(
+                            gapPadding: 3.3,
+                            borderRadius: BorderRadius.circular(20),
                             borderSide: BorderSide(color: Colors.blue),
-                            borderRadius: BorderRadius.circular(20)),
-                        enabledBorder: OutlineInputBorder(
-                          gapPadding: 3.3,
-                          borderRadius: BorderRadius.circular(20),
-                          borderSide: BorderSide(color: Colors.blue),
-                        ),
-                        errorBorder:  OutlineInputBorder(
-                          gapPadding: 3.3,
-                          borderRadius: BorderRadius.circular(20),
-                          borderSide: BorderSide(color: Colors.red),
-                        )
-                      ),
+                          ),
+                          errorBorder: OutlineInputBorder(
+                            gapPadding: 3.3,
+                            borderRadius: BorderRadius.circular(20),
+                            borderSide: BorderSide(color: Colors.red),
+                          )),
                     ),
                   ),
                 ),
-                Padding(padding: EdgeInsets.fromLTRB(_stockable?8:0, 0, 0, 0)),
-                Flexible(
-                  flex: 5,
-                  child: Container(
-                    decoration: editMode? new BoxDecoration(
-                      border: Border.all(color: Colors.blueAccent,),
-                      borderRadius: BorderRadius.circular(20.0),
-                    ) : null,
-                    child: CheckboxListTile(
-                      title: Text(S.current.stockable, maxLines: 1,),
-                      value: _stockable,
-                      onChanged: editMode? (bool value) {
-                        setState(() {
-                          _stockable = value;
-                          if(!_stockable){
-                            _prixAchatControl.text = "";
-                          }
-                        });
-                      } : null,
+                Padding(
+                    padding: EdgeInsets.fromLTRB(_stockable ? 8 : 0, 0, 0, 0)),
+                Visibility(
+                  visible: false,
+                  child: Flexible(
+                    flex: 5,
+                    child: Container(
+                      decoration: editMode
+                          ? new BoxDecoration(
+                              border: Border.all(
+                                color: Colors.blueAccent,
+                              ),
+                              borderRadius: BorderRadius.circular(20.0),
+                            )
+                          : null,
+                      child: CheckboxListTile(
+                        title: Text(
+                          S.current.stockable,
+                          maxLines: 1,
+                          style: TextStyle(
+                              color: Theme.of(context).primaryColorDark),
+                        ),
+                        value: _stockable,
+                        onChanged: editMode
+                            ? (bool value) {
+                                setState(() {
+                                  _stockable = value;
+                                  if (!_stockable) {
+                                    _prixAchatControl.text = "";
+                                  }
+                                });
+                              }
+                            : null,
+                      ),
                     ),
                   ),
                 )
               ],
             ),
-
             Visibility(
               visible: _stockable,
               child: TextFormField(
@@ -467,29 +515,29 @@ class _AddArticlePageState extends State<AddArticlePage> with TickerProviderStat
                   return null;
                 },
                 decoration: InputDecoration(
-                  labelText: (modification) ? S.current.pmp : "${S.current.pmp} ${S.current.init}",
-                  labelStyle: TextStyle(color: Colors.blue),
-                  prefixIcon: Icon(
-                    Icons.archive,
-                    color: Colors.blue,
-                  ),
-                  focusedBorder: OutlineInputBorder(
+                    labelText: (modification)
+                        ? S.current.pmp
+                        : "${S.current.pmp} ${S.current.init}",
+                    labelStyle: TextStyle(color: Colors.blue),
+                    prefixIcon: Icon(
+                      Icons.archive,
+                      color: Colors.blue,
+                    ),
+                    focusedBorder: OutlineInputBorder(
+                        borderSide: BorderSide(color: Colors.blue),
+                        borderRadius: BorderRadius.circular(20)),
+                    enabledBorder: OutlineInputBorder(
+                      gapPadding: 3.3,
+                      borderRadius: BorderRadius.circular(20),
                       borderSide: BorderSide(color: Colors.blue),
-                      borderRadius: BorderRadius.circular(20)),
-                  enabledBorder: OutlineInputBorder(
-                    gapPadding: 3.3,
-                    borderRadius: BorderRadius.circular(20),
-                    borderSide: BorderSide(color: Colors.blue),
-                  ),
-                  errorBorder:  OutlineInputBorder(
-                    gapPadding: 3.3,
-                    borderRadius: BorderRadius.circular(20),
-                    borderSide: BorderSide(color: Colors.red),
-                  )
-                ),
+                    ),
+                    errorBorder: OutlineInputBorder(
+                      gapPadding: 3.3,
+                      borderRadius: BorderRadius.circular(20),
+                      borderSide: BorderSide(color: Colors.red),
+                    )),
               ),
             ),
-
             Row(
               children: [
                 Flexible(
@@ -504,7 +552,9 @@ class _AddArticlePageState extends State<AddArticlePage> with TickerProviderStat
                       return null;
                     },
                     decoration: InputDecoration(
-                      labelText: modification? S.current.quantit:S.current.stock_init,
+                      labelText: modification
+                          ? S.current.quantit
+                          : S.current.stock_init,
                       labelStyle: TextStyle(color: Colors.blue),
                       prefixIcon: Icon(
                         Icons.apps,
@@ -512,14 +562,13 @@ class _AddArticlePageState extends State<AddArticlePage> with TickerProviderStat
                       ),
                       focusedBorder: OutlineInputBorder(
                           borderSide: BorderSide(color: Colors.blue),
-                          borderRadius: BorderRadius.circular(20)
-                      ),
+                          borderRadius: BorderRadius.circular(20)),
                       enabledBorder: OutlineInputBorder(
                         gapPadding: 3.3,
                         borderRadius: BorderRadius.circular(20),
                         borderSide: BorderSide(color: Colors.blue),
                       ),
-                      errorBorder:  OutlineInputBorder(
+                      errorBorder: OutlineInputBorder(
                         gapPadding: 3.3,
                         borderRadius: BorderRadius.circular(20),
                         borderSide: BorderSide(color: Colors.red),
@@ -554,7 +603,7 @@ class _AddArticlePageState extends State<AddArticlePage> with TickerProviderStat
                         borderRadius: BorderRadius.circular(20),
                         borderSide: BorderSide(color: Colors.blue),
                       ),
-                      errorBorder:  OutlineInputBorder(
+                      errorBorder: OutlineInputBorder(
                         gapPadding: 3.3,
                         borderRadius: BorderRadius.circular(20),
                         borderSide: BorderSide(color: Colors.red),
@@ -564,7 +613,6 @@ class _AddArticlePageState extends State<AddArticlePage> with TickerProviderStat
                 ),
               ],
             ),
-
             Row(
               children: [
                 Flexible(
@@ -595,7 +643,7 @@ class _AddArticlePageState extends State<AddArticlePage> with TickerProviderStat
                           borderRadius: BorderRadius.circular(20),
                           borderSide: BorderSide(color: Colors.blue),
                         ),
-                        errorBorder:  OutlineInputBorder(
+                        errorBorder: OutlineInputBorder(
                           gapPadding: 3.3,
                           borderRadius: BorderRadius.circular(20),
                           borderSide: BorderSide(color: Colors.red),
@@ -605,47 +653,78 @@ class _AddArticlePageState extends State<AddArticlePage> with TickerProviderStat
                   ),
                 ),
                 Padding(padding: EdgeInsets.all(4)),
-                Visibility(
-                  visible: modification && !editMode,
-                  child: Flexible(
-                    flex: 5,
-                    child: TextFormField(
-                      enabled: false,
-                      controller: _colisControl,
-                      keyboardType: TextInputType.number,
-                      validator: (value) {
-                        if (value.isEmpty) {
-                          return S.current.msg_champ_oblg;
-                        }
-                        return null;
-                      },
-                      decoration: InputDecoration(
-                        prefixIcon: Icon(
-                          Icons.archive,
-                          color: Colors.blue,
-                        ),
-                        focusedBorder: OutlineInputBorder(
-                            borderSide: BorderSide(color: Colors.blue),
-                            borderRadius: BorderRadius.circular(20)),
-                        labelText: S.current.colis,
-                        labelStyle: TextStyle(color: Colors.blue),
-                        enabledBorder:OutlineInputBorder(
-                          gapPadding: 3.3,
-                          borderRadius: BorderRadius.circular(20),
+                Flexible(
+                  flex: 5,
+                  child: TextFormField(
+                    enabled: editMode,
+                    controller: _qteCmdCotrol,
+                    keyboardType: TextInputType.number,
+                    validator: (value) {
+                      if (value.isEmpty) {
+                        return S.current.msg_champ_oblg;
+                      }
+                      return null;
+                    },
+                    decoration: InputDecoration(
+                      prefixIcon: Icon(
+                        Icons.apps_outlined,
+                        color: Colors.blue,
+                      ),
+                      focusedBorder: OutlineInputBorder(
                           borderSide: BorderSide(color: Colors.blue),
-                        ),
-                        errorBorder:  OutlineInputBorder(
-                          gapPadding: 3.3,
-                          borderRadius: BorderRadius.circular(20),
-                          borderSide: BorderSide(color: Colors.red),
-                        ),
+                          borderRadius: BorderRadius.circular(20)),
+                      labelText: S.current.qte_cmd,
+                      labelStyle: TextStyle(color: Colors.blue),
+                      enabledBorder: OutlineInputBorder(
+                        gapPadding: 3.3,
+                        borderRadius: BorderRadius.circular(20),
+                        borderSide: BorderSide(color: Colors.blue),
+                      ),
+                      errorBorder: OutlineInputBorder(
+                        gapPadding: 3.3,
+                        borderRadius: BorderRadius.circular(20),
+                        borderSide: BorderSide(color: Colors.red),
                       ),
                     ),
                   ),
                 ),
               ],
             ),
-
+            Visibility(
+              visible: modification && !editMode,
+              child: TextFormField(
+                enabled: false,
+                controller: _colisControl,
+                keyboardType: TextInputType.number,
+                validator: (value) {
+                  if (value.isEmpty) {
+                    return S.current.msg_champ_oblg;
+                  }
+                  return null;
+                },
+                decoration: InputDecoration(
+                  prefixIcon: Icon(
+                    Icons.archive,
+                    color: Colors.blue,
+                  ),
+                  focusedBorder: OutlineInputBorder(
+                      borderSide: BorderSide(color: Colors.blue),
+                      borderRadius: BorderRadius.circular(20)),
+                  labelText: S.current.colis,
+                  labelStyle: TextStyle(color: Colors.blue),
+                  enabledBorder: OutlineInputBorder(
+                    gapPadding: 3.3,
+                    borderRadius: BorderRadius.circular(20),
+                    borderSide: BorderSide(color: Colors.blue),
+                  ),
+                  errorBorder: OutlineInputBorder(
+                    gapPadding: 3.3,
+                    borderRadius: BorderRadius.circular(20),
+                    borderSide: BorderSide(color: Colors.red),
+                  ),
+                ),
+              ),
+            ),
             TextFormField(
               enabled: editMode,
               controller: _price1Control,
@@ -671,7 +750,7 @@ class _AddArticlePageState extends State<AddArticlePage> with TickerProviderStat
                   borderRadius: BorderRadius.circular(20),
                   borderSide: BorderSide(color: Colors.blue),
                 ),
-                errorBorder:  OutlineInputBorder(
+                errorBorder: OutlineInputBorder(
                   gapPadding: 3.3,
                   borderRadius: BorderRadius.circular(20),
                   borderSide: BorderSide(color: Colors.red),
@@ -679,7 +758,7 @@ class _AddArticlePageState extends State<AddArticlePage> with TickerProviderStat
               ),
             ),
             Visibility(
-              visible: _price2 ,
+              visible: _price2,
               child: TextFormField(
                 enabled: editMode,
                 controller: _price2Control,
@@ -688,7 +767,7 @@ class _AddArticlePageState extends State<AddArticlePage> with TickerProviderStat
                   if (value.isEmpty && _price2) {
                     return S.current.msg_champ_oblg;
                   }
-                  return null ;
+                  return null;
                 },
                 decoration: InputDecoration(
                   labelText: S.current.prix_v2,
@@ -705,7 +784,7 @@ class _AddArticlePageState extends State<AddArticlePage> with TickerProviderStat
                     borderRadius: BorderRadius.circular(20),
                     borderSide: BorderSide(color: Colors.blue),
                   ),
-                  errorBorder:  OutlineInputBorder(
+                  errorBorder: OutlineInputBorder(
                     gapPadding: 3.3,
                     borderRadius: BorderRadius.circular(20),
                     borderSide: BorderSide(color: Colors.red),
@@ -714,7 +793,7 @@ class _AddArticlePageState extends State<AddArticlePage> with TickerProviderStat
               ),
             ),
             Visibility(
-              visible:_price3,
+              visible: _price3,
               child: TextFormField(
                 enabled: editMode,
                 controller: _price3Control,
@@ -723,7 +802,7 @@ class _AddArticlePageState extends State<AddArticlePage> with TickerProviderStat
                   if (value.isEmpty && _price3) {
                     return S.current.msg_champ_oblg;
                   }
-                  return null ;
+                  return null;
                 },
                 decoration: InputDecoration(
                   labelText: S.current.prix_v3,
@@ -740,7 +819,7 @@ class _AddArticlePageState extends State<AddArticlePage> with TickerProviderStat
                     borderRadius: BorderRadius.circular(20),
                     borderSide: BorderSide(color: Colors.blue),
                   ),
-                  errorBorder:  OutlineInputBorder(
+                  errorBorder: OutlineInputBorder(
                     gapPadding: 3.3,
                     borderRadius: BorderRadius.circular(20),
                     borderSide: BorderSide(color: Colors.red),
@@ -759,42 +838,41 @@ class _AddArticlePageState extends State<AddArticlePage> with TickerProviderStat
     return SingleChildScrollView(
       child: ImagePickerWidget(
           imageFile: _articleImage,
-          editMode: editMode, onImageChange: (File imageFile) => {
-        _articleImage = imageFile
-      }),
+          editMode: editMode,
+          onImageChange: (File imageFile) => {_articleImage = imageFile}),
     );
   }
 
   Widget descriptionTab() {
     return SingleChildScrollView(
         child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
-          Padding(
-            padding: EdgeInsets.all(20),
-            child: Center(
-                child: TextField(
-                  enabled: editMode,
-                  maxLines: 20,
-                  controller: _descriptionControl,
-                  keyboardType: TextInputType.multiline,
-                  decoration: InputDecoration(
-                    focusedBorder: OutlineInputBorder(
-                        borderSide: BorderSide(color: Colors.blue),
-                        borderRadius: BorderRadius.circular(20)),
-                    contentPadding: EdgeInsets.only(left: 20, top: 20, bottom: 20),
-                    labelText: S.current.description,
-                    labelStyle: TextStyle(color: Colors.blue),
-                    alignLabelWithHint: true,
-                    hintText: S.current.msg_description,
-                    enabledBorder: OutlineInputBorder(
-                      gapPadding: 3.3,
-                      borderRadius: BorderRadius.circular(20),
-                      borderSide: BorderSide(color: Colors.blue),
-                    ),
-                  ),
-                )),
+      Padding(
+        padding: EdgeInsets.all(20),
+        child: Center(
+            child: TextField(
+          enabled: editMode,
+          maxLines: 20,
+          controller: _descriptionControl,
+          keyboardType: TextInputType.multiline,
+          decoration: InputDecoration(
+            focusedBorder: OutlineInputBorder(
+                borderSide: BorderSide(color: Colors.blue),
+                borderRadius: BorderRadius.circular(20)),
+            contentPadding: EdgeInsets.only(left: 20, top: 20, bottom: 20),
+            labelText: S.current.description,
+            labelStyle: TextStyle(color: Colors.blue),
+            alignLabelWithHint: true,
+            hintText: S.current.msg_description,
+            enabledBorder: OutlineInputBorder(
+              gapPadding: 3.3,
+              borderRadius: BorderRadius.circular(20),
+              borderSide: BorderSide(color: Colors.blue),
+            ),
           ),
-          Padding(padding: EdgeInsets.all(10)),
-        ]));
+        )),
+      ),
+      Padding(padding: EdgeInsets.all(10)),
+    ]));
   }
 
   Widget dropdowns() {
@@ -808,7 +886,8 @@ class _AddArticlePageState extends State<AddArticlePage> with TickerProviderStat
             visible: _tva,
             child: ListDropDown(
               editMode: editMode,
-              libelle: ("${S.current.taux_tva}: ${_selectedTva.tva.toString()} %"),
+              libelle:
+                  ("${S.current.taux_tva}: ${_selectedTva.tva.toString()} %"),
               value: _selectedTva,
               items: _tvaDropdownItems,
               onChanged: (value) {
@@ -875,89 +954,89 @@ class _AddArticlePageState extends State<AddArticlePage> with TickerProviderStat
   Widget addMarquedialogue() {
     return StatefulBuilder(builder: (context, StateSetter setState) {
       return Dialog(
-        //this right here
+          //this right here
           child: SingleChildScrollView(
-            child: Container(
-              height: 500,
-              child: Padding(
-                padding: const EdgeInsets.all(6.0),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    ImagePickerWidget(editMode: editMode, scallFactor: 1, onImageChange: (File imageFile) => {
-                      _marque.setpic(imageFile)
-                    }),
-
-                    Padding(
-                      padding: EdgeInsets.only(left: 5, right: 5, bottom: 20),
-                      child: TextField(
-                        controller: _libelleMarqueControl,
-                        keyboardType: TextInputType.text,
-                        decoration: InputDecoration(
-                          prefixIcon: Icon(
-                            Icons.label,
-                            color: Colors.orange[900],
-                          ),
-                          focusedBorder: OutlineInputBorder(
-                              borderSide: BorderSide(color: Colors.orange[900]),
-                              borderRadius: BorderRadius.circular(20)),
-                          contentPadding: EdgeInsets.only(left: 10),
-                          labelText: S.current.marque,
-                          labelStyle: TextStyle(color: Colors.orange[900]),
-                          enabledBorder: OutlineInputBorder(
-                            gapPadding: 3.3,
-                            borderRadius: BorderRadius.circular(20),
-                            borderSide: BorderSide(color: Colors.orange[900]),
-                          ),
-                        ),
+        child: Container(
+          height: 500,
+          child: Padding(
+            padding: const EdgeInsets.all(6.0),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                ImagePickerWidget(
+                    editMode: editMode,
+                    scallFactor: 1,
+                    onImageChange: (File imageFile) =>
+                        {_marque.setpic(imageFile)}),
+                Padding(
+                  padding: EdgeInsets.only(left: 5, right: 5, bottom: 20),
+                  child: TextField(
+                    controller: _libelleMarqueControl,
+                    keyboardType: TextInputType.text,
+                    decoration: InputDecoration(
+                      prefixIcon: Icon(
+                        Icons.label,
+                        color: Colors.orange[900],
+                      ),
+                      focusedBorder: OutlineInputBorder(
+                          borderSide: BorderSide(color: Colors.orange[900]),
+                          borderRadius: BorderRadius.circular(20)),
+                      contentPadding: EdgeInsets.only(left: 10),
+                      labelText: S.current.marque,
+                      labelStyle: TextStyle(color: Colors.orange[900]),
+                      enabledBorder: OutlineInputBorder(
+                        gapPadding: 3.3,
+                        borderRadius: BorderRadius.circular(20),
+                        borderSide: BorderSide(color: Colors.orange[900]),
                       ),
                     ),
-                    SizedBox(
-                      width: 320.0,
-                      child: Padding(
-                        padding: EdgeInsets.only(right: 0, left: 0),
-                        child: RaisedButton(
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(18.0),
-                          ),
-                          onPressed: () async {
-                            setState(() {
-                              _marque.setLibelle(_libelleMarqueControl.text);
-                              _libelleMarqueControl.text = "";
-                            });
-
-                            await addMarqueIfNotExist(_marque);
-
-                            Navigator.pop(context);
-                            final snackBar = SnackBar(
-                              content: Text(
-                                S.current.msg_ajout_item,
-                                style: TextStyle(
-                                    color: Colors.white,
-                                    fontSize: 15,
-                                    fontWeight: FontWeight.w500),
-                              ),
-                              backgroundColor: Colors.blue,
-                              duration: Duration(seconds: 1),
-                            );
-                            _scaffoldKey.currentState.showSnackBar(snackBar);
-                            print(_marque.libelle);
-                          }
-                          ,
-                          child: Text(
-                            S.current.ajouter,
-                            style: TextStyle(color: Colors.white),
-                          ),
-                          color: Colors.blue,
-                        ),
-                      ),
-                    )
-                  ],
+                  ),
                 ),
-              ),
+                SizedBox(
+                  width: 320.0,
+                  child: Padding(
+                    padding: EdgeInsets.only(right: 0, left: 0),
+                    child: RaisedButton(
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(18.0),
+                      ),
+                      onPressed: () async {
+                        setState(() {
+                          _marque.setLibelle(_libelleMarqueControl.text);
+                          _libelleMarqueControl.text = "";
+                        });
+
+                        await addMarqueIfNotExist(_marque);
+
+                        Navigator.pop(context);
+                        final snackBar = SnackBar(
+                          content: Text(
+                            S.current.msg_ajout_item,
+                            style: TextStyle(
+                                color: Colors.white,
+                                fontSize: 15,
+                                fontWeight: FontWeight.w500),
+                          ),
+                          backgroundColor: Colors.blue,
+                          duration: Duration(seconds: 1),
+                        );
+                        _scaffoldKey.currentState.showSnackBar(snackBar);
+                        print(_marque.libelle);
+                      },
+                      child: Text(
+                        S.current.ajouter,
+                        style: TextStyle(color: Colors.white),
+                      ),
+                      color: Colors.blue,
+                    ),
+                  ),
+                )
+              ],
             ),
-          ));
+          ),
+        ),
+      ));
     });
   }
 
@@ -966,7 +1045,8 @@ class _AddArticlePageState extends State<AddArticlePage> with TickerProviderStat
     if (marqueIndex > -1) {
       _selectedMarque = _marqueItems[marqueIndex];
     } else {
-      int id = await widget._queryCtr.addItemToTable(DbTablesNames.articlesMarques, marque);
+      int id = await widget._queryCtr
+          .addItemToTable(DbTablesNames.articlesMarques, marque);
       marque.id = id;
 
       _marqueItems.add(marque);
@@ -979,95 +1059,96 @@ class _AddArticlePageState extends State<AddArticlePage> with TickerProviderStat
     return StatefulBuilder(builder: (context, StateSetter setState) {
       return Builder(
           builder: (context) => Dialog(
-            //this right here
-            child: SingleChildScrollView(
-              child: Container(
-                height: 500,
-                child: Padding(
-                  padding: const EdgeInsets.all(6.0),
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      ImagePickerWidget(editMode: editMode, scallFactor: 1, onImageChange: (File imageFile) => {
-                        _famille.setpic(imageFile)
-                      }),
-                      Padding(
-                        padding: EdgeInsets.only(
-                            left: 5, right: 5, bottom: 20, top: 20),
-                        child: TextField(
-                          controller: _libelleFamilleControl,
-                          keyboardType: TextInputType.text,
-                          decoration: InputDecoration(
-                            prefixIcon: Icon(
-                              Icons.view_agenda,
-                              color: Colors.orange[900],
-                            ),
-                            focusedBorder: OutlineInputBorder(
-                                borderSide:
-                                BorderSide(color: Colors.orange[900]),
-                                borderRadius: BorderRadius.circular(20)),
-                            contentPadding: EdgeInsets.only(left: 10),
-                            labelText: S.current.famile,
-                            labelStyle:
-                            TextStyle(color: Colors.orange[900]),
-                            enabledBorder: OutlineInputBorder(
-                              gapPadding: 3.3,
-                              borderRadius: BorderRadius.circular(20),
-                              borderSide:
-                              BorderSide(color: Colors.orange[900]),
-                            ),
-                          ),
-                        ),
-                      ),
-                      SizedBox(
-                        width: 320.0,
-                        child: Padding(
-                          padding: EdgeInsets.only(right: 0, left: 0),
-                          child: RaisedButton(
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(18.0),
-                            ),
-                            onPressed: () async {
-                              setState(() {
-                                _famille.setLibelle(
-                                    _libelleFamilleControl.text);
-                                _libelleFamilleControl.text = "";
-                              });
-
-                              await addFamilleIfNotExist(_famille);
-
-                              Navigator.pop(context);
-                              final snackBar = SnackBar(
-                                content: Text(
-                                  S.current.msg_ajout_item,
-                                  style: TextStyle(
-                                      color: Colors.white,
-                                      fontSize: 15,
-                                      fontWeight: FontWeight.w500),
+                //this right here
+                child: SingleChildScrollView(
+                  child: Container(
+                    height: 500,
+                    child: Padding(
+                      padding: const EdgeInsets.all(6.0),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          ImagePickerWidget(
+                              editMode: editMode,
+                              scallFactor: 1,
+                              onImageChange: (File imageFile) =>
+                                  {_famille.setpic(imageFile)}),
+                          Padding(
+                            padding: EdgeInsets.only(
+                                left: 5, right: 5, bottom: 20, top: 20),
+                            child: TextField(
+                              controller: _libelleFamilleControl,
+                              keyboardType: TextInputType.text,
+                              decoration: InputDecoration(
+                                prefixIcon: Icon(
+                                  Icons.view_agenda,
+                                  color: Colors.orange[900],
                                 ),
-                                backgroundColor: Colors.red,
-                                duration: Duration(seconds: 1),
-                              );
-                              _scaffoldKey.currentState
-                                  .showSnackBar(snackBar);
-                              print(_famille.libelle);
-                            }
-                            ,
-                            child: Text(
-                              S.current.ajouter,
-                              style: TextStyle(color: Colors.white),
+                                focusedBorder: OutlineInputBorder(
+                                    borderSide:
+                                        BorderSide(color: Colors.orange[900]),
+                                    borderRadius: BorderRadius.circular(20)),
+                                contentPadding: EdgeInsets.only(left: 10),
+                                labelText: S.current.famile,
+                                labelStyle:
+                                    TextStyle(color: Colors.orange[900]),
+                                enabledBorder: OutlineInputBorder(
+                                  gapPadding: 3.3,
+                                  borderRadius: BorderRadius.circular(20),
+                                  borderSide:
+                                      BorderSide(color: Colors.orange[900]),
+                                ),
+                              ),
                             ),
-                            color: Colors.red,
                           ),
-                        ),
-                      )
-                    ],
+                          SizedBox(
+                            width: 320.0,
+                            child: Padding(
+                              padding: EdgeInsets.only(right: 0, left: 0),
+                              child: RaisedButton(
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(18.0),
+                                ),
+                                onPressed: () async {
+                                  setState(() {
+                                    _famille.setLibelle(
+                                        _libelleFamilleControl.text);
+                                    _libelleFamilleControl.text = "";
+                                  });
+
+                                  await addFamilleIfNotExist(_famille);
+
+                                  Navigator.pop(context);
+                                  final snackBar = SnackBar(
+                                    content: Text(
+                                      S.current.msg_ajout_item,
+                                      style: TextStyle(
+                                          color: Colors.white,
+                                          fontSize: 15,
+                                          fontWeight: FontWeight.w500),
+                                    ),
+                                    backgroundColor: Colors.red,
+                                    duration: Duration(seconds: 1),
+                                  );
+                                  _scaffoldKey.currentState
+                                      .showSnackBar(snackBar);
+                                  print(_famille.libelle);
+                                },
+                                child: Text(
+                                  S.current.ajouter,
+                                  style: TextStyle(color: Colors.white),
+                                ),
+                                color: Colors.red,
+                              ),
+                            ),
+                          )
+                        ],
+                      ),
+                    ),
                   ),
                 ),
-              ),
-            ),
-          ));
+              ));
     });
   }
 
@@ -1076,12 +1157,12 @@ class _AddArticlePageState extends State<AddArticlePage> with TickerProviderStat
     if (familleIndex > -1) {
       _selectedFamille = _familleItems[familleIndex];
     } else {
-      int id = await widget._queryCtr.addItemToTable(DbTablesNames.articlesTva, famille);
+      int id = await widget._queryCtr
+          .addItemToTable(DbTablesNames.articlesTva, famille);
       famille.id = id;
 
       _familleItems.add(famille);
-      _familleDropdownItems =
-          utils.buildDropFamilleArticle(_familleItems);
+      _familleDropdownItems = utils.buildDropFamilleArticle(_familleItems);
       _selectedFamille = _familleItems[_familleItems.length];
     }
   }
@@ -1100,15 +1181,15 @@ class _AddArticlePageState extends State<AddArticlePage> with TickerProviderStat
               children: [
                 Center(
                     child: Padding(
-                      padding: const EdgeInsets.only(bottom: 20),
-                      child: Text(
-                        "${S.current.ajouter} ${S.current.tva}",
-                        style: TextStyle(
-                          fontSize: 18,
-                          fontWeight: FontWeight.w400,
-                        ),
-                      ),
-                    )),
+                  padding: const EdgeInsets.only(bottom: 20),
+                  child: Text(
+                    "${S.current.ajouter} ${S.current.tva}",
+                    style: TextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.w400,
+                    ),
+                  ),
+                )),
                 Padding(
                   padding: EdgeInsets.only(left: 5, right: 5, bottom: 20),
                   child: TextField(
@@ -1159,8 +1240,7 @@ class _AddArticlePageState extends State<AddArticlePage> with TickerProviderStat
                           duration: Duration(seconds: 1),
                         );
                         _scaffoldKey.currentState.showSnackBar(snackBar);
-                      }
-                      ,
+                      },
                       child: Text(
                         S.current.ajouter,
                         style: TextStyle(color: Colors.white),
@@ -1183,7 +1263,8 @@ class _AddArticlePageState extends State<AddArticlePage> with TickerProviderStat
     if (tvaIndex > -1) {
       _selectedTva = _tvaItems[tvaIndex];
     } else {
-      await widget._queryCtr.addItemToTable(DbTablesNames.articlesTva, new ArticleTva(tvaDouble));
+      await widget._queryCtr
+          .addItemToTable(DbTablesNames.articlesTva, new ArticleTva(tvaDouble));
 
       _tvaItems.add(tvaItem);
       _tvaItems.sort((a, b) => a.tva.compareTo(b.tva));
@@ -1199,7 +1280,8 @@ class _AddArticlePageState extends State<AddArticlePage> with TickerProviderStat
     String message;
     try {
       if (widget.arguments.id != null) {
-        id = await widget._queryCtr.updateItemInDb(DbTablesNames.articles, await makeArticle());
+        id = await widget._queryCtr
+            .updateItemInDb(DbTablesNames.articles, await makeArticle());
         if (id > -1) {
           message = S.current.msg_update_item;
         } else {
@@ -1207,8 +1289,9 @@ class _AddArticlePageState extends State<AddArticlePage> with TickerProviderStat
         }
       } else {
         Article article = await makeArticle();
-        article.cmdClient = 0 ;
-        id = await widget._queryCtr.addItemToTable(DbTablesNames.articles, article);
+        article.cmdClient = 0;
+        id = await widget._queryCtr
+            .addItemToTable(DbTablesNames.articles, article);
         if (id > -1) {
           widget.arguments = article;
           widget.arguments.setId(id);
@@ -1223,7 +1306,6 @@ class _AddArticlePageState extends State<AddArticlePage> with TickerProviderStat
       Helpers.showFlushBar(context, S.current.msg_ereure);
       return Future.value(-1);
     }
-
   }
 
   Future<Article> makeArticle() async {
@@ -1233,20 +1315,21 @@ class _AddArticlePageState extends State<AddArticlePage> with TickerProviderStat
     article.setdesignation(_designationControl.text);
     article.setref(_refControl.text);
     article.setCodeBar(_codeBarControl.text);
-    if(_stockable){
+    if (_stockable) {
       article.setprixAchat(double.parse(_prixAchatControl.text));
     }
     article.setQteInit(double.parse(_stockInitialControl.text));
     article.setquantite(double.parse(_stockInitialControl.text));
     article.setQteMin(double.parse(_stockMinimumControl.text));
-    article.cmdClient = widget.arguments.cmdClient ;
+    article.cmdClient = double.parse(_qteCmdCotrol.text);
     article.setPmp(double.parse(_pmpControl.text));
-    if(!modification && editMode){
+    if (!modification && editMode) {
       article.setPmpInit(double.parse(_pmpControl.text));
     }
 
     article.setQteColis(double.parse(_qteColisCotrol.text));
-    double colis= double.parse(_stockInitialControl.text) / double.parse(_qteColisCotrol.text) ;
+    double colis = double.parse(_stockInitialControl.text) /
+        double.parse(_qteColisCotrol.text);
     article.setColis(colis);
 
     article.setprixVente1(double.parse(_price1Control.text));
@@ -1257,20 +1340,24 @@ class _AddArticlePageState extends State<AddArticlePage> with TickerProviderStat
     article.setIdMarque(_marqueItems.indexOf(_selectedMarque));
     article.setTva(_selectedTva.tva);
 
-    double ttc1 = (double.parse(_price1Control.text)*_selectedTva.tva)/100 + double.parse(_price1Control.text) ;
-    double ttc2 = (double.parse(_price2Control.text)*_selectedTva.tva)/100 + double.parse(_price2Control.text) ;
-    double ttc3 = (double.parse(_price3Control.text)*_selectedTva.tva)/100 + double.parse(_price3Control.text);
+    double ttc1 = (double.parse(_price1Control.text) * _selectedTva.tva) / 100 +
+        double.parse(_price1Control.text);
+    double ttc2 = (double.parse(_price2Control.text) * _selectedTva.tva) / 100 +
+        double.parse(_price2Control.text);
+    double ttc3 = (double.parse(_price3Control.text) * _selectedTva.tva) / 100 +
+        double.parse(_price3Control.text);
     article.setprixVente1TTC(ttc1);
     article.setprixVente2TTC(ttc2);
     article.setprixVente3TTC(ttc3);
 
     article.setDescription(_descriptionControl.text);
     article.setbloquer(false);
-    article.setStockable(_stockable);
+    article.setStockable(true);
 
     if (_articleImage != null) {
-      article.setImageUint8List(await Helpers.getUint8ListFromFile(_articleImage));
-    } else{
+      article
+          .setImageUint8List(await Helpers.getUint8ListFromFile(_articleImage));
+    } else {
       Uint8List image = await Helpers.getDefaultImageUint8List(from: "article");
       article.setImageUint8List(image);
     }
@@ -1291,13 +1378,12 @@ class _AddArticlePageState extends State<AddArticlePage> with TickerProviderStat
       );
 
       var result = await BarcodeScanner.scan(options: options);
-      if(result.rawContent.isNotEmpty){
+      if (result.rawContent.isNotEmpty) {
         setState(() {
           _codeBarControl.text = result.rawContent;
           FocusScope.of(context).requestFocus(null);
         });
       }
-
     } catch (e) {
       var result = ScanResult(
         type: ResultType.Error,
@@ -1313,5 +1399,4 @@ class _AddArticlePageState extends State<AddArticlePage> with TickerProviderStat
       Helpers.showToast(result.rawContent);
     }
   }
-
 }

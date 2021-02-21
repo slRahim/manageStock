@@ -70,7 +70,6 @@ class _ArticleListItemState extends State<ArticleListItem> {
 
   @override
   Widget build(BuildContext context) {
-
     SizeConfig().init(context);
     return ListTileCard(
       from:  widget.article,
@@ -142,21 +141,21 @@ class _ArticleListItemState extends State<ArticleListItem> {
             : null,
         Row(
           children: [
-            Icon(MdiIcons.cashMultiple ,size: 14, color: Theme.of(context).primaryColorDark,),
+            Icon(Icons.apps_outlined ,size: 14, color: Theme.of(context).primaryColorDark,),
             SizedBox(width: 3,),
             Text(
-              "${Helpers.numberFormat(widget.article.selectedQuantite * widget.article.selectedPrice).toString()} ${_devise}",
+              "${widget.article.selectedQuantite.toString()}",
               style: TextStyle(
-                  fontSize: 16.0,
-                  fontWeight: FontWeight.bold
+                  fontSize: 16.0
               ),
             ),
           ],
         ),
         Text(
-          "(${widget.article.selectedQuantite.toString()})",
+          "${Helpers.numberFormat(widget.article.selectedQuantite * widget.article.selectedPrice).toString()} ${_devise}",
           style: TextStyle(
-              fontSize: 16.0
+              fontSize: 16.0,
+              fontWeight: FontWeight.bold
           ),
         ),
       ]:
@@ -174,15 +173,21 @@ class _ArticleListItemState extends State<ArticleListItem> {
           ],
         )
             : null,
-        trailingChildrenOnArticleFragment(),
-        Text(
-           "(${(widget.article.quantite - widget.article.cmdClient).toString()})",
-          style: TextStyle(
-              color: widget.article.quantite <= widget.article.quantiteMinimum
-                  ? Colors.redAccent
-                  : Theme.of(context).primaryColorDark ,
-              fontSize: 15.0),
+        Row(
+          children: [
+            Icon(Icons.apps_outlined ,size: 14, color: Theme.of(context).primaryColorDark,),
+            SizedBox(width: 3,),
+            Text(
+              "${(widget.article.quantite - widget.article.cmdClient).toString()}",
+              style: TextStyle(
+                  color: widget.article.quantite <= widget.article.quantiteMinimum
+                      ? Colors.redAccent
+                      : Theme.of(context).primaryColorDark ,
+                  fontSize: 15.0),
+            ),
+          ],
         ),
+        trailingChildrenOnArticleFragment(),
       ],
     );
   }
@@ -191,66 +196,36 @@ class _ArticleListItemState extends State<ArticleListItem> {
   Widget trailingChildrenOnArticleFragment(){
     switch (widget.tarification){
       case 1 :
-        return Row(
-          children: [
-            Icon(MdiIcons.cashMultiple ,size: 14, color: Theme.of(context).primaryColorDark,),
-            SizedBox(width: 3,),
-            Text(
+        return Text(
               "${Helpers.numberFormat(widget.article.prixVente1).toString()} ${_devise}",
               style: TextStyle(fontSize: 16.0, fontWeight: FontWeight.bold),
-            ),
-          ],
         );
         break ;
 
       case 2:
-        return Row(
-          children: [
-            Icon(MdiIcons.cashMultiple ,size: 14, color: Theme.of(context).primaryColorDark,),
-            SizedBox(width: 3,),
-            Text(
+        return Text(
               "${Helpers.numberFormat(widget.article.prixVente2).toString()} ${_devise}",
               style: TextStyle(fontSize: 16.0, fontWeight: FontWeight.bold),
-            ),
-          ],
         );
         break ;
 
       case 3 :
-        return Row(
-          children: [
-            Icon(MdiIcons.cashMultiple ,size: 14, color: Theme.of(context).primaryColorDark,),
-            SizedBox(width: 3,),
-            Text(
+        return Text(
               "${Helpers.numberFormat(widget.article.prixVente3).toString()} ${_devise}",
               style: TextStyle(fontSize: 16.0, fontWeight: FontWeight.bold),
-            ),
-          ],
         );
         break ;
 
       default :
         if(widget.article.selectedPrice > 0){
-          return Row(
-            children: [
-              Icon(MdiIcons.cashMultiple ,size: 14, color: Theme.of(context).primaryColorDark,),
-              SizedBox(width: 3,),
-              Text(
+          return Text(
                 "${Helpers.numberFormat(widget.article.selectedPrice).toString()} ${_devise}",
                 style: TextStyle(fontSize: 16.0, fontWeight: FontWeight.bold),
-              ),
-            ],
           );
         }
-        return Row(
-          children: [
-            Icon(MdiIcons.cashMultiple ,size: 14, color: Theme.of(context).primaryColorDark,),
-            SizedBox(width: 3,),
-            Text(
+        return Text(
               "${Helpers.numberFormat(widget.article.prixVente1).toString()} ${_devise}",
               style: TextStyle(fontSize: 16.0, fontWeight: FontWeight.bold),
-            ),
-          ],
         );
         break ;
     }

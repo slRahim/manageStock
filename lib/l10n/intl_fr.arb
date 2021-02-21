@@ -179,6 +179,7 @@
 
   "prix" : "Prix",
   "qte" : "QTE",
+  "qte_cmd" : "Qte Commandée",
 
   "msg_err_transfer" : "Transformation d'un brouilion est impossible",
   "msg_info_article" : "Vous risquez d'ajouter des articles inassocier aux pieces !",
@@ -356,7 +357,11 @@
   "intro_infor" : "Vos Informations",
 
   "start_date" : "Date du début",
-  "end_date" : "Date de fin"
+  "end_date" : "Date de fin",
+
+  "choix_province" : "Choisir Ville",
+  "choix_city" : "Choisir Département",
+  "department" : "Département"
 
 
 
