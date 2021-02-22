@@ -203,10 +203,10 @@
   "msg_num_err" : "Entrez un nombre valide",
   "transferer" : "Transferer",
 
-  "to_commande" : "Vers Commande",
+  "to_commande" : "Commande Client",
   "to_bon" : "Vers un Bon",
   "to_facture" : "Vers Facture",
-  "to_retour" : "Vers Retour/Avoir",
+  "to_retour" : "Retour/Avoir",
 
   "msg_no_dispo" : "Cette option n'est pas disponible",
   "remise" : "Remise",
@@ -361,7 +361,20 @@
 
   "choix_province" : "Choisir Ville",
   "choix_city" : "Choisir Département",
-  "department" : "Département"
+  "department" : "Département",
+
+  "abonnement_title" : "Passer en Premium",
+  "illimite" : "Illimité",
+  "illimite_desc" : "Créer des articles , des pieces , des clients et des fournisseurs illimité",
+  "imprime" : "Imprimé",
+  "imprime_desc" : "Vos pieces en plusieur format 80cm , 55cm , A4 et A5",
+  "exporte" : "Exporté",
+  "exporte_desc" : "Vos pieces et des QrCodes en format pdf",
+  "save_rest": "Sauvgarde & Restauration",
+  "save_rest_desc" : "Créer des sauvgardes de vos données dans le drive",
+  "msg_get_abonnement" : "Taper sur l'abonnement pour la récuperer",
+
+  "transformer_title" : "Transformer la piece vers"
 
 
 

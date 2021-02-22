@@ -32,10 +32,10 @@ class _IntroPageState extends State<IntroPage> {
   List<DropdownMenuItem<String>> _languages;
   String _countryname;
   String _currencycode;
-  List<String> _cities = ["Choose City"];
-  String _selectedCity = "Choose City";
-  String _selectedProvince = "Choose State";
-  List<String> _provinces = ["Choose State"];
+  List<String> _cities = ["${S.current.choix_city}"];
+  String _selectedCity = S.current.choix_city;
+  String _selectedProvince =S.current.choix_province;
+  List<String> _provinces = ["${S.current.choix_province}"];
   String defaultLocale = Platform.localeName;
 
   TextEditingController _raisonSocialeControl = new TextEditingController();
@@ -81,7 +81,7 @@ class _IntroPageState extends State<IntroPage> {
     }
     _countryname = "Algeria";
     _currencycode = "DZD";
-
+     getProvince() ;
     _prefs = await SharedPreferences.getInstance();
   }
 

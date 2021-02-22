@@ -88,7 +88,7 @@ class _homeState extends State<home> {
         onWillPop: _onWillPop,
         child: Scaffold(
           key: _globalKey,
-          drawer: NavDrawer(),
+          drawer: NavDrawer(myparams: _myParams,),
           body: BlocConsumer<HomeCubit, HomeState>(
             listener: (context, state) {
               if (state is HomeError) {

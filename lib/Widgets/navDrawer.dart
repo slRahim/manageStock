@@ -1,6 +1,5 @@
 import 'dart:io';
 import 'dart:ui';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_icons/flutter_icons.dart';
@@ -9,19 +8,21 @@ import 'package:gestmob/Helpers/Statics.dart';
 import 'package:gestmob/cubit/home_cubit.dart';
 import 'package:gestmob/generated/l10n.dart';
 import 'package:gestmob/models/HomeItem.dart';
+import 'package:gestmob/models/MyParams.dart';
 import 'package:gestmob/models/Profile.dart';
+import 'package:gestmob/services/push_notifications.dart';
 import 'package:gestmob/ui/home.dart';
-
-
 import 'HomeItemsWidgets.dart';
 
 // le nav drawer restyle
 class NavDrawer extends StatelessWidget {
+  final MyParams myparams ;
+  NavDrawer({Key key ,this.myparams}):super(key : key);
+
   var drawerHeaderColor = 0xFF1E90FF;
 
   List<Widget> homeItemWidgetList;
   List<HomeItem> homeItemList = [
-    drawerItemPurchase ,
     homeItemAccueil,
     homeItemTableauDeBord,
     homeItemArticles,
@@ -46,6 +47,20 @@ class NavDrawer extends StatelessWidget {
   ];
 
 
+
+  @override
+  Widget build(BuildContext context) {
+    return Drawer(
+        child: Container(
+          color: Theme.of(context).secondaryHeaderColor,
+          child: ListView(
+            physics: const AlwaysScrollableScrollPhysics(),
+            padding: EdgeInsets.zero,
+            children: getNavDrawerWidgetList(context),
+          ),
+    ));
+  }
+
   List<Widget> getNavDrawerWidgetList(context) {
     homeItemWidgetList = <Widget>[
       DrawerHeader(
@@ -53,7 +68,7 @@ class NavDrawer extends StatelessWidget {
             onTap: (){
               Navigator.pop(context);
               Navigator.of(context).pushNamed(
-                  RoutesKeys.profilePage,
+                RoutesKeys.profilePage,
               );
             },
             child: Container(
@@ -78,12 +93,19 @@ class NavDrawer extends StatelessWidget {
       )
     ];
 
+    if(myparams.versionType == "demo" ||
+        Helpers.getDateExpiration(myparams).isAfter(DateTime.now()) ){
+
+      homeItemWidgetList.add(getDrawerItemWidget(context, drawerItemPurchase));
+      homeItemWidgetList.add(new Divider()) ;
+    }
+
     homeItemList.forEach((data) => {
-          homeItemWidgetList.add(getDrawerItemWidget(context, data)),
-          homeItemWidgetList.add(
-            new Divider(),
-          )
-        });
+      homeItemWidgetList.add(getDrawerItemWidget(context, data)),
+      homeItemWidgetList.add(
+        new Divider(),
+      )
+    });
 
     return homeItemWidgetList;
   }
@@ -91,31 +113,20 @@ class NavDrawer extends StatelessWidget {
 //the drawer item
   Widget getDrawerItemWidget(context, data) {
     return ListTile(
-        dense: true,
-        leading: iconsSet(data.id, 20),
-        title: Text(
-          data.title,
-          style: TextStyle(color: Colors.white, fontSize: 15),
-        ),
-        onTap: () => {
-          Navigator.of(context).pop(),
-          Helpers.handleIdClick(context, data.id),
-        },
-        trailing:(Helpers.isDirectionRTL(context))? Icon(Icons.keyboard_arrow_left,color: Colors.white,)
-            :Icon(Icons.keyboard_arrow_right,color: Colors.white,),
-      );
+      dense: true,
+      leading: iconsSet(data.id, 20),
+      title: Text(
+        data.title,
+        style: TextStyle(color: Colors.white, fontSize: 15),
+      ),
+      onTap: () => {
+        Navigator.of(context).pop(),
+        Helpers.handleIdClick(context, data.id),
+      },
+      trailing:(Helpers.isDirectionRTL(context))? Icon(Icons.keyboard_arrow_left,color: Colors.white,)
+          :Icon(Icons.keyboard_arrow_right,color: Colors.white,),
+    );
   }
 
-  @override
-  Widget build(BuildContext context) {
-    return Drawer(
-        child: Container(
-          color: Theme.of(context).secondaryHeaderColor,
-          child: ListView(
-            physics: const AlwaysScrollableScrollPhysics(),
-            padding: EdgeInsets.zero,
-            children: getNavDrawerWidgetList(context),
-          ),
-    ));
-  }
+
 }

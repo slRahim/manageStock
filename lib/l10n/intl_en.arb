@@ -205,7 +205,7 @@
   "to_commande" : "To Order",
   "to_bon" : "To Receipt",
   "to_facture" : "To Invoice",
-  "to_retour" : "To Feedback",
+  "to_retour" : "Feedback",
 
   "msg_no_dispo" : "this option is not avalaible",
   "remise" : "Discount",
@@ -360,7 +360,20 @@
 
   "choix_province" : "Choose City",
   "choix_city" : "Choose Department",
-  "department" : "Departement"
+  "department" : "Departement",
+
+  "abonnement_title" : "Upgrade to Premium",
+  "illimite" : "Illimit",
+  "illimite_desc" : "numbrer of products , invoices , customers , and providers",
+  "imprime" : "Print",
+  "imprime_desc" : "Your invoices in different formats 80cm , 55cm , A4 et A5",
+  "exporte" : "Export",
+  "exporte_desc" : "Your invoices and QrCodes as pdf file",
+  "save_rest": "Backup & Restore",
+  "save_rest_desc" : "Persist your data to your drive",
+  "msg_get_abonnement" : "Tap on subscription to restore",
+
+  "transformer_title" : "Transformer item to"
 
 
 }

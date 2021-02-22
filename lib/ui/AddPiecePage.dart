@@ -1641,7 +1641,7 @@ class _AddPiecePageState extends State<AddPiecePage>
                         child: Padding(
                       padding: const EdgeInsets.only(bottom: 20),
                       child: Text(
-                        "${S.current.choisir_action}: ",
+                        "${S.current.transformer_title}: ",
                         style: TextStyle(
                           fontSize: 22,
                           fontWeight: FontWeight.w400,
@@ -1689,10 +1689,14 @@ class _AddPiecePageState extends State<AddPiecePage>
                               var msg = await transfererPiece(context, "toBon");
                               Helpers.showFlushBar(context, msg);
                             },
-                            child: Text(
-                              S.current.to_bon,
+                            child:(_piece.piece == PieceType.bonCommande)? Text(
+                              S.current.bon_reception,
                               style:
                                   TextStyle(color: Colors.white, fontSize: 16),
+                            ):Text(
+                              S.current.bon_livraison,
+                              style:
+                              TextStyle(color: Colors.white, fontSize: 16),
                             ),
                             color: Colors.blue,
                           ),
@@ -1715,10 +1719,16 @@ class _AddPiecePageState extends State<AddPiecePage>
                                   await transfererPiece(context, "toFacture");
                               Helpers.showFlushBar(context, msg);
                             },
-                            child: Text(
-                              S.current.to_facture,
+                            child: (_piece.piece == PieceType.devis ||
+                                _piece.piece == PieceType.commandeClient ||
+                                _piece.piece == PieceType.bonLivraison)? Text(
+                              S.current.facture_vente,
                               style:
                                   TextStyle(color: Colors.white, fontSize: 16),
+                            ):Text(
+                              S.current.facture_achat,
+                              style:
+                              TextStyle(color: Colors.white, fontSize: 16),
                             ),
                             color: Colors.green,
                           ),
@@ -1743,10 +1753,15 @@ class _AddPiecePageState extends State<AddPiecePage>
                                   await transfererPiece(context, "toRetour");
                               Helpers.showFlushBar(context, msg);
                             },
-                            child: Text(
-                              S.current.to_retour,
+                            child:(  _piece.piece == PieceType.bonLivraison ||
+                                _piece.piece == PieceType.factureClient) ? Text(
+                              "${S.current.to_retour} ${S.current.client}",
                               style:
                                   TextStyle(color: Colors.white, fontSize: 16),
+                            ):Text(
+                              "${S.current.to_retour} ${S.current.fournisseur}",
+                              style:
+                              TextStyle(color: Colors.white, fontSize: 16),
                             ),
                             color: Colors.redAccent,
                           ),

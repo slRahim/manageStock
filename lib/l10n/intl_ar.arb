@@ -206,7 +206,7 @@
   "to_commande" : "إلى طلب",
   "to_bon" : "إلى وصل",
   "to_facture" : "إلى فاتورة",
-  "to_retour" : "إلى إرجاع",
+  "to_retour" : "إرجاع",
 
   "msg_no_dispo" : "هذه الخاصية غير متوفرة",
   "remise" : "الخصم",
@@ -361,6 +361,19 @@
 
   "choix_province" : "إختر المدينة",
   "choix_city" : "إختر البلدية",
-  "department" : "البلدية"
+  "department" : "البلدية",
+
+  "abonnement_title" : "Passer en Premium",
+  "illimite" : "Illimité",
+  "illimite_desc" : "Créer des articles , des pieces , des clients et des fournisseurs illimité",
+  "imprime" : "Imprimé",
+  "imprime_desc" : "Vos pieces en plusieur format 80cm , 55cm , A4 et A5",
+  "exporte" : "Exporté",
+  "exporte_desc" : "Vos pieces et des QrCodes en format pdf",
+  "save_rest": "Sauvgarde & Restauration",
+  "save_rest_desc" : "Créer des sauvgardes de vos données dans le drive",
+  "msg_get_abonnement" : "Taper sur l'abonnement pour la récuperer",
+
+  "transformer_title" : "Transformer la piece vers"
 
 }

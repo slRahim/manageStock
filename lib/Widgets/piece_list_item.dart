@@ -289,9 +289,9 @@ class _PieceListItemState extends State<PieceListItem> {
       switch (widget.piece.mov){
         case 1 :
           if(widget.piece.reste > 0){
-            return Colors.green;
-          }else{
             return Colors.red;
+          }else{
+            return Colors.green;
           }
           break;
         case 2 :

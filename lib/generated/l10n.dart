@@ -1985,10 +1985,10 @@ class S {
     );
   }
 
-  /// `To Feedback`
+  /// `Feedback`
   String get to_retour {
     return Intl.message(
-      'To Feedback',
+      'Feedback',
       name: 'to_retour',
       desc: '',
       args: [],
@@ -3380,6 +3380,116 @@ class S {
     return Intl.message(
       'Departement',
       name: 'department',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Upgrade to Premium`
+  String get abonnement_title {
+    return Intl.message(
+      'Upgrade to Premium',
+      name: 'abonnement_title',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Illimit`
+  String get illimite {
+    return Intl.message(
+      'Illimit',
+      name: 'illimite',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `numbrer of products , invoices , customers , and providers`
+  String get illimite_desc {
+    return Intl.message(
+      'numbrer of products , invoices , customers , and providers',
+      name: 'illimite_desc',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Print`
+  String get imprime {
+    return Intl.message(
+      'Print',
+      name: 'imprime',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Your invoices in different formats 80cm , 55cm , A4 et A5`
+  String get imprime_desc {
+    return Intl.message(
+      'Your invoices in different formats 80cm , 55cm , A4 et A5',
+      name: 'imprime_desc',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Export`
+  String get exporte {
+    return Intl.message(
+      'Export',
+      name: 'exporte',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Your invoices and QrCodes as pdf file`
+  String get exporte_desc {
+    return Intl.message(
+      'Your invoices and QrCodes as pdf file',
+      name: 'exporte_desc',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Backup & Restore`
+  String get save_rest {
+    return Intl.message(
+      'Backup & Restore',
+      name: 'save_rest',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Persist your data to your drive`
+  String get save_rest_desc {
+    return Intl.message(
+      'Persist your data to your drive',
+      name: 'save_rest_desc',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Tap on subscription to restore`
+  String get msg_get_abonnement {
+    return Intl.message(
+      'Tap on subscription to restore',
+      name: 'msg_get_abonnement',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Transformer item to`
+  String get transformer_title {
+    return Intl.message(
+      'Transformer item to',
+      name: 'transformer_title',
       desc: '',
       args: [],
     );
