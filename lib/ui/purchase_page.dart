@@ -9,7 +9,6 @@ import 'package:gestmob/generated/l10n.dart';
 import 'package:in_app_purchase/in_app_purchase.dart';
 import 'package:provider/provider.dart';
 import 'package:introduction_screen/introduction_screen.dart';
-import 'package:flip_card/flip_card.dart';
 
 class PurchasePage extends StatefulWidget {
   @override

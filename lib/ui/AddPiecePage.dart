@@ -8,6 +8,7 @@ import 'package:esc_pos_bluetooth/esc_pos_bluetooth.dart';
 import 'package:expandable_bottom_bar/expandable_bottom_bar.dart';
 import 'package:floating_action_row/floating_action_row.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bluetooth_basic/flutter_bluetooth_basic.dart';
 import 'package:flutter_icons/flutter_icons.dart';
@@ -52,6 +53,7 @@ import 'ArticlesFragment.dart';
 import 'package:pdf/pdf.dart';
 import 'package:pdf/widgets.dart' as pw;
 import 'package:printing/printing.dart';
+import 'package:feature_discovery/feature_discovery.dart';
 
 class AddPiecePage extends StatefulWidget {
   var arguments;
@@ -117,12 +119,25 @@ class _AddPiecePageState extends State<AddPiecePage>
   Profile _profile;
 
   String _devise;
-
   bool directionRtl = false;
   DefaultPrinter defaultPrinter = new DefaultPrinter.init();
 
+   String feature1 = 'feature1';
+   String feature2 = 'feature2';
+   String feature3 = 'feature3';
+
   void initState() {
     super.initState();
+    SchedulerBinding.instance.addPostFrameCallback((Duration duration) {
+      FeatureDiscovery.discoverFeatures(
+        context,
+         <String>{ // Feature ids for every feature that you want to showcase in order.
+           feature1,
+           feature2,
+           feature3
+        },
+      );
+    });
     bottomBarControler =
         BottomBarController(vsync: this, dragLength: 450, snap: true);
     _dataSource = SliverListDataSource(
@@ -373,103 +388,39 @@ class _AddPiecePageState extends State<AddPiecePage>
               children: <Widget>[
                 Expanded(
                   flex: 4,
-                  child: InkWell(
-                    onTap: () async {
-                      if (editMode) {
-                        if (_selectedItems.isNotEmpty) {
-                          AwesomeDialog(
-                              context: context,
-                              dialogType: DialogType.INFO,
-                              animType: AnimType.BOTTOMSLIDE,
-                              title: S.current.supp,
-                              body: addRemisedialogue(),
-                              btnCancelText: S.current.annuler,
-                              btnCancelOnPress: () {},
-                              btnOkText: S.current.confirme,
-                              btnOkOnPress: () {
-                                setState(() {
-                                  _pourcentremise = double.parse(
-                                      _pourcentremiseControler.text);
-                                  _remisepiece =
-                                      double.parse(_remisepieceControler.text);
-                                });
-                                calculPiece();
-                              })
-                            ..show();
-                        } else {
-                          Helpers.showFlushBar(
-                              context, S.current.msg_select_art);
-                        }
-                      } else {
-                        Helpers.showFlushBar(context, S.current.msg_no_dispo);
-                      }
+                  child: DescribedFeatureOverlay(
+                    featureId: feature1,
+                    tapTarget: Icon(MdiIcons.sigma , color: Colors.black,),
+                    backgroundColor: Colors.blue,
+                    contentLocation: ContentLocation.above,
+                    title: const Text('Ajout Remise'),
+                    description: const Text(
+                        'Cliquer ici pour ajouter une remise sur le montant total'),
+                    onBackgroundTap: () async{
+                      await FeatureDiscovery.completeCurrentStep(context);
+                      return true ;
                     },
-                    child: Container(
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceAround,
-                            children: [
-                              Icon(
-                                MdiIcons.sigma,
-                                color: (editMode)
-                                    ? Colors.blue
-                                    : Theme.of(context).primaryColorDark,
-                                size: 18,
-                              ),
-                              Text(
-                                "${_devise}",
-                                style: TextStyle(
-                                    fontSize: 12, fontWeight: FontWeight.bold),
-                              ),
-                            ],
-                          ),
-                          SizedBox(
-                            height: 2,
-                          ),
-                          Text(
-                            Helpers.numberFormat(_net_a_payer).toString(),
-                            textAlign: TextAlign.center,
-                            style: TextStyle(
-                                fontWeight: FontWeight.bold, fontSize: 14),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                ),
-                Spacer(
-                  flex: 1,
-                ),
-                Expanded(
-                  flex: 4,
-                  child: InkWell(
-                    onTap: () async {
-                      if (editMode) {
-                        if (_piece.piece != PieceType.devis &&
-                            _piece.piece != PieceType.bonCommande &&
-                            _piece.piece != PieceType.retourClient &&
-                            _piece.piece != PieceType.avoirClient &&
-                            _piece.piece != PieceType.retourFournisseur &&
-                            _piece.piece != PieceType.avoirFournisseur) {
+                    child: InkWell(
+                      onTap: () async {
+                        if (editMode) {
                           if (_selectedItems.isNotEmpty) {
                             AwesomeDialog(
                                 context: context,
                                 dialogType: DialogType.INFO,
                                 animType: AnimType.BOTTOMSLIDE,
                                 title: S.current.supp,
-                                body: addVerssementdialogue(),
+                                body: addRemisedialogue(),
                                 btnCancelText: S.current.annuler,
                                 btnCancelOnPress: () {},
                                 btnOkText: S.current.confirme,
                                 btnOkOnPress: () {
                                   setState(() {
-                                    _restepiece =
-                                        double.parse(_resteControler.text);
-                                    _verssementpiece =
-                                        double.parse(_verssementControler.text);
+                                    _pourcentremise = double.parse(
+                                        _pourcentremiseControler.text);
+                                    _remisepiece =
+                                        double.parse(_remisepieceControler.text);
                                   });
+                                  calculPiece();
                                 })
                               ..show();
                           } else {
@@ -479,49 +430,139 @@ class _AddPiecePageState extends State<AddPiecePage>
                         } else {
                           Helpers.showFlushBar(context, S.current.msg_no_dispo);
                         }
-                      }
-                    },
-                    child: Container(
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceAround,
-                            children: [
-                              Icon(MdiIcons.cashMultiple,
-                                  size: 20,
-                                  color: (_piece.piece != PieceType.devis &&
-                                          _piece.piece !=
-                                              PieceType.bonCommande &&
-                                          _piece.piece !=
-                                              PieceType.retourClient &&
-                                          _piece.piece !=
-                                              PieceType.avoirClient &&
-                                          _piece.piece !=
-                                              PieceType.retourFournisseur &&
-                                          _piece.piece !=
-                                              PieceType.avoirFournisseur &&
-                                          editMode)
+                      },
+                      child: Container(
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceAround,
+                              children: [
+                                Icon(
+                                  MdiIcons.sigma,
+                                  color: (editMode)
                                       ? Colors.blue
-                                      : Theme.of(context).primaryColorDark),
-                              Text(
-                                "${_devise}",
-                                style: TextStyle(
-                                    fontSize: 12, fontWeight: FontWeight.bold),
-                              ),
-                            ],
-                          ),
-                          SizedBox(
-                            height: 2,
-                          ),
-                          Text(
-                            Helpers.numberFormat(_restepiece).toString(),
-                            textAlign: TextAlign.center,
-                            style: TextStyle(
-                              fontWeight: FontWeight.bold,
+                                      : Theme.of(context).primaryColorDark,
+                                  size: 18,
+                                ),
+                                Text(
+                                  "${_devise}",
+                                  style: TextStyle(
+                                      fontSize: 12, fontWeight: FontWeight.bold),
+                                ),
+                              ],
                             ),
-                          ),
-                        ],
+                            SizedBox(
+                              height: 2,
+                            ),
+                            Text(
+                              Helpers.numberFormat(_net_a_payer).toString(),
+                              textAlign: TextAlign.center,
+                              style: TextStyle(
+                                  fontWeight: FontWeight.bold, fontSize: 14),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+                Spacer(
+                  flex: 1,
+                ),
+                Expanded(
+                  flex: 4,
+                  child: DescribedFeatureOverlay(
+                    featureId: feature2,
+                    tapTarget: Icon(MdiIcons.cashMultiple , color: Colors.black,),
+                    backgroundColor: Colors.green,
+                    contentLocation: ContentLocation.above,
+                    title: const Text('Ajout Verssemnt'),
+                    description: const Text(
+                        'Cliquer ici pour ajouter la some versser'),
+                    onBackgroundTap: () async{
+                      await FeatureDiscovery.completeCurrentStep(context);
+                      return true ;
+                    },
+                    child: InkWell(
+                      onTap: () async {
+                        if (editMode) {
+                          if (_piece.piece != PieceType.devis &&
+                              _piece.piece != PieceType.bonCommande &&
+                              _piece.piece != PieceType.retourClient &&
+                              _piece.piece != PieceType.avoirClient &&
+                              _piece.piece != PieceType.retourFournisseur &&
+                              _piece.piece != PieceType.avoirFournisseur) {
+                            if (_selectedItems.isNotEmpty) {
+                              AwesomeDialog(
+                                  context: context,
+                                  dialogType: DialogType.INFO,
+                                  animType: AnimType.BOTTOMSLIDE,
+                                  title: S.current.supp,
+                                  body: addVerssementdialogue(),
+                                  btnCancelText: S.current.annuler,
+                                  btnCancelOnPress: () {},
+                                  btnOkText: S.current.confirme,
+                                  btnOkOnPress: () {
+                                    setState(() {
+                                      _restepiece =
+                                          double.parse(_resteControler.text);
+                                      _verssementpiece =
+                                          double.parse(_verssementControler.text);
+                                    });
+                                  })
+                                ..show();
+                            } else {
+                              Helpers.showFlushBar(
+                                  context, S.current.msg_select_art);
+                            }
+                          } else {
+                            Helpers.showFlushBar(context, S.current.msg_no_dispo);
+                          }
+                        }
+                      },
+                      child: Container(
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceAround,
+                              children: [
+                                Icon(MdiIcons.cashMultiple,
+                                    size: 20,
+                                    color: (_piece.piece != PieceType.devis &&
+                                            _piece.piece !=
+                                                PieceType.bonCommande &&
+                                            _piece.piece !=
+                                                PieceType.retourClient &&
+                                            _piece.piece !=
+                                                PieceType.avoirClient &&
+                                            _piece.piece !=
+                                                PieceType.retourFournisseur &&
+                                            _piece.piece !=
+                                                PieceType.avoirFournisseur &&
+                                            editMode)
+                                        ? Colors.blue
+                                        : Theme.of(context).primaryColorDark),
+                                Text(
+                                  "${_devise}",
+                                  style: TextStyle(
+                                      fontSize: 12, fontWeight: FontWeight.bold),
+                                ),
+                              ],
+                            ),
+                            SizedBox(
+                              height: 2,
+                            ),
+                            Text(
+                              Helpers.numberFormat(_restepiece).toString(),
+                              textAlign: TextAlign.center,
+                              style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                          ],
+                        ),
                       ),
                     ),
                   ),
@@ -535,78 +576,91 @@ class _AddPiecePageState extends State<AddPiecePage>
             // Set onVerticalDrag event to drag handlers of controller for swipe effect
             onVerticalDragUpdate: bottomBarControler.onDrag,
             onVerticalDragEnd: bottomBarControler.onDragEnd,
-            child: FloatingActionRow(
-              children: [
-                FloatingActionRowButton(
-                    icon: (editMode)
-                        ? Icon(
-                            Icons.add,
-                            color: Colors.white,
-                          )
-                        : Icon(
-                            Icons.print,
+            child: DescribedFeatureOverlay(
+              featureId: feature3,
+              tapTarget: Icon(Icons.text_snippet_outlined , color: Colors.black,),
+              backgroundColor: Colors.blue,
+              contentLocation: ContentLocation.above,
+              title: const Text('Swipe to top'),
+              description: const Text(
+                  'to show the payment details'),
+              onBackgroundTap: () async{
+                await FeatureDiscovery.completeCurrentStep(context);
+                return true ;
+              },
+              child: FloatingActionRow(
+                children: [
+                  FloatingActionRowButton(
+                      icon: (editMode)
+                          ? Icon(
+                              Icons.add,
+                              color: Colors.white,
+                            )
+                          : Icon(
+                              Icons.print,
+                              color: Colors.white,
+                            ),
+                      color: editMode ? Colors.blue : Colors.redAccent,
+                      foregroundColor: Colors.white,
+                      //Set onPressed event to swap state of bottom bar
+                      onTap: editMode
+                          ? () async {
+                              if (_piece.piece == PieceType.avoirClient ||
+                                  _piece.piece == PieceType.retourClient ||
+                                  _piece.piece == PieceType.retourFournisseur ||
+                                  _piece.piece == PieceType.avoirFournisseur) {
+                                var message = S.current.msg_info_article;
+                                Helpers.showFlushBar(context, message);
+                              }
+                              Future.delayed(Duration(seconds: 1), () async {
+                                await showDialog(
+                                    context: context,
+                                    builder: (BuildContext context) {
+                                      return addArticleDialog();
+                                    }).then((val) {
+                                  calculPiece();
+                                });
+                              });
+                            }
+                          : () async {
+                              AwesomeDialog(
+                                context: context,
+                                dialogType: DialogType.QUESTION,
+                                animType: AnimType.BOTTOMSLIDE,
+                                body: printChoicesDialog(),
+                                closeIcon: Icon(
+                                  Icons.cancel_sharp,
+                                  color: Colors.red,
+                                  size: 26,
+                                ),
+                                showCloseIcon: true,
+                              )..show();
+                            }),
+                  (editMode &&
+                          (_piece.piece == PieceType.avoirClient ||
+                              _piece.piece == PieceType.retourClient ||
+                              _piece.piece == PieceType.retourFournisseur ||
+                              _piece.piece == PieceType.avoirFournisseur))
+                      ? FloatingActionRowButton(
+                          icon: Icon(
+                            Icons.insert_drive_file_outlined,
                             color: Colors.white,
                           ),
-                    color: editMode ? Colors.blue : Colors.redAccent,
-                    foregroundColor: Colors.white,
-                    //Set onPressed event to swap state of bottom bar
-                    onTap: editMode
-                        ? () async {
-                            if (_piece.piece == PieceType.avoirClient ||
-                                _piece.piece == PieceType.retourClient ||
-                                _piece.piece == PieceType.retourFournisseur ||
-                                _piece.piece == PieceType.avoirFournisseur) {
-                              var message = S.current.msg_info_article;
-                              Helpers.showFlushBar(context, message);
-                            }
-                            Future.delayed(Duration(seconds: 1), () async {
-                              await showDialog(
-                                  context: context,
-                                  builder: (BuildContext context) {
-                                    return addArticleDialog();
-                                  }).then((val) {
-                                calculPiece();
-                              });
+                          color: Colors.redAccent,
+                          onTap: () async {
+                            await showDialog(
+                                context: context,
+                                builder: (BuildContext context) {
+                                  return addJournauxDialog();
+                                }).then((val) {
+                              calculPiece();
                             });
-                          }
-                        : () async {
-                            AwesomeDialog(
-                              context: context,
-                              dialogType: DialogType.QUESTION,
-                              animType: AnimType.BOTTOMSLIDE,
-                              body: printChoicesDialog(),
-                              closeIcon: Icon(
-                                Icons.cancel_sharp,
-                                color: Colors.red,
-                                size: 26,
-                              ),
-                              showCloseIcon: true,
-                            )..show();
-                          }),
-                (editMode &&
-                        (_piece.piece == PieceType.avoirClient ||
-                            _piece.piece == PieceType.retourClient ||
-                            _piece.piece == PieceType.retourFournisseur ||
-                            _piece.piece == PieceType.avoirFournisseur))
-                    ? FloatingActionRowButton(
-                        icon: Icon(
-                          Icons.insert_drive_file_outlined,
-                          color: Colors.white,
+                          })
+                      : SizedBox(
+                          height: 0,
                         ),
-                        color: Colors.redAccent,
-                        onTap: () async {
-                          await showDialog(
-                              context: context,
-                              builder: (BuildContext context) {
-                                return addJournauxDialog();
-                              }).then((val) {
-                            calculPiece();
-                          });
-                        })
-                    : SizedBox(
-                        height: 0,
-                      ),
-              ],
+                ],
+              ),
             ),
           ),
           body: Builder(
@@ -2606,9 +2660,6 @@ class _AddPiecePageState extends State<AddPiecePage>
                   pw.Divider(height: 2),
                   pw.SizedBox(height: 4),
                   pw.Text("${S.current.msg_visite}",
-                      style: pw.TextStyle(
-                          fontWeight: pw.FontWeight.bold, font: ttf)),
-                  pw.Text("****BY Ciratit****",
                       style: pw.TextStyle(
                           fontWeight: pw.FontWeight.bold, font: ttf)),
                 ])),

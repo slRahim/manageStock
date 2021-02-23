@@ -374,6 +374,8 @@
   "save_rest_desc" : "Créer des sauvgardes de vos données dans le drive",
   "msg_get_abonnement" : "Taper sur l'abonnement pour la récuperer",
 
-  "transformer_title" : "Transformer la piece vers"
+  "transformer_title" : "Transformer la piece vers",
+  "select_devise" : "Selectionné le devise",
+  "devise" : "Devise"
 
 }

@@ -3494,6 +3494,26 @@ class S {
       args: [],
     );
   }
+
+  /// `Select Currency`
+  String get select_devise {
+    return Intl.message(
+      'Select Currency',
+      name: 'select_devise',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Currency`
+  String get devise {
+    return Intl.message(
+      'Currency',
+      name: 'devise',
+      desc: '',
+      args: [],
+    );
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<S> {

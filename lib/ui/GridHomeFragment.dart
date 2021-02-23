@@ -21,6 +21,8 @@ import 'package:reorderables/reorderables.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'AddArticlePage.dart';
 import 'package:gestmob/services/push_notifications.dart';
+import 'package:feature_discovery/feature_discovery.dart';
+import 'package:flutter/scheduler.dart';
 
 class GridHomeWidget extends StatefulWidget {
   static bool Global_Draggable_Mode = false;
@@ -59,10 +61,14 @@ class _GridHomeWidgetState extends State<GridHomeWidget> {
   var _indiceFinanciere;
   String _devise;
   bool _finishLoading = false;
+  String feature8 = 'feature8';
 
   @override
   Future<void> initState() {
     super.initState();
+    SchedulerBinding.instance.addPostFrameCallback((Duration duration) {
+      FeatureDiscovery.discoverFeatures(context, <String>{feature8});
+    });
     futurInit().then((value) {
       setState(() {
         _finishLoading = true;
@@ -329,56 +335,69 @@ class _GridHomeWidgetState extends State<GridHomeWidget> {
                         alignment: Alignment.center,
                         padding: const EdgeInsetsDirectional.only(
                             start: 20, end: 20),
-                        child: DraggableContainer(
-                          key: _containerKey,
-                          draggableMode: false,
-                          autoReorder: true,
-                          // the decoration when dragging item
-                          dragDecoration: BoxDecoration(boxShadow: [
-                            BoxShadow(color: Colors.black, blurRadius: 10)
-                          ]),
-                          // slot margin
-                          slotMargin: EdgeInsets.only(
-                              left: 10, right: 10, top: 5, bottom: 5),
-                          // the slot size
-                          slotSize: Size(90, 90),
-                          // item list
-                          items: homeDraggableItemList,
-                          // onDragEnd: () {
-                          //   _containerKey.currentState.draggableMode = false;
-                          // },
-                          deleteButton: Container(
-                            width: 20,
-                            height: 20,
-                            decoration: BoxDecoration(
-                              color: Colors.redAccent,
-                              borderRadius:
-                                  BorderRadius.all(Radius.circular(8)),
+                        child: DescribedFeatureOverlay(
+                          featureId: feature8,
+                          tapTarget: Icon(MdiIcons.gestureTapHold , color: Colors.black,),
+                          backgroundColor: Colors.yellow[700],
+                          contentLocation: ContentLocation.below,
+                          title: const Text('Tap and Hold'),
+                          description: const Text(
+                              'on the item to edit order, remove item , or add new one'),
+                          onBackgroundTap: () async{
+                            await FeatureDiscovery.completeCurrentStep(context);
+                            return true ;
+                          },
+                          child: DraggableContainer(
+                            key: _containerKey,
+                            draggableMode: false,
+                            autoReorder: true,
+                            // the decoration when dragging item
+                            dragDecoration: BoxDecoration(boxShadow: [
+                              BoxShadow(color: Colors.black, blurRadius: 10)
+                            ]),
+                            // slot margin
+                            slotMargin: EdgeInsets.only(
+                                left: 10, right: 10, top: 5, bottom: 5),
+                            // the slot size
+                            slotSize: Size(90, 90),
+                            // item list
+                            items: homeDraggableItemList,
+                            // onDragEnd: () {
+                            //   _containerKey.currentState.draggableMode = false;
+                            // },
+                            deleteButton: Container(
+                              width: 20,
+                              height: 20,
+                              decoration: BoxDecoration(
+                                color: Colors.redAccent,
+                                borderRadius:
+                                    BorderRadius.all(Radius.circular(8)),
+                              ),
+                              child: Icon(
+                                Icons.delete_forever,
+                                size: 18,
+                                color: Colors.white,
+                              ),
                             ),
-                            child: Icon(
-                              Icons.delete_forever,
-                              size: 18,
-                              color: Colors.white,
-                            ),
-                          ),
-                          onDraggableModeChanged: (bool draggableMode) {
-                            GridHomeWidget.Global_Draggable_Mode =
-                                draggableMode;
+                            onDraggableModeChanged: (bool draggableMode) {
+                              GridHomeWidget.Global_Draggable_Mode =
+                                  draggableMode;
 
-                            final items = _containerKey.currentState.items;
-                            if (draggableMode) {
-                              draggableItemsListOnChange(items);
-                            } else {
-                              _containerKey.currentState
-                                  .removeItem(_addButton, triggerEvent: false);
-                              if (items.isNotEmpty) {
-                                saveCurrentItemsOrder(items);
+                              final items = _containerKey.currentState.items;
+                              if (draggableMode) {
+                                draggableItemsListOnChange(items);
+                              } else {
+                                _containerKey.currentState
+                                    .removeItem(_addButton, triggerEvent: false);
+                                if (items.isNotEmpty) {
+                                  saveCurrentItemsOrder(items);
+                                }
                               }
-                            }
-                          },
-                          onChanged: (items) async {
-                            draggableItemsListOnChange(items);
-                          },
+                            },
+                            onChanged: (items) async {
+                              draggableItemsListOnChange(items);
+                            },
+                          ),
                         ),
                       ),
                     );

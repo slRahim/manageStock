@@ -4,6 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:gestmob/generated/l10n.dart';
 import 'package:gestmob/search/search_input_sliver.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
+import 'package:feature_discovery/feature_discovery.dart';
+import 'package:flutter/scheduler.dart';
 
 // app bar de la partie detail et modification
 class AddEditBar extends StatefulWidget with PreferredSizeWidget{
@@ -32,6 +34,16 @@ class AddEditBar extends StatefulWidget with PreferredSizeWidget{
 
 class AddEditBarState extends State<AddEditBar>{
 
+  String feature4 = 'feature4';
+
+  @override
+  void initState() {
+    SchedulerBinding.instance.addPostFrameCallback((Duration duration) {
+      FeatureDiscovery.discoverFeatures(context, <String>{feature4});
+    });
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return AppBar(
@@ -45,10 +57,24 @@ class AddEditBarState extends State<AddEditBar>{
       bottom: widget.bottom,
       actions: [
         (widget.onTrensferPressed != null && !widget.editMode)
-            ?IconButton(
-            tooltip: S.current.transferer,
-            icon: Icon(MdiIcons.transfer),
-            onPressed: widget.onTrensferPressed)
+            ?DescribedFeatureOverlay(
+              featureId: feature4,
+              tapTarget: Icon(MdiIcons.transfer , color: Colors.black,),
+              backgroundColor: Colors.blue,
+              contentLocation: ContentLocation.below,
+              title: const Text('Transformer'),
+              description: const Text(
+                  'Cliquer ici pour transformer la piece vers une autre'),
+              onBackgroundTap: () async{
+                await FeatureDiscovery.completeCurrentStep(context);
+                return true ;
+              },
+              child: IconButton(
+                tooltip: S.current.transferer,
+                icon: Icon(MdiIcons.transfer),
+                onPressed: widget.onTrensferPressed
+              ),
+            )
             : SizedBox() ,
         widget.editMode
             ? IconButton(

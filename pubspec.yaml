@@ -106,7 +106,7 @@ dependencies:
   in_app_purchase: ^0.3.4
   introduction_screen: ^1.0.7
   ntp: ^1.0.8
-  flip_card: ^0.4.4
+  feature_discovery: ^0.13.0+2
 
   flutter_localizations:
     sdk: flutter

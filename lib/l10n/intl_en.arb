@@ -373,7 +373,9 @@
   "save_rest_desc" : "Persist your data to your drive",
   "msg_get_abonnement" : "Tap on subscription to restore",
 
-  "transformer_title" : "Transformer item to"
+  "transformer_title" : "Transformer item to",
+  "select_devise" : "Select Currency",
+  "devise" : "Currency"
 
 
 }

@@ -30,12 +30,18 @@ class IntroPage extends StatefulWidget {
 class _IntroPageState extends State<IntroPage> {
   String _selectedLanguage;
   List<DropdownMenuItem<String>> _languages;
-  String _countryname;
+
+  List<String> _countries = ["${S.current.selec_pays}"];
+  String _selectedCountry = S.current.selec_pays ;
+  String _countryname ;
   String _currencycode;
+
   List<String> _cities = ["${S.current.choix_city}"];
   String _selectedCity = S.current.choix_city;
-  String _selectedProvince =S.current.choix_province;
+
   List<String> _provinces = ["${S.current.choix_province}"];
+  String _selectedProvince =S.current.choix_province;
+
   String defaultLocale = Platform.localeName;
 
   TextEditingController _raisonSocialeControl = new TextEditingController();
@@ -62,7 +68,6 @@ class _IntroPageState extends State<IntroPage> {
   }
 
 
-
   Future futureInit() async {
     _languages = utils.buildDropLanguageDownMenuItems(Statics.languages);
     switch(defaultLocale.substring(0,(2))){
@@ -79,9 +84,9 @@ class _IntroPageState extends State<IntroPage> {
         _selectedLanguage = Statics.languages[0];
         break;
     }
-    _countryname = "Algeria";
-    _currencycode = "DZD";
-     getProvince() ;
+    getCounty();
+    _countryname = "United States" ;
+    _currencycode = "USD";
     _prefs = await SharedPreferences.getInstance();
   }
 
@@ -91,12 +96,26 @@ class _IntroPageState extends State<IntroPage> {
     return jsonDecode(res);
   }
 
+  Future getCounty() async {
+    var countryres = await getResponse() as List;
+    countryres.forEach((data) {
+      var model = CountryModel();
+      model.name = data['name'];
+      if (!mounted) return;
+      setState(() {
+        _countries.add(model.name);
+      });
+    });
+
+    return _countries;
+  }
+
   Future getProvince() async {
     var response = await getResponse();
 
     var takeProvince = response
         .map((map) => CountryModel.fromJson(map))
-        .where((item) => item.name == _countryname)
+        .where((item) => item.name == _selectedCountry)
         .map((item) => item.province)
         .toList();
 
@@ -106,8 +125,6 @@ class _IntroPageState extends State<IntroPage> {
       setState(() {
         var name = f.map((item) => item.name).toList();
         for (var statename in name) {
-          print(statename.toString());
-
           _provinces.add(statename.toString());
         }
       });
@@ -120,7 +137,7 @@ class _IntroPageState extends State<IntroPage> {
     var response = await getResponse();
     var takestate = response
         .map((map) => CountryModel.fromJson(map))
-        .where((item) => item.name == _countryname)
+        .where((item) => item.name == _selectedCountry)
         .map((item) => item.province)
         .toList();
     var states = takestate as List;
@@ -132,8 +149,6 @@ class _IntroPageState extends State<IntroPage> {
         setState(() {
           var citiesname = ci.map((item) => item.name).toList();
           for (var citynames in citiesname) {
-            print(citynames.toString());
-
             _cities.add(citynames.toString());
           }
         });
@@ -234,7 +249,7 @@ class _IntroPageState extends State<IntroPage> {
       ),
       PageViewModel(
         titleWidget: Container(
-          margin: EdgeInsets.only(top: 100),
+          margin: EdgeInsets.only(top: 50),
           padding: EdgeInsets.all(20),
           child: Column(
             children: [
@@ -256,6 +271,144 @@ class _IntroPageState extends State<IntroPage> {
         ),
         bodyWidget: Column(
           children: [
+            Container(
+              margin: EdgeInsetsDirectional.only(start: 25 , end: 25),
+              width: 300,
+              padding: const EdgeInsets.all(8),
+              decoration: BoxDecoration(
+                border: Border.all(
+                  color: Colors.blueAccent,
+                ),
+                borderRadius: BorderRadius.circular(20.0),
+              ),
+              child:  Row(
+                  children: [
+                    Icon(
+                      Icons.pin_drop,
+                      color: Theme.of(context).accentColor,
+                    ),
+                    SizedBox(width: 5,),
+                    Container(
+                      width: 200,
+                      child: SingleChildScrollView(
+                        scrollDirection: Axis.horizontal,
+                        child:  DropdownButtonHideUnderline(
+                            child: DropdownButton<String>(
+                              items: _countries.map((String dropDownStringItem) {
+                                return DropdownMenuItem<String>(
+                                  value: dropDownStringItem,
+                                  child: Text(dropDownStringItem,),
+                                );
+                              }).toList(),
+                              onChanged: (value) {
+                                if (!mounted) return;
+                                setState(() {
+                                  _selectedProvince = S.current.choix_province;
+                                  _provinces = ["${S.current.choix_province}"];
+                                  _selectedCountry = value;
+                                  getProvince();
+                                });
+                              },
+                              value: _selectedCountry,
+                            ),
+                          ),
+                        ),
+                    ),
+                  ],
+                ),
+            ),
+            SizedBox(height: 10,),
+            Container(
+              margin: EdgeInsetsDirectional.only(start: 25 , end: 25),
+              padding: const EdgeInsets.all(8),
+              width: 300,
+              decoration: BoxDecoration(
+                border: Border.all(
+                  color: Colors.blueAccent,
+                ),
+                borderRadius: BorderRadius.circular(20.0),
+              ),
+              child: Row(
+                  children: [
+                    Icon(
+                      Icons.pin_drop,
+                      color: Theme.of(context).accentColor,
+                    ),
+                     SizedBox(width: 5,),
+                     Container(
+                        width: 200,
+                        child: SingleChildScrollView(
+                          scrollDirection: Axis.horizontal,
+                          child: DropdownButtonHideUnderline(
+                              child: DropdownButton<String>(
+                                items: _provinces.map((String dropDownStringItem) {
+                                  return DropdownMenuItem<String>(
+                                    value: dropDownStringItem,
+                                    child: Text(dropDownStringItem,),
+                                  );
+                                }).toList(),
+                                onChanged: (value){
+                                  if (!mounted) return;
+                                  setState(() {
+                                    _selectedProvince = value;
+                                    _cities = ["${S.current.choix_city}"];
+                                    _selectedCity = "${S.current.choix_city}" ;
+                                    getCity();
+                                  });
+                                },
+                                value: _selectedProvince,
+                              ),
+                            ),
+                          ),
+                      ),
+
+                  ],
+                ),
+            ),
+            SizedBox(height: 10,),
+            Container(
+              margin: EdgeInsetsDirectional.only(start: 25 , end: 25),
+              padding: const EdgeInsets.all(8),
+              width: 300,
+              decoration: BoxDecoration(
+                border: Border.all(
+                  color: Colors.blueAccent,
+                ),
+                borderRadius: BorderRadius.circular(20.0),
+              ),
+              child: Row(
+                children: [
+                  Icon(
+                    Icons.pin_drop,
+                    color: Theme.of(context).accentColor,
+                  ),
+                  SizedBox(width: 5,),
+                  Container(
+                    width: 200,
+                    child: SingleChildScrollView(
+                      child: DropdownButtonHideUnderline(
+                          child: DropdownButton<String>(
+                            items: _cities.map((String dropDownStringItem) {
+                              return DropdownMenuItem<String>(
+                                value: dropDownStringItem,
+                                child: Text(dropDownStringItem),
+                              );
+                            }).toList(),
+                            onChanged: (value) {
+                              if (!mounted) return;
+                              setState(() {
+                                _selectedCity = value;
+                              });
+                            },
+                            value: _selectedCity,
+                          ),
+                        ),
+                      ),
+                    ),
+                ],
+              ),
+            ),
+            SizedBox(height: 10,),
             InkWell(
               onTap: () async {
                 await showDialog(
@@ -268,7 +421,7 @@ class _IntroPageState extends State<IntroPage> {
                           borderRadius: BorderRadius.circular(20)),
                       contentPadding:
                       EdgeInsets.only(left: 20, top: 20, bottom: 20),
-                      labelText: S.current.pays,
+                      labelText: S.current.devise,
                       alignLabelWithHint: true,
                       hintText: S.current.msg_search,
                       enabledBorder: OutlineInputBorder(
@@ -278,15 +431,13 @@ class _IntroPageState extends State<IntroPage> {
                       ),
                     ),
                     isSearchable: true,
-                    title: Text('${S.current.selec_pays}'),
+                    title: Text('${S.current.select_devise}'),
                     itemBuilder: _countryDialog,
                     onValuePicked: (Country country) {
                       setState(() {
-                        _provinces = ["${S.current.choix_province}"];
-                        _countryname = country.name;
+                        _countryname = country.name ;
                         _currencycode = country.currencyCode;
                       });
-                      getProvince();
                     },
                   ),
                 );
@@ -295,6 +446,7 @@ class _IntroPageState extends State<IntroPage> {
                 padding: const EdgeInsetsDirectional.only(
                     start: 8, end: 8, top: 20.5, bottom: 20.5),
                 margin: EdgeInsetsDirectional.only(start: 25 , end: 25),
+                width: 300,
                 decoration: BoxDecoration(
                   border: Border.all(
                     color: Colors.blueAccent,
@@ -304,104 +456,22 @@ class _IntroPageState extends State<IntroPage> {
                 child: Row(
                   children: [
                     Icon(
-                      Icons.pin_drop,
+                      Icons.monetization_on,
                       color: Theme.of(context).accentColor,
                     ),
+                    SizedBox(width: 5,),
                     Expanded(
-                      child: Center(
+                      child: SingleChildScrollView(
                         child: Text(
-                          "${_countryname}",
-                          style: TextStyle(fontSize: 18),
+                            "${_currencycode} (${_countryname})",
+                            style: TextStyle(fontSize: 18),
+                          ),
                         ),
-                      ),
                     )
                   ],
                 ),
               ),
             ),
-            SizedBox(height: 10,),
-            Container(
-              margin: EdgeInsetsDirectional.only(start: 25 , end: 25),
-              padding: const EdgeInsets.all(8),
-              decoration: BoxDecoration(
-                border: Border.all(
-                  color: Colors.blueAccent,
-                ),
-                borderRadius: BorderRadius.circular(20.0),
-              ),
-              child: Row(
-                children: [
-                  Icon(
-                    Icons.pin_drop,
-                    color: Theme.of(context).accentColor,
-                  ),
-                  Expanded(
-                    child: Center(
-                      child: DropdownButtonHideUnderline(
-                        child: DropdownButton<String>(
-                          items: _provinces.map((String dropDownStringItem) {
-                            return DropdownMenuItem<String>(
-                              value: dropDownStringItem,
-                              child: Text(dropDownStringItem,),
-                            );
-                          }).toList(),
-                          onChanged: (value){
-                            if (!mounted) return;
-                            setState(() {
-                              _selectedProvince = value;
-                              _cities = ["${S.current.choix_city}"];
-                              getCity();
-                            });
-                          },
-                          value: _selectedProvince,
-                        ),
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-            ),
-            SizedBox(height: 10,),
-            Container(
-              margin: EdgeInsetsDirectional.only(start: 25 , end: 25),
-              padding: const EdgeInsets.all(8),
-              decoration: BoxDecoration(
-                border: Border.all(
-                  color: Colors.blueAccent,
-                ),
-                borderRadius: BorderRadius.circular(20.0),
-              ),
-              child: Row(
-                children: [
-                  Icon(
-                    Icons.pin_drop,
-                    color: Theme.of(context).accentColor,
-                  ),
-                  Expanded(
-                    child: Center(
-                      child: DropdownButtonHideUnderline(
-                        child: DropdownButton<String>(
-                          items: _cities.map((String dropDownStringItem) {
-                            return DropdownMenuItem<String>(
-                              value: dropDownStringItem,
-                              child: Text(dropDownStringItem),
-                            );
-                          }).toList(),
-                          onChanged: (value) {
-                            if (!mounted) return;
-                            setState(() {
-                              _selectedCity = value;
-                            });
-                          },
-                          value: _selectedCity,
-                        ),
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-            ),
-
           ],
         ),
       ),
@@ -605,6 +675,10 @@ class _IntroPageState extends State<IntroPage> {
     try{
       DateTime startDate = await getDateFromServer();
       Uint8List image01 = await Helpers.getDefaultImageUint8List(from: "profile");
+      var country = (_countries.indexOf(_selectedCountry) == 0)? _countryname : _selectedCountry ;
+      var province = (_provinces.indexOf(_selectedProvince) == 0)? null : _selectedProvince ;
+      var city = (_cities.indexOf(_selectedCity) == 0)? null : _selectedCity ;
+
       _myParams = new MyParams(
           1,
           2,
@@ -617,11 +691,12 @@ class _IntroPageState extends State<IntroPage> {
           "9:01",
           0,
           0,
-          _countryname,
+          country,
           _currencycode,
           "beta",
           startDate,
           'illimit');
+
 
       _profile = new Profile(
           1,
@@ -631,8 +706,8 @@ class _IntroPageState extends State<IntroPage> {
           5,
           _adresseControl.text,
           "_addressWeb",
-          "${_selectedProvince.split(' ').first}",
-          "${_selectedCity}",
+          "${province.split(' ').first}",
+          "${city}",
           "${_countryname}",
           "_cp",
           _mobileControl.text,

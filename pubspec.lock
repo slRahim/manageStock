@@ -260,6 +260,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "0.0.1"
+  feature_discovery:
+    dependency: "direct main"
+    description:
+      name: feature_discovery
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.13.0+2"
   ffi:
     dependency: transitive
     description:
@@ -365,13 +372,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "2.0.6"
-  flip_card:
-    dependency: "direct main"
-    description:
-      name: flip_card
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "0.4.4"
   floating_action_row:
     dependency: "direct main"
     description:

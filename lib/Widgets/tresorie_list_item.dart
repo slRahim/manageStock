@@ -13,6 +13,8 @@ import 'package:material_design_icons_flutter/material_design_icons_flutter.dart
 import 'package:sliding_card/sliding_card.dart';
 import 'CustomWidgets/list_tile_card.dart';
 import 'package:gestmob/services/push_notifications.dart';
+import 'package:feature_discovery/feature_discovery.dart';
+import 'package:flutter/scheduler.dart';
 
 // element à afficher lors de listing des tresorie
 class TresorieListItem extends StatefulWidget {
@@ -34,11 +36,15 @@ class _TresorieListItemState extends State<TresorieListItem> {
   bool _visible = true ;
   SlidingCardController controller ;
   String _devise ;
+  String feature6 = 'feature6';
 
   @override
   void initState() {
     super.initState();
     controller = SlidingCardController();
+    SchedulerBinding.instance.addPostFrameCallback((Duration duration) {
+      FeatureDiscovery.discoverFeatures(context, <String>{feature6});
+    });
   }
 
   @override
@@ -62,91 +68,104 @@ class _TresorieListItemState extends State<TresorieListItem> {
   @override
   Widget build(BuildContext context) {
     SizeConfig().init(context);
-    return Visibility(
-      visible: _visible,
-      child: Slidable(
-        actionPane: SlidableDrawerActionPane(),
-        actionExtentRatio: 0.25,
-        child: ListTileCard(
-          from: widget.tresorie,
-          onTap: () =>
-          {
-            Navigator.of(context).pushNamed(
-                RoutesKeys.addTresorie, arguments: widget.tresorie)
-          },
-          slidingCardController: controller,
-          onCardTapped: () {
-            if(controller.isCardSeparated == true) {
-              controller.collapseCard();
-            } else {
-              controller.expandCard();
-            }
-          },
-          leading: CircleAvatar(
-            radius: 28,
-            backgroundColor: getColor(),
-            child: CircleAvatar(
-              child: (widget.tresorie.categorie == 2 ||
-                  widget.tresorie.categorie == 7) ? Icon(
-                Icons.arrow_upward_outlined, color: Colors.green,)
-                  : Icon(Icons.arrow_downward_outlined, color: Colors.red,),
-              radius: 25,
-              backgroundColor: Colors.grey[100],
+    return DescribedFeatureOverlay(
+      featureId: feature6,
+      tapTarget: Icon(MdiIcons.arrowExpandRight , color: Colors.black,),
+      backgroundColor: Colors.green,
+      contentLocation: ContentLocation.below,
+      title: const Text('Swipe'),
+      description: const Text(
+          'from start to get extra options'),
+      onBackgroundTap: () async{
+        await FeatureDiscovery.completeCurrentStep(context);
+        return true ;
+      },
+      child: Visibility(
+        visible: _visible,
+        child: Slidable(
+          actionPane: SlidableDrawerActionPane(),
+          actionExtentRatio: 0.25,
+          child: ListTileCard(
+            from: widget.tresorie,
+            onTap: () =>
+            {
+              Navigator.of(context).pushNamed(
+                  RoutesKeys.addTresorie, arguments: widget.tresorie)
+            },
+            slidingCardController: controller,
+            onCardTapped: () {
+              if(controller.isCardSeparated == true) {
+                controller.collapseCard();
+              } else {
+                controller.expandCard();
+              }
+            },
+            leading: CircleAvatar(
+              radius: 28,
+              backgroundColor: getColor(),
+              child: CircleAvatar(
+                child: (widget.tresorie.categorie == 2 ||
+                    widget.tresorie.categorie == 7) ? Icon(
+                  Icons.arrow_upward_outlined, color: Colors.green,)
+                    : Icon(Icons.arrow_downward_outlined, color: Colors.red,),
+                radius: 25,
+                backgroundColor: Colors.grey[100],
+              ),
             ),
-          ),
-          title: (widget.tresorie.tierRS != null)
-              ? Text("(# : ${widget.tresorie.numTresorie}) ${widget.tresorie.tierRS}" ,
-                  style: TextStyle(fontSize: 16,)
+            title: (widget.tresorie.tierRS != null)
+                ? Text("(# : ${widget.tresorie.numTresorie}) ${widget.tresorie.tierRS}" ,
+                    style: TextStyle(fontSize: 16,)
+                  )
+                :Text("(# : ${widget.tresorie.numTresorie}) __" ,
+                    style: TextStyle(fontSize: 16,)
+                ),
+            trailingChildren: [
+              Text(
+                "${S.current.objet}: ${widget.tresorie.objet}",
+                style: TextStyle(
+                    fontSize: 16.0),
+              ),
+              (widget.tresorie.montant >= 0)
+                ? Row(
+                  children: [
+                    Icon(MdiIcons.cashMultiple,
+                      size: 16,
+                      color: Theme.of(context).primaryColorDark,
+                    ),
+                    SizedBox(
+                      width: 3,
+                    ),
+                    Text(
+                      '${Helpers.numberFormat(widget.tresorie.montant).toString()} ${_devise}',
+                      style: TextStyle(fontSize: 16.0, fontWeight: FontWeight.bold),),
+                  ],
                 )
-              :Text("(# : ${widget.tresorie.numTresorie}) __" ,
-                  style: TextStyle(fontSize: 16,)
-              ),
-          trailingChildren: [
-            Text(
-              "${S.current.objet}: ${widget.tresorie.objet}",
-              style: TextStyle(
-                  fontSize: 16.0),
-            ),
-            (widget.tresorie.montant >= 0)
-              ? Row(
-                children: [
-                  Icon(MdiIcons.cashMultiple,
-                    size: 16,
-                    color: Theme.of(context).primaryColorDark,
-                  ),
-                  SizedBox(
-                    width: 3,
-                  ),
-                  Text(
-                    '${Helpers.numberFormat(widget.tresorie.montant).toString()} ${_devise}',
+                : Row(
+                  children: [
+                    Icon(MdiIcons.cashMultiple,
+                      size: 16,
+                      color: Theme.of(context).primaryColorDark,
+                    ),
+                    SizedBox(
+                      width: 3,
+                    ),
+                    Text(
+                    '${Helpers.numberFormat(widget.tresorie.montant * -1).toString()} ${_devise}',
                     style: TextStyle(fontSize: 16.0, fontWeight: FontWeight.bold),),
-                ],
-              )
-              : Row(
-                children: [
-                  Icon(MdiIcons.cashMultiple,
-                    size: 16,
-                    color: Theme.of(context).primaryColorDark,
-                  ),
-                  SizedBox(
-                    width: 3,
-                  ),
-                  Text(
-                  '${Helpers.numberFormat(widget.tresorie.montant * -1).toString()} ${_devise}',
-                  style: TextStyle(fontSize: 16.0, fontWeight: FontWeight.bold),),
-                ],
-              ),
+                  ],
+                ),
+            ],
+          ),
+          actions: <Widget>[
+            IconSlideAction(
+                color: Colors.white10,
+                iconWidget: Icon(Icons.delete_forever,size: 50, color: Colors.red,),
+                onTap: () async {
+                  dellDialog(context);
+                }
+            ),
           ],
         ),
-        actions: <Widget>[
-          IconSlideAction(
-              color: Colors.white10,
-              iconWidget: Icon(Icons.delete_forever,size: 50, color: Colors.red,),
-              onTap: () async {
-                dellDialog(context);
-              }
-          ),
-        ],
       ),
     );
   }

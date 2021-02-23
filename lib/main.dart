@@ -1,6 +1,8 @@
 import 'dart:async';
+import 'package:feature_discovery/feature_discovery.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_phoenix/flutter_phoenix.dart';
@@ -33,6 +35,8 @@ void main() {
   //       )
   //   );
   // }, onError: Crashlytics.instance.recordError);
+
+  timeDilation = 1.0;
 
   runApp(
       Phoenix(
@@ -111,66 +115,69 @@ class _MyAppState extends State<MyApp> {
 
   @override
   Widget build(BuildContext context) {
-    return  MaterialApp(
-        theme: ThemeData(
-            brightness: Brightness.light,
-            primarySwatch: Colors.red,
-            backgroundColor: Color(0xFFF1F8FA),
-            floatingActionButtonTheme: FloatingActionButtonThemeData(
-                backgroundColor: Colors.redAccent
-            ),
-            secondaryHeaderColor: Colors.blue[800],
-            selectedRowColor: Colors.white,
-            primaryColorDark: Colors.black,
-            bottomAppBarColor: Colors.white,
-            disabledColor: Colors.white,
-            hoverColor: Colors.blue[200],
-            tabBarTheme: TabBarTheme(
-              labelColor: Colors.blue,
-              unselectedLabelStyle: TextStyle(color: Colors.black54, fontSize: 12),
-              unselectedLabelColor: Colors.black54,
-            ),
-            appBarTheme: AppBarTheme(
-              color: Colors.blue[600],
-            )
-        ),
-        darkTheme: ThemeData(
-            brightness: Brightness.dark,
-            primarySwatch: Colors.red,
-            backgroundColor: Colors.white10,
-            floatingActionButtonTheme: FloatingActionButtonThemeData(
-                backgroundColor: Colors.greenAccent,
-                foregroundColor: Colors.black
-            ),
-            secondaryHeaderColor: Colors.blueGrey[900],
-            selectedRowColor: Colors.black.withOpacity(0),
-            primaryColorDark: Colors.white,
-            disabledColor: Colors.black26,
-            hoverColor: Colors.black26,
-            tabBarTheme: TabBarTheme(
-              labelColor: Colors.blue,
-              unselectedLabelStyle: TextStyle(color: Colors.white60, fontSize: 12),
-              unselectedLabelColor: Colors.white60,
-            ),
-            bottomAppBarColor: Colors.black,
-            appBarTheme: AppBarTheme(
-              color: Colors.black,
-            )
-        ),
-        themeMode: themeMode,
-        localizationsDelegates: [
-          S.delegate,
-          GlobalMaterialLocalizations.delegate,
-          GlobalWidgetsLocalizations.delegate,
-          GlobalCupertinoLocalizations.delegate,
-        ],
-        supportedLocales: S.delegate.supportedLocales,
-        locale: localeList[index],
-        title: "GestMob",
-        home: _getHome(),
-        onGenerateRoute: RouteGenerator.generateRoute,
+    return  FeatureDiscovery(
+      child: MaterialApp(
+         debugShowCheckedModeBanner: false,
+          theme: ThemeData(
+              brightness: Brightness.light,
+              primarySwatch: Colors.red,
+              backgroundColor: Color(0xFFF1F8FA),
+              floatingActionButtonTheme: FloatingActionButtonThemeData(
+                  backgroundColor: Colors.redAccent
+              ),
+              secondaryHeaderColor: Colors.blue[800],
+              selectedRowColor: Colors.white,
+              primaryColorDark: Colors.black,
+              bottomAppBarColor: Colors.white,
+              disabledColor: Colors.white,
+              hoverColor: Colors.blue[200],
+              tabBarTheme: TabBarTheme(
+                labelColor: Colors.blue,
+                unselectedLabelStyle: TextStyle(color: Colors.black54, fontSize: 12),
+                unselectedLabelColor: Colors.black54,
+              ),
+              appBarTheme: AppBarTheme(
+                color: Colors.blue[600],
+              )
+          ),
+          darkTheme: ThemeData(
+              brightness: Brightness.dark,
+              primarySwatch: Colors.red,
+              backgroundColor: Colors.white10,
+              floatingActionButtonTheme: FloatingActionButtonThemeData(
+                  backgroundColor: Colors.greenAccent,
+                  foregroundColor: Colors.black
+              ),
+              secondaryHeaderColor: Colors.blueGrey[900],
+              selectedRowColor: Colors.black.withOpacity(0),
+              primaryColorDark: Colors.white,
+              disabledColor: Colors.black26,
+              hoverColor: Colors.black26,
+              tabBarTheme: TabBarTheme(
+                labelColor: Colors.blue,
+                unselectedLabelStyle: TextStyle(color: Colors.white60, fontSize: 12),
+                unselectedLabelColor: Colors.white60,
+              ),
+              bottomAppBarColor: Colors.black,
+              appBarTheme: AppBarTheme(
+                color: Colors.black,
+              )
+          ),
+          themeMode: themeMode,
+          localizationsDelegates: [
+            S.delegate,
+            GlobalMaterialLocalizations.delegate,
+            GlobalWidgetsLocalizations.delegate,
+            GlobalCupertinoLocalizations.delegate,
+          ],
+          supportedLocales: S.delegate.supportedLocales,
+          locale: localeList[index],
+          title: "GestMob",
+          home: _getHome(),
+          onGenerateRoute: RouteGenerator.generateRoute,
 
-      );
+        ),
+    );
 
   }
 
