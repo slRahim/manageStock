@@ -9,17 +9,16 @@ import 'package:gestmob/cubit/home_cubit.dart';
 import 'package:gestmob/generated/l10n.dart';
 import 'package:gestmob/models/HomeItem.dart';
 import 'package:gestmob/models/MyParams.dart';
-import 'package:gestmob/models/Profile.dart';
 import 'package:gestmob/services/push_notifications.dart';
 import 'package:gestmob/ui/home.dart';
 import 'HomeItemsWidgets.dart';
+import 'package:gestmob/models/Profile.dart';
 
-// le nav drawer restyle
-class NavDrawer extends StatelessWidget {
-  final MyParams myparams ;
-  NavDrawer({Key key ,this.myparams}):super(key : key);
 
-  var drawerHeaderColor = 0xFF1E90FF;
+class NavDrawer extends  StatelessWidget {
+  final MyParams myparams;
+  final Profile profile ;
+  NavDrawer({Key key, this.myparams, this.profile}) : super(key: key);
 
   List<Widget> homeItemWidgetList;
   List<HomeItem> homeItemList = [
@@ -42,11 +41,8 @@ class NavDrawer extends StatelessWidget {
     homeItemTresorerie,
     homeItemRapports,
     homeItemParametres,
-    drawerItemHelp,
     drawerItemExit
   ];
-
-
 
   @override
   Widget build(BuildContext context) {
@@ -58,47 +54,80 @@ class NavDrawer extends StatelessWidget {
             padding: EdgeInsets.zero,
             children: getNavDrawerWidgetList(context),
           ),
-    ));
+        ));
+
   }
 
   List<Widget> getNavDrawerWidgetList(context) {
     homeItemWidgetList = <Widget>[
       DrawerHeader(
-        child: InkWell(
-            onTap: (){
+          decoration: BoxDecoration(
+            // color: Colors.blue[900],
+              gradient: LinearGradient(
+                  colors: [Colors.blue[700], Colors.blue[900]],
+                  begin: FractionalOffset.topCenter,
+                  end: FractionalOffset.bottomCenter,
+                  stops: [0.0, 0.5],
+                  tileMode: TileMode.clamp)
+          ),
+          child: InkWell(
+            onTap: () {
               Navigator.pop(context);
               Navigator.of(context).pushNamed(
                 RoutesKeys.profilePage,
               );
             },
             child: Container(
-              width: 500.0,
-              padding: new EdgeInsetsDirectional.fromSTEB(20.0, 40.0, 20.0, 40.0),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Padding(
-                    padding: const EdgeInsetsDirectional.fromSTEB(20,0,0,60),
-                    child: Image(image: AssetImage('assets/logos/profile_logo.png')),
-                  ),
-                  Padding(
-                    padding: const EdgeInsetsDirectional.fromSTEB(40,0,0,0),
-                    child: Image(image: AssetImage('assets/logos/profile_logo.png')),
-                  ),
-                ],
+              child: SingleChildScrollView(
+                scrollDirection: Axis.horizontal,
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: [
+                    CircleAvatar(
+                      radius: 40,
+                      backgroundColor: Theme.of(context).secondaryHeaderColor,
+                      child:(profile.imageUint8List == null)? CircleAvatar(
+                        radius: 35,
+                        backgroundColor: Colors.white,
+                        child: Icon(
+                          Icons.person,
+                          size: 60,
+                          color: Colors.blue[700],
+                        ),
+                      ):CircleAvatar(
+                        radius: 35,
+                        backgroundColor: Colors.white,
+                        backgroundImage: MemoryImage(profile.imageUint8List),
+                      ),
+                    ),
+                    SizedBox(width: 8,),
+                    Container(
+                        width: 180,
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Text("${profile.raisonSociale}" , style: TextStyle(color: Colors.white , fontWeight: FontWeight.bold , fontSize: 20),),
+                            SizedBox(height: 2,),
+                            Text(getTranslateVersion() , style: TextStyle(color: Colors.white , fontWeight: FontWeight.bold ,),),
+                            SizedBox(height: 2,),
+                            Text("${S.current.until}: ${Helpers.dateToText(Helpers.getDateExpiration(myparams))}" , style: TextStyle(color: Colors.white),),
+                          ],
+                        )
+                    ),
+                  ],
+                ),
               ),
-            )
-        ),
-        decoration: BoxDecoration(color: Colors.blue[200]),
-      )
+            ),
+          ))
     ];
 
     if(myparams.versionType == "demo" ||
-        Helpers.getDateExpiration(myparams).isAfter(DateTime.now()) ){
-
+        Helpers.getDateExpiration(myparams).isBefore(DateTime.now()) ){
       homeItemWidgetList.add(getDrawerItemWidget(context, drawerItemPurchase));
       homeItemWidgetList.add(new Divider()) ;
     }
+
 
     homeItemList.forEach((data) => {
       homeItemWidgetList.add(getDrawerItemWidget(context, data)),
@@ -123,10 +152,31 @@ class NavDrawer extends StatelessWidget {
         Navigator.of(context).pop(),
         Helpers.handleIdClick(context, data.id),
       },
-      trailing:(Helpers.isDirectionRTL(context))? Icon(Icons.keyboard_arrow_left,color: Colors.white,)
-          :Icon(Icons.keyboard_arrow_right,color: Colors.white,),
+      trailing: (Helpers.isDirectionRTL(context))
+          ? Icon(
+        Icons.keyboard_arrow_left,
+        color: Colors.white,
+      )
+          : Icon(
+        Icons.keyboard_arrow_right,
+        color: Colors.white,
+      ),
     );
   }
 
-
+  String getTranslateVersion(){
+    switch(myparams.versionType){
+      case "demo" :
+        return S.current.demo;
+        break ;
+      case "premium" :
+        return S.current.premium;
+        break ;
+      case "beta" :
+        return S.current.beta;
+        break ;
+    }
+  }
 }
+
+

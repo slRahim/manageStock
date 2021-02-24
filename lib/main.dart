@@ -39,8 +39,8 @@ void main() {
   timeDilation = 1.0;
 
   runApp(
-      Phoenix(
-          child: PushNotificationsManager (
+      PushNotificationsManager(
+          child: Phoenix (
               child: MyApp()
           )
       )

@@ -9,7 +9,6 @@ import 'package:gestmob/ui/AddPiecePage.dart';
 import 'package:gestmob/ui/AddTierPage.dart';
 import 'package:gestmob/ui/AddTresoriePage.dart';
 import 'package:gestmob/ui/ProfilePage.dart';
-import 'package:gestmob/ui/HelpPage.dart';
 import 'package:gestmob/ui/LoginPage.dart';
 import 'package:gestmob/ui/SettingsPage.dart';
 import 'package:gestmob/ui/AddArticlePage.dart';
@@ -127,10 +126,6 @@ class RouteGenerator {
           builder: (_) => Selectfromdrive(),
         );
         break;
-      case RoutesKeys.helpPage:
-        return MaterialPageRoute(
-          builder: (_) => HelpPage(),
-        );
       default:
         // If there is no such named route in the switch statement, e.g. /third
         return _errorRoute();

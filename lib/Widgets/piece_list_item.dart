@@ -46,10 +46,12 @@ class _PieceListItemState extends State<PieceListItem> {
 
   @override
   void initState() {
+    if(FeatureDiscovery.hasPreviouslyCompleted(context, feature5) == false){
+      SchedulerBinding.instance.addPostFrameCallback((Duration duration) {
+        FeatureDiscovery.discoverFeatures(context, <String>{feature5});
+      });
+    }
     super.initState();
-    SchedulerBinding.instance.addPostFrameCallback((Duration duration) {
-      FeatureDiscovery.discoverFeatures(context, <String>{feature5});
-    });
     controller = SlidingCardController();
   }
 
@@ -80,9 +82,8 @@ class _PieceListItemState extends State<PieceListItem> {
       tapTarget: Icon(MdiIcons.arrowSplitVertical , color: Colors.black,),
       backgroundColor: Colors.green,
       contentLocation: ContentLocation.below,
-      title: const Text('Swipe'),
-      description: const Text(
-          'Swipe left or right to get extra options'),
+      title: Text(S.current.swipe),
+      description: Text(S.current.msg_swipe_lr),
       onBackgroundTap: () async{
         await FeatureDiscovery.completeCurrentStep(context);
         return true ;

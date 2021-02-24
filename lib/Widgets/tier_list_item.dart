@@ -44,11 +44,14 @@ class _TierListItemState extends State<TierListItem> {
 
   @override
   void initState() {
+    if(FeatureDiscovery.hasPreviouslyCompleted(context, feature7) == false){
+      SchedulerBinding.instance.addPostFrameCallback((Duration duration) {
+        FeatureDiscovery.discoverFeatures(context, <String>{feature7});
+      });
+    }
     super.initState();
     controller = SlidingCardController();
-    SchedulerBinding.instance.addPostFrameCallback((Duration duration) {
-      FeatureDiscovery.discoverFeatures(context, <String>{feature7});
-    });
+
   }
 
   @override
@@ -77,9 +80,8 @@ class _TierListItemState extends State<TierListItem> {
       tapTarget: Icon(MdiIcons.arrowExpandRight , color: Colors.black,),
       backgroundColor: Colors.green,
       contentLocation: ContentLocation.below,
-      title: const Text('Swipe'),
-      description: const Text(
-          'from start to get extra options'),
+      title: Text(S.current.swipe),
+      description: Text(S.current.msg_swipe_start),
       onBackgroundTap: () async{
         await FeatureDiscovery.completeCurrentStep(context);
         return true ;

@@ -151,10 +151,10 @@ class _SettingsPageState extends State<SettingsPage> {
           appBar: AppBar(
             leading: IconButton(
               icon: Icon(
-                Icons.live_help_sharp,
+                Icons.arrow_back,
               ),
               onPressed: () {
-                Helpers.handleIdClick(context, drawerItemHelpId);
+                Navigator.pop(context);
               },
             ),
             title: Text(S.current.settings),

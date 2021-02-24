@@ -68,6 +68,7 @@ class _PreviewPieceState extends State<PreviewPiece> {
   }
 
   futureInit() async {
+    _myParams = await _queryCtr.getAllParams() ;
     if(widget.pdfDoc != null){
       final output = await getTemporaryDirectory();
       final file = File("${output.path}/my-document.pdf");
@@ -77,7 +78,6 @@ class _PreviewPieceState extends State<PreviewPiece> {
 
     }else{
        _profile = await _queryCtr.getProfileById(1);
-       _myParams = await _queryCtr.getAllParams() ;
        _devise = getDeviseTranslate(_myParams.devise) ;
     }
   }

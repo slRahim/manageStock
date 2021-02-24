@@ -325,6 +325,7 @@ class _AddArticlePageState extends State<AddArticlePage>
             TextFormField(
               enabled: editMode,
               controller: _designationControl,
+              // onTap: () => _designationControl.selection = TextSelection(baseOffset: 0, extentOffset: _designationControl.value.text.length),
               keyboardType: TextInputType.text,
               validator: (value) {
                 if (value.isEmpty) {
@@ -358,6 +359,7 @@ class _AddArticlePageState extends State<AddArticlePage>
             TextFormField(
               enabled: editMode,
               controller: _refControl,
+              // onTap: () => _refControl.selection = TextSelection(baseOffset: 0, extentOffset: _refControl.value.text.length),
               keyboardType: TextInputType.text,
               validator: (value) {
                 if (value.isEmpty) {
@@ -394,6 +396,7 @@ class _AddArticlePageState extends State<AddArticlePage>
               child: TextFormField(
                 enabled: editMode,
                 controller: _codeBarControl,
+                onTap: () => _codeBarControl.selection = TextSelection(baseOffset: 0, extentOffset: _codeBarControl.value.text.length),
                 keyboardType: TextInputType.text,
                 validator: (value) {
                   if (value.isEmpty) {
@@ -433,6 +436,7 @@ class _AddArticlePageState extends State<AddArticlePage>
                     child: TextFormField(
                       enabled: editMode && _stockable,
                       controller: _prixAchatControl,
+                      onTap: () => _prixAchatControl.selection = TextSelection(baseOffset: 0, extentOffset: _prixAchatControl.value.text.length),
                       keyboardType: TextInputType.number,
                       validator: (value) {
                         if (value.isEmpty) {
@@ -503,10 +507,11 @@ class _AddArticlePageState extends State<AddArticlePage>
               ],
             ),
             Visibility(
-              visible: _stockable,
+              visible: true,
               child: TextFormField(
                 enabled: editMode,
                 controller: _pmpControl,
+                // onTap: () => _pmpControl.selection = TextSelection(baseOffset: 0, extentOffset: _pmpControl.value.text.length),
                 keyboardType: TextInputType.number,
                 validator: (value) {
                   if (value.isEmpty) {
@@ -544,6 +549,7 @@ class _AddArticlePageState extends State<AddArticlePage>
                   child: TextFormField(
                     enabled: editMode,
                     controller: _stockInitialControl,
+                    onTap: () => _stockInitialControl.selection = TextSelection(baseOffset: 0, extentOffset: _stockInitialControl.value.text.length),
                     keyboardType: TextInputType.number,
                     validator: (value) {
                       if (value.isEmpty) {
@@ -581,6 +587,7 @@ class _AddArticlePageState extends State<AddArticlePage>
                   child: TextFormField(
                     enabled: editMode,
                     controller: _stockMinimumControl,
+                    onTap: () => _stockMinimumControl.selection = TextSelection(baseOffset: 0, extentOffset: _stockMinimumControl.value.text.length),
                     keyboardType: TextInputType.number,
                     validator: (value) {
                       if (value.isEmpty) {
@@ -621,6 +628,7 @@ class _AddArticlePageState extends State<AddArticlePage>
                     child: TextFormField(
                       enabled: editMode,
                       controller: _qteColisCotrol,
+                      onTap: () => _qteColisCotrol.selection = TextSelection(baseOffset: 0, extentOffset: _qteColisCotrol.value.text.length),
                       keyboardType: TextInputType.number,
                       validator: (value) {
                         if (value.isEmpty) {
@@ -658,6 +666,7 @@ class _AddArticlePageState extends State<AddArticlePage>
                   child: TextFormField(
                     enabled: editMode,
                     controller: _qteCmdCotrol,
+                    onTap: () => _qteCmdCotrol.selection = TextSelection(baseOffset: 0, extentOffset: _qteCmdCotrol.value.text.length),
                     keyboardType: TextInputType.number,
                     validator: (value) {
                       if (value.isEmpty) {
@@ -695,6 +704,7 @@ class _AddArticlePageState extends State<AddArticlePage>
               child: TextFormField(
                 enabled: false,
                 controller: _colisControl,
+                onTap: () => _colisControl.selection = TextSelection(baseOffset: 0, extentOffset: _colisControl.value.text.length),
                 keyboardType: TextInputType.number,
                 validator: (value) {
                   if (value.isEmpty) {
@@ -728,6 +738,7 @@ class _AddArticlePageState extends State<AddArticlePage>
             TextFormField(
               enabled: editMode,
               controller: _price1Control,
+              onTap: () => _price1Control.selection = TextSelection(baseOffset: 0, extentOffset: _price1Control.value.text.length),
               keyboardType: TextInputType.number,
               validator: (value) {
                 if (value.isEmpty) {
@@ -762,6 +773,7 @@ class _AddArticlePageState extends State<AddArticlePage>
               child: TextFormField(
                 enabled: editMode,
                 controller: _price2Control,
+                onTap: () => _price2Control.selection = TextSelection(baseOffset: 0, extentOffset: _price2Control.value.text.length),
                 keyboardType: TextInputType.number,
                 validator: (value) {
                   if (value.isEmpty && _price2) {
@@ -797,6 +809,7 @@ class _AddArticlePageState extends State<AddArticlePage>
               child: TextFormField(
                 enabled: editMode,
                 controller: _price3Control,
+                onTap: () => _price3Control.selection = TextSelection(baseOffset: 0, extentOffset: _price3Control.value.text.length),
                 keyboardType: TextInputType.number,
                 validator: (value) {
                   if (value.isEmpty && _price3) {

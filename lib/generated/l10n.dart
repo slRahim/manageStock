@@ -465,10 +465,10 @@ class S {
     );
   }
 
-  /// `NIF`
+  /// `NTVA/NIF`
   String get nif {
     return Intl.message(
-      'NIF',
+      'NTVA/NIF',
       name: 'nif',
       desc: '',
       args: [],
@@ -3235,60 +3235,60 @@ class S {
     );
   }
 
-  /// `Abonnement`
+  /// `Pass to Premium`
   String get abonnement {
     return Intl.message(
-      'Abonnement',
+      'Pass to Premium',
       name: 'abonnement',
       desc: '',
       args: [],
     );
   }
 
-  /// `Cette option n'est pas disponible pour la verssion évaluation`
+  /// `This option does not avalaible for demo version`
   String get msg_demo_option {
     return Intl.message(
-      'Cette option n\'est pas disponible pour la verssion évaluation',
+      'This option does not avalaible for demo version',
       name: 'msg_demo_option',
       desc: '',
       args: [],
     );
   }
 
-  /// `Votre licence d'éssaie a été éxpirer, Abonnez vous pour continuer`
+  /// `Your demonstration licence has expired, Please subscribe to get premium version`
   String get msg_demo_exp {
     return Intl.message(
-      'Votre licence d\'éssaie a été éxpirer, Abonnez vous pour continuer',
+      'Your demonstration licence has expired, Please subscribe to get premium version',
       name: 'msg_demo_exp',
       desc: '',
       args: [],
     );
   }
 
-  /// `Votre licence commercial a été éxpirer, Abonnez vous pour continuer`
+  /// `Your premium subscription has expired, Please resubscribe to service`
   String get msg_premium_exp {
     return Intl.message(
-      'Votre licence commercial a été éxpirer, Abonnez vous pour continuer',
+      'Your premium subscription has expired, Please resubscribe to service',
       name: 'msg_premium_exp',
       desc: '',
       args: [],
     );
   }
 
-  /// `C.A (Mois)`
+  /// `T.O (Month)`
   String get ca_mois {
     return Intl.message(
-      'C.A (Mois)',
+      'T.O (Month)',
       name: 'ca_mois',
       desc: '',
       args: [],
     );
   }
 
-  /// `Achat (Mois)`
+  /// `Purchase (Month)`
   String get achat_mois {
     return Intl.message(
-      'Achat (Mois)',
+      'Purchase (Month)',
       name: 'achat_mois',
       desc: '',
       args: [],
@@ -3335,20 +3335,20 @@ class S {
     );
   }
 
-  /// `Date du début`
+  /// `Start date`
   String get start_date {
     return Intl.message(
-      'Date du début',
+      'Start date',
       name: 'start_date',
       desc: '',
       args: [],
     );
   }
 
-  /// `Date de fin`
+  /// `End date`
   String get end_date {
     return Intl.message(
-      'Date de fin',
+      'End date',
       name: 'end_date',
       desc: '',
       args: [],
@@ -3395,20 +3395,20 @@ class S {
     );
   }
 
-  /// `Illimit`
+  /// `Unlimited`
   String get illimite {
     return Intl.message(
-      'Illimit',
+      'Unlimited',
       name: 'illimite',
       desc: '',
       args: [],
     );
   }
 
-  /// `numbrer of products , invoices , customers , and providers`
+  /// `number of products , invoices , customers , and providers`
   String get illimite_desc {
     return Intl.message(
-      'numbrer of products , invoices , customers , and providers',
+      'number of products , invoices , customers , and providers',
       name: 'illimite_desc',
       desc: '',
       args: [],
@@ -3510,6 +3510,176 @@ class S {
     return Intl.message(
       'Currency',
       name: 'devise',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Add discount`
+  String get ajout_remise {
+    return Intl.message(
+      'Add discount',
+      name: 'ajout_remise',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Click here to add a discount on the total amount`
+  String get msg_ajout_remise {
+    return Intl.message(
+      'Click here to add a discount on the total amount',
+      name: 'msg_ajout_remise',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Add payment`
+  String get ajout_verssement {
+    return Intl.message(
+      'Add payment',
+      name: 'ajout_verssement',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Click here to add the amount paid`
+  String get msg_ajout_verssement {
+    return Intl.message(
+      'Click here to add the amount paid',
+      name: 'msg_ajout_verssement',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Swipe to top`
+  String get swipe_top {
+    return Intl.message(
+      'Swipe to top',
+      name: 'swipe_top',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `To view the calculation details`
+  String get msg_swipe_top {
+    return Intl.message(
+      'To view the calculation details',
+      name: 'msg_swipe_top',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Transform`
+  String get transformer {
+    return Intl.message(
+      'Transform',
+      name: 'transformer',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Click here to transform the item into another`
+  String get msg_transformer {
+    return Intl.message(
+      'Click here to transform the item into another',
+      name: 'msg_transformer',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Swipe`
+  String get swipe {
+    return Intl.message(
+      'Swipe',
+      name: 'swipe',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `to the right and to the left for more options`
+  String get msg_swipe_lr {
+    return Intl.message(
+      'to the right and to the left for more options',
+      name: 'msg_swipe_lr',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `from left to delete the element`
+  String get msg_swipe_start {
+    return Intl.message(
+      'from left to delete the element',
+      name: 'msg_swipe_start',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `HoldPress`
+  String get long_presse {
+    return Intl.message(
+      'HoldPress',
+      name: 'long_presse',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `on the array element to modify, delete, or add a new one`
+  String get msg_long_presse {
+    return Intl.message(
+      'on the array element to modify, delete, or add a new one',
+      name: 'msg_long_presse',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Demo Version`
+  String get demo {
+    return Intl.message(
+      'Demo Version',
+      name: 'demo',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Premium Version`
+  String get premium {
+    return Intl.message(
+      'Premium Version',
+      name: 'premium',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Test Version`
+  String get beta {
+    return Intl.message(
+      'Test Version',
+      name: 'beta',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Until`
+  String get until {
+    return Intl.message(
+      'Until',
+      name: 'until',
       desc: '',
       args: [],
     );

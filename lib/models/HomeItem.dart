@@ -25,7 +25,6 @@ const String drawerItemRetourFournisseurId = "drawerItemRetourFournisseurId";
 const String drawerItemAvoirClientId = "drawerItemAvoirClientId";
 const String drawerItemAvoirFournisseurId = "drawerItemAvoirFournisseurId";
 const String drawerItemBonDeCommandeId = "drawerItemBonDeCommandeId";
-const String drawerItemHelpId = "drawerItemHelpId";
 const String drawerItemExitId = "drawerItemExitId";
 const String drawerItemPurchaseId = "drawerItemPurchaseId";
 
@@ -164,12 +163,6 @@ HomeItem drawerItemBonDeCommande = new HomeItem(
     active: true
 );
 
-HomeItem drawerItemHelp = new HomeItem(
-    id: drawerItemHelpId,
-    title: S.current.aide,
-    img: "assets/setting.png",
-    active: true
-);
 
 HomeItem drawerItemExit = new HomeItem(
     id: drawerItemExitId,
@@ -266,16 +259,12 @@ Widget iconsSet(String itemId, double iconSize){
       return Icon(Icons.assignment_returned_outlined,size: iconSize,color: Colors.white,);
       break;
 
-    case drawerItemHelpId:
-      return Icon(Icons.help,size: iconSize,color: Colors.white,);
-      break;
-
     case drawerItemExitId:
       return Icon(Icons.exit_to_app,size: iconSize,color: Colors.red,);
       break;
 
     case drawerItemPurchaseId:
-      return Icon(Icons.backpack ,size: iconSize,color: Colors.white,);
+      return Icon(Icons.star_purple500_outlined ,size: 35,color: Colors.yellow[700],);
 
     default:
       return Icon(Icons.assignment,size: iconSize,color: Colors.white,);

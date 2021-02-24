@@ -17,7 +17,8 @@ import 'package:gestmob/ui/AddArticlePage.dart';
 import 'package:gestmob/services/push_notifications.dart';
 import 'GridHomeFragment.dart';
 import 'package:gestmob/models/MyParams.dart';
-
+import 'package:gestmob/Helpers/QueryCtr.dart';
+import 'package:gestmob/models/Profile.dart';
 
 class home extends StatefulWidget {
   @override
@@ -31,6 +32,7 @@ DateTime currentBackPressTime;
 class _homeState extends State<home> {
   MyParams _myParams;
   DateTime now ;
+  Profile _profile ;
 
   @override
   void initState() {
@@ -41,13 +43,13 @@ class _homeState extends State<home> {
   void didChangeDependencies() {
     PushNotificationsManagerState data = PushNotificationsManager.of(context);
     _myParams = data.myParams;
+    _profile = data.profile ;
   }
 
   onNotificationClick(String payload) {
     print('taped notification from home: $payload');
     Navigator.pushNamed(context, RoutesKeys.allPieces);
   }
-
 
 
   @override
@@ -88,7 +90,7 @@ class _homeState extends State<home> {
         onWillPop: _onWillPop,
         child: Scaffold(
           key: _globalKey,
-          drawer: NavDrawer(myparams: _myParams,),
+          drawer: NavDrawer(myparams: _myParams,profile: _profile,),
           body: BlocConsumer<HomeCubit, HomeState>(
             listener: (context, state) {
               if (state is HomeError) {

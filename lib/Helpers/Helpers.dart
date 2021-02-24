@@ -148,12 +148,6 @@ class Helpers {
         ).then((value) => Phoenix.rebirth(context));
         break;
 
-      case drawerItemHelpId:
-        Navigator.of(context).pushNamed(
-          RoutesKeys.helpPage,
-        );
-        break;
-
       default:
         BlocProvider.of<HomeCubit>(context).getHomeData(id);
         break;
@@ -320,6 +314,9 @@ class Helpers {
         return myParam.startDate.add(Duration(days: 180));
         break;
       case('illimit'):
+        if(myParam.versionType == "beta"){
+          return DateTime(2021, 6, 1);
+        }
         return DateTime(2100, 1, 1);
         break;
     }

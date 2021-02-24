@@ -63,6 +63,7 @@ class _GridHomeWidgetState extends State<GridHomeWidget> {
   bool _finishLoading = false;
   String feature8 = 'feature8';
 
+
   @override
   Future<void> initState() {
     super.initState();
@@ -106,6 +107,7 @@ class _GridHomeWidgetState extends State<GridHomeWidget> {
     );
   }
 
+
   @override
   void didChangeDependencies() {
     final newLocale = Localizations.localeOf(context);
@@ -133,7 +135,6 @@ class _GridHomeWidgetState extends State<GridHomeWidget> {
       drawerItemRetourClient.title = S.current.retour_client;
       drawerItemRetourFournisseur.title = S.current.retour_fournisseur;
       drawerItemBonDeCommande.title = S.current.bon_commande;
-      drawerItemHelp.title = S.current.aide;
       drawerItemExit.title = S.current.quitter;
 
       _appBarTitle = S.current.app_name;
@@ -340,9 +341,8 @@ class _GridHomeWidgetState extends State<GridHomeWidget> {
                           tapTarget: Icon(MdiIcons.gestureTapHold , color: Colors.black,),
                           backgroundColor: Colors.yellow[700],
                           contentLocation: ContentLocation.below,
-                          title: const Text('Tap and Hold'),
-                          description: const Text(
-                              'on the item to edit order, remove item , or add new one'),
+                          title: Text(S.current.long_presse),
+                          description: Text(S.current.msg_long_presse),
                           onBackgroundTap: () async{
                             await FeatureDiscovery.completeCurrentStep(context);
                             return true ;

@@ -197,8 +197,8 @@ class _AddTresoriePageState extends State<AddTresoriePage>
       _objetControl.text = _tresorie.objet;
       _modaliteControl.text = _tresorie.modalite;
       _montantControl.text = (_tresorie.montant < 0)
-          ? (_tresorie.montant * -1).toString()
-          : _tresorie.montant.toString();
+          ? Helpers.numberFormat((_tresorie.montant * -1)).toString()
+          : Helpers.numberFormat(_tresorie.montant).toString();
     } else {
       _selectedTypeTiers = Statics.tiersItems[0];
       _selectedCategorie = _categorieItems[1];
@@ -650,6 +650,7 @@ class _AddTresoriePageState extends State<AddTresoriePage>
                       TextFormField(
                         enabled: editMode,
                         controller: _objetControl,
+                        onTap: () => _objetControl.selection = TextSelection(baseOffset: 0, extentOffset: _objetControl.value.text.length),
                         keyboardType: TextInputType.text,
                         validator: (value) {
                           if (value.isEmpty) {
@@ -682,6 +683,7 @@ class _AddTresoriePageState extends State<AddTresoriePage>
                       TextFormField(
                         enabled: editMode,
                         controller: _modaliteControl,
+                        onTap: () => _modaliteControl.selection = TextSelection(baseOffset: 0, extentOffset: _modaliteControl.value.text.length),
                         keyboardType: TextInputType.text,
                         validator: (value) {
                           if (value.isEmpty) {
@@ -693,7 +695,7 @@ class _AddTresoriePageState extends State<AddTresoriePage>
                           labelText: S.current.modalite,
                           labelStyle: TextStyle(color: Colors.blue),
                           prefixIcon: Icon(
-                            Icons.merge_type,
+                            MdiIcons.creditCardSettingsOutline,
                             color: Colors.blue,
                           ),
                           focusedBorder: OutlineInputBorder(
@@ -734,6 +736,7 @@ class _AddTresoriePageState extends State<AddTresoriePage>
                       TextFormField(
                         enabled: editMode,
                         controller: _montantControl,
+                        onTap: () => _montantControl.selection = TextSelection(baseOffset: 0, extentOffset: _montantControl.value.text.length),
                         keyboardType: TextInputType.number,
                         validator: (value) {
                           if (value.isEmpty) {
@@ -785,7 +788,7 @@ class _AddTresoriePageState extends State<AddTresoriePage>
               _tresorie.tierId = _selectedClient.id;
               _tresorie.tierRS = _selectedClient.raisonSociale;
               _clientControl.text = _selectedClient.raisonSociale;
-              _montantControl.text = _selectedClient.credit.toString();
+              _montantControl.text = Helpers.numberFormat(_selectedClient.credit).toString();
             });
           },
         );
@@ -801,7 +804,7 @@ class _AddTresoriePageState extends State<AddTresoriePage>
         setState(() {
           _selectedPieces.add(selectedItem);
           _restepiece = _selectedPieces.first.reste;
-          _montantControl.text = _restepiece.toString();
+          _montantControl.text = Helpers.numberFormat(_restepiece).toString();
           _objetControl.text = _objetControl.text +
               " ${selectedItem.piece} ${selectedItem.num_piece}";
         });

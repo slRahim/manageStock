@@ -45,7 +45,7 @@
   "adresse_web" : "Web Address",
   "n_rc" : "N°RC",
   "art_imp" : "ART.IMP",
-  "nif" : "NIF",
+  "nif" : "NTVA/NIF",
   "nis" : "NIS" ,
   "capitale_sociale" : "Social Capital",
   "code_pin" : "Enable Code Pin",
@@ -344,27 +344,27 @@
   "sys_theme" : "System",
   "selec_pays" : "Select country",
 
-  "abonnement" : "Abonnement",
-  "msg_demo_option" : "Cette option n'est pas disponible pour la verssion évaluation",
-  "msg_demo_exp" : "Votre licence d'éssaie a été éxpirer, Abonnez vous pour continuer",
-  "msg_premium_exp" : "Votre licence commercial a été éxpirer, Abonnez vous pour continuer",
-  "ca_mois" : "C.A (Mois)",
-  "achat_mois" : "Achat (Mois)",
+  "abonnement" : "Pass to Premium",
+  "msg_demo_option" : "This option does not avalaible for demo version",
+  "msg_demo_exp" : "Your demonstration licence has expired, Please subscribe to get premium version",
+  "msg_premium_exp" : "Your premium subscription has expired, Please resubscribe to service",
+  "ca_mois" : "T.O (Month)",
+  "achat_mois" : "Purchase (Month)",
   "start" : "Start",
   "intro_select_lang" : "Please Select Your Language",
   "intro_select_region" : "Please Select Country",
   "intro_infor" : "Your Informations",
 
-  "start_date" : "Date du début",
-  "end_date" : "Date de fin",
+  "start_date" : "Start date",
+  "end_date" : "End date",
 
   "choix_province" : "Choose City",
   "choix_city" : "Choose Department",
   "department" : "Departement",
 
   "abonnement_title" : "Upgrade to Premium",
-  "illimite" : "Illimit",
-  "illimite_desc" : "numbrer of products , invoices , customers , and providers",
+  "illimite" : "Unlimited",
+  "illimite_desc" : "number of products , invoices , customers , and providers",
   "imprime" : "Print",
   "imprime_desc" : "Your invoices in different formats 80cm , 55cm , A4 et A5",
   "exporte" : "Export",
@@ -375,7 +375,27 @@
 
   "transformer_title" : "Transformer item to",
   "select_devise" : "Select Currency",
-  "devise" : "Currency"
+  "devise" : "Currency",
+
+  "ajout_remise" : "Add discount",
+  "msg_ajout_remise" : "Click here to add a discount on the total amount",
+  "ajout_verssement" : "Add payment",
+  "msg_ajout_verssement" : "Click here to add the amount paid",
+  "swipe_top" : "Swipe to top",
+  "msg_swipe_top" : "To view the calculation details",
+  "transformer" : "Transform",
+  "msg_transformer" : "Click here to transform the item into another",
+  "swipe" : "Swipe",
+  "msg_swipe_lr" : "to the right and to the left for more options",
+  "msg_swipe_start" : "from left to delete the element",
+  "long_presse" : "HoldPress",
+  "msg_long_presse" : "on the array element to modify, delete, or add a new one",
+
+
+  "demo" : "Demo Version",
+  "premium" : "Premium Version",
+  "beta" : "Test Version",
+  "until" : "Until"
 
 
 }

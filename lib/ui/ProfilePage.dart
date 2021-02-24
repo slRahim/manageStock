@@ -237,6 +237,7 @@ class _ProfilePageState extends State<ProfilePage> with TickerProviderStateMixin
                   child: TextFormField(
                     enabled: editMode,
                     controller: _raisonSocialeControl,
+                    // onTap: () => _raisonSocialeControl.selection = TextSelection(baseOffset: 0, extentOffset: _raisonSocialeControl.value.text.length),
                     keyboardType: TextInputType.text,
                     validator: (value) {
                       if (value.isEmpty) {
@@ -292,6 +293,7 @@ class _ProfilePageState extends State<ProfilePage> with TickerProviderStateMixin
             TextFormField(
               enabled: editMode,
               controller: _activiteControl,
+              // onTap: () => _activiteControl.selection = TextSelection(baseOffset: 0, extentOffset: _activiteControl.value.text.length),
               keyboardType: TextInputType.text,
               validator: (value) {
                 if (value.isEmpty) {
@@ -324,6 +326,7 @@ class _ProfilePageState extends State<ProfilePage> with TickerProviderStateMixin
             TextFormField(
               enabled: editMode,
               controller: _adresseControl,
+              // onTap: () => _adresseControl.selection = TextSelection(baseOffset: 0, extentOffset: _adresseControl.value.text.length),
               keyboardType: TextInputType.text,
               validator: (value) {
                 if (value.isEmpty) {
@@ -335,7 +338,7 @@ class _ProfilePageState extends State<ProfilePage> with TickerProviderStateMixin
                 labelText:  S.current.adresse,
                 labelStyle: TextStyle(color: Colors.blue),
                 prefixIcon: Icon(
-                  MdiIcons.homeCityOutline,
+                  Icons.home_outlined,
                   color: Colors.blue,
                 ),
                 focusedBorder: OutlineInputBorder(
@@ -356,6 +359,7 @@ class _ProfilePageState extends State<ProfilePage> with TickerProviderStateMixin
             TextFormField(
               enabled: editMode,
               controller: _departmentControl,
+              // onTap: () => _departmentControl.selection = TextSelection(baseOffset: 0, extentOffset: _departmentControl.value.text.length),
               keyboardType: TextInputType.text,
               validator: (value) {
                 if (value.isEmpty) {
@@ -388,6 +392,7 @@ class _ProfilePageState extends State<ProfilePage> with TickerProviderStateMixin
             TextFormField(
               enabled: editMode,
               controller: _villeControl,
+              // onTap: () => _villeControl.selection = TextSelection(baseOffset: 0, extentOffset: _villeControl.value.text.length),
               keyboardType: TextInputType.text,
               // validator: (value) {
               //   if (value.isEmpty) {
@@ -420,6 +425,7 @@ class _ProfilePageState extends State<ProfilePage> with TickerProviderStateMixin
             TextFormField(
               enabled: editMode,
               controller: _paysControl,
+              // onTap: () => _paysControl.selection = TextSelection(baseOffset: 0, extentOffset: _paysControl.value.text.length),
               keyboardType: TextInputType.text,
               // validator: (value) {
               //   if (value.isEmpty) {
@@ -452,6 +458,7 @@ class _ProfilePageState extends State<ProfilePage> with TickerProviderStateMixin
             TextFormField(
               enabled: editMode,
               controller: _telephoneControl,
+              onTap: () => _telephoneControl.selection = TextSelection(baseOffset: 0, extentOffset: _telephoneControl.value.text.length),
               keyboardType: TextInputType.number,
               // validator: (value) {
               //   if (value.isEmpty) {
@@ -484,6 +491,7 @@ class _ProfilePageState extends State<ProfilePage> with TickerProviderStateMixin
             TextFormField(
               enabled: editMode,
               controller: _telephone2Control,
+              onTap: () => _telephone2Control.selection = TextSelection(baseOffset: 0, extentOffset: _telephone2Control.value.text.length),
               keyboardType: TextInputType.number,
               // validator: (value) {
               //   if (value.isEmpty) {
@@ -516,6 +524,7 @@ class _ProfilePageState extends State<ProfilePage> with TickerProviderStateMixin
             TextFormField(
               enabled: editMode,
               controller: _mobileControl,
+              onTap: () => _mobileControl.selection = TextSelection(baseOffset: 0, extentOffset: _mobileControl.value.text.length),
               keyboardType: TextInputType.number,
               validator: (value) {
                 if (value.isEmpty) {
@@ -548,6 +557,7 @@ class _ProfilePageState extends State<ProfilePage> with TickerProviderStateMixin
             TextFormField(
               enabled: editMode,
               controller: _mobile2Control,
+              onTap: () => _mobile2Control.selection = TextSelection(baseOffset: 0, extentOffset: _mobile2Control.value.text.length),
               keyboardType: TextInputType.number,
               // validator: (value) {
               //   if (value.isEmpty) {
@@ -580,6 +590,7 @@ class _ProfilePageState extends State<ProfilePage> with TickerProviderStateMixin
             TextFormField(
               enabled: editMode,
               controller: _faxControl,
+              onTap: () => _faxControl.selection = TextSelection(baseOffset: 0, extentOffset: _faxControl.value.text.length),
               keyboardType: TextInputType.number,
               // validator: (value) {
               //   if (value.isEmpty) {
@@ -612,6 +623,7 @@ class _ProfilePageState extends State<ProfilePage> with TickerProviderStateMixin
             TextFormField(
               enabled: editMode,
               controller: _emailControl,
+              // onTap: () => _emailControl.selection = TextSelection(baseOffset: 0, extentOffset: _emailControl.value.text.length),
               keyboardType: TextInputType.text,
               // validator: (value) {
               //   if (value.isEmpty) {
@@ -644,6 +656,7 @@ class _ProfilePageState extends State<ProfilePage> with TickerProviderStateMixin
             TextFormField(
               enabled: editMode,
               controller: _addresseWebControl,
+              // onTap: () => _addresseWebControl.selection = TextSelection(baseOffset: 0, extentOffset: _addresseWebControl.value.text.length),
               keyboardType: TextInputType.text,
               // validator: (value) {
               //   if (value.isEmpty) {
@@ -655,7 +668,7 @@ class _ProfilePageState extends State<ProfilePage> with TickerProviderStateMixin
                 labelText:  S.current.adresse_web,
                 labelStyle: TextStyle(color: Colors.blue),
                 prefixIcon: Icon(
-                  Icons.email,
+                  MdiIcons.searchWeb,
                   color: Colors.blue[700],
                 ),
                 focusedBorder: OutlineInputBorder(
@@ -676,6 +689,7 @@ class _ProfilePageState extends State<ProfilePage> with TickerProviderStateMixin
             TextFormField(
               enabled: editMode,
               controller: _rcControl,
+              onTap: () => _rcControl.selection = TextSelection(baseOffset: 0, extentOffset: _rcControl.value.text.length),
               keyboardType: TextInputType.text,
               validator: (value) {
                 if (value.isEmpty) {
@@ -687,7 +701,7 @@ class _ProfilePageState extends State<ProfilePage> with TickerProviderStateMixin
                 labelText:  S.current.n_rc,
                 labelStyle: TextStyle(color: Colors.blue),
                 prefixIcon: Icon(
-                  Icons.email,
+                  MdiIcons.cardAccountDetails,
                   color: Colors.blue,
                 ),
                 focusedBorder: OutlineInputBorder(
@@ -708,6 +722,7 @@ class _ProfilePageState extends State<ProfilePage> with TickerProviderStateMixin
             TextFormField(
               enabled: editMode,
               controller: _aiControl,
+              onTap: () => _aiControl.selection = TextSelection(baseOffset: 0, extentOffset: _aiControl.value.text.length),
               keyboardType: TextInputType.text,
               // validator: (value) {
               //   if (value.isEmpty) {
@@ -719,7 +734,7 @@ class _ProfilePageState extends State<ProfilePage> with TickerProviderStateMixin
                 labelText:  S.current.art_imp,
                 labelStyle: TextStyle(color: Colors.blue),
                 prefixIcon: Icon(
-                  Icons.email,
+                  MdiIcons.cardAccountDetails,
                   color: Colors.blue,
                 ),
                 focusedBorder: OutlineInputBorder(
@@ -740,6 +755,7 @@ class _ProfilePageState extends State<ProfilePage> with TickerProviderStateMixin
             TextFormField(
               enabled: editMode,
               controller: _nifControl,
+              onTap: () => _nifControl.selection = TextSelection(baseOffset: 0, extentOffset: _nifControl.value.text.length),
               keyboardType: TextInputType.text,
               validator: (value) {
                 if (value.isEmpty) {
@@ -751,7 +767,7 @@ class _ProfilePageState extends State<ProfilePage> with TickerProviderStateMixin
                 labelText:  S.current.nif,
                 labelStyle: TextStyle(color: Colors.blue),
                 prefixIcon: Icon(
-                  Icons.email,
+                  MdiIcons.cardAccountDetails,
                   color: Colors.blue,
                 ),
                 focusedBorder: OutlineInputBorder(
@@ -772,6 +788,7 @@ class _ProfilePageState extends State<ProfilePage> with TickerProviderStateMixin
             TextFormField(
               enabled: editMode,
               controller: _nisControl,
+              onTap: () => _nisControl.selection = TextSelection(baseOffset: 0, extentOffset: _nisControl.value.text.length),
               keyboardType: TextInputType.text,
               // validator: (value) {
               //   if (value.isEmpty) {
@@ -783,7 +800,7 @@ class _ProfilePageState extends State<ProfilePage> with TickerProviderStateMixin
                 labelText:  S.current.nis,
                 labelStyle: TextStyle(color: Colors.blue),
                 prefixIcon: Icon(
-                  Icons.email,
+                  MdiIcons.cardAccountDetails,
                   color: Colors.blue,
                 ),
                 focusedBorder: OutlineInputBorder(
@@ -804,6 +821,7 @@ class _ProfilePageState extends State<ProfilePage> with TickerProviderStateMixin
             TextFormField(
               enabled: editMode,
               controller: _capitalsocialControl,
+              onTap: () => _capitalsocialControl.selection = TextSelection(baseOffset: 0, extentOffset: _capitalsocialControl.value.text.length),
               keyboardType: TextInputType.number,
               validator: (value) {
                 if (value.isEmpty) {

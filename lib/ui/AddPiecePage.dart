@@ -393,9 +393,9 @@ class _AddPiecePageState extends State<AddPiecePage>
                     tapTarget: Icon(MdiIcons.sigma , color: Colors.black,),
                     backgroundColor: Colors.blue,
                     contentLocation: ContentLocation.above,
-                    title: const Text('Ajout Remise'),
-                    description: const Text(
-                        'Cliquer ici pour ajouter une remise sur le montant total'),
+                    title: Text('${S.current.ajout_remise}'),
+                    description: Text(
+                        '${S.current.msg_ajout_remise}'),
                     onBackgroundTap: () async{
                       await FeatureDiscovery.completeCurrentStep(context);
                       return true ;
@@ -477,9 +477,9 @@ class _AddPiecePageState extends State<AddPiecePage>
                     tapTarget: Icon(MdiIcons.cashMultiple , color: Colors.black,),
                     backgroundColor: Colors.green,
                     contentLocation: ContentLocation.above,
-                    title: const Text('Ajout Verssemnt'),
-                    description: const Text(
-                        'Cliquer ici pour ajouter la some versser'),
+                    title:  Text('${S.current.ajout_verssement}'),
+                    description:  Text(
+                        '${S.current.msg_ajout_verssement}'),
                     onBackgroundTap: () async{
                       await FeatureDiscovery.completeCurrentStep(context);
                       return true ;
@@ -578,12 +578,12 @@ class _AddPiecePageState extends State<AddPiecePage>
             onVerticalDragEnd: bottomBarControler.onDragEnd,
             child: DescribedFeatureOverlay(
               featureId: feature3,
-              tapTarget: Icon(Icons.text_snippet_outlined , color: Colors.black,),
+              tapTarget: Icon(MdiIcons.arrowExpandUp , color: Colors.black,),
               backgroundColor: Colors.blue,
               contentLocation: ContentLocation.above,
-              title: const Text('Swipe to top'),
-              description: const Text(
-                  'to show the payment details'),
+              title: Text('${S.current.swipe_top}'),
+              description: Text(
+                  '${S.current.msg_swipe_top}'),
               onBackgroundTap: () async{
                 await FeatureDiscovery.completeCurrentStep(context);
                 return true ;

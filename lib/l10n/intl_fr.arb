@@ -345,7 +345,7 @@
   "sys_theme" : "Système",
   "selec_pays" : "Choisir le pays",
 
-  "abonnement" : "Abonnement",
+  "abonnement" : "Passer au Premium",
   "msg_demo_option" : "Cette option n'est pas disponible pour la verssion évaluation",
   "msg_demo_exp" : "Votre licence d'éssaie a été éxpirer, Abonnez vous pour continuer",
   "msg_premium_exp" : "Votre licence commercial a été éxpirer, Abonnez vous pour continuer",
@@ -376,8 +376,26 @@
 
   "transformer_title" : "Transformer la piece vers",
   "select_devise" : "Selectionné le devise",
-  "devise" : "Devise"
+  "devise" : "Devise",
 
+  "ajout_remise" : "Ajouter une remise",
+  "msg_ajout_remise" : "Cliquez ici pour ajouter une remise sur le montant total",
+  "ajout_verssement" : "Ajouter un verssement ",
+  "msg_ajout_verssement" : "Cliquez ici pour ajouter le montant verssé",
+  "swipe_top" : "Glisser vers le haut",
+  "msg_swipe_top" : "Pour consulter le details des calculs",
+  "transformer" : "Transformer",
+  "msg_transformer" : "Cliquez ici pour transformer la piece vers une autre",
+  "swipe" : "Glisser",
+  "msg_swipe_lr" : "à droite et à gauche pour avoir plus d'options",
+  "msg_swipe_start" : "depuis la gauche pour supprimer l'élément",
+  "long_presse" : "LongPresse",
+  "msg_long_presse" : "sur l'élément du tableau pour modifier, supprimer, ou ajouter un nouveau",
+
+  "demo" : "Verssion Démo",
+  "premium" : "Verssion Prémium",
+  "beta" : "Verssion Teste",
+  "until" : "Jusqu'au"
 
 
 

@@ -62,9 +62,8 @@ class AddEditBarState extends State<AddEditBar>{
               tapTarget: Icon(MdiIcons.transfer , color: Colors.black,),
               backgroundColor: Colors.blue,
               contentLocation: ContentLocation.below,
-              title: const Text('Transformer'),
-              description: const Text(
-                  'Cliquer ici pour transformer la piece vers une autre'),
+              title: Text(S.current.transformer),
+              description:  Text(S.current.msg_transformer),
               onBackgroundTap: () async{
                 await FeatureDiscovery.completeCurrentStep(context);
                 return true ;

@@ -395,6 +395,7 @@ class _AddTierPageState extends State<AddTierPage>
                   child: TextFormField(
                     enabled: editMode,
                     controller: _raisonSocialeControl,
+                    // onTap: () => _raisonSocialeControl.selection = TextSelection(baseOffset: 0, extentOffset: _raisonSocialeControl.value.text.length),
                     keyboardType: TextInputType.text,
                     validator: (value) {
                       if (value.isEmpty) {
@@ -450,6 +451,7 @@ class _AddTierPageState extends State<AddTierPage>
             TextFormField(
               enabled: editMode,
               controller: _adresseControl,
+              // onTap: () => _controller.selection = TextSelection(baseOffset: 0, extentOffset: _controller.value.text.length),
               keyboardType: TextInputType.text,
               validator: (value) {
                 if (value.isEmpty) {
@@ -482,6 +484,7 @@ class _AddTierPageState extends State<AddTierPage>
             TextFormField(
               enabled: editMode,
               controller: _villeControl,
+              // onTap: () => _controller.selection = TextSelection(baseOffset: 0, extentOffset: _controller.value.text.length),
               keyboardType: TextInputType.text,
               // validator: (value) {
               //   if (value.isEmpty) {
@@ -514,6 +517,7 @@ class _AddTierPageState extends State<AddTierPage>
             TextFormField(
               enabled: editMode,
               controller: _telephoneControl,
+              onTap: () => _telephoneControl.selection = TextSelection(baseOffset: 0, extentOffset: _telephoneControl.value.text.length),
               keyboardType: TextInputType.phone,
               // validator: (value) {
               //   if (value.isEmpty) {
@@ -546,6 +550,7 @@ class _AddTierPageState extends State<AddTierPage>
             TextFormField(
               enabled: editMode,
               controller: _mobileControl,
+              onTap: () => _mobileControl.selection = TextSelection(baseOffset: 0, extentOffset: _mobileControl.value.text.length),
               keyboardType: TextInputType.phone,
               validator: (value) {
                 if (value.isEmpty) {
@@ -578,6 +583,7 @@ class _AddTierPageState extends State<AddTierPage>
             TextFormField(
               enabled: editMode,
               controller: _faxControl,
+              onTap: () => _faxControl.selection = TextSelection(baseOffset: 0, extentOffset: _faxControl.value.text.length),
               keyboardType: TextInputType.phone,
               // validator: (value) {
               //   if (value.isEmpty) {
@@ -610,6 +616,7 @@ class _AddTierPageState extends State<AddTierPage>
             TextFormField(
               enabled: editMode,
               controller: _emailControl,
+              // onTap: () => _emailControl.selection = TextSelection(baseOffset: 0, extentOffset: _emailControl.value.text.length),
               keyboardType: TextInputType.emailAddress,
               // validator: (value) {
               //   if (value.isEmpty) {
@@ -642,6 +649,7 @@ class _AddTierPageState extends State<AddTierPage>
             TextFormField(
               enabled: editMode && !modification,
               controller: _solde_departControl,
+              onTap: () => _solde_departControl.selection = TextSelection(baseOffset: 0, extentOffset: _solde_departControl.value.text.length),
               keyboardType: TextInputType.number,
               validator: (value) {
                 if (value.isEmpty) {
@@ -674,6 +682,7 @@ class _AddTierPageState extends State<AddTierPage>
             TextFormField(
               enabled: editMode && !modification,
               controller: _chiffre_affairesControl,
+              onTap: () => _chiffre_affairesControl.selection = TextSelection(baseOffset: 0, extentOffset: _chiffre_affairesControl.value.text.length),
               keyboardType: TextInputType.number,
               validator: (value) {
                 if (value.isEmpty) {
@@ -706,6 +715,7 @@ class _AddTierPageState extends State<AddTierPage>
             TextFormField(
               enabled: editMode && !modification,
               controller: _reglerControl,
+              onTap: () => _reglerControl.selection = TextSelection(baseOffset: 0, extentOffset: _reglerControl.value.text.length),
               keyboardType: TextInputType.number,
               validator: (value) {
                 if (value.isEmpty) {

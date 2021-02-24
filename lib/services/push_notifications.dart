@@ -5,6 +5,7 @@ import 'package:gestmob/Helpers/QueryCtr.dart';
 import 'package:gestmob/Helpers/Statics.dart';
 import 'package:gestmob/models/HomeItem.dart';
 import 'package:gestmob/models/MyParams.dart';
+import 'package:gestmob/models/Profile.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'local_notification.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -26,6 +27,7 @@ class PushNotificationsManager extends StatefulWidget {
 class PushNotificationsManagerState extends State<PushNotificationsManager> {
   final FirebaseMessaging _firebaseMessaging = FirebaseMessaging();
   MyParams _myParams;
+  Profile _profile ;
   bool _pieceHasCredit;
   QueryCtr _queryCtr = new QueryCtr();
 
@@ -44,6 +46,7 @@ class PushNotificationsManagerState extends State<PushNotificationsManager> {
   }
 
   MyParams get myParams => _myParams;
+  Profile get profile => _profile;
 
   @override
   Widget build(BuildContext context) {
@@ -75,6 +78,7 @@ class PushNotificationsManagerState extends State<PushNotificationsManager> {
   }
 
   configureLocalNotification() async {
+    _profile = await _queryCtr.getProfileById(1);
     _myParams = await _queryCtr.getAllParams();
     _pieceHasCredit = await _queryCtr.pieceHasCredit();
 
