@@ -395,7 +395,19 @@
   "demo" : "Verssion Démo",
   "premium" : "Verssion Prémium",
   "beta" : "Verssion Teste",
-  "until" : "Jusqu'au"
+  "until" : "Jusqu'au",
+
+  "msg_long_press_select" : "pour séléctionner l'élément",
+  "tap_element" : "Taper",
+  "msg_tap" : "sur l'élément pour modifier la quantité",
+  "support" : "Support",
+  "msg_support" : "un service commercial et un service aprés vente est à votre disposition",
+  "economiser" : "Économiser",
+
+  "service_comercial" : "Service Commercial",
+  "service_technique" : "Service Technique",
+  "service_ticket" : "Signalé / Réserver un ticket",
+  "get_ticket" : "Obtenir un ticket"
 
 
 

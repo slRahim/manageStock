@@ -125,6 +125,7 @@ class _AddPiecePageState extends State<AddPiecePage>
    String feature1 = 'feature1';
    String feature2 = 'feature2';
    String feature3 = 'feature3';
+   String feature4 = 'feature4';
 
   void initState() {
     super.initState();
@@ -134,7 +135,8 @@ class _AddPiecePageState extends State<AddPiecePage>
          <String>{ // Feature ids for every feature that you want to showcase in order.
            feature1,
            feature2,
-           feature3
+           feature3,
+           feature4
         },
       );
     });

@@ -38,9 +38,6 @@ class AddEditBarState extends State<AddEditBar>{
 
   @override
   void initState() {
-    SchedulerBinding.instance.addPostFrameCallback((Duration duration) {
-      FeatureDiscovery.discoverFeatures(context, <String>{feature4});
-    });
     super.initState();
   }
 

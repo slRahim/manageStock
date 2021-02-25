@@ -44,6 +44,11 @@ class _PurchasePageState extends State<PurchasePage> {
       "icon" : Icon(Icons.add_to_drive , color: Colors.blue),
       "title" :  S.current.save_rest,
       "small_description" :  S.current.save_rest_desc,
+    },
+    {
+      "icon" : Icon(Icons.headset_mic_outlined , color: Colors.blue),
+      "title" : S.current.support,
+      "small_description" : S.current.msg_support,
     }
   ];
 
@@ -107,7 +112,7 @@ class _PurchasePageState extends State<PurchasePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Theme.of(context).backgroundColor,
+      backgroundColor: Theme.of(context).selectedRowColor,
       appBar: SearchBar(
         mainContext: context,
         title: S.current.abonnement_title,
@@ -120,6 +125,9 @@ class _PurchasePageState extends State<PurchasePage> {
             for (var e in _avantages)
               _buildAvantage(e),
             SizedBox(height: 10,),
+            // _buildPurchaseCard(Colors.blue , null),
+            // _buildPurchaseCard(Colors.green , null),
+            // _buildPurchaseCard(Colors.red , null),
             FutureBuilder<List<PurchaseDetails>>(
                 future: retrieveoldPurchase(),
                 initialData: List<PurchaseDetails>(),
@@ -219,7 +227,7 @@ class _PurchasePageState extends State<PurchasePage> {
       },
       child: Container(
         padding: EdgeInsets.all(8),
-        margin: EdgeInsetsDirectional.only(bottom: 10),
+        margin: EdgeInsetsDirectional.only(bottom: 5),
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(10),
           border: Border.all(color: color1,width: 2),
@@ -228,13 +236,21 @@ class _PurchasePageState extends State<PurchasePage> {
         child: ListTile(
           title: Text("${productDetail.price}", style: TextStyle(fontWeight: FontWeight.bold , fontSize: 22),),
           subtitle: Text("${productDetail.title.replaceAll('(Gestmob)', '')}" , style: TextStyle(fontWeight: FontWeight.bold),),
-          trailing:  Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Text("Economisé" , style: TextStyle(fontWeight: FontWeight.bold),),
-              SizedBox (height: 5,),
-              Text("10 %" , style: TextStyle(fontWeight: FontWeight.bold),)
-            ],
+          trailing: Container(
+            padding: EdgeInsets.all(5),
+            decoration: BoxDecoration(
+              color: color1,
+              borderRadius: BorderRadius.circular(8),
+            ),
+
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text(S.current.economiser , style: TextStyle(fontWeight: FontWeight.bold , color: Colors.white),),
+                SizedBox (height: 5,),
+                Text("10 %" , style: TextStyle(fontWeight: FontWeight.bold, color: Colors.white),)
+              ],
+            ),
           ),
         ),
       ),

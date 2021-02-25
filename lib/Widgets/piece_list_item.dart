@@ -46,11 +46,6 @@ class _PieceListItemState extends State<PieceListItem> {
 
   @override
   void initState() {
-    if(FeatureDiscovery.hasPreviouslyCompleted(context, feature5) == false){
-      SchedulerBinding.instance.addPostFrameCallback((Duration duration) {
-        FeatureDiscovery.discoverFeatures(context, <String>{feature5});
-      });
-    }
     super.initState();
     controller = SlidingCardController();
   }

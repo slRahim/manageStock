@@ -17,6 +17,7 @@ import 'package:gestmob/ui/backup_restore_listing.dart';
 import 'package:gestmob/ui/home.dart';
 import 'package:gestmob/ui/intro_page.dart';
 import 'package:gestmob/ui/purchase_page.dart';
+import 'package:gestmob/ui/support_page.dart';
 import 'QueryCtr.dart';
 import 'Statics.dart';
 
@@ -120,6 +121,10 @@ class RouteGenerator {
       case RoutesKeys.settingsPage:
         return MaterialPageRoute(
           builder: (_) => SettingsPage(),
+        );
+      case RoutesKeys.supportPage:
+        return MaterialPageRoute(
+          builder: (_) => SupportPage(),
         );
       case RoutesKeys.driveListing:
         return MaterialPageRoute(

@@ -41,14 +41,10 @@ class _TierListItemState extends State<TierListItem> {
   SlidingCardController controller ;
   String _devise ;
   String feature7 = 'feature7';
+  String feature8 = 'feature8';
 
   @override
   void initState() {
-    if(FeatureDiscovery.hasPreviouslyCompleted(context, feature7) == false){
-      SchedulerBinding.instance.addPostFrameCallback((Duration duration) {
-        FeatureDiscovery.discoverFeatures(context, <String>{feature7});
-      });
-    }
     super.initState();
     controller = SlidingCardController();
 
@@ -91,103 +87,115 @@ class _TierListItemState extends State<TierListItem> {
         child: Slidable(
           actionPane: SlidableDrawerActionPane(),
           actionExtentRatio: 0.25,
-          child: ListTileCard(
-            from: widget.tier,
-            onLongPress: () =>
-            widget.onItemSelected != null ? widget.onItemSelected(widget.tier) : null,
-            onTap: () =>
-            {
-              if(widget.onItemSelected == null){
-                Navigator.of(context)
-                    .pushNamed(RoutesKeys.addTier, arguments: widget.tier)
-              }
+          child: DescribedFeatureOverlay(
+            featureId: (widget.onItemSelected != null)? feature8 : '',
+            tapTarget: Icon(MdiIcons.gestureTapHold , color: Colors.black,),
+            backgroundColor: Colors.green,
+            contentLocation: ContentLocation.below,
+            title: Text(S.current.long_presse),
+            description: Text(S.current.msg_long_press_select),
+            onBackgroundTap: () async{
+              await FeatureDiscovery.completeCurrentStep(context);
+              return true ;
             },
-            slidingCardController: controller,
-            onCardTapped: () {
-              if (controller.isCardSeparated == true) {
-                controller.collapseCard();
-              } else {
-                controller.expandCard();
-              }
-            },
-            leading: CircleAvatar(
-              backgroundColor: Colors.yellow[700],
-              radius: 28,
-              child: CircleAvatar(
-                backgroundColor: Colors.white,
-                radius: 25,
-                backgroundImage:  MemoryImage(widget.tier.imageUint8List),
+            child: ListTileCard(
+              from: widget.tier,
+              onLongPress: () =>
+              widget.onItemSelected != null ? widget.onItemSelected(widget.tier) : null,
+              onTap: () =>
+              {
+                if(widget.onItemSelected == null){
+                  Navigator.of(context)
+                      .pushNamed(RoutesKeys.addTier, arguments: widget.tier)
+                }
+              },
+              slidingCardController: controller,
+              onCardTapped: () {
+                if (controller.isCardSeparated == true) {
+                  controller.collapseCard();
+                } else {
+                  controller.expandCard();
+                }
+              },
+              leading: CircleAvatar(
+                backgroundColor: Colors.yellow[700],
+                radius: 28,
+                child: CircleAvatar(
+                  backgroundColor: Colors.white,
+                  radius: 25,
+                  backgroundImage:  MemoryImage(widget.tier.imageUint8List),
 
+                ),
               ),
+              title:(widget.tier.raisonSociale != null)
+                  ? Text("(${Statics.statutItems[widget.tier.statut]}) ${widget.tier.raisonSociale}" ,
+                      style: TextStyle(
+                          fontSize: 16,)
+                  )
+                  : null,
+              trailingChildren: [
+                Text(
+                  "${S.current.regler}: ${Helpers.numberFormat(widget.tier.regler).toString()} ${_devise}",
+                  style: TextStyle(
+                      fontSize: 16.0),
+                ),
+                Text(
+                 "${Helpers.numberFormat(widget.tier.credit).toString()} ${_devise}",
+                  style: TextStyle(
+                      color: widget.tier.credit > 0 ? Colors.redAccent : Theme.of(context).primaryColorDark,
+                      fontSize: 16.0, fontWeight: FontWeight.bold),
+                ),
+                RichText(
+                  text: TextSpan(
+                      children: [
+                        TextSpan(
+                            text: "${S.current.mobile} : ",
+                            style: TextStyle(fontSize: 15,fontWeight: FontWeight.bold,color: Theme.of(context).primaryColorDark,)
+                        ),
+                        TextSpan(
+                          text:"${widget.tier.mobile} ",
+                          style: TextStyle(
+                              color: Theme.of(context).primaryColorDark,
+                              fontSize: 15.0),
+                        ),
+                      ]
+                  ),
+                ),
+                RichText(
+                  text: TextSpan(
+                      children: [
+                        TextSpan(
+                            text: "${S.current.chifre_affaire} : ",
+                            style: TextStyle(fontSize: 15,fontWeight: FontWeight.bold,color: Theme.of(context).primaryColorDark,)
+                        ),
+                        TextSpan(
+                          text:"${Helpers.numberFormat(widget.tier.chiffre_affaires)} ${_devise}",
+                          style: TextStyle(
+                              color: Theme.of(context).primaryColorDark,
+                              fontSize: 15.0),
+                        ),
+                      ]
+                  ),
+                ),
+                RichText(
+                  text: TextSpan(
+                      children: [
+                        TextSpan(
+                            text: "${S.current.adresse} : ",
+                            style: TextStyle(fontSize: 15 , fontWeight: FontWeight.bold,color: Theme.of(context).primaryColorDark,)
+                        ),
+                        TextSpan(
+                          text:"${widget.tier.adresse}",
+                          style: TextStyle(
+                              color: Theme.of(context).primaryColorDark,
+                              fontSize: 15.0),
+                        ),
+                      ]
+                  ),
+                ),
+              ],
+
             ),
-            title:(widget.tier.raisonSociale != null)
-                ? Text("(${Statics.statutItems[widget.tier.statut]}) ${widget.tier.raisonSociale}" ,
-                    style: TextStyle(
-                        fontSize: 16,)
-                )
-                : null,
-            trailingChildren: [
-              Text(
-                "${S.current.regler}: ${Helpers.numberFormat(widget.tier.regler).toString()} ${_devise}",
-                style: TextStyle(
-                    fontSize: 16.0),
-              ),
-              Text(
-               "${Helpers.numberFormat(widget.tier.credit).toString()} ${_devise}",
-                style: TextStyle(
-                    color: widget.tier.credit > 0 ? Colors.redAccent : Theme.of(context).primaryColorDark,
-                    fontSize: 16.0, fontWeight: FontWeight.bold),
-              ),
-              RichText(
-                text: TextSpan(
-                    children: [
-                      TextSpan(
-                          text: "${S.current.mobile} : ",
-                          style: TextStyle(fontSize: 15,fontWeight: FontWeight.bold,color: Theme.of(context).primaryColorDark,)
-                      ),
-                      TextSpan(
-                        text:"${widget.tier.mobile} ",
-                        style: TextStyle(
-                            color: Theme.of(context).primaryColorDark,
-                            fontSize: 15.0),
-                      ),
-                    ]
-                ),
-              ),
-              RichText(
-                text: TextSpan(
-                    children: [
-                      TextSpan(
-                          text: "${S.current.chifre_affaire} : ",
-                          style: TextStyle(fontSize: 15,fontWeight: FontWeight.bold,color: Theme.of(context).primaryColorDark,)
-                      ),
-                      TextSpan(
-                        text:"${Helpers.numberFormat(widget.tier.chiffre_affaires)} ${_devise}",
-                        style: TextStyle(
-                            color: Theme.of(context).primaryColorDark,
-                            fontSize: 15.0),
-                      ),
-                    ]
-                ),
-              ),
-              RichText(
-                text: TextSpan(
-                    children: [
-                      TextSpan(
-                          text: "${S.current.adresse} : ",
-                          style: TextStyle(fontSize: 15 , fontWeight: FontWeight.bold,color: Theme.of(context).primaryColorDark,)
-                      ),
-                      TextSpan(
-                        text:"${widget.tier.adresse}",
-                        style: TextStyle(
-                            color: Theme.of(context).primaryColorDark,
-                            fontSize: 15.0),
-                      ),
-                    ]
-                ),
-              ),
-            ],
-
           ),
           actions: <Widget>[
             IconSlideAction(

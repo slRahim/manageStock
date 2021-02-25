@@ -86,7 +86,7 @@
   "msg_scan_qr" : "Double tap to scan qr",
   "solde_depart" : "Starting Balance",
   "chifre_affaire" : "Sales Number ",
-  "regler" : "Pay",
+  "regler" : "Payment",
   "credit": "Credit",
   "client_four" : "Customer/Provider",
   "bloquer" : "Bloqued",
@@ -395,7 +395,19 @@
   "demo" : "Demo Version",
   "premium" : "Premium Version",
   "beta" : "Test Version",
-  "until" : "Until"
+  "until" : "Until",
+
+  "msg_long_press_select" : "to select the element",
+  "tap_element" : "Tap",
+  "msg_tap" : "on the element to edit quantity",
+  "support" : "Support",
+  "msg_support" : "a sales and after-sales service is at your disposal",
+  "economiser" : "Save",
+
+  "service_comercial" : "Sales Support",
+  "service_technique" : "Technical Support",
+  "service_ticket" : "Signaled / Book a ticket",
+  "get_ticket" : "Get a ticket"
 
 
 }

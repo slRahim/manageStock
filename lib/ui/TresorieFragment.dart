@@ -22,6 +22,8 @@ import 'package:material_design_icons_flutter/material_design_icons_flutter.dart
 import 'package:gestmob/services/push_notifications.dart';
 import 'package:gestmob/models/MyParams.dart';
 import 'AddArticlePage.dart';
+import 'package:feature_discovery/feature_discovery.dart';
+import 'package:flutter/scheduler.dart';
 
 class TresorieFragment extends StatefulWidget {
 
@@ -52,11 +54,14 @@ class _TresorieFragmentState extends State<TresorieFragment> {
 
   SliverListDataSource _dataSource;
   MyParams _myParams;
+  String feature6 = 'feature6';
 
   @override
   Future<void> initState() {
     super.initState();
-
+    SchedulerBinding.instance.addPostFrameCallback((Duration duration) {
+      FeatureDiscovery.discoverFeatures(context, <String>{feature6});
+    });
     fillFilter(_filterMap);
     fillFilter(_emptyFilterMap);
     _dataSource = SliverListDataSource(ItemsListTypes.tresorieList, _filterMap);

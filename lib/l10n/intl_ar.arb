@@ -395,6 +395,18 @@
   "demo" : "نسخة تجريبية",
   "premium" : "نسخة مدفوعة",
   "beta" : "نسخة بيتا",
-  "until" : "إلى"
+  "until" : "إلى",
+
+  "msg_long_press_select" : "لتحديد العنصر",
+  "tap_element" : "إضغط",
+  "msg_tap" : "على العنصر لتغيير الكمية",
+  "support" : "الدعم",
+  "msg_support" : "خدمة البيع وما بعد البيع تحت تصرفك",
+  "economiser" : "وفر",
+
+  "service_comercial" : "خدمة تجارية",
+  "service_technique" : "خدمة تقنية",
+  "service_ticket" : "تبليغ / حجز تذكرة",
+  "get_ticket" : " حجز تذكرة"
 
 }

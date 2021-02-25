@@ -36,74 +36,73 @@ class _ArticleListItemSelectedState extends State<ArticleListItemSelected> {
   String _validateQteError;
   String _validatePriceError;
 
-
   @override
   Widget build(BuildContext context) {
-    return SelectableListItem(
-      key_id: Key(widget.article.id.toString()),
-      isListing: widget.fromListing,
-      onDismiss: (direction) {
-        if(widget.onItemSelected != null){
-          selectThisItem();
-        }
-      },
-      onTap: () async {
-        if(widget.fromListing == false){
-          if(widget.onItemSelected == null ){
-            Navigator.of(context).pushNamed(RoutesKeys.addArticle, arguments: widget.article);
-          } else if(widget.article.selectedQuantite >= 0){
-            await showDialog(
-                context: context,
-                builder: (BuildContext context) {
-                  return addQtedialogue();
-                }).then((val) {
-
-              setState(() {});
-            });
-          } else if(widget.onItemSelected != null ){
+    return  SelectableListItem(
+        key_id: Key(widget.article.id.toString()),
+        isListing: widget.fromListing,
+        onDismiss: (direction) {
+          if(widget.onItemSelected != null){
             selectThisItem();
           }
-        }
-      },
-      itemSelected: widget.article.selectedQuantite > 0,
-      leading: CircleAvatar(
-        radius: 23,
-        backgroundColor: Colors.yellow[700],
-        child: CircleAvatar(
-          radius: 20,
-          backgroundColor: Colors.white,
-          backgroundImage: MemoryImage(widget.article.imageUint8List),
-        ),
-      ),
-      title: Row(
-        children: [
-          Icon(Icons.assignment,size: 14, color: Theme.of(context).primaryColorDark,),
-          SizedBox(width: 2,),
-          Text(widget.article.designation),
-        ],
-      ),
-      subtitle: Row(
-        children: [
-          Icon(MdiIcons.pound,size: 14, color: Theme.of(context).primaryColorDark,),
-          SizedBox(width: 2,),
-          Text(widget.article.ref),
-        ],
-      ),
-      trailingChildren: [
-        Text(
-          "${Helpers.numberFormat((widget.article.selectedQuantite * widget.article.selectedPrice))}",
-          style: TextStyle(
-              fontSize: 15.0,
-              fontWeight: FontWeight.bold
+        },
+        onTap: () async {
+          if(widget.fromListing == false){
+            if(widget.onItemSelected == null ){
+              Navigator.of(context).pushNamed(RoutesKeys.addArticle, arguments: widget.article);
+            } else if(widget.article.selectedQuantite >= 0){
+              await showDialog(
+                  context: context,
+                  builder: (BuildContext context) {
+                    return addQtedialogue();
+                  }).then((val) {
+
+                setState(() {});
+              });
+            } else if(widget.onItemSelected != null ){
+              selectThisItem();
+            }
+          }
+        },
+        itemSelected: widget.article.selectedQuantite > 0,
+        leading: CircleAvatar(
+          radius: 23,
+          backgroundColor: Colors.yellow[700],
+          child: CircleAvatar(
+            radius: 20,
+            backgroundColor: Colors.white,
+            backgroundImage: MemoryImage(widget.article.imageUint8List),
           ),
         ),
-        SizedBox(height: 5),
-        Text(
-          Helpers.numberFormat(widget.article.selectedQuantite).toString(),
-          style: TextStyle(
-              fontSize: 15.0),
-        )
-      ]
+        title: Row(
+          children: [
+            Icon(Icons.assignment,size: 14, color: Theme.of(context).primaryColorDark,),
+            SizedBox(width: 2,),
+            Text(widget.article.designation),
+          ],
+        ),
+        subtitle: Row(
+          children: [
+            Icon(MdiIcons.pound,size: 14, color: Theme.of(context).primaryColorDark,),
+            SizedBox(width: 2,),
+            Text(widget.article.ref),
+          ],
+        ),
+        trailingChildren: [
+          Text(
+            "${Helpers.numberFormat((widget.article.selectedQuantite * widget.article.selectedPrice))}",
+            style: TextStyle(
+                fontSize: 15.0,
+                fontWeight: FontWeight.bold
+            ),
+          ),
+          SizedBox(height: 5),
+          Text(
+            Helpers.numberFormat(widget.article.selectedQuantite).toString(),
+            style: TextStyle(
+                fontSize: 15.0),
+          )
+        ]
 
     );
   }

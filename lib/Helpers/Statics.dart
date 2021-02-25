@@ -96,7 +96,7 @@ class RoutesKeys {
   static const settingsPage = '/settingsPage';
   static const driveListing = '/drivePage';
   static const appPurchase = '/purchasePage';
-  static const helpPage = '/helpPage';
+  static const supportPage = '/SupportPage';
 }
 
 class ItemsListTypes {

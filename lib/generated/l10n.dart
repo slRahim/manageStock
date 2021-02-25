@@ -865,10 +865,10 @@ class S {
     );
   }
 
-  /// `Pay`
+  /// `Payment`
   String get regler {
     return Intl.message(
-      'Pay',
+      'Payment',
       name: 'regler',
       desc: '',
       args: [],
@@ -3680,6 +3680,106 @@ class S {
     return Intl.message(
       'Until',
       name: 'until',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `to select the element`
+  String get msg_long_press_select {
+    return Intl.message(
+      'to select the element',
+      name: 'msg_long_press_select',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Tap`
+  String get tap_element {
+    return Intl.message(
+      'Tap',
+      name: 'tap_element',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `on the element to edit quantity`
+  String get msg_tap {
+    return Intl.message(
+      'on the element to edit quantity',
+      name: 'msg_tap',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Support`
+  String get support {
+    return Intl.message(
+      'Support',
+      name: 'support',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `a sales and after-sales service is at your disposal`
+  String get msg_support {
+    return Intl.message(
+      'a sales and after-sales service is at your disposal',
+      name: 'msg_support',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Save`
+  String get economiser {
+    return Intl.message(
+      'Save',
+      name: 'economiser',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Sales Support`
+  String get service_comercial {
+    return Intl.message(
+      'Sales Support',
+      name: 'service_comercial',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Technical Support`
+  String get service_technique {
+    return Intl.message(
+      'Technical Support',
+      name: 'service_technique',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Signaled / Book a ticket`
+  String get service_ticket {
+    return Intl.message(
+      'Signaled / Book a ticket',
+      name: 'service_ticket',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Get a ticket`
+  String get get_ticket {
+    return Intl.message(
+      'Get a ticket',
+      name: 'get_ticket',
       desc: '',
       args: [],
     );

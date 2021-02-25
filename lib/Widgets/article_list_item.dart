@@ -12,6 +12,8 @@ import 'package:sliding_card/sliding_card.dart';
 
 import 'CustomWidgets/list_tile_card.dart';
 import 'package:gestmob/services/push_notifications.dart';
+import 'package:feature_discovery/feature_discovery.dart';
+import 'package:flutter/scheduler.dart';
 
 
 // element à afficher lors de listing des articles
@@ -42,6 +44,8 @@ class _ArticleListItemState extends State<ArticleListItem> {
   String _validatePriceError;
   SlidingCardController controller ;
   String _devise ;
+  String feature9 = 'feature9' ;
+  String feature10 = 'feature10' ;
 
   @override
   void initState() {
@@ -71,124 +75,149 @@ class _ArticleListItemState extends State<ArticleListItem> {
   @override
   Widget build(BuildContext context) {
     SizeConfig().init(context);
-    return ListTileCard(
-      from:  widget.article,
-      onLongPress: () {
-        if(widget.onItemSelected != null){
-          selectThisItem();
-        }
+    return DescribedFeatureOverlay(
+      featureId: (widget.onItemSelected != null)? feature9 : '',
+      tapTarget: Icon(MdiIcons.gestureTapHold , color: Colors.black,),
+      backgroundColor: Colors.green,
+      contentLocation: ContentLocation.below,
+      title: Text(S.current.long_presse),
+      description: Text("long press to select item"),
+      onBackgroundTap: () async{
+        await FeatureDiscovery.completeCurrentStep(context);
+        return true ;
       },
-      onTap: () async {
-        if(widget.fromListing == false){
-          if(widget.onItemSelected == null ){
-            Navigator.of(context).pushNamed(RoutesKeys.addArticle, arguments: widget.article);
-          } else if(widget.article.selectedQuantite >= 0){
-            await showDialog(
-                context: context,
-                builder: (BuildContext context) {
-                  return addQtedialogue();
-                }).then((val) {
-
-              setState(() {});
-            });
-          } else if(widget.onItemSelected != null ){
+      child: ListTileCard(
+        from:  widget.article,
+        onLongPress: () {
+          if(widget.onItemSelected != null){
             selectThisItem();
           }
-        }
-      },
-      slidingCardController: controller,
-      onCardTapped: () {
-        if(controller.isCardSeparated == true) {
-          controller.collapseCard();
-        } else {
-          controller.expandCard();
-        }
-      },
-      itemSelected: widget.article.selectedQuantite > 0,
-      leading: CircleAvatar(
-        radius: 28,
-        backgroundColor: Colors.yellow[700],
-        child: CircleAvatar(
-          backgroundColor: Colors.white,
-          radius: 25,
-          backgroundImage: MemoryImage(widget.article.imageUint8List),
+        },
+        onTap: () async {
+          if(widget.fromListing == false){
+            if(widget.onItemSelected == null ){
+              Navigator.of(context).pushNamed(RoutesKeys.addArticle, arguments: widget.article);
+            } else if(widget.article.selectedQuantite >= 0){
+              await showDialog(
+                  context: context,
+                  builder: (BuildContext context) {
+                    return addQtedialogue();
+                  }).then((val) {
+
+                setState(() {});
+              });
+            } else if(widget.onItemSelected != null ){
+              selectThisItem();
+            }
+          }
+        },
+        slidingCardController: controller,
+        onCardTapped: () {
+          if(controller.isCardSeparated == true) {
+            controller.collapseCard();
+          } else {
+            controller.expandCard();
+          }
+        },
+        itemSelected: widget.article.selectedQuantite > 0,
+        leading:  CircleAvatar(
+            radius: 28,
+            backgroundColor: Colors.yellow[700],
+            child: CircleAvatar(
+              backgroundColor: Colors.white,
+              radius: 25,
+              backgroundImage: MemoryImage(widget.article.imageUint8List),
+            ),
+
         ),
-      ),
-      title:(widget.article.designation != null)
-          ?Row(
+        title:DescribedFeatureOverlay(
+          featureId: (widget.onItemSelected != null && widget.article.selectedQuantite > 0)? feature10 : '',
+          tapTarget: Icon(MdiIcons.gestureTap , color: Colors.black,),
+          backgroundColor: Colors.yellow[700],
+          contentLocation: ContentLocation.below,
+          title: Text(S.current.tap_element),
+          description: Text(S.current.msg_tap),
+          onBackgroundTap: () async{
+            await FeatureDiscovery.completeCurrentStep(context);
+            return true ;
+          },
+          child: (widget.article.designation != null)
+              ?Row(
+                children: [
+                  Icon(Icons.assignment,size: 16, color: Theme.of(context).primaryColorDark,),
+                  SizedBox(width: 3,),
+                  Text("${widget.article.designation}" ,
+                      style: TextStyle(
+                          fontSize: 16.0,)
+                    ),
+                ],
+              )
+              : null,
+        ),
+        trailingChildren: widget.article.selectedQuantite > 0 ? [
+          (widget.article.designation != null)
+              ?Row(
             children: [
-              Icon(Icons.assignment,size: 16, color: Theme.of(context).primaryColorDark,),
+              Icon(MdiIcons.pound,size: 14, color: Theme.of(context).primaryColorDark,),
               SizedBox(width: 3,),
-              Text("${widget.article.designation}" ,
+              Text("${widget.article.ref}" ,
                   style: TextStyle(
-                      fontSize: 16.0,)
-                ),
+                    fontSize: 16.0,)
+              ),
             ],
           )
-          : null,
-      trailingChildren: widget.article.selectedQuantite > 0 ? [
-        (widget.article.designation != null)
-            ?Row(
-          children: [
-            Icon(MdiIcons.pound,size: 14, color: Theme.of(context).primaryColorDark,),
-            SizedBox(width: 3,),
-            Text("${widget.article.ref}" ,
+              : null,
+          Row(
+            children: [
+              Icon(Icons.apps_outlined ,size: 14, color: Theme.of(context).primaryColorDark,),
+              SizedBox(width: 3,),
+              Text(
+                "${widget.article.selectedQuantite.toString()}",
                 style: TextStyle(
-                  fontSize: 16.0,)
-            ),
-          ],
-        )
-            : null,
-        Row(
-          children: [
-            Icon(Icons.apps_outlined ,size: 14, color: Theme.of(context).primaryColorDark,),
-            SizedBox(width: 3,),
-            Text(
-              "${widget.article.selectedQuantite.toString()}",
-              style: TextStyle(
-                  fontSize: 16.0
+                    fontSize: 16.0
+                ),
               ),
-            ),
-          ],
-        ),
-        Text(
-          "${Helpers.numberFormat(widget.article.selectedQuantite * widget.article.selectedPrice).toString()} ${_devise}",
-          style: TextStyle(
-              fontSize: 16.0,
-              fontWeight: FontWeight.bold
+            ],
           ),
-        ),
-      ]:
-      // listing des articles ds le fragement article
-      [
-        (widget.article.ref != null)
-            ?Row(
-          children: [
-            Icon(MdiIcons.pound,size: 14, color: Theme.of(context).primaryColorDark,),
-            SizedBox(width: 3,),
-            Text("${widget.article.ref}" ,
+          Text(
+            "${Helpers.numberFormat(widget.article.selectedQuantite * widget.article.selectedPrice).toString()} ${_devise}",
+            style: TextStyle(
+                fontSize: 16.0,
+                fontWeight: FontWeight.bold
+            ),
+          ),
+        ]:
+        // listing des articles ds le fragement article
+        [
+          (widget.article.ref != null)
+              ?Row(
+            children: [
+              Icon(MdiIcons.pound,size: 14, color: Theme.of(context).primaryColorDark,),
+              SizedBox(width: 3,),
+              Text("${widget.article.ref}" ,
+                  style: TextStyle(
+                    fontSize: 16.0,)
+              ),
+            ],
+          )
+              : null,
+          Row(
+            children: [
+              Icon(Icons.apps_outlined ,size: 14, color: Theme.of(context).primaryColorDark,),
+              SizedBox(width: 3,),
+              Text(
+                "${(widget.article.quantite - widget.article.cmdClient).toString()}",
                 style: TextStyle(
-                  fontSize: 16.0,)
-            ),
-          ],
-        )
-            : null,
-        Row(
-          children: [
-            Icon(Icons.apps_outlined ,size: 14, color: Theme.of(context).primaryColorDark,),
-            SizedBox(width: 3,),
-            Text(
-              "${(widget.article.quantite - widget.article.cmdClient).toString()}",
-              style: TextStyle(
-                  color: widget.article.quantite <= widget.article.quantiteMinimum
-                      ? Colors.redAccent
-                      : Theme.of(context).primaryColorDark ,
-                  fontSize: 15.0),
-            ),
-          ],
-        ),
-        trailingChildrenOnArticleFragment(),
-      ],
+                    color: widget.article.quantite <= widget.article.quantiteMinimum
+                        ? Colors.redAccent
+                        : Theme.of(context).primaryColorDark ,
+                    fontSize: 15.0),
+              ),
+            ],
+          ),
+          trailingChildrenOnArticleFragment(),
+        ],
+      ),
     );
   }
 

@@ -20,6 +20,8 @@ import 'package:material_design_icons_flutter/material_design_icons_flutter.dart
 import 'AddArticlePage.dart';
 import 'package:gestmob/services/push_notifications.dart';
 import 'package:gestmob/models/MyParams.dart';
+import 'package:feature_discovery/feature_discovery.dart';
+import 'package:flutter/scheduler.dart';
 
 class PiecesFragment extends StatefulWidget {
   final int clientFourn;
@@ -58,10 +60,14 @@ class _PiecesFragmentState extends State<PiecesFragment> {
 
   SliverListDataSource _dataSource;
   MyParams _myParams;
+  String feature5 = 'feature5';
 
   @override
   Future<void> initState() {
     super.initState();
+    SchedulerBinding.instance.addPostFrameCallback((Duration duration) {
+      FeatureDiscovery.discoverFeatures(context, <String>{feature5});
+    });
     _tier_id = widget.tierId ;
     fillFilter(_filterMap);
     fillFilter(_emptyFilterMap);

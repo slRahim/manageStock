@@ -40,11 +40,6 @@ class _TresorieListItemState extends State<TresorieListItem> {
 
   @override
   void initState() {
-    if(FeatureDiscovery.hasPreviouslyCompleted(context, feature6) == false){
-      SchedulerBinding.instance.addPostFrameCallback((Duration duration) {
-        FeatureDiscovery.discoverFeatures(context, <String>{feature6});
-      });
-    }
     super.initState();
     controller = SlidingCardController();
   }

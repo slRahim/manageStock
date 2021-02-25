@@ -61,14 +61,14 @@ class _GridHomeWidgetState extends State<GridHomeWidget> {
   var _indiceFinanciere;
   String _devise;
   bool _finishLoading = false;
-  String feature8 = 'feature8';
+  String feature11 = 'feature11';
 
 
   @override
   Future<void> initState() {
     super.initState();
     SchedulerBinding.instance.addPostFrameCallback((Duration duration) {
-      FeatureDiscovery.discoverFeatures(context, <String>{feature8});
+      FeatureDiscovery.discoverFeatures(context, <String>{feature11});
     });
     futurInit().then((value) {
       setState(() {
@@ -196,6 +196,14 @@ class _GridHomeWidgetState extends State<GridHomeWidget> {
                   title: Text(_appBarTitle , style: GoogleFonts.anton(fontSize: 28, )),
                   centerTitle: true,
                   elevation: 0,
+                  actions: [
+                    IconButton(
+                      icon: Icon(Icons.contact_support,size: 30,),
+                      onPressed: (){
+                        Navigator.pushNamed(context, RoutesKeys.supportPage);
+                      },
+                    )
+                  ],
                 ),
                 Expanded(
                   child: SingleChildScrollView(
@@ -337,7 +345,7 @@ class _GridHomeWidgetState extends State<GridHomeWidget> {
                         padding: const EdgeInsetsDirectional.only(
                             start: 20, end: 20),
                         child: DescribedFeatureOverlay(
-                          featureId: feature8,
+                          featureId: feature11,
                           tapTarget: Icon(MdiIcons.gestureTapHold , color: Colors.black,),
                           backgroundColor: Colors.yellow[700],
                           contentLocation: ContentLocation.below,

@@ -1,5 +1,4 @@
 import 'dart:math';
-
 import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:barcode_scan/barcode_scan.dart';
 import 'package:circular_menu/circular_menu.dart';
@@ -26,6 +25,8 @@ import 'package:material_design_icons_flutter/material_design_icons_flutter.dart
 import 'AddArticlePage.dart';
 import 'package:gestmob/services/push_notifications.dart';
 import 'package:gestmob/models/MyParams.dart';
+import 'package:feature_discovery/feature_discovery.dart';
+import 'package:flutter/scheduler.dart';
 
 
 class ArticlesFragment extends StatefulWidget {
@@ -64,11 +65,15 @@ class _ArticlesFragmentState extends State<ArticlesFragment> {
 
   SliverListDataSource _dataSource;
   MyParams _myParams;
+  String feature9 = 'feature9' ;
+  String feature10 = 'feature10' ;
 
   @override
   Future<void> initState() {
     super.initState();
-
+    SchedulerBinding.instance.addPostFrameCallback((Duration duration) {
+      FeatureDiscovery.discoverFeatures(context, <String>{feature9,feature10});
+    });
     fillFilter(_filterMap);
     fillFilter(_emptyFilterMap);
     _dataSource = SliverListDataSource(ItemsListTypes.articlesList, _filterMap);
