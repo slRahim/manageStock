@@ -368,15 +368,15 @@ class SelectableListItem extends StatelessWidget {
     return Dismissible(
       key: key_id,
       onDismissed:onDismiss,
-      direction: DismissDirection.endToStart,
+      direction: DismissDirection.startToEnd,
       background: Container(
         padding: EdgeInsets.all(12),
         decoration: BoxDecoration(
             color: Colors.red,
-            borderRadius: BorderRadius.circular(15)
+            borderRadius: BorderRadius.circular(5)
         ),
         child: Row(
-          mainAxisAlignment: MainAxisAlignment.end,
+          mainAxisAlignment: MainAxisAlignment.start,
           children: [
             Icon(Icons.delete_forever , color: Colors.white , size: 30,),
           ],

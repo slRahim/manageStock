@@ -54,39 +54,7 @@ class _homeState extends State<home> {
 
   @override
   Widget build(BuildContext context) {
-    if (_myParams.versionType == "beta" && _myParams.startDate.isAfter(DateTime(2021,6,1))){
-      return Scaffold(
-        appBar: AppBar(
-          centerTitle: true,
-          title: Text('Error'),
-        ),
-        body: Center(
-          child: Container(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                Icon(
-                  Icons.error,
-                  color: Colors.red,
-                  size: 60,
-                ),
-                SizedBox(
-                  height: 15,
-                ),
-                Text(
-                  'Beta version is depricated',
-                  style: TextStyle(
-                    fontSize: 20,
-                  ),
-                ),
-              ],
-            ),
-          ),
-        ),
-      );
-    } else {
-      return WillPopScope(
+    return WillPopScope(
         onWillPop: _onWillPop,
         child: Scaffold(
           key: _globalKey,
@@ -104,8 +72,7 @@ class _homeState extends State<home> {
             },
           ),
         ),
-      );
-    }
+    );
   }
 
   Future<bool> _onWillPop() async {

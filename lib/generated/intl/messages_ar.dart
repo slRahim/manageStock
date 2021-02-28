@@ -261,6 +261,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "net_payer" : MessageLookupByLibrary.simpleMessage("اجمالي الدفع"),
     "nif" : MessageLookupByLibrary.simpleMessage("رقم التعريف الجبائي"),
     "nis" : MessageLookupByLibrary.simpleMessage("رقم الضمان الاجتماعي "),
+    "no_abonnement" : MessageLookupByLibrary.simpleMessage("بدون\nاشتراك"),
     "no_device" : MessageLookupByLibrary.simpleMessage("لا توجد طابعة"),
     "no_famille" : MessageLookupByLibrary.simpleMessage("لا توجد عائلة"),
     "no_marque" : MessageLookupByLibrary.simpleMessage("لا توجد علامة"),

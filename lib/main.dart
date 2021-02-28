@@ -21,6 +21,7 @@ import 'Helpers/route_generator.dart';
 import 'Widgets/CustomWidgets/bottom_tab_bar.dart';
 import 'models/MyParams.dart';
 import 'package:gestmob/ui/intro_page.dart';
+import 'package:in_app_purchase/in_app_purchase.dart';
 
 void main() {
   // Crashlytics.instance.enableInDevMode = false;
@@ -37,7 +38,7 @@ void main() {
   // }, onError: Crashlytics.instance.recordError);
 
   timeDilation = 1.0;
-
+  InAppPurchaseConnection.enablePendingPurchases();
   runApp(
       PushNotificationsManager(
           child: Phoenix (

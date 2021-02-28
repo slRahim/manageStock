@@ -48,9 +48,18 @@ class PushNotificationsManagerState extends State<PushNotificationsManager> {
   MyParams get myParams => _myParams;
   Profile get profile => _profile;
 
+  void onMyParamsChange(newValue) {
+    setState(() {
+      _myParams = newValue;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
-    return MyInheritedWidget(data: this, child: widget.child);
+    return MyInheritedWidget(
+        data: this,
+        child: widget.child
+    );
   }
 
   configureCloudMessaginCallbacks() async {
@@ -114,11 +123,13 @@ class PushNotificationsManagerState extends State<PushNotificationsManager> {
 
 class MyInheritedWidget extends InheritedWidget {
   final PushNotificationsManagerState data;
+  final ValueChanged<dynamic> onMyParamsChanged;
 
   MyInheritedWidget({
     Key key,
     @required Widget child,
     @required this.data,
+    this.onMyParamsChanged
   }) : super(key: key, child: child);
 
   @override

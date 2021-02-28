@@ -310,13 +310,10 @@ class Helpers {
       case ('mensuel'):
         return myParam.startDate.add(Duration(days: 30));
         break;
-      case('trimestre'):
+      case('annuel'):
         return myParam.startDate.add(Duration(days: 180));
         break;
       case('illimit'):
-        if(myParam.versionType == "beta"){
-          return DateTime(2021, 6, 1);
-        }
         return DateTime(2100, 1, 1);
         break;
     }

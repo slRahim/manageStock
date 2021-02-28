@@ -407,6 +407,8 @@
   "service_comercial" : "خدمة تجارية",
   "service_technique" : "خدمة تقنية",
   "service_ticket" : "تبليغ / حجز تذكرة",
-  "get_ticket" : " حجز تذكرة"
+  "get_ticket" : " حجز تذكرة",
+  "no_abonnement" : "بدون\nاشتراك"
+
 
 }

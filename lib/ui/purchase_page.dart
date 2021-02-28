@@ -9,6 +9,10 @@ import 'package:gestmob/generated/l10n.dart';
 import 'package:in_app_purchase/in_app_purchase.dart';
 import 'package:provider/provider.dart';
 import 'package:introduction_screen/introduction_screen.dart';
+import 'package:gestmob/Helpers/QueryCtr.dart';
+import 'package:gestmob/models/MyParams.dart';
+import 'package:gestmob/services/push_notifications.dart';
+import 'package:gestmob/Helpers/Statics.dart';
 
 class PurchasePage extends StatefulWidget {
   @override
@@ -20,8 +24,8 @@ class _PurchasePageState extends State<PurchasePage> {
   List<PurchaseDetails> _purchases = [];
   StreamSubscription<List<PurchaseDetails>> _subscription;
   String _selectedProduct;
-  Set<String> _productIds = <String>[].toSet();
-  double _prixmensuelle;
+  Set<String> _productIds = <String>["010101", "121212", "999999"].toSet();
+  double _prixmensuelle ;
 
 
   List<Map<String , dynamic>> _avantages = <Map<String , dynamic>> [
@@ -52,11 +56,16 @@ class _PurchasePageState extends State<PurchasePage> {
     }
   ];
 
+  QueryCtr _queryCtr = new QueryCtr();
+  MyParams _myParams ;
+
+
   @override
   void initState() {
     super.initState();
 
-    retrieveoldPurchase();
+    // retrieveoldPurchase();
+    _prixmensuelle = 0 ;
     final Stream purchaseUpdates = _instance.purchaseUpdatedStream;
     _subscription = purchaseUpdates.listen((purchases) async {
       _purchases.addAll(purchases);
@@ -73,37 +82,34 @@ class _PurchasePageState extends State<PurchasePage> {
     super.dispose();
   }
 
+  @override
+  void didChangeDependencies() {
+    PushNotificationsManagerState data = PushNotificationsManager.of(context);
+    _myParams = data.myParams;
+  }
+
   //get mon ancien package
   Future<List<PurchaseDetails>> retrieveoldPurchase() async {
     final bool available = await _instance.isAvailable();
-    if (!available) {
-      // Handle store not available
-    } else {
-      final QueryPurchaseDetailsResponse response =
-      await _instance.queryPastPurchases();
+    if (available) {
+      final QueryPurchaseDetailsResponse response = await _instance.queryPastPurchases();
       _purchases = response.pastPurchases;
-      if(_purchases.length!=0){
+      if(_purchases.length != 0){
         _selectedProduct = _purchases[0].productID;
       }
       return new Future(() => response.pastPurchases);
     }
+    return null ;
   }
 
   // get tout les type d'abonement
   Future<List<ProductDetails>> retrieveProducts() async {
     final bool available = await _instance.isAvailable();
-    if (!available) {
-      // Handle store not available
-    } else {
-      final ProductDetailsResponse response = await InAppPurchaseConnection
-          .instance
-          .queryProductDetails(_productIds);
-      if (response.notFoundIDs.isNotEmpty) {
-        print("notFoundIDs : ${response.notFoundIDs}");
-      }
-      print("productDetails : ${response.productDetails}");
+    if (available) {
+      final ProductDetailsResponse response = await InAppPurchaseConnection.instance.queryProductDetails(_productIds);
       return new Future(() => response.productDetails);
     }
+    return null;
   }
 
   //****************************************************************************************************************************************************************************
@@ -125,9 +131,6 @@ class _PurchasePageState extends State<PurchasePage> {
             for (var e in _avantages)
               _buildAvantage(e),
             SizedBox(height: 10,),
-            // _buildPurchaseCard(Colors.blue , null),
-            // _buildPurchaseCard(Colors.green , null),
-            // _buildPurchaseCard(Colors.red , null),
             FutureBuilder<List<PurchaseDetails>>(
                 future: retrieveoldPurchase(),
                 initialData: List<PurchaseDetails>(),
@@ -183,11 +186,11 @@ class _PurchasePageState extends State<PurchasePage> {
                               AsyncSnapshot<List<ProductDetails>> products) {
                             if (products.data != null) {
                               return SingleChildScrollView(
-                                  padding: new EdgeInsets.all(8.0),
-                                  child: new Column(
-                                      children: products.data
-                                          .map((item) => _buildPurchaseCard(Colors.orange,item))
-                                          .toList()));
+                                  padding:  EdgeInsets.all(8.0),
+                                  child:  Column(
+                                      children:_buildListPurchasedCard(products.data)
+                                  )
+                              );
                             }
                             return CircularProgressIndicator();
                           });
@@ -219,7 +222,46 @@ class _PurchasePageState extends State<PurchasePage> {
      );
   }
 
-  Widget _buildPurchaseCard(color1,productDetail){
+  List<Widget> _buildListPurchasedCard(data){
+    List<Widget> list = new List<Widget>();
+    data.sort((a,b){
+      return a.id.toString().compareTo(b.id.toString());
+    });
+    for(int i=0 ; i<data.length ; i++){
+      var item = _buildPurchaseCard(data[i]);
+      list.add(item);
+    }
+    return list ;
+  }
+
+  Widget _buildPurchaseCard(ProductDetails productDetail){
+
+    double _remisePercent = 0;
+    
+    //traitement de string
+    String _prix_product = productDetail.price;
+    _prix_product = _prix_product.replaceAll(",", "").replaceAll(new RegExp('[a-zA-Z]'), '').trim();
+    _prix_product = _prix_product.replaceAll('\u00A0', '');
+    _prix_product= _prix_product.replaceAll('&nbsp;', '');
+
+    String _devise_product = productDetail.price;
+    _devise_product = _devise_product.replaceAll(new RegExp('[0-9,.]'), '').trim();
+    _devise_product = _devise_product.replaceAll('\u00A0', '');
+    _devise_product= _devise_product.replaceAll('&nbsp;', '');
+    
+
+    switch(productDetail.id){
+      case "010101":
+        _prixmensuelle = double.parse(_prix_product);
+        break ;
+      case "121212":
+        double _prix_annuel = double.parse(_prix_product);
+        double _prixmensuelle_12 = _prixmensuelle * 12;
+        double _remiseMontant = (_prixmensuelle_12 - _prix_annuel);
+        _remisePercent = (_remiseMontant * 100) / _prixmensuelle_12;
+        break ;
+    }
+
     return InkWell(
       onTap: () async{
         print("purchase");
@@ -227,31 +269,40 @@ class _PurchasePageState extends State<PurchasePage> {
       },
       child: Container(
         padding: EdgeInsets.all(8),
-        margin: EdgeInsetsDirectional.only(bottom: 5),
+        margin: EdgeInsetsDirectional.only(bottom: 8),
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(10),
-          border: Border.all(color: color1,width: 2),
+          border: Border.all(color: (productDetail.id == "010101")
+              ? Colors.blue : (productDetail.id == "121212")
+              ?Colors.green:Colors.red,
+              width: 2),
           color: Theme.of(context).selectedRowColor
         ),
         child: ListTile(
-          title: Text("${productDetail.price}", style: TextStyle(fontWeight: FontWeight.bold , fontSize: 22),),
-          subtitle: Text("${productDetail.title.replaceAll('(Gestmob)', '')}" , style: TextStyle(fontWeight: FontWeight.bold),),
-          trailing: Container(
-            padding: EdgeInsets.all(5),
+          title: Text("${_devise_product} ${Helpers.numberFormat(double.parse(_prix_product))}", style: TextStyle(fontWeight: FontWeight.bold , fontSize: 22),),
+          subtitle: Text("${productDetail.title.replaceAll('(Virtual Plexus)', '')}" , style: TextStyle(fontWeight: FontWeight.bold),),
+          trailing: (productDetail.id != "010101")? Container(
+            padding: EdgeInsets.all(4),
             decoration: BoxDecoration(
-              color: color1,
+              color: (productDetail.id == "010101")
+                  ? Colors.blue [900] : (productDetail.id == "121212")
+                  ?Colors.green[700]:Colors.red[900],
               borderRadius: BorderRadius.circular(8),
             ),
 
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Text(S.current.economiser , style: TextStyle(fontWeight: FontWeight.bold , color: Colors.white),),
+                (productDetail.id == "121212")
+                    ? Text("${_remisePercent.roundToDouble()} %" , style: TextStyle(fontWeight: FontWeight.bold, color: Colors.white,fontSize: 14),)
+                    : Text("${S.current.no_abonnement}" ,textAlign: TextAlign.center ,style: TextStyle(fontWeight: FontWeight.bold, color: Colors.white,fontSize: 14),),
                 SizedBox (height: 5,),
-                Text("10 %" , style: TextStyle(fontWeight: FontWeight.bold, color: Colors.white),)
+                (productDetail.id == "121212")
+                    ? Text(S.current.economiser , style: TextStyle(fontWeight: FontWeight.bold , color: Colors.white,fontSize: 14),)
+                    : SizedBox()
               ],
             ),
-          ),
+          ):null,
         ),
       ),
     );
@@ -266,13 +317,31 @@ class _PurchasePageState extends State<PurchasePage> {
 //      update data base
       switch (purchase.productID) {
         case '999999':
-
+          _myParams.versionType= "premium" ;
+          _myParams.codeAbonnement = "mensuel";
+          _myParams.startDate = DateTime.fromMillisecondsSinceEpoch(purchase.billingClientPurchase.purchaseTime);
+          PushNotificationsManager.of(context).onMyParamsChange(_myParams);
+          await _queryCtr.updateItemInDb(DbTablesNames.myparams, _myParams);
+          await retrieveoldPurchase();
+          Navigator.of(context).pop();
           break;
         case '121212':
-
+          _myParams.versionType= "premium" ;
+          _myParams.codeAbonnement = "mensuel";
+          _myParams.startDate = DateTime.fromMillisecondsSinceEpoch(purchase.billingClientPurchase.purchaseTime);
+          PushNotificationsManager.of(context).onMyParamsChange(_myParams);
+          await _queryCtr.updateItemInDb(DbTablesNames.myparams, _myParams);
+          await retrieveoldPurchase();
+          Navigator.of(context).pop();
           break;
         case '010101':
-
+          _myParams.versionType= "premium" ;
+          _myParams.codeAbonnement = "mensuel";
+          _myParams.startDate = DateTime.fromMillisecondsSinceEpoch(purchase.billingClientPurchase.purchaseTime);
+          PushNotificationsManager.of(context).onMyParamsChange(_myParams);
+          await _queryCtr.updateItemInDb(DbTablesNames.myparams, _myParams);
+          await retrieveoldPurchase();
+          Navigator.of(context).pop();
           break;
       }
     } else {

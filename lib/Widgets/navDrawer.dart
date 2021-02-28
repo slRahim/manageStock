@@ -148,9 +148,12 @@ class NavDrawer extends  StatelessWidget {
         data.title,
         style: TextStyle(color: Colors.white, fontSize: 15),
       ),
-      onTap: () => {
-        Navigator.of(context).pop(),
-        Helpers.handleIdClick(context, data.id),
+      onTap: () {
+        print(data.title);
+        if(data.id != homeItemParametres.id){
+          Navigator.of(context).pop();
+        }
+        Helpers.handleIdClick(context, data.id);
       },
       trailing: (Helpers.isDirectionRTL(context))
           ? Icon(

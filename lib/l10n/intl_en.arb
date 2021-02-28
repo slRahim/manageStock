@@ -407,7 +407,8 @@
   "service_comercial" : "Sales Support",
   "service_technique" : "Technical Support",
   "service_ticket" : "Signaled / Book a ticket",
-  "get_ticket" : "Get a ticket"
+  "get_ticket" : "Get a ticket",
+  "no_abonnement" : "No\nSubscription"
 
 
 }

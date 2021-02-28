@@ -19,7 +19,6 @@ import 'package:gestmob/generated/l10n.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:esc_pos_utils/esc_pos_utils.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:ntp/ntp.dart';
 import 'dart:io';
 
 class IntroPage extends StatefulWidget {
@@ -673,7 +672,6 @@ class _IntroPageState extends State<IntroPage> {
   Future saveConfig() async {
 
     try{
-      DateTime startDate = await getDateFromServer();
       Uint8List image01 = await Helpers.getDefaultImageUint8List(from: "profile");
       var country = (_countries.indexOf(_selectedCountry) == 0)? _countryname : _selectedCountry ;
       var province = (_provinces.indexOf(_selectedProvince) == 0)? null : _selectedProvince ;
@@ -693,9 +691,9 @@ class _IntroPageState extends State<IntroPage> {
           0,
           country,
           _currencycode,
-          "beta",
-          startDate,
-          'illimit');
+          "demo",
+          DateTime.now(),
+          'mensuel');
 
 
       _profile = new Profile(
@@ -752,8 +750,5 @@ class _IntroPageState extends State<IntroPage> {
     
   }
 
-  Future getDateFromServer()async {
-    DateTime startDate = await NTP.now();
-    return startDate ;
-  }
+
 }

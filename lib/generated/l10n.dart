@@ -3784,6 +3784,16 @@ class S {
       args: [],
     );
   }
+
+  /// `No\nSubscription`
+  String get no_abonnement {
+    return Intl.message(
+      'No\nSubscription',
+      name: 'no_abonnement',
+      desc: '',
+      args: [],
+    );
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<S> {

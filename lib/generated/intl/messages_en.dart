@@ -261,6 +261,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "net_payer" : MessageLookupByLibrary.simpleMessage("Net to pay"),
     "nif" : MessageLookupByLibrary.simpleMessage("NTVA/NIF"),
     "nis" : MessageLookupByLibrary.simpleMessage("NIS"),
+    "no_abonnement" : MessageLookupByLibrary.simpleMessage("No\nSubscription"),
     "no_device" : MessageLookupByLibrary.simpleMessage("No Printer is find"),
     "no_famille" : MessageLookupByLibrary.simpleMessage("No Family"),
     "no_marque" : MessageLookupByLibrary.simpleMessage("No Brand"),

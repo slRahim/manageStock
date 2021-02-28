@@ -126,6 +126,7 @@ class _AddPiecePageState extends State<AddPiecePage>
    String feature2 = 'feature2';
    String feature3 = 'feature3';
    String feature4 = 'feature4';
+   String feature12 = 'feature12';
 
   void initState() {
     super.initState();
@@ -136,7 +137,8 @@ class _AddPiecePageState extends State<AddPiecePage>
            feature1,
            feature2,
            feature3,
-           feature4
+           feature4,
+           feature12
         },
       );
     });
@@ -810,15 +812,28 @@ class _AddPiecePageState extends State<AddPiecePage>
                             itemCount: _selectedItems.length,
                             itemBuilder: (BuildContext ctxt, int index) {
                               if (editMode) {
-                                return new ArticleListItemSelected(
-                                  article: _selectedItems[index],
-                                  onItemSelected: (selectedItem) => ({
-                                    removeItemfromPiece(selectedItem),
-                                    calculPiece()
-                                  }),
+                                return  DescribedFeatureOverlay(
+                                  featureId: feature12,
+                                  tapTarget: Icon(MdiIcons.arrowExpandRight , color: Colors.black,),
+                                  backgroundColor: Colors.blue,
+                                  contentLocation: ContentLocation.above,
+                                  title: Text('${S.current.swipe}'),
+                                  description: Text(
+                                      '${S.current.msg_swipe_start}'),
+                                  onBackgroundTap: () async{
+                                    await FeatureDiscovery.completeCurrentStep(context);
+                                    return true ;
+                                  },
+                                  child: ArticleListItemSelected(
+                                    article: _selectedItems[index],
+                                    onItemSelected: (selectedItem) => ({
+                                      removeItemfromPiece(selectedItem),
+                                      calculPiece()
+                                    }),
+                                  ),
                                 );
                               } else {
-                                return new ArticleListItemSelected(
+                                return ArticleListItemSelected(
                                   article: _selectedItems[index],
                                   fromListing: _islisting,
                                 );
