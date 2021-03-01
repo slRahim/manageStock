@@ -501,7 +501,7 @@ class _SettingsPageState extends State<SettingsPage> {
                       RadioListTile(
                         value: Statics.languages[1],
                         groupValue: _language,
-                        title: Text('French (FR)'),
+                        title: Text('Français (FR)'),
                         onChanged: (value) {
                           setState(() {
                             _language = value;
@@ -511,7 +511,7 @@ class _SettingsPageState extends State<SettingsPage> {
                       RadioListTile(
                         value: Statics.languages[2],
                         groupValue: _language,
-                        title: Text('Arabic (AR)'),
+                        title: Text('عربي (AR)'),
                         onChanged: (value) {
                           setState(() {
                             _language = value;
@@ -862,11 +862,11 @@ class _SettingsPageState extends State<SettingsPage> {
       case ("English (ENG)"):
         _prefs.setString("myLocale", "en");
         break;
-      case ("French (FR)"):
+      case ("Français (FR)"):
         _prefs.setString("myLocale", "fr");
         break;
 
-      case ("Arabic (AR)"):
+      case ("عربي (AR)"):
         _prefs.setString("myLocale", "ar");
         break;
     }

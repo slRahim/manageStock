@@ -359,8 +359,8 @@
   "start_date" : "Date du début",
   "end_date" : "Date de fin",
 
-  "choix_province" : "Choisir Ville",
-  "choix_city" : "Choisir Département",
+  "choix_province" : "Choisir le département",
+  "choix_city" : "Choisir la ville",
   "department" : "Département",
 
   "abonnement_title" : "Passer en Premium",
@@ -408,7 +408,9 @@
   "service_technique" : "Service Technique",
   "service_ticket" : "Signalé / Réserver un ticket",
   "get_ticket" : "Obtenir un ticket",
-  "no_abonnement" : "Sans\nAbonnement"
+  "no_abonnement" : "Sans\nAbonnement",
+  "no_element" : "Aucun élément trouvé",
+  "liste_vide" : "La liste actuelement est vide."
 
 
 

@@ -332,8 +332,7 @@ class _GridHomeWidgetState extends State<GridHomeWidget> {
             ),
           ),
         ),
-        body: Container(
-            alignment: Alignment.center,
+        body: Center(
             child: FutureBuilder(
                 future: asyncStart(),
                 builder: (context, snapshot) {
@@ -342,9 +341,6 @@ class _GridHomeWidgetState extends State<GridHomeWidget> {
                   } else {
                     return SingleChildScrollView(
                       child: Container(
-                        alignment: Alignment.center,
-                        padding: const EdgeInsetsDirectional.only(
-                            start: 20, end: 20),
                         child: DescribedFeatureOverlay(
                           featureId: feature11,
                           tapTarget: Icon(MdiIcons.gestureTapHold , color: Colors.black,),
@@ -357,58 +353,58 @@ class _GridHomeWidgetState extends State<GridHomeWidget> {
                             return true ;
                           },
                           child: DraggableContainer(
-                            key: _containerKey,
-                            draggableMode: false,
-                            autoReorder: true,
-                            // the decoration when dragging item
-                            dragDecoration: BoxDecoration(boxShadow: [
-                              BoxShadow(color: Colors.black, blurRadius: 10)
-                            ]),
-                            // slot margin
-                            slotMargin: EdgeInsets.only(
-                                left: 10, right: 10, top: 5, bottom: 5),
-                            // the slot size
-                            slotSize: Size(90, 90),
-                            // item list
-                            items: homeDraggableItemList,
-                            // onDragEnd: () {
-                            //   _containerKey.currentState.draggableMode = false;
-                            // },
-                            deleteButton: Container(
-                              width: 20,
-                              height: 20,
-                              decoration: BoxDecoration(
-                                color: Colors.redAccent,
-                                borderRadius:
-                                    BorderRadius.all(Radius.circular(8)),
-                              ),
-                              child: Icon(
-                                Icons.delete_forever,
-                                size: 18,
-                                color: Colors.white,
-                              ),
-                            ),
-                            onDraggableModeChanged: (bool draggableMode) {
-                              GridHomeWidget.Global_Draggable_Mode =
-                                  draggableMode;
+                              key: _containerKey,
+                              draggableMode: false,
+                              autoReorder: true,
+                              // the decoration when dragging item
+                              dragDecoration: BoxDecoration(boxShadow: [
+                                BoxShadow(color: Colors.black, blurRadius: 10)
+                              ]),
+                              // slot margin
+                              slotMargin: EdgeInsets.only(
+                                  left: 20, right: 10, top: 5, bottom: 5),
+                              // the slot size
 
-                              final items = _containerKey.currentState.items;
-                              if (draggableMode) {
-                                draggableItemsListOnChange(items);
-                              } else {
-                                _containerKey.currentState
-                                    .removeItem(_addButton, triggerEvent: false);
-                                if (items.isNotEmpty) {
-                                  saveCurrentItemsOrder(items);
+                              // item list
+                              items: homeDraggableItemList,
+                              // onDragEnd: () {
+                              //   _containerKey.currentState.draggableMode = false;
+                              // },
+                              deleteButton: Container(
+                                width: 20,
+                                height: 20,
+                                decoration: BoxDecoration(
+                                  color: Colors.redAccent,
+                                  borderRadius:
+                                  BorderRadius.all(Radius.circular(8)),
+                                ),
+                                child: Icon(
+                                  Icons.delete_forever,
+                                  size: 18,
+                                  color: Colors.white,
+                                ),
+                              ),
+                              onDraggableModeChanged: (bool draggableMode) {
+                                GridHomeWidget.Global_Draggable_Mode =
+                                    draggableMode;
+
+                                final items = _containerKey.currentState.items;
+                                if (draggableMode) {
+                                  draggableItemsListOnChange(items);
+                                } else {
+                                  _containerKey.currentState
+                                      .removeItem(_addButton, triggerEvent: false);
+                                  if (items.isNotEmpty) {
+                                    saveCurrentItemsOrder(items);
+                                  }
                                 }
-                              }
-                            },
-                            onChanged: (items) async {
-                              draggableItemsListOnChange(items);
-                            },
+                              },
+                              onChanged: (items) async {
+                                draggableItemsListOnChange(items);
+                              },
+                            ),
                           ),
                         ),
-                      ),
                     );
                   }
                 })),
@@ -448,8 +444,7 @@ class _GridHomeWidgetState extends State<GridHomeWidget> {
     return homeDraggableItemList;
   }
 
-  DraggableItem getMissingItem(
-      BuildContext context, List<DraggableItem> items, int count) {
+  DraggableItem getMissingItem(BuildContext context, List<DraggableItem> items, int count) {
     for (DraggableItem item in originalHomeDraggableItemList) {
       if (!items.contains(item)) {
         return item;

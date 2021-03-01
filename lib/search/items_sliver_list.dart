@@ -18,6 +18,7 @@ import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 
 import 'search_input_sliver.dart';
 import 'sliver_list_data_source.dart';
+import 'package:gestmob/generated/l10n.dart';
 
 class ItemsSliverList extends StatefulWidget {
   final SliverListDataSource dataSource;
@@ -47,7 +48,26 @@ class _ItemsSliverListState extends State<ItemsSliverList> {
       slivers: <Widget>[
         PagedSliverList<int, Object>(
           dataSource: widget.dataSource,
+
           builderDelegate: PagedChildBuilderDelegate<Object>(
+              noItemsFoundIndicatorBuilder : (context){
+                   return Center(
+                       child: Container(
+                           padding: EdgeInsets.only(top: 100,bottom: 100),
+                           child: Column(
+                             children: [
+                               Text(S.current.no_element ,
+                                 style:  TextStyle(fontSize: 24 , fontWeight: FontWeight.bold),
+                               ),
+                               SizedBox(height: 2,),
+                               Text(S.current.liste_vide ,
+                                 style:  TextStyle(fontSize: 16),
+                               ),
+                             ],
+                           )
+                       )
+                   );
+              },
               itemBuilder: (context, _item, index) => createItemWidget(_item)
           ),
         ),

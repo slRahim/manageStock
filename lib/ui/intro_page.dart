@@ -20,6 +20,9 @@ import 'package:material_design_icons_flutter/material_design_icons_flutter.dart
 import 'package:esc_pos_utils/esc_pos_utils.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'dart:io';
+import 'package:currency_pickers/country.dart';
+import 'package:gestmob/Helpers/countries_list.dart';
+import 'package:gestmob/services/push_notifications.dart';
 
 class IntroPage extends StatefulWidget {
   @override
@@ -30,8 +33,8 @@ class _IntroPageState extends State<IntroPage> {
   String _selectedLanguage;
   List<DropdownMenuItem<String>> _languages;
 
-  List<String> _countries = ["${S.current.selec_pays}"];
-  String _selectedCountry = S.current.selec_pays ;
+  List<String> _countries =["${S.current.selec_pays}"];
+  String  _selectedCountry = S.current.selec_pays ;
   String _countryname ;
   String _currencycode;
 
@@ -39,7 +42,7 @@ class _IntroPageState extends State<IntroPage> {
   String _selectedCity = S.current.choix_city;
 
   List<String> _provinces = ["${S.current.choix_province}"];
-  String _selectedProvince =S.current.choix_province;
+  String _selectedProvince = S.current.choix_province;
 
   String defaultLocale = Platform.localeName;
 
@@ -66,25 +69,51 @@ class _IntroPageState extends State<IntroPage> {
     futureInit();
   }
 
-
   Future futureInit() async {
     _languages = utils.buildDropLanguageDownMenuItems(Statics.languages);
     switch(defaultLocale.substring(0,(2))){
       case "en":
         _selectedLanguage = Statics.languages[0];
+        S.load(Locale("en")).then((value){
+          _countries[0] = "${S.current.selec_pays}";
+          _selectedCountry = S.current.selec_pays ;
+          _cities[0] = "${S.current.choix_city}";
+          _selectedCity = S.current.choix_city;
+          _provinces[0] = "${S.current.choix_province}";
+          _selectedProvince =S.current.choix_province;
+        });
         break;
       case "fr":
         _selectedLanguage = Statics.languages[1];
+        S.load(Locale("fr")).then((value){
+          _countries[0] = "${S.current.selec_pays}";
+          _selectedCountry = S.current.selec_pays ;
+          _cities[0] = "${S.current.choix_city}";
+          _selectedCity = S.current.choix_city;
+          _provinces[0] = "${S.current.choix_province}";
+          _selectedProvince =S.current.choix_province;
+        });
+
         break;
       case "ar":
-        _selectedLanguage = Statics.languages[2];
+        S.load(Locale("ar")).then((value){
+          _selectedLanguage = Statics.languages[2];
+          _countries[0] = "${S.current.selec_pays}";
+          _selectedCountry = S.current.selec_pays ;
+          _cities[0] = "${S.current.choix_city}";
+          _selectedCity = S.current.choix_city;
+          _provinces[0] = "${S.current.choix_province}";
+          _selectedProvince =S.current.choix_province;
+        });
+
         break;
       default :
         _selectedLanguage = Statics.languages[0];
+        S.load(Locale("en"));
         break;
     }
     getCounty();
-    _countryname = "United States" ;
+    _countryname = "United States of America" ;
     _currencycode = "USD";
     _prefs = await SharedPreferences.getInstance();
   }
@@ -227,16 +256,38 @@ class _IntroPageState extends State<IntroPage> {
                             _selectedLanguage = value;
                             switch (_selectedLanguage) {
                               case ("English (ENG)"):
-                                S.load(Locale("en"));
+                                S.load(Locale("en")).then((value){
+                                  _countries[0] = "${S.current.selec_pays}";
+                                  _selectedCountry = S.current.selec_pays ;
+                                  _cities[0] = "${S.current.choix_city}";
+                                  _selectedCity = S.current.choix_city;
+                                  _provinces[0] = "${S.current.choix_province}";
+                                  _selectedProvince =S.current.choix_province;
+                                });
                                 break;
-                              case ("French (FR)"):
-                                S.load(Locale("fr"));
+                              case ("Français (FR)"):
+                                S.load(Locale("fr")).then((value){
+                                  _countries[0] = "${S.current.selec_pays}";
+                                  _selectedCountry = S.current.selec_pays ;
+                                  _cities[0] = "${S.current.choix_city}";
+                                  _selectedCity = S.current.choix_city;
+                                  _provinces[0] = "${S.current.choix_province}";
+                                  _selectedProvince =S.current.choix_province;
+                                });
                                 break;
 
-                              case ("Arabic (AR)"):
-                                S.load(Locale("ar"));
+                              case ("عربي (AR)"):
+                                S.load(Locale("ar")).then((value){
+                                  _countries[0] = "${S.current.selec_pays}";
+                                  _selectedCountry = S.current.selec_pays ;
+                                  _cities[0] = "${S.current.choix_city}";
+                                  _selectedCity = S.current.choix_city;
+                                  _provinces[0] = "${S.current.choix_province}";
+                                  _selectedProvince =S.current.choix_province;
+                                });
                                 break;
                             }
+
                           });
                         }),
                   ),
@@ -293,6 +344,7 @@ class _IntroPageState extends State<IntroPage> {
                         scrollDirection: Axis.horizontal,
                         child:  DropdownButtonHideUnderline(
                             child: DropdownButton<String>(
+                              value: _selectedCountry,
                               items: _countries.map((String dropDownStringItem) {
                                 return DropdownMenuItem<String>(
                                   value: dropDownStringItem,
@@ -306,9 +358,12 @@ class _IntroPageState extends State<IntroPage> {
                                   _provinces = ["${S.current.choix_province}"];
                                   _selectedCountry = value;
                                   getProvince();
+                                  var country = countryList.where((element) => element.name == _selectedCountry).toList();
+                                  _countryname = country.first.name ;
+                                  _currencycode = country.first.currencyCode ;
                                 });
+
                               },
-                              value: _selectedCountry,
                             ),
                           ),
                         ),
@@ -704,8 +759,8 @@ class _IntroPageState extends State<IntroPage> {
           5,
           _adresseControl.text,
           "_addressWeb",
-          "${province.split(' ').first}",
           "${city}",
+          "${province.split(' ').first}",
           "${_countryname}",
           "_cp",
           _mobileControl.text,
@@ -724,8 +779,10 @@ class _IntroPageState extends State<IntroPage> {
           "_codedouane",
           "_maposition",
           false);
-      _prefs.setInt("intro", 0);
 
+      _prefs.setInt("intro", 0);
+      PushNotificationsManager.of(context).onMyParamsChange(_myParams);
+      PushNotificationsManager.of(context).onProfileChange(_profile);
       switch (_selectedLanguage) {
         case ("English (ENG)"):
           _prefs.setString("myLocale", "en");

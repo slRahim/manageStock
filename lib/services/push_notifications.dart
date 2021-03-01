@@ -54,6 +54,12 @@ class PushNotificationsManagerState extends State<PushNotificationsManager> {
     });
   }
 
+  void onProfileChange(newValue) {
+    setState(() {
+      _profile = newValue;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return MyInheritedWidget(
@@ -124,12 +130,14 @@ class PushNotificationsManagerState extends State<PushNotificationsManager> {
 class MyInheritedWidget extends InheritedWidget {
   final PushNotificationsManagerState data;
   final ValueChanged<dynamic> onMyParamsChanged;
+  final ValueChanged<dynamic> onProfileChanged;
 
   MyInheritedWidget({
     Key key,
     @required Widget child,
     @required this.data,
-    this.onMyParamsChanged
+    this.onMyParamsChanged,
+    this.onProfileChanged
   }) : super(key: key, child: child);
 
   @override

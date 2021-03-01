@@ -358,8 +358,8 @@
   "start_date" : "Start date",
   "end_date" : "End date",
 
-  "choix_province" : "Choose City",
-  "choix_city" : "Choose Department",
+  "choix_province" : "Choose Department",
+  "choix_city" : "Choose City",
   "department" : "Departement",
 
   "abonnement_title" : "Upgrade to Premium",
@@ -408,7 +408,9 @@
   "service_technique" : "Technical Support",
   "service_ticket" : "Signaled / Book a ticket",
   "get_ticket" : "Get a ticket",
-  "no_abonnement" : "No\nSubscription"
+  "no_abonnement" : "No\nSubscription",
+  "no_element" : "No items found",
+  "liste_vide" : "The list is currently empty."
 
 
 }

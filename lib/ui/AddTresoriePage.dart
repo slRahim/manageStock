@@ -859,9 +859,8 @@ class _AddTresoriePageState extends State<AddTresoriePage>
                 child: SingleChildScrollView(
                   child: Container(
                     height: 250,
-                    child: Padding(
-                      padding: const EdgeInsets.all(6.0),
-                      child: Column(
+                    padding: EdgeInsets.all(10),
+                    child: Column(
                         mainAxisAlignment: MainAxisAlignment.center,
                         crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
@@ -934,7 +933,7 @@ class _AddTresoriePageState extends State<AddTresoriePage>
                     ),
                   ),
                 ),
-              ));
+              );
     });
   }
 
@@ -964,10 +963,10 @@ class _AddTresoriePageState extends State<AddTresoriePage>
     return StatefulBuilder(builder: (context, StateSetter setState) {
       return Builder(
           builder: (context) => Dialog(
-                //this right here
                 child: SingleChildScrollView(
                   child: Container(
                     height: 350,
+                    padding: EdgeInsets.all(10),
                     child: Scrollbar(
                       isAlwaysShown: true,
                       controller: _controller,
@@ -1147,9 +1146,8 @@ class _AddTresoriePageState extends State<AddTresoriePage>
                 child: SingleChildScrollView(
                   child: Container(
                     height: 250,
-                    child: Padding(
-                      padding: const EdgeInsets.all(6.0),
-                      child: Column(
+                    padding: EdgeInsets.all(10),
+                    child:  Column(
                         mainAxisAlignment: MainAxisAlignment.center,
                         crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
@@ -1216,7 +1214,7 @@ class _AddTresoriePageState extends State<AddTresoriePage>
                     ),
                   ),
                 ),
-              ));
+              );
     });
   }
 

@@ -361,12 +361,12 @@ class _AddArticlePageState extends State<AddArticlePage>
               controller: _refControl,
               // onTap: () => _refControl.selection = TextSelection(baseOffset: 0, extentOffset: _refControl.value.text.length),
               keyboardType: TextInputType.text,
-              validator: (value) {
-                if (value.isEmpty) {
-                  return S.current.msg_champ_oblg;
-                }
-                return null;
-              },
+              // validator: (value) {
+              //   if (value.isEmpty) {
+              //     return S.current.msg_champ_oblg;
+              //   }
+              //   return null;
+              // },
               decoration: InputDecoration(
                 labelText: S.current.referance,
                 labelStyle: TextStyle(color: Colors.blue),
@@ -398,12 +398,12 @@ class _AddArticlePageState extends State<AddArticlePage>
                 controller: _codeBarControl,
                 onTap: () => _codeBarControl.selection = TextSelection(baseOffset: 0, extentOffset: _codeBarControl.value.text.length),
                 keyboardType: TextInputType.text,
-                validator: (value) {
-                  if (value.isEmpty) {
-                    return S.current.msg_champ_oblg;
-                  }
-                  return null;
-                },
+                // validator: (value) {
+                //   if (value.isEmpty) {
+                //     return S.current.msg_champ_oblg;
+                //   }
+                //   return null;
+                // },
                 decoration: InputDecoration(
                   labelText: S.current.msg_scan_barcode,
                   labelStyle: TextStyle(color: Colors.blue),
@@ -438,12 +438,12 @@ class _AddArticlePageState extends State<AddArticlePage>
                       controller: _prixAchatControl,
                       onTap: () => _prixAchatControl.selection = TextSelection(baseOffset: 0, extentOffset: _prixAchatControl.value.text.length),
                       keyboardType: TextInputType.number,
-                      validator: (value) {
-                        if (value.isEmpty) {
-                          return S.current.msg_champ_oblg;
-                        }
-                        return null;
-                      },
+                      // validator: (value) {
+                      //   if (value.isEmpty) {
+                      //     return S.current.msg_champ_oblg;
+                      //   }
+                      //   return null;
+                      // },
                       decoration: InputDecoration(
                           labelText: S.current.prix_achat,
                           labelStyle: TextStyle(color: Colors.blue),
@@ -513,12 +513,12 @@ class _AddArticlePageState extends State<AddArticlePage>
                 controller: _pmpControl,
                 // onTap: () => _pmpControl.selection = TextSelection(baseOffset: 0, extentOffset: _pmpControl.value.text.length),
                 keyboardType: TextInputType.number,
-                validator: (value) {
-                  if (value.isEmpty) {
-                    return S.current.msg_champ_oblg;
-                  }
-                  return null;
-                },
+                // validator: (value) {
+                //   if (value.isEmpty) {
+                //     return S.current.msg_champ_oblg;
+                //   }
+                //   return null;
+                // },
                 decoration: InputDecoration(
                     labelText: (modification)
                         ? S.current.pmp
@@ -551,12 +551,12 @@ class _AddArticlePageState extends State<AddArticlePage>
                     controller: _stockInitialControl,
                     onTap: () => _stockInitialControl.selection = TextSelection(baseOffset: 0, extentOffset: _stockInitialControl.value.text.length),
                     keyboardType: TextInputType.number,
-                    validator: (value) {
-                      if (value.isEmpty) {
-                        return S.current.msg_champ_oblg;
-                      }
-                      return null;
-                    },
+                    // validator: (value) {
+                    //   if (value.isEmpty) {
+                    //     return S.current.msg_champ_oblg;
+                    //   }
+                    //   return null;
+                    // },
                     decoration: InputDecoration(
                       labelText: modification
                           ? S.current.quantit
@@ -589,12 +589,12 @@ class _AddArticlePageState extends State<AddArticlePage>
                     controller: _stockMinimumControl,
                     onTap: () => _stockMinimumControl.selection = TextSelection(baseOffset: 0, extentOffset: _stockMinimumControl.value.text.length),
                     keyboardType: TextInputType.number,
-                    validator: (value) {
-                      if (value.isEmpty) {
-                        return S.current.msg_champ_oblg;
-                      }
-                      return null;
-                    },
+                    // validator: (value) {
+                    //   if (value.isEmpty) {
+                    //     return S.current.msg_champ_oblg;
+                    //   }
+                    //   return null;
+                    // },
                     decoration: InputDecoration(
                       labelText: S.current.stock_min,
                       labelStyle: TextStyle(color: Colors.blue),
@@ -630,12 +630,12 @@ class _AddArticlePageState extends State<AddArticlePage>
                       controller: _qteColisCotrol,
                       onTap: () => _qteColisCotrol.selection = TextSelection(baseOffset: 0, extentOffset: _qteColisCotrol.value.text.length),
                       keyboardType: TextInputType.number,
-                      validator: (value) {
-                        if (value.isEmpty) {
-                          return S.current.msg_champ_oblg;
-                        }
-                        return null;
-                      },
+                      // validator: (value) {
+                      //   if (value.isEmpty) {
+                      //     return S.current.msg_champ_oblg;
+                      //   }
+                      //   return null;
+                      // },
                       decoration: InputDecoration(
                         labelText: S.current.qte_colis,
                         labelStyle: TextStyle(color: Colors.blue),
@@ -668,12 +668,12 @@ class _AddArticlePageState extends State<AddArticlePage>
                     controller: _qteCmdCotrol,
                     onTap: () => _qteCmdCotrol.selection = TextSelection(baseOffset: 0, extentOffset: _qteCmdCotrol.value.text.length),
                     keyboardType: TextInputType.number,
-                    validator: (value) {
-                      if (value.isEmpty) {
-                        return S.current.msg_champ_oblg;
-                      }
-                      return null;
-                    },
+                    // validator: (value) {
+                    //   if (value.isEmpty) {
+                    //     return S.current.msg_champ_oblg;
+                    //   }
+                    //   return null;
+                    // },
                     decoration: InputDecoration(
                       prefixIcon: Icon(
                         Icons.apps_outlined,
@@ -706,12 +706,12 @@ class _AddArticlePageState extends State<AddArticlePage>
                 controller: _colisControl,
                 onTap: () => _colisControl.selection = TextSelection(baseOffset: 0, extentOffset: _colisControl.value.text.length),
                 keyboardType: TextInputType.number,
-                validator: (value) {
-                  if (value.isEmpty) {
-                    return S.current.msg_champ_oblg;
-                  }
-                  return null;
-                },
+                // validator: (value) {
+                //   if (value.isEmpty) {
+                //     return S.current.msg_champ_oblg;
+                //   }
+                //   return null;
+                // },
                 decoration: InputDecoration(
                   prefixIcon: Icon(
                     Icons.archive,
@@ -740,12 +740,12 @@ class _AddArticlePageState extends State<AddArticlePage>
               controller: _price1Control,
               onTap: () => _price1Control.selection = TextSelection(baseOffset: 0, extentOffset: _price1Control.value.text.length),
               keyboardType: TextInputType.number,
-              validator: (value) {
-                if (value.isEmpty) {
-                  return S.current.msg_champ_oblg;
-                }
-                return null;
-              },
+              // validator: (value) {
+              //   if (value.isEmpty) {
+              //     return S.current.msg_champ_oblg;
+              //   }
+              //   return null;
+              // },
               decoration: InputDecoration(
                 labelText: S.current.prix_v1,
                 labelStyle: TextStyle(color: Colors.blue),
@@ -775,12 +775,12 @@ class _AddArticlePageState extends State<AddArticlePage>
                 controller: _price2Control,
                 onTap: () => _price2Control.selection = TextSelection(baseOffset: 0, extentOffset: _price2Control.value.text.length),
                 keyboardType: TextInputType.number,
-                validator: (value) {
-                  if (value.isEmpty && _price2) {
-                    return S.current.msg_champ_oblg;
-                  }
-                  return null;
-                },
+                // validator: (value) {
+                //   if (value.isEmpty && _price2) {
+                //     return S.current.msg_champ_oblg;
+                //   }
+                //   return null;
+                // },
                 decoration: InputDecoration(
                   labelText: S.current.prix_v2,
                   labelStyle: TextStyle(color: Colors.blue),
@@ -811,12 +811,12 @@ class _AddArticlePageState extends State<AddArticlePage>
                 controller: _price3Control,
                 onTap: () => _price3Control.selection = TextSelection(baseOffset: 0, extentOffset: _price3Control.value.text.length),
                 keyboardType: TextInputType.number,
-                validator: (value) {
-                  if (value.isEmpty && _price3) {
-                    return S.current.msg_champ_oblg;
-                  }
-                  return null;
-                },
+                // validator: (value) {
+                //   if (value.isEmpty && _price3) {
+                //     return S.current.msg_champ_oblg;
+                //   }
+                //   return null;
+                // },
                 decoration: InputDecoration(
                   labelText: S.current.prix_v3,
                   labelStyle: TextStyle(color: Colors.blue),
@@ -971,9 +971,8 @@ class _AddArticlePageState extends State<AddArticlePage>
           child: SingleChildScrollView(
         child: Container(
           height: 500,
-          child: Padding(
-            padding: const EdgeInsets.all(6.0),
-            child: Column(
+          padding: EdgeInsets.all(10),
+          child:  Column(
               mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -1049,7 +1048,7 @@ class _AddArticlePageState extends State<AddArticlePage>
             ),
           ),
         ),
-      ));
+      );
     });
   }
 
@@ -1076,9 +1075,8 @@ class _AddArticlePageState extends State<AddArticlePage>
                 child: SingleChildScrollView(
                   child: Container(
                     height: 500,
-                    child: Padding(
-                      padding: const EdgeInsets.all(6.0),
-                      child: Column(
+                    padding: EdgeInsets.all(10),
+                    child: Column(
                         mainAxisAlignment: MainAxisAlignment.center,
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
@@ -1161,7 +1159,7 @@ class _AddArticlePageState extends State<AddArticlePage>
                     ),
                   ),
                 ),
-              ));
+              );
     });
   }
 
@@ -1186,9 +1184,8 @@ class _AddArticlePageState extends State<AddArticlePage>
         //this right here
         child: Container(
           height: 200,
-          child: Padding(
-            padding: const EdgeInsets.all(6.0),
-            child: Column(
+          padding: EdgeInsets.all(10),
+          child:  Column(
               mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -1265,7 +1262,6 @@ class _AddArticlePageState extends State<AddArticlePage>
               ],
             ),
           ),
-        ),
       );
     });
   }
@@ -1328,40 +1324,53 @@ class _AddArticlePageState extends State<AddArticlePage>
     article.setdesignation(_designationControl.text);
     article.setref(_refControl.text);
     article.setCodeBar(_codeBarControl.text);
-    if (_stockable) {
-      article.setprixAchat(double.parse(_prixAchatControl.text));
+
+    //reliere à _stockable
+    if (true) {
+      (_prixAchatControl.text != null )?article.setprixAchat(double.parse(_prixAchatControl.text)):article.setprixAchat(0.0);
     }
-    article.setQteInit(double.parse(_stockInitialControl.text));
-    article.setquantite(double.parse(_stockInitialControl.text));
-    article.setQteMin(double.parse(_stockMinimumControl.text));
-    article.cmdClient = double.parse(_qteCmdCotrol.text);
-    article.setPmp(double.parse(_pmpControl.text));
+    (_stockInitialControl.text != null )?article.setQteInit(double.parse(_stockInitialControl.text)):article.setQteInit(0);
+    (_stockInitialControl.text != null )?article.setquantite(double.parse(_stockInitialControl.text)):article.setquantite(0);
+    (_stockMinimumControl.text != null )?article.setQteMin(double.parse(_stockMinimumControl.text)):article.setQteMin(0);
+    (_qteCmdCotrol.text != null )?article.cmdClient = double.parse(_qteCmdCotrol.text):article.cmdClient =0;
+    (_pmpControl.text != null )?article.setPmp(double.parse(_pmpControl.text)):article.setPmp(0);
     if (!modification && editMode) {
-      article.setPmpInit(double.parse(_pmpControl.text));
+      (_pmpControl.text != null )?article.setPmpInit(double.parse(_pmpControl.text)):article.setPmpInit(0);
     }
 
-    article.setQteColis(double.parse(_qteColisCotrol.text));
-    double colis = double.parse(_stockInitialControl.text) /
-        double.parse(_qteColisCotrol.text);
-    article.setColis(colis);
+    (_qteColisCotrol.text != null )?article.setQteColis(double.parse(_qteColisCotrol.text)):article.setQteColis(0);
+    if(_stockInitialControl.text != null && _qteColisCotrol.text != null){
+      double colis = double.parse(_stockInitialControl.text) /
+          double.parse(_qteColisCotrol.text);
+      article.setColis(colis);
+    }else{
+      article.setColis(0);
+    }
 
-    article.setprixVente1(double.parse(_price1Control.text));
-    article.setprixVente2(double.parse(_price2Control.text));
-    article.setprixVente3(double.parse(_price3Control.text));
+    (_price1Control.text != null )?article.setprixVente1(double.parse(_price1Control.text)):article.setprixVente1(0);
+    (_price2Control.text != null )?article.setprixVente2(double.parse(_price2Control.text)):article.setprixVente2(0);
+    (_price3Control.text != null )?article.setprixVente3(double.parse(_price3Control.text)):article.setprixVente3(0);
 
     article.setIdFamille(_familleItems.indexOf(_selectedFamille));
     article.setIdMarque(_marqueItems.indexOf(_selectedMarque));
     article.setTva(_selectedTva.tva);
 
-    double ttc1 = (double.parse(_price1Control.text) * _selectedTva.tva) / 100 +
-        double.parse(_price1Control.text);
-    double ttc2 = (double.parse(_price2Control.text) * _selectedTva.tva) / 100 +
-        double.parse(_price2Control.text);
-    double ttc3 = (double.parse(_price3Control.text) * _selectedTva.tva) / 100 +
-        double.parse(_price3Control.text);
-    article.setprixVente1TTC(ttc1);
-    article.setprixVente2TTC(ttc2);
-    article.setprixVente3TTC(ttc3);
+    if(_price1Control.text != null){
+      double ttc1 = (double.parse(_price1Control.text) * _selectedTva.tva) / 100 +
+          double.parse(_price1Control.text);
+      double ttc2 = (double.parse(_price2Control.text) * _selectedTva.tva) / 100 +
+          double.parse(_price2Control.text);
+      double ttc3 = (double.parse(_price3Control.text) * _selectedTva.tva) / 100 +
+          double.parse(_price3Control.text);
+      article.setprixVente1TTC(ttc1);
+      article.setprixVente2TTC(ttc2);
+      article.setprixVente3TTC(ttc3);
+    }else{
+      article.setprixVente1TTC(0);
+      article.setprixVente2TTC(0);
+      article.setprixVente3TTC(0);
+    }
+
 
     article.setDescription(_descriptionControl.text);
     article.setbloquer(false);

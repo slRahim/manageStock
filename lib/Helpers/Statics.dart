@@ -32,8 +32,8 @@ class Statics {
   ];
   static List<String> languages = [
     "English (ENG)",
-    "French (FR)",
-    "Arabic (AR)"
+    "Français (FR)",
+    "عربي (AR)"
   ];
   static List<String> themeStyle = [
     S.current.light_theme,

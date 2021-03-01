@@ -1205,7 +1205,7 @@ class SqlLiteDatabaseHelper {
     batch.rawInsert('INSERT INTO FormatPiece(Format , Piece , Current_index) VALUES("XXXX/YYYY"  , "AC" , 0)');
     batch.rawInsert('INSERT INTO FormatPiece(Format , Piece , Current_index) VALUES("XXXX/YYYY"  , "TR" , 0)');
 
-    batch.rawInsert("INSERT INTO MyParams VALUES(1,2,0,0,1,1,'80',1,'9:01',0,0,'Algeria','DZD' , 'beta' , 0 , 'illimit')");
+    batch.rawInsert("INSERT INTO MyParams VALUES(1,2,0,0,1,1,'80',1,'9:01',0,0,'United States of America','USD' , 'demo' , 0 , 'mensuel')");
 
     Uint8List image = await Helpers.getDefaultImageUint8List(from: "tier");
     Tiers tier0 = new Tiers(image ,"Client Passagé", null, 1, 0, 0, "adresse", "ville", "telephone", "000000", "fax", "email", 0.0, 0, 0, false);

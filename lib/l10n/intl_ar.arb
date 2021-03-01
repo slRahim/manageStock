@@ -361,7 +361,7 @@
 
   "choix_province" : "إختر المدينة",
   "choix_city" : "إختر البلدية",
-  "department" : "البلدية",
+  "department" : "المدينة",
 
   "abonnement_title" : "إشتراك",
   "illimite" : "غير محدود",
@@ -408,7 +408,9 @@
   "service_technique" : "خدمة تقنية",
   "service_ticket" : "تبليغ / حجز تذكرة",
   "get_ticket" : " حجز تذكرة",
-  "no_abonnement" : "بدون\nاشتراك"
+  "no_abonnement" : "بدون\nاشتراك",
+  "no_element" : "لا يوجد أي عنصر",
+  "liste_vide" : "القائمة فارغة حاليا."
 
 
 }

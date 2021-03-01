@@ -3355,20 +3355,20 @@ class S {
     );
   }
 
-  /// `Choose City`
+  /// `Choose Department`
   String get choix_province {
     return Intl.message(
-      'Choose City',
+      'Choose Department',
       name: 'choix_province',
       desc: '',
       args: [],
     );
   }
 
-  /// `Choose Department`
+  /// `Choose City`
   String get choix_city {
     return Intl.message(
-      'Choose Department',
+      'Choose City',
       name: 'choix_city',
       desc: '',
       args: [],
@@ -3790,6 +3790,26 @@ class S {
     return Intl.message(
       'No\nSubscription',
       name: 'no_abonnement',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `No items found`
+  String get no_element {
+    return Intl.message(
+      'No items found',
+      name: 'no_element',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `The list is currently empty.`
+  String get liste_vide {
+    return Intl.message(
+      'The list is currently empty.',
+      name: 'liste_vide',
       desc: '',
       args: [],
     );

@@ -1077,9 +1077,8 @@ class _AddTierPageState extends State<AddTierPage>
     return StatefulBuilder(builder: (context, StateSetter setState) {
       return Builder(
           builder: (context) => Dialog(
-                //this right here
                 child: SingleChildScrollView(
-                  child: Wrap(children: [
+                  child: Column(children: [
                     Padding(
                       padding: const EdgeInsets.all(20),
                       child: Column(
