@@ -152,8 +152,8 @@ class _IntroPageState extends State<IntroPage> {
       if (!mounted) return;
       setState(() {
         var name = f.map((item) => item.name).toList();
-        for (var statename in name) {
-          _provinces.add(statename.toString());
+        for (String statename in name) {
+          _provinces.add(statename.split('Province').first);
         }
       });
     });
@@ -170,7 +170,7 @@ class _IntroPageState extends State<IntroPage> {
         .toList();
     var states = takestate as List;
     states.forEach((f) {
-      var name = f.where((item) => item.name == _selectedProvince);
+      var name = f.where((item) => item.name == (_selectedProvince+'Province') || item.name == _selectedProvince);
       var cityname = name.map((item) => item.city).toList();
       cityname.forEach((ci) {
         if (!mounted) return;

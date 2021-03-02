@@ -71,7 +71,7 @@ class _TresorieListItemState extends State<TresorieListItem> {
       backgroundColor: Colors.green,
       contentLocation: ContentLocation.below,
       title: Text(S.current.swipe),
-      description:  Text(S.current.msg_swipe_start),
+      description:  Container(width:100,child: Text(S.current.msg_swipe_start)),
       onBackgroundTap: () async{
         await FeatureDiscovery.completeCurrentStep(context);
         return true ;
@@ -109,9 +109,16 @@ class _TresorieListItemState extends State<TresorieListItem> {
               ),
             ),
             title: (widget.tresorie.tierRS != null)
-                ? Text("(# : ${widget.tresorie.numTresorie}) ${widget.tresorie.tierRS}" ,
-                    style: TextStyle(fontSize: 16,)
-                  )
+                ? SingleChildScrollView(
+                 scrollDirection: Axis.horizontal,
+                  child: Row(
+                    children: [
+                      Text("(# : ${widget.tresorie.numTresorie}) ${widget.tresorie.tierRS}" ,
+                          style: TextStyle(fontSize: 16,)
+                        ),
+                    ],
+                  ),
+                )
                 :Text("(# : ${widget.tresorie.numTresorie}) __" ,
                     style: TextStyle(fontSize: 16,)
                 ),

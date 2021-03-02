@@ -48,7 +48,7 @@ class ArticleFamille {
   Map<String, dynamic> toMap() {
     var map = new Map<String, dynamic>();
 
-    String  _bytesImageString = Helpers.getEncodedByteStringFromFile(this._image);
+    var _bytesImageString = (this._image != null)? Helpers.getEncodedByteStringFromFile(this._image):null;
 
     map["BytesImageString"] = _bytesImageString;
     map["Libelle"] = _libelle;

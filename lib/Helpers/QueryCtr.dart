@@ -61,11 +61,12 @@ class QueryCtr {
     if(filters != null){
       int marque = filters["Id_Marque"] != null? filters["Id_Marque"] : -1;
       int famille = filters["Id_Famille"] != null? filters["Id_Famille"] : -1;
-      bool stock = filters["inStock"] != null? filters["inStock"] : false;
+      bool stock = filters["outStock"] != null ? filters["outStock"] : false;
 
+      print(stock);
       String marqueFilter = marque > 0 ? " AND Id_Marque = $marque" : "";
       String familleFilter = famille > 0 ? " AND Id_Famille = $famille" : "";
-      String stockFilter = stock ? " AND Qte > 0 " : "";
+      String stockFilter = stock ? " AND (Qte < 1 OR Qte < Qte_Min)" : "";
 
       query += " where (Designation like '%${searchTerm??''}%' OR CodeBar like '%${searchTerm??''}%' OR Ref like '%${searchTerm??''}%')";
 

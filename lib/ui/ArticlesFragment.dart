@@ -57,11 +57,11 @@ class _ArticlesFragmentState extends State<ArticlesFragment> {
 
   ArticleMarque _selectedMarque;
   ArticleFamille _selectedFamille;
-  bool _filterInStock = false;
+  bool _filterOutStock = false;
 
   int _savedSelectedMarque = 0;
   int _savedSelectedFamille = 0;
-  bool _savedFilterInStock = false;
+  bool _savedFilterOutStock = false;
 
   SliverListDataSource _dataSource;
   MyParams _myParams;
@@ -89,7 +89,7 @@ class _ArticlesFragmentState extends State<ArticlesFragment> {
   void fillFilter(Map<String, dynamic> filter) {
     filter["Id_Marque"] = _savedSelectedMarque;
     filter["Id_Famille"] = _savedSelectedFamille;
-    filter["inStock"] = _savedFilterInStock;
+    filter["outStock"] = _savedFilterOutStock;
   }
 
   Future<Widget> futureInitState() async {
@@ -104,7 +104,7 @@ class _ArticlesFragmentState extends State<ArticlesFragment> {
 
     _selectedMarque = _marqueItems[_savedSelectedMarque];
     _selectedFamille = _familleItems[_savedSelectedFamille];
-    _filterInStock = _savedFilterInStock;
+    _filterOutStock = _savedFilterOutStock;
 
     final tile = StatefulBuilder(builder: (context, StateSetter _setState) {
       return Builder(
@@ -188,11 +188,11 @@ class _ArticlesFragmentState extends State<ArticlesFragment> {
 
   Widget stockCheckBox(StateSetter _setState) {
     return CheckboxListTile(
-      title: Text(S.current.stockable),
-      value: _filterInStock,
+      title: Text(S.current.non_stocke),
+      value: _filterOutStock,
       onChanged: (bool value) {
         _setState(() {
-          _filterInStock = value;
+          _filterOutStock = value;
         });
       },
     );
@@ -243,7 +243,7 @@ class _ArticlesFragmentState extends State<ArticlesFragment> {
                   _savedSelectedMarque = _marqueItems.indexOf(_selectedMarque);
                   _savedSelectedFamille =
                       _familleItems.indexOf(_selectedFamille);
-                  _savedFilterInStock = _filterInStock;
+                  _savedFilterOutStock = _filterOutStock;
 
                   fillFilter(_filterMap);
 

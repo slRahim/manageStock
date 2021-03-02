@@ -179,7 +179,7 @@
 
   "prix" : "Prix",
   "qte" : "QTE",
-  "qte_cmd" : "Qte Commandée",
+  "qte_cmd" : "Qte Cmd",
 
   "msg_err_transfer" : "Transformation d'un brouilion est impossible",
   "msg_info_article" : "Vous risquez d'ajouter des articles inassocier aux pieces !",
@@ -410,7 +410,9 @@
   "get_ticket" : "Obtenir un ticket",
   "no_abonnement" : "Sans\nAbonnement",
   "no_element" : "Aucun élément trouvé",
-  "liste_vide" : "La liste actuelement est vide."
+  "liste_vide" : "La liste actuelement est vide.",
+
+  "non_stocke" : "< Qte min"
 
 
 

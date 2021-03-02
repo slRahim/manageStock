@@ -166,6 +166,8 @@ class _GridHomeWidgetState extends State<GridHomeWidget> {
 
   @override
   Widget build(BuildContext context) {
+    var padding = (MediaQuery.of(context).size.width%112).toInt()/2;
+
     if (!_finishLoading) {
       return Center(child: CircularProgressIndicator());
     } else {
@@ -341,13 +343,16 @@ class _GridHomeWidgetState extends State<GridHomeWidget> {
                   } else {
                     return SingleChildScrollView(
                       child: Container(
+                        padding: EdgeInsetsDirectional.only(start: padding,),
                         child: DescribedFeatureOverlay(
                           featureId: feature11,
                           tapTarget: Icon(MdiIcons.gestureTapHold , color: Colors.black,),
                           backgroundColor: Colors.yellow[700],
                           contentLocation: ContentLocation.below,
                           title: Text(S.current.long_presse),
-                          description: Text(S.current.msg_long_presse),
+                          description: Container(
+                               width: 150,
+                              child: Text(S.current.msg_long_presse,)),
                           onBackgroundTap: () async{
                             await FeatureDiscovery.completeCurrentStep(context);
                             return true ;
@@ -362,7 +367,7 @@ class _GridHomeWidgetState extends State<GridHomeWidget> {
                               ]),
                               // slot margin
                               slotMargin: EdgeInsets.only(
-                                  left: 20, right: 10, top: 5, bottom: 5),
+                                  left: 10, right: 10, top: 5, bottom: 5),
                               // the slot size
 
                               // item list

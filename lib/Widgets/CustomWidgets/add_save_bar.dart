@@ -60,7 +60,9 @@ class AddEditBarState extends State<AddEditBar>{
               backgroundColor: Colors.blue,
               contentLocation: ContentLocation.below,
               title: Text(S.current.transformer),
-              description:  Text(S.current.msg_transformer),
+              description:  Container(
+                  width: 150,
+                  child: Text(S.current.msg_transformer)),
               onBackgroundTap: () async{
                 await FeatureDiscovery.completeCurrentStep(context);
                 return true ;

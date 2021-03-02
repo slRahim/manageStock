@@ -437,6 +437,11 @@ class _AddArticlePageState extends State<AddArticlePage>
                       enabled: editMode && _stockable,
                       controller: _prixAchatControl,
                       onTap: () => _prixAchatControl.selection = TextSelection(baseOffset: 0, extentOffset: _prixAchatControl.value.text.length),
+                      onChanged: (value){
+                        setState(() {
+                          _pmpControl.text = value ;
+                        });
+                      },
                       keyboardType: TextInputType.number,
                       // validator: (value) {
                       //   if (value.isEmpty) {
@@ -444,6 +449,7 @@ class _AddArticlePageState extends State<AddArticlePage>
                       //   }
                       //   return null;
                       // },
+
                       decoration: InputDecoration(
                           labelText: S.current.prix_achat,
                           labelStyle: TextStyle(color: Colors.blue),
@@ -660,7 +666,7 @@ class _AddArticlePageState extends State<AddArticlePage>
                     ),
                   ),
                 ),
-                Padding(padding: EdgeInsets.all(4)),
+                SizedBox(width: 5,),
                 Flexible(
                   flex: 5,
                   child: TextFormField(
@@ -965,42 +971,55 @@ class _AddArticlePageState extends State<AddArticlePage>
   }
 
   Widget addMarquedialogue() {
+    _marque = new ArticleMarque.init();
+    var _formKey = GlobalKey<FormState>() ;
     return StatefulBuilder(builder: (context, StateSetter setState) {
       return Dialog(
           //this right here
           child: SingleChildScrollView(
         child: Container(
-          height: 500,
+          height: 200,
           padding: EdgeInsets.all(10),
           child:  Column(
               mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                ImagePickerWidget(
-                    editMode: editMode,
-                    scallFactor: 1,
-                    onImageChange: (File imageFile) =>
-                        {_marque.setpic(imageFile)}),
+                // ImagePickerWidget(
+                //     editMode: editMode,
+                //     scallFactor: 1,
+                //     onImageChange: (File imageFile) {
+                //       _marque.setpic(imageFile) ;
+                //     }
+                // ),
                 Padding(
                   padding: EdgeInsets.only(left: 5, right: 5, bottom: 20),
-                  child: TextField(
-                    controller: _libelleMarqueControl,
-                    keyboardType: TextInputType.text,
-                    decoration: InputDecoration(
-                      prefixIcon: Icon(
-                        Icons.label,
-                        color: Colors.orange[900],
-                      ),
-                      focusedBorder: OutlineInputBorder(
+                  child: Form(
+                    key: _formKey,
+                    child: TextFormField(
+                      controller: _libelleMarqueControl,
+                      keyboardType: TextInputType.text,
+                      validator: (value) {
+                        if (value.isEmpty) {
+                          return S.current.msg_champ_oblg;
+                        }
+                        return null;
+                      },
+                      decoration: InputDecoration(
+                        prefixIcon: Icon(
+                          Icons.label,
+                          color: Colors.orange[900],
+                        ),
+                        focusedBorder: OutlineInputBorder(
+                            borderSide: BorderSide(color: Colors.orange[900]),
+                            borderRadius: BorderRadius.circular(20)),
+                        contentPadding: EdgeInsets.only(left: 10),
+                        labelText: S.current.marque,
+                        labelStyle: TextStyle(color: Colors.orange[900]),
+                        enabledBorder: OutlineInputBorder(
+                          gapPadding: 3.3,
+                          borderRadius: BorderRadius.circular(20),
                           borderSide: BorderSide(color: Colors.orange[900]),
-                          borderRadius: BorderRadius.circular(20)),
-                      contentPadding: EdgeInsets.only(left: 10),
-                      labelText: S.current.marque,
-                      labelStyle: TextStyle(color: Colors.orange[900]),
-                      enabledBorder: OutlineInputBorder(
-                        gapPadding: 3.3,
-                        borderRadius: BorderRadius.circular(20),
-                        borderSide: BorderSide(color: Colors.orange[900]),
+                        ),
                       ),
                     ),
                   ),
@@ -1014,27 +1033,29 @@ class _AddArticlePageState extends State<AddArticlePage>
                         borderRadius: BorderRadius.circular(18.0),
                       ),
                       onPressed: () async {
-                        setState(() {
-                          _marque.setLibelle(_libelleMarqueControl.text);
-                          _libelleMarqueControl.text = "";
-                        });
+                        if(_formKey.currentState.validate()){
+                          setState(() {
+                            _marque.setLibelle(_libelleMarqueControl.text);
+                            _libelleMarqueControl.text = "";
+                          });
 
-                        await addMarqueIfNotExist(_marque);
+                          await addMarqueIfNotExist(_marque);
 
-                        Navigator.pop(context);
-                        final snackBar = SnackBar(
-                          content: Text(
-                            S.current.msg_ajout_item,
-                            style: TextStyle(
-                                color: Colors.white,
-                                fontSize: 15,
-                                fontWeight: FontWeight.w500),
-                          ),
-                          backgroundColor: Colors.blue,
-                          duration: Duration(seconds: 1),
-                        );
-                        _scaffoldKey.currentState.showSnackBar(snackBar);
-                        print(_marque.libelle);
+                          Navigator.pop(context);
+                          final snackBar = SnackBar(
+                            content: Text(
+                              S.current.msg_ajout_item,
+                              style: TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 15,
+                                  fontWeight: FontWeight.w500),
+                            ),
+                            backgroundColor: Colors.blue,
+                            duration: Duration(seconds: 1),
+                          );
+                          _scaffoldKey.currentState.showSnackBar(snackBar);
+                        }
+
                       },
                       child: Text(
                         S.current.ajouter,
@@ -1063,52 +1084,64 @@ class _AddArticlePageState extends State<AddArticlePage>
 
       _marqueItems.add(marque);
       _marqueDropdownItems = utils.buildMarqueDropDownMenuItems(_marqueItems);
-      _selectedMarque = _marqueItems[_marqueItems.length];
+      _selectedMarque = _marqueItems.last;
+
     }
   }
 
   Widget addFamilledialogue() {
+    _famille = ArticleFamille.init();
+    var _formKey = GlobalKey<FormState>() ;
     return StatefulBuilder(builder: (context, StateSetter setState) {
       return Builder(
           builder: (context) => Dialog(
                 //this right here
                 child: SingleChildScrollView(
                   child: Container(
-                    height: 500,
+                    height: 200,
                     padding: EdgeInsets.all(10),
                     child: Column(
                         mainAxisAlignment: MainAxisAlignment.center,
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          ImagePickerWidget(
-                              editMode: editMode,
-                              scallFactor: 1,
-                              onImageChange: (File imageFile) =>
-                                  {_famille.setpic(imageFile)}),
+                          // ImagePickerWidget(
+                          //     editMode: editMode,
+                          //     scallFactor: 1,
+                          //     onImageChange: (File imageFile) =>
+                          //         {_famille.setpic(imageFile)}),
                           Padding(
                             padding: EdgeInsets.only(
                                 left: 5, right: 5, bottom: 20, top: 20),
-                            child: TextField(
-                              controller: _libelleFamilleControl,
-                              keyboardType: TextInputType.text,
-                              decoration: InputDecoration(
-                                prefixIcon: Icon(
-                                  Icons.view_agenda,
-                                  color: Colors.orange[900],
-                                ),
-                                focusedBorder: OutlineInputBorder(
+                            child: Form(
+                              key: _formKey,
+                              child: TextFormField(
+                                controller: _libelleFamilleControl,
+                                keyboardType: TextInputType.text,
+                                validator: (value) {
+                                  if (value.isEmpty) {
+                                    return S.current.msg_champ_oblg;
+                                  }
+                                  return null;
+                                },
+                                decoration: InputDecoration(
+                                  prefixIcon: Icon(
+                                    Icons.view_agenda,
+                                    color: Colors.orange[900],
+                                  ),
+                                  focusedBorder: OutlineInputBorder(
+                                      borderSide:
+                                          BorderSide(color: Colors.orange[900]),
+                                      borderRadius: BorderRadius.circular(20)),
+                                  contentPadding: EdgeInsets.only(left: 10),
+                                  labelText: S.current.famile,
+                                  labelStyle:
+                                      TextStyle(color: Colors.orange[900]),
+                                  enabledBorder: OutlineInputBorder(
+                                    gapPadding: 3.3,
+                                    borderRadius: BorderRadius.circular(20),
                                     borderSide:
                                         BorderSide(color: Colors.orange[900]),
-                                    borderRadius: BorderRadius.circular(20)),
-                                contentPadding: EdgeInsets.only(left: 10),
-                                labelText: S.current.famile,
-                                labelStyle:
-                                    TextStyle(color: Colors.orange[900]),
-                                enabledBorder: OutlineInputBorder(
-                                  gapPadding: 3.3,
-                                  borderRadius: BorderRadius.circular(20),
-                                  borderSide:
-                                      BorderSide(color: Colors.orange[900]),
+                                  ),
                                 ),
                               ),
                             ),
@@ -1122,29 +1155,30 @@ class _AddArticlePageState extends State<AddArticlePage>
                                   borderRadius: BorderRadius.circular(18.0),
                                 ),
                                 onPressed: () async {
-                                  setState(() {
-                                    _famille.setLibelle(
-                                        _libelleFamilleControl.text);
-                                    _libelleFamilleControl.text = "";
-                                  });
+                                  if(_formKey.currentState.validate()){
+                                    setState(() {
+                                      _famille.setLibelle(
+                                          _libelleFamilleControl.text);
+                                      _libelleFamilleControl.text = "";
+                                    });
 
-                                  await addFamilleIfNotExist(_famille);
+                                    await addFamilleIfNotExist(_famille);
 
-                                  Navigator.pop(context);
-                                  final snackBar = SnackBar(
-                                    content: Text(
-                                      S.current.msg_ajout_item,
-                                      style: TextStyle(
-                                          color: Colors.white,
-                                          fontSize: 15,
-                                          fontWeight: FontWeight.w500),
-                                    ),
-                                    backgroundColor: Colors.red,
-                                    duration: Duration(seconds: 1),
-                                  );
-                                  _scaffoldKey.currentState
-                                      .showSnackBar(snackBar);
-                                  print(_famille.libelle);
+                                    Navigator.pop(context);
+                                    final snackBar = SnackBar(
+                                      content: Text(
+                                        S.current.msg_ajout_item,
+                                        style: TextStyle(
+                                            color: Colors.white,
+                                            fontSize: 15,
+                                            fontWeight: FontWeight.w500),
+                                      ),
+                                      backgroundColor: Colors.red,
+                                      duration: Duration(seconds: 1),
+                                    );
+                                    _scaffoldKey.currentState
+                                        .showSnackBar(snackBar);
+                                  }
                                 },
                                 child: Text(
                                   S.current.ajouter,
@@ -1169,16 +1203,17 @@ class _AddArticlePageState extends State<AddArticlePage>
       _selectedFamille = _familleItems[familleIndex];
     } else {
       int id = await widget._queryCtr
-          .addItemToTable(DbTablesNames.articlesTva, famille);
+          .addItemToTable(DbTablesNames.articlesFamilles, famille);
       famille.id = id;
 
       _familleItems.add(famille);
       _familleDropdownItems = utils.buildDropFamilleArticle(_familleItems);
-      _selectedFamille = _familleItems[_familleItems.length];
+      _selectedFamille = _familleItems.last;
     }
   }
 
   Widget addTVAdialogue() {
+    var _formKey = GlobalKey<FormState>() ;
     return StatefulBuilder(builder: (context, StateSetter setState) {
       return Dialog(
         //this right here
@@ -1202,24 +1237,33 @@ class _AddArticlePageState extends State<AddArticlePage>
                 )),
                 Padding(
                   padding: EdgeInsets.only(left: 5, right: 5, bottom: 20),
-                  child: TextField(
-                    controller: _tauxTVAControl,
-                    keyboardType: TextInputType.number,
-                    decoration: InputDecoration(
-                      prefixIcon: Icon(
-                        FontAwesome.percent,
-                        color: Colors.orange[900],
-                      ),
-                      focusedBorder: OutlineInputBorder(
+                  child: Form(
+                    key: _formKey,
+                    child: TextFormField(
+                      controller: _tauxTVAControl,
+                      keyboardType: TextInputType.number,
+                      validator: (value) {
+                        if (value.isEmpty) {
+                          return S.current.msg_champ_oblg;
+                        }
+                        return null;
+                      },
+                      decoration: InputDecoration(
+                        prefixIcon: Icon(
+                          FontAwesome.percent,
+                          color: Colors.orange[900],
+                        ),
+                        focusedBorder: OutlineInputBorder(
+                            borderSide: BorderSide(color: Colors.orange[900]),
+                            borderRadius: BorderRadius.circular(20)),
+                        contentPadding: EdgeInsets.only(left: 10),
+                        labelText: S.current.taux_tva,
+                        labelStyle: TextStyle(color: Colors.orange[900]),
+                        enabledBorder: OutlineInputBorder(
+                          gapPadding: 3.3,
+                          borderRadius: BorderRadius.circular(20),
                           borderSide: BorderSide(color: Colors.orange[900]),
-                          borderRadius: BorderRadius.circular(20)),
-                      contentPadding: EdgeInsets.only(left: 10),
-                      labelText: S.current.taux_tva,
-                      labelStyle: TextStyle(color: Colors.orange[900]),
-                      enabledBorder: OutlineInputBorder(
-                        gapPadding: 3.3,
-                        borderRadius: BorderRadius.circular(20),
-                        borderSide: BorderSide(color: Colors.orange[900]),
+                        ),
                       ),
                     ),
                   ),
@@ -1233,23 +1277,25 @@ class _AddArticlePageState extends State<AddArticlePage>
                         borderRadius: BorderRadius.circular(18.0),
                       ),
                       onPressed: () async {
-                        double _taux = double.parse(_tauxTVAControl.text);
-                        _tauxTVAControl.text = "";
-                        await addTvaIfNotExist(_taux);
+                        if(_formKey.currentState.validate()){
+                          double _taux = double.parse(_tauxTVAControl.text);
+                          _tauxTVAControl.text = "";
+                          await addTvaIfNotExist(_taux);
+                          Navigator.pop(context);
+                          final snackBar = SnackBar(
+                            content: Text(
+                              '${S.current.tva} ' + _taux.toString() + '%',
+                              style: TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 15,
+                                  fontWeight: FontWeight.w500),
+                            ),
+                            backgroundColor: Colors.green[900],
+                            duration: Duration(seconds: 1),
+                          );
+                          _scaffoldKey.currentState.showSnackBar(snackBar);
+                        }
 
-                        Navigator.pop(context);
-                        final snackBar = SnackBar(
-                          content: Text(
-                            '${S.current.tva} ' + _taux.toString() + '%',
-                            style: TextStyle(
-                                color: Colors.white,
-                                fontSize: 15,
-                                fontWeight: FontWeight.w500),
-                          ),
-                          backgroundColor: Colors.green[900],
-                          duration: Duration(seconds: 1),
-                        );
-                        _scaffoldKey.currentState.showSnackBar(snackBar);
                       },
                       child: Text(
                         S.current.ajouter,
@@ -1327,49 +1373,43 @@ class _AddArticlePageState extends State<AddArticlePage>
 
     //reliere à _stockable
     if (true) {
-      (_prixAchatControl.text != null )?article.setprixAchat(double.parse(_prixAchatControl.text)):article.setprixAchat(0.0);
-    }
-    (_stockInitialControl.text != null )?article.setQteInit(double.parse(_stockInitialControl.text)):article.setQteInit(0);
-    (_stockInitialControl.text != null )?article.setquantite(double.parse(_stockInitialControl.text)):article.setquantite(0);
-    (_stockMinimumControl.text != null )?article.setQteMin(double.parse(_stockMinimumControl.text)):article.setQteMin(0);
-    (_qteCmdCotrol.text != null )?article.cmdClient = double.parse(_qteCmdCotrol.text):article.cmdClient =0;
-    (_pmpControl.text != null )?article.setPmp(double.parse(_pmpControl.text)):article.setPmp(0);
-    if (!modification && editMode) {
-      (_pmpControl.text != null )?article.setPmpInit(double.parse(_pmpControl.text)):article.setPmpInit(0);
+      (_prixAchatControl.text != "" )?article.setprixAchat(double.parse(_prixAchatControl.text)):article.setprixAchat(0.0);
     }
 
-    (_qteColisCotrol.text != null )?article.setQteColis(double.parse(_qteColisCotrol.text)):article.setQteColis(0);
-    if(_stockInitialControl.text != null && _qteColisCotrol.text != null){
+    (_stockInitialControl.text != "" )?article.setQteInit(double.parse(_stockInitialControl.text)):article.setQteInit(0.0);
+    (_stockInitialControl.text != "" )?article.setquantite(double.parse(_stockInitialControl.text)):article.setquantite(0.0);
+    (_stockMinimumControl.text != "" )?article.setQteMin(double.parse(_stockMinimumControl.text)):article.setQteMin(0.0);
+    (_qteCmdCotrol.text != "" )?article.cmdClient = double.parse(_qteCmdCotrol.text):article.cmdClient =0.0;
+
+    (_pmpControl.text != "" )?article.setPmp(double.parse(_pmpControl.text)):article.setPmp(0.0);
+    if (!modification && editMode) {
+      (_pmpControl.text != "" )?article.setPmpInit(double.parse(_pmpControl.text)):article.setPmpInit(0.0);
+    }
+
+    (_qteColisCotrol.text != "" )?article.setQteColis(double.parse(_qteColisCotrol.text)):article.setQteColis(1.0);
+    if(_stockInitialControl.text != "" && _qteColisCotrol.text != ""){
       double colis = double.parse(_stockInitialControl.text) /
           double.parse(_qteColisCotrol.text);
       article.setColis(colis);
     }else{
-      article.setColis(0);
+      article.setColis(0.0);
     }
 
-    (_price1Control.text != null )?article.setprixVente1(double.parse(_price1Control.text)):article.setprixVente1(0);
-    (_price2Control.text != null )?article.setprixVente2(double.parse(_price2Control.text)):article.setprixVente2(0);
-    (_price3Control.text != null )?article.setprixVente3(double.parse(_price3Control.text)):article.setprixVente3(0);
+    (_price1Control.text != "" )?article.setprixVente1(double.parse(_price1Control.text)):article.setprixVente1(0.0);
+    (_price2Control.text != "" )?article.setprixVente2(double.parse(_price2Control.text)):article.setprixVente2(0.0);
+    (_price3Control.text != "" )?article.setprixVente3(double.parse(_price3Control.text)):article.setprixVente3(0.0);
 
     article.setIdFamille(_familleItems.indexOf(_selectedFamille));
     article.setIdMarque(_marqueItems.indexOf(_selectedMarque));
     article.setTva(_selectedTva.tva);
 
-    if(_price1Control.text != null){
-      double ttc1 = (double.parse(_price1Control.text) * _selectedTva.tva) / 100 +
-          double.parse(_price1Control.text);
-      double ttc2 = (double.parse(_price2Control.text) * _selectedTva.tva) / 100 +
-          double.parse(_price2Control.text);
-      double ttc3 = (double.parse(_price3Control.text) * _selectedTva.tva) / 100 +
-          double.parse(_price3Control.text);
-      article.setprixVente1TTC(ttc1);
-      article.setprixVente2TTC(ttc2);
-      article.setprixVente3TTC(ttc3);
-    }else{
-      article.setprixVente1TTC(0);
-      article.setprixVente2TTC(0);
-      article.setprixVente3TTC(0);
-    }
+
+    double ttc1 = (article.prixVente1 * _selectedTva.tva) / 100 + article.prixVente1 ;
+    double ttc2 = (article.prixVente2  * _selectedTva.tva) / 100 +article.prixVente2 ;
+    double ttc3 = (article.prixVente3  * _selectedTva.tva) / 100 +article.prixVente3;
+    article.setprixVente1TTC(ttc1);
+    article.setprixVente2TTC(ttc2);
+    article.setprixVente3TTC(ttc3);
 
 
     article.setDescription(_descriptionControl.text);

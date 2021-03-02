@@ -3814,6 +3814,16 @@ class S {
       args: [],
     );
   }
+
+  /// `< Min Qte`
+  String get non_stocke {
+    return Intl.message(
+      '< Min Qte',
+      name: 'non_stocke',
+      desc: '',
+      args: [],
+    );
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<S> {

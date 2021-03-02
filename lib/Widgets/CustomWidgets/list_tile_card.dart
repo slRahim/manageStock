@@ -57,8 +57,8 @@ class _ListTileCardState extends State<ListTileCard> {
             cardsGap: SizeConfig.safeBlockVertical,
             controller: widget.slidingCardController,
             slidingCardWidth: SizeConfig.horizontalBloc * 95,
-            visibleCardHeight: SizeConfig.safeBlockVertical * 13,
-            hiddenCardHeight: SizeConfig.safeBlockVertical * 11,
+            visibleCardHeight: 100,
+            hiddenCardHeight: 90,
             showColors: false,
             frontCardWidget: ListFrontCard(
               title: widget.title,
@@ -291,7 +291,6 @@ class ListBackCard extends StatelessWidget {
                       child: Center(
                           child: Icon(
                         Icons.remove_red_eye,
-                        size: SizeConfig.safeBlockHorizontal * 8,
                         color: Colors.white,
                       )),
                     ),

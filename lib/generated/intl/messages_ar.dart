@@ -268,6 +268,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "no_famille" : MessageLookupByLibrary.simpleMessage("لا توجد عائلة"),
     "no_marque" : MessageLookupByLibrary.simpleMessage("لا توجد علامة"),
     "non" : MessageLookupByLibrary.simpleMessage("لا"),
+    "non_stocke" : MessageLookupByLibrary.simpleMessage("< ك م الدنيا"),
     "objet" : MessageLookupByLibrary.simpleMessage("الموضوع"),
     "oui" : MessageLookupByLibrary.simpleMessage("نعم"),
     "par_desgn" : MessageLookupByLibrary.simpleMessage("بإسم المنتج"),

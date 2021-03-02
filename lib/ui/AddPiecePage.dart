@@ -398,8 +398,11 @@ class _AddPiecePageState extends State<AddPiecePage>
                     backgroundColor: Colors.blue,
                     contentLocation: ContentLocation.above,
                     title: Text('${S.current.ajout_remise}'),
-                    description: Text(
-                        '${S.current.msg_ajout_remise}'),
+                    description: Container(
+                      width: 150,
+                      child: Text(
+                          '${S.current.msg_ajout_remise}'),
+                    ),
                     onBackgroundTap: () async{
                       await FeatureDiscovery.completeCurrentStep(context);
                       return true ;
@@ -482,8 +485,11 @@ class _AddPiecePageState extends State<AddPiecePage>
                     backgroundColor: Colors.green,
                     contentLocation: ContentLocation.above,
                     title:  Text('${S.current.ajout_verssement}'),
-                    description:  Text(
-                        '${S.current.msg_ajout_verssement}'),
+                    description:  Container(
+                      width: 150,
+                      child: Text(
+                          '${S.current.msg_ajout_verssement}'),
+                    ),
                     onBackgroundTap: () async{
                       await FeatureDiscovery.completeCurrentStep(context);
                       return true ;
@@ -586,8 +592,11 @@ class _AddPiecePageState extends State<AddPiecePage>
               backgroundColor: Colors.blue,
               contentLocation: ContentLocation.above,
               title: Text('${S.current.swipe_top}'),
-              description: Text(
-                  '${S.current.msg_swipe_top}'),
+              description: Container(
+                width: 150,
+                child: Text(
+                    '${S.current.msg_swipe_top}'),
+              ),
               onBackgroundTap: () async{
                 await FeatureDiscovery.completeCurrentStep(context);
                 return true ;
@@ -766,7 +775,7 @@ class _AddPiecePageState extends State<AddPiecePage>
                       Flexible(
                         flex: 6,
                         child: GestureDetector(
-                          onTap: editMode
+                          onTap: editMode && !modification
                               ? () {
                                   chooseClientDialog();
                                 }
@@ -818,8 +827,11 @@ class _AddPiecePageState extends State<AddPiecePage>
                                   backgroundColor: Colors.blue,
                                   contentLocation: ContentLocation.above,
                                   title: Text('${S.current.swipe}'),
-                                  description: Text(
-                                      '${S.current.msg_swipe_start}'),
+                                  description: Container(
+                                    width: 100,
+                                    child: Text(
+                                        '${S.current.msg_swipe_start}'),
+                                  ),
                                   onBackgroundTap: () async{
                                     await FeatureDiscovery.completeCurrentStep(context);
                                     return true ;

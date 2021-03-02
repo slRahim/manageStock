@@ -77,7 +77,7 @@ class _TierListItemState extends State<TierListItem> {
       backgroundColor: Colors.green,
       contentLocation: ContentLocation.below,
       title: Text(S.current.swipe),
-      description: Text(S.current.msg_swipe_start),
+      description: Container(width:100,child: Text(S.current.msg_swipe_start)),
       onBackgroundTap: () async{
         await FeatureDiscovery.completeCurrentStep(context);
         return true ;
@@ -93,7 +93,7 @@ class _TierListItemState extends State<TierListItem> {
             backgroundColor: Colors.green,
             contentLocation: ContentLocation.below,
             title: Text(S.current.long_presse),
-            description: Text(S.current.msg_long_press_select),
+            description: Container(width:100,child: Text(S.current.msg_long_press_select)),
             onBackgroundTap: () async{
               await FeatureDiscovery.completeCurrentStep(context);
               return true ;
@@ -128,9 +128,16 @@ class _TierListItemState extends State<TierListItem> {
                 ),
               ),
               title:(widget.tier.raisonSociale != null)
-                  ? Text("(${Statics.statutItems[widget.tier.statut]}) ${widget.tier.raisonSociale}" ,
-                      style: TextStyle(
-                          fontSize: 16,)
+                  ? SingleChildScrollView(
+                    scrollDirection: Axis.horizontal,
+                    child: Row(
+                      children: [
+                        Text("(${Statics.statutItems[widget.tier.statut]}) ${widget.tier.raisonSociale}" ,
+                            style: TextStyle(
+                                fontSize: 16,)
+                        ),
+                      ],
+                    ),
                   )
                   : null,
               trailingChildren: [

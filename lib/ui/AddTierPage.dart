@@ -453,12 +453,12 @@ class _AddTierPageState extends State<AddTierPage>
               controller: _adresseControl,
               // onTap: () => _controller.selection = TextSelection(baseOffset: 0, extentOffset: _controller.value.text.length),
               keyboardType: TextInputType.text,
-              validator: (value) {
-                if (value.isEmpty) {
-                  return S.current.msg_champ_oblg;
-                }
-                return null;
-              },
+              // validator: (value) {
+              //   if (value.isEmpty) {
+              //     return S.current.msg_champ_oblg;
+              //   }
+              //   return null;
+              // },
               decoration: InputDecoration(
                 labelText: S.current.adresse,
                 labelStyle: TextStyle(color: Colors.blue),
@@ -651,12 +651,12 @@ class _AddTierPageState extends State<AddTierPage>
               controller: _solde_departControl,
               onTap: () => _solde_departControl.selection = TextSelection(baseOffset: 0, extentOffset: _solde_departControl.value.text.length),
               keyboardType: TextInputType.number,
-              validator: (value) {
-                if (value.isEmpty) {
-                  return S.current.msg_champ_oblg;
-                }
-                return null;
-              },
+              // validator: (value) {
+              //   if (value.isEmpty) {
+              //     return S.current.msg_champ_oblg;
+              //   }
+              //   return null;
+              // },
               decoration: InputDecoration(
                 labelText: S.current.solde_depart,
                 labelStyle: TextStyle(color: Colors.blue),
@@ -679,69 +679,75 @@ class _AddTierPageState extends State<AddTierPage>
                 ),
               ),
             ),
-            TextFormField(
-              enabled: editMode && !modification,
-              controller: _chiffre_affairesControl,
-              onTap: () => _chiffre_affairesControl.selection = TextSelection(baseOffset: 0, extentOffset: _chiffre_affairesControl.value.text.length),
-              keyboardType: TextInputType.number,
-              validator: (value) {
-                if (value.isEmpty) {
-                  return S.current.msg_champ_oblg;
-                }
-                return null;
-              },
-              decoration: InputDecoration(
-                labelText: S.current.chifre_affaire,
-                labelStyle: TextStyle(color: Colors.blue),
-                prefixIcon: Icon(
-                  Icons.monetization_on,
-                  color: Colors.blue,
-                ),
-                focusedBorder: OutlineInputBorder(
+            Visibility(
+              visible: modification,
+              child: TextFormField(
+                enabled: false,
+                controller: _chiffre_affairesControl,
+                onTap: () => _chiffre_affairesControl.selection = TextSelection(baseOffset: 0, extentOffset: _chiffre_affairesControl.value.text.length),
+                keyboardType: TextInputType.number,
+                validator: (value) {
+                  if (value.isEmpty) {
+                    return S.current.msg_champ_oblg;
+                  }
+                  return null;
+                },
+                decoration: InputDecoration(
+                  labelText: S.current.chifre_affaire,
+                  labelStyle: TextStyle(color: Colors.blue),
+                  prefixIcon: Icon(
+                    Icons.monetization_on,
+                    color: Colors.blue,
+                  ),
+                  focusedBorder: OutlineInputBorder(
+                      borderSide: BorderSide(color: Colors.blue),
+                      borderRadius: BorderRadius.circular(20)),
+                  enabledBorder: OutlineInputBorder(
+                    gapPadding: 3.3,
+                    borderRadius: BorderRadius.circular(20),
                     borderSide: BorderSide(color: Colors.blue),
-                    borderRadius: BorderRadius.circular(20)),
-                enabledBorder: OutlineInputBorder(
-                  gapPadding: 3.3,
-                  borderRadius: BorderRadius.circular(20),
-                  borderSide: BorderSide(color: Colors.blue),
-                ),
-                errorBorder:  OutlineInputBorder(
-                  gapPadding: 3.3,
-                  borderRadius: BorderRadius.circular(20),
-                  borderSide: BorderSide(color: Colors.red),
+                  ),
+                  errorBorder:  OutlineInputBorder(
+                    gapPadding: 3.3,
+                    borderRadius: BorderRadius.circular(20),
+                    borderSide: BorderSide(color: Colors.red),
+                  ),
                 ),
               ),
             ),
-            TextFormField(
-              enabled: editMode && !modification,
-              controller: _reglerControl,
-              onTap: () => _reglerControl.selection = TextSelection(baseOffset: 0, extentOffset: _reglerControl.value.text.length),
-              keyboardType: TextInputType.number,
-              validator: (value) {
-                if (value.isEmpty) {
-                  return S.current.msg_champ_oblg;
-                }
-                return null;
-              },
-              decoration: InputDecoration(
-                labelText: S.current.regler,
-                labelStyle: TextStyle(color: Colors.blue),
-                prefixIcon: Icon(
-                  Icons.monetization_on,
-                  color: Colors.blue,
-                ),
-                focusedBorder: OutlineInputBorder(
+            Visibility(
+              visible: modification,
+              child: TextFormField(
+                enabled: false,
+                controller: _reglerControl,
+                onTap: () => _reglerControl.selection = TextSelection(baseOffset: 0, extentOffset: _reglerControl.value.text.length),
+                keyboardType: TextInputType.number,
+                // validator: (value) {
+                //   if (value.isEmpty) {
+                //     return S.current.msg_champ_oblg;
+                //   }
+                //   return null;
+                // },
+                decoration: InputDecoration(
+                  labelText: S.current.regler,
+                  labelStyle: TextStyle(color: Colors.blue),
+                  prefixIcon: Icon(
+                    Icons.monetization_on,
+                    color: Colors.blue,
+                  ),
+                  focusedBorder: OutlineInputBorder(
+                      borderSide: BorderSide(color: Colors.blue),
+                      borderRadius: BorderRadius.circular(20)),
+                  enabledBorder: OutlineInputBorder(
+                    gapPadding: 3.3,
+                    borderRadius: BorderRadius.circular(20),
                     borderSide: BorderSide(color: Colors.blue),
-                    borderRadius: BorderRadius.circular(20)),
-                enabledBorder: OutlineInputBorder(
-                  gapPadding: 3.3,
-                  borderRadius: BorderRadius.circular(20),
-                  borderSide: BorderSide(color: Colors.blue),
-                ),
-                errorBorder:  OutlineInputBorder(
-                  gapPadding: 3.3,
-                  borderRadius: BorderRadius.circular(20),
-                  borderSide: BorderSide(color: Colors.red),
+                  ),
+                  errorBorder:  OutlineInputBorder(
+                    gapPadding: 3.3,
+                    borderRadius: BorderRadius.circular(20),
+                    borderSide: BorderSide(color: Colors.red),
+                  ),
                 ),
               ),
             ),
@@ -1235,7 +1241,7 @@ class _AddTierPageState extends State<AddTierPage>
 
     item.raisonSociale = _raisonSocialeControl.text;
 
-    if(_qrCodeControl.text != null){
+    if(_qrCodeControl.text != ""){
       item.qrCode = _qrCodeControl.text;
     }
 
@@ -1248,9 +1254,11 @@ class _AddTierPageState extends State<AddTierPage>
     item.mobile = _mobileControl.text;
     item.fax = _faxControl.text;
     item.email = _emailControl.text;
-    item.solde_depart = double.tryParse(_solde_departControl.text);
-    item.chiffre_affaires = double.tryParse(_chiffre_affairesControl.text);
-    item.regler = double.tryParse(_reglerControl.text);
+
+    item.solde_depart =(_solde_departControl.text != "")? double.tryParse(_solde_departControl.text):0.0;
+    item.chiffre_affaires = (_chiffre_affairesControl.text != "")?double.tryParse(_chiffre_affairesControl.text):0.0;
+    item.regler =(_reglerControl.text != "")? double.tryParse(_reglerControl.text):0.0;
+
     if (_itemImage != null) {
       item.imageUint8List =  await Helpers.getUint8ListFromFile(_itemImage);
     } else {

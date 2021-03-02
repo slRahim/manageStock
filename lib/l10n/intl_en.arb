@@ -410,7 +410,9 @@
   "get_ticket" : "Get a ticket",
   "no_abonnement" : "No\nSubscription",
   "no_element" : "No items found",
-  "liste_vide" : "The list is currently empty."
+  "liste_vide" : "The list is currently empty.",
+
+  "non_stocke" : "< Min Qte"
 
 
 }

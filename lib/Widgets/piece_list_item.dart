@@ -78,7 +78,7 @@ class _PieceListItemState extends State<PieceListItem> {
       backgroundColor: Colors.green,
       contentLocation: ContentLocation.below,
       title: Text(S.current.swipe),
-      description: Text(S.current.msg_swipe_lr),
+      description: Container(width:150,child: Text(S.current.msg_swipe_lr)),
       onBackgroundTap: () async{
         await FeatureDiscovery.completeCurrentStep(context);
         return true ;
@@ -115,10 +115,17 @@ class _PieceListItemState extends State<PieceListItem> {
               ),
             ),
             title:(widget.piece.raisonSociale != null)
-                ?Text("(# : ${widget.piece.num_piece}) ${widget.piece.raisonSociale}" ,
-                    style: TextStyle(
-                          fontSize: 16,)
-                  )
+                ?SingleChildScrollView(
+                  scrollDirection: Axis.horizontal,
+                  child: Row(
+                    children: [
+                      Text("(# : ${widget.piece.num_piece}) ${widget.piece.raisonSociale}" ,
+                          style: TextStyle(
+                                fontSize: 16,)
+                        ),
+                    ],
+                  ),
+                )
                 : null,
             trailingChildren: [
               Row(

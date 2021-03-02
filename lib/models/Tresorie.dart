@@ -1,8 +1,4 @@
 
-
-
-
-
 class Tresorie {
   int _id;
 

@@ -268,6 +268,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "no_famille" : MessageLookupByLibrary.simpleMessage("No Family"),
     "no_marque" : MessageLookupByLibrary.simpleMessage("No Brand"),
     "non" : MessageLookupByLibrary.simpleMessage("No"),
+    "non_stocke" : MessageLookupByLibrary.simpleMessage("< Min Qte"),
     "objet" : MessageLookupByLibrary.simpleMessage("Object"),
     "oui" : MessageLookupByLibrary.simpleMessage("Yes"),
     "par_desgn" : MessageLookupByLibrary.simpleMessage("By Designation"),

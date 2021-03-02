@@ -81,7 +81,7 @@ class _ArticleListItemState extends State<ArticleListItem> {
       backgroundColor: Colors.green,
       contentLocation: ContentLocation.below,
       title: Text(S.current.long_presse),
-      description: Text("long press to select item"),
+      description: Container(width:150,child: Text("long press to select item")),
       onBackgroundTap: () async{
         await FeatureDiscovery.completeCurrentStep(context);
         return true ;
@@ -136,21 +136,24 @@ class _ArticleListItemState extends State<ArticleListItem> {
           backgroundColor: Colors.yellow[700],
           contentLocation: ContentLocation.below,
           title: Text(S.current.tap_element),
-          description: Text(S.current.msg_tap),
+          description: Container(width:150,child: Text(S.current.msg_tap)),
           onBackgroundTap: () async{
             await FeatureDiscovery.completeCurrentStep(context);
             return true ;
           },
           child: (widget.article.designation != null)
-              ?Row(
-                children: [
-                  Icon(Icons.assignment,size: 16, color: Theme.of(context).primaryColorDark,),
-                  SizedBox(width: 3,),
-                  Text("${widget.article.designation}" ,
-                      style: TextStyle(
-                          fontSize: 16.0,)
-                    ),
-                ],
+              ?SingleChildScrollView(
+                scrollDirection: Axis.horizontal,
+                child: Row(
+                  children: [
+                    Icon(Icons.assignment,size: 16, color: Theme.of(context).primaryColorDark,),
+                    SizedBox(width: 3,),
+                    Text("${widget.article.designation}" ,
+                        style: TextStyle(
+                            fontSize: 16.0,)
+                      ),
+                  ],
+                ),
               )
               : null,
         ),
