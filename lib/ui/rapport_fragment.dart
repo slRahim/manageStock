@@ -11,6 +11,8 @@ import 'package:gestmob/ui/preview_piece.dart';
 import 'package:pdf/pdf.dart';
 import 'package:pdf/widgets.dart' as pw;
 import 'package:printing/printing.dart';
+import 'package:gestmob/services/push_notifications.dart';
+import 'package:gestmob/models/MyParams.dart';
 
 class Rapport extends StatefulWidget {
   @override
@@ -36,6 +38,7 @@ class _RapportState extends State<Rapport> {
 
   QueryCtr _queryCtr = new QueryCtr();
   bool directionRtl = false;
+  MyParams _myparams ;
 
   @override
   void initState() {
@@ -93,6 +96,12 @@ class _RapportState extends State<Rapport> {
   }
 
   @override
+  void didChangeDependencies() {
+    PushNotificationsManagerState data = PushNotificationsManager.of(context);
+    _myparams = data.myParams;
+  }
+
+  @override
   Widget build(BuildContext context) {
     directionRtl = Helpers.isDirectionRTL(context);
     return Scaffold(
@@ -114,12 +123,11 @@ class _RapportState extends State<Rapport> {
                   borderRadius: BorderRadius.circular(10),
                   boxShadow: [
                     BoxShadow(
-                      color: Colors.grey.withOpacity(.5),
-                      blurRadius: 20.0, // soften the shadow
+                      color: Colors.grey.withOpacity(.2), // soften the shadow
                       spreadRadius: 0.0, //extend the shadow
                       offset: Offset(
-                        5.0, // Move to right 10  horizontally
-                        5.0, // Move to bottom 10 Vertically
+                        1, // Move to right 10  horizontally
+                        2.0, // Move to bottom 10 Vertically
                       ),
                     )
                   ],
@@ -367,14 +375,20 @@ class _RapportState extends State<Rapport> {
                             color: Colors.white,
                           ),
                           onPressed: () async{
-                            var doc = await _makePdfDocument();
-                            if(doc != null){
-                              await Printing.layoutPdf(
-                                  onLayout: (PdfPageFormat format) async => doc.save());
+                            if(_myparams.versionType != "demo"){
+                              var doc = await _makePdfDocument();
+                              if(doc != null){
+                                await Printing.layoutPdf(
+                                    onLayout: (PdfPageFormat format) async => doc.save());
+                              }else{
+                                var message = "${S.current.msg_rapport_vide}";
+                                Helpers.showFlushBar(context, message);
+                              }
                             }else{
-                              var message = "${S.current.msg_rapport_vide}";
+                              var message = S.current.msg_demo_option;
                               Helpers.showFlushBar(context, message);
                             }
+
                           },
                         ),
                       )
@@ -651,6 +665,9 @@ class _RapportState extends State<Rapport> {
         break ;
       case "charge":
         return S.current.charge ;
+        break ;
+      case "credit":
+        return S.current.credit ;
         break ;
     }
   }

@@ -72,185 +72,185 @@ class _PieceListItemState extends State<PieceListItem> {
   @override
   Widget build(BuildContext context) {
     SizeConfig().init(context);
-    return DescribedFeatureOverlay(
-      featureId: feature5,
-      tapTarget: Icon(MdiIcons.arrowSplitVertical , color: Colors.black,),
-      backgroundColor: Colors.green,
-      contentLocation: ContentLocation.below,
-      title: Text(S.current.swipe),
-      description: Container(width:150,child: Text(S.current.msg_swipe_lr)),
-      onBackgroundTap: () async{
-        await FeatureDiscovery.completeCurrentStep(context);
-        return true ;
-      },
-      child: Visibility(
+    return Visibility(
         visible: _visible,
-        child: Slidable(
-          actionPane: SlidableDrawerActionPane(),
-          actionExtentRatio: 0.25,
-          child: ListTileCard(
-            from: widget.piece,
-            onLongPress:  () => widget.onItemSelected != null? widget.onItemSelected(widget.piece) : null,
-            onTap: () => {
-              if(widget.onItemSelected == null){
-                Navigator.of(context).pushNamed(RoutesKeys.addPiece, arguments: widget.piece)
-              }
-            },
-            slidingCardController: controller,
-            onCardTapped: () {
-              if(controller.isCardSeparated == true) {
-                controller.collapseCard();
-              } else {
-                controller.expandCard();
-              }
-            },
-            leading: CircleAvatar(
-              radius: 28,
-              backgroundColor: getColor(),
-              child: CircleAvatar(
-                child: Text(getPiecetype()),
-                radius:25,
-                backgroundColor: Colors.grey[200],
-                foregroundColor: Colors.black,
+        child: DescribedFeatureOverlay(
+          featureId: feature5,
+          tapTarget: Icon(MdiIcons.arrowSplitVertical , color: Colors.black,),
+          backgroundColor: Colors.red,
+          contentLocation: ContentLocation.below,
+          title: Text(S.current.swipe),
+          description: Container(width:150,child: Text(S.current.msg_swipe_lr)),
+          onBackgroundTap: () async{
+            await FeatureDiscovery.completeCurrentStep(context);
+            return true ;
+          },
+          child: Slidable(
+            actionPane: SlidableDrawerActionPane(),
+            actionExtentRatio: 0.25,
+            child: ListTileCard(
+              from: widget.piece,
+              onLongPress:  () => widget.onItemSelected != null? widget.onItemSelected(widget.piece) : null,
+              onTap: () => {
+                if(widget.onItemSelected == null){
+                  Navigator.of(context).pushNamed(RoutesKeys.addPiece, arguments: widget.piece)
+                }
+              },
+              slidingCardController: controller,
+              onCardTapped: () {
+                if(controller.isCardSeparated == true) {
+                  controller.collapseCard();
+                } else {
+                  controller.expandCard();
+                }
+              },
+              leading: CircleAvatar(
+                radius: 25,
+                backgroundColor: getColor(),
+                child: CircleAvatar(
+                  child: Text(getPiecetype()),
+                  radius:23,
+                  backgroundColor: Colors.grey[200],
+                  foregroundColor: Colors.black,
+                ),
               ),
-            ),
-            title:(widget.piece.raisonSociale != null)
-                ?SingleChildScrollView(
-                  scrollDirection: Axis.horizontal,
-                  child: Row(
-                    children: [
-                      Text("(# : ${widget.piece.num_piece}) ${widget.piece.raisonSociale}" ,
-                          style: TextStyle(
-                                fontSize: 16,)
-                        ),
-                    ],
-                  ),
-                )
-                : null,
-            trailingChildren: [
-              Row(
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: <Widget>[
-                  Icon(Icons.date_range,
-                    size: 14,
-                    color: Theme.of(context).primaryColorDark,
-                  ),
-                  SizedBox(
-                    width: 3,
-                  ),
-                  Text(
-                    "${Helpers.dateToText(widget.piece.date)}",
-                    style: TextStyle(
-                        fontSize: 16 , color: Theme.of(context).primaryColorDark),
-                  ),
-                ],
-              ),
-              (widget.piece.net_a_payer < 0)
-                  ? Row(
-                    children: [
-                      Icon(MdiIcons.sigma,
-                        size: 16,
-                        color: Theme.of(context).primaryColorDark,
-                      ),
-                      SizedBox(
-                        width: 3,
-                      ),
-                      Text("${Helpers.numberFormat(widget.piece.net_a_payer * -1).toString() } ${_devise}",
-                        style: TextStyle(
-                          fontSize: 16.0,
-                          fontWeight: FontWeight.bold ,
-                          color:Theme.of(context).primaryColorDark ),
-                      ),
-                    ],
+              title:(widget.piece.raisonSociale != null)
+                  ?SingleChildScrollView(
+                    scrollDirection: Axis.horizontal,
+                    child: Row(
+                      children: [
+                        Text("(# : ${widget.piece.num_piece}) ${widget.piece.raisonSociale}" ,
+                            style: TextStyle(
+                                  fontSize: 14,)
+                          ),
+                      ],
+                    ),
                   )
-                  : Row(
-                    children: [
-                      Icon(MdiIcons.sigma,
-                        size: 16,
-                        color: Theme.of(context).primaryColorDark,
-                      ),
-                      SizedBox(
-                        width: 3,
-                      ),
-                      Text('${Helpers.numberFormat(widget.piece.net_a_payer).toString()} ${_devise}',
-                        style: TextStyle(
-                          fontSize: 16.0,
-                          fontWeight: FontWeight.bold ,
-                          color: Theme.of(context).primaryColorDark ),
-                      ),
-                    ],
-                  ) ,
-              RichText(
-                text: TextSpan(
-                    children: [
-                      TextSpan(
-                          text: "${S.current.regler} : ",
-                          style: TextStyle(fontSize: 15 , fontWeight: FontWeight.bold,color: Colors.blue)
-                      ),
-                      TextSpan(
-                        text:"${Helpers.numberFormat(widget.piece.regler)} ${_devise}",
-                        style: TextStyle(
-                            color: Theme.of(context).primaryColorDark,
-                            fontSize: 15.0),
-                      ),
-                    ]
-                ),
-              ),
-              RichText(
-                text: TextSpan(
-                    children: [
-                      TextSpan(
-                          text: "${S.current.reste} : ",
-                          style: TextStyle(fontSize: 15 , fontWeight: FontWeight.bold,color: Colors.redAccent)
-                      ),
-                      TextSpan(
-                        text:"${Helpers.numberFormat(widget.piece.reste)} ${_devise}",
-                        style: TextStyle(
-                            color: Theme.of(context).primaryColorDark,
-                            fontSize: 15.0),
-                      ),
-                    ]
-                ),
-              ),
-              RichText(
-                text: TextSpan(
-                  children: [
-                    TextSpan(
-                      text: "${S.current.marge} : ",
-                      style: TextStyle(fontSize: 15 , fontWeight: FontWeight.bold,color: Colors.green)
+                  : null,
+              trailingChildren: [
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: <Widget>[
+                    Icon(Icons.date_range,
+                      size: 14,
+                      color: Theme.of(context).primaryColorDark,
                     ),
-                    TextSpan(
-                      text:"${Helpers.numberFormat(widget.piece.marge)} ${_devise}",
+                    SizedBox(
+                      width: 3,
+                    ),
+                    Text(
+                      "${Helpers.dateToText(widget.piece.date)}",
                       style: TextStyle(
-                          color: Theme.of(context).primaryColorDark,
-                          fontSize: 15.0),
+                          fontSize: 14 , color: Theme.of(context).primaryColorDark),
                     ),
-                  ]
+                  ],
                 ),
+                (widget.piece.net_a_payer < 0)
+                    ? Row(
+                      children: [
+                        Icon(MdiIcons.sigma,
+                          size: 16,
+                          color: Theme.of(context).primaryColorDark,
+                        ),
+                        SizedBox(
+                          width: 3,
+                        ),
+                        Text("${Helpers.numberFormat(widget.piece.net_a_payer * -1).toString() } ${_devise}",
+                          style: TextStyle(
+                            fontSize: 16.0,
+                            fontWeight: FontWeight.bold ,
+                            color:Theme.of(context).primaryColorDark ),
+                        ),
+                      ],
+                    )
+                    : Row(
+                      children: [
+                        Icon(MdiIcons.sigma,
+                          size: 16,
+                          color: Theme.of(context).primaryColorDark,
+                        ),
+                        SizedBox(
+                          width: 3,
+                        ),
+                        Text('${Helpers.numberFormat(widget.piece.net_a_payer).toString()} ${_devise}',
+                          style: TextStyle(
+                            fontSize: 16.0,
+                            fontWeight: FontWeight.bold ,
+                            color: Theme.of(context).primaryColorDark ),
+                        ),
+                      ],
+                    ) ,
+                RichText(
+                  text: TextSpan(
+                      children: [
+                        TextSpan(
+                            text: "${S.current.regler} : ",
+                            style: TextStyle(fontSize: 14 , fontWeight: FontWeight.bold,color: Colors.blue)
+                        ),
+                        TextSpan(
+                          text:"${Helpers.numberFormat(widget.piece.regler)} ${_devise}",
+                          style: TextStyle(
+                              color: Theme.of(context).primaryColorDark,
+                              fontSize: 14),
+                        ),
+                      ]
+                  ),
+                ),
+                RichText(
+                  text: TextSpan(
+                      children: [
+                        TextSpan(
+                            text: "${S.current.reste} : ",
+                            style: TextStyle(fontSize: 14 , fontWeight: FontWeight.bold,color: Colors.redAccent)
+                        ),
+                        TextSpan(
+                          text:"${Helpers.numberFormat(widget.piece.reste)} ${_devise}",
+                          style: TextStyle(
+                              color: Theme.of(context).primaryColorDark,
+                              fontSize: 15.0),
+                        ),
+                      ]
+                  ),
+                ),
+                RichText(
+                  text: TextSpan(
+                    children: [
+                      TextSpan(
+                        text: "${S.current.marge} : ",
+                        style: TextStyle(fontSize: 14 , fontWeight: FontWeight.bold,color: Colors.green)
+                      ),
+                      TextSpan(
+                        text:"${Helpers.numberFormat(widget.piece.marge)} ${_devise}",
+                        style: TextStyle(
+                            color: Theme.of(context).primaryColorDark,
+                            fontSize: 14.0),
+                      ),
+                    ]
+                  ),
+                ),
+              ],
+            ),
+            actions: <Widget>[
+              IconSlideAction(
+                  color: Colors.white10,
+                  iconWidget: Icon(Icons.delete_forever,size: 50, color: Colors.red,),
+                  onTap: () async {
+                     dellDialog(context);
+                  }
+              ),
+            ],
+            secondaryActions: [
+              IconSlideAction(
+                color: Colors.white10,
+                iconWidget: Icon(Icons.phone_enabled,size: 50, color: Colors.green,),
+                onTap: () async{
+                  await _makePhoneCall("tel:${widget.piece.mobileTier}");
+                },
+                foregroundColor: Colors.green,
               ),
             ],
           ),
-          actions: <Widget>[
-            IconSlideAction(
-                color: Colors.white10,
-                iconWidget: Icon(Icons.delete_forever,size: 50, color: Colors.red,),
-                onTap: () async {
-                   dellDialog(context);
-                }
-            ),
-          ],
-          secondaryActions: [
-            IconSlideAction(
-              color: Colors.white10,
-              iconWidget: Icon(Icons.phone_enabled,size: 50, color: Colors.green,),
-              onTap: () async{
-                await _makePhoneCall("tel:${widget.piece.mobileTier}");
-              },
-              foregroundColor: Colors.green,
-            ),
-          ],
         ),
-      ),
     );
   }
 
@@ -367,7 +367,7 @@ class _PieceListItemState extends State<PieceListItem> {
         var message = "" ;
         if(res > 0){
           int res1 = await _queryCtr.removeItemFromTable(DbTablesNames.pieces, widget.piece);
-          if(res > 0){
+          if(res1 > 0){
             message =S.current.msg_supp_ok;
             _confirmDell =true ;
 

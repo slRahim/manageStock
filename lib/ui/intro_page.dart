@@ -729,8 +729,8 @@ class _IntroPageState extends State<IntroPage> {
     try{
       Uint8List image01 = await Helpers.getDefaultImageUint8List(from: "profile");
       var country = (_countries.indexOf(_selectedCountry) == 0)? _countryname : _selectedCountry ;
-      var province = (_provinces.indexOf(_selectedProvince) == 0)? null : _selectedProvince ;
-      var city = (_cities.indexOf(_selectedCity) == 0)? null : _selectedCity ;
+      var province = (_provinces.indexOf(_selectedProvince) == 0)? '' : _selectedProvince ;
+      var city = (_cities.indexOf(_selectedCity) == 0)? '' : _selectedCity ;
 
       _myParams = new MyParams(
           1,
@@ -760,7 +760,7 @@ class _IntroPageState extends State<IntroPage> {
           _adresseControl.text,
           "_addressWeb",
           "${city}",
-          "${province.split(' ').first}",
+          "${province}",
           "${_countryname}",
           "_cp",
           _mobileControl.text,
@@ -787,11 +787,11 @@ class _IntroPageState extends State<IntroPage> {
         case ("English (ENG)"):
           _prefs.setString("myLocale", "en");
           break;
-        case ("French (FR)"):
+        case ("Français (FR)"):
           _prefs.setString("myLocale", "fr");
           break;
 
-        case ("Arabic (AR)"):
+        case ("عربي (AR)"):
           _prefs.setString("myLocale", "ar");
           break;
       }

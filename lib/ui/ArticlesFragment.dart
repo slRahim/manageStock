@@ -67,12 +67,13 @@ class _ArticlesFragmentState extends State<ArticlesFragment> {
   MyParams _myParams;
   String feature9 = 'feature9' ;
   String feature10 = 'feature10' ;
+  String feature13 = 'feature13' ;
 
   @override
   Future<void> initState() {
     super.initState();
     SchedulerBinding.instance.addPostFrameCallback((Duration duration) {
-      FeatureDiscovery.discoverFeatures(context, <String>{feature9,feature10});
+      FeatureDiscovery.discoverFeatures(context, <String>{feature9,feature10,feature13});
     });
     fillFilter(_filterMap);
     fillFilter(_emptyFilterMap);
@@ -254,6 +255,7 @@ class _ArticlesFragmentState extends State<ArticlesFragment> {
                   }
                   _dataSource.updateFilters(_filterMap);
                 });
+
               })
             ..show();
         },

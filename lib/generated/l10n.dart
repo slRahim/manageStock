@@ -3824,6 +3824,26 @@ class S {
       args: [],
     );
   }
+
+  /// `Product is already used you can't delete`
+  String get msg_article_utilise {
+    return Intl.message(
+      'Product is already used you can\'t delete',
+      name: 'msg_article_utilise',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `T.O`
+  String get ca {
+    return Intl.message(
+      'T.O',
+      name: 'ca',
+      desc: '',
+      args: [],
+    );
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<S> {

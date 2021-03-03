@@ -82,7 +82,7 @@ class _ChartPieState extends State<ChartPie> {
                   ),
                 ],
               ),
-              Expanded(
+              (widget.data.isNotEmpty)?Expanded(
                 child: AspectRatio(
                   aspectRatio: 1,
                   child: PieChart(
@@ -107,15 +107,15 @@ class _ChartPieState extends State<ChartPie> {
                         sections: showingSections()),
                   ),
                 ),
-              ),
-              Container(
+              ):SizedBox(),
+              (widget.data.isNotEmpty)?Container(
                 height: 30,
                 child: ListView(
                   padding: EdgeInsets.all(2),
                   scrollDirection: Axis.horizontal,
                   children: getIndicator(),
                 ),
-              ),
+              ):SizedBox(),
               SizedBox(height: 10,)
 
             ],
@@ -157,7 +157,7 @@ class _ChartPieState extends State<ChartPie> {
             fontSize: fontSize,
             fontWeight: FontWeight.bold,
             color: const Color(0xffffffff)),
-        badgeWidget: (widget.typeData != "charge")?Badge(
+        badgeWidget: (widget.typeData != "charge" && widget.typeData != "famille")?Badge(
           getImage(index),
           size: widgetSize,
           borderColor: Colors.yellow[700],
@@ -209,9 +209,6 @@ class _ChartPieState extends State<ChartPie> {
         break ;
       case ("tiers"):
         return widget.data[index].imageUint8List;
-        break ;
-      case ("famille"):
-        return Helpers.getUint8ListFromByteString(widget.data[index]["BytesImageString"]) ;
         break ;
     }
   }

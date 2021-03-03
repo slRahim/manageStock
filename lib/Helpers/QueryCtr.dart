@@ -62,8 +62,6 @@ class QueryCtr {
       int marque = filters["Id_Marque"] != null? filters["Id_Marque"] : -1;
       int famille = filters["Id_Famille"] != null? filters["Id_Famille"] : -1;
       bool stock = filters["outStock"] != null ? filters["outStock"] : false;
-
-      print(stock);
       String marqueFilter = marque > 0 ? " AND Id_Marque = $marque" : "";
       String familleFilter = famille > 0 ? " AND Id_Famille = $famille" : "";
       String stockFilter = stock ? " AND (Qte < 1 OR Qte < Qte_Min)" : "";
@@ -109,8 +107,9 @@ class QueryCtr {
         clientFournFilter = " AND (Clientfour = $clientFourn OR Clientfour = 1)" ;
       }
       String familleFilter = famille > 0 ? " AND Id_Famille = $famille" : "";
+
       String hasCreditFilter = hasCredit ? " AND Credit > 0 " : "";
-      String showBloquerFilter = showBloquer ? " AND Bloquer > 0 " : "AND Bloquer = 0";
+      String showBloquerFilter = showBloquer ? " AND Bloquer > 0 " : " AND Bloquer = 0";
 
       query += clientFournFilter;
       query += familleFilter;
@@ -361,6 +360,14 @@ class QueryCtr {
   Future<int> updateJournaux(String tableName, item)async{
     var dbClient = await _databaseHelper.db ;
     var res = await dbClient.update(tableName, item.toMap(), where: "Piece_id = ? AND Article_id = ?" , whereArgs: [item.piece_id , item.article_id] );
+
+    return res ;
+  }
+
+  Future getJournalByArticle(Article item)async {
+    Database dbClient = await _databaseHelper.db;
+    var res = await dbClient.query(DbTablesNames.journaux , where: "Article_id = ?" , whereArgs: [item.id]);
+
 
     return res ;
   }

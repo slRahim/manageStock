@@ -412,7 +412,9 @@
   "no_element" : "Aucun élément trouvé",
   "liste_vide" : "La liste actuelement est vide.",
 
-  "non_stocke" : "< Qte min"
+  "non_stocke" : "< Qte min",
+  "msg_article_utilise" : "Article associer à des piéces, vous ne pouvez pas supprimer",
+  "ca" : "C.A"
 
 
 

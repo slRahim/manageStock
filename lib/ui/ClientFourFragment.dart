@@ -263,6 +263,7 @@ class _ClientFourFragmentState extends State<ClientFourFragment> {
                     }
                     _dataSource.updateFilters(_filterMap);
                   });
+
                 }
             )..show();
           },
@@ -341,7 +342,5 @@ class _ClientFourFragmentState extends State<ClientFourFragment> {
       Helpers.showToast(result.rawContent);
     }
   }
-
-
 
 }

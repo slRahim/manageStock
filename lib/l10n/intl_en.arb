@@ -412,7 +412,9 @@
   "no_element" : "No items found",
   "liste_vide" : "The list is currently empty.",
 
-  "non_stocke" : "< Min Qte"
+  "non_stocke" : "< Min Qte",
+  "msg_article_utilise" : "Product is already used you can't delete",
+  "ca" : "T.O"
 
 
 }

@@ -852,6 +852,7 @@ class _AddTresoriePageState extends State<AddTresoriePage>
     TextEditingController _libelleCategorieControl =
         new TextEditingController();
     TresorieCategories _categorieTresorie = new TresorieCategories.init();
+    var _formKey = GlobalKey<FormState>() ;
     return StatefulBuilder(builder: (context, StateSetter setState) {
       return Builder(
           builder: (context) => Dialog(
@@ -860,76 +861,87 @@ class _AddTresoriePageState extends State<AddTresoriePage>
                   child: Container(
                     height: 250,
                     padding: EdgeInsets.all(10),
-                    child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
-                          Padding(
-                            padding: EdgeInsets.only(
-                                left: 5, right: 5, bottom: 20, top: 20),
-                            child: Text(
-                              "${S.current.ajouter} ${S.current.categorie}:",
-                              style: TextStyle(
-                                  fontSize: 20, color: Colors.redAccent),
+                    child: Form(
+                      key: _formKey,
+                      child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            Padding(
+                              padding: EdgeInsets.only(
+                                  left: 5, right: 5, bottom: 20, top: 20),
+                              child: Text(
+                                "${S.current.ajouter} ${S.current.categorie}:",
+                                style: TextStyle(
+                                    fontSize: 20, color: Colors.redAccent),
+                              ),
                             ),
-                          ),
-                          Padding(
-                            padding: EdgeInsets.only(
-                                left: 5, right: 5, bottom: 20, top: 20),
-                            child: TextField(
-                              controller: _libelleCategorieControl,
-                              keyboardType: TextInputType.text,
-                              decoration: InputDecoration(
-                                prefixIcon: Icon(
-                                  Icons.view_agenda,
-                                  color: Colors.orange[900],
-                                ),
-                                focusedBorder: OutlineInputBorder(
+                            Padding(
+                              padding: EdgeInsets.only(
+                                  left: 5, right: 5, bottom: 20, top: 20),
+                              child: TextFormField(
+                                controller: _libelleCategorieControl,
+                                keyboardType: TextInputType.text,
+                                validator: (value) {
+                                  if (value.isEmpty) {
+                                    return S.current.msg_champ_oblg;
+                                  }
+                                  return null;
+                                },
+                                decoration: InputDecoration(
+                                  prefixIcon: Icon(
+                                    Icons.view_agenda,
+                                    color: Colors.orange[900],
+                                  ),
+                                  focusedBorder: OutlineInputBorder(
+                                      borderSide:
+                                          BorderSide(color: Colors.orange[900]),
+                                      borderRadius: BorderRadius.circular(20)),
+                                  contentPadding: EdgeInsets.only(left: 10),
+                                  labelText: S.current.categorie,
+                                  labelStyle:
+                                      TextStyle(color: Colors.orange[900]),
+                                  enabledBorder: OutlineInputBorder(
+                                    gapPadding: 3.3,
+                                    borderRadius: BorderRadius.circular(20),
                                     borderSide:
                                         BorderSide(color: Colors.orange[900]),
-                                    borderRadius: BorderRadius.circular(20)),
-                                contentPadding: EdgeInsets.only(left: 10),
-                                labelText: S.current.categorie,
-                                labelStyle:
-                                    TextStyle(color: Colors.orange[900]),
-                                enabledBorder: OutlineInputBorder(
-                                  gapPadding: 3.3,
-                                  borderRadius: BorderRadius.circular(20),
-                                  borderSide:
-                                      BorderSide(color: Colors.orange[900]),
+                                  ),
                                 ),
                               ),
                             ),
-                          ),
-                          SizedBox(
-                            width: 320.0,
-                            child: Padding(
-                              padding: EdgeInsets.only(right: 0, left: 0),
-                              child: RaisedButton(
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(18.0),
+                            SizedBox(
+                              width: 320.0,
+                              child: Padding(
+                                padding: EdgeInsets.only(right: 0, left: 0),
+                                child: RaisedButton(
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(18.0),
+                                  ),
+                                  onPressed: () async {
+                                    if(_formKey.currentState.validate()){
+                                      setState(() {
+                                        _categorieTresorie.libelle =
+                                            _libelleCategorieControl.text;
+                                        _libelleCategorieControl.text = "";
+                                      });
+                                      await addTresoreCategorieIfNotExist(
+                                          _categorieTresorie);
+                                      Navigator.pop(context);
+                                      print(_categorieTresorie.libelle);
+                                    }
+                                  },
+                                  child: Text(
+                                    S.current.ajouter,
+                                    style: TextStyle(color: Colors.white),
+                                  ),
+                                  color: Colors.red,
                                 ),
-                                onPressed: () async {
-                                  setState(() {
-                                    _categorieTresorie.libelle =
-                                        _libelleCategorieControl.text;
-                                    _libelleCategorieControl.text = "";
-                                  });
-                                  await addTresoreCategorieIfNotExist(
-                                      _categorieTresorie);
-                                  Navigator.pop(context);
-                                  print(_categorieTresorie.libelle);
-                                },
-                                child: Text(
-                                  S.current.ajouter,
-                                  style: TextStyle(color: Colors.white),
-                                ),
-                                color: Colors.red,
                               ),
-                            ),
-                          )
-                        ],
-                      ),
+                            )
+                          ],
+                        ),
+                    ),
                     ),
                   ),
                 ),
@@ -960,6 +972,7 @@ class _AddTresoriePageState extends State<AddTresoriePage>
     TextEditingController _soldeCompteControl = new TextEditingController();
     CompteTresorie _compteTresorie = new CompteTresorie.init();
     ScrollController _controller = new ScrollController();
+    var _formKey = GlobalKey<FormState>() ;
     return StatefulBuilder(builder: (context, StateSetter setState) {
       return Builder(
           builder: (context) => Dialog(
@@ -970,149 +983,179 @@ class _AddTresoriePageState extends State<AddTresoriePage>
                     child: Scrollbar(
                       isAlwaysShown: true,
                       controller: _controller,
-                      child: ListView(
-                        controller: _controller,
-                        padding: EdgeInsets.all(15),
-                        children: [
-                          Padding(
-                            padding: EdgeInsets.only(
-                                left: 5, right: 5, bottom: 20, top: 10),
-                            child: Text(
-                              "${S.current.ajouter} ${S.current.compte}:",
-                              textAlign: TextAlign.center,
-                              style: TextStyle(
-                                fontSize: 20,
-                              ),
-                            ),
-                          ),
-                          TextField(
-                            controller: _numCompteControl,
-                            keyboardType: TextInputType.text,
-                            decoration: InputDecoration(
-                              prefixIcon: Icon(
-                                Icons.view_agenda,
-                                color: Colors.blue,
-                              ),
-                              focusedBorder: OutlineInputBorder(
-                                  borderSide: BorderSide(color: Colors.blue),
-                                  borderRadius: BorderRadius.circular(20)),
-                              contentPadding: EdgeInsets.only(left: 10),
-                              labelText: "N°:",
-                              enabledBorder: OutlineInputBorder(
-                                gapPadding: 3.3,
-                                borderRadius: BorderRadius.circular(20),
-                                borderSide: BorderSide(color: Colors.blue),
-                              ),
-                            ),
-                          ),
-                          SizedBox(
-                            height: 5,
-                          ),
-                          TextField(
-                            controller: _libelleCompteControl,
-                            keyboardType: TextInputType.text,
-                            decoration: InputDecoration(
-                              prefixIcon: Icon(
-                                Icons.description,
-                                color: Colors.blue,
-                              ),
-                              focusedBorder: OutlineInputBorder(
-                                  borderSide: BorderSide(color: Colors.blue),
-                                  borderRadius: BorderRadius.circular(20)),
-                              contentPadding: EdgeInsets.only(left: 10),
-                              labelText: S.current.designation,
-                              enabledBorder: OutlineInputBorder(
-                                gapPadding: 3.3,
-                                borderRadius: BorderRadius.circular(20),
-                                borderSide: BorderSide(color: Colors.blue),
-                              ),
-                            ),
-                          ),
-                          SizedBox(
-                            height: 10,
-                          ),
-                          TextField(
-                            controller: _codeCompteControl,
-                            keyboardType: TextInputType.text,
-                            decoration: InputDecoration(
-                              prefixIcon: Icon(
-                                Icons.vpn_key,
-                                color: Colors.blue,
-                              ),
-                              focusedBorder: OutlineInputBorder(
-                                  borderSide: BorderSide(color: Colors.blue),
-                                  borderRadius: BorderRadius.circular(20)),
-                              contentPadding: EdgeInsets.only(left: 10),
-                              labelText: S.current.code_pin,
-                              enabledBorder: OutlineInputBorder(
-                                gapPadding: 3.3,
-                                borderRadius: BorderRadius.circular(20),
-                                borderSide: BorderSide(color: Colors.blue),
-                              ),
-                            ),
-                          ),
-                          SizedBox(
-                            height: 10,
-                          ),
-                          TextField(
-                            controller: _soldeCompteControl,
-                            keyboardType: TextInputType.text,
-                            decoration: InputDecoration(
-                              prefixIcon: Icon(
-                                Icons.monetization_on,
-                                color: Colors.blue,
-                              ),
-                              focusedBorder: OutlineInputBorder(
-                                  borderSide: BorderSide(color: Colors.blue),
-                                  borderRadius: BorderRadius.circular(20)),
-                              contentPadding: EdgeInsets.only(left: 10),
-                              labelText: S.current.solde_depart,
-                              enabledBorder: OutlineInputBorder(
-                                gapPadding: 3.3,
-                                borderRadius: BorderRadius.circular(20),
-                                borderSide: BorderSide(color: Colors.blue),
-                              ),
-                            ),
-                          ),
-                          SizedBox(
-                            height: 10,
-                          ),
-                          SizedBox(
-                            width: 320.0,
-                            child: Padding(
-                              padding: EdgeInsets.only(right: 0, left: 0),
-                              child: RaisedButton(
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(18.0),
+                      child: Form(
+                        key: _formKey,
+                        child: ListView(
+                          controller: _controller,
+                          padding: EdgeInsets.all(15),
+                          children: [
+                            Padding(
+                              padding: EdgeInsets.only(
+                                  left: 5, right: 5, bottom: 20, top: 10),
+                              child: Text(
+                                "${S.current.ajouter} ${S.current.compte}:",
+                                textAlign: TextAlign.center,
+                                style: TextStyle(
+                                  fontSize: 20,
                                 ),
-                                onPressed: () async {
-                                  setState(() {
-                                    _compteTresorie.numCompte =
-                                        _numCompteControl.text;
-                                    _numCompteControl.text = "";
-                                    _compteTresorie.nomCompte =
-                                        _libelleCompteControl.text;
-                                    _libelleCompteControl.text = "";
-                                    _compteTresorie.codeCompte =
-                                        _codeCompteControl.text;
-                                    _codeCompteControl.text = "";
-                                    _compteTresorie.soldeDepart =
-                                        double.parse(_soldeCompteControl.text);
-                                    _soldeCompteControl.text = "";
-                                    _compteTresorie.solde = 0.0;
-                                  });
-                                  await addCompteIfNotExist(_compteTresorie);
-                                  Navigator.pop(context);
-                                },
-                                child: Text(
-                                  S.current.ajouter,
-                                  style: TextStyle(color: Colors.white),
-                                ),
-                                color: Colors.green,
                               ),
                             ),
-                          )
-                        ],
+                            TextFormField(
+                              controller: _numCompteControl,
+                              keyboardType: TextInputType.text,
+                              // validator: (value) {
+                              //   if (value.isEmpty) {
+                              //     return S.current.msg_champ_oblg;
+                              //   }
+                              //   return null;
+                              // },
+                              decoration: InputDecoration(
+                                prefixIcon: Icon(
+                                  Icons.view_agenda,
+                                  color: Colors.blue,
+                                ),
+                                focusedBorder: OutlineInputBorder(
+                                    borderSide: BorderSide(color: Colors.blue),
+                                    borderRadius: BorderRadius.circular(20)),
+                                contentPadding: EdgeInsets.only(left: 10),
+                                labelText: "N°:",
+                                enabledBorder: OutlineInputBorder(
+                                  gapPadding: 3.3,
+                                  borderRadius: BorderRadius.circular(20),
+                                  borderSide: BorderSide(color: Colors.blue),
+                                ),
+                              ),
+                            ),
+                            SizedBox(
+                              height: 5,
+                            ),
+                            TextFormField(
+                              controller: _libelleCompteControl,
+                              keyboardType: TextInputType.text,
+                              validator: (value) {
+                                if (value.isEmpty) {
+                                  return S.current.msg_champ_oblg;
+                                }
+                                return null;
+                              },
+                              decoration: InputDecoration(
+                                prefixIcon: Icon(
+                                  Icons.description,
+                                  color: Colors.blue,
+                                ),
+                                focusedBorder: OutlineInputBorder(
+                                    borderSide: BorderSide(color: Colors.blue),
+                                    borderRadius: BorderRadius.circular(20)),
+                                contentPadding: EdgeInsets.only(left: 10),
+                                labelText: S.current.designation,
+                                enabledBorder: OutlineInputBorder(
+                                  gapPadding: 3.3,
+                                  borderRadius: BorderRadius.circular(20),
+                                  borderSide: BorderSide(color: Colors.blue),
+                                ),
+                              ),
+                            ),
+                            SizedBox(
+                              height: 10,
+                            ),
+                            TextFormField(
+                              controller: _codeCompteControl,
+                              keyboardType: TextInputType.text,
+                              // validator: (value) {
+                              //   if (value.isEmpty) {
+                              //     return S.current.msg_champ_oblg;
+                              //   }
+                              //   return null;
+                              // },
+                              decoration: InputDecoration(
+                                prefixIcon: Icon(
+                                  Icons.vpn_key,
+                                  color: Colors.blue,
+                                ),
+                                focusedBorder: OutlineInputBorder(
+                                    borderSide: BorderSide(color: Colors.blue),
+                                    borderRadius: BorderRadius.circular(20)),
+                                contentPadding: EdgeInsets.only(left: 10),
+                                labelText: S.current.code_pin,
+                                enabledBorder: OutlineInputBorder(
+                                  gapPadding: 3.3,
+                                  borderRadius: BorderRadius.circular(20),
+                                  borderSide: BorderSide(color: Colors.blue),
+                                ),
+                              ),
+                            ),
+                            SizedBox(
+                              height: 10,
+                            ),
+                            TextFormField(
+                              controller: _soldeCompteControl,
+                              keyboardType: TextInputType.text,
+                              validator: (value) {
+                                if (value.isEmpty) {
+                                  return S.current.msg_champ_oblg;
+                                }
+                                return null;
+                              },
+                              decoration: InputDecoration(
+                                prefixIcon: Icon(
+                                  Icons.monetization_on,
+                                  color: Colors.blue,
+                                ),
+                                focusedBorder: OutlineInputBorder(
+                                    borderSide: BorderSide(color: Colors.blue),
+                                    borderRadius: BorderRadius.circular(20)),
+                                contentPadding: EdgeInsets.only(left: 10),
+                                labelText: S.current.solde_depart,
+                                enabledBorder: OutlineInputBorder(
+                                  gapPadding: 3.3,
+                                  borderRadius: BorderRadius.circular(20),
+                                  borderSide: BorderSide(color: Colors.blue),
+                                ),
+                              ),
+                            ),
+                            SizedBox(
+                              height: 10,
+                            ),
+                            SizedBox(
+                              width: 320.0,
+                              child: Padding(
+                                padding: EdgeInsets.only(right: 0, left: 0),
+                                child: RaisedButton(
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(18.0),
+                                  ),
+                                  onPressed: () async {
+                                    if(_formKey.currentState.validate()){
+                                      setState(() {
+                                        _compteTresorie.numCompte =
+                                            _numCompteControl.text;
+                                        _numCompteControl.text = "";
+                                        _compteTresorie.nomCompte =
+                                            _libelleCompteControl.text;
+                                        _libelleCompteControl.text = "";
+                                        _compteTresorie.codeCompte =
+                                            _codeCompteControl.text;
+                                        _codeCompteControl.text = "";
+                                        _compteTresorie.soldeDepart =
+                                            double.parse(_soldeCompteControl.text);
+                                        _soldeCompteControl.text = "";
+                                        _compteTresorie.solde = 0.0;
+                                      });
+                                      await addCompteIfNotExist(_compteTresorie);
+                                      Navigator.pop(context);
+                                    }
+
+                                  },
+                                  child: Text(
+                                    S.current.ajouter,
+                                    style: TextStyle(color: Colors.white),
+                                  ),
+                                  color: Colors.green,
+                                ),
+                              ),
+                            )
+                          ],
+                        ),
                       ),
                     ),
                   ),
@@ -1139,6 +1182,7 @@ class _AddTresoriePageState extends State<AddTresoriePage>
 
   Widget addCharge() {
     TextEditingController _libelleChargeControl = new TextEditingController();
+    var _formKey = GlobalKey<FormState>() ;
     ChargeTresorie _chargeTresorie = new ChargeTresorie.init();
     return StatefulBuilder(builder: (context, StateSetter setState) {
       return Builder(
@@ -1147,70 +1191,81 @@ class _AddTresoriePageState extends State<AddTresoriePage>
                   child: Container(
                     height: 250,
                     padding: EdgeInsets.all(10),
-                    child:  Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
-                          Padding(
-                            padding: EdgeInsets.only(
-                                left: 8, right: 8, bottom: 10, top: 10),
-                            child: Text(
-                              "${S.current.ajouter} ${S.current.charge}:",
-                              style: TextStyle(fontSize: 20),
+                    child:  Form(
+                      key: _formKey,
+                      child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            Padding(
+                              padding: EdgeInsets.only(
+                                  left: 8, right: 8, bottom: 10, top: 10),
+                              child: Text(
+                                "${S.current.ajouter} ${S.current.charge}:",
+                                style: TextStyle(fontSize: 20),
+                              ),
                             ),
-                          ),
-                          Padding(
-                            padding: EdgeInsets.only(
-                                left: 5, right: 5, bottom: 20, top: 20),
-                            child: TextField(
-                              controller: _libelleChargeControl,
-                              keyboardType: TextInputType.text,
-                              decoration: InputDecoration(
-                                prefixIcon: Icon(
-                                  Icons.view_agenda,
+                            Padding(
+                              padding: EdgeInsets.only(
+                                  left: 5, right: 5, bottom: 20, top: 20),
+                              child: TextFormField(
+                                controller: _libelleChargeControl,
+                                keyboardType: TextInputType.text,
+                                validator: (value) {
+                                  if (value.isEmpty) {
+                                    return S.current.msg_champ_oblg;
+                                  }
+                                  return null;
+                                },
+                                decoration: InputDecoration(
+                                  prefixIcon: Icon(
+                                    Icons.view_agenda,
+                                    color: Colors.green,
+                                  ),
+                                  focusedBorder: OutlineInputBorder(
+                                    borderSide: BorderSide(color: Colors.blue),
+                                    borderRadius: BorderRadius.circular(20),
+                                  ),
+                                  contentPadding: EdgeInsets.only(left: 10),
+                                  labelText: S.current.categorie,
+                                  enabledBorder: OutlineInputBorder(
+                                    gapPadding: 3.3,
+                                    borderRadius: BorderRadius.circular(20),
+                                    borderSide: BorderSide(color: Colors.green),
+                                  ),
+                                ),
+                              ),
+                            ),
+                            SizedBox(
+                              width: 320.0,
+                              child: Padding(
+                                padding: EdgeInsets.only(right: 0, left: 0),
+                                child: RaisedButton(
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(18.0),
+                                  ),
+                                  onPressed: () async {
+                                    if(_formKey.currentState.validate()){
+                                      setState(() {
+                                        _chargeTresorie.libelle =
+                                            _libelleChargeControl.text;
+                                        _libelleChargeControl.text = "";
+                                      });
+                                      await addChargeIfNotExist(_chargeTresorie);
+                                      Navigator.pop(context);
+                                    }
+                                  },
+                                  child: Text(
+                                    S.current.ajouter,
+                                    style: TextStyle(color: Colors.white),
+                                  ),
                                   color: Colors.green,
                                 ),
-                                focusedBorder: OutlineInputBorder(
-                                  borderSide: BorderSide(color: Colors.blue),
-                                  borderRadius: BorderRadius.circular(20),
-                                ),
-                                contentPadding: EdgeInsets.only(left: 10),
-                                labelText: S.current.categorie,
-                                enabledBorder: OutlineInputBorder(
-                                  gapPadding: 3.3,
-                                  borderRadius: BorderRadius.circular(20),
-                                  borderSide: BorderSide(color: Colors.green),
-                                ),
                               ),
-                            ),
-                          ),
-                          SizedBox(
-                            width: 320.0,
-                            child: Padding(
-                              padding: EdgeInsets.only(right: 0, left: 0),
-                              child: RaisedButton(
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(18.0),
-                                ),
-                                onPressed: () async {
-                                  setState(() {
-                                    _chargeTresorie.libelle =
-                                        _libelleChargeControl.text;
-                                    _libelleChargeControl.text = "";
-                                  });
-                                  await addChargeIfNotExist(_chargeTresorie);
-                                  Navigator.pop(context);
-                                },
-                                child: Text(
-                                  S.current.ajouter,
-                                  style: TextStyle(color: Colors.white),
-                                ),
-                                color: Colors.green,
-                              ),
-                            ),
-                          )
-                        ],
-                      ),
+                            )
+                          ],
+                        ),
+                    ),
                     ),
                   ),
                 ),

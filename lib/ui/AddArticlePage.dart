@@ -858,7 +858,12 @@ class _AddArticlePageState extends State<AddArticlePage>
       child: ImagePickerWidget(
           imageFile: _articleImage,
           editMode: editMode,
-          onImageChange: (File imageFile) => {_articleImage = imageFile}),
+          onImageChange: (File imageFile){
+            setState(() {
+              _articleImage = imageFile ;
+            });
+
+          }),
     );
   }
 

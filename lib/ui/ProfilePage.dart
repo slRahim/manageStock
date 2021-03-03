@@ -757,12 +757,12 @@ class _ProfilePageState extends State<ProfilePage> with TickerProviderStateMixin
               controller: _nifControl,
               onTap: () => _nifControl.selection = TextSelection(baseOffset: 0, extentOffset: _nifControl.value.text.length),
               keyboardType: TextInputType.text,
-              validator: (value) {
-                if (value.isEmpty) {
-                  return S.current.msg_champ_oblg;
-                }
-                return null;
-              },
+              // validator: (value) {
+              //   if (value.isEmpty) {
+              //     return S.current.msg_champ_oblg;
+              //   }
+              //   return null;
+              // },
               decoration: InputDecoration(
                 labelText:  S.current.nif,
                 labelStyle: TextStyle(color: Colors.blue),
@@ -823,12 +823,12 @@ class _ProfilePageState extends State<ProfilePage> with TickerProviderStateMixin
               controller: _capitalsocialControl,
               onTap: () => _capitalsocialControl.selection = TextSelection(baseOffset: 0, extentOffset: _capitalsocialControl.value.text.length),
               keyboardType: TextInputType.number,
-              validator: (value) {
-                if (value.isEmpty) {
-                  return S.current.msg_champ_oblg;
-                }
-                return null;
-              },
+              // validator: (value) {
+              //   if (value.isEmpty) {
+              //     return S.current.msg_champ_oblg;
+              //   }
+              //   return null;
+              // },
               decoration: InputDecoration(
                 labelText:  S.current.capitale_sociale,
                 labelStyle: TextStyle(color: Colors.blue),
@@ -927,6 +927,7 @@ class _ProfilePageState extends State<ProfilePage> with TickerProviderStateMixin
     arguments.codepin = newCodePin;
     setState(() {
       _tabController.index = 0;
+      arguments.codePinEnabled = true ;
     });
   }
 
@@ -997,7 +998,7 @@ class _ProfilePageState extends State<ProfilePage> with TickerProviderStateMixin
     item.ai = _aiControl.text;
     item.nif = _nifControl.text;
     item.nis = _nisControl.text;
-    item.capital = double.tryParse(_capitalsocialControl.text);
+    item.capital =(_capitalsocialControl.text != "")? double.tryParse(_capitalsocialControl.text):0.0;
 
     return item;
   }

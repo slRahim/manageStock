@@ -79,7 +79,7 @@ class _ChartBarState extends State<ChartBar> {
                   child: BarChart(
                     BarChartData(
                       alignment: BarChartAlignment.center,
-                      groupsSpace: 30,
+                      groupsSpace: 20,
                       barTouchData: BarTouchData(
                         enabled: true,
                       ),
@@ -102,8 +102,7 @@ class _ChartBarState extends State<ChartBar> {
                         leftTitles: SideTitles(
                           showTitles: true,
                           getTextStyles: (value) => TextStyle(color: widget.textColor, fontSize: 10),
-                          rotateAngle: 20,
-                          interval: 100,
+                          rotateAngle: 0,
                         ),
                         rightTitles: SideTitles(
                           showTitles: false,
@@ -180,22 +179,22 @@ class _ChartBarState extends State<ChartBar> {
     if(widget.data is List<CompteTresorie>){
       return widget.data[index].nomCompte;
     }else{
-      if(widget.data[index] is double){
+      if(widget.data[0] is double){
         switch(index){
           case 0:
-            return "C.A";
+            return "${S.current.ca}";
             break;
           case 1:
-            return "Reg.Cl";
+            return "${S.current.reg_cl}";
             break;
           case 2:
-            return "Reg.Four";
+            return "${S.current.reg_four}";
             break;
           case 3:
-            return "Achats";
+            return "${S.current.achat}";
             break;
           case 4:
-            return "Marge";
+            return "${S.current.marge}";
             break;
         }
       }else{

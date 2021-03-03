@@ -217,12 +217,14 @@ class _AddPiecePageState extends State<AddPiecePage>
       _pourcentremiseControler.text = _pourcentremise.toString();
     } else {
       _piece.piece = widget.arguments.piece;
+
       if (_piece.piece == PieceType.devis ||
           _piece.piece == PieceType.retourClient ||
           _piece.piece == PieceType.avoirClient ||
           _piece.piece == PieceType.commandeClient ||
           _piece.piece == PieceType.bonLivraison ||
           _piece.piece == PieceType.factureClient) {
+
         _selectedClient = await _queryCtr.getTierById(1);
       } else {
         _selectedClient = await _queryCtr.getTierById(2);
@@ -434,8 +436,6 @@ class _AddPiecePageState extends State<AddPiecePage>
                             Helpers.showFlushBar(
                                 context, S.current.msg_select_art);
                           }
-                        } else {
-                          Helpers.showFlushBar(context, S.current.msg_no_dispo);
                         }
                       },
                       child: Container(
@@ -907,9 +907,12 @@ class _AddPiecePageState extends State<AddPiecePage>
       context: context,
       builder: (BuildContext context) {
         return new ClientFourFragment(
-          clientFourn: (_piece.piece == "CC" ||
-                  _piece.piece == "FC" ||
-                  _piece.piece == "BL")
+          clientFourn: (_piece.piece == PieceType.devis ||
+              _piece.piece == PieceType.retourClient ||
+              _piece.piece == PieceType.avoirClient ||
+              _piece.piece == PieceType.commandeClient ||
+              _piece.piece == PieceType.bonLivraison ||
+              _piece.piece == PieceType.factureClient)
               ? 0
               : 2,
           onConfirmSelectedItem: (selectedItem) {

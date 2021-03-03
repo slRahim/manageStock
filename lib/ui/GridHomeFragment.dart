@@ -343,7 +343,7 @@ class _GridHomeWidgetState extends State<GridHomeWidget> {
                   } else {
                     return SingleChildScrollView(
                       child: Container(
-                        padding: EdgeInsetsDirectional.only(start: padding,),
+                        padding: EdgeInsets.only(left: padding,),
                         child: DescribedFeatureOverlay(
                           featureId: feature11,
                           tapTarget: Icon(MdiIcons.gestureTapHold , color: Colors.black,),

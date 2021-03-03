@@ -27,6 +27,7 @@ import 'package:share/share.dart';
 import 'package:pdf/pdf.dart';
 import 'package:pdf/widgets.dart' as pw;
 import 'package:printing/printing.dart';
+import 'package:gestmob/services/push_notifications.dart';
 
 class AddTierPage extends StatefulWidget {
 
@@ -103,6 +104,7 @@ class _AddTierPageState extends State<AddTierPage>
   final _formKey = GlobalKey<FormState>();
 
 
+
   @override
   void dispose() {
     _tabController.dispose();
@@ -112,6 +114,9 @@ class _AddTierPageState extends State<AddTierPage>
 
   @override
   void didChangeDependencies() {
+    // PushNotificationsManagerState data = PushNotificationsManager.of(context);
+    // _myParams = data.myParams ;
+
     Statics.statutItems[0] = S.current.statut_m ;
     Statics.statutItems[1] = S.current.statut_mlle ;
     Statics.statutItems[2] = S.current.statut_mme;
@@ -169,7 +174,7 @@ class _AddTierPageState extends State<AddTierPage>
 
   Future<void> setDataFromItem(item) async {
     _raisonSocialeControl.text = item.raisonSociale;
-    _qrCodeControl.text = item.qrCode;
+    _qrCodeControl.text =  (item.qrCode == null) ? '' : item.qrCode;
     _adresseControl.text = item.adresse;
     _clientFournBool = _clientFourn == 1;
 
@@ -188,7 +193,7 @@ class _AddTierPageState extends State<AddTierPage>
     _chiffre_affairesControl.text = item.chiffre_affaires.toString();
     _reglerControl.text = item.regler.toString();
     _creditControl.text = item.credit.toString();
-    _selectedFamille = _familleItems[item.id_famille-1];
+    _selectedFamille = _familleItems[item.id_famille];
     _selectedStatut = Statics.statutItems[item.statut];
     _selectedTarification = _tarificationItems[item.tarification];
     _controlBloquer = item.bloquer ;
@@ -647,7 +652,7 @@ class _AddTierPageState extends State<AddTierPage>
               ),
             ),
             TextFormField(
-              enabled: editMode && !modification,
+              enabled: editMode,
               controller: _solde_departControl,
               onTap: () => _solde_departControl.selection = TextSelection(baseOffset: 0, extentOffset: _solde_departControl.value.text.length),
               keyboardType: TextInputType.number,
@@ -657,6 +662,12 @@ class _AddTierPageState extends State<AddTierPage>
               //   }
               //   return null;
               // },
+              onChanged: (value){
+                var ch_affaire = (_chiffre_affairesControl.text != '')? double.parse(_chiffre_affairesControl.text):0.0 ;
+                var regle = (_reglerControl.text != '')? double.parse(_reglerControl.text ):0.0 ;
+
+                _creditControl.text = ((double.parse(value)+ch_affaire)-regle).toString() ;
+              },
               decoration: InputDecoration(
                 labelText: S.current.solde_depart,
                 labelStyle: TextStyle(color: Colors.blue),
@@ -799,22 +810,13 @@ class _AddTierPageState extends State<AddTierPage>
                   borderRadius: BorderRadius.circular(20.0),
                 ) : null,
                 child: SwitchListTile(
-                  title: Text(S.current.bloquer),
+                  title: Text(S.current.bloquer , style: TextStyle(color: Theme.of(context).primaryColorDark),),
                   value: _controlBloquer,
-                  onChanged: (bool value){
+                  onChanged: editMode ? (bool value){
                     setState(() {
-                      if(widget.arguments.id != null){
-                        if(widget.arguments.id < 2){
-                          _controlBloquer =false ;
-                        }else{
-                          _controlBloquer = value ;
-                        }
-                      }else{
-                        _controlBloquer = value ;
-                      }
-
+                      _controlBloquer = value ;
                     });
-                  },
+                  }:null,
                 )
             ),
           ],
@@ -828,8 +830,10 @@ class _AddTierPageState extends State<AddTierPage>
       child: ImagePickerWidget(
           imageFile: _itemImage,
           editMode: editMode,
-          onImageChange: (File imageFile) => {
-              _itemImage = imageFile
+          onImageChange: (File imageFile)  {
+            setState(() {
+              _itemImage = imageFile ;
+            });
           }
         ),
     );
@@ -863,7 +867,7 @@ class _AddTierPageState extends State<AddTierPage>
                     size: 0.5 * bodyHeight,
                   )
                 : Center(
-                  child: Text(S.current.msg_no_qr ,style: TextStyle(fontSize: 16 )),
+                  child: Text(S.current.msg_no_qr ,style: TextStyle(fontSize: 16 , color:Colors.black , fontWeight: FontWeight.bold)),
                 ),
 
               ),
@@ -958,12 +962,22 @@ class _AddTierPageState extends State<AddTierPage>
                     icon: new Icon(
                       Icons.share,
                       size: 30,
-                      color:(_qrCodeControl.text != "")? Colors.blue:Colors.black54,
+                      color: Colors.blue,
                     ),
-                    onPressed:(_qrCodeControl.text != "")? () async{
-                      if(_qrCodeControl.text != "")
-                        await _captureAndSharePng();
-                    }:null
+                    onPressed: () async{
+                      if(_qrCodeControl.text != ""){
+                        if(_myParams.versionType != "demo"){
+                          await _captureAndSharePng();
+                        }else{
+                          var message = S.current.msg_demo_option;
+                          Helpers.showFlushBar(context, message);
+                        }
+                      }else{
+                        var message = S.current.msg_no_qr;
+                        Helpers.showFlushBar(context, message);
+                      }
+
+                    }
                   ),
                 ),
                 Container(
@@ -984,13 +998,22 @@ class _AddTierPageState extends State<AddTierPage>
                       icon: new Icon(
                         Icons.print_rounded,
                         size: 30,
-                        color:(_qrCodeControl.text != "")? Colors.blue:Colors.black54,
+                        color:Colors.green,
                       ),
-                      onPressed:(_qrCodeControl.text != "")? () async{
+                      onPressed:() async{
                         if(_qrCodeControl.text != ""){
-                          await _printQr();
+                          if(_myParams.versionType != "demo"){
+                            await _printQr();
+                          }else{
+                            var message = S.current.msg_demo_option;
+                            Helpers.showFlushBar(context, message);
+                          }
+                        }else{
+                          var message = S.current.msg_no_qr;
+                          Helpers.showFlushBar(context, message);
                         }
-                      }:null
+
+                      },
                   ),
                 ),
               ],
@@ -1080,6 +1103,7 @@ class _AddTierPageState extends State<AddTierPage>
   }
 
   Widget addFamilledialogue() {
+    _famille = TiersFamille.init();
     return StatefulBuilder(builder: (context, StateSetter setState) {
       return Builder(
           builder: (context) => Dialog(
@@ -1188,7 +1212,7 @@ class _AddTierPageState extends State<AddTierPage>
 
       _familleItems.add(famille);
       _familleDropdownItems = utils.buildDropFamilleTier(_familleItems);
-      _selectedFamille = _familleItems[_familleItems.length];
+      _selectedFamille = _familleItems.last;
     }
   }
 
@@ -1258,6 +1282,7 @@ class _AddTierPageState extends State<AddTierPage>
     item.solde_depart =(_solde_departControl.text != "")? double.tryParse(_solde_departControl.text):0.0;
     item.chiffre_affaires = (_chiffre_affairesControl.text != "")?double.tryParse(_chiffre_affairesControl.text):0.0;
     item.regler =(_reglerControl.text != "")? double.tryParse(_reglerControl.text):0.0;
+    item.credit =(_creditControl.text != '')? double.parse(_creditControl.text):0.0;
 
     if (_itemImage != null) {
       item.imageUint8List =  await Helpers.getUint8ListFromFile(_itemImage);
@@ -1265,7 +1290,7 @@ class _AddTierPageState extends State<AddTierPage>
       Uint8List image = await Helpers.getDefaultImageUint8List(from: "tier");
       item.imageUint8List = image;
     }
-    item.id_famille = _selectedFamille.id;
+    item.id_famille = _familleItems.indexOf(_selectedFamille);
     item.statut = Statics.statutItems.indexOf(_selectedStatut);
     item.tarification = _tarificationItems.indexOf(_selectedTarification);
     item.bloquer = _controlBloquer;
