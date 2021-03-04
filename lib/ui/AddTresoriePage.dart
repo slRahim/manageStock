@@ -106,7 +106,7 @@ class _AddTresoriePageState extends State<AddTresoriePage>
   void didChangeDependencies() {
     super.didChangeDependencies();
     PushNotificationsManagerState data = PushNotificationsManager.of(context);
-    _devise = getDeviseTranslate(data.myParams.devise) ;
+    _devise = Helpers.getDeviseTranslate(data.myParams.devise) ;
   }
 
   @override
@@ -197,8 +197,8 @@ class _AddTresoriePageState extends State<AddTresoriePage>
       _objetControl.text = _tresorie.objet;
       _modaliteControl.text = _tresorie.modalite;
       _montantControl.text = (_tresorie.montant < 0)
-          ? Helpers.numberFormat((_tresorie.montant * -1)).toString()
-          : Helpers.numberFormat(_tresorie.montant).toString();
+          ? ((_tresorie.montant * -1)).toString()
+          : (_tresorie.montant).toString();
     } else {
       _selectedTypeTiers = Statics.tiersItems[0];
       _selectedCategorie = _categorieItems[1];
@@ -215,16 +215,6 @@ class _AddTresoriePageState extends State<AddTresoriePage>
     });
   }
 
-  String getDeviseTranslate(devise){
-    switch(devise){
-      case "DZD" :
-        return S.current.da ;
-        break;
-      default :
-        return devise ;
-        break ;
-    }
-  }
 
   //****************************************************************************************************************************************************************
   //***********************************************************************build de l'affichage***************************************************************************
@@ -345,7 +335,7 @@ class _AddTresoriePageState extends State<AddTresoriePage>
                   Expanded(
                     flex: 4,
                     child: Container(
-                        child: Column(
+                        child: (_selectedPieces.isNotEmpty)? Column(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
                             Row(
@@ -367,7 +357,7 @@ class _AddTresoriePageState extends State<AddTresoriePage>
                               style: TextStyle(fontWeight: FontWeight.bold),
                             ),
                           ],
-                        )),
+                        ):null),
                   ),
                 ],
               ),
@@ -788,7 +778,7 @@ class _AddTresoriePageState extends State<AddTresoriePage>
               _tresorie.tierId = _selectedClient.id;
               _tresorie.tierRS = _selectedClient.raisonSociale;
               _clientControl.text = _selectedClient.raisonSociale;
-              _montantControl.text = Helpers.numberFormat(_selectedClient.credit).toString();
+              _montantControl.text = (_selectedClient.credit).toString();
             });
           },
         );
@@ -804,7 +794,7 @@ class _AddTresoriePageState extends State<AddTresoriePage>
         setState(() {
           _selectedPieces.add(selectedItem);
           _restepiece = _selectedPieces.first.reste;
-          _montantControl.text = Helpers.numberFormat(_restepiece).toString();
+          _montantControl.text = (_restepiece).toString();
           _objetControl.text = _objetControl.text +
               " ${selectedItem.piece} ${selectedItem.num_piece}";
         });

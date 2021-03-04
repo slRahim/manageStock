@@ -48,19 +48,9 @@ class _TresorieListItemState extends State<TresorieListItem> {
   void didChangeDependencies() {
     super.didChangeDependencies();
     PushNotificationsManagerState data = PushNotificationsManager.of(context);
-    _devise = getDeviseTranslate(data.myParams.devise) ;
+    _devise = Helpers.getDeviseTranslate(data.myParams.devise) ;
   }
 
-  String getDeviseTranslate(devise){
-    switch(devise){
-      case "DZD" :
-        return S.current.da ;
-        break;
-      default :
-        return devise ;
-        break ;
-    }
-  }
 
   @override
   Widget build(BuildContext context) {

@@ -300,6 +300,26 @@ class Helpers {
    return f.format(number);
 
  }
+
+  static String getDeviseTranslate(devise) {
+    switch (devise) {
+      case "DZD":
+        return S.current.da;
+        break;
+      case "EUR":
+        return "€";
+        break;
+      case "USD":
+        return '\$';
+        break;
+      case "GBP":
+        return '£';
+        break;
+      default:
+        return devise;
+        break;
+    }
+  }
  
  static double calcTimber (ttc , myparams){
     return (ttc >= 1000000) ? 2500 : ttc * 0.01 ;

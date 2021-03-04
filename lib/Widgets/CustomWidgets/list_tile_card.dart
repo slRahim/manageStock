@@ -51,7 +51,6 @@ class _ListTileCardState extends State<ListTileCard> {
       child: InkWell(
         onTap: widget.onTap,
         onLongPress: widget.onLongPress,
-        onDoubleTap: (widget.from is Tiers) ? widget.onLongPress : null,
         child: SlidingCard(
             slimeCardElevation: 2,
             slimeCardBorderRadius: 10,

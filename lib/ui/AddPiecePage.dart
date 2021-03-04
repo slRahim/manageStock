@@ -181,7 +181,7 @@ class _AddPiecePageState extends State<AddPiecePage>
     }
     _profile = await _queryCtr.getProfileById(1);
     _myParams = await _queryCtr.getAllParams();
-    _devise = getDeviseTranslate(_myParams.devise);
+    _devise = Helpers.getDeviseTranslate(_myParams.devise);
     return Future<bool>.value(editMode);
   }
 
@@ -258,16 +258,7 @@ class _AddPiecePageState extends State<AddPiecePage>
     });
   }
 
-  String getDeviseTranslate(devise) {
-    switch (devise) {
-      case "DZD":
-        return S.current.da;
-        break;
-      default:
-        return devise;
-        break;
-    }
-  }
+
 
   //************************************************************************************************************************************
   // ***************************************** partie affichage et build *****************************************************************

@@ -223,8 +223,9 @@ class _ArticlesFragmentState extends State<ArticlesFragment> {
         mainContext: widget.onConfirmSelectedItems != null ? null : context,
         title: S.of(context).articles,
         isFilterOn: isFilterOn,
-        onSearchChanged: (String search) =>
-            _dataSource.updateSearchTerm(search),
+        onSearchChanged: (String search) => {
+          _dataSource.updateSearchTerm(search),
+        },
         onFilterPressed: () async {
           AwesomeDialog(
               context: context,
@@ -379,6 +380,7 @@ class _ArticlesFragmentState extends State<ArticlesFragment> {
           searchController.text = result.rawContent;
           _dataSource.updateSearchTerm(result.rawContent);
           FocusScope.of(context).requestFocus(null);
+
         });
       }
     } catch (e) {

@@ -78,7 +78,7 @@ class _PreviewPieceState extends State<PreviewPiece> {
 
     }else{
        _profile = await _queryCtr.getProfileById(1);
-       _devise = getDeviseTranslate(_myParams.devise) ;
+       _devise = Helpers.getDeviseTranslate(_myParams.devise) ;
     }
   }
 
@@ -94,16 +94,7 @@ class _PreviewPieceState extends State<PreviewPiece> {
     await _queryCtr.updateItemInDb(DbTablesNames.myparams, _myParams);
   }
 
-  String getDeviseTranslate(devise){
-    switch(devise){
-      case "DZD" :
-        return S.current.da ;
-        break;
-      default :
-        return devise ;
-        break ;
-    }
-  }
+
 
   @override
   Widget build(BuildContext context) {

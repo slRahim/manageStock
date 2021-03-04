@@ -112,7 +112,7 @@ class _GridHomeWidgetState extends State<GridHomeWidget> {
   void didChangeDependencies() {
     final newLocale = Localizations.localeOf(context);
     PushNotificationsManagerState data = PushNotificationsManager.of(context);
-    _devise = getDeviseTranslate(data.myParams.devise);
+    _devise = Helpers.getDeviseTranslate(data.myParams.devise);
     if (newLocale != _userLocale) {
       homeItemList[0].title = S.current.tableau_bord;
       homeItemList[1].title = S.current.articles;
@@ -151,17 +151,6 @@ class _GridHomeWidgetState extends State<GridHomeWidget> {
     _key.currentState.showSnackBar(SnackBar(
       content: Text(text),
     ));
-  }
-
-  String getDeviseTranslate(devise) {
-    switch (devise) {
-      case "DZD":
-        return S.current.da;
-        break;
-      default:
-        return devise;
-        break;
-    }
   }
 
   @override

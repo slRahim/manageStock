@@ -54,19 +54,9 @@ class _TierListItemState extends State<TierListItem> {
   void didChangeDependencies() {
     super.didChangeDependencies();
     PushNotificationsManagerState data = PushNotificationsManager.of(context);
-    _devise = getDeviseTranslate(data.myParams.devise) ;
+    _devise = Helpers.getDeviseTranslate(data.myParams.devise) ;
   }
 
-  String getDeviseTranslate(devise){
-    switch(devise){
-      case "DZD" :
-        return S.current.da ;
-        break;
-      default :
-        return devise ;
-        break ;
-    }
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -107,6 +97,8 @@ class _TierListItemState extends State<TierListItem> {
                   if(widget.onItemSelected == null){
                     Navigator.of(context)
                         .pushNamed(RoutesKeys.addTier, arguments: widget.tier)
+                  }else{
+                    widget.onItemSelected(widget.tier)
                   }
                 },
                 slidingCardController: controller,

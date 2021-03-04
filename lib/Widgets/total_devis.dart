@@ -20,20 +20,10 @@ class TotalDevis extends StatelessWidget{
     , this.timbre ,this.net_ht ,this.remise , this.net_payer , this.myParams}) : super(key: key);
 
 
-  String getDeviseTranslate(devise){
-    switch(devise){
-      case "DZD" :
-        return S.current.da ;
-        break;
-      default :
-        return devise ;
-        break ;
-    }
-  }
 
   @override
   Widget build(BuildContext context) {
-    String _devise = getDeviseTranslate(myParams.devise);
+    String _devise = Helpers.getDeviseTranslate(myParams.devise);
     return Container(
       margin: EdgeInsetsDirectional.fromSTEB(20, 0, 20, 10),
       child: Center(
