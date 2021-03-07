@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_icons/flutter_icons.dart';
+import 'package:gestmob/Helpers/Helpers.dart';
 import 'package:gestmob/Helpers/Statics.dart';
 import 'package:gestmob/generated/l10n.dart';
 import 'package:gestmob/models/Article.dart';
@@ -57,8 +58,8 @@ class _ListTileCardState extends State<ListTileCard> {
             cardsGap: SizeConfig.safeBlockVertical,
             controller: widget.slidingCardController,
             slidingCardWidth: SizeConfig.horizontalBloc * 95,
-            visibleCardHeight: 100,
-            hiddenCardHeight: 90,
+            visibleCardHeight:(Helpers.isDirectionRTL(context))? (widget.from is Tiers)? 110:100 : 95,
+            hiddenCardHeight: (Helpers.isDirectionRTL(context))? 90 : 80,
             showColors: false,
             frontCardWidget: ListFrontCard(
               title: widget.title,
@@ -208,11 +209,11 @@ class _ListFrontCardState extends State<ListFrontCard> {
                               children: <Widget>[
                                 widget.title,
                                 SizedBox(
-                                  height: 5,
+                                  height:(Helpers.isDirectionRTL(context))? 2 : 5,
                                 ),
                                 widget.trailingChildren[0],
                                 SizedBox(
-                                  height: 5,
+                                  height:(Helpers.isDirectionRTL(context))? 2 : 5,
                                 ),
                                 Row(
                                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -259,7 +260,9 @@ class ListBackCard extends StatelessWidget {
       decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(10)),
       child: SingleChildScrollView(
-         padding: EdgeInsetsDirectional.only(start: 15, end: 15, top: 10),
+         padding:(Helpers.isDirectionRTL(context))
+             ? EdgeInsetsDirectional.only(start: 15, end: 15, top: 5)
+             :EdgeInsetsDirectional.only(start: 15, end: 15, top: 10),
          child: Container(
             child: Row(
               children: <Widget>[
@@ -270,11 +273,11 @@ class ListBackCard extends StatelessWidget {
                     children: <Widget>[
                       trailingChildren[2],
                       SizedBox(
-                        height: 5,
+                        height:(Helpers.isDirectionRTL(context))? 2 : 5,
                       ),
                       trailingChildren[3],
                       SizedBox(
-                        height: 5,
+                        height:(Helpers.isDirectionRTL(context))? 2 : 5,
                       ),
                       trailingChildren[4],
                     ],

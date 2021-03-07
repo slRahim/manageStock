@@ -557,12 +557,12 @@ class _AddTierPageState extends State<AddTierPage>
               controller: _mobileControl,
               onTap: () => _mobileControl.selection = TextSelection(baseOffset: 0, extentOffset: _mobileControl.value.text.length),
               keyboardType: TextInputType.phone,
-              validator: (value) {
-                if (value.isEmpty) {
-                  return S.current.msg_champ_oblg;
-                }
-                return null;
-              },
+              // validator: (value) {
+              //   if (value.isEmpty) {
+              //     return S.current.msg_champ_oblg;
+              //   }
+              //   return null;
+              // },
               decoration: InputDecoration(
                 labelText: S.current.mobile,
                 labelStyle: TextStyle(color: Colors.blue),
@@ -787,21 +787,24 @@ class _AddTierPageState extends State<AddTierPage>
               ),
             ),
             dropdowns() ,
-            Container(
-              decoration: editMode? new BoxDecoration(
-                border: Border.all(color: Colors.blueAccent,),
-                borderRadius: BorderRadius.circular(20.0),
-              ) : null,
-              child: CheckboxListTile(
-                title: Text(S.current.client_four,
-                  style: TextStyle(color: editMode ? Theme.of(context).primaryColorDark : Theme.of(context).tabBarTheme.unselectedLabelColor ),
+            Visibility(
+              visible: false ,
+              child: Container(
+                decoration: editMode? new BoxDecoration(
+                  border: Border.all(color: Colors.blueAccent,),
+                  borderRadius: BorderRadius.circular(20.0),
+                ) : null,
+                child: CheckboxListTile(
+                  title: Text(S.current.client_four,
+                    style: TextStyle(color: editMode ? Theme.of(context).primaryColorDark : Theme.of(context).tabBarTheme.unselectedLabelColor ),
+                  ),
+                  value: _clientFournBool,
+                  onChanged: editMode? (bool value) {
+                    setState(() {
+                      _clientFournBool = value;
+                    });
+                  } : null,
                 ),
-                value: _clientFournBool,
-                onChanged: editMode? (bool value) {
-                  setState(() {
-                    _clientFournBool = value;
-                  });
-                } : null,
               ),
             ),
              Container(
@@ -1275,7 +1278,7 @@ class _AddTierPageState extends State<AddTierPage>
     item.longitude = _longitude;
     item.ville = _villeControl.text;
     item.telephone = _telephoneControl.text;
-    item.mobile = _mobileControl.text;
+    item.mobile = (_mobileControl.text != '')?_mobileControl.text : '';
     item.fax = _faxControl.text;
     item.email = _emailControl.text;
 

@@ -1,12 +1,12 @@
 import 'package:awesome_dialog/awesome_dialog.dart';
-import 'package:currency_pickers/country.dart';
-import 'package:currency_pickers/currency_picker_dialog.dart';
-import 'package:currency_pickers/utils/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:gestmob/Helpers/Helpers.dart';
 import 'package:gestmob/Helpers/QueryCtr.dart';
 import 'package:gestmob/Helpers/Statics.dart';
+import 'package:gestmob/Helpers/curency/country.dart';
+import 'package:gestmob/Helpers/curency/currency_picker_dialog.dart';
+import 'package:gestmob/Helpers/curency/utils/utils.dart';
 import 'package:gestmob/generated/l10n.dart';
 import 'package:gestmob/models/Article.dart';
 import 'package:gestmob/models/HomeItem.dart';
@@ -245,9 +245,9 @@ class _SettingsPageState extends State<SettingsPage> {
                     },
                   ),
                   SettingsTile(
-                    title: S.current.pays,
-                    subtitle: _countryname,
-                    leading: Icon(Icons.pin_drop),
+                    title: S.current.devise,
+                    subtitle: "($_currencycode) $_countryname",
+                    leading: Icon(Icons.monetization_on),
                     onTap: () async {
                       await showDialog(
                         context: context,
@@ -258,7 +258,7 @@ class _SettingsPageState extends State<SettingsPage> {
                                       borderSide: BorderSide(color: Colors.blue[600]),
                                       borderRadius: BorderRadius.circular(20)),
                                   contentPadding: EdgeInsets.only(left: 20, top: 20, bottom: 20),
-                                  labelText: S.current.pays,
+                                  labelText: S.current.devise,
                                   labelStyle: TextStyle(color: Colors.blue[600]),
                                   alignLabelWithHint: true,
                                   hintText: S.current.msg_search,
@@ -269,7 +269,7 @@ class _SettingsPageState extends State<SettingsPage> {
                                   ),
                                 ),
                                 isSearchable: true,
-                                title: Text('${S.current.selec_pays}'),
+                                title: Text('${S.current.select_devise}'),
                                 itemBuilder: _countryDialog,
                                 onValuePicked: (Country country) {
                                   setState(() {
@@ -918,25 +918,5 @@ class _SettingsPageState extends State<SettingsPage> {
     Helpers.showFlushBar(context, message);
   }
 
-//  *******************************************************************************************************************************************************************
-//***********************************************************************notification***********************************************************************************
-  Future showNotification() async{
-    if(_myParams.notifications){
-      switch(_myParams.notificationDay){
-        case 0 :
-          for(int i=0 ; i<4; i++){
-            await notificationPlugin.showDailyAtTime(_myParams.notificationTime);
-          }
-          break;
-        default :
-          for(int i=0 ; i<4; i++){
-            await notificationPlugin.showWeeklyAtDayTime(_myParams.notificationTime , _myParams.notificationDay);
-          }
-          break;
-      }
-    }else{
-      await notificationPlugin.cancelAllNotification();
-    }
-  }
 
 }

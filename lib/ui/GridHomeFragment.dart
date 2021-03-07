@@ -79,6 +79,9 @@ class _GridHomeWidgetState extends State<GridHomeWidget> {
       fixed: true,
       deletable: false,
       child: Container(
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(10),
+          ),
           child: RaisedButton.icon(
               color: Colors.orange,
               onPressed: () async {
@@ -139,6 +142,13 @@ class _GridHomeWidgetState extends State<GridHomeWidget> {
       drawerItemPurchase.title = S.current.abonnement;
 
       _appBarTitle = S.current.app_name;
+
+      Statics.statutItems[0] = S.current.statut_m ;
+      Statics.statutItems[1] = S.current.statut_mlle ;
+      Statics.statutItems[2] = S.current.statut_mme ;
+      Statics.statutItems[3] = S.current.statut_dr ;
+      Statics.statutItems[4] = S.current.statut_pr ;
+      Statics.statutItems[5] = S.current.statut_eurl ;
     }
   }
 

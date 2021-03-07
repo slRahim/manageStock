@@ -23,6 +23,9 @@ import 'package:image_picker/image_picker.dart';
 import 'package:gestmob/Widgets/utils.dart' as utils;
 import 'package:map_launcher/map_launcher.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
+import 'package:gestmob/Helpers/country_utils.dart';
+import 'package:flutter/services.dart';
+import 'dart:convert';
 
 class ProfilePage extends StatefulWidget {
   @override
@@ -49,9 +52,6 @@ class _ProfilePageState extends State<ProfilePage> with TickerProviderStateMixin
   TextEditingController _raisonSocialeControl = new TextEditingController();
   TextEditingController _activiteControl = new TextEditingController();
   TextEditingController _adresseControl = new TextEditingController();
-  TextEditingController _departmentControl = new TextEditingController();
-  TextEditingController _villeControl = new TextEditingController();
-  TextEditingController _paysControl = new TextEditingController();
   TextEditingController _telephoneControl = new TextEditingController();
   TextEditingController _telephone2Control = new TextEditingController();
   TextEditingController _faxControl = new TextEditingController();
@@ -64,6 +64,15 @@ class _ProfilePageState extends State<ProfilePage> with TickerProviderStateMixin
   TextEditingController _nifControl = new TextEditingController();
   TextEditingController _nisControl = new TextEditingController();
   TextEditingController _capitalsocialControl = new TextEditingController();
+
+  List<String> _countries =["${S.current.selec_pays}"];
+  String  _selectedCountry = S.current.selec_pays ;
+
+  List<String> _cities = ["${S.current.choix_city}"];
+  String _selectedCity = S.current.choix_city;
+
+  List<String> _provinces = ["${S.current.choix_province}"];
+  String _selectedProvince = S.current.choix_province;
 
   File _itemImage;
 
@@ -78,7 +87,8 @@ class _ProfilePageState extends State<ProfilePage> with TickerProviderStateMixin
 
     _dataSource = SliverListDataSource(ItemsListTypes.articlesList, new Map<String, dynamic>());
     _queryCtr = _dataSource.queryCtr;
-    
+
+    getCounty();
     futureInitState().then((val) {
       setState(() {
         finishedLoading = true;
@@ -96,14 +106,23 @@ class _ProfilePageState extends State<ProfilePage> with TickerProviderStateMixin
 
   Future<bool> futureInitState() async {
     _statutDropdownItems = utils.buildDropStatutTier(Statics.statutItems);
-
     _selectedStatut = Statics.statutItems[0];
-
     arguments = await _queryCtr.getProfileById(1);
+    if(arguments.pays != ''){
+      _selectedCountry = arguments.pays ;
+      getProvince() ;
+    }
+    if(arguments.departement != ''){
+      _selectedProvince = arguments.departement ;
+      getCity() ;
+    }
+    if(arguments.ville != ''){
+      _selectedCity =arguments.ville ;
+    }
+
     editMode = false;
     modification = true;
     await setDataFromItem(arguments);
-
     return Future<bool>.value(editMode);
   }
 
@@ -114,9 +133,9 @@ class _ProfilePageState extends State<ProfilePage> with TickerProviderStateMixin
     _selectedStatut = Statics.statutItems[item.statut];
     _activiteControl.text = item.activite;
     _adresseControl.text = item.adresse;
-    _departmentControl.text = item.departement ;
-    _villeControl.text = item.ville;
-    _paysControl.text = item.pays;
+    _selectedProvince = (item.departement != '')?item.departement : _selectedProvince ;
+    _selectedCity = (item.ville != '')? item.ville : _selectedCity;
+    _selectedCountry = (item.pays != '')? item.pays : _selectedCountry;
     _telephoneControl.text = item.telephone;
     _telephone2Control.text = item.telephone2;
     _mobileControl.text = item.mobile;
@@ -130,6 +149,73 @@ class _ProfilePageState extends State<ProfilePage> with TickerProviderStateMixin
     _nisControl.text = item.nis;
     _capitalsocialControl.text = item.capital.toString();
 
+  }
+
+  Future getResponse() async {
+    var res = await rootBundle.loadString(
+        'assets/data/country.json');
+    return jsonDecode(res);
+  }
+
+  Future getCounty() async {
+    var countryres = await getResponse() as List;
+    countryres.forEach((data) {
+      var model = CountryModel();
+      model.name = data['name'];
+      if (!mounted) return;
+      setState(() {
+        _countries.add(model.name);
+      });
+    });
+
+    return _countries;
+  }
+
+  Future getProvince() async {
+    var response = await getResponse();
+
+    var takeProvince = response
+        .map((map) => CountryModel.fromJson(map))
+        .where((item) => item.name == _selectedCountry)
+        .map((item) => item.province)
+        .toList();
+
+    var provinces = takeProvince as List;
+    provinces.forEach((f) {
+      if (!mounted) return;
+      setState(() {
+        var name = f.map((item) => item.name).toList();
+        for (String statename in name) {
+          _provinces.add(statename.split('Province').first);
+        }
+      });
+    });
+
+    return _provinces;
+  }
+
+  Future getCity() async {
+    var response = await getResponse();
+    var takestate = response
+        .map((map) => CountryModel.fromJson(map))
+        .where((item) => item.name == _selectedCountry)
+        .map((item) => item.province)
+        .toList();
+    var states = takestate as List;
+    states.forEach((f) {
+      var name = f.where((item) => item.name == (_selectedProvince+'Province') || item.name == _selectedProvince);
+      var cityname = name.map((item) => item.city).toList();
+      cityname.forEach((ci) {
+        if (!mounted) return;
+        setState(() {
+          var citiesname = ci.map((item) => item.name).toList();
+          for (var citynames in citiesname) {
+            _cities.add(citynames.toString());
+          }
+        });
+      });
+    });
+    return _cities;
   }
 
   //****************************************************************************************************************************************************************************
@@ -295,12 +381,12 @@ class _ProfilePageState extends State<ProfilePage> with TickerProviderStateMixin
               controller: _activiteControl,
               // onTap: () => _activiteControl.selection = TextSelection(baseOffset: 0, extentOffset: _activiteControl.value.text.length),
               keyboardType: TextInputType.text,
-              validator: (value) {
-                if (value.isEmpty) {
-                  return S.current.msg_champ_oblg;
-                }
-                return null;
-              },
+              // validator: (value) {
+              //   if (value.isEmpty) {
+              //     return S.current.msg_champ_oblg;
+              //   }
+              //   return null;
+              // },
               decoration: InputDecoration(
                 labelText:  S.current.activite,
                 labelStyle: TextStyle(color: Colors.blue),
@@ -328,12 +414,12 @@ class _ProfilePageState extends State<ProfilePage> with TickerProviderStateMixin
               controller: _adresseControl,
               // onTap: () => _adresseControl.selection = TextSelection(baseOffset: 0, extentOffset: _adresseControl.value.text.length),
               keyboardType: TextInputType.text,
-              validator: (value) {
-                if (value.isEmpty) {
-                  return S.current.msg_champ_oblg;
-                }
-                return null;
-              },
+              // validator: (value) {
+              //   if (value.isEmpty) {
+              //     return S.current.msg_champ_oblg;
+              //   }
+              //   return null;
+              // },
               decoration: InputDecoration(
                 labelText:  S.current.adresse,
                 labelStyle: TextStyle(color: Colors.blue),
@@ -356,103 +442,139 @@ class _ProfilePageState extends State<ProfilePage> with TickerProviderStateMixin
                 ),
               ),
             ),
-            TextFormField(
-              enabled: editMode,
-              controller: _departmentControl,
-              // onTap: () => _departmentControl.selection = TextSelection(baseOffset: 0, extentOffset: _departmentControl.value.text.length),
-              keyboardType: TextInputType.text,
-              validator: (value) {
-                if (value.isEmpty) {
-                  return S.current.msg_champ_oblg;
-                }
-                return null;
-              },
-              decoration: InputDecoration(
-                labelText: S.current.department,
-                labelStyle: TextStyle(color: Colors.blue),
-                prefixIcon: Icon(
-                  Icons.pin_drop,
-                  color: Colors.blue,
+            Container(
+              padding: const EdgeInsetsDirectional.only(start: 12 , end: 0 , top: 5 ,bottom: 5),
+              decoration:editMode ? BoxDecoration(
+                border: Border.all(
+                  color: Colors.blueAccent,
                 ),
-                focusedBorder: OutlineInputBorder(
-                    borderSide: BorderSide(color: Colors.blue),
-                    borderRadius: BorderRadius.circular(20)),
-                enabledBorder: OutlineInputBorder(
-                  gapPadding: 3.3,
-                  borderRadius: BorderRadius.circular(20),
-                  borderSide: BorderSide(color: Colors.blue),
-                ),
-                errorBorder:  OutlineInputBorder(
-                  gapPadding: 3.3,
-                  borderRadius: BorderRadius.circular(20),
-                  borderSide: BorderSide(color: Colors.red),
-                ),
+                borderRadius: BorderRadius.circular(20.0),
+              ):null,
+              child:  Row(
+                children: [
+                  Icon(
+                    Icons.pin_drop,
+                    color: Colors.blue,
+                  ),
+                  SizedBox(width: 15,),
+                  Container(
+                    width: 200,
+                    child: SingleChildScrollView(
+                      scrollDirection: Axis.horizontal,
+                      child:  DropdownButtonHideUnderline(
+                        child: DropdownButton<String>(
+                          disabledHint: Text(_selectedCountry),
+                          value: _selectedCountry,
+                          items: _countries.map((String dropDownStringItem) {
+                            return DropdownMenuItem<String>(
+                              value: dropDownStringItem,
+                              child: Text(dropDownStringItem,),
+                            );
+                          }).toList(),
+                          onChanged: editMode ? (value) {
+                            if (!mounted) return;
+                            setState(() {
+                              _selectedCountry = value;
+                              _selectedProvince = S.current.choix_province;
+                              _provinces = ["${S.current.choix_province}"];
+                              _cities = ["${S.current.choix_city}"];
+                              _selectedCity = S.current.choix_city;
+                              getProvince();
+                            });
+
+                          }:null,
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
               ),
             ),
-            TextFormField(
-              enabled: editMode,
-              controller: _villeControl,
-              // onTap: () => _villeControl.selection = TextSelection(baseOffset: 0, extentOffset: _villeControl.value.text.length),
-              keyboardType: TextInputType.text,
-              // validator: (value) {
-              //   if (value.isEmpty) {
-              //     return S.current.msg_champ_oblg;
-              //   }
-              //   return null;
-              // },
-              decoration: InputDecoration(
-                labelText:  S.current.ville,
-                labelStyle: TextStyle(color: Colors.blue),
-                prefixIcon: Icon(
-                  Icons.add_location,
-                  color: Colors.blue,
+            Container(
+              padding: const EdgeInsetsDirectional.only(start: 12 , end: 0 , top: 5 ,bottom: 5),
+              decoration:editMode ? BoxDecoration(
+                border: Border.all(
+                  color: Colors.blueAccent,
                 ),
-                focusedBorder: OutlineInputBorder(
-                    borderSide: BorderSide(color: Colors.blue),
-                    borderRadius: BorderRadius.circular(20)),
-                enabledBorder: OutlineInputBorder(
-                  gapPadding: 3.3,
-                  borderRadius: BorderRadius.circular(20),
-                  borderSide: BorderSide(color: Colors.blue),
-                ),
-                errorBorder:  OutlineInputBorder(
-                  gapPadding: 3.3,
-                  borderRadius: BorderRadius.circular(20),
-                  borderSide: BorderSide(color: Colors.red),
-                ),
+                borderRadius: BorderRadius.circular(20.0),
+              ):null,
+              child:  Row(
+                children: [
+                  Icon(
+                    Icons.pin_drop,
+                    color: Colors.blue,
+                  ),
+                  SizedBox(width: 15,),
+                  Container(
+                    width: 200,
+                    child: SingleChildScrollView(
+                      scrollDirection: Axis.horizontal,
+                      child: DropdownButtonHideUnderline(
+                        child: DropdownButton<String>(
+                          value: _selectedProvince,
+                          disabledHint: Text(_selectedProvince),
+                          items: _provinces.map((String dropDownStringItem) {
+                            return DropdownMenuItem<String>(
+                              value: dropDownStringItem,
+                              child: Text(dropDownStringItem,),
+                            );
+                          }).toList(),
+                          onChanged:editMode ? (value){
+                            if (!mounted) return;
+                            setState(() {
+                              _selectedProvince = value;
+                              _cities = ["${S.current.choix_city}"];
+                              _selectedCity = "${S.current.choix_city}" ;
+                              getCity();
+                            });
+                          }:null,
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
               ),
             ),
-            TextFormField(
-              enabled: editMode,
-              controller: _paysControl,
-              // onTap: () => _paysControl.selection = TextSelection(baseOffset: 0, extentOffset: _paysControl.value.text.length),
-              keyboardType: TextInputType.text,
-              // validator: (value) {
-              //   if (value.isEmpty) {
-              //     return S.current.msg_champ_oblg;
-              //   }
-              //   return null;
-              // },
-              decoration: InputDecoration(
-                labelText:  S.current.pays,
-                labelStyle: TextStyle(color: Colors.blue),
-                prefixIcon: Icon(
-                  Icons.add_location,
-                  color: Colors.blue[700],
+            Container(
+              padding: const EdgeInsetsDirectional.only(start: 12 , end: 0 , top: 5 ,bottom: 5),
+              decoration:editMode ? BoxDecoration(
+                border: Border.all(
+                  color: Colors.blueAccent,
                 ),
-                focusedBorder: OutlineInputBorder(
-                    borderSide: BorderSide(color: Colors.blue),
-                    borderRadius: BorderRadius.circular(20)),
-                enabledBorder: OutlineInputBorder(
-                  gapPadding: 3.3,
-                  borderRadius: BorderRadius.circular(20),
-                  borderSide: BorderSide(color: Colors.blue),
-                ),
-                errorBorder:  OutlineInputBorder(
-                  gapPadding: 3.3,
-                  borderRadius: BorderRadius.circular(20),
-                  borderSide: BorderSide(color: Colors.red),
-                ),
+                borderRadius: BorderRadius.circular(20.0),
+              ):null,
+              child:  Row(
+                children: [
+                  Icon(
+                    Icons.pin_drop,
+                    color: Colors.blue,
+                  ),
+                  SizedBox(width: 15,),
+                  Container(
+                    width: 200,
+                    child: SingleChildScrollView(
+                      scrollDirection: Axis.horizontal,
+                      child:DropdownButtonHideUnderline(
+                        child: DropdownButton<String>(
+                          value: _selectedCity,
+                          disabledHint: Text(_selectedCity),
+                          items: _cities.map((String dropDownStringItem) {
+                            return DropdownMenuItem<String>(
+                              value: dropDownStringItem,
+                              child: Text(dropDownStringItem),
+                            );
+                          }).toList(),
+                          onChanged:editMode? (value) {
+                            if (!mounted) return;
+                            setState(() {
+                              _selectedCity = value;
+                            });
+                          }:null,
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
               ),
             ),
             TextFormField(
@@ -471,7 +593,7 @@ class _ProfilePageState extends State<ProfilePage> with TickerProviderStateMixin
                 labelStyle: TextStyle(color: Colors.blue),
                 prefixIcon: Icon(
                   Icons.phone,
-                  color: Colors.blue[700],
+                  color: Colors.blue,
                 ),
                 focusedBorder: OutlineInputBorder(
                     borderSide: BorderSide(color: Colors.blue),
@@ -504,7 +626,7 @@ class _ProfilePageState extends State<ProfilePage> with TickerProviderStateMixin
                 labelStyle: TextStyle(color: Colors.blue),
                 prefixIcon: Icon(
                   Icons.phone,
-                  color: Colors.blue[700],
+                  color: Colors.blue,
                 ),
                 focusedBorder: OutlineInputBorder(
                     borderSide: BorderSide(color: Colors.blue),
@@ -537,7 +659,7 @@ class _ProfilePageState extends State<ProfilePage> with TickerProviderStateMixin
                 labelStyle: TextStyle(color: Colors.blue),
                 prefixIcon: Icon(
                   Icons.phone_android,
-                  color: Colors.blue[700],
+                  color: Colors.blue,
                 ),
                 focusedBorder: OutlineInputBorder(
                     borderSide: BorderSide(color: Colors.blue),
@@ -570,7 +692,7 @@ class _ProfilePageState extends State<ProfilePage> with TickerProviderStateMixin
                 labelStyle: TextStyle(color: Colors.blue),
                 prefixIcon: Icon(
                   Icons.phone_android,
-                  color: Colors.blue[700],
+                  color: Colors.blue,
                 ),
                 focusedBorder: OutlineInputBorder(
                     borderSide: BorderSide(color: Colors.blue),
@@ -603,7 +725,7 @@ class _ProfilePageState extends State<ProfilePage> with TickerProviderStateMixin
                 labelStyle: TextStyle(color: Colors.blue),
                 prefixIcon: Icon(
                   MdiIcons.fax,
-                  color: Colors.blue[700],
+                  color: Colors.blue,
                 ),
                 focusedBorder: OutlineInputBorder(
                     borderSide: BorderSide(color: Colors.blue),
@@ -669,7 +791,7 @@ class _ProfilePageState extends State<ProfilePage> with TickerProviderStateMixin
                 labelStyle: TextStyle(color: Colors.blue),
                 prefixIcon: Icon(
                   MdiIcons.searchWeb,
-                  color: Colors.blue[700],
+                  color: Colors.blue,
                 ),
                 focusedBorder: OutlineInputBorder(
                     borderSide: BorderSide(color: Colors.blue),
@@ -691,12 +813,12 @@ class _ProfilePageState extends State<ProfilePage> with TickerProviderStateMixin
               controller: _rcControl,
               onTap: () => _rcControl.selection = TextSelection(baseOffset: 0, extentOffset: _rcControl.value.text.length),
               keyboardType: TextInputType.text,
-              validator: (value) {
-                if (value.isEmpty) {
-                  return S.current.msg_champ_oblg;
-                }
-                return null;
-              },
+              // validator: (value) {
+              //   if (value.isEmpty) {
+              //     return S.current.msg_champ_oblg;
+              //   }
+              //   return null;
+              // },
               decoration: InputDecoration(
                 labelText:  S.current.n_rc,
                 labelStyle: TextStyle(color: Colors.blue),
@@ -914,7 +1036,11 @@ class _ProfilePageState extends State<ProfilePage> with TickerProviderStateMixin
       child: ImagePickerWidget(
           imageFile: _itemImage,
           editMode: editMode,
-          onImageChange: (File imageFile) => {_itemImage = imageFile}
+          onImageChange: (File imageFile) {
+            setState(() {
+              _itemImage = imageFile ;
+            });
+          }
           ),
     );
   }
@@ -976,11 +1102,11 @@ class _ProfilePageState extends State<ProfilePage> with TickerProviderStateMixin
 
     item.raisonSociale = _raisonSocialeControl.text;
     item.statut = Statics.statutItems.indexOf(_selectedStatut);
-    item.activite = _activiteControl.text;
-    item.adresse = _adresseControl.text;
-    item.departement = _departmentControl.text ;
-    item.ville = _villeControl.text;
-    item.pays = _paysControl.text;
+    item.activite = (_activiteControl.text != '')? _activiteControl.text : '';
+    item.adresse = (_adresseControl.text != '')?_adresseControl.text : '';
+    item.departement = (_provinces.indexOf(_selectedProvince)==0)? '' : _selectedProvince ;
+    item.ville = (_cities.indexOf(_selectedCity) == 0) ? '' :_selectedCity ;
+    item.pays =( _countries.indexOf(_selectedCountry) == 0) ? '' : _selectedCountry;
     item.telephone = _telephoneControl.text;
     item.telephone2 = _telephone2Control.text;
     item.mobile = _mobileControl.text;
@@ -994,7 +1120,7 @@ class _ProfilePageState extends State<ProfilePage> with TickerProviderStateMixin
       Uint8List image = await Helpers.getDefaultImageUint8List(from: "profile");
       item.imageUint8List = image;
     }
-    item.rc = _rcControl.text;
+    item.rc = (_rcControl.text != '')?_rcControl.text:'';
     item.ai = _aiControl.text;
     item.nif = _nifControl.text;
     item.nis = _nisControl.text;

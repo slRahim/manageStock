@@ -1,5 +1,4 @@
 import 'dart:ui';
-
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:gestmob/Helpers/Helpers.dart';
@@ -56,10 +55,16 @@ class _ArticleListItemSelectedState extends State<ArticleListItemSelected> {
                   builder: (BuildContext context) {
                     return addQtedialogue();
                   }).then((val) {
-
-                setState(() {});
-              });
+                      if((widget.article.quantite - widget.article.cmdClient) < widget.article.selectedQuantite){
+                        Helpers.showFlushBar(context, S.current.msg_qte_select_sup);
+                      }
+                      setState(() {});
+                  }
+              );
             } else if(widget.onItemSelected != null ){
+              if((widget.article.quantite - widget.article.cmdClient) < 1){
+                Helpers.showFlushBar(context, S.current.msg_qte_zero);
+              }
               selectThisItem();
             }
           }

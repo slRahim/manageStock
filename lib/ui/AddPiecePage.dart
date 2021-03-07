@@ -495,24 +495,30 @@ class _AddPiecePageState extends State<AddPiecePage>
                               _piece.piece != PieceType.retourFournisseur &&
                               _piece.piece != PieceType.avoirFournisseur) {
                             if (_selectedItems.isNotEmpty) {
-                              AwesomeDialog(
-                                  context: context,
-                                  dialogType: DialogType.INFO,
-                                  animType: AnimType.BOTTOMSLIDE,
-                                  title: S.current.supp,
-                                  body: addVerssementdialogue(),
-                                  btnCancelText: S.current.annuler,
-                                  btnCancelOnPress: () {},
-                                  btnOkText: S.current.confirme,
-                                  btnOkOnPress: () {
-                                    setState(() {
-                                      _restepiece =
-                                          double.parse(_resteControler.text);
-                                      _verssementpiece =
-                                          double.parse(_verssementControler.text);
-                                    });
-                                  })
-                                ..show();
+                              if(_net_a_payer > _piece.regler){
+                                AwesomeDialog(
+                                    context: context,
+                                    dialogType: DialogType.INFO,
+                                    animType: AnimType.BOTTOMSLIDE,
+                                    title: S.current.supp,
+                                    body: addVerssementdialogue(),
+                                    btnCancelText: S.current.annuler,
+                                    btnCancelOnPress: () {},
+                                    btnOkText: S.current.confirme,
+                                    btnOkOnPress: () {
+                                      setState(() {
+                                        _restepiece =
+                                            double.parse(_resteControler.text);
+                                        _verssementpiece =
+                                            double.parse(_verssementControler.text);
+                                      });
+                                    })
+                                  ..show();
+                              }else{
+                                Helpers.showFlushBar(
+                                    context, S.current.msg_versement_err);
+                              }
+
                             } else {
                               Helpers.showFlushBar(
                                   context, S.current.msg_select_art);
@@ -766,8 +772,7 @@ class _AddPiecePageState extends State<AddPiecePage>
                       Flexible(
                         flex: 6,
                         child: GestureDetector(
-                          onTap: editMode && !modification
-                              ? () {
+                          onTap: editMode ? () {
                                   chooseClientDialog();
                                 }
                               : null,
@@ -1555,6 +1560,7 @@ class _AddPiecePageState extends State<AddPiecePage>
             _piece.piece != PieceType.avoirClient &&
             _piece.piece != PieceType.retourFournisseur &&
             _piece.piece != PieceType.avoirFournisseur) {
+
           await addTresorie(_piece, transferer: false);
         }
 
@@ -2680,11 +2686,6 @@ class _AddPiecePageState extends State<AddPiecePage>
                           "${S.current.credit}\t ${Helpers.numberFormat(_selectedClient.credit)} ${_devise}",
                           style: pw.TextStyle(font: ttf))
                       : pw.SizedBox(),
-                  pw.Divider(height: 2),
-                  pw.SizedBox(height: 4),
-                  pw.Text("${S.current.msg_visite}",
-                      style: pw.TextStyle(
-                          fontWeight: pw.FontWeight.bold, font: ttf)),
                 ])),
             pw.SizedBox(width: 10),
             pw.Expanded(

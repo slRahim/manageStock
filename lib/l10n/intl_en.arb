@@ -414,7 +414,11 @@
 
   "non_stocke" : "< Min Qte",
   "msg_article_utilise" : "Product is already used you can't delete",
-  "ca" : "T.O"
+  "ca" : "T.O",
+
+  "msg_versement_err" : "The total is less than or equal to the amount already paid",
+  "msg_qte_zero" : "Please note that the available quantity is equal to zero",
+  "msg_qte_select_sup" : "Please note that the selected quantity is greater than the available quantity"
 
 
 }

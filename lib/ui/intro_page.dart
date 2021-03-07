@@ -1,9 +1,6 @@
 import 'dart:convert';
 import 'dart:typed_data';
 
-import 'package:currency_pickers/country.dart';
-import 'package:currency_pickers/currency_picker_dialog.dart';
-import 'package:currency_pickers/utils/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_phoenix/flutter_phoenix.dart';
@@ -11,6 +8,10 @@ import 'package:gestmob/Helpers/Helpers.dart';
 import 'package:gestmob/Helpers/QueryCtr.dart';
 import 'package:gestmob/Helpers/Statics.dart';
 import 'package:gestmob/Helpers/country_utils.dart';
+import 'package:gestmob/Helpers/curency/countries.dart';
+import 'package:gestmob/Helpers/curency/country.dart';
+import 'package:gestmob/Helpers/curency/currency_picker_dialog.dart';
+import 'package:gestmob/Helpers/curency/utils/utils.dart';
 import 'package:gestmob/models/MyParams.dart';
 import 'package:gestmob/models/Profile.dart';
 import 'package:introduction_screen/introduction_screen.dart';
@@ -20,8 +21,6 @@ import 'package:material_design_icons_flutter/material_design_icons_flutter.dart
 import 'package:esc_pos_utils/esc_pos_utils.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'dart:io';
-import 'package:currency_pickers/country.dart';
-import 'package:gestmob/Helpers/countries_list.dart';
 import 'package:gestmob/services/push_notifications.dart';
 
 class IntroPage extends StatefulWidget {
@@ -354,9 +353,11 @@ class _IntroPageState extends State<IntroPage> {
                               onChanged: (value) {
                                 if (!mounted) return;
                                 setState(() {
+                                  _selectedCountry = value;
                                   _selectedProvince = S.current.choix_province;
                                   _provinces = ["${S.current.choix_province}"];
-                                  _selectedCountry = value;
+                                  _cities = ["${S.current.choix_city}"];
+                                  _selectedCity = S.current.choix_city;
                                   getProvince();
                                   var country = countryList.where((element) => element.name == _selectedCountry).toList();
                                   _countryname = country.first.name ;
@@ -744,7 +745,7 @@ class _IntroPageState extends State<IntroPage> {
           "9:01",
           0,
           0,
-          country,
+          _countryname,
           _currencycode,
           "demo",
           DateTime.now(),
@@ -759,9 +760,9 @@ class _IntroPageState extends State<IntroPage> {
           5,
           _adresseControl.text,
           "_addressWeb",
-          "${city}",
-          "${province}",
-          "${_countryname}",
+          city,
+          province,
+          country,
           "_cp",
           _mobileControl.text,
           "_telephone2",

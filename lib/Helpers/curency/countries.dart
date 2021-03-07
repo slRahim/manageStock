@@ -1,4 +1,6 @@
-import 'package:currency_pickers/country.dart';
+
+import 'package:gestmob/Helpers/curency/country.dart';
+
 final List<Country> countryList = [
   Country(
     isoCode: "AF",
@@ -769,13 +771,6 @@ final List<Country> countryList = [
     currencyName: "British pound",
     name: "Isle of Man",
     iso3Code: "IMN",
-  ),
-  Country(
-    isoCode: "IL",
-    currencyCode: "ILS",
-    currencyName: "Israeli new shekel",
-    name: "Israel",
-    iso3Code: "ISR",
   ),
   Country(
     isoCode: "IT",

@@ -3844,6 +3844,36 @@ class S {
       args: [],
     );
   }
+
+  /// `The total is less than or equal to the amount already paid`
+  String get msg_versement_err {
+    return Intl.message(
+      'The total is less than or equal to the amount already paid',
+      name: 'msg_versement_err',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Please note that the available quantity is equal to zero`
+  String get msg_qte_zero {
+    return Intl.message(
+      'Please note that the available quantity is equal to zero',
+      name: 'msg_qte_zero',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Please note that the selected quantity is greater than the available quantity`
+  String get msg_qte_select_sup {
+    return Intl.message(
+      'Please note that the selected quantity is greater than the available quantity',
+      name: 'msg_qte_select_sup',
+      desc: '',
+      args: [],
+    );
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<S> {

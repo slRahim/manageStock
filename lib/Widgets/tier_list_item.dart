@@ -147,13 +147,13 @@ class _TierListItemState extends State<TierListItem> {
                         children: [
                           TextSpan(
                               text: "${S.current.mobile} : ",
-                              style: TextStyle(fontSize: 15,fontWeight: FontWeight.bold,color: Theme.of(context).primaryColorDark,)
+                              style: TextStyle(fontSize: 14,fontWeight: FontWeight.bold,color: Theme.of(context).primaryColorDark,)
                           ),
                           TextSpan(
                             text:"${widget.tier.mobile} ",
                             style: TextStyle(
                                 color: Theme.of(context).primaryColorDark,
-                                fontSize: 15.0),
+                                fontSize: 14),
                           ),
                         ]
                     ),
@@ -163,13 +163,13 @@ class _TierListItemState extends State<TierListItem> {
                         children: [
                           TextSpan(
                               text: "${S.current.chifre_affaire} : ",
-                              style: TextStyle(fontSize: 15,fontWeight: FontWeight.bold,color: Theme.of(context).primaryColorDark,)
+                              style: TextStyle(fontSize: 14,fontWeight: FontWeight.bold,color: Theme.of(context).primaryColorDark,)
                           ),
                           TextSpan(
                             text:"${Helpers.numberFormat(widget.tier.chiffre_affaires)} ${_devise}",
                             style: TextStyle(
                                 color: Theme.of(context).primaryColorDark,
-                                fontSize: 15.0),
+                                fontSize: 14),
                           ),
                         ]
                     ),
@@ -179,13 +179,13 @@ class _TierListItemState extends State<TierListItem> {
                         children: [
                           TextSpan(
                               text: "${S.current.adresse} : ",
-                              style: TextStyle(fontSize: 15 , fontWeight: FontWeight.bold,color: Theme.of(context).primaryColorDark,)
+                              style: TextStyle(fontSize: 14 , fontWeight: FontWeight.bold,color: Theme.of(context).primaryColorDark,)
                           ),
                           TextSpan(
                             text:"${widget.tier.adresse}",
                             style: TextStyle(
                                 color: Theme.of(context).primaryColorDark,
-                                fontSize: 15.0),
+                                fontSize: 14.0),
                           ),
                         ]
                     ),

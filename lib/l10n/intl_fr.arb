@@ -4,19 +4,19 @@
   "quitter": "Quitter",
   "aide": "Aide",
   "articles": "Articles",
-  "settings": "Paramétres",
-  "rapports": "Repports",
-  "tresories": "Tresories",
+  "settings": "Paramètres",
+  "rapports": "Rapports",
+  "tresories": "Trésorerie",
   "facture_achat" : "Facture d'achat",
   "facture_vente" : "Facture de vente",
-  "bon_reception" : "Bon de reception",
+  "bon_reception" : "Bon de réception",
   "fournisseur" : "Fournisseurs",
   "client" : "Clients",
   "bon_livraison" : "Bon de livraison",
   "commande_client" : "Commande Client",
   "devis" : "Devis",
   "tableau_bord" : "Tableau de Bord",
-  "accueil" : "Acceuil",
+  "accueil" : "Accueil",
 
   "avoir_client" : "Avoir client",
   "avoir_fournisseur": "Avoir fournisseur",
@@ -31,7 +31,7 @@
   "fiche": "Ma Fiche",
   "logo" : "Logo",
   "securite": "Securité",
-  "rs": "Raison Social",
+  "rs": "Raison Sociale",
   "activite" : "Activité",
   "adresse": "Adresse",
   "ville": "Ville",
@@ -122,7 +122,7 @@
   "reste": "Reste",
   "date" : "Date",
   "tarif" : "Tarif: ",
-  "verssement": "Verssement",
+  "verssement": "Versement",
   "total" : "Total",
   "confirme": "Confirmé",
   "choisir_action" : "Choisis une action",
@@ -223,7 +223,7 @@
   "timbre" : "Timbre",
   "fiche_art" : "Fiche Article",
 
-  "msg_quitter" : "Voullez vous quitter l'apllication...",
+  "msg_quitter" : "Voulez-vous quitter l'apllication ?",
   "msg_quitter1" : "Tapez retour une autre fois pour quitter",
 
   "msg_champs_obg" : "Veuillez remplir les champs obligatoire",
@@ -343,7 +343,7 @@
   "light_theme" : "Clair",
   "dark_them" : "Sombre",
   "sys_theme" : "Système",
-  "selec_pays" : "Choisir le pays",
+  "selec_pays" : "Choisissez votre pays",
 
   "abonnement" : "Passer au Premium",
   "msg_demo_option" : "Cette option n'est pas disponible pour la verssion évaluation",
@@ -359,8 +359,8 @@
   "start_date" : "Date du début",
   "end_date" : "Date de fin",
 
-  "choix_province" : "Choisir le département",
-  "choix_city" : "Choisir la ville",
+  "choix_province" : "Choisissez votre département",
+  "choix_city" : "Choisissez votre ville",
   "department" : "Département",
 
   "abonnement_title" : "Passer en Premium",
@@ -392,9 +392,9 @@
   "long_presse" : "LongPresse",
   "msg_long_presse" : "sur l'élément du tableau pour modifier, supprimer, ou ajouter un nouveau",
 
-  "demo" : "Verssion Démo",
-  "premium" : "Verssion Prémium",
-  "beta" : "Verssion Teste",
+  "demo" : "Version Démo",
+  "premium" : "Version Prémium",
+  "beta" : "Version Teste",
   "until" : "Jusqu'au",
 
   "msg_long_press_select" : "pour séléctionner l'élément",
@@ -406,7 +406,7 @@
 
   "service_comercial" : "Service Commercial",
   "service_technique" : "Service Technique",
-  "service_ticket" : "Signalé / Réserver un ticket",
+  "service_ticket" : "Signaler / Réserver un ticket",
   "get_ticket" : "Obtenir un ticket",
   "no_abonnement" : "Sans\nAbonnement",
   "no_element" : "Aucun élément trouvé",
@@ -414,7 +414,11 @@
 
   "non_stocke" : "< Qte min",
   "msg_article_utilise" : "Article associer à des piéces, vous ne pouvez pas supprimer",
-  "ca" : "C.A"
+  "ca" : "C.A",
+
+  "msg_versement_err" : "Le totale de la piece est infèrieure ou égale le montant déja verser",
+  "msg_qte_zero" : "Attention la quantité disponible égale à zero",
+  "msg_qte_select_sup" : "Attention la quantité séléctionné est supérieur à la quantité disponible"
 
 
 

@@ -164,7 +164,7 @@ class _ArticleListItemState extends State<ArticleListItem> {
                             SizedBox(width: 3,),
                             Text("${widget.article.designation}" ,
                                 style: TextStyle(
-                                    fontSize: 14.0,)
+                                    fontSize: 16.0,)
                               ),
                           ],
                         ),
@@ -179,7 +179,7 @@ class _ArticleListItemState extends State<ArticleListItem> {
                       SizedBox(width: 3,),
                       Text("${widget.article.ref}" ,
                           style: TextStyle(
-                            fontSize: 14.0,)
+                            fontSize: 16.0,)
                       ),
                     ],
                   )
@@ -209,18 +209,18 @@ class _ArticleListItemState extends State<ArticleListItem> {
                   (widget.article.ref != null)
                       ?Row(
                     children: [
-                      Icon(MdiIcons.pound,size: 14, color: Theme.of(context).primaryColorDark,),
+                      Icon(MdiIcons.pound,size: 16, color: Theme.of(context).primaryColorDark,),
                       SizedBox(width: 3,),
                       Text("${widget.article.ref}" ,
                           style: TextStyle(
-                            fontSize: 14.0,)
+                            fontSize: 16.0,)
                       ),
                     ],
                   )
                       : null,
                   Row(
                     children: [
-                      Icon(Icons.apps_outlined ,size: 14, color: Theme.of(context).primaryColorDark,),
+                      Icon(Icons.apps_outlined ,size: 16, color: Theme.of(context).primaryColorDark,),
                       SizedBox(width: 3,),
                       Text(
                         "${(widget.article.quantite - widget.article.cmdClient).toString()}",
