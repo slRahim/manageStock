@@ -21,15 +21,13 @@ import 'package:gestmob/models/Tresorie.dart';
 import 'package:gestmob/models/TresorieCategories.dart';
 import 'package:gestmob/ui/AddArticlePage.dart';
 import 'package:sqflite/sqflite.dart';
-
 import 'dart:async';
 import 'dart:io' as io;
 import 'dart:io';
-
 import 'package:path/path.dart';
 import 'package:path_provider/path_provider.dart';
-
 import 'Helpers.dart';
+import 'package:gestmob/models/Transformer.dart';
 
 class QueryCtr {
   SqlLiteDatabaseHelper _databaseHelper = SqlLiteDatabaseHelper();
@@ -555,6 +553,20 @@ class QueryCtr {
     }
 
     return null ;
+  }
+
+  Future<Transformer> getTransformer(item, String column) async {
+    Database dbClient = await _databaseHelper.db;
+    var res ;
+    if (column == "old"){
+       res = await dbClient.query(DbTablesNames.transformer , where: "Old_Piece_id = ?", whereArgs: [item.id]);
+    }else{
+       res = await dbClient.query(DbTablesNames.transformer , where: "New_Piece_id = ?", whereArgs: [item.id]);
+    }
+
+    Transformer transformer = new Transformer.fromMap(res.first);
+
+    return transformer ;
   }
 
   Future<dynamic> addItemToTable(String tableName, item) async {

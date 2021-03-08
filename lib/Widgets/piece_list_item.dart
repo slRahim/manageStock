@@ -359,7 +359,6 @@ class _PieceListItemState extends State<PieceListItem> {
             _visible = false ;
           });
         }
-
       },
       btnOkText: S.current.avec_tresorie,
       btnOkOnPress: () async{

@@ -141,13 +141,15 @@ class Helpers {
       case drawerItemExitId:
         exit(0);
         break;
-
       case homeItemParametresId:
         Navigator.of(context).pushNamed(
           RoutesKeys.settingsPage,
         ).then((value) => Phoenix.rebirth(context));
         break;
-
+      case drawerItemAchatId:
+        break;
+      case drawerItemVenteId:
+        break;
       default:
         BlocProvider.of<HomeCubit>(context).getHomeData(id);
         break;

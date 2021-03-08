@@ -70,7 +70,7 @@ class _PurchasePageState extends State<PurchasePage> {
     _subscription = purchaseUpdates.listen((purchases) async {
       _purchases.addAll(purchases);
       await retrieveoldPurchase();
-      await _verifyPurchase();
+      await _verifyPurchase(context);
     }, onDone: () async {
       await _subscription.cancel();
     });
@@ -143,14 +143,14 @@ class _PurchasePageState extends State<PurchasePage> {
                           child: Column(
                               children: products.data.map((item) {
                                    _selectedProduct = item.productID;
-                                   _verifyPurchase();
+                                   _verifyPurchase(context);
                             return Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 InkWell(
                                   onTap: () async {
                                     _selectedProduct = item.productID;
-                                    await _verifyPurchase();
+                                    await _verifyPurchase(context);
                                   },
                                   child: Container(
                                     padding: EdgeInsets.all(8),
@@ -310,7 +310,7 @@ class _PurchasePageState extends State<PurchasePage> {
 
   //*****************************************************************************************************************************************************************************
   //**************************************************************************acheté*********************************************************************************************
-  _verifyPurchase() async {
+  _verifyPurchase(context) async {
     PurchaseDetails purchase = _hasPurchased(_selectedProduct);
 
     if (purchase != null && purchase.status == PurchaseStatus.purchased) {
@@ -320,28 +320,25 @@ class _PurchasePageState extends State<PurchasePage> {
           _myParams.versionType= "premium" ;
           _myParams.codeAbonnement = "mensuel";
           _myParams.startDate = DateTime.fromMillisecondsSinceEpoch(purchase.billingClientPurchase.purchaseTime);
-          PushNotificationsManager.of(context).onMyParamsChange(_myParams);
           await _queryCtr.updateItemInDb(DbTablesNames.myparams, _myParams);
+          PushNotificationsManager.of(context).onMyParamsChange(_myParams);
           await retrieveoldPurchase();
-          Navigator.of(context).pop();
           break;
         case '121212':
           _myParams.versionType= "premium" ;
           _myParams.codeAbonnement = "mensuel";
           _myParams.startDate = DateTime.fromMillisecondsSinceEpoch(purchase.billingClientPurchase.purchaseTime);
-          PushNotificationsManager.of(context).onMyParamsChange(_myParams);
           await _queryCtr.updateItemInDb(DbTablesNames.myparams, _myParams);
+          PushNotificationsManager.of(context).onMyParamsChange(_myParams);
           await retrieveoldPurchase();
-          Navigator.of(context).pop();
           break;
         case '010101':
           _myParams.versionType= "premium" ;
           _myParams.codeAbonnement = "mensuel";
           _myParams.startDate = DateTime.fromMillisecondsSinceEpoch(purchase.billingClientPurchase.purchaseTime);
-          PushNotificationsManager.of(context).onMyParamsChange(_myParams);
           await _queryCtr.updateItemInDb(DbTablesNames.myparams, _myParams);
+          PushNotificationsManager.of(context).onMyParamsChange(_myParams);
           await retrieveoldPurchase();
-          Navigator.of(context).pop();
           break;
       }
     } else {

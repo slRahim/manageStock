@@ -122,11 +122,15 @@ class _AddPiecePageState extends State<AddPiecePage>
   bool directionRtl = false;
   DefaultPrinter defaultPrinter = new DefaultPrinter.init();
 
-   String feature1 = 'feature1';
-   String feature2 = 'feature2';
-   String feature3 = 'feature3';
-   String feature4 = 'feature4';
-   String feature12 = 'feature12';
+  String feature1 = 'feature1';
+  String feature2 = 'feature2';
+  String feature3 = 'feature3';
+  String feature4 = 'feature4';
+  String feature12 = 'feature12';
+
+  Piece _pieceFrom ;
+  Piece _pieceTo ;
+  Transformer _trasformers ;
 
   void initState() {
     super.initState();
@@ -172,6 +176,14 @@ class _AddPiecePageState extends State<AddPiecePage>
       editMode = false;
       modification = true;
       await setDataFromItem(widget.arguments);
+      if(_piece.etat == 1){
+        _trasformers = await _queryCtr.getTransformer(_piece,"old");
+        _pieceTo = await _queryCtr.getPieceById(_trasformers.newPieceId);
+      }
+      if(_piece.transformer == 1){
+        _trasformers = await _queryCtr.getTransformer(_piece,"new");
+        _pieceFrom = await _queryCtr.getPieceById(_trasformers.oldPieceId);
+      }
     } else {
       await setDataFromItem(null);
       await getNumPiece(widget.arguments);
@@ -258,8 +270,6 @@ class _AddPiecePageState extends State<AddPiecePage>
     });
   }
 
-
-
   //************************************************************************************************************************************
   // ***************************************** partie affichage et build *****************************************************************
   @override
@@ -275,7 +285,7 @@ class _AddPiecePageState extends State<AddPiecePage>
       }
     } else {
       if (editMode) {
-        appBarTitle = S.current.ajouter + Helpers.getPieceTitle(_piece.piece);
+        appBarTitle = Helpers.getPieceTitle(_piece.piece);
         _islisting = false;
       } else {
         appBarTitle = Helpers.getPieceTitle(_piece.piece);
@@ -310,10 +320,12 @@ class _AddPiecePageState extends State<AddPiecePage>
                   Navigator.pop(context),
                 }
             },
-            onEditPressed: () {
+            onEditPressed:(_piece.etat == 0)? () {
               setState(() {
                 editMode = true;
               });
+            }:(){
+              Helpers.showFlushBar(context, S.current.msg_no_edit_transformer);
             },
             onSavePressed: () async {
               if (_selectedItems.length > 0) {
@@ -692,6 +704,30 @@ class _AddPiecePageState extends State<AddPiecePage>
                 spacing: 10,
                 runSpacing: 10,
                 children: [
+                  (_piece.etat == 1)
+                      ?SingleChildScrollView(
+                        scrollDirection: Axis.horizontal,
+                        child: Row(
+                          children: [
+                              Icon(Icons.check_circle , size: 12, color: Colors.green,),
+                              SizedBox(width: 5,),
+                              Text("Piece Transformer à ${getPiecetype(_pieceTo)} ${_pieceTo.num_piece}", style:TextStyle(fontSize: 13))
+
+                          ],
+                        ),
+                      ):SizedBox(height: 0,),
+                  (_piece.transformer == 1)
+                      ?SingleChildScrollView(
+                        scrollDirection: Axis.horizontal,
+                        child: Row(
+                          children: [
+                            Icon(Icons.check_circle , size: 12, color: Colors.green,),
+                            SizedBox(width: 5,),
+                            Text("Piece from ${getPiecetype(_pieceFrom)} ${_pieceFrom.num_piece}" , style:TextStyle(fontSize: 13))
+
+                          ],
+                        ),
+                      ):SizedBox(height: 0,),
                   Row(
                     children: [
                       Flexible(
@@ -1836,17 +1872,13 @@ class _AddPiecePageState extends State<AddPiecePage>
                                   await transfererPiece(context, "toRetour");
                               Helpers.showFlushBar(context, msg);
                             },
-                            child:(  _piece.piece == PieceType.bonLivraison ||
-                                _piece.piece == PieceType.factureClient) ? Text(
-                              "${S.current.to_retour} ${S.current.client}",
-                              style:
-                                  TextStyle(color: Colors.white, fontSize: 16),
-                            ):Text(
-                              "${S.current.to_retour} ${S.current.fournisseur}",
-                              style:
-                              TextStyle(color: Colors.white, fontSize: 16),
-                            ),
                             color: Colors.redAccent,
+                            child: Text(
+                                  _textBtnTransfereRetour(),
+                                  style:
+                                    TextStyle(color: Colors.white, fontSize: 16),
+                                ),
+
                           ),
                         ),
                       ),
@@ -1855,6 +1887,26 @@ class _AddPiecePageState extends State<AddPiecePage>
                 ),
               ));
     });
+  }
+
+  String _textBtnTransfereRetour (){
+    switch(_piece.piece){
+      case (PieceType.bonLivraison):
+        return S.current.retour_client ;
+        break ;
+      case (PieceType.factureClient):
+        return S.current.avoir_client ;
+        break ;
+      case (PieceType.bonReception):
+        return S.current.retour_fournisseur ;
+        break ;
+      case (PieceType.factureFournisseur):
+        return S.current.avoir_fournisseur ;
+        break ;
+      default:
+        return 'test' ;
+        break ;
+    }
   }
 
   Future<String> transfererPiece(context, String to) async {
@@ -2102,7 +2154,7 @@ class _AddPiecePageState extends State<AddPiecePage>
       }
       ticket.hr(ch: '=');
 
-      input = "${S.current.n} ${getPiecetype()}";
+      input = "${S.current.n} ${getPiecetype(_piece)}";
       encArabic = await CharsetConverter.encode("ISO-8859-6",
           "${_piece.num_piece}: ${input.split('').reversed.join()}");
       ticket.textEncoded(encArabic,
@@ -2746,8 +2798,8 @@ class _AddPiecePageState extends State<AddPiecePage>
         DbTablesNames.defaultPrinter, defaultPrinter);
   }
 
-  String getPiecetype() {
-    switch (_piece.piece) {
+  String getPiecetype(item) {
+    switch (item.piece) {
       case "FP":
         return S.current.fp;
         break;

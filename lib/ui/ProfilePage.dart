@@ -231,7 +231,7 @@ class _ProfilePageState extends State<ProfilePage> with TickerProviderStateMixin
       }
     } else {
       if (editMode) {
-        appBarTitle =  S.current.profile_ajouter;
+        appBarTitle =  S.current.profile_titre;
       } else {
         appBarTitle =  S.current.profile_titre;
       }

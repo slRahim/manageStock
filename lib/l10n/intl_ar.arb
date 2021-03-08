@@ -144,7 +144,8 @@
   "montant": "المبلغ",
   "categorie" : "الفئة",
 
-  "article_titre" : "البضائع",
+  "article_titre" : "المنتج",
+  "artcile_titre_ajouter" : "إضافة منتج",
   "msg_designation" : "الرجاء إدخال ",
   "description": "وصف",
   "msg_entre_design" : "الرجاء إدخال إسم المنتج",
@@ -418,7 +419,8 @@
 
   "msg_versement_err" : "إجمالي الدفع أقل من أو يساوي المبلغ المدفوع بالفعل",
   "msg_qte_zero" : "يرجى الإنتباه أن الكمية المتاحة تساوي الصفر",
-  "msg_qte_select_sup" : "يرجى الإنتباه أن الكمية المحددة أكبر من الكمية المتاحة"
+  "msg_qte_select_sup" : "يرجى الإنتباه أن الكمية المحددة أكبر من الكمية المتاحة",
+  "msg_no_edit_transformer" : "لا يمكن التعديل على وصل تم تحويله"
 
 
 

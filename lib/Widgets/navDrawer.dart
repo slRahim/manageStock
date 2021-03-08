@@ -23,26 +23,35 @@ class NavDrawer extends  StatelessWidget {
   List<Widget> homeItemWidgetList;
   List<HomeItem> homeItemList = [
     homeItemAccueil,
-    homeItemTableauDeBord,
     homeItemArticles,
+    drawerItemVente,
+    drawerItemAchat,
     homeItemClients,
+    homeItemFournisseurs,
+    homeItemTresorerie,
+    homeItemTableauDeBord,
+    homeItemRapports,
+    homeItemParametres,
+    drawerItemExit
+  ];
+
+  List<HomeItem> venteItemList = [
     homeItemDevis,
     homeItemCommandeClient,
     homeItemBonDeLivraison,
     drawerItemRetourClient,
     homeItemFactureDeVente,
     drawerItemAvoirClient,
-    homeItemFournisseurs,
+  ] ;
+
+  List<HomeItem> achatItemList = [
     drawerItemBonDeCommande,
     homeItemBonDeReception,
     drawerItemRetourFournisseur,
     homeItemFactureDachat,
     drawerItemAvoirFournisseur,
-    homeItemTresorerie,
-    homeItemRapports,
-    homeItemParametres,
-    drawerItemExit
-  ];
+  ] ;
+
 
   @override
   Widget build(BuildContext context) {
@@ -130,6 +139,7 @@ class NavDrawer extends  StatelessWidget {
 
 
     homeItemList.forEach((data) => {
+
       homeItemWidgetList.add(getDrawerItemWidget(context, data)),
       homeItemWidgetList.add(
         new Divider(),
@@ -141,30 +151,82 @@ class NavDrawer extends  StatelessWidget {
 
 //the drawer item
   Widget getDrawerItemWidget(context, data) {
-    return ListTile(
-      dense: true,
-      leading: iconsSet(data.id, 20),
-      title: Text(
-        data.title,
-        style: TextStyle(color: Colors.white, fontSize: 15),
-      ),
-      onTap: () {
-        print(data.title);
-        if(data.id != homeItemParametres.id){
-          Navigator.of(context).pop();
-        }
-        Helpers.handleIdClick(context, data.id);
-      },
-      trailing: (Helpers.isDirectionRTL(context))
-          ? Icon(
-        Icons.keyboard_arrow_left,
-        color: Colors.white,
-      )
-          : Icon(
-        Icons.keyboard_arrow_right,
-        color: Colors.white,
-      ),
-    );
+    if(data.id == drawerItemVente.id || data.id == drawerItemAchat.id){
+      return ExpansionTile(
+        leading: iconsSet(data.id, 20),
+        title: Text(
+          data.title,
+          style: TextStyle(color: Colors.white, fontSize: 15),
+        ),
+        trailing: (Helpers.isDirectionRTL(context))
+            ? Icon(
+          Icons.keyboard_arrow_left,
+          color: Colors.white,
+        )
+            : Icon(
+          Icons.keyboard_arrow_right,
+          color: Colors.white,
+        ),
+        children: (data.id == drawerItemVente.id)
+          ?[
+            for (var e in venteItemList)
+              Padding(
+                padding:  EdgeInsetsDirectional.only(start: 20),
+                child: ListTile(
+                  leading: iconsSet(e.id, 20),
+                  title: Text(
+                    e.title,
+                    style: TextStyle(color: Colors.white, fontSize: 15),
+                  ),
+                  onTap: () {
+                    print(e.title);
+                    if(e.id != homeItemParametres.id){
+                      Navigator.of(context).pop();
+                    }
+                    Helpers.handleIdClick(context, e.id);
+                  },
+                ),
+              )
+          ]
+          :[
+              for (var e in achatItemList)
+                Padding(
+                  padding:  EdgeInsetsDirectional.only(start: 20),
+                  child: ListTile(
+                    leading: iconsSet(e.id, 20),
+                    title: Text(
+                      e.title,
+                      style: TextStyle(color: Colors.white, fontSize: 15),
+                    ),
+                    onTap: () {
+                      print(e.title);
+                      if(e.id != homeItemParametres.id){
+                        Navigator.of(context).pop();
+                      }
+                      Helpers.handleIdClick(context, e.id);
+                    },
+                  ),
+                )
+          ],
+      );
+    }else{
+      return ListTile(
+        dense: true,
+        leading: iconsSet(data.id, 20),
+        title: Text(
+          data.title,
+          style: TextStyle(color: Colors.white, fontSize: 15),
+        ),
+        onTap: () {
+          print(data.title);
+          if(data.id != homeItemParametres.id){
+            Navigator.of(context).pop();
+          }
+          Helpers.handleIdClick(context, data.id);
+        },
+      );
+    }
+
   }
 
   String getTranslateVersion(){

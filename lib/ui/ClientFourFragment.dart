@@ -235,7 +235,7 @@ class _ClientFourFragmentState extends State<ClientFourFragment> {
         appBar: SearchBar(
           searchController: searchController,
           mainContext: context,
-          title: widget.clientFourn == 0? S.current.client_titre : S.current.fournisseur_titre,
+          title: widget.clientFourn == 0? S.current.client : S.current.fournisseur,
           isFilterOn: isFilterOn,
           onSearchChanged: (String search) => _dataSource.updateSearchTerm(search),
           onFilterPressed: () async {

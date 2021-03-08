@@ -224,13 +224,13 @@ class _AddTresoriePageState extends State<AddTresoriePage>
       if (editMode) {
         appBarTitle = S.current.modification_titre;
       } else {
-        appBarTitle = S.current.verssement;
+        appBarTitle = S.current.tresorie_titre;
       }
     } else {
       if (editMode) {
-        appBarTitle = "${S.current.ajouter} ${S.current.verssement}";
+        appBarTitle = "${S.current.tresorie_titre}";
       } else {
-        appBarTitle = S.current.verssement;
+        appBarTitle = S.current.tresorie_titre;
       }
     }
 

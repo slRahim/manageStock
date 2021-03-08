@@ -230,7 +230,7 @@ class _AddTierPageState extends State<AddTierPage>
         if(_clientFourn == 0){
           appBarTitle = S.current.client_titre;
         } else if(_clientFourn == 1){
-          appBarTitle = S.current.client_titre + S.current.fournisseur_titre;
+          appBarTitle = S.current.client_four;
         } else{
           appBarTitle = S.current.fournisseur_titre;
         }
@@ -238,17 +238,17 @@ class _AddTierPageState extends State<AddTierPage>
     } else {
       if (editMode) {
         if(_clientFourn == 0){
-          appBarTitle = "${S.current.ajouter} ${S.current.client_titre}";
+          appBarTitle = "${S.current.client_titre}";
         } else{
-          appBarTitle ="${S.current.ajouter} ${S.current.fournisseur_titre}";
+          appBarTitle ="${S.current.fournisseur_titre}";
         }
       } else {
         if(_clientFourn == 0){
           appBarTitle = S.current.client_titre;
         } else if(_clientFourn == 1){
-          appBarTitle = S.current.client_titre + S.current.fournisseur_titre;;
+          appBarTitle = S.current.client_four;
         } else{
-          appBarTitle = S.current.client_titre;
+          appBarTitle = S.current.fournisseur_titre;
         }
       }
     }

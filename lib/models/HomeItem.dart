@@ -27,6 +27,8 @@ const String drawerItemAvoirFournisseurId = "drawerItemAvoirFournisseurId";
 const String drawerItemBonDeCommandeId = "drawerItemBonDeCommandeId";
 const String drawerItemExitId = "drawerItemExitId";
 const String drawerItemPurchaseId = "drawerItemPurchaseId";
+const String drawerItemVenteId = "drawerItemVenteId";
+const String drawerItemAchatId = "drawerItemAchatId";
 
 class HomeItem {
   String id;
@@ -36,20 +38,16 @@ class HomeItem {
   HomeItem({this.id, this.title, this.img,this.active});
 }
 
-
-
 HomeItem homeItemAccueil = new HomeItem(
     id: homeItemAccueilId,
     title: S.current.accueil,
     img: "assets/dashboard.png",
     active: true);
-
 HomeItem homeItemTableauDeBord = new HomeItem(
     id: homeItemTableauDeBordId,
     title: S.current.tableau_bord,
     img: "assets/dashboard.png",
     active: true);
-
 HomeItem homeItemArticles = new HomeItem(
     id: homeItemArticlesId,
     title: S.current.articles,
@@ -104,76 +102,75 @@ HomeItem homeItemFactureDachat = new HomeItem(
     img: "assets/factureAchat.png",
     active: true
 );
-
 HomeItem homeItemTresorerie = new HomeItem(
     id: homeItemTresorerieId,
     title: S.current.tresories,
     img: "assets/Tresorerie.png",
     active: true
 );
-
 HomeItem homeItemRapports = new HomeItem(
     id: homeItemRapportsId,
     title: S.current.rapports,
     img: "assets/rapport.png",
     active: true
 );
-
-
 HomeItem homeItemParametres = new HomeItem(
     id: homeItemParametresId,
     title: S.current.settings,
     img: "assets/setting.png",
     active: true
 );
-
-
 HomeItem drawerItemRetourClient = new HomeItem(
     id: drawerItemRetourClientId,
     title:S.current.retour_client,
     img: "assets/setting.png",
     active: true
 );
-
 HomeItem drawerItemRetourFournisseur = new HomeItem(
     id: drawerItemRetourFournisseurId,
     title: S.current.retour_fournisseur,
     img: "assets/setting.png",
     active: true
 );
-
 HomeItem drawerItemAvoirClient = new HomeItem(
     id: drawerItemAvoirClientId,
     title: S.current.avoir_client,
     img: "assets/setting.png",
     active: true
 );
-
 HomeItem drawerItemAvoirFournisseur = new HomeItem(
     id: drawerItemAvoirFournisseurId,
     title:S.current.avoir_fournisseur,
     img: "assets/setting.png",
     active: true
 );
-
 HomeItem drawerItemBonDeCommande = new HomeItem(
     id: drawerItemBonDeCommandeId,
     title:S.current.bon_commande,
     img: "assets/setting.png",
     active: true
 );
-
-
 HomeItem drawerItemExit = new HomeItem(
     id: drawerItemExitId,
     title: S.current.quitter,
     img: "assets/setting.png",
     active: true
 );
-
 HomeItem drawerItemPurchase= new HomeItem(
     id: drawerItemPurchaseId,
     title:S.current.abonnement,
+    img: "assets/setting.png",
+    active: true
+);
+HomeItem drawerItemVente= new HomeItem(
+    id: drawerItemVenteId,
+    title:S.current.vente,
+    img: "assets/setting.png",
+    active: true
+);
+HomeItem drawerItemAchat= new HomeItem(
+    id: drawerItemAchatId,
+    title:S.current.achat,
     img: "assets/setting.png",
     active: true
 );
@@ -204,7 +201,7 @@ Widget iconsSet(String itemId, double iconSize){
       break;
 
     case homeItemTableauDeBordId:
-      return Icon(Icons.developer_board,size: iconSize,color: Colors.white,);
+      return Icon(Icons.insert_chart_outlined,size: iconSize,color: Colors.white,);
       break;
 
       case homeItemAccueilId:
@@ -265,6 +262,14 @@ Widget iconsSet(String itemId, double iconSize){
 
     case drawerItemPurchaseId:
       return Icon(Icons.star_purple500_outlined ,size: 35,color: Colors.yellow[700],);
+
+    case drawerItemVenteId:
+      return Icon(MdiIcons.basketUnfill,size: iconSize,color: Colors.white,);
+      break;
+
+    case drawerItemAchatId:
+      return Icon(MdiIcons.basketFill,size: iconSize,color: Colors.white,);
+      break;
 
     default:
       return Icon(Icons.assignment,size: iconSize,color: Colors.white,);

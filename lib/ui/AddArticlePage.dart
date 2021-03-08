@@ -206,7 +206,7 @@ class _AddArticlePageState extends State<AddArticlePage>
       }
     } else {
       if (editMode) {
-        appBarTitle = "${S.current.ajouter} ${S.current.article_titre}";
+        appBarTitle = "${S.current.artcile_titre_ajouter}";
       } else {
         appBarTitle = S.current.article_titre;
       }

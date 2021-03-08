@@ -950,16 +950,6 @@ class SqlLiteDatabaseHelper {
                SET  Credit = (Solde_depart + Chiffre_affaires) - Regler 
              WHERE id = OLD.Tier_id;
              
-             UPDATE Tiers
-               SET Chiffre_affaires = (Select Sum(Net_a_payer) From Pieces where Tier_id = NEW.Tier_id AND Mov = 1 AND Piece <> "CC")
-             WHERE id = NEW.Tier_id;
-             UPDATE Tiers
-                SET Regler = (SELECT SUM(Montant) FROM Tresories WHERE Tier_id = New.Tier_id AND Mov = 1)
-             WHERE id = NEW.Tier_id ;
-             UPDATE Tiers
-               SET  Credit = (Solde_depart + Chiffre_affaires) - Regler 
-             WHERE id = NEW.Tier_id;
-            
         END;
      ''');
 

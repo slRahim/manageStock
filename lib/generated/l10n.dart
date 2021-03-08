@@ -705,20 +705,20 @@ class S {
     );
   }
 
-  /// `Customer (s)`
+  /// `Customer`
   String get client_titre {
     return Intl.message(
-      'Customer (s)',
+      'Customer',
       name: 'client_titre',
       desc: '',
       args: [],
     );
   }
 
-  /// `Provider (s)`
+  /// `Provider`
   String get fournisseur_titre {
     return Intl.message(
-      'Provider (s)',
+      'Provider',
       name: 'fournisseur_titre',
       desc: '',
       args: [],
@@ -1395,11 +1395,21 @@ class S {
     );
   }
 
-  /// `Item (s)`
+  /// `Product`
   String get article_titre {
     return Intl.message(
-      'Item (s)',
+      'Product',
       name: 'article_titre',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Add a product`
+  String get artcile_titre_ajouter {
+    return Intl.message(
+      'Add a product',
+      name: 'artcile_titre_ajouter',
       desc: '',
       args: [],
     );
@@ -3870,6 +3880,16 @@ class S {
     return Intl.message(
       'Please note that the selected quantity is greater than the available quantity',
       name: 'msg_qte_select_sup',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `You can't edit transformed invoice`
+  String get msg_no_edit_transformer {
+    return Intl.message(
+      'You can\'t edit transformed invoice',
+      name: 'msg_no_edit_transformer',
       desc: '',
       args: [],
     );
