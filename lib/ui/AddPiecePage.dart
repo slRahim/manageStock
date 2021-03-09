@@ -168,7 +168,6 @@ class _AddPiecePageState extends State<AddPiecePage>
   Future<bool> futureInitState() async {
     _tarificationDropdownItems =
         utils.buildDropTarificationTier(_tarificationItems);
-    _selectedTarification = _tarificationItems[0];
 
     if (widget.arguments is Piece &&
         widget.arguments.id != null &&
@@ -184,8 +183,10 @@ class _AddPiecePageState extends State<AddPiecePage>
         _trasformers = await _queryCtr.getTransformer(_piece,"new");
         _pieceFrom = await _queryCtr.getPieceById(_trasformers.oldPieceId);
       }
+      _selectedTarification = _piece.tarification;
     } else {
       await setDataFromItem(null);
+      _selectedTarification = _selectedClient.tarification;
       await getNumPiece(widget.arguments);
       _piece.date = DateTime.now();
       _dateControl.text = Helpers.dateToText(DateTime.now());
@@ -953,8 +954,7 @@ class _AddPiecePageState extends State<AddPiecePage>
               _piece.tier_id = _selectedClient.id;
               _piece.raisonSociale = _selectedClient.raisonSociale;
               _clientControl.text = _selectedClient.raisonSociale;
-              _selectedTarification =
-                  _tarificationItems[_selectedClient.tarification];
+              _selectedTarification = _selectedClient.tarification;
             });
           },
         );

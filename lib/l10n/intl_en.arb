@@ -93,7 +93,7 @@
   "msg_no_qr" : "No QrCode was associate to the tier ",
   "msg_gen_qr" : "Please add at least raison social et mobile",
   "masquer" : "Hide",
-  "tarification" : "Pricing: ",
+  "tarification" : "Price alternative",
   "msg_fam_ajout": "Familly added",
   "msg_ajout_item" : "Element has been added successfully",
   "msg_update_item" : "Element has been updated successfully",
@@ -420,7 +420,10 @@
   "msg_versement_err" : "The total is less than or equal to the amount already paid",
   "msg_qte_zero" : "Please note that the available quantity is equal to zero",
   "msg_qte_select_sup" : "Please note that the selected quantity is greater than the available quantity",
-  "msg_no_edit_transformer" : "You can't edit transformed invoice"
+  "msg_no_edit_transformer" : "You can't edit transformed invoice",
+
+  "tarif_s" : "Price (s)",
+  "titre_dialog_tarification" : "Number of prices to use:"
 
 
 }

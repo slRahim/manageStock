@@ -19,6 +19,7 @@ import 'package:gestmob/models/Tiers.dart';
 import 'package:gestmob/models/TiersFamille.dart';
 import 'package:gestmob/search/items_sliver_list.dart';
 import 'package:gestmob/search/sliver_list_data_source.dart';
+import 'package:gestmob/services/push_notifications.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:gestmob/Widgets/utils.dart' as utils;
 import 'package:map_launcher/map_launcher.dart';
@@ -1068,6 +1069,7 @@ class _ProfilePageState extends State<ProfilePage> with TickerProviderStateMixin
         var item = await makeItem();
         id = await _queryCtr.updateItemInDb(DbTablesNames.profile, item);
         if (id > -1) {
+          PushNotificationsManager.of(context).onProfileChange(item);
           arguments = item;
           arguments.id = id;
           message = S.current.msg_update_item;
@@ -1078,6 +1080,7 @@ class _ProfilePageState extends State<ProfilePage> with TickerProviderStateMixin
         var item = await makeItem();
         id = await _queryCtr.addItemToTable(DbTablesNames.profile, item);
         if (id > -1) {
+          PushNotificationsManager.of(context).onProfileChange(item);
           arguments = item;
           arguments.id = id;
           message = S.current.msg_ajout_item;

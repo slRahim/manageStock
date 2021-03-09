@@ -94,7 +94,7 @@
   "msg_no_qr" : "Pas de QRCode associer au tier",
   "msg_gen_qr" : "Veulliez determiner au moins RS et mobile",
   "masquer" : "Masquer",
-  "tarification" : "Tarification: ",
+  "tarification" : "Nombre de tarif",
   "msg_fam_ajout": "Famille ajoutée",
   "msg_ajout_item" : "L'élément a bien été ajouter",
   "msg_update_item" : "Element a bien été modifier",
@@ -278,7 +278,7 @@
   "ev_sat" : "Chaque Samedi",
   "msg_upd_param" : "Paramétres ont bien été modifier",
   "msg_err_upd_param" : "Ereure à la modifications des paramétres",
-  "use" : "utiliser",
+  "use" : "utilisé",
   "details" : "Détails",
   "marge" : "Marge",
   "msg_piece_transfo" : "C'est une piece transformer",
@@ -420,7 +420,10 @@
   "msg_versement_err" : "Le totale de la piece est infèrieure ou égale le montant déja verser",
   "msg_qte_zero" : "Attention la quantité disponible égale à zero",
   "msg_qte_select_sup" : "Attention la quantité séléctionné est supérieur à la quantité disponible",
-  "msg_no_edit_transformer" : "La piece transformer ne peut pas étre modifier"
+  "msg_no_edit_transformer" : "La piece transformer ne peut pas étre modifier",
+
+  "tarif_s" : "Tarif (s)",
+  "titre_dialog_tarification" : "Nombre de tarif à utiliser :"
 
 
 

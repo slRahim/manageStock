@@ -195,7 +195,7 @@ class _AddTierPageState extends State<AddTierPage>
     _creditControl.text = item.credit.toString();
     _selectedFamille = _familleItems[item.id_famille];
     _selectedStatut = Statics.statutItems[item.statut];
-    _selectedTarification = _tarificationItems[item.tarification];
+    _selectedTarification = item.tarification;
     _controlBloquer = item.bloquer ;
   }
 
@@ -1295,7 +1295,7 @@ class _AddTierPageState extends State<AddTierPage>
     }
     item.id_famille = _familleItems.indexOf(_selectedFamille);
     item.statut = Statics.statutItems.indexOf(_selectedStatut);
-    item.tarification = _tarificationItems.indexOf(_selectedTarification);
+    item.tarification = _selectedTarification;
     item.bloquer = _controlBloquer;
 
     return item;

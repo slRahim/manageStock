@@ -13,6 +13,7 @@ import 'package:gestmob/models/HomeItem.dart';
 import 'package:gestmob/models/MyParams.dart';
 import 'package:gestmob/search/search_input_sliver.dart';
 import 'package:gestmob/services/local_notification.dart';
+import 'package:gestmob/services/push_notifications.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 import 'package:intl/intl.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
@@ -593,10 +594,13 @@ class _SettingsPageState extends State<SettingsPage> {
                 child: ListView(
                   controller: _controller,
                   children: [
+                    SizedBox(height: 20,),
+                    Text(S.current.titre_dialog_tarification,textAlign: TextAlign.center, style: TextStyle(fontSize: 18),),
+                    SizedBox(height: 5,),
                     RadioListTile(
                       value: Statics.tarificationItems[0],
                       groupValue: _tarification,
-                      title: Text('${S.current.tarif} 1'),
+                      title: Text('1 ${S.current.tarif_s}'),
                       onChanged: (value) {
                         setState(() {
                           _tarification = value;
@@ -606,7 +610,7 @@ class _SettingsPageState extends State<SettingsPage> {
                     RadioListTile(
                       value: Statics.tarificationItems[1],
                       groupValue: _tarification,
-                      title: Text('${S.current.tarif} 2'),
+                      title: Text('2 ${S.current.tarif_s}'),
                       onChanged: (value) {
                         setState(() {
                           _tarification = value;
@@ -616,7 +620,7 @@ class _SettingsPageState extends State<SettingsPage> {
                     RadioListTile(
                       value: Statics.tarificationItems[2],
                       groupValue: _tarification,
-                      title: Text('${S.current.tarif} 3'),
+                      title: Text('3 ${S.current.tarif_s}'),
                       onChanged: (value) {
                         setState(() {
                           _tarification = value;
@@ -909,6 +913,7 @@ class _SettingsPageState extends State<SettingsPage> {
     // await showNotification();
     var message = "";
     if (id > -1) {
+      PushNotificationsManager.of(context).onMyParamsChange(_myParams);
       message = "${S.current.msg_upd_param}";
     } else {
       message = "${S.current.msg_err_upd_param}";

@@ -935,10 +935,10 @@ class S {
     );
   }
 
-  /// `Pricing: `
+  /// `Price alternative`
   String get tarification {
     return Intl.message(
-      'Pricing: ',
+      'Price alternative',
       name: 'tarification',
       desc: '',
       args: [],
@@ -3890,6 +3890,26 @@ class S {
     return Intl.message(
       'You can\'t edit transformed invoice',
       name: 'msg_no_edit_transformer',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Price (s)`
+  String get tarif_s {
+    return Intl.message(
+      'Price (s)',
+      name: 'tarif_s',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Number of prices to use:`
+  String get titre_dialog_tarification {
+    return Intl.message(
+      'Number of prices to use:',
+      name: 'titre_dialog_tarification',
       desc: '',
       args: [],
     );

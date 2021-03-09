@@ -1273,11 +1273,11 @@ class SqlLiteDatabaseHelper {
     batch.rawInsert("INSERT INTO MyParams VALUES(1,2,0,0,1,1,'80',1,'9:01',0,0,'United States of America','USD' , 'demo' , 0 , 'mensuel')");
 
     Uint8List image = await Helpers.getDefaultImageUint8List(from: "tier");
-    Tiers tier0 = new Tiers(image ,"Client Passagé", null, 0, 0, 0, "adresse", "ville", "telephone", " ", "fax", "email", 0.0, 0, 0, false);
+    Tiers tier0 = new Tiers(image ,"Client Passagé", null, 0, 0, 1, "adresse", "ville", "telephone", " ", "fax", "email", 0.0, 0, 0, false);
     tier0.clientFour = 0 ;
     batch.insert(DbTablesNames.tiers, tier0.toMap());
 
-    Tiers tier2 = new Tiers(image,"Fournisseur Passagé", null, 0, 0, 0, "adresse", "ville", "telephone", " ", "fax", "email", 0.0, 0, 0, false);
+    Tiers tier2 = new Tiers(image,"Fournisseur Passagé", null, 0, 0, 1, "adresse", "ville", "telephone", " ", "fax", "email", 0.0, 0, 0, false);
     tier2.clientFour = 2 ;
     batch.insert(DbTablesNames.tiers, tier2.toMap());
 
