@@ -42,7 +42,8 @@ class _ArticleListItemSelectedState extends State<ArticleListItemSelected> {
         isListing: widget.fromListing,
         onDismiss: (direction) {
           if(widget.onItemSelected != null){
-            selectThisItem();
+            widget.article.selectedQuantite = -1;
+            widget.onItemSelected(widget.article);
           }
         },
         onTap: () async {
@@ -142,6 +143,9 @@ class _ArticleListItemSelectedState extends State<ArticleListItemSelected> {
                       child: TextField(
                         controller: _quntiteControler,
                         keyboardType: TextInputType.number,
+                        onTap: () =>{
+                          _quntiteControler.selection = TextSelection(baseOffset: 0, extentOffset: _quntiteControler.value.text.length),
+                        },
                         decoration: InputDecoration(
                           errorText: _validateQteError?? null,
                           prefixIcon: Icon(
@@ -180,9 +184,9 @@ class _ArticleListItemSelectedState extends State<ArticleListItemSelected> {
                                     _quntiteControler.text = _qte.toString();
                                   },
                                   elevation: 2.0,
-                                  fillColor: Colors.redAccent,
+                                  fillColor: Colors.red[600],
                                   child: Icon(
-                                    Icons.remove,
+                                    Icons.remove,color: Colors.white,
                                   ),
                                   padding: EdgeInsets.all(15.0),
                                   shape: CircleBorder(),
@@ -193,9 +197,9 @@ class _ArticleListItemSelectedState extends State<ArticleListItemSelected> {
                                     _quntiteControler.text = _qte.toString();
                                   },
                                   elevation: 2.0,
-                                  fillColor: Colors.greenAccent,
+                                  fillColor: Colors.greenAccent[700],
                                   child: Icon(
-                                    Icons.add,
+                                    Icons.add,color: Colors.white,
                                   ),
                                   padding: EdgeInsets.all(15.0),
                                   shape: CircleBorder(),
@@ -208,6 +212,9 @@ class _ArticleListItemSelectedState extends State<ArticleListItemSelected> {
                               child: TextField(
                                 controller: _priceControler,
                                 keyboardType: TextInputType.number,
+                                onTap: () =>{
+                                  _priceControler.selection = TextSelection(baseOffset: 0, extentOffset: _priceControler.value.text.length),
+                                },
                                 decoration: InputDecoration(
                                   errorText: _validatePriceError?? null,
                                   prefixIcon: Icon(
@@ -236,15 +243,13 @@ class _ArticleListItemSelectedState extends State<ArticleListItemSelected> {
                                 RaisedButton(
                                   onPressed: ()  {
                                     _quntiteControler.text = "0";
-                                    widget.article.selectedQuantite = -1;
-                                    widget.onItemSelected(widget.article);
                                     Navigator.pop(context);
                                   },
                                   child: Text(
                                     S.current.annuler,
                                     style: TextStyle(color: Colors.white),
                                   ),
-                                  color: Colors.redAccent,
+                                  color: Colors.red[600],
                                 ),
                                 SizedBox(width: 10),
                                 RaisedButton(
@@ -283,7 +288,7 @@ class _ArticleListItemSelectedState extends State<ArticleListItemSelected> {
                                     S.current.confirme,
                                     style: TextStyle(color: Colors.white),
                                   ),
-                                  color: Colors.green,
+                                  color: Colors.greenAccent[700],
                                 ),
                               ],
                             ),

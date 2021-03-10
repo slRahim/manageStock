@@ -770,7 +770,9 @@ class QueryCtr {
     var dbClient = await _databaseHelper.db;
      String query="" ;
      int dateStart = start.millisecondsSinceEpoch ;
-     int dateEnd = end.millisecondsSinceEpoch ;
+     int dateEnd =end.millisecondsSinceEpoch +89940000 ;
+
+
      switch(rapport){
        case 0 :
          query = """
@@ -833,7 +835,8 @@ class QueryCtr {
     var dbClient = await _databaseHelper.db;
     String query="" ;
     int dateStart = start.millisecondsSinceEpoch ;
-    int dateEnd = end.millisecondsSinceEpoch ;
+    int dateEnd =end.millisecondsSinceEpoch +89940000 ;
+
     switch(rapport){
       case 0 :
         query = """
@@ -955,7 +958,9 @@ class QueryCtr {
     var dbClient = await _databaseHelper.db;
     String query="" ;
     int dateStart = start.millisecondsSinceEpoch ;
-    int dateEnd = end.millisecondsSinceEpoch ;
+    int dateEnd =end.millisecondsSinceEpoch +89940000 ;
+
+
     switch(rapport){
       case 0 :
         query = """

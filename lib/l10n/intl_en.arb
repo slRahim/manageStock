@@ -398,7 +398,7 @@
   "beta" : "Test Version",
   "until" : "Until",
 
-  "msg_long_press_select" : "to select the element",
+  "msg_long_press_select" : "to deselect the element",
   "tap_element" : "Tap",
   "msg_tap" : "on the element to edit quantity",
   "support" : "Support",
@@ -423,7 +423,11 @@
   "msg_no_edit_transformer" : "You can't edit transformed invoice",
 
   "tarif_s" : "Price (s)",
-  "titre_dialog_tarification" : "Number of prices to use:"
+  "titre_dialog_tarification" : "Number of prices to use:",
+  "msg_piece_transformer_to" : "Item transform to",
+  "msg_piece_transformer_from" : "Item from",
+  "lan_print" : "Print A4/A5",
+  "export_pdf" : "Export as pdf"
 
 
 }

@@ -3695,10 +3695,10 @@ class S {
     );
   }
 
-  /// `to select the element`
+  /// `to deselect the element`
   String get msg_long_press_select {
     return Intl.message(
-      'to select the element',
+      'to deselect the element',
       name: 'msg_long_press_select',
       desc: '',
       args: [],
@@ -3910,6 +3910,46 @@ class S {
     return Intl.message(
       'Number of prices to use:',
       name: 'titre_dialog_tarification',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Item transform to`
+  String get msg_piece_transformer_to {
+    return Intl.message(
+      'Item transform to',
+      name: 'msg_piece_transformer_to',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Item from`
+  String get msg_piece_transformer_from {
+    return Intl.message(
+      'Item from',
+      name: 'msg_piece_transformer_from',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Print A4/A5`
+  String get lan_print {
+    return Intl.message(
+      'Print A4/A5',
+      name: 'lan_print',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Export as pdf`
+  String get export_pdf {
+    return Intl.message(
+      'Export as pdf',
+      name: 'export_pdf',
       desc: '',
       args: [],
     );

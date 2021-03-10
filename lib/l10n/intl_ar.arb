@@ -398,7 +398,7 @@
   "beta" : "نسخة بيتا",
   "until" : "إلى",
 
-  "msg_long_press_select" : "لتحديد العنصر",
+  "msg_long_press_select" : "لحذف العنصر",
   "tap_element" : "إضغط",
   "msg_tap" : "على العنصر لتغيير الكمية",
   "support" : "الدعم",
@@ -423,7 +423,11 @@
   "msg_no_edit_transformer" : "لا يمكن التعديل على وصل تم تحويله",
 
   "tarif_s" : "سعر",
-  "titre_dialog_tarification" : "عدد الأسعار المستخدمة:"
+  "titre_dialog_tarification" : "عدد الأسعار المستخدمة:",
+  "msg_piece_transformer_to" : "عنصر محول الى",
+  "msg_piece_transformer_from" : "عنصر محول من",
+  "lan_print" : "طباعة A4/A5",
+  "export_pdf" : "مشاركة pdf"
 
 
 

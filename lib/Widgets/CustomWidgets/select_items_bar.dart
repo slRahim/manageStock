@@ -12,8 +12,10 @@ class SelectItemsBar extends StatefulWidget with PreferredSizeWidget{
   final int itemsCount;
   final VoidCallback onConfirm;
   final VoidCallback onCancel;
+  final Function(String search) onSearchChanged;
+  final TextEditingController searchController;
 
-  const SelectItemsBar({Key key, this.itemsCount, this.onConfirm, this.onCancel}) : super(key: key);
+  const SelectItemsBar({Key key, this.itemsCount, this.onConfirm, this.onCancel,this.onSearchChanged, this.searchController}) : super(key: key);
 
 
   @override
@@ -27,6 +29,8 @@ class SelectItemsBar extends StatefulWidget with PreferredSizeWidget{
 }
 
 class SelectItemsBarState extends State<SelectItemsBar>{
+  bool isSearching = false;
+
   @override
   Widget build(BuildContext context) {
     if(widget.itemsCount <= 0){
@@ -39,7 +43,7 @@ class SelectItemsBarState extends State<SelectItemsBar>{
       ),
       automaticallyImplyLeading: false,
       titleSpacing: 0,
-      title:  Text(widget.itemsCount.toString(), style: TextStyle(color: Colors.white)),
+      title: Text(widget.itemsCount.toString(), style: TextStyle(color: Colors.white)),
       backgroundColor: Colors.black,
       centerTitle: true,
       actions: [

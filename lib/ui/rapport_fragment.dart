@@ -87,11 +87,12 @@ class _RapportState extends State<Rapport> {
 
     _subDropdownItems = _venteDropdownItems;
     _selectedSubItem = Statics.rapportVenteItems[0];
+    DateTime now = DateTime.now() ;
     setState(() {
       _dateRange = new DateTimeRange(
-          start: DateTime.now(), end: DateTime.now().add(Duration(days: 30)));
+          start: DateTime(now.year ,now.month ,now.day,), end: now.add(Duration(days: 30)));
       _dateControl.text =
-          "${Helpers.dateToText(DateTime.now())} / ${Helpers.dateToText(DateTime.now().add(Duration(days: 30)))}";
+          "${Helpers.dateToText(DateTime(now.year ,now.month , now.day,0,0))} / ${Helpers.dateToText(now.add(Duration(days: 30)))}";
     });
   }
 
@@ -428,16 +429,16 @@ class _RapportState extends State<Rapport> {
   }
 
   void callDatePicker() async {
-    DateTime now = new DateTime.now();
+    DateTime now = DateTime.now() ;
     DateTimeRange order = await getDate();
 
     if (order != null) {
       setState(() {
         _dateRange = new DateTimeRange(start: order.start, end: order.end);
         var start = new DateTime(order.start.year, order.start.month,
-            order.start.day, now.hour, now.minute);
+            order.start.day);
         var end = new DateTime(order.end.year, order.end.month, order.end.day,
-            now.hour, now.minute);
+           23 ,59);
         _dateControl.text =
             "${Helpers.dateToText(start)} / ${Helpers.dateToText(end)}";
       });
@@ -450,10 +451,7 @@ class _RapportState extends State<Rapport> {
       firstDate: DateTime(2020),
       lastDate: DateTime(2050),
       builder: (BuildContext context, Widget child) {
-        return Theme(
-          data: ThemeData.light(),
-          child: child,
-        );
+        return child ;
       },
     );
   }

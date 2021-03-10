@@ -68,8 +68,6 @@ class _ArticleListItemState extends State<ArticleListItem> {
     _devise = Helpers.getDeviseTranslate(data.myParams.devise) ;
   }
 
-
-
   @override
   Widget build(BuildContext context) {
     SizeConfig().init(context);
@@ -103,8 +101,9 @@ class _ArticleListItemState extends State<ArticleListItem> {
               child: ListTileCard(
                 from:  widget.article,
                 onLongPress: () {
-                  if(widget.onItemSelected != null){
-                    selectThisItem();
+                  if(widget.onItemSelected != null && widget.article.selectedQuantite > 0){
+                    widget.article.selectedQuantite = -1;
+                    widget.onItemSelected(widget.article);
                   }
                 },
                 onTap: () async {
@@ -117,10 +116,16 @@ class _ArticleListItemState extends State<ArticleListItem> {
                           builder: (BuildContext context) {
                             return addQtedialogue();
                           }).then((val) {
-
-                        setState(() {});
-                      });
+                            if((widget.article.quantite - widget.article.cmdClient) < widget.article.selectedQuantite){
+                              Helpers.showFlushBar(context, S.current.msg_qte_select_sup);
+                            }
+                            setState(() {});
+                          }
+                      );
                     } else if(widget.onItemSelected != null ){
+                      if((widget.article.quantite - widget.article.cmdClient) < 1){
+                        Helpers.showFlushBar(context, S.current.msg_qte_zero);
+                      }
                       selectThisItem();
                     }
                   }
@@ -236,7 +241,7 @@ class _ArticleListItemState extends State<ArticleListItem> {
                 ],
               ),
             ),
-            actions: <Widget>[
+            actions: (widget.onItemSelected == null) ? <Widget>[
               IconSlideAction(
                   color: Colors.white10,
                   iconWidget: Icon(Icons.delete_forever,size: 50, color: Colors.red,),
@@ -244,7 +249,7 @@ class _ArticleListItemState extends State<ArticleListItem> {
                     dellDialog(context);
                   }
               ),
-            ],
+            ] :null,
           ),
         ),
     );
@@ -320,6 +325,9 @@ class _ArticleListItemState extends State<ArticleListItem> {
                     child: TextField(
                       controller: _quntiteControler,
                       keyboardType: TextInputType.number,
+                      onTap: () =>{
+                        _quntiteControler.selection = TextSelection(baseOffset: 0, extentOffset: _quntiteControler.value.text.length),
+                      },
                       decoration: InputDecoration(
                         errorText: _validateQteError?? null,
                         prefixIcon: Icon(
@@ -358,9 +366,9 @@ class _ArticleListItemState extends State<ArticleListItem> {
                                   _quntiteControler.text = _qte.toString();
                                   },
                                 elevation: 2.0,
-                                fillColor: Colors.redAccent,
+                                fillColor: Colors.red[600],
                                 child: Icon(
-                                  Icons.remove,
+                                  Icons.remove, color: Colors.white,
                                 ),
                                 padding: EdgeInsets.all(15.0),
                                 shape: CircleBorder(),
@@ -371,9 +379,9 @@ class _ArticleListItemState extends State<ArticleListItem> {
                                   _quntiteControler.text = _qte.toString();
                                   },
                                 elevation: 2.0,
-                                fillColor: Colors.greenAccent,
+                                fillColor: Colors.greenAccent[700],
                                 child: Icon(
-                                  Icons.add,
+                                  Icons.add, color: Colors.white,
                                 ),
                                 padding: EdgeInsets.all(15.0),
                                 shape: CircleBorder(),
@@ -386,6 +394,9 @@ class _ArticleListItemState extends State<ArticleListItem> {
                             child: TextField(
                               controller: _priceControler,
                               keyboardType: TextInputType.number,
+                              onTap: () =>{
+                                _priceControler.selection = TextSelection(baseOffset: 0, extentOffset: _priceControler.value.text.length),
+                              },
                               decoration: InputDecoration(
                                 errorText: _validatePriceError?? null,
                                 prefixIcon: Icon(
@@ -414,15 +425,13 @@ class _ArticleListItemState extends State<ArticleListItem> {
                               RaisedButton(
                                 onPressed: ()  {
                                   _quntiteControler.text = "0";
-                                  widget.article.selectedQuantite = -1;
-                                  widget.onItemSelected(widget.article);
                                   Navigator.pop(context);
                                 },
                                 child: Text(
                                   S.current.annuler,
                                   style: TextStyle(color: Colors.white),
                                 ),
-                                color: Colors.redAccent,
+                                color: Colors.redAccent[600],
                               ),
                               SizedBox(width: 10),
                               RaisedButton(
@@ -461,7 +470,7 @@ class _ArticleListItemState extends State<ArticleListItem> {
                                   S.current.confirme,
                                   style: TextStyle(color: Colors.white),
                                 ),
-                                color: Colors.green,
+                                color: Colors.greenAccent[700],
                               ),
                             ],
                           ),

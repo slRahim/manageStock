@@ -225,6 +225,13 @@ class _ArticlesFragmentState extends State<ArticlesFragment> {
         isFilterOn: isFilterOn,
         onSearchChanged: (String search) => {
           _dataSource.updateSearchTerm(search),
+           for(var item in _dataSource.itemList){
+             for(var e in _selectedItems){
+               if (e.hashCode == item.hashCode){
+
+               }
+             }
+           }
         },
         onFilterPressed: () async {
           AwesomeDialog(
@@ -267,7 +274,7 @@ class _ArticlesFragmentState extends State<ArticlesFragment> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        floatingActionButton: CircularMenu(
+        floatingActionButton:CircularMenu(
             alignment: (Helpers.isDirectionRTL(context))
                 ? Alignment.bottomLeft
                 : Alignment.bottomRight,
@@ -308,7 +315,8 @@ class _ArticlesFragmentState extends State<ArticlesFragment> {
                   scanBarCode();
                 },
               )
-            ]),
+            ]
+        ),
         appBar: getAppBar(setState),
         body: ItemsSliverList(
             dataSource: _dataSource,

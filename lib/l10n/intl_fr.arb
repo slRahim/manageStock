@@ -398,7 +398,7 @@
   "beta" : "Version Teste",
   "until" : "Jusqu'au",
 
-  "msg_long_press_select" : "pour séléctionner l'élément",
+  "msg_long_press_select" : "pour déséléctionner l'élément",
   "tap_element" : "Taper",
   "msg_tap" : "sur l'élément pour modifier la quantité",
   "support" : "Support",
@@ -423,7 +423,11 @@
   "msg_no_edit_transformer" : "La piece transformer ne peut pas étre modifier",
 
   "tarif_s" : "Tarif (s)",
-  "titre_dialog_tarification" : "Nombre de tarif à utiliser :"
+  "titre_dialog_tarification" : "Nombre de tarif à utiliser :",
+  "msg_piece_transformer_to" : "Piece transformer à",
+  "msg_piece_transformer_from" : "Piece depuis",
+  "lan_print" : "Impression A4/A5",
+  "export_pdf" : "Exporter pdf"
 
 
 

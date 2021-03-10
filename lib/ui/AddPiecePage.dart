@@ -575,7 +575,7 @@ class _AddPiecePageState extends State<AddPiecePage>
                               height: 2,
                             ),
                             Text(
-                              Helpers.numberFormat(_restepiece).toString(),
+                              Helpers.numberFormat(_verssementpiece+_piece.regler).toString(),
                               textAlign: TextAlign.center,
                               style: TextStyle(
                                 fontWeight: FontWeight.bold,
@@ -628,22 +628,22 @@ class _AddPiecePageState extends State<AddPiecePage>
                       //Set onPressed event to swap state of bottom bar
                       onTap: editMode
                           ? () async {
-                              if (_piece.piece == PieceType.avoirClient ||
-                                  _piece.piece == PieceType.retourClient ||
-                                  _piece.piece == PieceType.retourFournisseur ||
-                                  _piece.piece == PieceType.avoirFournisseur) {
-                                var message = S.current.msg_info_article;
-                                Helpers.showFlushBar(context, message);
-                              }
-                              Future.delayed(Duration(seconds: 1), () async {
-                                await showDialog(
-                                    context: context,
-                                    builder: (BuildContext context) {
-                                      return addArticleDialog();
-                                    }).then((val) {
-                                  calculPiece();
-                                });
+                              await showDialog(
+                                  context: context,
+                                  builder: (BuildContext context) {
+                                    return addArticleDialog();
+                                  }).then((val) {
+                                if (_piece.piece == PieceType.avoirClient ||
+                                    _piece.piece == PieceType.retourClient ||
+                                    _piece.piece == PieceType.retourFournisseur ||
+                                    _piece.piece == PieceType.avoirFournisseur) {
+
+                                  var message = S.current.msg_info_article;
+                                  Helpers.showFlushBar(context, message);
+                                }
+                                calculPiece();
                               });
+
                             }
                           : () async {
                               AwesomeDialog(
@@ -712,7 +712,7 @@ class _AddPiecePageState extends State<AddPiecePage>
                           children: [
                               Icon(Icons.check_circle , size: 12, color: Colors.green,),
                               SizedBox(width: 5,),
-                              Text("Piece Transformer à ${getPiecetype(_pieceTo)} ${_pieceTo.num_piece}", style:TextStyle(fontSize: 13))
+                              Text("${S.current.msg_piece_transformer_to} ${getPiecetype(_pieceTo)} ${_pieceTo.num_piece}", style:TextStyle(fontSize: 13))
 
                           ],
                         ),
@@ -724,7 +724,7 @@ class _AddPiecePageState extends State<AddPiecePage>
                           children: [
                             Icon(Icons.check_circle , size: 12, color: Colors.green,),
                             SizedBox(width: 5,),
-                            Text("Piece from ${getPiecetype(_pieceFrom)} ${_pieceFrom.num_piece}" , style:TextStyle(fontSize: 13))
+                            Text("${S.current.msg_piece_transformer_from} ${getPiecetype(_pieceFrom)} ${_pieceFrom.num_piece}" , style:TextStyle(fontSize: 13))
 
                           ],
                         ),
@@ -987,6 +987,9 @@ class _AddPiecePageState extends State<AddPiecePage>
               child: TextField(
                 controller: _verssementControler,
                 keyboardType: TextInputType.number,
+                onTap: () =>{
+                  _verssementControler.selection = TextSelection(baseOffset: 0, extentOffset: _verssementControler.value.text.length),
+                },
                 onChanged: (value) {
                   if (_piece.id != null) {
                     if (_verssementpiece == 0) {
@@ -1087,6 +1090,9 @@ class _AddPiecePageState extends State<AddPiecePage>
               child: TextField(
                 controller: _remisepieceControler,
                 keyboardType: TextInputType.number,
+                onTap: () =>{
+                  _remisepieceControler.selection = TextSelection(baseOffset: 0, extentOffset: _remisepieceControler.value.text.length),
+                },
                 onChanged: (value) {
                   _remisepiece = double.parse(value);
                   _pourcentremise = (_remisepiece * 100) / _total_ht;
@@ -1126,6 +1132,9 @@ class _AddPiecePageState extends State<AddPiecePage>
                       child: TextField(
                         controller: _pourcentremiseControler,
                         keyboardType: TextInputType.number,
+                        onTap: () =>{
+                          _pourcentremiseControler.selection = TextSelection(baseOffset: 0, extentOffset: _pourcentremiseControler.value.text.length),
+                        },
                         onChanged: (value) {
                           _pourcentremise = double.parse(value);
                           _remisepiece = (_total_ht * _pourcentremise) / 100;
@@ -1256,7 +1265,7 @@ class _AddPiecePageState extends State<AddPiecePage>
                             }
                           },
                           child: Text(
-                            "Lan Printer",
+                            S.current.lan_print,
                             style: TextStyle(color: Colors.white, fontSize: 16),
                           ),
                           color: Colors.deepOrange,
@@ -1281,7 +1290,7 @@ class _AddPiecePageState extends State<AddPiecePage>
                                 });
                           },
                           child: Text(
-                            "Export as Pdf",
+                            S.current.export_pdf,
                             style: TextStyle(color: Colors.white, fontSize: 16),
                           ),
                           color: Colors.red,
