@@ -207,7 +207,7 @@ class _AddPiecePageState extends State<AddPiecePage>
       _dateControl.text = Helpers.dateToText(time);
       _selectedClient = await _queryCtr.getTierById(_piece.tier_id);
       _clientControl.text = _selectedClient.raisonSociale;
-      _selectedTarification = _tarificationItems[_selectedClient.tarification];
+      _selectedTarification = _selectedClient.tarification;
       _selectedItems = await _queryCtr.getJournalPiece(item, local: false);
       _verssementControler.text = "0.0";
       _resteControler.text = _piece.reste.toString();
@@ -244,7 +244,7 @@ class _AddPiecePageState extends State<AddPiecePage>
       }
 
       _clientControl.text = _selectedClient.raisonSociale;
-      _selectedTarification = _tarificationItems[_selectedClient.tarification];
+      _selectedTarification = _selectedClient.tarification;
       _verssementControler.text = "0.0";
       _resteControler.text = "0.0";
       _remisepieceControler.text = "0.0";
@@ -2747,6 +2747,10 @@ class _AddPiecePageState extends State<AddPiecePage>
                           "${S.current.credit}\t ${Helpers.numberFormat(_selectedClient.credit)} ${_devise}",
                           style: pw.TextStyle(font: ttf))
                       : pw.SizedBox(),
+                  pw.Divider(height: 2),
+                  pw.Text(getPieceSuminLetters(),
+                      style: pw.TextStyle(font: ttf , fontWeight: pw.FontWeight.bold)),
+
                 ])),
             pw.SizedBox(width: 10),
             pw.Expanded(
@@ -2843,5 +2847,17 @@ class _AddPiecePageState extends State<AddPiecePage>
         return S.current.af;
         break;
     }
+  }
+
+  String getPieceSuminLetters(){
+    String res = '' ;
+    res = res + "${Helpers.numberToWords((_piece.net_a_payer.toInt()).toString())} ${Helpers.currencyName(_myParams.devise)} " ;
+
+    int a = (_piece.net_a_payer % 1 * 100).roundToDouble().toInt();
+    if(a > 0){
+      res= res + "${Helpers.numberToWords(a.toString())} ${S.current.centime}" ;
+    }
+
+    return res ;
   }
 }

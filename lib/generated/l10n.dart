@@ -3954,6 +3954,1586 @@ class S {
       args: [],
     );
   }
+
+  /// `centime`
+  String get centime {
+    return Intl.message(
+      'centime',
+      name: 'centime',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Dinar algérien`
+  String get DZD_name {
+    return Intl.message(
+      'Dinar algérien',
+      name: 'DZD_name',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Afghan afghani`
+  String get AFN_name {
+    return Intl.message(
+      'Afghan afghani',
+      name: 'AFN_name',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Euro`
+  String get EUR_name {
+    return Intl.message(
+      'Euro',
+      name: 'EUR_name',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Albanian lek`
+  String get ALL_name {
+    return Intl.message(
+      'Albanian lek',
+      name: 'ALL_name',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `United State Dollar`
+  String get USD_name {
+    return Intl.message(
+      'United State Dollar',
+      name: 'USD_name',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Angolan kwanza`
+  String get AOA_name {
+    return Intl.message(
+      'Angolan kwanza',
+      name: 'AOA_name',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `East Caribbean dollar`
+  String get XCD_name {
+    return Intl.message(
+      'East Caribbean dollar',
+      name: 'XCD_name',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Australian dollar`
+  String get AUD_name {
+    return Intl.message(
+      'Australian dollar',
+      name: 'AUD_name',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Argentine peso`
+  String get ARS_name {
+    return Intl.message(
+      'Argentine peso',
+      name: 'ARS_name',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Armenian dram`
+  String get AMD_name {
+    return Intl.message(
+      'Armenian dram',
+      name: 'AMD_name',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Aruban florin`
+  String get AWG_name {
+    return Intl.message(
+      'Aruban florin',
+      name: 'AWG_name',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Azerbaijani manat`
+  String get AZN_name {
+    return Intl.message(
+      'Azerbaijani manat',
+      name: 'AZN_name',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Bahamian dollar`
+  String get BSD_name {
+    return Intl.message(
+      'Bahamian dollar',
+      name: 'BSD_name',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Bahraini dinar`
+  String get BHD_name {
+    return Intl.message(
+      'Bahraini dinar',
+      name: 'BHD_name',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Bangladeshi taka`
+  String get BDT_name {
+    return Intl.message(
+      'Bangladeshi taka',
+      name: 'BDT_name',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Barbadian dollar`
+  String get BBD_name {
+    return Intl.message(
+      'Barbadian dollar',
+      name: 'BBD_name',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `New Belarusian ruble`
+  String get BYN_name {
+    return Intl.message(
+      'New Belarusian ruble',
+      name: 'BYN_name',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Belize dollar`
+  String get BZD_name {
+    return Intl.message(
+      'Belize dollar',
+      name: 'BZD_name',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `West African CFA franc`
+  String get XOF_name {
+    return Intl.message(
+      'West African CFA franc',
+      name: 'XOF_name',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Bermudian dollar`
+  String get BMD_name {
+    return Intl.message(
+      'Bermudian dollar',
+      name: 'BMD_name',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Bhutanese ngultrum`
+  String get BTN_name {
+    return Intl.message(
+      'Bhutanese ngultrum',
+      name: 'BTN_name',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Bolivian boliviano`
+  String get BOB_name {
+    return Intl.message(
+      'Bolivian boliviano',
+      name: 'BOB_name',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Bosnia and Herzegovina convertible mark`
+  String get BAM_name {
+    return Intl.message(
+      'Bosnia and Herzegovina convertible mark',
+      name: 'BAM_name',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Botswana pula`
+  String get BWP_name {
+    return Intl.message(
+      'Botswana pula',
+      name: 'BWP_name',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Norwegian krone`
+  String get NOK_name {
+    return Intl.message(
+      'Norwegian krone',
+      name: 'NOK_name',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Brazilian real`
+  String get BRL_name {
+    return Intl.message(
+      'Brazilian real',
+      name: 'BRL_name',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Brunei dollar`
+  String get BND_name {
+    return Intl.message(
+      'Brunei dollar',
+      name: 'BND_name',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Bulgarian lev`
+  String get BGN_name {
+    return Intl.message(
+      'Bulgarian lev',
+      name: 'BGN_name',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Burundian franc`
+  String get BIF_name {
+    return Intl.message(
+      'Burundian franc',
+      name: 'BIF_name',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Cambodian riel`
+  String get KHR_name {
+    return Intl.message(
+      'Cambodian riel',
+      name: 'KHR_name',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Canadian dollar`
+  String get CAD_name {
+    return Intl.message(
+      'Canadian dollar',
+      name: 'CAD_name',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Cape Verdean escudo`
+  String get CVE_name {
+    return Intl.message(
+      'Cape Verdean escudo',
+      name: 'CVE_name',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Cayman Islands dollar`
+  String get KYD_name {
+    return Intl.message(
+      'Cayman Islands dollar',
+      name: 'KYD_name',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Chilean peso`
+  String get CLP_name {
+    return Intl.message(
+      'Chilean peso',
+      name: 'CLP_name',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Chinese yuan`
+  String get CNY_name {
+    return Intl.message(
+      'Chinese yuan',
+      name: 'CNY_name',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Colombian peso`
+  String get COP_name {
+    return Intl.message(
+      'Colombian peso',
+      name: 'COP_name',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Comorian franc`
+  String get KMF_name {
+    return Intl.message(
+      'Comorian franc',
+      name: 'KMF_name',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Congolese franc`
+  String get CDF_name {
+    return Intl.message(
+      'Congolese franc',
+      name: 'CDF_name',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `New Zealand dollar`
+  String get NZD_name {
+    return Intl.message(
+      'New Zealand dollar',
+      name: 'NZD_name',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Costa Rican colón`
+  String get CRC_name {
+    return Intl.message(
+      'Costa Rican colón',
+      name: 'CRC_name',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Croatian kuna`
+  String get HRK_name {
+    return Intl.message(
+      'Croatian kuna',
+      name: 'HRK_name',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Cuban convertible peso`
+  String get CUC_name {
+    return Intl.message(
+      'Cuban convertible peso',
+      name: 'CUC_name',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Netherlands Antillean guilder`
+  String get ANG_name {
+    return Intl.message(
+      'Netherlands Antillean guilder',
+      name: 'ANG_name',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Czech koruna`
+  String get CZK_name {
+    return Intl.message(
+      'Czech koruna',
+      name: 'CZK_name',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Danish krone`
+  String get DKK_name {
+    return Intl.message(
+      'Danish krone',
+      name: 'DKK_name',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Djiboutian franc`
+  String get DJF_name {
+    return Intl.message(
+      'Djiboutian franc',
+      name: 'DJF_name',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Dominican peso`
+  String get DOP_name {
+    return Intl.message(
+      'Dominican peso',
+      name: 'DOP_name',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Egyptian pound`
+  String get EGP_name {
+    return Intl.message(
+      'Egyptian pound',
+      name: 'EGP_name',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Eritrean nakfa`
+  String get ERN_name {
+    return Intl.message(
+      'Eritrean nakfa',
+      name: 'ERN_name',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Ethiopian birr`
+  String get ETB_name {
+    return Intl.message(
+      'Ethiopian birr',
+      name: 'ETB_name',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Falkland Islands pound`
+  String get FKP_name {
+    return Intl.message(
+      'Falkland Islands pound',
+      name: 'FKP_name',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Fijian dollar`
+  String get FJD_name {
+    return Intl.message(
+      'Fijian dollar',
+      name: 'FJD_name',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `CFP franc`
+  String get XPF_name {
+    return Intl.message(
+      'CFP franc',
+      name: 'XPF_name',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Gambian dalasi`
+  String get GMD_name {
+    return Intl.message(
+      'Gambian dalasi',
+      name: 'GMD_name',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Georgian Lari`
+  String get GEL_name {
+    return Intl.message(
+      'Georgian Lari',
+      name: 'GEL_name',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Ghanaian cedi`
+  String get GHS_name {
+    return Intl.message(
+      'Ghanaian cedi',
+      name: 'GHS_name',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Gibraltar pound`
+  String get GIP_name {
+    return Intl.message(
+      'Gibraltar pound',
+      name: 'GIP_name',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Guatemalan quetzal`
+  String get GTQ_name {
+    return Intl.message(
+      'Guatemalan quetzal',
+      name: 'GTQ_name',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `British pound`
+  String get GBP_name {
+    return Intl.message(
+      'British pound',
+      name: 'GBP_name',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Guinean franc`
+  String get GNF_name {
+    return Intl.message(
+      'Guinean franc',
+      name: 'GNF_name',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Guyanese dollar`
+  String get GYD_name {
+    return Intl.message(
+      'Guyanese dollar',
+      name: 'GYD_name',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Haitian gourde`
+  String get HTG_name {
+    return Intl.message(
+      'Haitian gourde',
+      name: 'HTG_name',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Honduran lempira`
+  String get HNL_name {
+    return Intl.message(
+      'Honduran lempira',
+      name: 'HNL_name',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Hong Kong dollar`
+  String get HKD_name {
+    return Intl.message(
+      'Hong Kong dollar',
+      name: 'HKD_name',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Hungarian forint`
+  String get HUF_name {
+    return Intl.message(
+      'Hungarian forint',
+      name: 'HUF_name',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Icelandic króna`
+  String get ISK_name {
+    return Intl.message(
+      'Icelandic króna',
+      name: 'ISK_name',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Indian rupee`
+  String get INR_name {
+    return Intl.message(
+      'Indian rupee',
+      name: 'INR_name',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Indonesian rupiah`
+  String get IDR_name {
+    return Intl.message(
+      'Indonesian rupiah',
+      name: 'IDR_name',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Iranian rial`
+  String get IRR_name {
+    return Intl.message(
+      'Iranian rial',
+      name: 'IRR_name',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Iraqi dinar`
+  String get IQD_name {
+    return Intl.message(
+      'Iraqi dinar',
+      name: 'IQD_name',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Jamaican dollar`
+  String get JMD_name {
+    return Intl.message(
+      'Jamaican dollar',
+      name: 'JMD_name',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Japanese yen`
+  String get JPY_name {
+    return Intl.message(
+      'Japanese yen',
+      name: 'JPY_name',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Jordanian dinar`
+  String get JOD_name {
+    return Intl.message(
+      'Jordanian dinar',
+      name: 'JOD_name',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Kazakhstani tenge`
+  String get KZT_name {
+    return Intl.message(
+      'Kazakhstani tenge',
+      name: 'KZT_name',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Kenyan shilling`
+  String get KES_name {
+    return Intl.message(
+      'Kenyan shilling',
+      name: 'KES_name',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Kuwaiti dinar`
+  String get KWD_name {
+    return Intl.message(
+      'Kuwaiti dinar',
+      name: 'KWD_name',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Kyrgyzstani som`
+  String get KGS_name {
+    return Intl.message(
+      'Kyrgyzstani som',
+      name: 'KGS_name',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Lao kip`
+  String get LAK_name {
+    return Intl.message(
+      'Lao kip',
+      name: 'LAK_name',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Lebanese pound`
+  String get LBP_name {
+    return Intl.message(
+      'Lebanese pound',
+      name: 'LBP_name',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Lesotho loti`
+  String get LSL_name {
+    return Intl.message(
+      'Lesotho loti',
+      name: 'LSL_name',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Liberian dollar`
+  String get LRD_name {
+    return Intl.message(
+      'Liberian dollar',
+      name: 'LRD_name',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Libyan dinar`
+  String get LYD_name {
+    return Intl.message(
+      'Libyan dinar',
+      name: 'LYD_name',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Swiss franc`
+  String get CHF_name {
+    return Intl.message(
+      'Swiss franc',
+      name: 'CHF_name',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Macanese pataca`
+  String get MOP_name {
+    return Intl.message(
+      'Macanese pataca',
+      name: 'MOP_name',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Macedonian denar`
+  String get MKD_name {
+    return Intl.message(
+      'Macedonian denar',
+      name: 'MKD_name',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Malagasy ariary`
+  String get MGA_name {
+    return Intl.message(
+      'Malagasy ariary',
+      name: 'MGA_name',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Malawian kwacha`
+  String get MWK_name {
+    return Intl.message(
+      'Malawian kwacha',
+      name: 'MWK_name',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Malaysian ringgit`
+  String get MYR_name {
+    return Intl.message(
+      'Malaysian ringgit',
+      name: 'MYR_name',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Maldivian rufiyaa`
+  String get MVR_name {
+    return Intl.message(
+      'Maldivian rufiyaa',
+      name: 'MVR_name',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Mauritanian ouguiya`
+  String get MRO_name {
+    return Intl.message(
+      'Mauritanian ouguiya',
+      name: 'MRO_name',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Mauritian rupee`
+  String get MUR_name {
+    return Intl.message(
+      'Mauritian rupee',
+      name: 'MUR_name',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Mexican peso`
+  String get MXN_name {
+    return Intl.message(
+      'Mexican peso',
+      name: 'MXN_name',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `[D]`
+  String get None_name {
+    return Intl.message(
+      '[D]',
+      name: 'None_name',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Moldovan leu`
+  String get MDL_name {
+    return Intl.message(
+      'Moldovan leu',
+      name: 'MDL_name',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Mongolian tögrög`
+  String get MNT_name {
+    return Intl.message(
+      'Mongolian tögrög',
+      name: 'MNT_name',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Moroccan dirham`
+  String get MAD_name {
+    return Intl.message(
+      'Moroccan dirham',
+      name: 'MAD_name',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Mozambican metical`
+  String get MZN_name {
+    return Intl.message(
+      'Mozambican metical',
+      name: 'MZN_name',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Burmese kyat`
+  String get MMK_name {
+    return Intl.message(
+      'Burmese kyat',
+      name: 'MMK_name',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Namibian dollar`
+  String get NAD_name {
+    return Intl.message(
+      'Namibian dollar',
+      name: 'NAD_name',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Nepalese rupee`
+  String get NPR_name {
+    return Intl.message(
+      'Nepalese rupee',
+      name: 'NPR_name',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Nicaraguan córdoba`
+  String get NIO_name {
+    return Intl.message(
+      'Nicaraguan córdoba',
+      name: 'NIO_name',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Nigerian naira`
+  String get NGN_name {
+    return Intl.message(
+      'Nigerian naira',
+      name: 'NGN_name',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `North Korean won`
+  String get KPW_name {
+    return Intl.message(
+      'North Korean won',
+      name: 'KPW_name',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Omani rial`
+  String get OMR_name {
+    return Intl.message(
+      'Omani rial',
+      name: 'OMR_name',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Pakistani rupee`
+  String get PKR_name {
+    return Intl.message(
+      'Pakistani rupee',
+      name: 'PKR_name',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Israeli new sheqel`
+  String get ILS_name {
+    return Intl.message(
+      'Israeli new sheqel',
+      name: 'ILS_name',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Panamanian balboa`
+  String get PAB_name {
+    return Intl.message(
+      'Panamanian balboa',
+      name: 'PAB_name',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Papua New Guinean kina`
+  String get PGK_name {
+    return Intl.message(
+      'Papua New Guinean kina',
+      name: 'PGK_name',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Paraguayan guaraní`
+  String get PYG_name {
+    return Intl.message(
+      'Paraguayan guaraní',
+      name: 'PYG_name',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Peruvian sol`
+  String get PEN_name {
+    return Intl.message(
+      'Peruvian sol',
+      name: 'PEN_name',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Philippine peso`
+  String get PHP_name {
+    return Intl.message(
+      'Philippine peso',
+      name: 'PHP_name',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Polish złoty`
+  String get PLN_name {
+    return Intl.message(
+      'Polish złoty',
+      name: 'PLN_name',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Qatari riyal`
+  String get QAR_name {
+    return Intl.message(
+      'Qatari riyal',
+      name: 'QAR_name',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Romanian leu`
+  String get RON_name {
+    return Intl.message(
+      'Romanian leu',
+      name: 'RON_name',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Russian ruble`
+  String get RUB_name {
+    return Intl.message(
+      'Russian ruble',
+      name: 'RUB_name',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Rwandan franc`
+  String get RWF_name {
+    return Intl.message(
+      'Rwandan franc',
+      name: 'RWF_name',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Saint Helena pound`
+  String get SHP_name {
+    return Intl.message(
+      'Saint Helena pound',
+      name: 'SHP_name',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Samoan tālā`
+  String get WST_name {
+    return Intl.message(
+      'Samoan tālā',
+      name: 'WST_name',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `São Tomé and Príncipe dobra`
+  String get STD_name {
+    return Intl.message(
+      'São Tomé and Príncipe dobra',
+      name: 'STD_name',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Saudi riyal`
+  String get SAR_name {
+    return Intl.message(
+      'Saudi riyal',
+      name: 'SAR_name',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Serbian dinar`
+  String get RSD_name {
+    return Intl.message(
+      'Serbian dinar',
+      name: 'RSD_name',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Seychellois rupee`
+  String get SCR_name {
+    return Intl.message(
+      'Seychellois rupee',
+      name: 'SCR_name',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Sierra Leonean leone`
+  String get SLL_name {
+    return Intl.message(
+      'Sierra Leonean leone',
+      name: 'SLL_name',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Singapore dollar`
+  String get SGD_name {
+    return Intl.message(
+      'Singapore dollar',
+      name: 'SGD_name',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Solomon Islands dollar`
+  String get SBD_name {
+    return Intl.message(
+      'Solomon Islands dollar',
+      name: 'SBD_name',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Somali shilling`
+  String get SOS_name {
+    return Intl.message(
+      'Somali shilling',
+      name: 'SOS_name',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `South African rand`
+  String get ZAR_name {
+    return Intl.message(
+      'South African rand',
+      name: 'ZAR_name',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `South Korean won`
+  String get KRW_name {
+    return Intl.message(
+      'South Korean won',
+      name: 'KRW_name',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `South Sudanese pound`
+  String get SSP_name {
+    return Intl.message(
+      'South Sudanese pound',
+      name: 'SSP_name',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Sri Lankan rupee`
+  String get LKR_name {
+    return Intl.message(
+      'Sri Lankan rupee',
+      name: 'LKR_name',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Sudanese pound`
+  String get SDG_name {
+    return Intl.message(
+      'Sudanese pound',
+      name: 'SDG_name',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Surinamese dollar`
+  String get SRD_name {
+    return Intl.message(
+      'Surinamese dollar',
+      name: 'SRD_name',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Swazi lilangeni`
+  String get SZL_name {
+    return Intl.message(
+      'Swazi lilangeni',
+      name: 'SZL_name',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Swedish krona`
+  String get SEK_name {
+    return Intl.message(
+      'Swedish krona',
+      name: 'SEK_name',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Syrian pound`
+  String get SYP_name {
+    return Intl.message(
+      'Syrian pound',
+      name: 'SYP_name',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `New Taiwan dollar`
+  String get TWD_name {
+    return Intl.message(
+      'New Taiwan dollar',
+      name: 'TWD_name',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Tajikistani somoni`
+  String get TJS_name {
+    return Intl.message(
+      'Tajikistani somoni',
+      name: 'TJS_name',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Tanzanian shilling`
+  String get TZS_name {
+    return Intl.message(
+      'Tanzanian shilling',
+      name: 'TZS_name',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Thai baht`
+  String get THB {
+    return Intl.message(
+      'Thai baht',
+      name: 'THB',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Tongan paʻanga`
+  String get TOP_name {
+    return Intl.message(
+      'Tongan paʻanga',
+      name: 'TOP_name',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Trinidad and Tobago dollar`
+  String get TTD_name {
+    return Intl.message(
+      'Trinidad and Tobago dollar',
+      name: 'TTD_name',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Tunisian dinar`
+  String get TND_name {
+    return Intl.message(
+      'Tunisian dinar',
+      name: 'TND_name',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Turkish lira`
+  String get TRY_name {
+    return Intl.message(
+      'Turkish lira',
+      name: 'TRY_name',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Turkmenistan manat`
+  String get TMT_name {
+    return Intl.message(
+      'Turkmenistan manat',
+      name: 'TMT_name',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Ugandan shilling`
+  String get UGX_namme {
+    return Intl.message(
+      'Ugandan shilling',
+      name: 'UGX_namme',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Ukrainian hryvnia`
+  String get UAH_name {
+    return Intl.message(
+      'Ukrainian hryvnia',
+      name: 'UAH_name',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `United Arab Emirates dirham`
+  String get AED_name {
+    return Intl.message(
+      'United Arab Emirates dirham',
+      name: 'AED_name',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Uruguayan peso`
+  String get UYU_name {
+    return Intl.message(
+      'Uruguayan peso',
+      name: 'UYU_name',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Uzbekistani so'm`
+  String get UZS_name {
+    return Intl.message(
+      'Uzbekistani so\'m',
+      name: 'UZS_name',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Vanuatu vatu`
+  String get VUV_name {
+    return Intl.message(
+      'Vanuatu vatu',
+      name: 'VUV_name',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Venezuelan bolívar`
+  String get VEF_name {
+    return Intl.message(
+      'Venezuelan bolívar',
+      name: 'VEF_name',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Vietnamese đồng`
+  String get VND_name {
+    return Intl.message(
+      'Vietnamese đồng',
+      name: 'VND_name',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Yemeni rial`
+  String get YER_name {
+    return Intl.message(
+      'Yemeni rial',
+      name: 'YER_name',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Zambian kwacha`
+  String get ZMW_name {
+    return Intl.message(
+      'Zambian kwacha',
+      name: 'ZMW_name',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Central African CFA franc`
+  String get XAF_name {
+    return Intl.message(
+      'Central African CFA franc',
+      name: 'XAF_name',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Thai baht`
+  String get THB_name {
+    return Intl.message(
+      'Thai baht',
+      name: 'THB_name',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Ugandan shilling`
+  String get UGX_name {
+    return Intl.message(
+      'Ugandan shilling',
+      name: 'UGX_name',
+      desc: '',
+      args: [],
+    );
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<S> {
