@@ -28,7 +28,6 @@ class HomeCubit extends Cubit<HomeState> {
 
       case homeItemTableauDeBordId:
         emit(new FragmentLoaded(Dashboard()));
-
         break;
 
       case homeItemArticlesId:

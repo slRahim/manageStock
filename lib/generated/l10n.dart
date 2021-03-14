@@ -5405,16 +5405,6 @@ class S {
     );
   }
 
-  /// `Ugandan shilling`
-  String get UGX_namme {
-    return Intl.message(
-      'Ugandan shilling',
-      name: 'UGX_namme',
-      desc: '',
-      args: [],
-    );
-  }
-
   /// `Ukrainian hryvnia`
   String get UAH_name {
     return Intl.message(

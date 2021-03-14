@@ -517,7 +517,7 @@ class _AddArticlePageState extends State<AddArticlePage>
               child: TextFormField(
                 enabled: editMode,
                 controller: _pmpControl,
-                // onTap: () => _pmpControl.selection = TextSelection(baseOffset: 0, extentOffset: _pmpControl.value.text.length),
+                onTap: () => _pmpControl.selection = TextSelection(baseOffset: 0, extentOffset: _pmpControl.value.text.length),
                 keyboardType: TextInputType.number,
                 // validator: (value) {
                 //   if (value.isEmpty) {

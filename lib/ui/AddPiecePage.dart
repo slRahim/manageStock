@@ -443,6 +443,10 @@ class _AddPiecePageState extends State<AddPiecePage>
                         }
                       },
                       child: Container(
+                        decoration: BoxDecoration(
+                            border:(editMode)
+                                ? Border(bottom: BorderSide(color: Colors.blue , width: 1)) : null
+                        ),
                         child: Column(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
@@ -509,6 +513,10 @@ class _AddPiecePageState extends State<AddPiecePage>
                               _piece.piece != PieceType.avoirFournisseur) {
                             if (_selectedItems.isNotEmpty) {
                               if(_net_a_payer > _piece.regler){
+                                setState(() {
+                                  double _reste = _total_ttc - (_piece.regler + _verssementpiece);
+                                  _resteControler.text = _reste.toString();
+                                });
                                 AwesomeDialog(
                                     context: context,
                                     dialogType: DialogType.INFO,
@@ -542,6 +550,15 @@ class _AddPiecePageState extends State<AddPiecePage>
                         }
                       },
                       child: Container(
+                        decoration: BoxDecoration(
+                          border:(editMode && _piece.piece != PieceType.devis &&
+                              _piece.piece != PieceType.bonCommande &&
+                              _piece.piece != PieceType.retourClient &&
+                              _piece.piece != PieceType.avoirClient &&
+                              _piece.piece != PieceType.retourFournisseur &&
+                              _piece.piece != PieceType.avoirFournisseur)
+                              ? Border(bottom: BorderSide(color: Colors.blue , width: 1)) : null
+                        ),
                         child: Column(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [

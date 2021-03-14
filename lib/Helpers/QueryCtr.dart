@@ -206,7 +206,7 @@ class QueryCtr {
     query+=_tierFilter ;
     query += _creditFilter ;
 
-    query += ' ORDER BY id DESC';
+    query += ' ORDER BY Date DESC';
     query += " LIMIT ${limit} OFFSET ${offset}";
 
 

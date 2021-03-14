@@ -225,13 +225,6 @@ class _ArticlesFragmentState extends State<ArticlesFragment> {
         isFilterOn: isFilterOn,
         onSearchChanged: (String search) => {
           _dataSource.updateSearchTerm(search),
-           for(var item in _dataSource.itemList){
-             for(var e in _selectedItems){
-               if (e.hashCode == item.hashCode){
-
-               }
-             }
-           }
         },
         onFilterPressed: () async {
           AwesomeDialog(

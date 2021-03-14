@@ -163,7 +163,6 @@ class MessageLookup extends MessageLookupByLibrary {
     "TZS_name" : MessageLookupByLibrary.simpleMessage("Tanzanian shilling"),
     "UAH_name" : MessageLookupByLibrary.simpleMessage("Ukrainian hryvnia"),
     "UGX_name" : MessageLookupByLibrary.simpleMessage("Ugandan shilling"),
-    "UGX_namme" : MessageLookupByLibrary.simpleMessage("Ugandan shilling"),
     "USD_name" : MessageLookupByLibrary.simpleMessage("United State Dollar"),
     "UYU_name" : MessageLookupByLibrary.simpleMessage("Uruguayan peso"),
     "UZS_name" : MessageLookupByLibrary.simpleMessage("Uzbekistani so\'m"),
