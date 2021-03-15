@@ -353,6 +353,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "msg_cam_permission" : MessageLookupByLibrary.simpleMessage("The user did not grant the camera permission!"),
     "msg_champ_oblg" : MessageLookupByLibrary.simpleMessage("Required Field"),
     "msg_champs_obg" : MessageLookupByLibrary.simpleMessage("Please fill in the required fields"),
+    "msg_change_tarif" : MessageLookupByLibrary.simpleMessage("Do you want to change the rates?"),
     "msg_choix_pin" : MessageLookupByLibrary.simpleMessage("Choose PinCode"),
     "msg_confirm_pin" : MessageLookupByLibrary.simpleMessage("Confirm PinCode"),
     "msg_confirm_pin1" : MessageLookupByLibrary.simpleMessage("Confirm PinCode To Protect Data"),

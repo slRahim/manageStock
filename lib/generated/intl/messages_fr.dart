@@ -353,6 +353,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "msg_cam_permission" : MessageLookupByLibrary.simpleMessage("Camera non autoriser !"),
     "msg_champ_oblg" : MessageLookupByLibrary.simpleMessage("Chapms Obligatoire"),
     "msg_champs_obg" : MessageLookupByLibrary.simpleMessage("Veuillez remplir les champs obligatoire"),
+    "msg_change_tarif" : MessageLookupByLibrary.simpleMessage("Voulez-vous changer les tarifs ?"),
     "msg_choix_pin" : MessageLookupByLibrary.simpleMessage("ChoisissezVotreCodePIN"),
     "msg_confirm_pin" : MessageLookupByLibrary.simpleMessage("ConfirmezVotreCodePIN"),
     "msg_confirm_pin1" : MessageLookupByLibrary.simpleMessage("ConfirmezVotreCodePINPourProtegerVosDonnees"),

@@ -1288,152 +1288,166 @@ class _AddTresoriePageState extends State<AddTresoriePage>
       if (widget.arguments.id != null) {
         //update tresorie
         Tresorie tresorie = await makeItem();
-        id = await _queryCtr.updateItemInDb(DbTablesNames.tresorie, tresorie);
-        if (tresorie.categorie == 2 || tresorie.categorie == 3) {
-          bool _haspiece = true;
-          double verssementSolde = 0;
-          if (tresorie.pieceId == null) {
-            _haspiece = false;
-            _selectedPieces =
-                await _queryCtr.getAllPiecesByTierId(_selectedClient.id);
-          } else {
-            var piece = await _queryCtr.getPieceById(_selectedClient.id);
-            _selectedPieces = new List<Piece>();
-            _selectedPieces.add(piece);
-          }
-          double _montant = tresorie.montant;
-          while (_montant > 0) {
-            // recuperer la some des verssement pour le solde
-            verssementSolde =
-                await _queryCtr.getVerssementSolde(_selectedClient);
-            if ((_selectedClient.solde_depart - verssementSolde) > 0 &&
-                _haspiece == false) {
-              ReglementTresorie item = new ReglementTresorie.init();
-              item.piece_id = 0;
-              item.tresorie_id = tresorie.id;
-              if (_montant <=
-                  (_selectedClient.solde_depart - verssementSolde)) {
-                item.regler = _montant;
-                _montant = 0;
-              } else {
-                item.regler = (_selectedClient.solde_depart - verssementSolde);
-                _montant =
-                    _montant - (_selectedClient.solde_depart - verssementSolde);
-              }
-              await _queryCtr.addItemToTable(
-                  DbTablesNames.reglementTresorie, item);
+        if(tresorie != null){
+          id = await _queryCtr.updateItemInDb(DbTablesNames.tresorie, tresorie);
+          if (tresorie.categorie == 2 || tresorie.categorie == 3) {
+            bool _haspiece = true;
+            double verssementSolde = 0;
+            if (tresorie.pieceId == null) {
+              _haspiece = false;
+              _selectedPieces =
+              await _queryCtr.getAllPiecesByTierId(_selectedClient.id);
             } else {
-              // le solde de depart est reglé
-              _selectedPieces.forEach((piece) async {
+              var piece = await _queryCtr.getPieceById(_selectedClient.id);
+              _selectedPieces = new List<Piece>();
+              _selectedPieces.add(piece);
+            }
+            double _montant = tresorie.montant;
+            while (_montant > 0) {
+              // recuperer la some des verssement pour le solde
+              verssementSolde =
+              await _queryCtr.getVerssementSolde(_selectedClient);
+              if ((_selectedClient.solde_depart - verssementSolde) > 0 &&
+                  _haspiece == false) {
                 ReglementTresorie item = new ReglementTresorie.init();
-                item.piece_id = piece.id;
-                item.tresorie_id = widget.arguments.id;
-
-                if (_montant >= piece.reste) {
-                  item.regler = piece.reste;
-                  _montant = _montant - piece.reste;
-                } else if (_montant != 0) {
+                item.piece_id = 0;
+                item.tresorie_id = tresorie.id;
+                if (_montant <=
+                    (_selectedClient.solde_depart - verssementSolde)) {
                   item.regler = _montant;
                   _montant = 0;
                 } else {
-                  return;
+                  item.regler = (_selectedClient.solde_depart - verssementSolde);
+                  _montant =
+                      _montant - (_selectedClient.solde_depart - verssementSolde);
                 }
                 await _queryCtr.addItemToTable(
                     DbTablesNames.reglementTresorie, item);
+              } else {
+                // le solde de depart est reglé
+                _selectedPieces.forEach((piece) async {
+                  ReglementTresorie item = new ReglementTresorie.init();
+                  item.piece_id = piece.id;
+                  item.tresorie_id = widget.arguments.id;
+
+                  if (_montant >= piece.reste) {
+                    item.regler = piece.reste;
+                    _montant = _montant - piece.reste;
+                  } else if (_montant != 0) {
+                    item.regler = _montant;
+                    _montant = 0;
+                  } else {
+                    return;
+                  }
+                  await _queryCtr.addItemToTable(
+                      DbTablesNames.reglementTresorie, item);
+                });
+              }
+            }
+            if (_haspiece == false) {
+              setState(() {
+                _selectedPieces = new List<Piece>();
               });
             }
           }
-          if (_haspiece == false) {
+
+          if (id > -1) {
+            widget.arguments = tresorie;
+            widget.arguments.id = id;
             setState(() {
-              _selectedPieces = new List<Piece>();
+              modification = true;
+              editMode = false;
             });
+            message = S.current.msg_update_item;
+          } else {
+            message = S.current.msg_update_err;
           }
+        }else{
+          var message = S.current.msg_num_existe;
+          Helpers.showFlushBar(context, message);
+          return Future.value(id);
         }
 
-        if (id > -1) {
-          widget.arguments = tresorie;
-          widget.arguments.id = id;
-          setState(() {
-            modification = true;
-            editMode = false;
-          });
-          message = S.current.msg_update_item;
-        } else {
-          message = S.current.msg_update_err;
-        }
       } else {
         // add new tresorie
         Tresorie tresorie = await makeItem();
-        id = await _queryCtr.addItemToTable(DbTablesNames.tresorie, tresorie);
-        if (id > -1) {
-          tresorie.id = await _queryCtr.getLastId(DbTablesNames.tresorie);
-        }
-        if (tresorie.categorie == 2 || tresorie.categorie == 3) {
-          bool _haspiece = true;
-          double verssementSolde = 0;
-          if (tresorie.pieceId == null) {
-            _haspiece = false;
-            _selectedPieces =
-                await _queryCtr.getAllPiecesByTierId(_selectedClient.id);
+        if(tresorie != null){
+          id = await _queryCtr.addItemToTable(DbTablesNames.tresorie, tresorie);
+          if (id > -1) {
+            tresorie.id = await _queryCtr.getLastId(DbTablesNames.tresorie);
           }
-          double _montant = tresorie.montant;
-          while (_montant > 0) {
-            // recuperer la some des verssement pour le solde
-            verssementSolde =
-                await _queryCtr.getVerssementSolde(_selectedClient);
-            if ((_selectedClient.solde_depart - verssementSolde) > 0 &&
-                !_haspiece) {
-              ReglementTresorie item = new ReglementTresorie.init();
-              item.piece_id = 0;
-              item.tresorie_id = tresorie.id;
-              if (_montant <=
-                  (_selectedClient.solde_depart - verssementSolde)) {
-                item.regler = _montant;
-                _montant = 0;
-              } else {
-                item.regler = (_selectedClient.solde_depart - verssementSolde);
-                _montant = _montant - item.regler;
-              }
-              await _queryCtr.addItemToTable(
-                  DbTablesNames.reglementTresorie, item);
-            } else {
-              // le solde de depart est reglé
-              _selectedPieces.forEach((piece) async {
+          if (tresorie.categorie == 2 || tresorie.categorie == 3) {
+            bool _haspiece = true;
+            double verssementSolde = 0;
+            if (tresorie.pieceId == null) {
+              _haspiece = false;
+              _selectedPieces =
+              await _queryCtr.getAllPiecesByTierId(_selectedClient.id);
+            }
+            double _montant = tresorie.montant;
+            while (_montant > 0) {
+              // recuperer la some des verssement pour le solde
+              verssementSolde =
+              await _queryCtr.getVerssementSolde(_selectedClient);
+              if ((_selectedClient.solde_depart - verssementSolde) > 0 &&
+                  !_haspiece) {
                 ReglementTresorie item = new ReglementTresorie.init();
-                item.piece_id = piece.id;
+                item.piece_id = 0;
                 item.tresorie_id = tresorie.id;
-
-                if (_montant >= piece.reste) {
-                  item.regler = piece.reste;
-                  _montant = _montant - piece.reste;
-                } else if (_montant != 0) {
+                if (_montant <=
+                    (_selectedClient.solde_depart - verssementSolde)) {
                   item.regler = _montant;
                   _montant = 0;
                 } else {
-                  return;
+                  item.regler = (_selectedClient.solde_depart - verssementSolde);
+                  _montant = _montant - item.regler;
                 }
                 await _queryCtr.addItemToTable(
                     DbTablesNames.reglementTresorie, item);
+              } else {
+                // le solde de depart est reglé
+                _selectedPieces.forEach((piece) async {
+                  ReglementTresorie item = new ReglementTresorie.init();
+                  item.piece_id = piece.id;
+                  item.tresorie_id = tresorie.id;
+
+                  if (_montant >= piece.reste) {
+                    item.regler = piece.reste;
+                    _montant = _montant - piece.reste;
+                  } else if (_montant != 0) {
+                    item.regler = _montant;
+                    _montant = 0;
+                  } else {
+                    return;
+                  }
+                  await _queryCtr.addItemToTable(
+                      DbTablesNames.reglementTresorie, item);
+                });
+              }
+            }
+            if (_haspiece == false) {
+              setState(() {
+                _selectedPieces = new List<Piece>();
               });
             }
           }
-          if (_haspiece == false) {
+          if (id > -1) {
+            widget.arguments = tresorie;
+            widget.arguments.id = id;
             setState(() {
-              _selectedPieces = new List<Piece>();
+              modification = true;
+              editMode = false;
             });
+            message = S.current.msg_ajout_item;
+          } else {
+            message = S.current.msg_ajout_err;
           }
+        }else{
+          var message = S.current.msg_num_existe;
+          Helpers.showFlushBar(context, message);
+          return Future.value(id);
         }
-        if (id > -1) {
-          widget.arguments = tresorie;
-          widget.arguments.id = id;
-          setState(() {
-            modification = true;
-            editMode = false;
-          });
-          message = S.current.msg_ajout_item;
-        } else {
-          message = S.current.msg_ajout_err;
-        }
+
       }
       Helpers.showFlushBar(context, message);
       return Future.value(id);
@@ -1473,11 +1487,9 @@ class _AddTresoriePageState extends State<AddTresoriePage>
     }
 
     var res = await _queryCtr.getTresorieByNum(_numeroControl.text);
-    if (res.length >= 1 && !modification) {
-      var message = S.current.msg_num_existe;
-      Helpers.showFlushBar(context, message);
+    if (res.length >= 1) {
       await getNumPiece();
-      _tresorie.numTresorie = _numeroControl.text;
+      return null ;
     }
 
     return _tresorie;

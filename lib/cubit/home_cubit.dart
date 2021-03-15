@@ -43,7 +43,7 @@ class HomeCubit extends Cubit<HomeState> {
         break;
 
       case homeItemDevisId:
-        emit(new FragmentLoaded(PiecesFragment(clientFourn: 0,peaceType: 'FP')));
+        emit(new FragmentLoaded(new PiecesFragment(clientFourn: 0,peaceType: 'FP')));
         break;
 
       case homeItemCommandeClientId:

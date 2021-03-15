@@ -73,7 +73,7 @@ class _ArticlesFragmentState extends State<ArticlesFragment> {
   Future<void> initState() {
     super.initState();
     SchedulerBinding.instance.addPostFrameCallback((Duration duration) {
-      FeatureDiscovery.discoverFeatures(context, <String>{feature9,feature10,feature13});
+      FeatureDiscovery.discoverFeatures(context, <String>{feature13 , feature9 ,feature10,});
     });
     fillFilter(_filterMap);
     fillFilter(_emptyFilterMap);

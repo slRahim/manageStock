@@ -114,9 +114,6 @@ class _AddTierPageState extends State<AddTierPage>
 
   @override
   void didChangeDependencies() {
-    // PushNotificationsManagerState data = PushNotificationsManager.of(context);
-    // _myParams = data.myParams ;
-
     Statics.statutItems[0] = S.current.statut_m ;
     Statics.statutItems[1] = S.current.statut_mlle ;
     Statics.statutItems[2] = S.current.statut_mme;
@@ -152,7 +149,7 @@ class _AddTierPageState extends State<AddTierPage>
 
     _familleDropdownItems = utils.buildDropFamilleTier(_familleItems);
     _statutDropdownItems = utils.buildDropStatutTier(Statics.statutItems);
-    await getParams() ;
+    await buildTarification() ;
     _tarificationDropdownItems = utils.buildDropTarificationTier(_tarificationItems);
 
     _selectedStatut = Statics.statutItems[0];
@@ -199,7 +196,7 @@ class _AddTierPageState extends State<AddTierPage>
     _controlBloquer = item.bloquer ;
   }
 
-  void getParams () async {
+  void buildTarification () async {
       _myParams = await _queryCtr.getAllParams() ;
       switch(_myParams.tarification){
         case 1 :
@@ -212,7 +209,7 @@ class _AddTierPageState extends State<AddTierPage>
           _tarificationItems = _tarificationItems.sublist(0,3);
           break;
         default:
-          _tarificationItems = _tarificationItems.sublist(0,1);
+          _tarificationItems = _tarificationItems.sublist(0,3);
           break;
       }
 

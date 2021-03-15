@@ -585,7 +585,9 @@
   "ZMW_name" : "Zambian kwacha",
   "XAF_name" : "Central African CFA franc",
   "THB_name" : "Thai baht",
-  "UGX_name" : "Ugandan shilling"
+  "UGX_name" : "Ugandan shilling",
+
+  "msg_change_tarif" : "Do you want to change the rates?"
 
 
 }

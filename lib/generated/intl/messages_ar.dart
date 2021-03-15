@@ -353,6 +353,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "msg_cam_permission" : MessageLookupByLibrary.simpleMessage("ليس لديك صلاحية إستعمال الكاميرا"),
     "msg_champ_oblg" : MessageLookupByLibrary.simpleMessage("حقل إلزامي"),
     "msg_champs_obg" : MessageLookupByLibrary.simpleMessage("الرجاء ملأ كل الفراغات الإلزامية"),
+    "msg_change_tarif" : MessageLookupByLibrary.simpleMessage("هل تريد تغيير الأسعار؟"),
     "msg_choix_pin" : MessageLookupByLibrary.simpleMessage("إختر الرمز السري"),
     "msg_confirm_pin" : MessageLookupByLibrary.simpleMessage("أكد الرمز السري"),
     "msg_confirm_pin1" : MessageLookupByLibrary.simpleMessage("أكد الرمز السري للحماية"),

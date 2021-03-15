@@ -277,6 +277,11 @@ class _PiecesFragmentState extends State<PiecesFragment> {
   //********************************************listing des pieces**********************************************************************
   @override
   Widget build(BuildContext context) {
+    setState(() {
+      _filterMap ["Piece"] = widget.peaceType ;
+    });
+    _dataSource.updateFilters(_filterMap);
+
     return Scaffold(
         floatingActionButton: FloatingActionButton(
           backgroundColor: Theme.of(context).floatingActionButtonTheme.backgroundColor,

@@ -789,9 +789,22 @@ class SqlLiteDatabaseHelper {
      await db.execute('''CREATE TRIGGER update_current_index 
         AFTER INSERT ON Pieces 
         FOR EACH ROW 
+        When ( (Cast(Substr (NEW.Num_piece,0,INSTR(NEW.Num_piece , '/' )) as interger)) > (Select Current_index From FormatPiece where FormatPiece.Piece LIKE NEW.Piece) )
         BEGIN 
             UPDATE FormatPiece
-               SET Current_index = Current_index+1
+               SET Current_index = ( Cast(Substr (NEW.Num_piece,0,INSTR(NEW.Num_piece , '/' )) as interger) )
+            WHERE  FormatPiece.Piece LIKE NEW.Piece ; 
+        END;
+      ''');
+
+     await db.execute('''CREATE TRIGGER update_current_index_after_update
+        AFTER Update ON Pieces 
+        FOR EACH ROW 
+        WHEN New.Num_piece <> Old.Num_piece 
+            AND ( (Cast(Substr (NEW.Num_piece,0,INSTR(NEW.Num_piece , '/' )) as interger)) > (Select Current_index From FormatPiece Where FormatPiece.Piece LIKE NEW.Piece) )
+        BEGIN 
+            UPDATE FormatPiece
+               SET Current_index = ( Cast(Substr (NEW.Num_piece,0,INSTR(NEW.Num_piece , '/' )) as interger) )
             WHERE  FormatPiece.Piece LIKE NEW.Piece ; 
         END;
       ''');
@@ -944,7 +957,7 @@ class SqlLiteDatabaseHelper {
                SET Chiffre_affaires = (Select Sum(Net_a_payer) From Pieces where Tier_id = OLD.Tier_id AND Mov = 1 AND Piece <> "CC")
              WHERE id = OLD.Tier_id;
              UPDATE Tiers
-                SET Regler = (SELECT SUM(Montant) FROM Tresories WHERE Tier_id = New.Tier_id AND Mov = 1)
+                SET Regler = (SELECT SUM(Montant) FROM Tresories WHERE Tier_id = OLD.Tier_id AND Mov = 1)
              WHERE id = OLD.Tier_id ;
              UPDATE Tiers
                SET  Credit = (Solde_depart + Chiffre_affaires) - Regler 
@@ -972,9 +985,23 @@ class SqlLiteDatabaseHelper {
     await db.execute('''CREATE TRIGGER update_current_index_tr 
         AFTER INSERT ON Tresories 
         FOR EACH ROW 
+        When ( (Cast(Substr (NEW.Num_tresorie,0,INSTR(NEW.Num_tresorie , '/' )) as interger)) > (Select Current_index From FormatPiece where FormatPiece.Piece LIKE 'TR') )
         BEGIN 
             UPDATE FormatPiece
-               SET Current_index = Current_index+1
+               SET Current_index =( Cast(Substr (NEW.Num_tresorie,0,INSTR(NEW.Num_tresorie , '/' )) as interger) )
+            WHERE  FormatPiece.Piece LIKE "TR" ; 
+            
+        END;
+      ''');
+
+    await db.execute('''CREATE TRIGGER update_current_index_tr_after_update
+        AFTER Update ON Tresories 
+        FOR EACH ROW 
+        When New.Num_tresorie <> Old.Num_tresorie 
+            AND  ( (Cast(Substr (NEW.Num_tresorie,0,INSTR(NEW.Num_tresorie , '/' )) as interger)) > (Select Current_index From FormatPiece where FormatPiece.Piece LIKE 'TR') )
+        BEGIN 
+            UPDATE FormatPiece
+               SET Current_index =( Cast(Substr (NEW.Num_tresorie,0,INSTR(NEW.Num_tresorie , '/' )) as interger) )
             WHERE  FormatPiece.Piece LIKE "TR" ; 
             
         END;
@@ -1250,7 +1277,7 @@ class SqlLiteDatabaseHelper {
     batch.rawInsert('INSERT INTO TresorieCategories(Libelle) VALUES("Remboursement Fournisseur")');
     batch.rawInsert('INSERT INTO TresorieCategories(Libelle) VALUES("Decaissement")');
 
-    batch.rawInsert('INSERT INTO CompteTresorie(Num_compte,Nom_compte,Solde_depart,Solde) VALUES("00001","Caisse",0,0)');
+    batch.rawInsert('INSERT INTO CompteTresorie(Num_compte,Nom_compte,Solde_depart,Solde) VALUES("00001","Caisse",0.0,0.0)');
 
     batch.rawInsert('INSERT INTO ChargeTresorie(Libelle) VALUES("No Categorie")');
     batch.rawInsert('INSERT INTO ChargeTresorie(Libelle) VALUES("Electricité")');

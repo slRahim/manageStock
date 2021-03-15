@@ -166,6 +166,11 @@ class _AddPiecePageState extends State<AddPiecePage>
   //**************************************************************************************************************************************
   //*********************************************** init le screen **********************************************************************
   Future<bool> futureInitState() async {
+    _profile = await _queryCtr.getProfileById(1);
+    _myParams = await _queryCtr.getAllParams();
+    _devise = Helpers.getDeviseTranslate(_myParams.devise);
+
+    buildTarification(_myParams.tarification) ;
     _tarificationDropdownItems =
         utils.buildDropTarificationTier(_tarificationItems);
 
@@ -192,9 +197,7 @@ class _AddPiecePageState extends State<AddPiecePage>
       _dateControl.text = Helpers.dateToText(DateTime.now());
       editMode = true;
     }
-    _profile = await _queryCtr.getProfileById(1);
-    _myParams = await _queryCtr.getAllParams();
-    _devise = Helpers.getDeviseTranslate(_myParams.devise);
+
     return Future<bool>.value(editMode);
   }
 
@@ -271,6 +274,25 @@ class _AddPiecePageState extends State<AddPiecePage>
     });
   }
 
+  void buildTarification (tarification) {
+    setState(() {
+      switch(tarification){
+        case 1 :
+          _tarificationItems = Statics.tarificationItems.sublist(0,1);
+          break;
+        case 2 :
+          _tarificationItems = Statics.tarificationItems.sublist(0,2);
+          break;
+        case 3 :
+          _tarificationItems = Statics.tarificationItems;
+          break;
+        default:
+          _tarificationItems = Statics.tarificationItems;
+          break;
+      }
+    });
+
+  }
   //************************************************************************************************************************************
   // ***************************************** partie affichage et build *****************************************************************
   @override
@@ -722,7 +744,7 @@ class _AddPiecePageState extends State<AddPiecePage>
                 spacing: 10,
                 runSpacing: 10,
                 children: [
-                  (_piece.etat == 1)
+                  (_piece.etat == 1 && _pieceTo != null)
                       ?SingleChildScrollView(
                         scrollDirection: Axis.horizontal,
                         child: Row(
@@ -734,7 +756,7 @@ class _AddPiecePageState extends State<AddPiecePage>
                           ],
                         ),
                       ):SizedBox(height: 0,),
-                  (_piece.transformer == 1)
+                  (_piece.transformer == 1 && _pieceFrom != null)
                       ?SingleChildScrollView(
                         scrollDirection: Axis.horizontal,
                         child: Row(
@@ -820,14 +842,16 @@ class _AddPiecePageState extends State<AddPiecePage>
                             setState(() {
                               _selectedTarification = value;
                             });
+                            if(_selectedItems.isNotEmpty)
+                              dialogChangeTarif() ;
                           },
                         ),
                       ),
                       Flexible(
                         flex: 6,
                         child: GestureDetector(
-                          onTap: editMode ? () {
-                                  chooseClientDialog();
+                          onTap: editMode ? ()  {
+                                   chooseClientDialog();
                                 }
                               : null,
                           child: TextField(
@@ -952,7 +976,7 @@ class _AddPiecePageState extends State<AddPiecePage>
   }
 
   //afficher le fragement des clients
-  Widget chooseClientDialog() {
+  Widget chooseClientDialog()  {
     showDialog(
       context: context,
       builder: (BuildContext context) {
@@ -971,12 +995,52 @@ class _AddPiecePageState extends State<AddPiecePage>
               _piece.tier_id = _selectedClient.id;
               _piece.raisonSociale = _selectedClient.raisonSociale;
               _clientControl.text = _selectedClient.raisonSociale;
+
+              if(_tarificationItems.indexOf(selectedItem.tarification) == -1){
+                buildTarification(selectedItem.tarification);
+                _tarificationDropdownItems =
+                    utils.buildDropTarificationTier(_tarificationItems);
+              }
               _selectedTarification = _selectedClient.tarification;
             });
           },
         );
       },
-    );
+    ).then((value) {
+      if(_selectedItems.isNotEmpty)
+        dialogChangeTarif() ;
+    });
+  }
+
+  Widget dialogChangeTarif(){
+    AwesomeDialog(
+      context: context,
+      dialogType: DialogType.WARNING,
+      animType: AnimType.BOTTOMSLIDE,
+      title: '',
+      desc: S.current.msg_change_tarif,
+      btnCancelText: S.current.non,
+      btnCancelOnPress: () {},
+      btnOkText: S.current.oui,
+      btnOkOnPress: () {
+        setState(() {
+          _selectedItems.forEach((element) {
+            switch (_selectedTarification){
+              case 1 :
+                element.selectedPrice = element.prixVente1 ;
+                break ;
+              case 2 :
+                element.selectedPrice = element.prixVente2 ;
+                break ;
+              case 3 :
+                element.selectedPrice = element.prixVente3 ;
+                break ;
+            }
+          });
+        });
+        calculPiece() ;
+      },
+    )..show();
   }
 
   //afficher un dialog pour versseemnt
@@ -1438,7 +1502,7 @@ class _AddPiecePageState extends State<AddPiecePage>
                           ),
                           onPressed: () async {
                             int mov = getMovForPiece();
-                            await saveItem(mov);
+                            await saveItem(mov , isFromTransfer: false);
                             await quikPrintTicket();
                           },
                           child: Text(
@@ -1459,7 +1523,7 @@ class _AddPiecePageState extends State<AddPiecePage>
                           ),
                           onPressed: () async {
                             int mov = getMovForPiece();
-                            await saveItem(mov);
+                            await saveItem(mov , isFromTransfer: false);
                             Navigator.pop(context);
                             AwesomeDialog(
                               context: context,
@@ -1492,7 +1556,7 @@ class _AddPiecePageState extends State<AddPiecePage>
                           ),
                           onPressed: () async {
                             int mov = getMovForPiece();
-                            await saveItem(mov);
+                            await saveItem(mov , isFromTransfer: false);
                           },
                           child: Text(
                             S.current.save_btn,
@@ -1547,9 +1611,9 @@ class _AddPiecePageState extends State<AddPiecePage>
     }
   }
 
-  saveItem(int move) async {
+  saveItem(int move , {@required bool isFromTransfer}) async {
     _piece.mov = move;
-    int id = await addItemToDb();
+    int id = await addItemToDb(isFromTransfer: isFromTransfer);
     if (id > -1) {
       setState(() {
         modification = true;
@@ -1560,7 +1624,7 @@ class _AddPiecePageState extends State<AddPiecePage>
   }
 
   saveItemAsDraft() async {
-    saveItem(2);
+    saveItem(2 , isFromTransfer: false);
   }
 
   previewItem(item, int format, doc) {
@@ -1592,75 +1656,91 @@ class _AddPiecePageState extends State<AddPiecePage>
 
   //**********************************************************************************************************************************************
   //************************************************add or update item *************************************************************************
-  Future<int> addItemToDb() async {
+  Future<int> addItemToDb({@required bool isFromTransfer}) async {
     int id = -1;
     String message;
     try {
       if (widget.arguments.id != null) {
         //edit piece
-        var item = await makePiece();
-        id = await _queryCtr.updateItemInDb(DbTablesNames.pieces, item);
-        _selectedItems.forEach((article) async {
-          Journaux journaux = Journaux.fromPiece(item, article);
-          await _queryCtr.updateJournaux(DbTablesNames.journaux, journaux);
-        });
-        _desSelectedItems.forEach((article) async {
-          Journaux journaux = Journaux.fromPiece(item, article);
-          journaux.mov = -2;
-          await _queryCtr.updateJournaux(DbTablesNames.journaux, journaux);
-        });
+        var item = await makePiece(isFromTransfer:isFromTransfer);
+        if(item != null){
+          id = await _queryCtr.updateItemInDb(DbTablesNames.pieces, item);
+          _selectedItems.forEach((article) async {
+            Journaux journaux = Journaux.fromPiece(item, article);
+            await _queryCtr.updateJournaux(DbTablesNames.journaux, journaux);
+          });
+          _desSelectedItems.forEach((article) async {
+            Journaux journaux = Journaux.fromPiece(item, article);
+            journaux.mov = -2;
+            await _queryCtr.updateJournaux(DbTablesNames.journaux, journaux);
+          });
 
-        if (_oldMov != null && _piece.mov != _oldMov) {
-          //ds le cas de modification de mov de piece
-          // update tresorie mov
-          await _queryCtr.updateItemByForeignKey(
-              DbTablesNames.tresorie, "Mov", _piece.mov, "Piece_id", _piece.id);
+          if (_oldMov != null && _piece.mov != _oldMov) {
+            //ds le cas de modification de mov de piece
+            // update tresorie mov
+            await _queryCtr.updateItemByForeignKey(
+                DbTablesNames.tresorie, "Mov", _piece.mov, "Piece_id", _piece.id);
+          }
+
+          if (_piece.piece != PieceType.devis &&
+              _piece.piece != PieceType.retourClient &&
+              _piece.piece != PieceType.avoirClient &&
+              _piece.piece != PieceType.retourFournisseur &&
+              _piece.piece != PieceType.avoirFournisseur) {
+
+            await addTresorie(_piece, transferer: false);
+          }
+
+          if (id > -1) {
+            widget.arguments = item;
+            widget.arguments.id = _piece.id;
+            message = S.current.msg_update_item;
+          } else {
+            message = S.current.msg_update_err;
+          }
+        }else{
+          Navigator.pop(context);
+          var message = S.current.msg_num_existe;
+          Helpers.showFlushBar(context, message);
+          return Future.value(id);
         }
 
-        if (_piece.piece != PieceType.devis &&
-            _piece.piece != PieceType.retourClient &&
-            _piece.piece != PieceType.avoirClient &&
-            _piece.piece != PieceType.retourFournisseur &&
-            _piece.piece != PieceType.avoirFournisseur) {
-
-          await addTresorie(_piece, transferer: false);
-        }
-
-        if (id > -1) {
-          widget.arguments = item;
-          widget.arguments.id = _piece.id;
-          message = S.current.msg_update_item;
-        } else {
-          message = S.current.msg_update_err;
-        }
       } else {
         //add new piece
-        Piece piece = await makePiece();
-        piece.etat = 0;
-        id = await _queryCtr.addItemToTable(DbTablesNames.pieces, piece);
-        if (id > -1) {
-          piece.id = await _queryCtr.getLastId(DbTablesNames.pieces);
-        }
-        _selectedItems.forEach((article) async {
-          Journaux journaux = Journaux.fromPiece(piece, article);
-          await _queryCtr.addItemToTable(DbTablesNames.journaux, journaux);
-        });
+        Piece piece = await makePiece(isFromTransfer:isFromTransfer);
+        if(piece != null){
+          piece.etat = 0;
+          id = await _queryCtr.addItemToTable(DbTablesNames.pieces, piece);
+          if (id > -1) {
+            piece.id = await _queryCtr.getLastId(DbTablesNames.pieces);
+          }
+          _selectedItems.forEach((article) async {
+            Journaux journaux = Journaux.fromPiece(piece, article);
+            await _queryCtr.addItemToTable(DbTablesNames.journaux, journaux);
+          });
 
-        if (_piece.piece != PieceType.devis &&
-            _piece.piece != PieceType.retourClient &&
-            _piece.piece != PieceType.avoirClient &&
-            _piece.piece != PieceType.retourFournisseur &&
-            _piece.piece != PieceType.avoirFournisseur) {
-          await addTresorie(_piece, transferer: false);
+          if (_piece.piece != PieceType.devis &&
+              _piece.piece != PieceType.retourClient &&
+              _piece.piece != PieceType.avoirClient &&
+              _piece.piece != PieceType.retourFournisseur &&
+              _piece.piece != PieceType.avoirFournisseur) {
+            await addTresorie(_piece, transferer: false);
+          }
+
+          if (id > -1) {
+            widget.arguments = piece;
+            widget.arguments.id = id;
+            message = S.current.msg_ajout_item;
+          } else {
+            message = S.current.msg_ajout_err;
+          }
+        }else{
+          Navigator.pop(context);
+          var message = S.current.msg_num_existe;
+          Helpers.showFlushBar(context, message);
+          return Future.value(id);
         }
 
-        if (id > -1) {
-          widget.arguments = piece;
-          widget.arguments.id = id;
-          message = S.current.msg_ajout_item;
-        } else {
-          message = S.current.msg_ajout_err;
-        }
       }
 
       Navigator.pop(context);
@@ -1672,7 +1752,7 @@ class _AddPiecePageState extends State<AddPiecePage>
     }
   }
 
-  Future<Object> makePiece() async {
+  Future<Object> makePiece({@required bool isFromTransfer}) async {
     var tiers = _selectedClient;
     _piece.num_piece = _numeroControl.text;
     _piece.tier_id = tiers.id;
@@ -1706,11 +1786,9 @@ class _AddPiecePageState extends State<AddPiecePage>
     }
 
     var res = await _queryCtr.getPieceByNum(_piece.num_piece, _piece.piece);
-    if (res.length >= 1 && !modification) {
-      var message = S.current.msg_num_existe;
-      Helpers.showFlushBar(context, message);
+    if (res.length >= 1 && !isFromTransfer) {
       await getNumPiece(_piece);
-      _piece.num_piece = _numeroControl.text;
+      return null;
     }
 
     return _piece;
@@ -1996,15 +2074,20 @@ class _AddPiecePageState extends State<AddPiecePage>
 
       var message = S.current.msg_piece_transfere;
 
-      _piece.etat = 1;
+      setState(() {
+        _piece.etat = 1;
+      });
+
 
       if (_newPiece.piece == PieceType.retourClient ||
           _newPiece.piece == PieceType.avoirClient ||
           _newPiece.piece == PieceType.retourFournisseur ||
           _newPiece.piece == PieceType.avoirFournisseur) {
-        await saveItem(1);
+
+        await saveItem(1,isFromTransfer: true);
+
       } else {
-        await saveItem(0);
+        await saveItem(0 , isFromTransfer: true);
       }
 
       Navigator.pop(context);

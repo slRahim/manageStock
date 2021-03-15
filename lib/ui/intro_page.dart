@@ -726,86 +726,78 @@ class _IntroPageState extends State<IntroPage> {
 //****************************************************************************save config*******************************************************************************************
 
   Future saveConfig() async {
+    Uint8List image01 = await Helpers.getDefaultImageUint8List(from: "profile");
+    var country = (_countries.indexOf(_selectedCountry) == 0)? _countryname : _selectedCountry ;
+    var province = (_provinces.indexOf(_selectedProvince) == 0)? '' : _selectedProvince ;
+    var city = (_cities.indexOf(_selectedCity) == 0)? '' : _selectedCity ;
 
-    try{
-      Uint8List image01 = await Helpers.getDefaultImageUint8List(from: "profile");
-      var country = (_countries.indexOf(_selectedCountry) == 0)? _countryname : _selectedCountry ;
-      var province = (_provinces.indexOf(_selectedProvince) == 0)? '' : _selectedProvince ;
-      var city = (_cities.indexOf(_selectedCity) == 0)? '' : _selectedCity ;
-
-      _myParams = new MyParams(
-          1,
-          2,
-          false,
-          false,
-          1,
-          true,
-          PaperSize.mm80,
-          true,
-          "9:01",
-          0,
-          0,
-          _countryname,
-          _currencycode,
-          "demo",
-          DateTime.now(),
-          'mensuel');
+    _myParams = new MyParams(
+        1,
+        2,
+        false,
+        false,
+        1,
+        true,
+        PaperSize.mm80,
+        true,
+        "9:01",
+        0,
+        0,
+        _countryname,
+        _currencycode,
+        "demo",
+        DateTime.now(),
+        'mensuel');
 
 
-      _profile = new Profile(
-          1,
-          image01,
-          "_codepin",
-          _raisonSocialeControl.text,
-          5,
-          _adresseControl.text,
-          "_addressWeb",
-          city,
-          province,
-          country,
-          "_cp",
-          _mobileControl.text,
-          "_telephone2",
-          "_fax",
-          "_mobile1",
-          "_mobile2",
-          "_email",
-          "_site",
-          _rcControl.text,
-          _nifControl.text,
-          "_ai",
-          0.0,
-          _activiteControl.text,
-          "_nis",
-          "_codedouane",
-          "_maposition",
-          false);
+    _profile = new Profile(
+        1,
+        image01,
+        "_codepin",
+        _raisonSocialeControl.text,
+        5,
+        _adresseControl.text,
+        "_addressWeb",
+        city,
+        province,
+        country,
+        "_cp",
+        _mobileControl.text,
+        "_telephone2",
+        "_fax",
+        "_mobile1",
+        "_mobile2",
+        "_email",
+        "_site",
+        _rcControl.text,
+        _nifControl.text,
+        "_ai",
+        0.0,
+        _activiteControl.text,
+        "_nis",
+        "_codedouane",
+        "_maposition",
+        false);
 
-      _prefs.setInt("intro", 0);
-      PushNotificationsManager.of(context).onMyParamsChange(_myParams);
-      PushNotificationsManager.of(context).onProfileChange(_profile);
-      switch (_selectedLanguage) {
-        case ("English (ENG)"):
-          _prefs.setString("myLocale", "en");
-          break;
-        case ("Français (FR)"):
-          _prefs.setString("myLocale", "fr");
-          break;
+    _prefs.setInt("intro", 0);
+    PushNotificationsManager.of(context).onMyParamsChange(_myParams);
+    PushNotificationsManager.of(context).onProfileChange(_profile);
+    switch (_selectedLanguage) {
+      case ("English (ENG)"):
+        _prefs.setString("myLocale", "en");
+        break;
+      case ("Français (FR)"):
+        _prefs.setString("myLocale", "fr");
+        break;
 
-        case ("عربي (AR)"):
-          _prefs.setString("myLocale", "ar");
-          break;
-      }
-
-      await _queryCtr.updateItemInDb(DbTablesNames.myparams, _myParams);
-      await _queryCtr.updateItemInDb(DbTablesNames.profile, _profile);
-      
-    }catch(error){
-      print('error network');
-      var message = "Error, Verify network connexion or system date" ;
-      Helpers.showToast(message);
+      case ("عربي (AR)"):
+        _prefs.setString("myLocale", "ar");
+        break;
     }
-    
+
+    await _queryCtr.updateItemInDb(DbTablesNames.myparams, _myParams);
+    await _queryCtr.updateItemInDb(DbTablesNames.profile, _profile);
+
   }
 
 

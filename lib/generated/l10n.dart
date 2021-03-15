@@ -5524,6 +5524,16 @@ class S {
       args: [],
     );
   }
+
+  /// `Do you want to change the rates?`
+  String get msg_change_tarif {
+    return Intl.message(
+      'Do you want to change the rates?',
+      name: 'msg_change_tarif',
+      desc: '',
+      args: [],
+    );
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<S> {

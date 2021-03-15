@@ -193,6 +193,11 @@ class _ClientFourFragmentState extends State<ClientFourFragment> {
   //***************************************************************************affichage***************************************************************
   @override
   Widget build(BuildContext context) {
+    setState(() {
+      _filterMap ["Clientfour"] = widget.clientFourn;
+    });
+    _dataSource.updateFilters(_filterMap);
+
     return Scaffold(
         floatingActionButton: CircularMenu(
             alignment: (Helpers.isDirectionRTL(context))?Alignment.bottomLeft:Alignment.bottomRight,
@@ -234,7 +239,7 @@ class _ClientFourFragmentState extends State<ClientFourFragment> {
         ),
         appBar: SearchBar(
           searchController: searchController,
-          mainContext: context,
+          mainContext: widget.onConfirmSelectedItem != null ? null : context,
           title: widget.clientFourn == 0? S.current.client : S.current.fournisseur,
           isFilterOn: isFilterOn,
           onSearchChanged: (String search) => _dataSource.updateSearchTerm(search),
