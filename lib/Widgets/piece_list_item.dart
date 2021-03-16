@@ -341,47 +341,74 @@ class _PieceListItemState extends State<PieceListItem> {
       animType: AnimType.BOTTOMSLIDE,
       title: S.current.supp,
       desc: '${S.current.msg_supp} ... ',
-      closeIcon: Icon(Icons.remove_circle_outline_sharp , color: Colors.red,size: 26,),
+      closeIcon: Icon(Icons.close , color: Colors.red,size: 26,),
       showCloseIcon: true,
-      btnCancelText: S.current.sans_tresorie,
+      btnCancelText:(widget.piece.piece != PieceType.devis)? S.current.sans_tresorie : S.current.non,
       btnCancelOnPress: () async{
-        int res = await _queryCtr.removeItemFromTable(DbTablesNames.pieces, widget.piece);
-        var message = "" ;
-        if(res > 0){
-          message =S.current.msg_supp_ok;
-          _confirmDell =true ;
-        }else{
-          message =S.current.msg_ereure;
-        }
-        Helpers.showFlushBar(context, message);
-        if(_confirmDell){
-          setState(() {
-            _visible = false ;
-          });
+        if(widget.piece.piece != PieceType.devis){
+          int res = await _queryCtr.removeItemFromTable(DbTablesNames.pieces, widget.piece);
+          var message = "" ;
+          if(res > 0){
+            message =S.current.msg_supp_ok;
+            _confirmDell =true ;
+          }else{
+            message =S.current.msg_ereure;
+          }
+          Helpers.showFlushBar(context, message);
+          if(_confirmDell){
+            setState(() {
+              _visible = false ;
+            });
+          }
         }
       },
-      btnOkText: S.current.avec_tresorie,
+      btnOkText:(widget.piece.piece != PieceType.devis)? S.current.avec_tresorie : S.current.oui,
       btnOkOnPress: () async{
-        int res = await _queryCtr.removeItemWithForeignKey (DbTablesNames.tresorie , widget.piece.id , "Piece_id");
-        var message = "" ;
-        if(res > 0){
+        if(widget.piece.piece != PieceType.devis){
+          int res = await _queryCtr.removeItemWithForeignKey (DbTablesNames.tresorie , widget.piece.id , "Piece_id");
+          var message = "" ;
+          if(res < 0){
+            message =S.current.msg_err_tresorie;
+            Helpers.showFlushBar(context, message);
+          }
+
           int res1 = await _queryCtr.removeItemFromTable(DbTablesNames.pieces, widget.piece);
           if(res1 > 0){
             message =S.current.msg_supp_ok;
             _confirmDell =true ;
-
           }else{
             message =S.current.msg_ereure;
           }
-        }else{
-          message =S.current.msg_err_tresorie;
-        }
 
-        Helpers.showFlushBar(context, message);
-        if(_confirmDell){
-          setState(() {
-            _visible = false ;
-          });
+          Helpers.showFlushBar(context, message);
+          if(_confirmDell){
+            setState(() {
+              _visible = false ;
+            });
+          }
+
+          Helpers.showFlushBar(context, message);
+          if(_confirmDell){
+            setState(() {
+              _visible = false ;
+            });
+          }
+        }else{
+          //ds le cas d'un devis uniquement
+          int res = await _queryCtr.removeItemFromTable(DbTablesNames.pieces, widget.piece);
+          var message = "" ;
+          if(res > 0){
+            message =S.current.msg_supp_ok;
+            _confirmDell =true ;
+          }else{
+            message =S.current.msg_ereure;
+          }
+          Helpers.showFlushBar(context, message);
+          if(_confirmDell){
+            setState(() {
+              _visible = false ;
+            });
+          }
         }
       },
     )..show();

@@ -110,23 +110,25 @@ class _ArticleListItemState extends State<ArticleListItem> {
                   if(widget.fromListing == false){
                     if(widget.onItemSelected == null ){
                       Navigator.of(context).pushNamed(RoutesKeys.addArticle, arguments: widget.article);
-                    } else if(widget.article.selectedQuantite >= 0){
-                      await showDialog(
-                          context: context,
-                          builder: (BuildContext context) {
-                            return addQtedialogue();
-                          }).then((val) {
-                            if((widget.article.quantite - widget.article.cmdClient) < widget.article.selectedQuantite){
-                              Helpers.showFlushBar(context, S.current.msg_qte_select_sup);
-                            }
-                            setState(() {});
+                    } else {
+                      if(widget.article.selectedQuantite >= 0){
+                        await showDialog(
+                            context: context,
+                            builder: (BuildContext context) {
+                              return addQtedialogue();
+                            }).then((val) {
+                          if((widget.article.quantite - widget.article.cmdClient) < widget.article.selectedQuantite){
+                            Helpers.showToast(S.current.msg_qte_select_sup);
                           }
-                      );
-                    } else if(widget.onItemSelected != null ){
-                      if((widget.article.quantite - widget.article.cmdClient) < 1){
-                        Helpers.showFlushBar(context, S.current.msg_qte_zero);
+                          setState(() {});
+                        }
+                        );
+                      } else {
+                        selectThisItem();
+                        if((widget.article.quantite - widget.article.cmdClient) < 1){
+                          Helpers.showToast(S.current.msg_qte_zero);
+                        }
                       }
-                      selectThisItem();
                     }
                   }
                 },

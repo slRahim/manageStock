@@ -446,7 +446,12 @@ class _AddPiecePageState extends State<AddPiecePage>
                                 title: S.current.supp,
                                 body: addRemisedialogue(),
                                 btnCancelText: S.current.annuler,
-                                btnCancelOnPress: () {},
+                                btnCancelOnPress: () {
+                                  setState(() {
+                                    _pourcentremiseControler.text = _pourcentremise.toString() ;
+                                    _remisepieceControler.text = _remisepiece.toString();
+                                  });
+                                },
                                 btnOkText: S.current.confirme,
                                 btnOkOnPress: () {
                                   setState(() {
@@ -1175,9 +1180,8 @@ class _AddPiecePageState extends State<AddPiecePage>
                   _remisepieceControler.selection = TextSelection(baseOffset: 0, extentOffset: _remisepieceControler.value.text.length),
                 },
                 onChanged: (value) {
-                  _remisepiece = double.parse(value);
-                  _pourcentremise = (_remisepiece * 100) / _total_ht;
-                  _pourcentremiseControler.text = _pourcentremise.toString();
+                  double res = (double.parse(value) * 100) / _total_ht ;
+                  _pourcentremiseControler.text = res.toString();
                 },
                 decoration: InputDecoration(
                   errorText: _validateVerssemntError ?? null,
@@ -1217,9 +1221,8 @@ class _AddPiecePageState extends State<AddPiecePage>
                           _pourcentremiseControler.selection = TextSelection(baseOffset: 0, extentOffset: _pourcentremiseControler.value.text.length),
                         },
                         onChanged: (value) {
-                          _pourcentremise = double.parse(value);
-                          _remisepiece = (_total_ht * _pourcentremise) / 100;
-                          _remisepieceControler.text = _remisepiece.toString();
+                          double res = (_total_ht * double.parse(value)) / 100;
+                          _remisepieceControler.text = res.toString();
                         },
                         decoration: InputDecoration(
                           prefixIcon: Icon(
@@ -1754,6 +1757,8 @@ class _AddPiecePageState extends State<AddPiecePage>
 
   Future<Object> makePiece({@required bool isFromTransfer}) async {
     var tiers = _selectedClient;
+    var _old_num_piece = _piece.num_piece ;
+
     _piece.num_piece = _numeroControl.text;
     _piece.tier_id = tiers.id;
     _piece.raisonSociale = tiers.raisonSociale;
@@ -1785,10 +1790,21 @@ class _AddPiecePageState extends State<AddPiecePage>
       _piece.net_a_payer = _piece.net_a_payer * -1;
     }
 
-    var res = await _queryCtr.getPieceByNum(_piece.num_piece, _piece.piece);
-    if (res.length >= 1 && !isFromTransfer) {
-      await getNumPiece(_piece);
-      return null;
+    if(!modification){
+      var res = await _queryCtr.getPieceByNum(_piece.num_piece, _piece.piece);
+      if (res.length >= 1 && !isFromTransfer) {
+        await getNumPiece(_piece);
+        return null;
+      }
+    }else{
+      if(_piece.num_piece != _old_num_piece){
+        var res = await _queryCtr.getPieceByNum(_piece.num_piece, _piece.piece);
+        if (res.length >= 1 && !isFromTransfer) {
+          _piece.num_piece = _old_num_piece ;
+          await getNumPiece(_piece);
+          return null;
+        }
+      }
     }
 
     return _piece;
