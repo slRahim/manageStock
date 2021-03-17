@@ -1001,8 +1001,12 @@ class _AddPiecePageState extends State<AddPiecePage>
               _piece.raisonSociale = _selectedClient.raisonSociale;
               _clientControl.text = _selectedClient.raisonSociale;
 
-              if(_tarificationItems.indexOf(selectedItem.tarification) == -1){
+              if(selectedItem.tarification > _myParams.tarification){
                 buildTarification(selectedItem.tarification);
+                _tarificationDropdownItems =
+                    utils.buildDropTarificationTier(_tarificationItems);
+              }else{
+                buildTarification(_myParams.tarification);
                 _tarificationDropdownItems =
                     utils.buildDropTarificationTier(_tarificationItems);
               }

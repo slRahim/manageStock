@@ -43,6 +43,7 @@ class PushNotificationsManagerState extends State<PushNotificationsManager> {
         .setListenerForLowerVersions(onNotificationInLowerVersions);
     await configureCloudMessaginCallbacks();
     await configureLocalNotification();
+    await updateCurrentIndexPiece () ;
   }
 
   MyParams get myParams => _myParams;
@@ -66,6 +67,15 @@ class PushNotificationsManagerState extends State<PushNotificationsManager> {
         data: this,
         child: widget.child
     );
+  }
+
+  updateCurrentIndexPiece () async {
+     var res = await _queryCtr.getAllFormatPiece();
+     var formatPiece = res.first ;
+     if(formatPiece.year != DateTime.now().year.toString()){
+       formatPiece.year = DateTime.now().year.toString() ;
+       await _queryCtr.updateItemInDb(DbTablesNames.formatPiece, formatPiece);
+     }
   }
 
   configureCloudMessaginCallbacks() async {

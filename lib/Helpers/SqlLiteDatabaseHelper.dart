@@ -77,6 +77,7 @@ class SqlLiteDatabaseHelper {
     await createTriggersJournaux(db , version);
     await createTriggersPiece(db , version);
     await createTriggersTresorie (db,version);
+    await createTriggersGeneral(db,version) ;
     await setInitialData(db, version);
 
   }
@@ -396,7 +397,8 @@ class SqlLiteDatabaseHelper {
         id INTEGER PRIMARY KEY AUTOINCREMENT, 
         Format VARCHAR (20), 
         Piece VARCHAR (4), 
-        Current_index integer
+        Current_index integer,
+        Year VARCHAR (20) 
         )""");
   }
 
@@ -434,6 +436,68 @@ class SqlLiteDatabaseHelper {
 //  ********************************************************************************************************************************************
 //  ********************************************************************************************************************************************
 
+  createTriggersGeneral(Database db , int version)async {
+    await db.execute('''
+        CREATE TRIGGER update_index_onstart
+        AFTER UPDATE ON FormatPiece
+        FOR EACH ROW
+        WHEN  OLD.Year Not Like NEW.Year 
+        BEGIN
+           UPDATE FormatPiece
+             Set Year = NEW.Year ;
+            
+           UPDATE FormatPiece
+            SET Current_index = IFNULL((Select Max((Cast(Substr (Num_piece,0,INSTR(Num_piece , '/' )) as interger))) From Pieces Where Substr(Num_piece,INSTR(Num_piece , '/' )+1) Like NEW.Year And Piece like 'FP'),0)
+           Where Piece = 'FP' ; 
+            
+           UPDATE FormatPiece
+            SET Current_index = IFNULL((Select Max((Cast(Substr (Num_piece,0,INSTR(Num_piece , '/' )) as interger))) From Pieces Where  Substr(Num_piece,INSTR(Num_piece , '/' )+1) like NEW.Year And Piece like 'CC'),0)
+           Where Piece = 'CC' ;
+           
+           UPDATE FormatPiece
+            SET Current_index = IFNULL((Select Max((Cast(Substr (Num_piece,0,INSTR(Num_piece , '/' )) as interger))) From Pieces Where  Substr(Num_piece,INSTR(Num_piece , '/' )+1) like NEW.Year And Piece like 'BL'),0)
+           Where Piece = 'BL' ;
+           
+           UPDATE FormatPiece
+            SET Current_index = IFNULL((Select Max((Cast(Substr (Num_piece,0,INSTR(Num_piece , '/' )) as interger))) From Pieces Where  Substr(Num_piece,INSTR(Num_piece , '/' )+1) like NEW.Year And Piece like 'FC'),0)
+           Where Piece = 'FC' ;
+           
+           UPDATE FormatPiece
+            SET Current_index = IFNULL((Select Max((Cast(Substr (Num_piece,0,INSTR(Num_piece , '/' )) as interger))) From Pieces Where  Substr(Num_piece,INSTR(Num_piece , '/' )+1) like NEW.Year And Piece like 'RC'),0)
+           Where Piece = 'RC' ;
+           
+           UPDATE FormatPiece
+            SET Current_index = IFNULL((Select Max((Cast(Substr (Num_piece,0,INSTR(Num_piece , '/' )) as interger))) From Pieces Where  Substr(Num_piece,INSTR(Num_piece , '/' )+1) like NEW.Year And Piece like 'AF'),0)
+           Where Piece = 'AF' ;
+           
+           UPDATE FormatPiece
+            SET Current_index = IFNULL((Select Max((Cast(Substr (Num_piece,0,INSTR(Num_piece , '/' )) as interger))) From Pieces Where  Substr(Num_piece,INSTR(Num_piece , '/' )+1) like NEW.Year And Piece like 'BC'),0)
+           Where Piece = 'BC' ;
+           
+           UPDATE FormatPiece
+            SET Current_index = IFNULL((Select Max((Cast(Substr (Num_piece,0,INSTR(Num_piece , '/' )) as interger))) From Pieces Where  Substr(Num_piece,INSTR(Num_piece , '/' )+1) like NEW.Year And Piece like 'BR'),0)
+           Where Piece = 'BR' ;
+           
+           UPDATE FormatPiece
+            SET Current_index = IFNULL((Select Max((Cast(Substr (Num_piece,0,INSTR(Num_piece , '/' )) as interger))) From Pieces Where  Substr(Num_piece,INSTR(Num_piece , '/' )+1) like NEW.Year And Piece like 'FF'),0)
+           Where Piece = 'FF' ;
+           
+           UPDATE FormatPiece
+            SET Current_index = IFNULL((Select Max((Cast(Substr (Num_piece,0,INSTR(Num_piece , '/' )) as interger))) From Pieces Where  Substr(Num_piece,INSTR(Num_piece , '/' )+1) like NEW.Year And Piece like 'RF'),0)
+           Where Piece = 'RF' ;
+           
+           UPDATE FormatPiece
+            SET Current_index = IFNULL((Select Max((Cast(Substr (Num_piece,0,INSTR(Num_piece , '/' )) as interger))) From Pieces Where  Substr(Num_piece,INSTR(Num_piece , '/' )+1) like NEW.Year And Piece like 'AC'),0)
+           Where Piece = 'AC' ;
+           
+           UPDATE FormatPiece
+            SET Current_index = IFNULL((Select Max((Cast(Substr (Num_tresorie,0,INSTR(Num_tresorie , '/' )) as interger))) From Tresories Where Substr(Num_tresorie,INSTR(Num_tresorie , '/' )+1) like NEW.Year),0)
+           Where Piece = 'TR' ;
+  
+        END;
+     ''');
+  }
+
   //fonction speciale pour la creation des triggers de bd table article
   createTriggersJournaux(Database db , int version) async {
     //*********************************************************************************************************************************************
@@ -449,7 +513,7 @@ class SqlLiteDatabaseHelper {
              WHERE id = New.Article_id;
              
             Update Pieces
-              Set Marge = (Select SUM(Marge) from Journaux where Piece_id = NEW.Piece_id AND New.Mov <> -2)
+              Set Marge = IFNULL((Select SUM(Marge) from Journaux where Piece_id = NEW.Piece_id AND New.Mov <> -2),0)
             where id = New.Piece_id ;
         END;
      ''');
@@ -465,7 +529,7 @@ class SqlLiteDatabaseHelper {
              WHERE id = NEW.Article_id ;
              
             Update Pieces
-              Set Marge = (Select SUM(Marge) from Journaux where Piece_id = NEW.Piece_id AND New.Mov <> -2)
+              Set Marge = IFNULL((Select SUM(Marge) from Journaux where Piece_id = NEW.Piece_id AND New.Mov <> -2),0)
             where id = New.Piece_id ;
         END;
      ''');
@@ -481,7 +545,7 @@ class SqlLiteDatabaseHelper {
              WHERE id = NEW.Article_id ;
              
             Update Pieces
-              Set Marge = (Select SUM(Marge) from Journaux where Piece_id = NEW.Piece_id AND New.Mov <> -2)
+              Set Marge = IFNULL((Select SUM(Marge) from Journaux where Piece_id = NEW.Piece_id AND New.Mov <> -2),0)
             where id = New.Piece_id ;
         END;
      ''');
@@ -514,7 +578,7 @@ class SqlLiteDatabaseHelper {
              WHERE id = New.Article_id;
              
             Update Pieces
-              Set Marge = (Select SUM(Marge) from Journaux where Piece_id = NEW.Piece_id AND New.Mov <> -2)
+              Set Marge = IFNULL((Select SUM(Marge) from Journaux where Piece_id = NEW.Piece_id AND New.Mov <> -2),0)
             where id = New.Piece_id ;
         END;
      ''');
@@ -531,7 +595,7 @@ class SqlLiteDatabaseHelper {
              WHERE id = NEW.Article_id ;
              
             Update Pieces
-              Set Marge = (Select SUM(Marge) from Journaux where Piece_id = NEW.Piece_id AND New.Mov <> -2)
+              Set Marge = IFNULL((Select SUM(Marge) from Journaux where Piece_id = NEW.Piece_id AND New.Mov <> -2),0)
             where id = New.Piece_id ;
         END;
      ''');
@@ -548,7 +612,7 @@ class SqlLiteDatabaseHelper {
              WHERE id = NEW.Article_id ;
              
             Update Pieces
-              Set Marge = (Select SUM(Marge) from Journaux where Piece_id = NEW.Piece_id AND New.Mov <> -2)
+              Set Marge = IFNULL((Select SUM(Marge) from Journaux where Piece_id = NEW.Piece_id AND New.Mov <> -2),0)
             where id = New.Piece_id ;
         END;
      ''');
@@ -586,7 +650,7 @@ class SqlLiteDatabaseHelper {
              WHERE id = New.Article_id;
              
             Update Pieces
-              Set Marge = (Select SUM(Marge) from Journaux where Piece_id = NEW.Piece_id AND New.Mov <> -2)
+              Set Marge = IFNULL((Select SUM(Marge) from Journaux where Piece_id = NEW.Piece_id AND New.Mov <> -2),0)
             where id = New.Piece_id ;
         END;
      ''');
@@ -605,7 +669,7 @@ class SqlLiteDatabaseHelper {
              WHERE id = New.Article_id;
              
             Update Pieces
-              Set Marge = (Select SUM(Marge) from Journaux where Piece_id = NEW.Piece_id AND New.Mov <> -2)
+              Set Marge = IFNULL((Select SUM(Marge) from Journaux where Piece_id = NEW.Piece_id AND New.Mov <> -2),0)
             where id = New.Piece_id ;
         END;
      ''');
@@ -625,7 +689,7 @@ class SqlLiteDatabaseHelper {
              WHERE id = New.Article_id;
              
             Update Pieces
-              Set Marge = (Select SUM(Marge) from Journaux where Piece_id = NEW.Piece_id AND New.Mov <> -2)
+              Set Marge = IFNULL((Select SUM(Marge) from Journaux where Piece_id = NEW.Piece_id AND New.Mov <> -2),0)
             where id = New.Piece_id ;
         END;
      ''');
@@ -793,7 +857,7 @@ class SqlLiteDatabaseHelper {
         BEGIN 
             UPDATE FormatPiece
                SET Current_index = ( Cast(Substr (NEW.Num_piece,0,INSTR(NEW.Num_piece , '/' )) as interger) )
-            WHERE  FormatPiece.Piece LIKE NEW.Piece ; 
+            WHERE FormatPiece.Piece LIKE NEW.Piece ; 
         END;
       ''');
 
@@ -818,11 +882,11 @@ class SqlLiteDatabaseHelper {
         WHEN NEW.Mov = 1 AND NEW.Piece <> "CC" 
         BEGIN
              UPDATE Tiers
-               SET Chiffre_affaires = (Select Sum(Net_a_payer) From Pieces where Tier_id = New.Tier_id AND Mov = 1 AND Piece <> "CC")
+               SET Chiffre_affaires = IFNULL((Select Sum(Net_a_payer) From Pieces where Tier_id = New.Tier_id AND Mov = 1 AND Piece <> "CC"),0)
              WHERE id = New.Tier_id; 
              
              UPDATE Tiers
-                SET Regler = (SELECT SUM(Montant) FROM Tresories WHERE Tier_id = New.Tier_id AND Mov = 1)
+                SET Regler = IFNULL((SELECT SUM(Montant) FROM Tresories WHERE Tier_id = New.Tier_id AND Mov = 1),0)
              WHERE id = NEW.Tier_id ;
              
              UPDATE Tiers
@@ -853,20 +917,20 @@ class SqlLiteDatabaseHelper {
         WHEN NEW.Mov = 1 AND NEW.Piece <> "CC"
         BEGIN
              UPDATE Tiers
-               SET Chiffre_affaires = (Select Sum(Net_a_payer) From Pieces where Tier_id = OLD.Tier_id AND Mov = 1 AND Piece <> "CC")
+               SET Chiffre_affaires = IFNULL((Select Sum(Net_a_payer) From Pieces where Tier_id = OLD.Tier_id AND Mov = 1 AND Piece <> "CC"),0)
              WHERE id = OLD.Tier_id;
              UPDATE Tiers
-                SET Regler = (SELECT SUM(Montant) FROM Tresories WHERE Tier_id = New.Tier_id AND Mov = 1)
+                SET Regler = IFNULL((SELECT SUM(Montant) FROM Tresories WHERE Tier_id = New.Tier_id AND Mov = 1),0)
              WHERE id = OLD.Tier_id ;
              UPDATE Tiers
                SET  Credit = (Solde_depart + Chiffre_affaires) - Regler 
              WHERE id = OLD.Tier_id;
              
              UPDATE Tiers
-               SET Chiffre_affaires = (Select Sum(Net_a_payer) From Pieces where Tier_id = NEW.Tier_id AND Mov = 1 AND Piece <> "CC")
+               SET Chiffre_affaires = IFNULL((Select Sum(Net_a_payer) From Pieces where Tier_id = NEW.Tier_id AND Mov = 1 AND Piece <> "CC"),0)
              WHERE id = NEW.Tier_id;
              UPDATE Tiers
-                SET Regler = (SELECT SUM(Montant) FROM Tresories WHERE Tier_id = New.Tier_id AND Mov = 1)
+                SET Regler = IFNULL((SELECT SUM(Montant) FROM Tresories WHERE Tier_id = New.Tier_id AND Mov = 1),0)
              WHERE id = NEW.Tier_id ;
              UPDATE Tiers
                SET  Credit = (Solde_depart + Chiffre_affaires) - Regler 
@@ -884,20 +948,20 @@ class SqlLiteDatabaseHelper {
             AND NEW.Piece <> "CC"
         BEGIN
              UPDATE Tiers
-               SET Chiffre_affaires = (Select Sum(Net_a_payer) From Pieces where Tier_id = OLD.Tier_id AND Mov = 1 AND Piece <> "CC")
+               SET Chiffre_affaires = IFNULL((Select Sum(Net_a_payer) From Pieces where Tier_id = OLD.Tier_id AND Mov = 1 AND Piece <> "CC"),0)
              WHERE id = OLD.Tier_id;
              UPDATE Tiers
-                SET Regler = (SELECT SUM(Montant) FROM Tresories WHERE Tier_id = New.Tier_id AND Mov = 1)
+                SET Regler = IFNULL((SELECT SUM(Montant) FROM Tresories WHERE Tier_id = New.Tier_id AND Mov = 1),0)
              WHERE id = OLD.Tier_id ;
              UPDATE Tiers
                SET  Credit = (Solde_depart + Chiffre_affaires) - Regler 
              WHERE id = OLD.Tier_id;
              
              UPDATE Tiers
-               SET Chiffre_affaires = (Select Sum(Net_a_payer) From Pieces where Tier_id = NEW.Tier_id AND Mov = 1 AND Piece <> "CC")
+               SET Chiffre_affaires = IFNULL((Select Sum(Net_a_payer) From Pieces where Tier_id = NEW.Tier_id AND Mov = 1 AND Piece <> "CC"),0)
              WHERE id = NEW.Tier_id;
              UPDATE Tiers
-                SET Regler = (SELECT SUM(Montant) FROM Tresories WHERE Tier_id = New.Tier_id AND Mov = 1)
+                SET Regler = IFNULL((SELECT SUM(Montant) FROM Tresories WHERE Tier_id = New.Tier_id AND Mov = 1),0)
              WHERE id = NEW.Tier_id ;
              UPDATE Tiers
                SET  Credit = (Solde_depart + Chiffre_affaires) - Regler 
@@ -912,20 +976,20 @@ class SqlLiteDatabaseHelper {
         WHEN (OLD.Mov <> NEW.Mov)  AND (NEW.Mov = 1) AND NEW.Piece <> "CC"
         BEGIN
              UPDATE Tiers
-               SET Chiffre_affaires = (Select Sum(Net_a_payer) From Pieces where Tier_id = OLD.Tier_id AND Mov = 1 AND Piece <> "CC")
+               SET Chiffre_affaires = IFNULL((Select Sum(Net_a_payer) From Pieces where Tier_id = OLD.Tier_id AND Mov = 1 AND Piece <> "CC"),0)
              WHERE id = OLD.Tier_id;
              UPDATE Tiers
-                SET Regler = (SELECT SUM(Montant) FROM Tresories WHERE Tier_id = New.Tier_id AND Mov = 1)
+                SET Regler = IFNULL((SELECT SUM(Montant) FROM Tresories WHERE Tier_id = New.Tier_id AND Mov = 1),0)
              WHERE id = OLD.Tier_id ;
              UPDATE Tiers
                SET  Credit = (Solde_depart + Chiffre_affaires) - Regler 
              WHERE id = OLD.Tier_id;
              
              UPDATE Tiers
-               SET Chiffre_affaires = (Select Sum(Net_a_payer) From Pieces where Tier_id = NEW.Tier_id AND Mov = 1 AND Piece <> "CC")
+               SET Chiffre_affaires = IFNULL((Select Sum(Net_a_payer) From Pieces where Tier_id = NEW.Tier_id AND Mov = 1 AND Piece <> "CC"),0)
              WHERE id = NEW.Tier_id;
              UPDATE Tiers
-                SET Regler = (SELECT SUM(Montant) FROM Tresories WHERE Tier_id = New.Tier_id AND Mov = 1)
+                SET Regler = IFNULL((SELECT SUM(Montant) FROM Tresories WHERE Tier_id = New.Tier_id AND Mov = 1),0)
              WHERE id = NEW.Tier_id ;
              UPDATE Tiers
                SET  Credit = (Solde_depart + Chiffre_affaires) - Regler 
@@ -948,16 +1012,28 @@ class SqlLiteDatabaseHelper {
      ''');
 
      await db.execute('''
+        CREATE TRIGGER IF NOT EXISTS reset_current_index
+        BEFORE DELETE ON Pieces
+        FOR EACH ROW
+        WHEN  Cast(Substr (OLD.Num_piece,0,INSTR(OLD.Num_piece , '/' )) as interger)  = (Select Current_index From FormatPiece Where Piece like OLD.Piece)
+        BEGIN
+           UPDATE FormatPiece
+               SET Current_index = (Select Max(Cast(Substr (Num_piece,0,INSTR(Num_piece , '/' )) as interger)) From Pieces where Piece like OLD.Piece And Num_piece <> Old.Num_piece)
+            WHERE  FormatPiece.Piece LIKE OLD.Piece;
+        END;
+     ''');
+
+     await db.execute('''
         CREATE TRIGGER IF NOT EXISTS delete_tresorie
         BEFORE DELETE ON Pieces
         FOR EACH ROW
         WHEN (OLD.Mov = 1 AND OLD.Piece <> "CC")
         BEGIN
              UPDATE Tiers
-               SET Chiffre_affaires = (Select Sum(Net_a_payer) From Pieces where Tier_id = OLD.Tier_id AND Mov = 1 AND Piece <> "CC")
+               SET Chiffre_affaires = IFNULl((Select (Sum(Net_a_payer)-Old.Net_a_payer) From Pieces where Tier_id = OLD.Tier_id AND Mov = 1 AND Piece <> "CC"),0)
              WHERE id = OLD.Tier_id;
              UPDATE Tiers
-                SET Regler = (SELECT SUM(Montant) FROM Tresories WHERE Tier_id = OLD.Tier_id AND Mov = 1)
+                SET Regler = IFNULl((SELECT SUM(Montant) FROM Tresories WHERE Tier_id = OLD.Tier_id AND Mov = 1) , 0)
              WHERE id = OLD.Tier_id ;
              UPDATE Tiers
                SET  Credit = (Solde_depart + Chiffre_affaires) - Regler 
@@ -1015,12 +1091,12 @@ class SqlLiteDatabaseHelper {
         BEGIN     
                 
             UPDATE CompteTresorie
-              SET  Solde = Solde_depart + (SELECT SUM(Montant) FROM Tresories WHERE (Compte_id = NEW.Compte_id) AND 
+              SET  Solde = IFNULL(Solde_depart + (SELECT SUM(Montant) FROM Tresories WHERE (Compte_id = NEW.Compte_id) AND 
                                                   (Categorie_id = 2 OR Categorie_id = 4 OR Categorie_id = 6))
                                         + (Select  -1*Sum(Montant) From Tresories 
                                             Where Compte_id = New.Compte_id AND 
                                                   (Categorie_id = 3 OR Categorie_id = 5 OR Categorie_id = 7 OR Categorie_id = 8)
-                                          )
+                                          ),0)
             WHERE id = New.Compte_id; 
             
         END;
@@ -1032,11 +1108,11 @@ class SqlLiteDatabaseHelper {
         when (New.Categorie_id = 2 OR New.Categorie_id = 3 OR New.Categorie_id = 6 OR New.Categorie_id = 7)
         BEGIN             
              UPDATE Tiers
-               SET Chiffre_affaires = (Select Sum(Net_a_payer) From Pieces where Tier_id = New.Tier_id AND Mov = 1 AND Piece <> "CC")
+               SET Chiffre_affaires = IFNULL((Select Sum(Net_a_payer) From Pieces where Tier_id = New.Tier_id AND Mov = 1 AND Piece <> "CC"),0)
              WHERE id = New.Tier_id; 
            
             UPDATE Tiers
-              SET Regler = (SELECT SUM(Montant) FROM Tresories WHERE Tier_id = New.Tier_id AND Mov = 1)
+              SET Regler = IFNULL((SELECT SUM(Montant) FROM Tresories WHERE Tier_id = New.Tier_id AND Mov = 1),0)
             WHERE id = NEW.Tier_id ;
              
              UPDATE Tiers
@@ -1051,7 +1127,7 @@ class SqlLiteDatabaseHelper {
         FOR EACH ROW
         BEGIN
             UPDATE Pieces
-              SET Regler = (SELECT SUM(Regler) FROM ReglementTresorie WHERE Piece_id = New.Piece_id)
+              SET Regler = IFNULL((SELECT SUM(Regler) FROM ReglementTresorie WHERE Piece_id = New.Piece_id),0)
             WHERE id =  New.Piece_id ;
 
              UPDATE Pieces
@@ -1069,14 +1145,14 @@ class SqlLiteDatabaseHelper {
         BEGIN     
                 
             UPDATE CompteTresorie
-              SET  Solde = Solde_depart + (Select Sum(Montant) From Tresories 
+              SET  Solde =IFNULL(Solde_depart + (Select Sum(Montant) From Tresories 
                                             Where Compte_id = New.Compte_id AND 
                                                   (Categorie_id = 2 OR Categorie_id = 4 OR Categorie_id = 6)
                                             ) + 
                                             (Select  -1 * Sum(Montant) From Tresories 
                                             Where Compte_id = New.Compte_id AND 
                                                   (Categorie_id = 3 OR Categorie_id = 5 OR Categorie_id = 7 OR Categorie_id = 8)
-                                            )
+                                            ),0)
             WHERE id = New.Compte_id; 
            
         END;
@@ -1089,20 +1165,20 @@ class SqlLiteDatabaseHelper {
              AND (OLD.Mov <> New.Mov) AND NEW.Mov = 1
         BEGIN        
              UPDATE Tiers
-               SET Chiffre_affaires = (Select Sum(Net_a_payer) From Pieces where Tier_id = OLD.Tier_id AND Mov = 1 AND Piece <> "CC")
+               SET Chiffre_affaires = IFNULL((Select Sum(Net_a_payer) From Pieces where Tier_id = OLD.Tier_id AND Mov = 1 AND Piece <> "CC"),0)
              WHERE id = OLD.Tier_id; 
             UPDATE Tiers
-              SET Regler = (SELECT SUM(Montant) FROM Tresories WHERE Tier_id = OLD.Tier_id AND Mov = 1)
+              SET Regler = IFNULL((SELECT SUM(Montant) FROM Tresories WHERE Tier_id = OLD.Tier_id AND Mov = 1),0)
             WHERE id = OLD.Tier_id ;
              UPDATE Tiers
                SET  Credit = (Solde_depart + Chiffre_affaires) - Regler 
              WHERE id = OLD.Tier_id;
                  
             UPDATE Tiers
-               SET Chiffre_affaires = (Select Sum(Net_a_payer) From Pieces where Tier_id = New.Tier_id AND Mov = 1 AND Piece <> "CC")
+               SET Chiffre_affaires = IFNULL((Select Sum(Net_a_payer) From Pieces where Tier_id = New.Tier_id AND Mov = 1 AND Piece <> "CC"),0)
              WHERE id = New.Tier_id; 
             UPDATE Tiers
-              SET Regler = (SELECT SUM(Montant) FROM Tresories WHERE Tier_id = New.Tier_id AND Mov = 1)
+              SET Regler = IFNULL((SELECT SUM(Montant) FROM Tresories WHERE Tier_id = New.Tier_id AND Mov = 1),0)
             WHERE id = NEW.Tier_id ;
              UPDATE Tiers
                SET  Credit = (Solde_depart + Chiffre_affaires) - Regler 
@@ -1120,20 +1196,20 @@ class SqlLiteDatabaseHelper {
               AND OLD.Mov = NEW.Mov  AND (OLD.Piece_id = NEW.Piece_id OR OLD.Piece_id  IS NULL) 
         BEGIN         
             UPDATE Tiers
-               SET Chiffre_affaires = (Select Sum(Net_a_payer) From Pieces where Tier_id = OLD.Tier_id AND Mov = 1 AND Piece <> "CC")
+               SET Chiffre_affaires = IFNULL((Select Sum(Net_a_payer) From Pieces where Tier_id = OLD.Tier_id AND Mov = 1 AND Piece <> "CC"),0)
             WHERE id = OLD.Tier_id; 
             UPDATE Tiers
-              SET Regler = (SELECT SUM(Montant) FROM Tresories WHERE Tier_id = OLD.Tier_id AND Mov = 1)
+              SET Regler = IFNULL((SELECT SUM(Montant) FROM Tresories WHERE Tier_id = OLD.Tier_id AND Mov = 1),0)
             WHERE id = OLD.Tier_id ;
             UPDATE Tiers
                SET  Credit = (Solde_depart + Chiffre_affaires) - Regler 
             WHERE id = OLD.Tier_id;
                  
             UPDATE Tiers
-               SET Chiffre_affaires = (Select Sum(Net_a_payer) From Pieces where Tier_id = New.Tier_id AND Mov = 1 AND Piece <> "CC")
+               SET Chiffre_affaires = IFNULL((Select Sum(Net_a_payer) From Pieces where Tier_id = New.Tier_id AND Mov = 1 AND Piece <> "CC"),0)
             WHERE id = New.Tier_id; 
             UPDATE Tiers
-              SET Regler = (SELECT SUM(Montant) FROM Tresories WHERE Tier_id = New.Tier_id AND Mov = 1)
+              SET Regler = IFNULL((SELECT SUM(Montant) FROM Tresories WHERE Tier_id = New.Tier_id AND Mov = 1),0)
             WHERE id = NEW.Tier_id ;
             UPDATE Tiers
                SET  Credit = (Solde_depart + Chiffre_affaires) - Regler 
@@ -1146,31 +1222,43 @@ class SqlLiteDatabaseHelper {
 
     // ***************************************************************************************************************
     //**********************************************dell tresorie*******************************************************
+    await db.execute('''
+        CREATE TRIGGER IF NOT EXISTS reset_current_index_tresorie
+        BEFORE DELETE ON Tresories
+        FOR EACH ROW
+        WHEN Cast(Substr (Num_tresorie,0,INSTR(Num_tresorie , '/' )) as interger) = (Select Current_index from FormatPiece where Piece like 'TR')
+        BEGIN
+           UPDATE FormatPiece
+               SET Current_index = (Select Max(Cast(Substr (OLD.Num_tresorie,0,INSTR(OLD.Num_tresorie , '/' )) as interger)) From Tresories Where Num_tresorie not like Old.Num_tresorie)
+            WHERE  FormatPiece.Piece LIKE 'TR' ;
+        END;
+     ''');
 
     await db.execute('''CREATE TRIGGER update_compte_solde_onDELETE
         AFTER DELETE ON Tresories 
         FOR EACH ROW 
         BEGIN     
              UPDATE CompteTresorie
-              SET Solde = Solde_depart + (SELECT Sum(Montant) FROM Tresories 
+              SET Solde = IFNULL(Solde_depart + (SELECT Sum(Montant) FROM Tresories 
                                             WHERE (Compte_id = OLD.Compte_id) AND 
                                                   (Categorie_id = 2 OR Categorie_id = 4 OR Categorie_id = 6))  
                                          +  (SELECT  -1 * Sum(Montant) FROM Tresories 
                                               WHERE (Compte_id = OLD.Compte_id) AND 
-                                                 (Categorie_id = 3 OR Categorie_id = 5 OR Categorie_id = 7 OR Categorie_id = 8))
+                                                 (Categorie_id = 3 OR Categorie_id = 5 OR Categorie_id = 7 OR Categorie_id = 8)),0)
             WHERE id = OLD.Compte_id; 
           
         END;
       ''');
+
     await db.execute('''CREATE TRIGGER dell_tresorie 
         BEFORE DELETE ON Tresories 
         FOR EACH ROW 
         BEGIN 
            UPDATE Tiers
-               SET Chiffre_affaires = (Select Sum(Net_a_payer) From Pieces where Tier_id = OLD.Tier_id AND Mov = 1 AND Piece <> "CC")
+               SET Chiffre_affaires = IFNULL((Select Sum(Net_a_payer) From Pieces where Tier_id = OLD.Tier_id AND Mov = 1 AND Piece <> "CC"),0)
            WHERE id = OLD.Tier_id; 
            UPDATE Tiers
-             SET Regler = (SELECT (SUM(Montant)-OLD.Montant) FROM Tresories WHERE Tier_id = OLD.Tier_id AND Mov = 1)
+             SET Regler = IFNULL((SELECT (SUM(Montant)-OLD.Montant) FROM Tresories WHERE Tier_id = OLD.Tier_id AND Mov = 1),0)
            WHERE id = OLD.Tier_id ;  
            UPDATE Tiers
              SET  Credit = (Solde_depart + Chiffre_affaires) - Regler 
@@ -1185,7 +1273,7 @@ class SqlLiteDatabaseHelper {
         FOR EACH ROW 
         BEGIN 
             UPDATE Pieces
-              SET Regler = (SELECT SUM(Regler-OLD.Regler) FROM ReglementTresorie WHERE Piece_id = OLD.Piece_id )
+              SET Regler = IFNULL((SELECT SUM(Regler-OLD.Regler) FROM ReglementTresorie WHERE Piece_id = OLD.Piece_id ),0)
             WHERE id =  OLD.Piece_id ;
 
              UPDATE Pieces
@@ -1243,7 +1331,6 @@ class SqlLiteDatabaseHelper {
         END;
       ''');
 
-
   }
 
 //*****************************************************************************************************************************************
@@ -1284,18 +1371,18 @@ class SqlLiteDatabaseHelper {
     batch.rawInsert('INSERT INTO ChargeTresorie(Libelle) VALUES("Loyer")');
     batch.rawInsert('INSERT INTO ChargeTresorie(Libelle) VALUES("Salaire")');
 
-    batch.rawInsert('INSERT INTO FormatPiece(Format , Piece , Current_index) VALUES("XXXX/YYYY"  , "FP" , 0)');
-    batch.rawInsert('INSERT INTO FormatPiece(Format , Piece , Current_index) VALUES("XXXX/YYYY"  , "CC" , 0)');
-    batch.rawInsert('INSERT INTO FormatPiece(Format , Piece , Current_index) VALUES("XXXX/YYYY"  , "BL" , 0)');
-    batch.rawInsert('INSERT INTO FormatPiece(Format , Piece , Current_index) VALUES("XXXX/YYYY"  , "FC" , 0)');
-    batch.rawInsert('INSERT INTO FormatPiece(Format , Piece , Current_index) VALUES("XXXX/YYYY"  , "RC" , 0)');
-    batch.rawInsert('INSERT INTO FormatPiece(Format , Piece , Current_index) VALUES("XXXX/YYYY"  , "AF" , 0)');
-    batch.rawInsert('INSERT INTO FormatPiece(Format , Piece , Current_index) VALUES("XXXX/YYYY"  , "BC" , 0)');
-    batch.rawInsert('INSERT INTO FormatPiece(Format , Piece , Current_index) VALUES("XXXX/YYYY"  , "BR" , 0)');
-    batch.rawInsert('INSERT INTO FormatPiece(Format , Piece , Current_index) VALUES("XXXX/YYYY"  , "FF" , 0)');
-    batch.rawInsert('INSERT INTO FormatPiece(Format , Piece , Current_index) VALUES("XXXX/YYYY"  , "RF" , 0)');
-    batch.rawInsert('INSERT INTO FormatPiece(Format , Piece , Current_index) VALUES("XXXX/YYYY"  , "AC" , 0)');
-    batch.rawInsert('INSERT INTO FormatPiece(Format , Piece , Current_index) VALUES("XXXX/YYYY"  , "TR" , 0)');
+    batch.rawInsert('INSERT INTO FormatPiece(Format , Piece , Current_index,Year) VALUES("XXXX/YYYY"  , "FP" , 0 , ${DateTime.now().year.toString()})');
+    batch.rawInsert('INSERT INTO FormatPiece(Format , Piece , Current_index,Year) VALUES("XXXX/YYYY"  , "CC" , 0 , ${DateTime.now().year.toString()})');
+    batch.rawInsert('INSERT INTO FormatPiece(Format , Piece , Current_index,Year) VALUES("XXXX/YYYY"  , "BL" , 0 , ${DateTime.now().year.toString()})');
+    batch.rawInsert('INSERT INTO FormatPiece(Format , Piece , Current_index,Year) VALUES("XXXX/YYYY"  , "FC" , 0 , ${DateTime.now().year.toString()})');
+    batch.rawInsert('INSERT INTO FormatPiece(Format , Piece , Current_index,Year) VALUES("XXXX/YYYY"  , "RC" , 0 , ${DateTime.now().year.toString()})');
+    batch.rawInsert('INSERT INTO FormatPiece(Format , Piece , Current_index,Year) VALUES("XXXX/YYYY"  , "AF" , 0 , ${DateTime.now().year.toString()})');
+    batch.rawInsert('INSERT INTO FormatPiece(Format , Piece , Current_index,Year) VALUES("XXXX/YYYY"  , "BC" , 0 , ${DateTime.now().year.toString()})');
+    batch.rawInsert('INSERT INTO FormatPiece(Format , Piece , Current_index,Year) VALUES("XXXX/YYYY"  , "BR" , 0 , ${DateTime.now().year.toString()})');
+    batch.rawInsert('INSERT INTO FormatPiece(Format , Piece , Current_index,Year) VALUES("XXXX/YYYY"  , "FF" , 0 , ${DateTime.now().year.toString()})');
+    batch.rawInsert('INSERT INTO FormatPiece(Format , Piece , Current_index,Year) VALUES("XXXX/YYYY"  , "RF" , 0 , ${DateTime.now().year.toString()})');
+    batch.rawInsert('INSERT INTO FormatPiece(Format , Piece , Current_index,Year) VALUES("XXXX/YYYY"  , "AC" , 0 , ${DateTime.now().year.toString()})');
+    batch.rawInsert('INSERT INTO FormatPiece(Format , Piece , Current_index,Year) VALUES("XXXX/YYYY"  , "TR" , 0 , ${DateTime.now().year.toString()})');
 
     batch.rawInsert("INSERT INTO MyParams VALUES(1,2,0,0,1,1,'80',1,'9:01',0,0,'United States of America','USD' , 'demo' , 0 , 'mensuel')");
 

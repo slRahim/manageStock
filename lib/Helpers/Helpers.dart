@@ -223,27 +223,25 @@ class Helpers {
     SystemChannels.platform.invokeMethod('SystemNavigator.pop');
   }
 
-  static String generateNumPiece(FormatPiece piece) {
-    switch (piece.format) {
+  static String generateNumPiece(FormatPiece formatPiece) {
+    switch (formatPiece.format) {
       case NumPieceFormat.format1:
-        var now = new DateTime.now();
-        String year = now.year.toString();
-        int index = piece.currentindex + 1;
+        String year = formatPiece.year;
+        int index = formatPiece.currentindex + 1;
         return "$index/$year";
         break;
 
       case NumPieceFormat.format2:
         var now = new DateTime.now();
-        String year = now.year.toString();
+        String year = formatPiece.year ;
         String month = now.month.toString();
-        int index = piece.currentindex + 1;
+        int index = formatPiece.currentindex + 1;
         return "$index/$month/$year";
         break;
 
       default:
-        var now = new DateTime.now();
-        String year = now.year.toString();
-        int index = piece.currentindex + 1;
+        String year =formatPiece.year;
+        int index = formatPiece.currentindex + 1;
         return "$index/$year";
         break;
     }

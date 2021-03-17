@@ -4,8 +4,9 @@ class FormatPiece {
   String _piece ;
   String _format ;
   int _currentindex ;
+  String _year ;
 
-  FormatPiece(this._id, this._piece, this._format, this._currentindex);
+  FormatPiece(this._id, this._piece, this._format, this._currentindex , this._year);
 
   FormatPiece.init();
 
@@ -14,16 +15,24 @@ class FormatPiece {
     this._piece=map["Piece"];
     this._format=map["Format"];
     this._currentindex = map["Current_index"];
+    this._year = map["Year"] ;
   }
 
   Map<String ,dynamic> toMap(){
     var map = new Map<String, dynamic>();
 
-    map["piece"] = this._piece;
-    map["format"]=this._format;
-    map["current_index"]=this._currentindex;
+    map["Piece"] = this._piece;
+    map["Format"]=this._format;
+    map["Current_index"]=this._currentindex;
+    map["Year"] = this._year ;
 
     return map ;
+  }
+
+  String get year => _year;
+
+  set year(String value) {
+    _year = value;
   }
 
   int get currentindex => _currentindex;

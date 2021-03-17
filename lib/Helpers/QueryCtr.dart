@@ -628,6 +628,19 @@ class QueryCtr {
     return list ;
   }
 
+  Future<List<FormatPiece>> getAllFormatPiece () async {
+    var dbClient = await _databaseHelper.db ;
+    var res = await dbClient.query(DbTablesNames.formatPiece);
+
+    List<FormatPiece> list = new List<FormatPiece>();
+    for(int i = 0 ; i<res.length ; i++){
+      FormatPiece  formatPiece = FormatPiece.fromMap(res[i]);
+      list.add(formatPiece);
+    }
+
+    return list ;
+  }
+
   //*****************************************************************************************************************************************************************
   //************************************************************************special statistique**********************************************************************
 
