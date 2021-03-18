@@ -694,12 +694,12 @@ class _AddTierPageState extends State<AddTierPage>
                 controller: _chiffre_affairesControl,
                 onTap: () => _chiffre_affairesControl.selection = TextSelection(baseOffset: 0, extentOffset: _chiffre_affairesControl.value.text.length),
                 keyboardType: TextInputType.number,
-                validator: (value) {
-                  if (value.isEmpty) {
-                    return S.current.msg_champ_oblg;
-                  }
-                  return null;
-                },
+                // validator: (value) {
+                //   if (value.isEmpty) {
+                //     return S.current.msg_champ_oblg;
+                //   }
+                //   return null;
+                // },
                 decoration: InputDecoration(
                   labelText: S.current.chifre_affaire,
                   labelStyle: TextStyle(color: Colors.blue),

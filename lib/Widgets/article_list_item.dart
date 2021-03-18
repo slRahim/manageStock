@@ -27,7 +27,8 @@ class ArticleListItem extends StatefulWidget {
     Key key,
     this.onItemSelected,
     this.tarification,
-    this.fromListing=false
+    this.fromListing=false,
+    this.pieceOrigin
   })  : assert(article != null),
         super(key: key);
 
@@ -35,6 +36,7 @@ class ArticleListItem extends StatefulWidget {
   final Function(Object) onItemSelected;
   final int tarification ;
   final bool fromListing ;
+  final String pieceOrigin ;
 
   @override
   _ArticleListItemState createState() => _ArticleListItemState();
@@ -259,41 +261,49 @@ class _ArticleListItemState extends State<ArticleListItem> {
 
   //afficher le prix de vente selon la tarification
   Widget trailingChildrenOnArticleFragment(){
-    switch (widget.tarification){
-      case 1 :
-        return Text(
-              "${Helpers.numberFormat(widget.article.prixVente1).toString()} ${_devise}",
-              style: TextStyle(fontSize: 16.0, fontWeight: FontWeight.bold),
-        );
-        break ;
-
-      case 2:
-        return Text(
-              "${Helpers.numberFormat(widget.article.prixVente2).toString()} ${_devise}",
-              style: TextStyle(fontSize: 16.0, fontWeight: FontWeight.bold),
-        );
-        break ;
-
-      case 3 :
-        return Text(
-              "${Helpers.numberFormat(widget.article.prixVente3).toString()} ${_devise}",
-              style: TextStyle(fontSize: 16.0, fontWeight: FontWeight.bold),
-        );
-        break ;
-
-      default :
-        if(widget.article.selectedPrice > 0){
+    if(widget.pieceOrigin == 'BR' || widget.pieceOrigin == 'FF'){
+      return Text(
+        "${Helpers.numberFormat(widget.article.prixAchat).toString()} ${_devise}",
+        style: TextStyle(fontSize: 16.0, fontWeight: FontWeight.bold),
+      );
+    }else{
+      switch (widget.tarification){
+        case 1 :
           return Text(
-                "${Helpers.numberFormat(widget.article.selectedPrice).toString()} ${_devise}",
-                style: TextStyle(fontSize: 16.0, fontWeight: FontWeight.bold),
+            "${Helpers.numberFormat(widget.article.prixVente1).toString()} ${_devise}",
+            style: TextStyle(fontSize: 16.0, fontWeight: FontWeight.bold),
           );
-        }
-        return Text(
-              "${Helpers.numberFormat(widget.article.prixVente1).toString()} ${_devise}",
+          break ;
+
+        case 2:
+          return Text(
+            "${Helpers.numberFormat(widget.article.prixVente2).toString()} ${_devise}",
+            style: TextStyle(fontSize: 16.0, fontWeight: FontWeight.bold),
+          );
+          break ;
+
+        case 3 :
+          return Text(
+            "${Helpers.numberFormat(widget.article.prixVente3).toString()} ${_devise}",
+            style: TextStyle(fontSize: 16.0, fontWeight: FontWeight.bold),
+          );
+          break ;
+
+        default :
+          if(widget.article.selectedPrice > 0){
+            return Text(
+              "${Helpers.numberFormat(widget.article.selectedPrice).toString()} ${_devise}",
               style: TextStyle(fontSize: 16.0, fontWeight: FontWeight.bold),
-        );
-        break ;
+            );
+          }
+          return Text(
+            "${Helpers.numberFormat(widget.article.prixVente1).toString()} ${_devise}",
+            style: TextStyle(fontSize: 16.0, fontWeight: FontWeight.bold),
+          );
+          break ;
+      }
     }
+
 
   }
 
@@ -494,22 +504,27 @@ class _ArticleListItemState extends State<ArticleListItem> {
 
   void selectThisItem() {
     widget.article.selectedQuantite = 1 ;
-    switch (widget.tarification) {
-      case 1 :
-        widget.article.selectedPrice = widget.article.prixVente1;
-        break;
-      case 2 :
-        widget.article.selectedPrice = widget.article.prixVente2;
-        break ;
-      case 3 :
-        widget.article.selectedPrice = widget.article.prixVente3;
-        break ;
-      default :
-        if(widget.article.selectedPrice == null){
+    if(widget.pieceOrigin == 'BR' || widget.pieceOrigin == 'FF'){
+      widget.article.selectedPrice = widget.article.prixAchat;
+    }else{
+      switch (widget.tarification) {
+        case 1 :
           widget.article.selectedPrice = widget.article.prixVente1;
-        }
-        break;
+          break;
+        case 2 :
+          widget.article.selectedPrice = widget.article.prixVente2;
+          break ;
+        case 3 :
+          widget.article.selectedPrice = widget.article.prixVente3;
+          break ;
+        default :
+          if(widget.article.selectedPrice == null){
+            widget.article.selectedPrice = widget.article.prixVente1;
+          }
+          break;
+      }
     }
+
     widget.onItemSelected(widget.article);
   }
 

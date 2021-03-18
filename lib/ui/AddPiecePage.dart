@@ -942,6 +942,7 @@ class _AddPiecePageState extends State<AddPiecePage>
   Widget addArticleDialog() {
     return new ArticlesFragment(
       tarification: _selectedTarification,
+      pieceOrigin:  _piece.piece ,
       onConfirmSelectedItems: (selectedItem) {
         selectedItem.forEach((item) {
           if (_selectedItems.contains(item)) {

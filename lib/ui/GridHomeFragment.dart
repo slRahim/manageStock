@@ -23,6 +23,7 @@ import 'AddArticlePage.dart';
 import 'package:gestmob/services/push_notifications.dart';
 import 'package:feature_discovery/feature_discovery.dart';
 import 'package:flutter/scheduler.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class GridHomeWidget extends StatefulWidget {
   static bool Global_Draggable_Mode = false;
@@ -201,8 +202,20 @@ class _GridHomeWidgetState extends State<GridHomeWidget> {
                   actions: [
                     IconButton(
                       icon: Icon(Icons.contact_support,size: 30,),
-                      onPressed: (){
-                        Navigator.pushNamed(context, RoutesKeys.supportPage);
+                      onPressed: ()async{
+                        // Navigator.pushNamed(context, RoutesKeys.supportPage);
+                        var url = "https://cirtait.com/contact" ;
+                        if (await canLaunch(url)) {
+                          await launch(
+                          url,
+                          forceSafariVC: true,
+                          forceWebView: true,
+                          enableJavaScript: true,
+                          headers: <String, String>{'my_header_key': 'my_header_value'},
+                          );
+                        } else {
+                          throw 'Could not launch $url';
+                        }
                       },
                     )
                   ],

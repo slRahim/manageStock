@@ -25,8 +25,9 @@ class ItemsSliverList extends StatefulWidget {
   final Function(Object) onItemSelected;
   final bool canRefresh;
   final int tarification ;
+  final String pieceOrigin ;
 
-  ItemsSliverList({Key key, @required this.dataSource, this.onItemSelected, this.canRefresh , this.tarification,}) : super(key: key);
+  ItemsSliverList({Key key, @required this.dataSource, this.onItemSelected, this.canRefresh , this.tarification,this.pieceOrigin}) : super(key: key);
 
   @override
   _ItemsSliverListState createState() => _ItemsSliverListState();
@@ -77,7 +78,7 @@ class _ItemsSliverListState extends State<ItemsSliverList> {
 
   Widget createItemWidget(item){
     if(item is Article){
-      return ArticleListItem(article: item, onItemSelected: widget.onItemSelected,tarification: widget.tarification,);
+      return ArticleListItem(article: item, onItemSelected: widget.onItemSelected,tarification: widget.tarification,pieceOrigin: widget.pieceOrigin,);
     } else if(item is Tiers){
       item.originClientOrFourn = widget.dataSource.listType == ItemsListTypes.clientsList? 0 : 2;
       return TierListItem(tier: item, onItemSelected: widget.onItemSelected,);

@@ -32,9 +32,10 @@ import 'package:flutter/scheduler.dart';
 class ArticlesFragment extends StatefulWidget {
   final Function(List<dynamic>) onConfirmSelectedItems;
   final int tarification;
+  final String pieceOrigin ;
 
   const ArticlesFragment(
-      {Key key, this.onConfirmSelectedItems, this.tarification})
+      {Key key, this.onConfirmSelectedItems, this.tarification , this.pieceOrigin})
       : super(key: key);
 
   @override
@@ -315,6 +316,7 @@ class _ArticlesFragmentState extends State<ArticlesFragment> {
             dataSource: _dataSource,
             canRefresh: _selectedItems.length <= 0,
             tarification: widget.tarification,
+            pieceOrigin: widget.pieceOrigin,
             onItemSelected: widget.onConfirmSelectedItems != null
                 ? (selectedItem) {
                     onItemSelected(setState, selectedItem);
