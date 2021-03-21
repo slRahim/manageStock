@@ -75,8 +75,7 @@ class _ListTileCardState extends State<ListTileCard> {
                 widget.slidingCardController.collapseCard();
               },
             ),
-            backCardWidget: (widget.from is Piece ||
-                    widget.from is Tiers)
+            backCardWidget: _backCardCondition()
                 ? ListBackCard(
                     trailingChildren: widget.trailingChildren,
                     onTap: widget.onTap,
@@ -85,6 +84,17 @@ class _ListTileCardState extends State<ListTileCard> {
           ),
         ),
     );
+  }
+
+  bool _backCardCondition (){
+    if(widget.from is Piece || widget.from is Tiers){
+      if(widget.from is Piece  && widget.from.piece == 'FP'){
+        return false ;
+      }
+      return true ;
+    }
+
+    return false ;
   }
 }
 
@@ -134,8 +144,7 @@ class _ListFrontCardState extends State<ListFrontCard> {
       child: Column(
         children: <Widget>[
           //en tete de la carte
-          (widget.from is Piece || widget.from is Tiers)
-              ? Flexible(
+          _arrowCondition () ? Flexible(
             flex: 1,
             child: Container(
               decoration: BoxDecoration(
@@ -239,6 +248,17 @@ class _ListFrontCardState extends State<ListFrontCard> {
         ],
       ),
     );
+  }
+
+  bool _arrowCondition (){
+    if(widget.from is Piece || widget.from is Tiers){
+      if(widget.from is Piece  && widget.from.piece == 'FP'){
+        return false ;
+      }
+      return true ;
+    }
+
+    return false ;
   }
 }
 

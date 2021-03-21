@@ -48,25 +48,18 @@ class _ArticleListItemSelectedState extends State<ArticleListItemSelected> {
         },
         onTap: () async {
           if(widget.fromListing == false){
-            if(widget.onItemSelected == null ){
-              Navigator.of(context).pushNamed(RoutesKeys.addArticle, arguments: widget.article);
-            } else if(widget.article.selectedQuantite >= 0){
+            if( widget.onItemSelected != null && widget.article.selectedQuantite >= 0){
               await showDialog(
                   context: context,
                   builder: (BuildContext context) {
                     return addQtedialogue();
                   }).then((val) {
-                      if((widget.article.quantite - widget.article.cmdClient) < widget.article.selectedQuantite){
-                        Helpers.showFlushBar(context, S.current.msg_qte_select_sup);
-                      }
-                      setState(() {});
-                  }
-              );
-            } else if(widget.onItemSelected != null ){
-              if((widget.article.quantite - widget.article.cmdClient) < 1){
-                Helpers.showFlushBar(context, S.current.msg_qte_zero);
+                if((widget.article.quantite - widget.article.cmdClient) < widget.article.selectedQuantite){
+                  Helpers.showFlushBar(context, S.current.msg_qte_select_sup);
+                }
+                setState(() {});
               }
-              selectThisItem();
+              );
             }
           }
         },
@@ -308,27 +301,7 @@ class _ArticleListItemSelectedState extends State<ArticleListItemSelected> {
     });
   }
 
-  void selectThisItem() {
-    widget.article.selectedQuantite = 1 ;
-    switch (widget.tarification) {
-      case 1 :
-        widget.article.selectedPrice = widget.article.prixVente1;
-        break;
-      case 2 :
-        widget.article.selectedPrice = widget.article.prixVente2;
-        break ;
-      case 3 :
-        widget.article.selectedPrice = widget.article.prixVente3;
-        break ;
-      default :
-        if(widget.article.selectedPrice == null){
-          widget.article.selectedPrice = widget.article.prixVente1;
-        }
-        break;
-    }
 
-    widget.onItemSelected(widget.article);
-  }
 }
 
 //****************************************************************************************************************************************************************

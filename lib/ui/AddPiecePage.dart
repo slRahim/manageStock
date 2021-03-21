@@ -961,7 +961,7 @@ class _AddPiecePageState extends State<AddPiecePage>
   }
 
   Widget addJournauxDialog() {
-    return new JournalFragment(
+    return  JournalFragment(
       tier: _selectedClient,
       pieceType: _piece.piece,
       onConfirmSelectedItems: (selectedItem) {
