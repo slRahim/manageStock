@@ -261,7 +261,7 @@ class _ArticleListItemState extends State<ArticleListItem> {
 
   //afficher le prix de vente selon la tarification
   Widget trailingChildrenOnArticleFragment(){
-    if(widget.pieceOrigin == 'BR' || widget.pieceOrigin == 'FF'){
+    if(widget.pieceOrigin == 'BR' || widget.pieceOrigin == 'FF' || widget.pieceOrigin == 'RF' || widget.pieceOrigin == 'AF'){
       return Text(
         "${Helpers.numberFormat(widget.article.prixAchat).toString()} ${_devise}",
         style: TextStyle(fontSize: 16.0, fontWeight: FontWeight.bold),
@@ -504,7 +504,7 @@ class _ArticleListItemState extends State<ArticleListItem> {
 
   void selectThisItem() {
     widget.article.selectedQuantite = 1 ;
-    if(widget.pieceOrigin == 'BR' || widget.pieceOrigin == 'FF'){
+    if(widget.pieceOrigin == 'BR' || widget.pieceOrigin == 'FF' || widget.pieceOrigin == 'RF' || widget.pieceOrigin == 'AF'){
       widget.article.selectedPrice = widget.article.prixAchat;
     }else{
       switch (widget.tarification) {

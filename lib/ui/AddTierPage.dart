@@ -1088,16 +1088,19 @@ class _AddTierPageState extends State<AddTierPage>
           },
         ),
         Padding(padding: EdgeInsetsDirectional.fromSTEB(10, 10, 10, 10),),
-        ListDropDown(
-          libelle: "${S.current.tarif }",
-          editMode: editMode,
-          value: _selectedTarification,
-          items: _tarificationDropdownItems,
-          onChanged: (value) {
-            setState(() {
-              _selectedTarification = value;
-            });
-          },),
+        Visibility(
+          visible : (_clientFourn != 2),
+          child: ListDropDown(
+            libelle: "${S.current.tarif }",
+            editMode: editMode,
+            value: _selectedTarification,
+            items: _tarificationDropdownItems,
+            onChanged: (value) {
+              setState(() {
+                _selectedTarification = value;
+              });
+            },),
+        ),
       ],
     );
   }

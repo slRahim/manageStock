@@ -836,20 +836,28 @@ class _AddPiecePageState extends State<AddPiecePage>
                   ),
                   Row(
                     children: [
-                      Flexible(
-                        flex: 4,
-                        child: ListDropDown(
-                          editMode: editMode,
-                          value: _selectedTarification,
-                          items: _tarificationDropdownItems,
-                          libelle: "${S.current.tarif}",
-                          onChanged: (value) {
-                            setState(() {
-                              _selectedTarification = value;
-                            });
-                            if(_selectedItems.isNotEmpty)
-                              dialogChangeTarif() ;
-                          },
+                      Visibility(
+                        visible: (_piece.piece == PieceType.devis ||
+                            _piece.piece == PieceType.retourClient ||
+                            _piece.piece == PieceType.avoirClient ||
+                            _piece.piece == PieceType.commandeClient ||
+                            _piece.piece == PieceType.bonLivraison ||
+                            _piece.piece == PieceType.factureClient),
+                        child: Flexible(
+                          flex: 4,
+                          child: ListDropDown(
+                            editMode: editMode,
+                            value: _selectedTarification,
+                            items: _tarificationDropdownItems,
+                            libelle: "${S.current.tarif}",
+                            onChanged: (value) {
+                              setState(() {
+                                _selectedTarification = value;
+                              });
+                              if(_selectedItems.isNotEmpty)
+                                dialogChangeTarif() ;
+                            },
+                          ),
                         ),
                       ),
                       Flexible(
@@ -1017,8 +1025,17 @@ class _AddPiecePageState extends State<AddPiecePage>
         );
       },
     ).then((value) {
-      if(_selectedItems.isNotEmpty)
-        dialogChangeTarif() ;
+      if(_piece.piece == PieceType.devis ||
+          _piece.piece == PieceType.retourClient ||
+          _piece.piece == PieceType.avoirClient ||
+          _piece.piece == PieceType.commandeClient ||
+          _piece.piece == PieceType.bonLivraison ||
+          _piece.piece == PieceType.factureClient){
+
+        if(_selectedItems.isNotEmpty)
+          dialogChangeTarif() ;
+      }
+
     });
   }
 

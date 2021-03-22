@@ -184,22 +184,15 @@ class _PreviewPieceState extends State<PreviewPiece> {
                                   style: TextStyle(fontWeight: FontWeight.bold,color: Colors.black),
                                 ),
                               ]),
-                              TableRow(children: [
-                                (_myParams.printDisplay != 0)
-                                    ? Text("Article1", style: TextStyle(color: Colors.black),)
-                                    : Text("Ref01", style: TextStyle(color: Colors.black),),
-                                Text("XXX", style: TextStyle(color: Colors.black),),
-                                Text("XXX", style: TextStyle(color: Colors.black),),
-                                Text("XXX", style: TextStyle(color: Colors.black),),
-                              ]),
-                              TableRow(children: [
-                                (_myParams.printDisplay  != 0)
-                                    ? Text("Article2", style: TextStyle(color: Colors.black),)
-                                    : Text("Ref02", style: TextStyle(color: Colors.black),),
-                                Text("XXX", style: TextStyle(color: Colors.black),),
-                                Text("XXX", style: TextStyle(color: Colors.black),),
-                                Text("XXX", style: TextStyle(color: Colors.black),),
-                              ]),
+                              for(var e in widget.articles)
+                                TableRow(children: [
+                                  (_myParams.printDisplay  != 0)
+                                      ? Text("${e.designation}", style: TextStyle(color: Colors.black),)
+                                      : Text("${e.ref}", style: TextStyle(color: Colors.black),),
+                                  Text("${Helpers.numberFormat(e.selectedQuantite)}", style: TextStyle(color: Colors.black),),
+                                  Text("${Helpers.numberFormat(e.selectedPrice)}", style: TextStyle(color: Colors.black),),
+                                  Text("${Helpers.numberFormat(e.selectedQuantite*e.selectedPrice)}", style: TextStyle(color: Colors.black),),
+                                ]),
                             ],
                           ),
                           Text(
