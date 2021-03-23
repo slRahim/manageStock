@@ -1226,10 +1226,10 @@ class SqlLiteDatabaseHelper {
         CREATE TRIGGER IF NOT EXISTS reset_current_index_tresorie
         BEFORE DELETE ON Tresories
         FOR EACH ROW
-        WHEN Cast(Substr (Num_tresorie,0,INSTR(Num_tresorie , '/' )) as interger) = (Select Current_index from FormatPiece where Piece like 'TR')
+        WHEN Cast(Substr (OLD.Num_tresorie,0,INSTR(OLD.Num_tresorie , '/' )) as interger) = (Select Current_index from FormatPiece where Piece like 'TR')
         BEGIN
            UPDATE FormatPiece
-               SET Current_index = (Select Max(Cast(Substr (OLD.Num_tresorie,0,INSTR(OLD.Num_tresorie , '/' )) as interger)) From Tresories Where Num_tresorie not like Old.Num_tresorie)
+               SET Current_index = (Select Max(Cast(Substr (Num_tresorie,0,INSTR(Num_tresorie , '/' )) as interger) ) From Tresories Where Num_tresorie <> Old.Num_tresorie )
             WHERE  FormatPiece.Piece LIKE 'TR' ;
         END;
      ''');

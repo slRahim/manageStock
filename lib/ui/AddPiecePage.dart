@@ -128,21 +128,22 @@ class _AddPiecePageState extends State<AddPiecePage>
   String feature4 = 'feature4';
   String feature12 = 'feature12';
 
-  Piece _pieceFrom ;
-  Piece _pieceTo ;
-  Transformer _trasformers ;
+  Piece _pieceFrom;
+  Piece _pieceTo;
+  Transformer _trasformers;
 
   void initState() {
     super.initState();
     SchedulerBinding.instance.addPostFrameCallback((Duration duration) {
       FeatureDiscovery.discoverFeatures(
         context,
-         <String>{ // Feature ids for every feature that you want to showcase in order.
-           feature1,
-           feature2,
-           feature3,
-           feature4,
-           feature12
+        <String>{
+          // Feature ids for every feature that you want to showcase in order.
+          feature1,
+          feature2,
+          feature3,
+          feature4,
+          feature12
         },
       );
     });
@@ -170,7 +171,7 @@ class _AddPiecePageState extends State<AddPiecePage>
     _myParams = await _queryCtr.getAllParams();
     _devise = Helpers.getDeviseTranslate(_myParams.devise);
 
-    buildTarification(_myParams.tarification) ;
+    buildTarification(_myParams.tarification);
     _tarificationDropdownItems =
         utils.buildDropTarificationTier(_tarificationItems);
 
@@ -180,12 +181,12 @@ class _AddPiecePageState extends State<AddPiecePage>
       editMode = false;
       modification = true;
       await setDataFromItem(widget.arguments);
-      if(_piece.etat == 1){
-        _trasformers = await _queryCtr.getTransformer(_piece,"old");
+      if (_piece.etat == 1) {
+        _trasformers = await _queryCtr.getTransformer(_piece, "old");
         _pieceTo = await _queryCtr.getPieceById(_trasformers.newPieceId);
       }
-      if(_piece.transformer == 1){
-        _trasformers = await _queryCtr.getTransformer(_piece,"new");
+      if (_piece.transformer == 1) {
+        _trasformers = await _queryCtr.getTransformer(_piece, "new");
         _pieceFrom = await _queryCtr.getPieceById(_trasformers.oldPieceId);
       }
       _selectedTarification = _piece.tarification;
@@ -240,7 +241,6 @@ class _AddPiecePageState extends State<AddPiecePage>
           _piece.piece == PieceType.commandeClient ||
           _piece.piece == PieceType.bonLivraison ||
           _piece.piece == PieceType.factureClient) {
-
         _selectedClient = await _queryCtr.getTierById(1);
       } else {
         _selectedClient = await _queryCtr.getTierById(2);
@@ -274,16 +274,16 @@ class _AddPiecePageState extends State<AddPiecePage>
     });
   }
 
-  void buildTarification (tarification) {
+  void buildTarification(tarification) {
     setState(() {
-      switch(tarification){
-        case 1 :
-          _tarificationItems = Statics.tarificationItems.sublist(0,1);
+      switch (tarification) {
+        case 1:
+          _tarificationItems = Statics.tarificationItems.sublist(0, 1);
           break;
-        case 2 :
-          _tarificationItems = Statics.tarificationItems.sublist(0,2);
+        case 2:
+          _tarificationItems = Statics.tarificationItems.sublist(0, 2);
           break;
-        case 3 :
+        case 3:
           _tarificationItems = Statics.tarificationItems;
           break;
         default:
@@ -291,8 +291,8 @@ class _AddPiecePageState extends State<AddPiecePage>
           break;
       }
     });
-
   }
+
   //************************************************************************************************************************************
   // ***************************************** partie affichage et build *****************************************************************
   @override
@@ -343,13 +343,16 @@ class _AddPiecePageState extends State<AddPiecePage>
                   Navigator.pop(context),
                 }
             },
-            onEditPressed:(_piece.etat == 0)? () {
-              setState(() {
-                editMode = true;
-              });
-            }:(){
-              Helpers.showFlushBar(context, S.current.msg_no_edit_transformer);
-            },
+            onEditPressed: (_piece.etat == 0)
+                ? () {
+                    setState(() {
+                      editMode = true;
+                    });
+                  }
+                : () {
+                    Helpers.showFlushBar(
+                        context, S.current.msg_no_edit_transformer);
+                  },
             onSavePressed: () async {
               if (_selectedItems.length > 0) {
                 AwesomeDialog(
@@ -422,18 +425,20 @@ class _AddPiecePageState extends State<AddPiecePage>
                   flex: 4,
                   child: DescribedFeatureOverlay(
                     featureId: feature1,
-                    tapTarget: Icon(MdiIcons.sigma , color: Colors.black,),
+                    tapTarget: Icon(
+                      MdiIcons.sigma,
+                      color: Colors.black,
+                    ),
                     backgroundColor: Colors.blue,
                     contentLocation: ContentLocation.above,
                     title: Text('${S.current.ajout_remise}'),
                     description: Container(
                       width: 150,
-                      child: Text(
-                          '${S.current.msg_ajout_remise}'),
+                      child: Text('${S.current.msg_ajout_remise}'),
                     ),
-                    onBackgroundTap: () async{
+                    onBackgroundTap: () async {
                       await FeatureDiscovery.completeCurrentStep(context);
-                      return true ;
+                      return true;
                     },
                     child: InkWell(
                       onTap: () async {
@@ -448,8 +453,10 @@ class _AddPiecePageState extends State<AddPiecePage>
                                 btnCancelText: S.current.annuler,
                                 btnCancelOnPress: () {
                                   setState(() {
-                                    _pourcentremiseControler.text = _pourcentremise.toString() ;
-                                    _remisepieceControler.text = _remisepiece.toString();
+                                    _pourcentremiseControler.text =
+                                        _pourcentremise.toString();
+                                    _remisepieceControler.text =
+                                        _remisepiece.toString();
                                   });
                                 },
                                 btnOkText: S.current.confirme,
@@ -457,8 +464,8 @@ class _AddPiecePageState extends State<AddPiecePage>
                                   setState(() {
                                     _pourcentremise = double.parse(
                                         _pourcentremiseControler.text);
-                                    _remisepiece =
-                                        double.parse(_remisepieceControler.text);
+                                    _remisepiece = double.parse(
+                                        _remisepieceControler.text);
                                   });
                                   calculPiece();
                                 })
@@ -471,9 +478,11 @@ class _AddPiecePageState extends State<AddPiecePage>
                       },
                       child: Container(
                         decoration: BoxDecoration(
-                            border:(editMode)
-                                ? Border(bottom: BorderSide(color: Colors.blue , width: 1)) : null
-                        ),
+                            border: (editMode)
+                                ? Border(
+                                    bottom: BorderSide(
+                                        color: Colors.blue, width: 1))
+                                : null),
                         child: Column(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
@@ -490,7 +499,8 @@ class _AddPiecePageState extends State<AddPiecePage>
                                 Text(
                                   "${_devise}",
                                   style: TextStyle(
-                                      fontSize: 12, fontWeight: FontWeight.bold),
+                                      fontSize: 12,
+                                      fontWeight: FontWeight.bold),
                                 ),
                               ],
                             ),
@@ -516,18 +526,20 @@ class _AddPiecePageState extends State<AddPiecePage>
                   flex: 4,
                   child: DescribedFeatureOverlay(
                     featureId: feature2,
-                    tapTarget: Icon(MdiIcons.cashMultiple , color: Colors.black,),
+                    tapTarget: Icon(
+                      MdiIcons.cashMultiple,
+                      color: Colors.black,
+                    ),
                     backgroundColor: Colors.green,
                     contentLocation: ContentLocation.above,
-                    title:  Text('${S.current.ajout_verssement}'),
-                    description:  Container(
+                    title: Text('${S.current.ajout_verssement}'),
+                    description: Container(
                       width: 150,
-                      child: Text(
-                          '${S.current.msg_ajout_verssement}'),
+                      child: Text('${S.current.msg_ajout_verssement}'),
                     ),
-                    onBackgroundTap: () async{
+                    onBackgroundTap: () async {
                       await FeatureDiscovery.completeCurrentStep(context);
-                      return true ;
+                      return true;
                     },
                     child: InkWell(
                       onTap: () async {
@@ -539,9 +551,10 @@ class _AddPiecePageState extends State<AddPiecePage>
                               _piece.piece != PieceType.retourFournisseur &&
                               _piece.piece != PieceType.avoirFournisseur) {
                             if (_selectedItems.isNotEmpty) {
-                              if(_net_a_payer > _piece.regler){
+                              if (_net_a_payer > _piece.regler) {
                                 setState(() {
-                                  double _reste = _total_ttc - (_piece.regler + _verssementpiece);
+                                  double _reste = _total_ttc -
+                                      (_piece.regler + _verssementpiece);
                                   _resteControler.text = _reste.toString();
                                 });
                                 AwesomeDialog(
@@ -557,35 +570,39 @@ class _AddPiecePageState extends State<AddPiecePage>
                                       setState(() {
                                         _restepiece =
                                             double.parse(_resteControler.text);
-                                        _verssementpiece =
-                                            double.parse(_verssementControler.text);
+                                        _verssementpiece = double.parse(
+                                            _verssementControler.text);
                                       });
                                     })
                                   ..show();
-                              }else{
+                              } else {
                                 Helpers.showFlushBar(
                                     context, S.current.msg_versement_err);
                               }
-
                             } else {
                               Helpers.showFlushBar(
                                   context, S.current.msg_select_art);
                             }
                           } else {
-                            Helpers.showFlushBar(context, S.current.msg_no_dispo);
+                            Helpers.showFlushBar(
+                                context, S.current.msg_no_dispo);
                           }
                         }
                       },
                       child: Container(
                         decoration: BoxDecoration(
-                          border:(editMode && _piece.piece != PieceType.devis &&
-                              _piece.piece != PieceType.bonCommande &&
-                              _piece.piece != PieceType.retourClient &&
-                              _piece.piece != PieceType.avoirClient &&
-                              _piece.piece != PieceType.retourFournisseur &&
-                              _piece.piece != PieceType.avoirFournisseur)
-                              ? Border(bottom: BorderSide(color: Colors.blue , width: 1)) : null
-                        ),
+                            border: (editMode &&
+                                    _piece.piece != PieceType.devis &&
+                                    _piece.piece != PieceType.bonCommande &&
+                                    _piece.piece != PieceType.retourClient &&
+                                    _piece.piece != PieceType.avoirClient &&
+                                    _piece.piece !=
+                                        PieceType.retourFournisseur &&
+                                    _piece.piece != PieceType.avoirFournisseur)
+                                ? Border(
+                                    bottom: BorderSide(
+                                        color: Colors.blue, width: 1))
+                                : null),
                         child: Column(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
@@ -611,7 +628,8 @@ class _AddPiecePageState extends State<AddPiecePage>
                                 Text(
                                   "${_devise}",
                                   style: TextStyle(
-                                      fontSize: 12, fontWeight: FontWeight.bold),
+                                      fontSize: 12,
+                                      fontWeight: FontWeight.bold),
                                 ),
                               ],
                             ),
@@ -619,7 +637,9 @@ class _AddPiecePageState extends State<AddPiecePage>
                               height: 2,
                             ),
                             Text(
-                              Helpers.numberFormat(_verssementpiece+_piece.regler).toString(),
+                              Helpers.numberFormat(
+                                      _verssementpiece + _piece.regler)
+                                  .toString(),
                               textAlign: TextAlign.center,
                               style: TextStyle(
                                 fontWeight: FontWeight.bold,
@@ -642,18 +662,20 @@ class _AddPiecePageState extends State<AddPiecePage>
             onVerticalDragEnd: bottomBarControler.onDragEnd,
             child: DescribedFeatureOverlay(
               featureId: feature3,
-              tapTarget: Icon(MdiIcons.arrowExpandUp , color: Colors.black,),
+              tapTarget: Icon(
+                MdiIcons.arrowExpandUp,
+                color: Colors.black,
+              ),
               backgroundColor: Colors.blue,
               contentLocation: ContentLocation.above,
               title: Text('${S.current.swipe_top}'),
               description: Container(
                 width: 150,
-                child: Text(
-                    '${S.current.msg_swipe_top}'),
+                child: Text('${S.current.msg_swipe_top}'),
               ),
-              onBackgroundTap: () async{
+              onBackgroundTap: () async {
                 await FeatureDiscovery.completeCurrentStep(context);
-                return true ;
+                return true;
               },
               child: FloatingActionRow(
                 children: [
@@ -679,15 +701,15 @@ class _AddPiecePageState extends State<AddPiecePage>
                                   }).then((val) {
                                 if (_piece.piece == PieceType.avoirClient ||
                                     _piece.piece == PieceType.retourClient ||
-                                    _piece.piece == PieceType.retourFournisseur ||
-                                    _piece.piece == PieceType.avoirFournisseur) {
-
+                                    _piece.piece ==
+                                        PieceType.retourFournisseur ||
+                                    _piece.piece ==
+                                        PieceType.avoirFournisseur) {
                                   var message = S.current.msg_info_article;
                                   Helpers.showFlushBar(context, message);
                                 }
                                 calculPiece();
                               });
-
                             }
                           : () async {
                               AwesomeDialog(
@@ -750,29 +772,49 @@ class _AddPiecePageState extends State<AddPiecePage>
                 runSpacing: 10,
                 children: [
                   (_piece.etat == 1 && _pieceTo != null)
-                      ?SingleChildScrollView(
-                        scrollDirection: Axis.horizontal,
-                        child: Row(
-                          children: [
-                              Icon(Icons.check_circle , size: 12, color: Colors.green,),
-                              SizedBox(width: 5,),
-                              Text("${S.current.msg_piece_transformer_to} ${getPiecetype(_pieceTo)} ${_pieceTo.num_piece}", style:TextStyle(fontSize: 13))
-
-                          ],
+                      ? SingleChildScrollView(
+                          scrollDirection: Axis.horizontal,
+                          child: Row(
+                            children: [
+                              Icon(
+                                Icons.check_circle,
+                                size: 12,
+                                color: Colors.green,
+                              ),
+                              SizedBox(
+                                width: 5,
+                              ),
+                              Text(
+                                  "${S.current.msg_piece_transformer_to} ${getPiecetype(_pieceTo)} ${_pieceTo.num_piece}",
+                                  style: TextStyle(fontSize: 13))
+                            ],
+                          ),
+                        )
+                      : SizedBox(
+                          height: 0,
                         ),
-                      ):SizedBox(height: 0,),
                   (_piece.transformer == 1 && _pieceFrom != null)
-                      ?SingleChildScrollView(
-                        scrollDirection: Axis.horizontal,
-                        child: Row(
-                          children: [
-                            Icon(Icons.check_circle , size: 12, color: Colors.green,),
-                            SizedBox(width: 5,),
-                            Text("${S.current.msg_piece_transformer_from} ${getPiecetype(_pieceFrom)} ${_pieceFrom.num_piece}" , style:TextStyle(fontSize: 13))
-
-                          ],
+                      ? SingleChildScrollView(
+                          scrollDirection: Axis.horizontal,
+                          child: Row(
+                            children: [
+                              Icon(
+                                Icons.check_circle,
+                                size: 12,
+                                color: Colors.green,
+                              ),
+                              SizedBox(
+                                width: 5,
+                              ),
+                              Text(
+                                  "${S.current.msg_piece_transformer_from} ${getPiecetype(_pieceFrom)} ${_pieceFrom.num_piece}",
+                                  style: TextStyle(fontSize: 13))
+                            ],
+                          ),
+                        )
+                      : SizedBox(
+                          height: 0,
                         ),
-                      ):SizedBox(height: 0,),
                   Row(
                     children: [
                       Flexible(
@@ -854,8 +896,8 @@ class _AddPiecePageState extends State<AddPiecePage>
                               setState(() {
                                 _selectedTarification = value;
                               });
-                              if(_selectedItems.isNotEmpty)
-                                dialogChangeTarif() ;
+                              if (_selectedItems.isNotEmpty)
+                                dialogChangeTarif();
                             },
                           ),
                         ),
@@ -863,8 +905,9 @@ class _AddPiecePageState extends State<AddPiecePage>
                       Flexible(
                         flex: 6,
                         child: GestureDetector(
-                          onTap: editMode ? ()  {
-                                   chooseClientDialog();
+                          onTap: editMode
+                              ? () {
+                                  chooseClientDialog();
                                 }
                               : null,
                           child: TextField(
@@ -908,20 +951,23 @@ class _AddPiecePageState extends State<AddPiecePage>
                             itemCount: _selectedItems.length,
                             itemBuilder: (BuildContext ctxt, int index) {
                               if (editMode) {
-                                return  DescribedFeatureOverlay(
+                                return DescribedFeatureOverlay(
                                   featureId: feature12,
-                                  tapTarget: Icon(MdiIcons.arrowExpandRight , color: Colors.black,),
+                                  tapTarget: Icon(
+                                    MdiIcons.arrowExpandRight,
+                                    color: Colors.black,
+                                  ),
                                   backgroundColor: Colors.blue,
                                   contentLocation: ContentLocation.above,
                                   title: Text('${S.current.swipe}'),
                                   description: Container(
                                     width: 100,
-                                    child: Text(
-                                        '${S.current.msg_swipe_start}'),
+                                    child: Text('${S.current.msg_swipe_start}'),
                                   ),
-                                  onBackgroundTap: () async{
-                                    await FeatureDiscovery.completeCurrentStep(context);
-                                    return true ;
+                                  onBackgroundTap: () async {
+                                    await FeatureDiscovery.completeCurrentStep(
+                                        context);
+                                    return true;
                                   },
                                   child: ArticleListItemSelected(
                                     article: _selectedItems[index],
@@ -950,7 +996,7 @@ class _AddPiecePageState extends State<AddPiecePage>
   Widget addArticleDialog() {
     return new ArticlesFragment(
       tarification: _selectedTarification,
-      pieceOrigin:  _piece.piece ,
+      pieceOrigin: _piece.piece,
       onConfirmSelectedItems: (selectedItem) {
         selectedItem.forEach((item) {
           if (_selectedItems.contains(item)) {
@@ -969,7 +1015,7 @@ class _AddPiecePageState extends State<AddPiecePage>
   }
 
   Widget addJournauxDialog() {
-    return  JournalFragment(
+    return JournalFragment(
       tier: _selectedClient,
       pieceType: _piece.piece,
       onConfirmSelectedItems: (selectedItem) {
@@ -990,17 +1036,17 @@ class _AddPiecePageState extends State<AddPiecePage>
   }
 
   //afficher le fragement des clients
-  Widget chooseClientDialog()  {
+  Widget chooseClientDialog() {
     showDialog(
       context: context,
       builder: (BuildContext context) {
         return new ClientFourFragment(
           clientFourn: (_piece.piece == PieceType.devis ||
-              _piece.piece == PieceType.retourClient ||
-              _piece.piece == PieceType.avoirClient ||
-              _piece.piece == PieceType.commandeClient ||
-              _piece.piece == PieceType.bonLivraison ||
-              _piece.piece == PieceType.factureClient)
+                  _piece.piece == PieceType.retourClient ||
+                  _piece.piece == PieceType.avoirClient ||
+                  _piece.piece == PieceType.commandeClient ||
+                  _piece.piece == PieceType.bonLivraison ||
+                  _piece.piece == PieceType.factureClient)
               ? 0
               : 2,
           onConfirmSelectedItem: (selectedItem) {
@@ -1010,11 +1056,11 @@ class _AddPiecePageState extends State<AddPiecePage>
               _piece.raisonSociale = _selectedClient.raisonSociale;
               _clientControl.text = _selectedClient.raisonSociale;
 
-              if(selectedItem.tarification > _myParams.tarification){
+              if (selectedItem.tarification > _myParams.tarification) {
                 buildTarification(selectedItem.tarification);
                 _tarificationDropdownItems =
                     utils.buildDropTarificationTier(_tarificationItems);
-              }else{
+              } else {
                 buildTarification(_myParams.tarification);
                 _tarificationDropdownItems =
                     utils.buildDropTarificationTier(_tarificationItems);
@@ -1025,21 +1071,18 @@ class _AddPiecePageState extends State<AddPiecePage>
         );
       },
     ).then((value) {
-      if(_piece.piece == PieceType.devis ||
+      if (_piece.piece == PieceType.devis ||
           _piece.piece == PieceType.retourClient ||
           _piece.piece == PieceType.avoirClient ||
           _piece.piece == PieceType.commandeClient ||
           _piece.piece == PieceType.bonLivraison ||
-          _piece.piece == PieceType.factureClient){
-
-        if(_selectedItems.isNotEmpty)
-          dialogChangeTarif() ;
+          _piece.piece == PieceType.factureClient) {
+        if (_selectedItems.isNotEmpty) dialogChangeTarif();
       }
-
     });
   }
 
-  Widget dialogChangeTarif(){
+  Widget dialogChangeTarif() {
     AwesomeDialog(
       context: context,
       dialogType: DialogType.WARNING,
@@ -1052,20 +1095,20 @@ class _AddPiecePageState extends State<AddPiecePage>
       btnOkOnPress: () {
         setState(() {
           _selectedItems.forEach((element) {
-            switch (_selectedTarification){
-              case 1 :
-                element.selectedPrice = element.prixVente1 ;
-                break ;
-              case 2 :
-                element.selectedPrice = element.prixVente2 ;
-                break ;
-              case 3 :
-                element.selectedPrice = element.prixVente3 ;
-                break ;
+            switch (_selectedTarification) {
+              case 1:
+                element.selectedPrice = element.prixVente1;
+                break;
+              case 2:
+                element.selectedPrice = element.prixVente2;
+                break;
+              case 3:
+                element.selectedPrice = element.prixVente3;
+                break;
             }
           });
         });
-        calculPiece() ;
+        calculPiece();
       },
     )..show();
   }
@@ -1095,8 +1138,10 @@ class _AddPiecePageState extends State<AddPiecePage>
               child: TextField(
                 controller: _verssementControler,
                 keyboardType: TextInputType.number,
-                onTap: () =>{
-                  _verssementControler.selection = TextSelection(baseOffset: 0, extentOffset: _verssementControler.value.text.length),
+                onTap: () => {
+                  _verssementControler.selection = TextSelection(
+                      baseOffset: 0,
+                      extentOffset: _verssementControler.value.text.length),
                 },
                 onChanged: (value) {
                   if (_piece.id != null) {
@@ -1198,11 +1243,13 @@ class _AddPiecePageState extends State<AddPiecePage>
               child: TextField(
                 controller: _remisepieceControler,
                 keyboardType: TextInputType.number,
-                onTap: () =>{
-                  _remisepieceControler.selection = TextSelection(baseOffset: 0, extentOffset: _remisepieceControler.value.text.length),
+                onTap: () => {
+                  _remisepieceControler.selection = TextSelection(
+                      baseOffset: 0,
+                      extentOffset: _remisepieceControler.value.text.length),
                 },
                 onChanged: (value) {
-                  double res = (double.parse(value) * 100) / _total_ht ;
+                  double res = (double.parse(value) * 100) / _total_ht;
                   _pourcentremiseControler.text = res.toString();
                 },
                 decoration: InputDecoration(
@@ -1239,8 +1286,11 @@ class _AddPiecePageState extends State<AddPiecePage>
                       child: TextField(
                         controller: _pourcentremiseControler,
                         keyboardType: TextInputType.number,
-                        onTap: () =>{
-                          _pourcentremiseControler.selection = TextSelection(baseOffset: 0, extentOffset: _pourcentremiseControler.value.text.length),
+                        onTap: () => {
+                          _pourcentremiseControler.selection = TextSelection(
+                              baseOffset: 0,
+                              extentOffset:
+                                  _pourcentremiseControler.value.text.length),
                         },
                         onChanged: (value) {
                           double res = (_total_ht * double.parse(value)) / 100;
@@ -1527,7 +1577,7 @@ class _AddPiecePageState extends State<AddPiecePage>
                           ),
                           onPressed: () async {
                             int mov = getMovForPiece();
-                            await saveItem(mov , isFromTransfer: false);
+                            await saveItem(mov, isFromTransfer: false);
                             await quikPrintTicket();
                           },
                           child: Text(
@@ -1548,7 +1598,7 @@ class _AddPiecePageState extends State<AddPiecePage>
                           ),
                           onPressed: () async {
                             int mov = getMovForPiece();
-                            await saveItem(mov , isFromTransfer: false);
+                            await saveItem(mov, isFromTransfer: false);
                             Navigator.pop(context);
                             AwesomeDialog(
                               context: context,
@@ -1581,7 +1631,7 @@ class _AddPiecePageState extends State<AddPiecePage>
                           ),
                           onPressed: () async {
                             int mov = getMovForPiece();
-                            await saveItem(mov , isFromTransfer: false);
+                            await saveItem(mov, isFromTransfer: false);
                           },
                           child: Text(
                             S.current.save_btn,
@@ -1636,7 +1686,7 @@ class _AddPiecePageState extends State<AddPiecePage>
     }
   }
 
-  saveItem(int move , {@required bool isFromTransfer}) async {
+  saveItem(int move, {@required bool isFromTransfer}) async {
     _piece.mov = move;
     int id = await addItemToDb(isFromTransfer: isFromTransfer);
     if (id > -1) {
@@ -1649,7 +1699,7 @@ class _AddPiecePageState extends State<AddPiecePage>
   }
 
   saveItemAsDraft() async {
-    saveItem(2 , isFromTransfer: false);
+    saveItem(2, isFromTransfer: false);
   }
 
   previewItem(item, int format, doc) {
@@ -1687,8 +1737,8 @@ class _AddPiecePageState extends State<AddPiecePage>
     try {
       if (widget.arguments.id != null) {
         //edit piece
-        var item = await makePiece(isFromTransfer:isFromTransfer);
-        if(item != null){
+        var item = await makePiece(isFromTransfer: isFromTransfer);
+        if (item != null) {
           id = await _queryCtr.updateItemInDb(DbTablesNames.pieces, item);
           _selectedItems.forEach((article) async {
             Journaux journaux = Journaux.fromPiece(item, article);
@@ -1703,8 +1753,8 @@ class _AddPiecePageState extends State<AddPiecePage>
           if (_oldMov != null && _piece.mov != _oldMov) {
             //ds le cas de modification de mov de piece
             // update tresorie mov
-            await _queryCtr.updateItemByForeignKey(
-                DbTablesNames.tresorie, "Mov", _piece.mov, "Piece_id", _piece.id);
+            await _queryCtr.updateItemByForeignKey(DbTablesNames.tresorie,
+                "Mov", _piece.mov, "Piece_id", _piece.id);
           }
 
           if (_piece.piece != PieceType.devis &&
@@ -1712,7 +1762,6 @@ class _AddPiecePageState extends State<AddPiecePage>
               _piece.piece != PieceType.avoirClient &&
               _piece.piece != PieceType.retourFournisseur &&
               _piece.piece != PieceType.avoirFournisseur) {
-
             await addTresorie(_piece, transferer: false);
           }
 
@@ -1723,17 +1772,16 @@ class _AddPiecePageState extends State<AddPiecePage>
           } else {
             message = S.current.msg_update_err;
           }
-        }else{
+        } else {
           Navigator.pop(context);
           var message = S.current.msg_num_existe;
           Helpers.showFlushBar(context, message);
           return Future.value(id);
         }
-
       } else {
         //add new piece
-        Piece piece = await makePiece(isFromTransfer:isFromTransfer);
-        if(piece != null){
+        Piece piece = await makePiece(isFromTransfer: isFromTransfer);
+        if (piece != null) {
           piece.etat = 0;
           id = await _queryCtr.addItemToTable(DbTablesNames.pieces, piece);
           if (id > -1) {
@@ -1759,13 +1807,12 @@ class _AddPiecePageState extends State<AddPiecePage>
           } else {
             message = S.current.msg_ajout_err;
           }
-        }else{
+        } else {
           Navigator.pop(context);
           var message = S.current.msg_num_existe;
           Helpers.showFlushBar(context, message);
           return Future.value(id);
         }
-
       }
 
       Navigator.pop(context);
@@ -1779,7 +1826,7 @@ class _AddPiecePageState extends State<AddPiecePage>
 
   Future<Object> makePiece({@required bool isFromTransfer}) async {
     var tiers = _selectedClient;
-    var _old_num_piece = _piece.num_piece ;
+    var _old_num_piece = _piece.num_piece;
 
     _piece.num_piece = _numeroControl.text;
     _piece.tier_id = tiers.id;
@@ -1812,17 +1859,17 @@ class _AddPiecePageState extends State<AddPiecePage>
       _piece.net_a_payer = _piece.net_a_payer * -1;
     }
 
-    if(!modification){
+    if (!modification) {
       var res = await _queryCtr.getPieceByNum(_piece.num_piece, _piece.piece);
       if (res.length >= 1 && !isFromTransfer) {
         await getNumPiece(_piece);
         return null;
       }
-    }else{
-      if(_piece.num_piece != _old_num_piece){
+    } else {
+      if (_piece.num_piece != _old_num_piece) {
         var res = await _queryCtr.getPieceByNum(_piece.num_piece, _piece.piece);
         if (res.length >= 1 && !isFromTransfer) {
-          _piece.num_piece = _old_num_piece ;
+          _piece.num_piece = _old_num_piece;
           await getNumPiece(_piece);
           return null;
         }
@@ -1950,15 +1997,17 @@ class _AddPiecePageState extends State<AddPiecePage>
                               var msg = await transfererPiece(context, "toBon");
                               Helpers.showFlushBar(context, msg);
                             },
-                            child:(_piece.piece == PieceType.bonCommande)? Text(
-                              S.current.bon_reception,
-                              style:
-                                  TextStyle(color: Colors.white, fontSize: 16),
-                            ):Text(
-                              S.current.bon_livraison,
-                              style:
-                              TextStyle(color: Colors.white, fontSize: 16),
-                            ),
+                            child: (_piece.piece == PieceType.bonCommande)
+                                ? Text(
+                                    S.current.bon_reception,
+                                    style: TextStyle(
+                                        color: Colors.white, fontSize: 16),
+                                  )
+                                : Text(
+                                    S.current.bon_livraison,
+                                    style: TextStyle(
+                                        color: Colors.white, fontSize: 16),
+                                  ),
                             color: Colors.blue,
                           ),
                         ),
@@ -1981,16 +2030,18 @@ class _AddPiecePageState extends State<AddPiecePage>
                               Helpers.showFlushBar(context, msg);
                             },
                             child: (_piece.piece == PieceType.devis ||
-                                _piece.piece == PieceType.commandeClient ||
-                                _piece.piece == PieceType.bonLivraison)? Text(
-                              S.current.facture_vente,
-                              style:
-                                  TextStyle(color: Colors.white, fontSize: 16),
-                            ):Text(
-                              S.current.facture_achat,
-                              style:
-                              TextStyle(color: Colors.white, fontSize: 16),
-                            ),
+                                    _piece.piece == PieceType.commandeClient ||
+                                    _piece.piece == PieceType.bonLivraison)
+                                ? Text(
+                                    S.current.facture_vente,
+                                    style: TextStyle(
+                                        color: Colors.white, fontSize: 16),
+                                  )
+                                : Text(
+                                    S.current.facture_achat,
+                                    style: TextStyle(
+                                        color: Colors.white, fontSize: 16),
+                                  ),
                             color: Colors.green,
                           ),
                         ),
@@ -2016,11 +2067,10 @@ class _AddPiecePageState extends State<AddPiecePage>
                             },
                             color: Colors.redAccent,
                             child: Text(
-                                  _textBtnTransfereRetour(),
-                                  style:
-                                    TextStyle(color: Colors.white, fontSize: 16),
-                                ),
-
+                              _textBtnTransfereRetour(),
+                              style:
+                                  TextStyle(color: Colors.white, fontSize: 16),
+                            ),
                           ),
                         ),
                       ),
@@ -2031,23 +2081,23 @@ class _AddPiecePageState extends State<AddPiecePage>
     });
   }
 
-  String _textBtnTransfereRetour (){
-    switch(_piece.piece){
+  String _textBtnTransfereRetour() {
+    switch (_piece.piece) {
       case (PieceType.bonLivraison):
-        return S.current.retour_client ;
-        break ;
+        return S.current.retour_client;
+        break;
       case (PieceType.factureClient):
-        return S.current.avoir_client ;
-        break ;
+        return S.current.avoir_client;
+        break;
       case (PieceType.bonReception):
-        return S.current.retour_fournisseur ;
-        break ;
+        return S.current.retour_fournisseur;
+        break;
       case (PieceType.factureFournisseur):
-        return S.current.avoir_fournisseur ;
-        break ;
+        return S.current.avoir_fournisseur;
+        break;
       default:
-        return 'test' ;
-        break ;
+        return 'test';
+        break;
     }
   }
 
@@ -2116,16 +2166,13 @@ class _AddPiecePageState extends State<AddPiecePage>
         _piece.etat = 1;
       });
 
-
       if (_newPiece.piece == PieceType.retourClient ||
           _newPiece.piece == PieceType.avoirClient ||
           _newPiece.piece == PieceType.retourFournisseur ||
           _newPiece.piece == PieceType.avoirFournisseur) {
-
-        await saveItem(1,isFromTransfer: true);
-
+        await saveItem(1, isFromTransfer: true);
       } else {
-        await saveItem(0 , isFromTransfer: true);
+        await saveItem(0, isFromTransfer: true);
       }
 
       Navigator.pop(context);
@@ -2247,18 +2294,18 @@ class _AddPiecePageState extends State<AddPiecePage>
 
     if (directionRtl) {
       var input = "${_profile.raisonSociale}";
-      Uint8List encArabic = await CharsetConverter.encode("ISO-8859-6",
-          "${input.split('').reversed.join()}");
+      Uint8List encArabic = await CharsetConverter.encode(
+          "ISO-8859-6", "${input.split('').reversed.join()}");
       ticket.textEncoded(encArabic,
           styles: PosStyles(
               codeTable: PosCodeTable.arabic,
               align: (formatPrint == PaperSize.mm80)
                   ? PosAlign.center
                   : PosAlign.left));
-      if(_profile.activite != null){
+      if (_profile.activite != null) {
         input = "${_profile.activite}";
-        encArabic = await CharsetConverter.encode("ISO-8859-6",
-            "${input.split('').reversed.join()}");
+        encArabic = await CharsetConverter.encode(
+            "ISO-8859-6", "${input.split('').reversed.join()}");
         ticket.textEncoded(encArabic,
             styles: PosStyles(
                 codeTable: PosCodeTable.arabic,
@@ -2266,10 +2313,10 @@ class _AddPiecePageState extends State<AddPiecePage>
                     ? PosAlign.center
                     : PosAlign.left));
       }
-      if(_profile.adresse != null){
+      if (_profile.adresse != null) {
         input = "${_profile.adresse}";
-        encArabic = await CharsetConverter.encode("ISO-8859-6",
-            "${input.split('').reversed.join()}");
+        encArabic = await CharsetConverter.encode(
+            "ISO-8859-6", "${input.split('').reversed.join()}");
         ticket.textEncoded(encArabic,
             styles: PosStyles(
                 codeTable: PosCodeTable.arabic,
@@ -2277,10 +2324,10 @@ class _AddPiecePageState extends State<AddPiecePage>
                     ? PosAlign.center
                     : PosAlign.left));
       }
-      if(_profile.ville != null){
+      if (_profile.ville != null) {
         input = "${_profile.ville}";
-        encArabic = await CharsetConverter.encode("ISO-8859-6",
-            "${input.split('').reversed.join()}");
+        encArabic = await CharsetConverter.encode(
+            "ISO-8859-6", "${input.split('').reversed.join()}");
         ticket.textEncoded(encArabic,
             styles: PosStyles(
                 codeTable: PosCodeTable.arabic,
@@ -2288,10 +2335,10 @@ class _AddPiecePageState extends State<AddPiecePage>
                     ? PosAlign.center
                     : PosAlign.left));
       }
-      if(_profile.telephone != null){
+      if (_profile.telephone != null) {
         input = "${_profile.telephone}";
-        encArabic = await CharsetConverter.encode("ISO-8859-6",
-            "${input.split('').reversed.join()}");
+        encArabic = await CharsetConverter.encode(
+            "ISO-8859-6", "${input.split('').reversed.join()}");
         ticket.textEncoded(encArabic,
             styles: PosStyles(
                 codeTable: PosCodeTable.arabic,
@@ -2501,28 +2548,28 @@ class _AddPiecePageState extends State<AddPiecePage>
               align: (formatPrint == PaperSize.mm80)
                   ? PosAlign.center
                   : PosAlign.left));
-      if(_profile.activite != null){
+      if (_profile.activite != null) {
         ticket.text("${_profile.activite}",
             styles: PosStyles(
                 align: (formatPrint == PaperSize.mm80)
                     ? PosAlign.center
                     : PosAlign.left));
       }
-      if(_profile.adresse != null){
+      if (_profile.adresse != null) {
         ticket.text("${_profile.adresse}",
             styles: PosStyles(
                 align: (formatPrint == PaperSize.mm80)
                     ? PosAlign.center
                     : PosAlign.left));
       }
-      if(_profile.ville != null){
+      if (_profile.ville != null) {
         ticket.text("${_profile.ville}",
             styles: PosStyles(
                 align: (formatPrint == PaperSize.mm80)
                     ? PosAlign.center
                     : PosAlign.left));
       }
-      if(_profile.telephone != null){
+      if (_profile.telephone != null) {
         ticket.text("${_profile.telephone}",
             styles: PosStyles(
                 align: (formatPrint == PaperSize.mm80)
@@ -2692,62 +2739,65 @@ class _AddPiecePageState extends State<AddPiecePage>
               mainAxisAlignment: pw.MainAxisAlignment.spaceBetween,
               children: [
                 pw.Column(
-                  crossAxisAlignment: pw.CrossAxisAlignment.start,
-                  children: [
-                    (_profile.raisonSociale != null)
-                        ? pw.Text(
-                        "${_profile.raisonSociale} ",
-                        style: pw.TextStyle(font: ttf , fontWeight: pw.FontWeight.bold))
-                        : pw.SizedBox(),
-                    (_profile.activite != null)
-                        ? pw.Text(
-                        "${_profile.activite} ",
-                        style: pw.TextStyle(font: ttf, fontWeight: pw.FontWeight.bold))
-                        : pw.SizedBox(),
-                    (_profile.adresse != null)
-                        ? pw.Text(
-                        "${_profile.adresse} ${_profile.departement} ${_profile.ville} ${_profile.pays}",
-                        style: pw.TextStyle(font: ttf, fontWeight: pw.FontWeight.bold))
-                        : pw.SizedBox(),
-                    (_profile.telephone != null)
-                        ? pw.Text(
-                        "${S.current.telephone}\t ${_profile.telephone}",
-                        style: pw.TextStyle(font: ttf, fontWeight: pw.FontWeight.bold))
-                        : pw.SizedBox(),
-                    (_profile.fax != null)
-                        ? pw.Text(
-                        "${S.current.fax}\t ${_profile.fax}",
-                        style: pw.TextStyle(font: ttf, fontWeight: pw.FontWeight.bold))
-                        : pw.SizedBox(),
-                    (_profile.mobile != null)
-                        ? pw.Text(
-                        "${S.current.mobile}\t ${_profile.mobile}",
-                        style: pw.TextStyle(font: ttf, fontWeight: pw.FontWeight.bold))
-                        : pw.SizedBox(),
-                    (_profile.email != null)
-                        ? pw.Text(
-                        "${S.current.mail}\t ${_profile.email}",
-                        style: pw.TextStyle(font: ttf, fontWeight: pw.FontWeight.bold))
-                        : pw.SizedBox(),
-                    (_profile.rc != null)
-                        ? pw.Text(
-                        "${S.current.rc}\t ${_profile.rc}",
-                        style: pw.TextStyle(font: ttf, fontWeight: pw.FontWeight.bold))
-                        : pw.SizedBox(),
-                    (_profile.nif != null)
-                        ? pw.Text(
-                        "${S.current.rc}\t ${_profile.nif}",
-                        style: pw.TextStyle(font: ttf, fontWeight: pw.FontWeight.bold))
-                        : pw.SizedBox(),
-                    (_profile.capital != null)
-                        ? pw.Text(
-                        "${S.current.capitale_sociale}\t ${_profile.capital}",
-                        style: pw.TextStyle(font: ttf, fontWeight: pw.FontWeight.bold))
-                        : pw.SizedBox(),
-                  ]
-                ),
+                    crossAxisAlignment: pw.CrossAxisAlignment.start,
+                    children: [
+                      (_profile.raisonSociale != null)
+                          ? pw.Text("${_profile.raisonSociale} ",
+                              style: pw.TextStyle(
+                                  font: ttf, fontWeight: pw.FontWeight.bold))
+                          : pw.SizedBox(),
+                      (_profile.activite != null)
+                          ? pw.Text("${_profile.activite} ",
+                              style: pw.TextStyle(
+                                  font: ttf, fontWeight: pw.FontWeight.bold))
+                          : pw.SizedBox(),
+                      (_profile.adresse != null)
+                          ? pw.Text(
+                              "${_profile.adresse} ${_profile.departement} ${_profile.ville} ${_profile.pays}",
+                              style: pw.TextStyle(
+                                  font: ttf, fontWeight: pw.FontWeight.bold))
+                          : pw.SizedBox(),
+                      (_profile.telephone != null)
+                          ? pw.Text(
+                              "${S.current.telephone}\t ${_profile.telephone}",
+                              style: pw.TextStyle(
+                                  font: ttf, fontWeight: pw.FontWeight.bold))
+                          : pw.SizedBox(),
+                      (_profile.fax != null)
+                          ? pw.Text("${S.current.fax}\t ${_profile.fax}",
+                              style: pw.TextStyle(
+                                  font: ttf, fontWeight: pw.FontWeight.bold))
+                          : pw.SizedBox(),
+                      (_profile.mobile != null)
+                          ? pw.Text("${S.current.mobile}\t ${_profile.mobile}",
+                              style: pw.TextStyle(
+                                  font: ttf, fontWeight: pw.FontWeight.bold))
+                          : pw.SizedBox(),
+                      (_profile.email != null)
+                          ? pw.Text("${S.current.mail}\t ${_profile.email}",
+                              style: pw.TextStyle(
+                                  font: ttf, fontWeight: pw.FontWeight.bold))
+                          : pw.SizedBox(),
+                      (_profile.rc != null)
+                          ? pw.Text("${S.current.rc}\t ${_profile.rc}",
+                              style: pw.TextStyle(
+                                  font: ttf, fontWeight: pw.FontWeight.bold))
+                          : pw.SizedBox(),
+                      (_profile.nif != null)
+                          ? pw.Text("${S.current.rc}\t ${_profile.nif}",
+                              style: pw.TextStyle(
+                                  font: ttf, fontWeight: pw.FontWeight.bold))
+                          : pw.SizedBox(),
+                      (_profile.capital != null)
+                          ? pw.Text(
+                              "${S.current.capitale_sociale}\t ${_profile.capital}",
+                              style: pw.TextStyle(
+                                  font: ttf, fontWeight: pw.FontWeight.bold))
+                          : pw.SizedBox(),
+                    ]),
                 (_profile.imageUint8List != null)
-                    ? pw.Image(pw.MemoryImage(_profile.imageUint8List),height: 100 , width: 100)
+                    ? pw.Image(pw.MemoryImage(_profile.imageUint8List),
+                        height: 100, width: 100)
                     : pw.SizedBox(),
               ]),
           pw.SizedBox(height: 20),
@@ -2887,8 +2937,8 @@ class _AddPiecePageState extends State<AddPiecePage>
                       : pw.SizedBox(),
                   pw.Divider(height: 2),
                   pw.Text(getPieceSuminLetters(),
-                      style: pw.TextStyle(font: ttf , fontWeight: pw.FontWeight.bold)),
-
+                      style: pw.TextStyle(
+                          font: ttf, fontWeight: pw.FontWeight.bold)),
                 ])),
             pw.SizedBox(width: 10),
             pw.Expanded(
@@ -2987,15 +3037,16 @@ class _AddPiecePageState extends State<AddPiecePage>
     }
   }
 
-  String getPieceSuminLetters(){
-    String res = '' ;
-    res = res + "${Helpers.numberToWords((_piece.net_a_payer.toInt()).toString())} ${Helpers.currencyName(_myParams.devise)} " ;
+  String getPieceSuminLetters() {
+    String res = '';
+    res = res +
+        "${Helpers.numberToWords((_piece.net_a_payer.toInt()).toString())} ${Helpers.currencyName(_myParams.devise)} ";
 
     int a = (_piece.net_a_payer % 1 * 100).roundToDouble().toInt();
-    if(a > 0){
-      res= res + "${Helpers.numberToWords(a.toString())} ${S.current.centime}" ;
+    if (a > 0) {
+      res = res + "${Helpers.numberToWords(a.toString())} ${S.current.centime}";
     }
 
-    return res ;
+    return res;
   }
 }
