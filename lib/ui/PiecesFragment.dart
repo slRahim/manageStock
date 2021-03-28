@@ -283,16 +283,16 @@ class _PiecesFragmentState extends State<PiecesFragment> {
     _dataSource.updateFilters(_filterMap);
 
     return Scaffold(
-        floatingActionButton: FloatingActionButton(
+        floatingActionButton:(widget.onConfirmSelectedItem == null) ? FloatingActionButton(
           backgroundColor: Theme.of(context).floatingActionButtonTheme.backgroundColor,
           onPressed: () {
               _addNewPiece(context);
           },
           child: Icon(Icons.add),
-        ),
+        ):null,
         appBar: SearchBar(
           searchController: searchController,
-          mainContext: context,
+          mainContext: widget.onConfirmSelectedItem != null ? null : context,
           title: (widget.peaceType !=null) ? Helpers.getPieceTitle(widget.peaceType) : S.current.piece_titre,
           isFilterOn: isFilterOn,
           onSearchChanged: (String search) => _dataSource.updateSearchTerm(search),
