@@ -971,15 +971,21 @@ class _AddPiecePageState extends State<AddPiecePage>
                                   },
                                   child: ArticleListItemSelected(
                                     article: _selectedItems[index],
+                                    pieceOrigin: _piece.piece,
                                     onItemSelected: (selectedItem) => ({
                                       removeItemfromPiece(selectedItem),
-                                      calculPiece()
+                                      calculPiece(),
+                                      setState((){
+                                        _remisepiece = (_total_ht * _pourcentremise) / 100 ;
+                                        _remisepieceControler.text = _restepiece.toString();
+                                      })
                                     }),
                                   ),
                                 );
                               } else {
                                 return ArticleListItemSelected(
                                   article: _selectedItems[index],
+                                  pieceOrigin: _piece.piece,
                                   fromListing: _islisting,
                                 );
                               }

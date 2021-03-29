@@ -46,7 +46,7 @@ class _IntroPageState extends State<IntroPage> {
   String defaultLocale = Platform.localeName;
 
   TextEditingController _raisonSocialeControl = new TextEditingController();
-  TextEditingController _mobileControl = new TextEditingController();
+  TextEditingController _telephoneControl = new TextEditingController();
   TextEditingController _activiteControl = new TextEditingController();
   TextEditingController _adresseControl = new TextEditingController();
   TextEditingController _rcControl = new TextEditingController();
@@ -610,7 +610,7 @@ class _IntroPageState extends State<IntroPage> {
                 Container(
                   margin: EdgeInsetsDirectional.only(start: 25 ,end: 25),
                   child: TextFormField(
-                    controller: _mobileControl,
+                    controller: _telephoneControl,
                     keyboardType: TextInputType.number,
                     decoration: InputDecoration(
                       labelText: S.current.telephone,
@@ -762,7 +762,7 @@ class _IntroPageState extends State<IntroPage> {
         province,
         country,
         "_cp",
-        _mobileControl.text,
+        _telephoneControl.text,
         "_telephone2",
         "_fax",
         "_mobile1",

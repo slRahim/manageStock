@@ -119,17 +119,27 @@ class _ArticleListItemState extends State<ArticleListItem> {
                             builder: (BuildContext context) {
                               return addQtedialogue();
                             }).then((val) {
-                          if((widget.article.quantite - widget.article.cmdClient) < widget.article.selectedQuantite){
-                            Helpers.showToast(S.current.msg_qte_select_sup);
-                          }
+                              if(widget.pieceOrigin == 'BR' || widget.pieceOrigin == 'FF'
+                                  || widget.pieceOrigin == 'RF' || widget.pieceOrigin == 'AF'){
+
+                                if((widget.article.quantite - widget.article.cmdClient) < widget.article.selectedQuantite){
+                                  Helpers.showToast(S.current.msg_qte_select_sup);
+                                }
+                              }
+
                           setState(() {});
                         }
                         );
                       } else {
                         selectThisItem();
-                        if((widget.article.quantite - widget.article.cmdClient) < 1){
-                          Helpers.showToast(S.current.msg_qte_zero);
+                        if(widget.pieceOrigin == 'BR' || widget.pieceOrigin == 'FF'
+                            || widget.pieceOrigin == 'RF' || widget.pieceOrigin == 'AF'){
+
+                          if((widget.article.quantite - widget.article.cmdClient) < 1){
+                            Helpers.showToast(S.current.msg_qte_zero);
+                          }
                         }
+
                       }
                     }
                   }

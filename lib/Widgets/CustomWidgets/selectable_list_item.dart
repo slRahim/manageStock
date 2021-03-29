@@ -17,6 +17,7 @@ class ArticleListItemSelected extends StatefulWidget {
     this.onItemSelected,
     this.tarification,
     this.fromListing=false,
+    this.pieceOrigin
   })  : assert(article != null),
         super(key: key);
 
@@ -24,6 +25,7 @@ class ArticleListItemSelected extends StatefulWidget {
   final Function(Object) onItemSelected;
   final int tarification ;
   final bool fromListing ;
+  final String pieceOrigin ;
 
   @override
   _ArticleListItemSelectedState createState() => _ArticleListItemSelectedState();
@@ -54,9 +56,14 @@ class _ArticleListItemSelectedState extends State<ArticleListItemSelected> {
                   builder: (BuildContext context) {
                     return addQtedialogue();
                   }).then((val) {
-                if((widget.article.quantite - widget.article.cmdClient) < widget.article.selectedQuantite){
-                  Helpers.showFlushBar(context, S.current.msg_qte_select_sup);
-                }
+                    if(widget.pieceOrigin == 'BR' || widget.pieceOrigin == 'FF'
+                        || widget.pieceOrigin == 'RF' || widget.pieceOrigin == 'AF'){
+
+                      if((widget.article.quantite - widget.article.cmdClient) < widget.article.selectedQuantite){
+                        Helpers.showFlushBar(context, S.current.msg_qte_select_sup);
+                      }
+                    }
+
                 setState(() {});
               }
               );
