@@ -61,7 +61,7 @@ class HomeDraggableItem extends DraggableItem {
               style: GoogleFonts.openSans(
                   textStyle: TextStyle(
                       color: Colors.white,
-                      fontSize: 12,
+                      fontSize: 14,
                       fontWeight: FontWeight.w600)
               ),
             ),

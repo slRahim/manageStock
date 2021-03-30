@@ -23,32 +23,34 @@ import 'models/MyParams.dart';
 import 'package:gestmob/ui/intro_page.dart';
 import 'package:in_app_purchase/in_app_purchase.dart';
 
-void main() {
-  // Crashlytics.instance.enableInDevMode = false;
-  // FlutterError.onError = Crashlytics.instance.recordFlutterError;
-  //
-  // runZoned(() {
-  //   runApp(
-  //       Phoenix(
-  //           child: PushNotificationsManager (
-  //               child: MyApp()
-  //           )
-  //       )
-  //   );
-  // }, onError: Crashlytics.instance.recordError);
-
+void main(){
   timeDilation = 1.0;
   InAppPurchaseConnection.enablePendingPurchases();
-  runApp(
-      PushNotificationsManager(
-          child: Phoenix (
-              child: MyApp()
-          )
-      )
-  );
+
+  Crashlytics.instance.enableInDevMode = true;
+  FlutterError.onError = Crashlytics.instance.recordFlutterError;
+
+  runZoned(() {
+    runApp(
+        Phoenix(
+            child: PushNotificationsManager (
+                child: MyApp()
+            )
+        )
+    );
+
+  }, onError:(exception , stackTrace) => Crashlytics.instance.recordError(exception, stackTrace));
+
+
+  // runApp(
+  //     PushNotificationsManager(
+  //         child: Phoenix (
+  //             child: MyApp()
+  //         )
+  //     )
+  // );
 
 }
-
 
 class MyApp extends StatefulWidget {
   @override
