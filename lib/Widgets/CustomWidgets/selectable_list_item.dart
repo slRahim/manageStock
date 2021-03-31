@@ -39,7 +39,7 @@ class _ArticleListItemSelectedState extends State<ArticleListItemSelected> {
 
   @override
   Widget build(BuildContext context) {
-    return  SelectableListItem(
+    return SelectableListItem(
         key_id: Key(widget.article.id.toString()),
         isListing: widget.fromListing,
         onDismiss: (direction) {
@@ -84,14 +84,14 @@ class _ArticleListItemSelectedState extends State<ArticleListItemSelected> {
           children: [
             Icon(Icons.assignment,size: 14, color: Theme.of(context).primaryColorDark,),
             SizedBox(width: 2,),
-            Text(widget.article.designation),
+            (widget.article.designation != '')?Text(widget.article.designation):Text('__'),
           ],
         ),
         subtitle: Row(
           children: [
             Icon(MdiIcons.pound,size: 14, color: Theme.of(context).primaryColorDark,),
             SizedBox(width: 2,),
-            Text(widget.article.ref),
+            (widget.article.ref != '')?Text(widget.article.ref):Text('__'),
           ],
         ),
         trailingChildren: [
