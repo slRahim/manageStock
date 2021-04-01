@@ -1422,7 +1422,7 @@ class _AddPiecePageState extends State<AddPiecePage>
                                   onLayout: (PdfPageFormat format) async =>
                                       doc.save());
                             } else {
-                              var message = S.current.msg_demo_exp;
+                              var message = S.current.msg_demo_option;
                               Helpers.showFlushBar(context, message);
                             }
                           },

@@ -1018,7 +1018,7 @@ class SqlLiteDatabaseHelper {
         WHEN  Cast(Substr (OLD.Num_piece,0,INSTR(OLD.Num_piece , '/' )) as interger)  = (Select Current_index From FormatPiece Where Piece like OLD.Piece)
         BEGIN
            UPDATE FormatPiece
-               SET Current_index = (Select Max(Cast(Substr (Num_piece,0,INSTR(Num_piece , '/' )) as interger)) From Pieces where Piece like OLD.Piece And Num_piece <> Old.Num_piece)
+               SET Current_index = IFNULL((Select Max(Cast(Substr (Num_piece,0,INSTR(Num_piece , '/' )) as interger)) From Pieces where Piece like OLD.Piece And Num_piece <> Old.Num_piece),0)
             WHERE  FormatPiece.Piece LIKE OLD.Piece;
         END;
      ''');
@@ -1030,10 +1030,10 @@ class SqlLiteDatabaseHelper {
         WHEN (OLD.Mov = 1 AND OLD.Piece <> "CC")
         BEGIN
              UPDATE Tiers
-               SET Chiffre_affaires = IFNULl((Select (Sum(Net_a_payer)-Old.Net_a_payer) From Pieces where Tier_id = OLD.Tier_id AND Mov = 1 AND Piece <> "CC"),0)
+               SET Chiffre_affaires = IFNULL((Select (Sum(Net_a_payer)-Old.Net_a_payer) From Pieces where Tier_id = OLD.Tier_id AND Mov = 1 AND Piece <> "CC"),0)
              WHERE id = OLD.Tier_id;
              UPDATE Tiers
-                SET Regler = IFNULl((SELECT SUM(Montant) FROM Tresories WHERE Tier_id = OLD.Tier_id AND Mov = 1) , 0)
+                SET Regler = IFNULL((SELECT SUM(Montant) FROM Tresories WHERE Tier_id = OLD.Tier_id AND Mov = 1) , 0)
              WHERE id = OLD.Tier_id ;
              UPDATE Tiers
                SET  Credit = (Solde_depart + Chiffre_affaires) - Regler 
@@ -1089,14 +1089,18 @@ class SqlLiteDatabaseHelper {
         AFTER INSERT ON Tresories 
         FOR EACH ROW 
         BEGIN     
-                
             UPDATE CompteTresorie
-              SET  Solde = IFNULL(Solde_depart + (SELECT SUM(Montant) FROM Tresories WHERE (Compte_id = NEW.Compte_id) AND 
-                                                  (Categorie_id = 2 OR Categorie_id = 4 OR Categorie_id = 6))
-                                        + (Select  -1*Sum(Montant) From Tresories 
+              SET  Solde = Solde_depart + IFNULL((Select Sum(Montant) From Tresories 
+                                            Where Compte_id = New.Compte_id AND 
+                                                  (Categorie_id = 2 OR Categorie_id = 4 OR Categorie_id = 6)
+                                             ),0)
+            WHERE id = New.Compte_id; 
+           
+            UPDATE CompteTresorie
+              SET  Solde = Solde + IFNULL((Select  -1 * Sum(Montant) From Tresories 
                                             Where Compte_id = New.Compte_id AND 
                                                   (Categorie_id = 3 OR Categorie_id = 5 OR Categorie_id = 7 OR Categorie_id = 8)
-                                          ),0)
+                                            ),0)
             WHERE id = New.Compte_id; 
             
         END;
@@ -1143,13 +1147,15 @@ class SqlLiteDatabaseHelper {
         AFTER UPDATE ON Tresories 
         FOR EACH ROW 
         BEGIN     
-                
             UPDATE CompteTresorie
-              SET  Solde =IFNULL(Solde_depart + (Select Sum(Montant) From Tresories 
+              SET  Solde = Solde_depart + IFNULL((Select Sum(Montant) From Tresories 
                                             Where Compte_id = New.Compte_id AND 
                                                   (Categorie_id = 2 OR Categorie_id = 4 OR Categorie_id = 6)
-                                            ) + 
-                                            (Select  -1 * Sum(Montant) From Tresories 
+                                             ),0)
+            WHERE id = New.Compte_id; 
+            
+            UPDATE CompteTresorie
+              SET  Solde = Solde + IFNULL((Select  -1 * Sum(Montant) From Tresories 
                                             Where Compte_id = New.Compte_id AND 
                                                   (Categorie_id = 3 OR Categorie_id = 5 OR Categorie_id = 7 OR Categorie_id = 8)
                                             ),0)
@@ -1229,7 +1235,7 @@ class SqlLiteDatabaseHelper {
         WHEN Cast(Substr (OLD.Num_tresorie,0,INSTR(OLD.Num_tresorie , '/' )) as interger) = (Select Current_index from FormatPiece where Piece like 'TR')
         BEGIN
            UPDATE FormatPiece
-               SET Current_index = (Select Max(Cast(Substr (Num_tresorie,0,INSTR(Num_tresorie , '/' )) as interger) ) From Tresories Where Num_tresorie <> Old.Num_tresorie )
+               SET Current_index = IFNULL((Select Max(Cast(Substr (Num_tresorie,0,INSTR(Num_tresorie , '/' )) as interger) ) From Tresories Where Num_tresorie <> Old.Num_tresorie ),0)
             WHERE  FormatPiece.Piece LIKE 'TR' ;
         END;
      ''');
