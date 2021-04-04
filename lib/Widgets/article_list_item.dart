@@ -196,14 +196,14 @@ class _ArticleListItemState extends State<ArticleListItem> {
                   await FeatureDiscovery.completeCurrentStep(context);
                   return true;
                 },
-                child: (widget.article.designation != null)
+                child: (widget.article.designation != '')
                     ? SingleChildScrollView(
                         scrollDirection: Axis.horizontal,
                         child: Row(
                           children: [
                             Icon(
                               Icons.assignment,
-                              size: 16,
+                              size: 12,
                               color: Theme.of(context).primaryColorDark,
                             ),
                             SizedBox(
@@ -220,29 +220,28 @@ class _ArticleListItemState extends State<ArticleListItem> {
               ),
               trailingChildren: widget.article.selectedQuantite > 0
                   ? [
-                      (widget.article.designation != null)
-                          ? Row(
-                              children: [
-                                Icon(
-                                  MdiIcons.pound,
-                                  size: 14,
-                                  color: Theme.of(context).primaryColorDark,
-                                ),
-                                SizedBox(
-                                  width: 3,
-                                ),
-                                Text("${widget.article.ref}",
-                                    style: TextStyle(
-                                      fontSize: 16.0,
-                                    )),
-                              ],
-                            )
-                          : null,
                       Row(
                         children: [
                           Icon(
-                            Icons.apps_outlined,
-                            size: 14,
+                            MdiIcons.pound,
+                            size: 12,
+                            color: Theme.of(context).primaryColorDark,
+                          ),
+                          SizedBox(
+                            width: 3,
+                          ),
+                          (widget.article.ref != '')?
+                          Text("${widget.article.ref}",
+                              style: TextStyle(
+                                fontSize: 16.0,
+                              )):Text("__"),
+                        ],
+                      ),
+                      Row(
+                        children: [
+                          Icon(
+                            Icons.widgets_rounded,
+                            size: 12,
                             color: Theme.of(context).primaryColorDark,
                           ),
                           SizedBox(
@@ -263,47 +262,46 @@ class _ArticleListItemState extends State<ArticleListItem> {
                   :
                   // listing des articles ds le fragement article
                   [
-                      (widget.article.ref != null)
-                          ? Row(
-                              children: [
-                                Icon(
-                                  MdiIcons.pound,
-                                  size: 16,
-                                  color: Theme.of(context).primaryColorDark,
-                                ),
-                                SizedBox(
-                                  width: 3,
-                                ),
-                                Text("${widget.article.ref}",
-                                    style: TextStyle(
-                                      fontSize: 16.0,
-                                    )),
-                              ],
-                            )
-                          : null,
-                      Row(
-                        children: [
-                          Icon(
-                            Icons.apps_outlined,
-                            size: 16,
-                            color: Theme.of(context).primaryColorDark,
-                          ),
-                          SizedBox(
-                            width: 3,
-                          ),
-                          Text(
-                            "${(widget.article.quantite - widget.article.cmdClient).toString()}",
+                    Row(
+                      children: [
+                        Icon(
+                          MdiIcons.pound,
+                          size: 12,
+                          color: Theme.of(context).primaryColorDark,
+                        ),
+                        SizedBox(
+                          width: 3,
+                        ),
+                        (widget.article.ref != '')?
+                        Text("${widget.article.ref}",
                             style: TextStyle(
-                                color: widget.article.quantite <=
-                                        widget.article.quantiteMinimum
-                                    ? Colors.redAccent
-                                    : Theme.of(context).primaryColorDark,
-                                fontSize: 16.0),
-                          ),
-                        ],
-                      ),
-                      trailingChildrenOnArticleFragment(),
-                    ],
+                              fontSize: 16.0,
+                            )):Text("__"),
+                      ],
+                    ),
+                    Row(
+                      children: [
+                        Icon(
+                          Icons.widgets_rounded,
+                          size: 12,
+                          color: Theme.of(context).primaryColorDark,
+                        ),
+                        SizedBox(
+                          width: 3,
+                        ),
+                        Text(
+                          "${(widget.article.quantite - widget.article.cmdClient).toString()}",
+                          style: TextStyle(
+                              color: widget.article.quantite <=
+                                      widget.article.quantiteMinimum
+                                  ? Colors.redAccent
+                                  : Theme.of(context).primaryColorDark,
+                              fontSize: 16.0),
+                        ),
+                      ],
+                    ),
+                    trailingChildrenOnArticleFragment(),
+                  ],
             ),
           ),
           actions: (widget.onItemSelected == null)

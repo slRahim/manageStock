@@ -89,6 +89,7 @@ class _AddTresoriePageState extends State<AddTresoriePage>
   QueryCtr _queryCtr = new QueryCtr();
   BottomBarController bottomBarControler;
   final _formKey = GlobalKey<FormState>();
+  final _formKey1 = GlobalKey<FormState>();
   String _devise ;
 
   void initState() {
@@ -267,7 +268,7 @@ class _AddTresoriePageState extends State<AddTresoriePage>
               });
             },
             onSavePressed: () async {
-              if (_formKey.currentState.validate()){
+              if (_formKey.currentState.validate() && _formKey1.currentState.validate()){
                 int id = await addItemToDb();
                 if (id > -1) {
                   setState(() {
@@ -403,65 +404,76 @@ class _AddTresoriePageState extends State<AddTresoriePage>
                 spacing: 13,
                 runSpacing: 13,
                 children: [
-                  Row(
-                    children: [
-                      Flexible(
-                        flex: 4,
-                        child: TextField(
-                          decoration: InputDecoration(
-                            prefixIcon: Icon(
-                              MdiIcons.idCard,
-                              color: Colors.orange[900],
-                            ),
-                            focusedBorder: OutlineInputBorder(
-                                borderSide: BorderSide(color: Colors.orange[900]),
-                                borderRadius: BorderRadius.circular(20)),
-                            labelText: "${S.current.n}",
-                            labelStyle: TextStyle(color: Colors.orange[900]),
-                            enabledBorder: OutlineInputBorder(
-                              gapPadding: 3.3,
-                              borderRadius: BorderRadius.circular(20),
-                              borderSide: BorderSide(color: Colors.orange[900]),
-                            ),
-                          ),
-                          enabled: editMode && !modification,
-                          controller: _numeroControl,
-                          keyboardType: TextInputType.text,
-                        ),
-                      ),
-                      Padding(padding: EdgeInsets.fromLTRB(5, 5, 5, 5)),
-                      Flexible(
-                        flex: 6,
-                        child: GestureDetector(
-                          onTap: editMode && !modification
-                              ? () {
-                                  callDatePicker();
-                                }
-                              : null,
-                          child: TextField(
+                  Form(
+                    key: _formKey1,
+                    child: Row(
+                      children: [
+                        Flexible(
+                          flex: 4,
+                          child: TextFormField(
+                            enabled: editMode && !modification,
+                            controller: _numeroControl,
+                            keyboardType: TextInputType.text,
+                            validator: (value) {
+                              if (value.isEmpty) {
+                                return S.current.msg_champ_oblg;
+                              }
+                              return null;
+                            },
                             decoration: InputDecoration(
+                              hintText: "#/YYYY",
                               prefixIcon: Icon(
-                                Icons.date_range,
-                                color: Colors.blue,
+                                MdiIcons.idCard,
+                                color: Colors.orange[900],
                               ),
                               focusedBorder: OutlineInputBorder(
-                                  borderSide: BorderSide(color: Colors.blue),
+                                  borderSide: BorderSide(color: Colors.orange[900]),
                                   borderRadius: BorderRadius.circular(20)),
-                              labelText: S.current.date,
-                              labelStyle: TextStyle(color: Colors.blue),
+                              labelText: "${S.current.n}",
+                              labelStyle: TextStyle(color: Colors.orange[900]),
                               enabledBorder: OutlineInputBorder(
                                 gapPadding: 3.3,
                                 borderRadius: BorderRadius.circular(20),
-                                borderSide: BorderSide(color: Colors.blue),
+                                borderSide: BorderSide(color: Colors.orange[900]),
                               ),
                             ),
-                            enabled: false,
-                            controller: _dateControl,
-                            keyboardType: TextInputType.text,
+
                           ),
                         ),
-                      ),
-                    ],
+                        Padding(padding: EdgeInsets.fromLTRB(5, 5, 5, 5)),
+                        Flexible(
+                          flex: 6,
+                          child: GestureDetector(
+                            onTap: editMode && !modification
+                                ? () {
+                                    callDatePicker();
+                                  }
+                                : null,
+                            child: TextField(
+                              decoration: InputDecoration(
+                                prefixIcon: Icon(
+                                  Icons.date_range,
+                                  color: Colors.blue,
+                                ),
+                                focusedBorder: OutlineInputBorder(
+                                    borderSide: BorderSide(color: Colors.blue),
+                                    borderRadius: BorderRadius.circular(20)),
+                                labelText: S.current.date,
+                                labelStyle: TextStyle(color: Colors.blue),
+                                enabledBorder: OutlineInputBorder(
+                                  gapPadding: 3.3,
+                                  borderRadius: BorderRadius.circular(20),
+                                  borderSide: BorderSide(color: Colors.blue),
+                                ),
+                              ),
+                              enabled: false,
+                              controller: _dateControl,
+                              keyboardType: TextInputType.text,
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
                   ),
                   Visibility(
                     visible: editMode && !modification,
@@ -593,7 +605,7 @@ class _AddTresoriePageState extends State<AddTresoriePage>
                               : null,
                           decoration: InputDecoration(
                             labelText: S.current.select_tier,
-                            labelStyle: TextStyle(color: Colors.blue),
+                            labelStyle: TextStyle(color: Theme.of(context).hintColor),
                             prefixIcon: Icon(
                               Icons.people,
                               color: Colors.blue,
@@ -650,7 +662,7 @@ class _AddTresoriePageState extends State<AddTresoriePage>
                         },
                         decoration: InputDecoration(
                           labelText: S.current.objet,
-                          labelStyle: TextStyle(color: Colors.blue),
+                          labelStyle: TextStyle(color: Theme.of(context).hintColor),
                           prefixIcon: Icon(
                             Icons.subject,
                             color: Colors.blue,
@@ -683,7 +695,7 @@ class _AddTresoriePageState extends State<AddTresoriePage>
                         },
                         decoration: InputDecoration(
                           labelText: S.current.modalite,
-                          labelStyle: TextStyle(color: Colors.blue),
+                          labelStyle: TextStyle(color: Theme.of(context).hintColor),
                           prefixIcon: Icon(
                             MdiIcons.creditCardSettingsOutline,
                             color: Colors.blue,
@@ -736,7 +748,7 @@ class _AddTresoriePageState extends State<AddTresoriePage>
                         },
                         decoration: InputDecoration(
                           labelText: S.current.montant,
-                          labelStyle: TextStyle(color: Colors.blue),
+                          labelStyle: TextStyle(color: Theme.of(context).hintColor),
                           prefixIcon: Icon(
                             Icons.monetization_on,
                             color: Colors.blue,
@@ -1486,7 +1498,7 @@ class _AddTresoriePageState extends State<AddTresoriePage>
       _tresorie.pieceId = _selectedPieces.first.id;
     }
 
-    var res = await _queryCtr.getTresorieByNum(_numeroControl.text);
+    var res = await _queryCtr.getTresorieByNum(_tresorie.numTresorie);
     if (res.length >= 1) {
       await getNumPiece();
       return null ;

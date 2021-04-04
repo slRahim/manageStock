@@ -58,7 +58,7 @@ class _ListTileCardState extends State<ListTileCard> {
             cardsGap: SizeConfig.safeBlockVertical,
             controller: widget.slidingCardController,
             slidingCardWidth: SizeConfig.horizontalBloc * 95,
-            visibleCardHeight:(Helpers.isDirectionRTL(context))? (widget.from is Tiers)? 110:105 : 95,
+            visibleCardHeight:(Helpers.isDirectionRTL(context))? (widget.from is Tiers)? 110:105 : 98,
             hiddenCardHeight: (Helpers.isDirectionRTL(context))? 90 : 80,
             showColors: false,
             frontCardWidget: ListFrontCard(

@@ -337,7 +337,7 @@ class _ProfilePageState extends State<ProfilePage> with TickerProviderStateMixin
                       labelStyle: TextStyle(color: Colors.green),
                       prefixIcon: Icon(
                         MdiIcons.idCard,
-                        color: Colors.blue,
+                        color: Colors.green,
                       ),
                       focusedBorder: OutlineInputBorder(
                           borderSide: BorderSide(color: Colors.green),
@@ -390,7 +390,7 @@ class _ProfilePageState extends State<ProfilePage> with TickerProviderStateMixin
               // },
               decoration: InputDecoration(
                 labelText:  S.current.activite,
-                labelStyle: TextStyle(color: Colors.blue),
+                labelStyle: TextStyle(color: Theme.of(context).hintColor),
                 prefixIcon: Icon(
                   MdiIcons.homeCityOutline,
                   color: Colors.blue,
@@ -423,7 +423,7 @@ class _ProfilePageState extends State<ProfilePage> with TickerProviderStateMixin
               // },
               decoration: InputDecoration(
                 labelText:  S.current.adresse,
-                labelStyle: TextStyle(color: Colors.blue),
+                labelStyle: TextStyle(color: Theme.of(context).hintColor),
                 prefixIcon: Icon(
                   Icons.home_outlined,
                   color: Colors.blue,
@@ -591,7 +591,7 @@ class _ProfilePageState extends State<ProfilePage> with TickerProviderStateMixin
               // },
               decoration: InputDecoration(
                 labelText:  S.current.telephone,
-                labelStyle: TextStyle(color: Colors.blue),
+                labelStyle: TextStyle(color: Theme.of(context).hintColor),
                 prefixIcon: Icon(
                   Icons.phone,
                   color: Colors.blue,
@@ -624,7 +624,7 @@ class _ProfilePageState extends State<ProfilePage> with TickerProviderStateMixin
               // },
               decoration: InputDecoration(
                 labelText:  S.current.telephone2,
-                labelStyle: TextStyle(color: Colors.blue),
+                labelStyle: TextStyle(color: Theme.of(context).hintColor),
                 prefixIcon: Icon(
                   Icons.phone,
                   color: Colors.blue,
@@ -657,7 +657,7 @@ class _ProfilePageState extends State<ProfilePage> with TickerProviderStateMixin
               },
               decoration: InputDecoration(
                 labelText:  S.current.mobile,
-                labelStyle: TextStyle(color: Colors.blue),
+                labelStyle: TextStyle(color: Theme.of(context).hintColor),
                 prefixIcon: Icon(
                   Icons.phone_android,
                   color: Colors.blue,
@@ -690,7 +690,7 @@ class _ProfilePageState extends State<ProfilePage> with TickerProviderStateMixin
               // },
               decoration: InputDecoration(
                 labelText:  S.current.mobile2,
-                labelStyle: TextStyle(color: Colors.blue),
+                labelStyle: TextStyle(color: Theme.of(context).hintColor),
                 prefixIcon: Icon(
                   Icons.phone_android,
                   color: Colors.blue,
@@ -723,7 +723,7 @@ class _ProfilePageState extends State<ProfilePage> with TickerProviderStateMixin
               // },
               decoration: InputDecoration(
                 labelText:  S.current.fax,
-                labelStyle: TextStyle(color: Colors.blue),
+                labelStyle: TextStyle(color: Theme.of(context).hintColor),
                 prefixIcon: Icon(
                   MdiIcons.fax,
                   color: Colors.blue,
@@ -756,7 +756,7 @@ class _ProfilePageState extends State<ProfilePage> with TickerProviderStateMixin
               // },
               decoration: InputDecoration(
                 labelText:  S.current.mail,
-                labelStyle: TextStyle(color: Colors.blue),
+                labelStyle: TextStyle(color: Theme.of(context).hintColor),
                 prefixIcon: Icon(
                   Icons.email,
                   color: Colors.blue,
@@ -789,7 +789,7 @@ class _ProfilePageState extends State<ProfilePage> with TickerProviderStateMixin
               // },
               decoration: InputDecoration(
                 labelText:  S.current.adresse_web,
-                labelStyle: TextStyle(color: Colors.blue),
+                labelStyle: TextStyle(color: Theme.of(context).hintColor),
                 prefixIcon: Icon(
                   MdiIcons.searchWeb,
                   color: Colors.blue,
@@ -822,7 +822,7 @@ class _ProfilePageState extends State<ProfilePage> with TickerProviderStateMixin
               // },
               decoration: InputDecoration(
                 labelText:  S.current.n_rc,
-                labelStyle: TextStyle(color: Colors.blue),
+                labelStyle: TextStyle(color: Theme.of(context).hintColor),
                 prefixIcon: Icon(
                   MdiIcons.cardAccountDetails,
                   color: Colors.blue,
@@ -855,7 +855,7 @@ class _ProfilePageState extends State<ProfilePage> with TickerProviderStateMixin
               // },
               decoration: InputDecoration(
                 labelText:  S.current.art_imp,
-                labelStyle: TextStyle(color: Colors.blue),
+                labelStyle: TextStyle(color: Theme.of(context).hintColor),
                 prefixIcon: Icon(
                   MdiIcons.cardAccountDetails,
                   color: Colors.blue,
@@ -888,7 +888,7 @@ class _ProfilePageState extends State<ProfilePage> with TickerProviderStateMixin
               // },
               decoration: InputDecoration(
                 labelText:  S.current.nif,
-                labelStyle: TextStyle(color: Colors.blue),
+                labelStyle: TextStyle(color: Theme.of(context).hintColor),
                 prefixIcon: Icon(
                   MdiIcons.cardAccountDetails,
                   color: Colors.blue,
@@ -921,7 +921,7 @@ class _ProfilePageState extends State<ProfilePage> with TickerProviderStateMixin
               // },
               decoration: InputDecoration(
                 labelText:  S.current.nis,
-                labelStyle: TextStyle(color: Colors.blue),
+                labelStyle: TextStyle(color: Theme.of(context).hintColor),
                 prefixIcon: Icon(
                   MdiIcons.cardAccountDetails,
                   color: Colors.blue,
@@ -954,7 +954,7 @@ class _ProfilePageState extends State<ProfilePage> with TickerProviderStateMixin
               // },
               decoration: InputDecoration(
                 labelText:  S.current.capitale_sociale,
-                labelStyle: TextStyle(color: Colors.blue),
+                labelStyle: TextStyle(color: Theme.of(context).hintColor),
                 prefixIcon: Icon(
                   Icons.monetization_on,
                   color: Colors.blue,

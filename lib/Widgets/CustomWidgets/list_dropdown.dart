@@ -56,7 +56,7 @@ class ListDropDownState extends State<ListDropDown> {
                   style: TextStyle(
                       fontSize: 16,
                       color:
-                          widget.editMode ? Colors.blue[700] : Colors.black54))
+                          widget.editMode ? Theme.of(context).hintColor : Colors.black54))
               : SizedBox(height: 1),
           Expanded(
             child: DropdownButtonHideUnderline(

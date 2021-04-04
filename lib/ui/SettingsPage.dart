@@ -444,32 +444,37 @@ class _SettingsPageState extends State<SettingsPage> {
                   SettingsTile(
                     title: '${S.current.param_backup}',
                     leading: Icon(Icons.backup),
-                    enabled: (_myParams.versionType != "demo"),
                     onTap: () async{
-                      await showDialog(
-                        context: context,
-                        builder: (context)  {
-                          _queryCtr.createBackup()
-                              .then((value){
-                            Navigator.pop(context);
-                            if(value["name"] != null){
-                              Helpers.showFlushBar(context, "${S.current.msg_back_suce}");
-                            }else{
-                              Helpers.showFlushBar(context, "${S.current.msg_back_err}");
+                      if(_myParams.versionType != "demo"){
+                        await showDialog(
+                            context: context,
+                            builder: (context)  {
+                              _queryCtr.createBackup()
+                                  .then((value){
+                                Navigator.pop(context);
+                                if(value["name"] != null){
+                                  Helpers.showFlushBar(context, "${S.current.msg_back_suce}");
+                                }else{
+                                  Helpers.showFlushBar(context, "${S.current.msg_back_err}");
+                                }
+                              });
+                              return Center(child: CircularProgressIndicator());
                             }
-                          });
-                          return Center(child: CircularProgressIndicator());
-                        }
-                      );
-
+                        );
+                      }else{
+                        Helpers.showFlushBar(context, S.current.msg_demo_option);
+                      }
                     },
                   ),
                   SettingsTile(
                     title: '${S.current.param_resto_data}',
-                    enabled: (_myParams.versionType != "demo"),
                     leading: Icon(Icons.restore),
                     onTap: () async {
-                      Navigator.pushNamed(context, RoutesKeys.driveListing);
+                      if(_myParams.versionType != "demo") {
+                        Navigator.pushNamed(context, RoutesKeys.driveListing);
+                      }else{
+                        Helpers.showFlushBar(context, S.current.msg_demo_option);
+                      }
                     },
                   ),
                 ],

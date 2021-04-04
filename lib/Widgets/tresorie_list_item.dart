@@ -98,7 +98,7 @@ class _TresorieListItemState extends State<TresorieListItem> {
                   backgroundColor: Colors.grey[100],
                 ),
               ),
-              title: (widget.tresorie.tierRS != null)
+              title: (widget.tresorie.tierRS != '')
                   ? SingleChildScrollView(
                    scrollDirection: Axis.horizontal,
                     child: Row(

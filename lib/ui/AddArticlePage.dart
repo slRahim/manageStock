@@ -43,9 +43,7 @@ class _AddArticlePageState extends State<AddArticlePage>
   bool modification = false;
 
   bool _stockable = true;
-
   bool finishedLoading = false;
-
   String appBarTitle = S.current.article_titre;
 
   List<ArticleMarque> _marqueItems;
@@ -62,9 +60,7 @@ class _AddArticlePageState extends State<AddArticlePage>
   ArticleTva _selectedTva;
 
   bool _price2 = false;
-
   bool _price3 = false;
-
   bool _tva = false;
 
   TextEditingController _designationControl = new TextEditingController();
@@ -369,7 +365,7 @@ class _AddArticlePageState extends State<AddArticlePage>
               // },
               decoration: InputDecoration(
                 labelText: S.current.referance,
-                labelStyle: TextStyle(color: Colors.blue),
+                labelStyle: TextStyle(color: Theme.of(context).hintColor),
                 prefixIcon: Icon(
                   Icons.archive,
                   color: Colors.blue,
@@ -406,7 +402,7 @@ class _AddArticlePageState extends State<AddArticlePage>
                 // },
                 decoration: InputDecoration(
                   labelText: S.current.msg_scan_barcode,
-                  labelStyle: TextStyle(color: Colors.blue),
+                  labelStyle: TextStyle(color: Theme.of(context).hintColor),
                   prefixIcon: Icon(
                     MdiIcons.barcode,
                     color: Colors.blue,
@@ -452,7 +448,7 @@ class _AddArticlePageState extends State<AddArticlePage>
 
                       decoration: InputDecoration(
                           labelText: S.current.prix_achat,
-                          labelStyle: TextStyle(color: Colors.blue),
+                          labelStyle: TextStyle(color: Theme.of(context).hintColor),
                           prefixIcon: Icon(
                             Icons.attach_money,
                             color: Colors.blue,
@@ -529,7 +525,7 @@ class _AddArticlePageState extends State<AddArticlePage>
                     labelText: (modification)
                         ? S.current.pmp
                         : "${S.current.pmp} ${S.current.init}",
-                    labelStyle: TextStyle(color: Colors.blue),
+                    labelStyle: TextStyle(color: Theme.of(context).hintColor),
                     prefixIcon: Icon(
                       Icons.archive,
                       color: Colors.blue,
@@ -567,7 +563,7 @@ class _AddArticlePageState extends State<AddArticlePage>
                       labelText: modification
                           ? S.current.quantit
                           : S.current.stock_init,
-                      labelStyle: TextStyle(color: Colors.blue),
+                      labelStyle: TextStyle(color: Theme.of(context).hintColor),
                       prefixIcon: Icon(
                         Icons.apps,
                         color: Colors.blue,
@@ -603,7 +599,7 @@ class _AddArticlePageState extends State<AddArticlePage>
                     // },
                     decoration: InputDecoration(
                       labelText: S.current.stock_min,
-                      labelStyle: TextStyle(color: Colors.blue),
+                      labelStyle: TextStyle(color: Theme.of(context).hintColor),
                       prefixIcon: Icon(
                         Icons.apps,
                         color: Colors.blue,
@@ -644,7 +640,7 @@ class _AddArticlePageState extends State<AddArticlePage>
                       // },
                       decoration: InputDecoration(
                         labelText: S.current.qte_colis,
-                        labelStyle: TextStyle(color: Colors.blue),
+                        labelStyle: TextStyle(color: Theme.of(context).hintColor),
                         prefixIcon: Icon(
                           Icons.shopping_bag_rounded,
                           color: Colors.blue[700],
@@ -689,7 +685,7 @@ class _AddArticlePageState extends State<AddArticlePage>
                           borderSide: BorderSide(color: Colors.blue),
                           borderRadius: BorderRadius.circular(20)),
                       labelText: S.current.qte_cmd,
-                      labelStyle: TextStyle(color: Colors.blue),
+                      labelStyle: TextStyle(color: Theme.of(context).hintColor),
                       enabledBorder: OutlineInputBorder(
                         gapPadding: 3.3,
                         borderRadius: BorderRadius.circular(20),
@@ -727,7 +723,7 @@ class _AddArticlePageState extends State<AddArticlePage>
                       borderSide: BorderSide(color: Colors.blue),
                       borderRadius: BorderRadius.circular(20)),
                   labelText: S.current.colis,
-                  labelStyle: TextStyle(color: Colors.blue),
+                  labelStyle: TextStyle(color: Theme.of(context).hintColor),
                   enabledBorder: OutlineInputBorder(
                     gapPadding: 3.3,
                     borderRadius: BorderRadius.circular(20),
@@ -754,7 +750,7 @@ class _AddArticlePageState extends State<AddArticlePage>
               // },
               decoration: InputDecoration(
                 labelText: S.current.prix_v1,
-                labelStyle: TextStyle(color: Colors.blue),
+                labelStyle: TextStyle(color: Theme.of(context).hintColor),
                 prefixIcon: Icon(
                   Icons.monetization_on,
                   color: Colors.blue,
@@ -789,7 +785,7 @@ class _AddArticlePageState extends State<AddArticlePage>
                 // },
                 decoration: InputDecoration(
                   labelText: S.current.prix_v2,
-                  labelStyle: TextStyle(color: Colors.blue),
+                  labelStyle: TextStyle(color: Theme.of(context).hintColor),
                   prefixIcon: Icon(
                     Icons.monetization_on,
                     color: Colors.blueGrey[700],
@@ -825,7 +821,7 @@ class _AddArticlePageState extends State<AddArticlePage>
                 // },
                 decoration: InputDecoration(
                   labelText: S.current.prix_v3,
-                  labelStyle: TextStyle(color: Colors.blue),
+                  labelStyle: TextStyle(color: Theme.of(context).hintColor),
                   prefixIcon: Icon(
                     Icons.monetization_on,
                     color: Colors.blueGrey[500],
@@ -884,7 +880,7 @@ class _AddArticlePageState extends State<AddArticlePage>
                 borderRadius: BorderRadius.circular(20)),
             contentPadding: EdgeInsets.only(left: 20, top: 20, bottom: 20),
             labelText: S.current.description,
-            labelStyle: TextStyle(color: Colors.blue),
+            labelStyle: TextStyle(color: Theme.of(context).hintColor),
             alignLabelWithHint: true,
             hintText: S.current.msg_description,
             enabledBorder: OutlineInputBorder(

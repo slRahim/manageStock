@@ -105,7 +105,7 @@ class _PieceListItemState extends State<PieceListItem> {
                   foregroundColor: Colors.black,
                 ),
               ),
-              title:(widget.piece.raisonSociale != null)
+              title:(widget.piece.raisonSociale != '')
                   ?SingleChildScrollView(
                     scrollDirection: Axis.horizontal,
                     child: Row(
@@ -123,7 +123,7 @@ class _PieceListItemState extends State<PieceListItem> {
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: <Widget>[
                     Icon(Icons.date_range,
-                      size: 14,
+                      size: 12,
                       color: Theme.of(context).primaryColorDark,
                     ),
                     SizedBox(
@@ -136,41 +136,30 @@ class _PieceListItemState extends State<PieceListItem> {
                     ),
                   ],
                 ),
-                (widget.piece.net_a_payer < 0)
-                    ? Row(
-                      children: [
-                        Icon(MdiIcons.sigma,
-                          size: 16,
-                          color: Theme.of(context).primaryColorDark,
-                        ),
-                        SizedBox(
-                          width: 3,
-                        ),
-                        Text("${Helpers.numberFormat(widget.piece.net_a_payer * -1).toString() } ${_devise}",
-                          style: TextStyle(
-                            fontSize: 16.0,
-                            fontWeight: FontWeight.bold ,
-                            color:Theme.of(context).primaryColorDark ),
-                        ),
-                      ],
-                    )
-                    : Row(
-                      children: [
-                        Icon(MdiIcons.sigma,
-                          size: 16,
-                          color: Theme.of(context).primaryColorDark,
-                        ),
-                        SizedBox(
-                          width: 3,
-                        ),
-                        Text('${Helpers.numberFormat(widget.piece.net_a_payer).toString()} ${_devise}',
-                          style: TextStyle(
-                            fontSize: 16.0,
-                            fontWeight: FontWeight.bold ,
-                            color: Theme.of(context).primaryColorDark ),
-                        ),
-                      ],
-                    ) ,
+                Row(
+                  children: [
+                    Icon(MdiIcons.sigma,
+                      size: 16,
+                      color: Theme.of(context).primaryColorDark,
+                    ),
+                    SizedBox(
+                      width: 3,
+                    ),
+                    (widget.piece.net_a_payer < 0)?
+                    Text("${Helpers.numberFormat(widget.piece.net_a_payer * -1).toString() } ${_devise}",
+                      style: TextStyle(
+                          fontSize: 16.0,
+                          fontWeight: FontWeight.bold ,
+                          color:Theme.of(context).primaryColorDark ),
+                    ) :
+                    Text('${Helpers.numberFormat(widget.piece.net_a_payer).toString()} ${_devise}',
+                      style: TextStyle(
+                          fontSize: 16.0,
+                          fontWeight: FontWeight.bold ,
+                          color: Theme.of(context).primaryColorDark ),
+                    ),
+                  ],
+                ),
                 RichText(
                   text: TextSpan(
                       children: [

@@ -132,6 +132,8 @@ class _AddPiecePageState extends State<AddPiecePage>
   Piece _pieceTo;
   Transformer _trasformers;
 
+  final _formKey = GlobalKey<FormState>();
+
   void initState() {
     super.initState();
     SchedulerBinding.instance.addPostFrameCallback((Duration duration) {
@@ -354,23 +356,29 @@ class _AddPiecePageState extends State<AddPiecePage>
                         context, S.current.msg_no_edit_transformer);
                   },
             onSavePressed: () async {
-              if (_selectedItems.length > 0) {
-                AwesomeDialog(
-                  context: context,
-                  dialogType: DialogType.SUCCES,
-                  animType: AnimType.BOTTOMSLIDE,
-                  title: S.current.supp,
-                  body: addChoicesDialog(),
-                  closeIcon: Icon(
-                    Icons.cancel_sharp,
-                    color: Colors.red,
-                    size: 26,
-                  ),
-                  showCloseIcon: true,
-                )..show();
-              } else {
-                Helpers.showFlushBar(context, S.current.msg_select_art);
+              if (_formKey.currentState.validate()){
+                if (_selectedItems.length > 0) {
+                  AwesomeDialog(
+                    context: context,
+                    dialogType: DialogType.SUCCES,
+                    animType: AnimType.BOTTOMSLIDE,
+                    title: S.current.supp,
+                    body: addChoicesDialog(),
+                    closeIcon: Icon(
+                      Icons.cancel_sharp,
+                      color: Colors.red,
+                      size: 26,
+                    ),
+                    showCloseIcon: true,
+                  )..show();
+                } else {
+                  Helpers.showFlushBar(context, S.current.msg_select_art);
+                }
+              }else{
+                Helpers.showFlushBar(
+                    context, "${S.current.msg_champs_obg}");
               }
+
             },
             onTrensferPressed: (_piece.etat == 0 &&
                     _piece.piece != PieceType.retourClient &&
@@ -815,66 +823,76 @@ class _AddPiecePageState extends State<AddPiecePage>
                       : SizedBox(
                           height: 0,
                         ),
-                  Row(
-                    children: [
-                      Flexible(
-                        flex: 4,
-                        child: TextField(
-                          decoration: InputDecoration(
-                            prefixIcon: Icon(
-                              MdiIcons.idCard,
-                              color: Colors.orange[900],
-                            ),
-                            focusedBorder: OutlineInputBorder(
-                                borderSide:
-                                    BorderSide(color: Colors.orange[900]),
-                                borderRadius: BorderRadius.circular(20)),
-                            labelText: "${S.current.n}",
-                            labelStyle: TextStyle(color: Colors.orange[900]),
-                            enabledBorder: OutlineInputBorder(
-                              gapPadding: 3.3,
-                              borderRadius: BorderRadius.circular(20),
-                              borderSide: BorderSide(color: Colors.orange[900]),
-                            ),
-                          ),
-                          enabled: editMode,
-                          controller: _numeroControl,
-                          keyboardType: TextInputType.text,
-                        ),
-                      ),
-                      Padding(padding: EdgeInsets.fromLTRB(5, 5, 5, 5)),
-                      Flexible(
-                        flex: 6,
-                        child: GestureDetector(
-                          onTap: editMode
-                              ? () {
-                                  callDatePicker();
-                                }
-                              : null,
-                          child: TextField(
+                  Form(
+                    key: _formKey,
+                    child: Row(
+                      children: [
+                        Flexible(
+                          flex: 4,
+                          child: TextFormField(
+                            enabled: editMode,
+                            controller: _numeroControl,
+                            keyboardType: TextInputType.text,
+                            validator: (value) {
+                              if (value.isEmpty) {
+                                return S.current.msg_champ_oblg;
+                              }
+                              return null;
+                            },
                             decoration: InputDecoration(
+                              hintText: "#/YYYY",
                               prefixIcon: Icon(
-                                Icons.date_range,
-                                color: Colors.blue,
+                                MdiIcons.idCard,
+                                color: Colors.orange[900],
                               ),
                               focusedBorder: OutlineInputBorder(
-                                  borderSide: BorderSide(color: Colors.blue),
+                                  borderSide:
+                                      BorderSide(color: Colors.orange[900]),
                                   borderRadius: BorderRadius.circular(20)),
-                              labelText: S.current.date,
-                              labelStyle: TextStyle(color: Colors.blue),
+                              labelText: "${S.current.n}",
+                              labelStyle: TextStyle(color: Colors.orange[900]),
                               enabledBorder: OutlineInputBorder(
                                 gapPadding: 3.3,
                                 borderRadius: BorderRadius.circular(20),
-                                borderSide: BorderSide(color: Colors.blue),
+                                borderSide: BorderSide(color: Colors.orange[900]),
                               ),
                             ),
-                            enabled: false,
-                            controller: _dateControl,
-                            keyboardType: TextInputType.text,
                           ),
                         ),
-                      ),
-                    ],
+                        Padding(padding: EdgeInsets.fromLTRB(5, 5, 5, 5)),
+                        Flexible(
+                          flex: 6,
+                          child: GestureDetector(
+                            onTap: editMode
+                                ? () {
+                                    callDatePicker();
+                                  }
+                                : null,
+                            child: TextField(
+                              decoration: InputDecoration(
+                                prefixIcon: Icon(
+                                  Icons.date_range,
+                                  color: Colors.blue,
+                                ),
+                                focusedBorder: OutlineInputBorder(
+                                    borderSide: BorderSide(color: Colors.blue),
+                                    borderRadius: BorderRadius.circular(20)),
+                                labelText: S.current.date,
+                                labelStyle: TextStyle(color: Colors.blue),
+                                enabledBorder: OutlineInputBorder(
+                                  gapPadding: 3.3,
+                                  borderRadius: BorderRadius.circular(20),
+                                  borderSide: BorderSide(color: Colors.blue),
+                                ),
+                              ),
+                              enabled: false,
+                              controller: _dateControl,
+                              keyboardType: TextInputType.text,
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
                   ),
                   Row(
                     children: [

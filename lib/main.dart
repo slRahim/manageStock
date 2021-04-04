@@ -134,6 +134,7 @@ class _MyAppState extends State<MyApp> {
               bottomAppBarColor: Colors.white,
               disabledColor: Colors.white,
               hoverColor: Colors.blue[200],
+              hintColor: Colors.blue,
               tabBarTheme: TabBarTheme(
                 labelColor: Colors.blue,
                 unselectedLabelStyle: TextStyle(color: Colors.black54, fontSize: 12),
@@ -156,6 +157,7 @@ class _MyAppState extends State<MyApp> {
               primaryColorDark: Colors.white,
               disabledColor: Colors.black26,
               hoverColor: Colors.black26,
+              hintColor: Colors.white,
               tabBarTheme: TabBarTheme(
                 labelColor: Colors.blue,
                 unselectedLabelStyle: TextStyle(color: Colors.white60, fontSize: 12),

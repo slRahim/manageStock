@@ -119,7 +119,7 @@ class _TierListItemState extends State<TierListItem> {
 
                   ),
                 ),
-                title:(widget.tier.raisonSociale != null)
+                title:(widget.tier.raisonSociale != '')
                     ? SingleChildScrollView(
                       scrollDirection: Axis.horizontal,
                       child: Row(

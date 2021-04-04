@@ -409,7 +409,7 @@ class _AddTierPageState extends State<AddTierPage>
                       labelText: S.current.rs,
                       prefixIcon: Icon(
                         MdiIcons.idCard,
-                        color: Colors.blue,
+                        color: Colors.green,
                       ),
                       focusedBorder: OutlineInputBorder(
                           borderSide: BorderSide(color: Colors.green),
@@ -463,7 +463,7 @@ class _AddTierPageState extends State<AddTierPage>
               // },
               decoration: InputDecoration(
                 labelText: S.current.adresse,
-                labelStyle: TextStyle(color: Colors.blue),
+                labelStyle: TextStyle(color: Theme.of(context).hintColor),
                 prefixIcon: Icon(
                   MdiIcons.homeCityOutline,
                   color: Colors.blue,
@@ -496,7 +496,7 @@ class _AddTierPageState extends State<AddTierPage>
               // },
               decoration: InputDecoration(
                 labelText: S.current.ville,
-                labelStyle: TextStyle(color: Colors.blue),
+                labelStyle: TextStyle(color: Theme.of(context).hintColor),
                 prefixIcon: Icon(
                   Icons.add_location,
                   color: Colors.blue,
@@ -529,7 +529,7 @@ class _AddTierPageState extends State<AddTierPage>
               // },
               decoration: InputDecoration(
                 labelText: S.current.telephone,
-                labelStyle: TextStyle(color: Colors.blue),
+                labelStyle: TextStyle(color: Theme.of(context).hintColor),
                 prefixIcon: Icon(
                   Icons.phone,
                   color: Colors.blue,
@@ -562,7 +562,7 @@ class _AddTierPageState extends State<AddTierPage>
               // },
               decoration: InputDecoration(
                 labelText: S.current.mobile,
-                labelStyle: TextStyle(color: Colors.blue),
+                labelStyle: TextStyle(color: Theme.of(context).hintColor),
                 prefixIcon: Icon(
                   Icons.phone_android,
                   color: Colors.blue,
@@ -595,7 +595,7 @@ class _AddTierPageState extends State<AddTierPage>
               // },
               decoration: InputDecoration(
                 labelText: S.current.fax,
-                labelStyle: TextStyle(color: Colors.blue),
+                labelStyle: TextStyle(color: Theme.of(context).hintColor),
                 prefixIcon: Icon(
                   MdiIcons.fax,
                   color: Colors.blue,
@@ -628,7 +628,7 @@ class _AddTierPageState extends State<AddTierPage>
               // },
               decoration: InputDecoration(
                 labelText: S.current.mail,
-                labelStyle: TextStyle(color: Colors.blue),
+                labelStyle: TextStyle(color: Theme.of(context).hintColor),
                 prefixIcon: Icon(
                   Icons.email,
                   color: Colors.blue,
@@ -667,7 +667,7 @@ class _AddTierPageState extends State<AddTierPage>
               },
               decoration: InputDecoration(
                 labelText: S.current.solde_depart,
-                labelStyle: TextStyle(color: Colors.blue),
+                labelStyle: TextStyle(color: Theme.of(context).hintColor),
                 prefixIcon: Icon(
                   Icons.monetization_on,
                   color: Colors.blue,
@@ -702,7 +702,7 @@ class _AddTierPageState extends State<AddTierPage>
                 // },
                 decoration: InputDecoration(
                   labelText: S.current.chifre_affaire,
-                  labelStyle: TextStyle(color: Colors.blue),
+                  labelStyle: TextStyle(color: Theme.of(context).hintColor),
                   prefixIcon: Icon(
                     Icons.monetization_on,
                     color: Colors.blue,
@@ -738,7 +738,7 @@ class _AddTierPageState extends State<AddTierPage>
                 // },
                 decoration: InputDecoration(
                   labelText: S.current.regler,
-                  labelStyle: TextStyle(color: Colors.blue),
+                  labelStyle: TextStyle(color: Theme.of(context).hintColor),
                   prefixIcon: Icon(
                     Icons.monetization_on,
                     color: Colors.blue,
@@ -774,7 +774,7 @@ class _AddTierPageState extends State<AddTierPage>
                       borderSide: BorderSide(color: Colors.blue),
                       borderRadius: BorderRadius.circular(20)),
                   labelText: S.current.credit,
-                  labelStyle: TextStyle(color: Colors.blue),
+                  labelStyle: TextStyle(color: Theme.of(context).hintColor),
                   enabledBorder: OutlineInputBorder(
                     gapPadding: 3.3,
                     borderRadius: BorderRadius.circular(20),
