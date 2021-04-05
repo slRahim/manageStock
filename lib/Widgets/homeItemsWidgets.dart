@@ -58,11 +58,11 @@ class HomeDraggableItem extends DraggableItem {
             Text(
               title,
               textAlign: TextAlign.center,
-              style: GoogleFonts.openSans(
+              style: GoogleFonts.lato(
                   textStyle: TextStyle(
                       color: Colors.white,
                       fontSize: 14,
-                      fontWeight: FontWeight.w600)
+                      fontWeight: FontWeight.bold)
               ),
             ),
           ],

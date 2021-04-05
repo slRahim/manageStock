@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:gestmob/generated/l10n.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 // drop down menu restyle
 class ListDropDown extends StatefulWidget {
@@ -53,16 +54,22 @@ class ListDropDownState extends State<ListDropDown> {
           SizedBox(width: 13),
           ((widget.value is int ) && widget.editMode)
               ? new Text("${widget.libelle}",
-                  style: TextStyle(
-                      fontSize: 16,
-                      color:
-                          widget.editMode ? Theme.of(context).hintColor : Colors.black54))
+                  style: GoogleFonts.lato(
+                    textStyle : TextStyle(
+                        fontSize: 16,
+                        color:
+                        widget.editMode ? Theme.of(context).hintColor : Colors.black54)
+                  ))
               : SizedBox(height: 1),
           Expanded(
             child: DropdownButtonHideUnderline(
               child: DropdownButton<Object>(
                   key: dropdownKey,
-                  disabledHint: (widget.value is int ) ? Text("${widget.libelle} ${widget.value.toString()}") :Text(widget.libelle),
+                  disabledHint: (widget.value is int )
+                      ? Text("${widget.libelle} ${widget.value.toString()}",
+                    style: GoogleFonts.lato(),
+                  )
+                      :Text(widget.libelle , style: GoogleFonts.lato(),),
                   icon: widget.onAddPressed != null
                       ? Row(
                         children: [

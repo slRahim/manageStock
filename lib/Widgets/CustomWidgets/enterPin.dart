@@ -3,6 +3,7 @@ import 'package:gestmob/Helpers/Helpers.dart';
 import 'package:gestmob/Helpers/TouchIdUtil.dart';
 import 'package:gestmob/generated/l10n.dart';
 import 'package:vibration/vibration.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 // special pour l'ajout et modification de pin d'auth ds le screen profile
 class EnterPin extends StatefulWidget {
@@ -61,11 +62,13 @@ class _EnterPinState extends State<EnterPin> {
               widget.codePin.isEmpty
                   ?  S.current.msg_no_pass
                   :  S.current.msg_pass + widget.codePin.substring(3, 4),
-              style: TextStyle(
-                color: Colors.white70,
-                fontSize: 21.0,
-                fontWeight: FontWeight.bold,
-              ),
+              style: GoogleFonts.lato(
+                textStyle: TextStyle(
+                  color: Colors.white70,
+                  fontSize: 21.0,
+                  fontWeight: FontWeight.bold,
+                ),
+              )
             ),
             SizedBox(
               height: 10,
@@ -73,10 +76,12 @@ class _EnterPinState extends State<EnterPin> {
             Text(widget.codePin.isEmpty
                 ?  S.current.msg_edit_pass
                 :  S.current.msg_edit_pass1,
-              style: TextStyle(
-                color: Colors.white70,
-                fontSize: 12.0,
-              ),
+              style:GoogleFonts.lato(
+                textStyle:  TextStyle(
+                  color: Colors.white70,
+                  fontSize: 12.0,
+                ),
+              )
             ),
           ],
         ),
@@ -358,11 +363,13 @@ class _OtpSceernState extends State<OtpSceern> {
           fisrt == ""
               ?  S.current.msg_choix_pin
               :  S.current.msg_confirm_pin,
-          style: TextStyle(
-            color: Colors.white70,
-            fontSize: 21.0,
-            fontWeight: FontWeight.bold,
-          ),
+          style: GoogleFonts.lato(
+            textStyle: TextStyle(
+              color: Colors.white70,
+              fontSize: 21.0,
+              fontWeight: FontWeight.bold,
+            ),
+          )
         ),
         SizedBox(
           height: 10,
@@ -371,10 +378,12 @@ class _OtpSceernState extends State<OtpSceern> {
           fisrt == ""
               ? S.current.msg_entre_pin
               : S.current.msg_confirm_pin1,
-          style: TextStyle(
-            color: Colors.white70,
-            fontSize: 12.0,
-          ),
+          style:GoogleFonts.lato(
+            textStyle:TextStyle(
+              color: Colors.white70,
+              fontSize: 12.0,
+            ),
+          )
         ),
       ],
     );
@@ -403,8 +412,10 @@ class PinNumber extends StatelessWidget {
           filled: true,
           fillColor: Colors.transparent,
         ),
-        style: TextStyle(
-            fontWeight: FontWeight.bold, fontSize: 21.0, color: Colors.white),
+        style: GoogleFonts.lato(
+          textStyle: TextStyle(
+              fontWeight: FontWeight.bold, fontSize: 21.0, color: Colors.white)
+        ),
       ),
     );
   }
@@ -433,11 +444,13 @@ class KeyboardNumber extends StatelessWidget {
         child: Text(
           "$n",
           textAlign: TextAlign.center,
-          style: TextStyle(
-            fontSize: 24 * MediaQuery.of(context).textScaleFactor,
-            color: Colors.white70,
-            fontWeight: FontWeight.bold,
-          ),
+          style: GoogleFonts.lato(
+            textStyle: TextStyle(
+              fontSize: 24 * MediaQuery.of(context).textScaleFactor,
+              color: Colors.white70,
+              fontWeight: FontWeight.bold,
+            ),
+          )
         ),
       ),
     );

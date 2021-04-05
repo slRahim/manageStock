@@ -8,6 +8,7 @@ import 'package:gestmob/models/Tiers.dart';
 
 import 'CustomWidgets/chart_badge.dart';
 import 'CustomWidgets/chart_indicator.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 class ChartPie extends StatefulWidget {
   final data;
@@ -71,14 +72,14 @@ class _ChartPieState extends State<ChartPie> {
                   ),
                   Text(
                     '${S.current.best_5}',
-                    style: TextStyle(color: widget.textColor, fontSize: 22),
+                    style: GoogleFonts.lato(textStyle: TextStyle(color: widget.textColor, fontSize: 22)),
                   ),
                   SizedBox(
                     width: 4,
                   ),
                   Text(
                     '${S.current.item}',
-                    style: TextStyle(color: Color(0xff77839a), fontSize: 16),
+                    style: GoogleFonts.lato(textStyle: TextStyle(color: Color(0xff77839a), fontSize: 16)),
                   ),
                 ],
               ),
@@ -153,10 +154,11 @@ class _ChartPieState extends State<ChartPie> {
         value: (getYvalue(index) == 0 && widget.data.length == 1 )? 1 : getYvalue(index),
         title: '${(getYvalue(index)*100/_totalSum).toStringAsFixed(2)}%'.toString(),
         radius: radius,
-        titleStyle: TextStyle(
-            fontSize: fontSize,
-            fontWeight: FontWeight.bold,
-            color: const Color(0xffffffff)),
+        titleStyle: GoogleFonts.lato(
+            textStyle: TextStyle(
+                fontSize: fontSize,
+                fontWeight: FontWeight.bold,
+                color: const Color(0xffffffff)),),
         badgeWidget: (widget.typeData != "charge" && widget.typeData != "famille")?Badge(
           getImage(index),
           size: widgetSize,

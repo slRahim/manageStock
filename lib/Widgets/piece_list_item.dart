@@ -18,6 +18,7 @@ import 'CustomWidgets/list_tile_card.dart';
 import 'package:gestmob/services/push_notifications.dart';
 import 'package:feature_discovery/feature_discovery.dart';
 import 'package:flutter/scheduler.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 // element à afficher lors de listing des factures
 class PieceListItem extends StatefulWidget {
@@ -70,7 +71,7 @@ class _PieceListItemState extends State<PieceListItem> {
           tapTarget: Icon(MdiIcons.arrowSplitVertical , color: Colors.black,),
           backgroundColor: Colors.red,
           contentLocation: ContentLocation.below,
-          title: Text(S.current.swipe),
+          title: Text(S.current.swipe, style: GoogleFonts.lato(fontWeight: FontWeight.bold),),
           description: Container(width:150,child: Text(S.current.msg_swipe_lr)),
           onBackgroundTap: () async{
             await FeatureDiscovery.completeCurrentStep(context);
@@ -99,7 +100,7 @@ class _PieceListItemState extends State<PieceListItem> {
                 radius: 25,
                 backgroundColor: getColor(),
                 child: CircleAvatar(
-                  child: Text(getPiecetype()),
+                  child: Text(getPiecetype(), style: GoogleFonts.lato(),),
                   radius:23,
                   backgroundColor: Colors.grey[200],
                   foregroundColor: Colors.black,
@@ -111,8 +112,8 @@ class _PieceListItemState extends State<PieceListItem> {
                     child: Row(
                       children: [
                         Text("(# : ${widget.piece.num_piece}) ${widget.piece.raisonSociale}" ,
-                            style: TextStyle(
-                                  fontSize: 14,)
+                            style: GoogleFonts.lato(textStyle: TextStyle(
+                              fontSize: 14,))
                           ),
                       ],
                     ),
@@ -131,8 +132,8 @@ class _PieceListItemState extends State<PieceListItem> {
                     ),
                     Text(
                       "${Helpers.dateToText(widget.piece.date)}",
-                      style: TextStyle(
-                          fontSize: 14 , color: Theme.of(context).primaryColorDark),
+                      style: GoogleFonts.lato(textStyle: TextStyle(
+                          fontSize: 14 , color: Theme.of(context).primaryColorDark)),
                     ),
                   ],
                 ),
@@ -147,16 +148,20 @@ class _PieceListItemState extends State<PieceListItem> {
                     ),
                     (widget.piece.net_a_payer < 0)?
                     Text("${Helpers.numberFormat(widget.piece.net_a_payer * -1).toString() } ${_devise}",
-                      style: TextStyle(
-                          fontSize: 16.0,
-                          fontWeight: FontWeight.bold ,
-                          color:Theme.of(context).primaryColorDark ),
+                      style: GoogleFonts.lato(
+                        textStyle: TextStyle(
+                            fontSize: 16.0,
+                            fontWeight: FontWeight.bold ,
+                            color:Theme.of(context).primaryColorDark )
+                      ),
                     ) :
                     Text('${Helpers.numberFormat(widget.piece.net_a_payer).toString()} ${_devise}',
-                      style: TextStyle(
-                          fontSize: 16.0,
-                          fontWeight: FontWeight.bold ,
-                          color: Theme.of(context).primaryColorDark ),
+                      style: GoogleFonts.lato(
+                        textStyle: TextStyle(
+                            fontSize: 16.0,
+                            fontWeight: FontWeight.bold ,
+                            color: Theme.of(context).primaryColorDark )
+                      ),
                     ),
                   ],
                 ),
@@ -165,13 +170,17 @@ class _PieceListItemState extends State<PieceListItem> {
                       children: [
                         TextSpan(
                             text: "${S.current.regler} : ",
-                            style: TextStyle(fontSize: 14 , fontWeight: FontWeight.bold,color: Colors.blue)
+                            style: GoogleFonts.lato(
+                              textStyle: TextStyle(fontSize: 14 , fontWeight: FontWeight.bold,color: Colors.blue)
+                            )
                         ),
                         TextSpan(
                           text:"${Helpers.numberFormat(widget.piece.regler)} ${_devise}",
-                          style: TextStyle(
-                              color: Theme.of(context).primaryColorDark,
-                              fontSize: 14),
+                          style: GoogleFonts.lato(
+                            textStyle: TextStyle(
+                                color: Theme.of(context).primaryColorDark,
+                                fontSize: 14)
+                          ),
                         ),
                       ]
                   ),
@@ -181,13 +190,17 @@ class _PieceListItemState extends State<PieceListItem> {
                       children: [
                         TextSpan(
                             text: "${S.current.reste} : ",
-                            style: TextStyle(fontSize: 14 , fontWeight: FontWeight.bold,color: Colors.redAccent)
+                            style: GoogleFonts.lato(
+                              textStyle: TextStyle(fontSize: 14 , fontWeight: FontWeight.bold,color: Colors.redAccent)
+                            )
                         ),
                         TextSpan(
                           text:"${Helpers.numberFormat(widget.piece.reste)} ${_devise}",
-                          style: TextStyle(
-                              color: Theme.of(context).primaryColorDark,
-                              fontSize: 15.0),
+                          style: GoogleFonts.lato(
+                            textStyle: TextStyle(
+                                color: Theme.of(context).primaryColorDark,
+                                fontSize: 15.0)
+                          ),
                         ),
                       ]
                   ),
@@ -197,13 +210,17 @@ class _PieceListItemState extends State<PieceListItem> {
                     children: [
                       TextSpan(
                         text: "${S.current.marge} : ",
-                        style: TextStyle(fontSize: 14 , fontWeight: FontWeight.bold,color: Colors.green)
+                        style: GoogleFonts.lato(
+                          textStyle: TextStyle(fontSize: 14 , fontWeight: FontWeight.bold,color: Colors.green)
+                        )
                       ),
                       TextSpan(
                         text:"${Helpers.numberFormat(widget.piece.marge)} ${_devise}",
-                        style: TextStyle(
-                            color: Theme.of(context).primaryColorDark,
-                            fontSize: 14.0),
+                        style: GoogleFonts.lato(
+                          textStyle: TextStyle(
+                              color: Theme.of(context).primaryColorDark,
+                              fontSize: 14.0)
+                        ),
                       ),
                     ]
                   ),

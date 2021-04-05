@@ -35,6 +35,7 @@ import 'package:map_launcher/map_launcher.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'ArticlesFragment.dart';
 import 'package:gestmob/services/push_notifications.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 class AddTresoriePage extends StatefulWidget {
   var arguments;
@@ -314,8 +315,10 @@ class _AddTresoriePageState extends State<AddTresoriePage>
                                   ),
                                   Text(
                                     "(${_devise})",
-                                    style: TextStyle(
-                                        fontSize: 12, fontWeight: FontWeight.bold),
+                                    style: GoogleFonts.lato(
+                                      textStyle: TextStyle(
+                                          fontSize: 12, fontWeight: FontWeight.bold)
+                                    ),
                                   ),
                                 ],
                               ),
@@ -323,7 +326,9 @@ class _AddTresoriePageState extends State<AddTresoriePage>
                               Text(
                                   '${Helpers.numberFormat(_selectedClient.credit).toString()}',
                                   textAlign: TextAlign.center,
-                                  style: TextStyle(fontWeight: FontWeight.bold,fontSize: 14),
+                                  style: GoogleFonts.lato(
+                                    textStyle: TextStyle(fontWeight: FontWeight.bold,fontSize: 14)
+                                  ),
                                 ),
                             ],
                           ),
@@ -347,15 +352,19 @@ class _AddTresoriePageState extends State<AddTresoriePage>
                                     color: Theme.of(context).primaryColorDark),
                                 Text(
                                   "(${_devise})",
-                                  style: TextStyle(
-                                      fontSize: 12, fontWeight: FontWeight.bold),
+                                  style: GoogleFonts.lato(
+                                    textStyle: TextStyle(
+                                        fontSize: 12, fontWeight: FontWeight.bold)
+                                  ),
                                 ),
                               ],
                             ),
                             Text(
                               "${Helpers.numberFormat(_restepiece).toString()}",
                               textAlign: TextAlign.center,
-                              style: TextStyle(fontWeight: FontWeight.bold),
+                              style: GoogleFonts.lato(
+                                textStyle: TextStyle(fontWeight: FontWeight.bold)
+                              ),
                             ),
                           ],
                         ):null),
@@ -430,7 +439,7 @@ class _AddTresoriePageState extends State<AddTresoriePage>
                                   borderSide: BorderSide(color: Colors.orange[900]),
                                   borderRadius: BorderRadius.circular(20)),
                               labelText: "${S.current.n}",
-                              labelStyle: TextStyle(color: Colors.orange[900]),
+                              labelStyle: GoogleFonts.lato(textStyle: TextStyle(color: Colors.orange[900])),
                               enabledBorder: OutlineInputBorder(
                                 gapPadding: 3.3,
                                 borderRadius: BorderRadius.circular(20),
@@ -459,7 +468,7 @@ class _AddTresoriePageState extends State<AddTresoriePage>
                                     borderSide: BorderSide(color: Colors.blue),
                                     borderRadius: BorderRadius.circular(20)),
                                 labelText: S.current.date,
-                                labelStyle: TextStyle(color: Colors.blue),
+                                labelStyle: GoogleFonts.lato(textStyle: TextStyle(color: Colors.blue)),
                                 enabledBorder: OutlineInputBorder(
                                   gapPadding: 3.3,
                                   borderRadius: BorderRadius.circular(20),
@@ -551,9 +560,10 @@ class _AddTresoriePageState extends State<AddTresoriePage>
                             child: ListTile(
                               title: Text(
                                 S.current.msg_credit_total,
-                                style: TextStyle(
-                                  fontSize: 16,
-                                ),
+                                style: GoogleFonts.lato(
+                                    textStyle: TextStyle(
+                                  fontSize: 16,fontWeight: FontWeight.bold
+                                )),
                               ),
                               leading: Container(
                                 child: Center(
@@ -605,7 +615,7 @@ class _AddTresoriePageState extends State<AddTresoriePage>
                               : null,
                           decoration: InputDecoration(
                             labelText: S.current.select_tier,
-                            labelStyle: TextStyle(color: Theme.of(context).hintColor),
+                            labelStyle: GoogleFonts.lato(textStyle: TextStyle(color: Theme.of(context).hintColor)),
                             prefixIcon: Icon(
                               Icons.people,
                               color: Colors.blue,
@@ -662,7 +672,7 @@ class _AddTresoriePageState extends State<AddTresoriePage>
                         },
                         decoration: InputDecoration(
                           labelText: S.current.objet,
-                          labelStyle: TextStyle(color: Theme.of(context).hintColor),
+                          labelStyle: GoogleFonts.lato(textStyle: TextStyle(color: Theme.of(context).hintColor)),
                           prefixIcon: Icon(
                             Icons.subject,
                             color: Colors.blue,
@@ -695,7 +705,7 @@ class _AddTresoriePageState extends State<AddTresoriePage>
                         },
                         decoration: InputDecoration(
                           labelText: S.current.modalite,
-                          labelStyle: TextStyle(color: Theme.of(context).hintColor),
+                          labelStyle: GoogleFonts.lato(textStyle: TextStyle(color: Theme.of(context).hintColor)),
                           prefixIcon: Icon(
                             MdiIcons.creditCardSettingsOutline,
                             color: Colors.blue,
@@ -748,7 +758,7 @@ class _AddTresoriePageState extends State<AddTresoriePage>
                         },
                         decoration: InputDecoration(
                           labelText: S.current.montant,
-                          labelStyle: TextStyle(color: Theme.of(context).hintColor),
+                          labelStyle: GoogleFonts.lato(textStyle: TextStyle(color: Theme.of(context).hintColor)),
                           prefixIcon: Icon(
                             Icons.monetization_on,
                             color: Colors.blue,
@@ -874,8 +884,8 @@ class _AddTresoriePageState extends State<AddTresoriePage>
                                   left: 5, right: 5, bottom: 20, top: 20),
                               child: Text(
                                 "${S.current.ajouter} ${S.current.categorie}:",
-                                style: TextStyle(
-                                    fontSize: 20, color: Colors.redAccent),
+                                style: GoogleFonts.lato(textStyle: TextStyle(
+                                    fontSize: 18, color: Colors.redAccent , fontWeight: FontWeight.bold)),
                               ),
                             ),
                             Padding(
@@ -901,8 +911,7 @@ class _AddTresoriePageState extends State<AddTresoriePage>
                                       borderRadius: BorderRadius.circular(20)),
                                   contentPadding: EdgeInsets.only(left: 10),
                                   labelText: S.current.categorie,
-                                  labelStyle:
-                                      TextStyle(color: Colors.orange[900]),
+                                  labelStyle: GoogleFonts.lato(textStyle: TextStyle(color: Colors.orange[900])),
                                   enabledBorder: OutlineInputBorder(
                                     gapPadding: 3.3,
                                     borderRadius: BorderRadius.circular(20),
@@ -1021,6 +1030,7 @@ class _AddTresoriePageState extends State<AddTresoriePage>
                                     borderRadius: BorderRadius.circular(20)),
                                 contentPadding: EdgeInsets.only(left: 10),
                                 labelText: "N°:",
+                                labelStyle: GoogleFonts.lato(),
                                 enabledBorder: OutlineInputBorder(
                                   gapPadding: 3.3,
                                   borderRadius: BorderRadius.circular(20),
@@ -1050,6 +1060,7 @@ class _AddTresoriePageState extends State<AddTresoriePage>
                                     borderRadius: BorderRadius.circular(20)),
                                 contentPadding: EdgeInsets.only(left: 10),
                                 labelText: S.current.designation,
+                                labelStyle: GoogleFonts.lato(),
                                 enabledBorder: OutlineInputBorder(
                                   gapPadding: 3.3,
                                   borderRadius: BorderRadius.circular(20),
@@ -1079,6 +1090,7 @@ class _AddTresoriePageState extends State<AddTresoriePage>
                                     borderRadius: BorderRadius.circular(20)),
                                 contentPadding: EdgeInsets.only(left: 10),
                                 labelText: S.current.code_pin,
+                                labelStyle: GoogleFonts.lato(),
                                 enabledBorder: OutlineInputBorder(
                                   gapPadding: 3.3,
                                   borderRadius: BorderRadius.circular(20),
@@ -1108,6 +1120,7 @@ class _AddTresoriePageState extends State<AddTresoriePage>
                                     borderRadius: BorderRadius.circular(20)),
                                 contentPadding: EdgeInsets.only(left: 10),
                                 labelText: S.current.solde_depart,
+                                labelStyle: GoogleFonts.lato(),
                                 enabledBorder: OutlineInputBorder(
                                   gapPadding: 3.3,
                                   borderRadius: BorderRadius.circular(20),
@@ -1150,7 +1163,9 @@ class _AddTresoriePageState extends State<AddTresoriePage>
                                   },
                                   child: Text(
                                     S.current.ajouter,
-                                    style: TextStyle(color: Colors.white),
+                                    style: GoogleFonts.lato(
+                                      textStyle: TextStyle(color: Colors.white , fontWeight: FontWeight.bold),
+                                    )
                                   ),
                                   color: Colors.green,
                                 ),
@@ -1204,7 +1219,7 @@ class _AddTresoriePageState extends State<AddTresoriePage>
                                   left: 8, right: 8, bottom: 10, top: 10),
                               child: Text(
                                 "${S.current.ajouter} ${S.current.charge}:",
-                                style: TextStyle(fontSize: 20),
+                                style: GoogleFonts.lato(textStyle: TextStyle(fontSize: 18 , fontWeight: FontWeight.bold)),
                               ),
                             ),
                             Padding(
@@ -1230,6 +1245,7 @@ class _AddTresoriePageState extends State<AddTresoriePage>
                                   ),
                                   contentPadding: EdgeInsets.only(left: 10),
                                   labelText: S.current.categorie,
+                                  labelStyle: GoogleFonts.lato(),
                                   enabledBorder: OutlineInputBorder(
                                     gapPadding: 3.3,
                                     borderRadius: BorderRadius.circular(20),
@@ -1259,7 +1275,7 @@ class _AddTresoriePageState extends State<AddTresoriePage>
                                   },
                                   child: Text(
                                     S.current.ajouter,
-                                    style: TextStyle(color: Colors.white),
+                                    style: GoogleFonts.lato(textStyle: TextStyle(color: Colors.white , fontWeight: FontWeight.bold)),
                                   ),
                                   color: Colors.green,
                                 ),

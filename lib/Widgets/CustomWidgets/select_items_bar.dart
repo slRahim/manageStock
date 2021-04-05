@@ -6,6 +6,7 @@ import 'package:gestmob/Helpers/Helpers.dart';
 import 'package:gestmob/generated/l10n.dart';
 import 'package:gestmob/search/search_input_sliver.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 // app bar lors de selection de plusieurs items
 class SelectItemsBar extends StatefulWidget with PreferredSizeWidget{
@@ -43,7 +44,7 @@ class SelectItemsBarState extends State<SelectItemsBar>{
       ),
       automaticallyImplyLeading: false,
       titleSpacing: 0,
-      title: Text(widget.itemsCount.toString(), style: TextStyle(color: Colors.white)),
+      title: Text(widget.itemsCount.toString(), style: GoogleFonts.lato(textStyle: TextStyle(color: Colors.white , fontWeight: FontWeight.bold))),
       backgroundColor: Colors.black,
       centerTitle: true,
       actions: [

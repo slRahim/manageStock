@@ -11,6 +11,7 @@ import 'package:gestmob/generated/l10n.dart';
 import 'package:gestmob/models/CompteTresorie.dart';
 import 'package:gestmob/models/Tiers.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 class Dashboard extends StatefulWidget {
   @override
@@ -82,7 +83,7 @@ class _DashboardState extends State<Dashboard> {
                   children: [
                     Icon(MdiIcons.scaleBalance),
                     SizedBox(height: 1),
-                    Text(S.current.generale),
+                    Text(S.current.generale, style: GoogleFonts.lato(),),
                   ],
                 )),
                 Tab(
@@ -90,7 +91,7 @@ class _DashboardState extends State<Dashboard> {
                   children: [
                     Icon(MdiIcons.basketUnfill),
                     SizedBox(height: 1),
-                    Text(S.current.vente),
+                    Text(S.current.vente, style: GoogleFonts.lato(),),
                   ],
                 )),
                 Tab(
@@ -98,7 +99,7 @@ class _DashboardState extends State<Dashboard> {
                   children: [
                     Icon(MdiIcons.basketFill),
                     SizedBox(height: 1),
-                    Text(S.current.achat),
+                    Text(S.current.achat, style: GoogleFonts.lato(),),
                   ],
                 )),
               ],
@@ -137,7 +138,9 @@ class _DashboardState extends State<Dashboard> {
             padding: EdgeInsets.all(10),
             child: Text(
               "${S.current.dash_charge_title}",
-              style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+              style: GoogleFonts.lato(
+                textStyle: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)
+              ),
             )),
         Container(
           height: 400,
@@ -152,7 +155,9 @@ class _DashboardState extends State<Dashboard> {
             padding: EdgeInsets.all(10),
             child: Text(
               "${S.current.dash_compte_title}",
-              style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+              style: GoogleFonts.lato(
+                textStyle: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)
+              ),
             )),
         Container(
           height: 400,
@@ -174,7 +179,9 @@ class _DashboardState extends State<Dashboard> {
             padding: EdgeInsets.all(10),
             child: Text(
               "${S.current.dash_vente_art_title}",
-              style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+              style: GoogleFonts.lato(
+                textStyle: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)
+              ),
             )),
         Container(
           height: 400,
@@ -189,7 +196,9 @@ class _DashboardState extends State<Dashboard> {
             padding: EdgeInsets.all(10),
             child: Text(
               "${S.current.dash_vente_cl_title}",
-              style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+              style:  GoogleFonts.lato(
+                  textStyle: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)
+              ),
             )),
         Container(
           height: 400,
@@ -204,7 +213,9 @@ class _DashboardState extends State<Dashboard> {
             padding: EdgeInsets.all(10),
             child: Text(
               "${S.current.dash_vente_fam_title}",
-              style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+              style: GoogleFonts.lato(
+                  textStyle: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)
+              ),
             )),
         Container(
           height: 400,
@@ -227,7 +238,9 @@ class _DashboardState extends State<Dashboard> {
             padding: EdgeInsets.all(10),
             child: Text(
               "${S.current.dash_achat_art_title}",
-              style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+              style: GoogleFonts.lato(
+                  textStyle: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)
+              ),
             )),
         Container(
           height: 400,
@@ -242,7 +255,9 @@ class _DashboardState extends State<Dashboard> {
             padding: EdgeInsets.all(10),
             child: Text(
               "${S.current.dash_achat_four_title}",
-              style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+              style:GoogleFonts.lato(
+                  textStyle: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)
+              ),
             )),
         Container(
           height: 400,

@@ -7,6 +7,7 @@ import 'package:flutter_icons/flutter_icons.dart';
 import 'package:gestmob/generated/l10n.dart';
 import 'package:gestmob/models/Article.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 // article selectionné ds une piece
 class ArticleListItemSelected extends StatefulWidget {
@@ -84,29 +85,33 @@ class _ArticleListItemSelectedState extends State<ArticleListItemSelected> {
           children: [
             Icon(Icons.assignment,size: 14, color: Theme.of(context).primaryColorDark,),
             SizedBox(width: 2,),
-            (widget.article.designation != '')?Text(widget.article.designation):Text('__'),
+            (widget.article.designation != '')?Text(widget.article.designation , style: GoogleFonts.lato(),):Text('__'),
           ],
         ),
         subtitle: Row(
           children: [
             Icon(MdiIcons.pound,size: 14, color: Theme.of(context).primaryColorDark,),
             SizedBox(width: 2,),
-            (widget.article.ref != '')?Text(widget.article.ref):Text('__'),
+            (widget.article.ref != '')?Text(widget.article.ref , style: GoogleFonts.lato(),):Text('__'),
           ],
         ),
         trailingChildren: [
           Text(
             "${Helpers.numberFormat((widget.article.selectedQuantite * widget.article.selectedPrice))}",
-            style: TextStyle(
-                fontSize: 15.0,
-                fontWeight: FontWeight.bold
-            ),
+            style: GoogleFonts.lato(
+              textStyle: TextStyle(
+                  fontSize: 15.0,
+                  fontWeight: FontWeight.bold
+              ),
+            )
           ),
           SizedBox(height: 5),
           Text(
             Helpers.numberFormat(widget.article.selectedQuantite).toString(),
-            style: TextStyle(
-                fontSize: 15.0),
+            style: GoogleFonts.lato(
+              textStyle: TextStyle(
+                  fontSize: 15.0)
+            ),
           )
         ]
 
@@ -132,10 +137,12 @@ class _ArticleListItemSelectedState extends State<ArticleListItemSelected> {
                           padding: const EdgeInsets.only(bottom: 20),
                           child: Text(
                             S.current.modification_titre,
-                            style: TextStyle(
-                              fontSize: 18,
-                              fontWeight: FontWeight.w400,
-                            ),
+                            style: GoogleFonts.lato(
+                              textStyle: TextStyle(
+                                fontSize: 18,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            )
                           ),
                         )),
                     Padding(
@@ -157,7 +164,7 @@ class _ArticleListItemSelectedState extends State<ArticleListItemSelected> {
                               borderRadius: BorderRadius.circular(20)),
                           contentPadding: EdgeInsets.only(left: 10),
                           labelText: S.current.quantit,
-                          labelStyle: TextStyle(color: Colors.orange[900]),
+                          labelStyle: GoogleFonts.lato(textStyle: TextStyle(color: Colors.orange[900])),
                           enabledBorder: OutlineInputBorder(
                             gapPadding: 3.3,
                             borderRadius: BorderRadius.circular(20),
@@ -226,7 +233,7 @@ class _ArticleListItemSelectedState extends State<ArticleListItemSelected> {
                                       borderRadius: BorderRadius.circular(20)),
                                   contentPadding: EdgeInsets.only(left: 10),
                                   labelText: S.current.prix,
-                                  labelStyle: TextStyle(color: Colors.orange[900]),
+                                  labelStyle:GoogleFonts.lato(textStyle:  TextStyle(color: Colors.orange[900])),
                                   enabledBorder: OutlineInputBorder(
                                     gapPadding: 3.3,
                                     borderRadius: BorderRadius.circular(20),
@@ -247,7 +254,7 @@ class _ArticleListItemSelectedState extends State<ArticleListItemSelected> {
                                   },
                                   child: Text(
                                     S.current.annuler,
-                                    style: TextStyle(color: Colors.white),
+                                    style: GoogleFonts.lato(textStyle: TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
                                   ),
                                   color: Colors.red[600],
                                 ),
@@ -286,7 +293,7 @@ class _ArticleListItemSelectedState extends State<ArticleListItemSelected> {
                                   },
                                   child: Text(
                                     S.current.confirme,
-                                    style: TextStyle(color: Colors.white),
+                                    style: GoogleFonts.lato(textStyle: TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
                                   ),
                                   color: Colors.greenAccent[700],
                                 ),

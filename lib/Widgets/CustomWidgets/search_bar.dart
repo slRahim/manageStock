@@ -6,6 +6,7 @@ import 'package:gestmob/Helpers/Helpers.dart';
 import 'package:gestmob/generated/l10n.dart';
 import 'package:gestmob/search/search_input_sliver.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 // la bar de recherche utiliser ds les fragements de listing
 class SearchBar extends StatefulWidget with PreferredSizeWidget{
@@ -47,7 +48,7 @@ class SearchBarState extends State<SearchBar>{
       automaticallyImplyLeading: false,
       titleSpacing: 0,
       title: !isSearching
-          ? Text(widget.title)
+          ? Text(widget.title , style: GoogleFonts.lato(fontWeight: FontWeight.bold),)
           : SearchInputSliver(
         searchController: widget.searchController,
         onChanged: (String search) => widget.onSearchChanged(search),

@@ -49,11 +49,11 @@ import 'package:material_design_icons_flutter/material_design_icons_flutter.dart
 import 'package:esc_pos_utils/esc_pos_utils.dart';
 import 'package:path_provider/path_provider.dart';
 import 'ArticlesFragment.dart';
-
 import 'package:pdf/pdf.dart';
 import 'package:pdf/widgets.dart' as pw;
 import 'package:printing/printing.dart';
 import 'package:feature_discovery/feature_discovery.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 class AddPiecePage extends StatefulWidget {
   var arguments;
@@ -439,10 +439,10 @@ class _AddPiecePageState extends State<AddPiecePage>
                     ),
                     backgroundColor: Colors.blue,
                     contentLocation: ContentLocation.above,
-                    title: Text('${S.current.ajout_remise}'),
+                    title: Text('${S.current.ajout_remise}', style: GoogleFonts.lato(fontWeight: FontWeight.bold),),
                     description: Container(
                       width: 150,
-                      child: Text('${S.current.msg_ajout_remise}'),
+                      child: Text('${S.current.msg_ajout_remise}', style: GoogleFonts.lato(),),
                     ),
                     onBackgroundTap: () async {
                       await FeatureDiscovery.completeCurrentStep(context);
@@ -506,9 +506,11 @@ class _AddPiecePageState extends State<AddPiecePage>
                                 ),
                                 Text(
                                   "${_devise}",
-                                  style: TextStyle(
-                                      fontSize: 12,
-                                      fontWeight: FontWeight.bold),
+                                  style: GoogleFonts.lato(
+                                    textStyle:TextStyle(
+                                        fontSize: 12,
+                                        fontWeight: FontWeight.bold)
+                                  ),
                                 ),
                               ],
                             ),
@@ -518,8 +520,10 @@ class _AddPiecePageState extends State<AddPiecePage>
                             Text(
                               Helpers.numberFormat(_net_a_payer).toString(),
                               textAlign: TextAlign.center,
-                              style: TextStyle(
-                                  fontWeight: FontWeight.bold, fontSize: 14),
+                              style: GoogleFonts.lato(
+                                textStyle: TextStyle(
+                                    fontWeight: FontWeight.bold, fontSize: 14)
+                              ),
                             ),
                           ],
                         ),
@@ -540,10 +544,10 @@ class _AddPiecePageState extends State<AddPiecePage>
                     ),
                     backgroundColor: Colors.green,
                     contentLocation: ContentLocation.above,
-                    title: Text('${S.current.ajout_verssement}'),
+                    title: Text('${S.current.ajout_verssement}', style: GoogleFonts.lato(fontWeight: FontWeight.bold),),
                     description: Container(
                       width: 150,
-                      child: Text('${S.current.msg_ajout_verssement}'),
+                      child: Text('${S.current.msg_ajout_verssement}' , style: GoogleFonts.lato(),),
                     ),
                     onBackgroundTap: () async {
                       await FeatureDiscovery.completeCurrentStep(context);
@@ -635,9 +639,11 @@ class _AddPiecePageState extends State<AddPiecePage>
                                         : Theme.of(context).primaryColorDark),
                                 Text(
                                   "${_devise}",
-                                  style: TextStyle(
-                                      fontSize: 12,
-                                      fontWeight: FontWeight.bold),
+                                  style: GoogleFonts.lato(
+                                    textStyle: TextStyle(
+                                        fontSize: 12,
+                                        fontWeight: FontWeight.bold)
+                                  ),
                                 ),
                               ],
                             ),
@@ -649,8 +655,10 @@ class _AddPiecePageState extends State<AddPiecePage>
                                       _verssementpiece + _piece.regler)
                                   .toString(),
                               textAlign: TextAlign.center,
-                              style: TextStyle(
-                                fontWeight: FontWeight.bold,
+                              style: GoogleFonts.lato(
+                                textStyle: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                )
                               ),
                             ),
                           ],
@@ -676,10 +684,10 @@ class _AddPiecePageState extends State<AddPiecePage>
               ),
               backgroundColor: Colors.blue,
               contentLocation: ContentLocation.above,
-              title: Text('${S.current.swipe_top}'),
+              title: Text('${S.current.swipe_top}' , style:GoogleFonts.lato(fontWeight: FontWeight.bold)),
               description: Container(
                 width: 150,
-                child: Text('${S.current.msg_swipe_top}'),
+                child: Text('${S.current.msg_swipe_top}' , style: GoogleFonts.lato(),),
               ),
               onBackgroundTap: () async {
                 await FeatureDiscovery.completeCurrentStep(context);
@@ -794,7 +802,7 @@ class _AddPiecePageState extends State<AddPiecePage>
                               ),
                               Text(
                                   "${S.current.msg_piece_transformer_to} ${getPiecetype(_pieceTo)} ${_pieceTo.num_piece}",
-                                  style: TextStyle(fontSize: 13))
+                                  style: GoogleFonts.lato(textStyle: TextStyle(fontSize: 13)))
                             ],
                           ),
                         )
@@ -816,7 +824,7 @@ class _AddPiecePageState extends State<AddPiecePage>
                               ),
                               Text(
                                   "${S.current.msg_piece_transformer_from} ${getPiecetype(_pieceFrom)} ${_pieceFrom.num_piece}",
-                                  style: TextStyle(fontSize: 13))
+                                  style: GoogleFonts.lato(textStyle: TextStyle(fontSize: 13)))
                             ],
                           ),
                         )
@@ -850,7 +858,7 @@ class _AddPiecePageState extends State<AddPiecePage>
                                       BorderSide(color: Colors.orange[900]),
                                   borderRadius: BorderRadius.circular(20)),
                               labelText: "${S.current.n}",
-                              labelStyle: TextStyle(color: Colors.orange[900]),
+                              labelStyle: GoogleFonts.lato(textStyle: TextStyle(color: Colors.orange[900])),
                               enabledBorder: OutlineInputBorder(
                                 gapPadding: 3.3,
                                 borderRadius: BorderRadius.circular(20),
@@ -878,7 +886,7 @@ class _AddPiecePageState extends State<AddPiecePage>
                                     borderSide: BorderSide(color: Colors.blue),
                                     borderRadius: BorderRadius.circular(20)),
                                 labelText: S.current.date,
-                                labelStyle: TextStyle(color: Colors.blue),
+                                labelStyle: GoogleFonts.lato(textStyle: TextStyle(color: Colors.blue)),
                                 enabledBorder: OutlineInputBorder(
                                   gapPadding: 3.3,
                                   borderRadius: BorderRadius.circular(20),
@@ -938,7 +946,7 @@ class _AddPiecePageState extends State<AddPiecePage>
                                   borderSide: BorderSide(color: Colors.blue),
                                   borderRadius: BorderRadius.circular(20)),
                               labelText: S.current.client_titre,
-                              labelStyle: TextStyle(color: Colors.blue),
+                              labelStyle: GoogleFonts.lato(textStyle: TextStyle(color: Colors.blue)),
                               enabledBorder: OutlineInputBorder(
                                 gapPadding: 3.3,
                                 borderRadius: BorderRadius.circular(20),
@@ -977,10 +985,10 @@ class _AddPiecePageState extends State<AddPiecePage>
                                   ),
                                   backgroundColor: Colors.blue,
                                   contentLocation: ContentLocation.above,
-                                  title: Text('${S.current.swipe}'),
+                                  title: Text('${S.current.swipe}' , style:GoogleFonts.lato(fontWeight: FontWeight.bold)),
                                   description: Container(
                                     width: 100,
-                                    child: Text('${S.current.msg_swipe_start}'),
+                                    child: Text('${S.current.msg_swipe_start}' , style: GoogleFonts.lato(),),
                                   ),
                                   onBackgroundTap: () async {
                                     await FeatureDiscovery.completeCurrentStep(
@@ -1151,9 +1159,11 @@ class _AddPiecePageState extends State<AddPiecePage>
               padding: const EdgeInsets.only(bottom: 20),
               child: Text(
                 "${S.current.modification_titre} ${S.current.verssement}",
-                style: TextStyle(
-                  fontSize: 18,
-                  fontWeight: FontWeight.w400,
+                style: GoogleFonts.lato(
+                  textStyle: TextStyle(
+                    fontSize: 18,
+                    fontWeight: FontWeight.bold,
+                  )
                 ),
               ),
             )),
@@ -1194,7 +1204,9 @@ class _AddPiecePageState extends State<AddPiecePage>
                       borderRadius: BorderRadius.circular(20)),
                   contentPadding: EdgeInsets.only(left: 10),
                   labelText: "${S.current.total} ${S.current.verssement}",
-                  labelStyle: TextStyle(color: Colors.green),
+                  labelStyle: GoogleFonts.lato(
+                    textStyle: TextStyle(color: Colors.green)
+                  ),
                   enabledBorder: OutlineInputBorder(
                     gapPadding: 3.3,
                     borderRadius: BorderRadius.circular(20),
@@ -1227,7 +1239,9 @@ class _AddPiecePageState extends State<AddPiecePage>
                               borderRadius: BorderRadius.circular(20)),
                           contentPadding: EdgeInsetsDirectional.only(start: 10),
                           labelText: S.current.reste,
-                          labelStyle: TextStyle(color: Colors.orange[900]),
+                          labelStyle: GoogleFonts.lato(
+                            textStyle: TextStyle(color: Colors.orange[900])
+                          ),
                           enabled: false,
                         ),
                       ),
@@ -1256,9 +1270,11 @@ class _AddPiecePageState extends State<AddPiecePage>
               padding: const EdgeInsets.only(bottom: 20),
               child: Text(
                 "${S.current.modification_titre} ${S.current.remise}",
-                style: TextStyle(
-                  fontSize: 18,
-                  fontWeight: FontWeight.w400,
+                style: GoogleFonts.lato(
+                  textStyle: TextStyle(
+                    fontSize: 18,
+                    fontWeight: FontWeight.bold,
+                  )
                 ),
               ),
             )),
@@ -1287,7 +1303,9 @@ class _AddPiecePageState extends State<AddPiecePage>
                       borderRadius: BorderRadius.circular(20)),
                   contentPadding: EdgeInsets.only(left: 10),
                   labelText: "${S.current.montant}",
-                  labelStyle: TextStyle(color: Colors.green[400]),
+                  labelStyle: GoogleFonts.lato(
+                    textStyle: TextStyle(color: Colors.green[400])
+                  ),
                   enabledBorder: OutlineInputBorder(
                     gapPadding: 3.3,
                     borderRadius: BorderRadius.circular(20),
@@ -1333,7 +1351,9 @@ class _AddPiecePageState extends State<AddPiecePage>
                               borderRadius: BorderRadius.circular(20)),
                           contentPadding: EdgeInsetsDirectional.only(start: 10),
                           labelText: S.current.pourcentage,
-                          labelStyle: TextStyle(color: Colors.orange[900]),
+                          labelStyle: GoogleFonts.lato(
+                            textStyle: TextStyle(color: Colors.orange[900])
+                          ),
                         ),
                       ),
                     ),
@@ -1360,9 +1380,11 @@ class _AddPiecePageState extends State<AddPiecePage>
                       padding: const EdgeInsets.only(bottom: 20),
                       child: Text(
                         "${S.current.choisir_action}: ",
-                        style: TextStyle(
-                          fontSize: 22,
-                          fontWeight: FontWeight.w400,
+                        style:GoogleFonts.lato(
+                          textStyle:  TextStyle(
+                            fontSize: 22,
+                            fontWeight: FontWeight.bold,
+                          )
                         ),
                       ),
                     )),
@@ -1387,7 +1409,9 @@ class _AddPiecePageState extends State<AddPiecePage>
                           },
                           child: Text(
                             S.current.format_80,
-                            style: TextStyle(color: Colors.white, fontSize: 16),
+                            style: GoogleFonts.lato(
+                              textStyle: TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.w500)
+                            ),
                           ),
                           color: Colors.blueAccent,
                         ),
@@ -1417,7 +1441,9 @@ class _AddPiecePageState extends State<AddPiecePage>
                           },
                           child: Text(
                             S.current.format_58,
-                            style: TextStyle(color: Colors.white, fontSize: 16),
+                            style: GoogleFonts.lato(
+                              textStyle: TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.w500)
+                            ),
                           ),
                           color: Colors.green,
                         ),
@@ -1446,7 +1472,9 @@ class _AddPiecePageState extends State<AddPiecePage>
                           },
                           child: Text(
                             S.current.lan_print,
-                            style: TextStyle(color: Colors.white, fontSize: 16),
+                            style: GoogleFonts.lato(
+                              textStyle: TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.w500)
+                            ),
                           ),
                           color: Colors.deepOrange,
                         ),
@@ -1471,7 +1499,9 @@ class _AddPiecePageState extends State<AddPiecePage>
                           },
                           child: Text(
                             S.current.export_pdf,
-                            style: TextStyle(color: Colors.white, fontSize: 16),
+                            style: GoogleFonts.lato(
+                              textStyle: TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.w500)
+                            ),
                           ),
                           color: Colors.red,
                         ),
@@ -1585,9 +1615,11 @@ class _AddPiecePageState extends State<AddPiecePage>
                       padding: const EdgeInsets.only(bottom: 20),
                       child: Text(
                         "${S.current.choisir_action}: ",
-                        style: TextStyle(
-                          fontSize: 22,
-                          fontWeight: FontWeight.w400,
+                        style: GoogleFonts.lato(
+                          textStyle: TextStyle(
+                            fontSize: 22,
+                            fontWeight: FontWeight.bold,
+                          )
                         ),
                       ),
                     )),
@@ -1606,7 +1638,9 @@ class _AddPiecePageState extends State<AddPiecePage>
                           },
                           child: Text(
                             S.current.imp_rapide_btn,
-                            style: TextStyle(color: Colors.white, fontSize: 16),
+                            style: GoogleFonts.lato(
+                              textStyle: TextStyle(color: Colors.white, fontSize: 16,fontWeight: FontWeight.w500)
+                            ),
                           ),
                           color: Colors.blueAccent,
                         ),
@@ -1639,7 +1673,9 @@ class _AddPiecePageState extends State<AddPiecePage>
                           },
                           child: Text(
                             S.current.save_imp_btn,
-                            style: TextStyle(color: Colors.white, fontSize: 16),
+                            style: GoogleFonts.lato(
+                                textStyle: TextStyle(color: Colors.white, fontSize: 16,fontWeight: FontWeight.w500)
+                            ),
                           ),
                           color: Colors.green,
                         ),
@@ -1659,7 +1695,9 @@ class _AddPiecePageState extends State<AddPiecePage>
                           },
                           child: Text(
                             S.current.save_btn,
-                            style: TextStyle(color: Colors.white, fontSize: 16),
+                            style: GoogleFonts.lato(
+                                textStyle: TextStyle(color: Colors.white, fontSize: 16,fontWeight: FontWeight.w500)
+                            ),
                           ),
                           color: Colors.deepOrange,
                         ),
@@ -1680,8 +1718,9 @@ class _AddPiecePageState extends State<AddPiecePage>
                             },
                             child: Text(
                               S.current.broullion_btn,
-                              style:
-                                  TextStyle(color: Colors.white, fontSize: 16),
+                              style: GoogleFonts.lato(
+                                  textStyle: TextStyle(color: Colors.white, fontSize: 16,fontWeight: FontWeight.w500)
+                              ),
                             ),
                             color: Colors.red,
                           ),
@@ -1974,9 +2013,11 @@ class _AddPiecePageState extends State<AddPiecePage>
                       padding: const EdgeInsets.only(bottom: 20),
                       child: Text(
                         "${S.current.transformer_title}: ",
-                        style: TextStyle(
-                          fontSize: 22,
-                          fontWeight: FontWeight.w400,
+                        style: GoogleFonts.lato(
+                          textStyle: TextStyle(
+                            fontSize: 22,
+                            fontWeight: FontWeight.bold,
+                          )
                         ),
                       ),
                     )),
@@ -1997,8 +2038,9 @@ class _AddPiecePageState extends State<AddPiecePage>
                             },
                             child: Text(
                               S.current.to_commande,
-                              style:
-                                  TextStyle(color: Colors.white, fontSize: 16),
+                              style:GoogleFonts.lato(
+                                textStyle: TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.w500)
+                              ),
                             ),
                             color: Colors.purple,
                           ),
@@ -2024,13 +2066,15 @@ class _AddPiecePageState extends State<AddPiecePage>
                             child: (_piece.piece == PieceType.bonCommande)
                                 ? Text(
                                     S.current.bon_reception,
-                                    style: TextStyle(
-                                        color: Colors.white, fontSize: 16),
+                                    style: GoogleFonts.lato(
+                                        textStyle: TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.w500)
+                                    ),
                                   )
                                 : Text(
                                     S.current.bon_livraison,
-                                    style: TextStyle(
-                                        color: Colors.white, fontSize: 16),
+                                    style: GoogleFonts.lato(
+                                        textStyle: TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.w500)
+                                    ),
                                   ),
                             color: Colors.blue,
                           ),
@@ -2058,13 +2102,15 @@ class _AddPiecePageState extends State<AddPiecePage>
                                     _piece.piece == PieceType.bonLivraison)
                                 ? Text(
                                     S.current.facture_vente,
-                                    style: TextStyle(
-                                        color: Colors.white, fontSize: 16),
+                                    style: GoogleFonts.lato(
+                                        textStyle: TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.w500)
+                                    ),
                                   )
                                 : Text(
                                     S.current.facture_achat,
-                                    style: TextStyle(
-                                        color: Colors.white, fontSize: 16),
+                                    style: GoogleFonts.lato(
+                                        textStyle: TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.w500)
+                                    ),
                                   ),
                             color: Colors.green,
                           ),
@@ -2092,8 +2138,9 @@ class _AddPiecePageState extends State<AddPiecePage>
                             color: Colors.redAccent,
                             child: Text(
                               _textBtnTransfereRetour(),
-                              style:
-                                  TextStyle(color: Colors.white, fontSize: 16),
+                              style: GoogleFonts.lato(
+                                  textStyle: TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.w500)
+                              ),
                             ),
                           ),
                         ),
@@ -2294,7 +2341,7 @@ class _AddPiecePageState extends State<AddPiecePage>
           showDialog(
             context: context,
             builder: (_) => AlertDialog(
-              content: Text(result.msg),
+              content: Text(result.msg , style: GoogleFonts.lato(),),
             ),
           );
           dispose();
@@ -2302,7 +2349,7 @@ class _AddPiecePageState extends State<AddPiecePage>
           showDialog(
             context: context,
             builder: (_) => AlertDialog(
-              content: Text(error.toString()),
+              content: Text(error.toString(),style: GoogleFonts.lato()),
             ),
           );
         });

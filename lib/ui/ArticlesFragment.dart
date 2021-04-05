@@ -21,12 +21,12 @@ import 'package:gestmob/search/sliver_list_data_source.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 import 'package:gestmob/Widgets/utils.dart' as utils;
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
-
 import 'AddArticlePage.dart';
 import 'package:gestmob/services/push_notifications.dart';
 import 'package:gestmob/models/MyParams.dart';
 import 'package:feature_discovery/feature_discovery.dart';
 import 'package:flutter/scheduler.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 
 class ArticlesFragment extends StatefulWidget {
@@ -113,11 +113,11 @@ class _ArticlesFragmentState extends State<ArticlesFragment> {
         builder: (context) => Column(
           children: [
             new ListTile(
-              title: new Text(S.current.marque),
+              title: new Text(S.current.marque , style: GoogleFonts.lato(),),
               trailing: marquesDropDown(_setState),
             ),
             new ListTile(
-              title: new Text(S.current.famile),
+              title: new Text(S.current.famile, style: GoogleFonts.lato(),),
               trailing: famillesDropDown(_setState),
             ),
             stockCheckBox(_setState),
@@ -190,7 +190,7 @@ class _ArticlesFragmentState extends State<ArticlesFragment> {
 
   Widget stockCheckBox(StateSetter _setState) {
     return CheckboxListTile(
-      title: Text(S.current.non_stocke),
+      title: Text(S.current.non_stocke , style: GoogleFonts.lato(),),
       value: _filterOutStock,
       onChanged: (bool value) {
         _setState(() {

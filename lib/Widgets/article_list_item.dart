@@ -17,6 +17,7 @@ import 'package:flutter/scheduler.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:awesome_dialog/awesome_dialog.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 // element à afficher lors de listing des articles
 class ArticleListItem extends StatefulWidget {
@@ -85,9 +86,9 @@ class _ArticleListItemState extends State<ArticleListItem> {
         ),
         backgroundColor: Colors.green,
         contentLocation: ContentLocation.below,
-        title: Text(S.current.long_presse),
+        title: Text(S.current.long_presse , style: GoogleFonts.lato(fontWeight: FontWeight.bold),),
         description:
-            Container(width: 150, child: Text(S.current.msg_long_press_select)),
+            Container(width: 150, child: Text(S.current.msg_long_press_select , style: GoogleFonts.lato(),)),
         onBackgroundTap: () async {
           await FeatureDiscovery.completeCurrentStep(context);
           return true;
@@ -103,9 +104,9 @@ class _ArticleListItemState extends State<ArticleListItem> {
             ),
             backgroundColor: Colors.red,
             contentLocation: ContentLocation.below,
-            title: Text(S.current.swipe),
+            title: Text(S.current.swipe, style: GoogleFonts.lato(fontWeight: FontWeight.bold),),
             description:
-                Container(width: 150, child: Text(S.current.msg_swipe_start)),
+                Container(width: 150, child: Text(S.current.msg_swipe_start, style: GoogleFonts.lato(),)),
             onBackgroundTap: () async {
               await FeatureDiscovery.completeCurrentStep(context);
               return true;
@@ -189,9 +190,9 @@ class _ArticleListItemState extends State<ArticleListItem> {
                 ),
                 backgroundColor: Colors.yellow[700],
                 contentLocation: ContentLocation.below,
-                title: Text(S.current.tap_element),
+                title: Text(S.current.tap_element , style: GoogleFonts.lato(fontWeight: FontWeight.bold),),
                 description:
-                    Container(width: 150, child: Text(S.current.msg_tap)),
+                    Container(width: 150, child: Text(S.current.msg_tap, style: GoogleFonts.lato(),)),
                 onBackgroundTap: () async {
                   await FeatureDiscovery.completeCurrentStep(context);
                   return true;
@@ -210,8 +211,10 @@ class _ArticleListItemState extends State<ArticleListItem> {
                               width: 3,
                             ),
                             Text("${widget.article.designation}",
-                                style: TextStyle(
-                                  fontSize: 16.0,
+                                style: GoogleFonts.lato(
+                                  textStyle: TextStyle(
+                                    fontSize: 16.0,
+                                  )
                                 )),
                           ],
                         ),
@@ -232,9 +235,11 @@ class _ArticleListItemState extends State<ArticleListItem> {
                           ),
                           (widget.article.ref != '')?
                           Text("${widget.article.ref}",
-                              style: TextStyle(
-                                fontSize: 16.0,
-                              )):Text("__"),
+                              style: GoogleFonts.lato(
+                                textStyle: TextStyle(
+                                  fontSize: 16.0,
+                                )
+                              )):Text("__" , style: GoogleFonts.lato(),),
                         ],
                       ),
                       Row(
@@ -249,14 +254,18 @@ class _ArticleListItemState extends State<ArticleListItem> {
                           ),
                           Text(
                             "${widget.article.selectedQuantite.toString()}",
-                            style: TextStyle(fontSize: 16.0),
+                            style: GoogleFonts.lato(
+                              textStyle: TextStyle(fontSize: 16.0),
+                            )
                           ),
                         ],
                       ),
                       Text(
                         "${Helpers.numberFormat(widget.article.selectedQuantite * widget.article.selectedPrice).toString()} ${_devise}",
-                        style: TextStyle(
-                            fontSize: 16.0, fontWeight: FontWeight.bold),
+                        style: GoogleFonts.lato(
+                          textStyle: TextStyle(
+                              fontSize: 16.0, fontWeight: FontWeight.bold)
+                        ),
                       ),
                     ]
                   :
@@ -274,9 +283,11 @@ class _ArticleListItemState extends State<ArticleListItem> {
                         ),
                         (widget.article.ref != '')?
                         Text("${widget.article.ref}",
-                            style: TextStyle(
-                              fontSize: 16.0,
-                            )):Text("__"),
+                            style:GoogleFonts.lato(
+                              textStyle:  TextStyle(
+                                fontSize: 16.0,
+                              )
+                            )):Text("__" , style: GoogleFonts.lato(),),
                       ],
                     ),
                     Row(
@@ -291,12 +302,14 @@ class _ArticleListItemState extends State<ArticleListItem> {
                         ),
                         Text(
                           "${(widget.article.quantite - widget.article.cmdClient).toString()}",
-                          style: TextStyle(
-                              color: widget.article.quantite <=
-                                      widget.article.quantiteMinimum
-                                  ? Colors.redAccent
-                                  : Theme.of(context).primaryColorDark,
-                              fontSize: 16.0),
+                          style: GoogleFonts.lato(
+                            textStyle: TextStyle(
+                                color: widget.article.quantite <=
+                                    widget.article.quantiteMinimum
+                                    ? Colors.redAccent
+                                    : Theme.of(context).primaryColorDark,
+                                fontSize: 16.0)
+                          ),
                         ),
                       ],
                     ),
@@ -331,28 +344,28 @@ class _ArticleListItemState extends State<ArticleListItem> {
         widget.pieceOrigin == 'AF') {
       return Text(
         "${Helpers.numberFormat(widget.article.prixAchat).toString()} ${_devise}",
-        style: TextStyle(fontSize: 16.0, fontWeight: FontWeight.bold),
+        style: GoogleFonts.lato(textStyle: TextStyle(fontSize: 16.0, fontWeight: FontWeight.bold)),
       );
     } else {
       switch (widget.tarification) {
         case 1:
           return Text(
             "${Helpers.numberFormat(widget.article.prixVente1).toString()} ${_devise}",
-            style: TextStyle(fontSize: 16.0, fontWeight: FontWeight.bold),
+            style: GoogleFonts.lato(textStyle: TextStyle(fontSize: 16.0, fontWeight: FontWeight.bold)),
           );
           break;
 
         case 2:
           return Text(
             "${Helpers.numberFormat(widget.article.prixVente2).toString()} ${_devise}",
-            style: TextStyle(fontSize: 16.0, fontWeight: FontWeight.bold),
+            style: GoogleFonts.lato(textStyle: TextStyle(fontSize: 16.0, fontWeight: FontWeight.bold)),
           );
           break;
 
         case 3:
           return Text(
             "${Helpers.numberFormat(widget.article.prixVente3).toString()} ${_devise}",
-            style: TextStyle(fontSize: 16.0, fontWeight: FontWeight.bold),
+            style: GoogleFonts.lato(textStyle: TextStyle(fontSize: 16.0, fontWeight: FontWeight.bold)),
           );
           break;
 
@@ -360,12 +373,12 @@ class _ArticleListItemState extends State<ArticleListItem> {
           if (widget.article.selectedPrice > 0) {
             return Text(
               "${Helpers.numberFormat(widget.article.selectedPrice).toString()} ${_devise}",
-              style: TextStyle(fontSize: 16.0, fontWeight: FontWeight.bold),
+              style: GoogleFonts.lato(textStyle: TextStyle(fontSize: 16.0, fontWeight: FontWeight.bold)),
             );
           }
           return Text(
             "${Helpers.numberFormat(widget.article.prixVente1).toString()} ${_devise}",
-            style: TextStyle(fontSize: 16.0, fontWeight: FontWeight.bold),
+            style: GoogleFonts.lato(textStyle: TextStyle(fontSize: 16.0, fontWeight: FontWeight.bold)),
           );
           break;
       }
@@ -391,10 +404,10 @@ class _ArticleListItemState extends State<ArticleListItem> {
                     padding: const EdgeInsets.only(bottom: 20),
                     child: Text(
                       S.current.modification_titre,
-                      style: TextStyle(
+                      style: GoogleFonts.lato(textStyle: TextStyle(
                         fontSize: 18,
                         fontWeight: FontWeight.w400,
-                      ),
+                      )),
                     ),
                   )),
                   Padding(
@@ -419,7 +432,7 @@ class _ArticleListItemState extends State<ArticleListItem> {
                             borderRadius: BorderRadius.circular(20)),
                         contentPadding: EdgeInsets.only(left: 10),
                         labelText: S.current.quantit,
-                        labelStyle: TextStyle(color: Colors.orange[900]),
+                        labelStyle: GoogleFonts.lato(textStyle: TextStyle(color: Colors.orange[900])),
                         enabledBorder: OutlineInputBorder(
                           gapPadding: 3.3,
                           borderRadius: BorderRadius.circular(20),
@@ -497,8 +510,7 @@ class _ArticleListItemState extends State<ArticleListItem> {
                                     borderRadius: BorderRadius.circular(20)),
                                 contentPadding: EdgeInsets.only(left: 10),
                                 labelText: S.current.prix,
-                                labelStyle:
-                                    TextStyle(color: Colors.orange[900]),
+                                labelStyle:GoogleFonts.lato(textStyle: TextStyle(color: Colors.orange[900])),
                                 enabledBorder: OutlineInputBorder(
                                   gapPadding: 3.3,
                                   borderRadius: BorderRadius.circular(20),
@@ -520,7 +532,7 @@ class _ArticleListItemState extends State<ArticleListItem> {
                                 },
                                 child: Text(
                                   S.current.annuler,
-                                  style: TextStyle(color: Colors.white),
+                                  style: GoogleFonts.lato(textStyle: TextStyle(color: Colors.white , fontWeight: FontWeight.w600)),
                                 ),
                                 color: Colors.redAccent[600],
                               ),
@@ -562,7 +574,7 @@ class _ArticleListItemState extends State<ArticleListItem> {
                                 },
                                 child: Text(
                                   S.current.confirme,
-                                  style: TextStyle(color: Colors.white),
+                                  style: GoogleFonts.lato(textStyle: TextStyle(color: Colors.white , fontWeight: FontWeight.w600)),
                                 ),
                                 color: Colors.greenAccent[700],
                               ),

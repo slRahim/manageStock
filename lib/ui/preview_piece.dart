@@ -22,6 +22,7 @@ import 'package:pdf/pdf.dart';
 import 'package:pdf/widgets.dart' as pw;
 import 'package:printing/printing.dart';
 import 'package:charset_converter/charset_converter.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 class PreviewPiece extends StatefulWidget {
   final Piece piece;
@@ -111,7 +112,7 @@ class _PreviewPieceState extends State<PreviewPiece> {
                 Navigator.pop(context);
               },
             ),
-            title: Text(S.current.preview_titre),
+            title: Text(S.current.preview_titre, style: GoogleFonts.lato(fontWeight: FontWeight.bold),),
             centerTitle: true,
           ),
           body: (widget.format == 45)

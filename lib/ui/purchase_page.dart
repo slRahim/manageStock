@@ -13,6 +13,7 @@ import 'package:gestmob/Helpers/QueryCtr.dart';
 import 'package:gestmob/models/MyParams.dart';
 import 'package:gestmob/services/push_notifications.dart';
 import 'package:gestmob/Helpers/Statics.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 class PurchasePage extends StatefulWidget {
   @override
@@ -161,18 +162,20 @@ class _PurchasePageState extends State<PurchasePage> {
                                         color: Theme.of(context).selectedRowColor
                                     ),
                                     child: ListTile(
-                                      title: Text("${item.productID == '010101' ? "Mensuel" : item.productID == '121212' ? "Annuel" : "A vie"}", style: TextStyle(fontWeight: FontWeight.bold , fontSize: 22),),
-                                      subtitle: Text("${item.transactionDate}" , style: TextStyle(fontWeight: FontWeight.bold),),
+                                      title: Text("${item.productID == '010101' ? "Mensuel" : item.productID == '121212' ? "Annuel" : "A vie"}",
+                                        style: GoogleFonts.lato(textStyle : GoogleFonts.lato(textStyle: TextStyle(fontWeight: FontWeight.bold , fontSize: 22))),
+                                      ),
+                                      subtitle: Text("${item.transactionDate}" , style: GoogleFonts.lato(textStyle: TextStyle(fontWeight: FontWeight.bold)),),
                                       trailing:  Icon(Icons.check_circle ,color: Colors.green, size: 30,)
                                     ),
                                   ),
                                 ),
                                 SizedBox(height: 5,),
                                 Text(S.current.msg_get_abonnement ,
-                                  style: TextStyle(
+                                  style:GoogleFonts.lato(textStyle: TextStyle(
                                       color: Theme.of(context).tabBarTheme.unselectedLabelColor ,
                                       fontWeight: FontWeight.bold
-                                  ),
+                                  )),
                                 )
                               ],
                             );
@@ -215,8 +218,8 @@ class _PurchasePageState extends State<PurchasePage> {
        padding: EdgeInsets.all(8),
        child: ListTile(
          leading: item["icon"],
-         title: Text(item["title"]),
-         subtitle: Text(item["small_description"]),
+         title: Text(item["title"] , style: GoogleFonts.lato(),),
+         subtitle: Text(item["small_description"], style: GoogleFonts.lato(),),
          trailing: Icon(Icons.check , color: Colors.green,),
        ),
      );
@@ -279,8 +282,8 @@ class _PurchasePageState extends State<PurchasePage> {
           color: Theme.of(context).selectedRowColor
         ),
         child: ListTile(
-          title: Text("${_devise_product} ${Helpers.numberFormat(double.parse(_prix_product))}", style: TextStyle(fontWeight: FontWeight.bold , fontSize: 22),),
-          subtitle: Text("${productDetail.title.replaceAll('(Virtual Plexus)', '')}" , style: TextStyle(fontWeight: FontWeight.bold),),
+          title: Text("${_devise_product} ${Helpers.numberFormat(double.parse(_prix_product))}", style: GoogleFonts.lato(textStyle: TextStyle(fontWeight: FontWeight.bold , fontSize: 22)),),
+          subtitle: Text("${productDetail.title.replaceAll('(Virtual Plexus)', '')}" , style: GoogleFonts.lato(textStyle: TextStyle(fontWeight: FontWeight.bold)),),
           trailing: (productDetail.id != "010101")? Container(
             padding: EdgeInsets.all(4),
             decoration: BoxDecoration(
@@ -294,11 +297,11 @@ class _PurchasePageState extends State<PurchasePage> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 (productDetail.id == "121212")
-                    ? Text("${_remisePercent.roundToDouble()} %" , style: TextStyle(fontWeight: FontWeight.bold, color: Colors.white,fontSize: 14),)
-                    : Text("${S.current.no_abonnement}" ,textAlign: TextAlign.center ,style: TextStyle(fontWeight: FontWeight.bold, color: Colors.white,fontSize: 14),),
+                    ? Text("${_remisePercent.roundToDouble()} %" , style: GoogleFonts.lato(textStyle: TextStyle(fontWeight: FontWeight.bold, color: Colors.white,fontSize: 14),))
+                    : Text("${S.current.no_abonnement}" ,textAlign: TextAlign.center ,style: GoogleFonts.lato(textStyle: TextStyle(fontWeight: FontWeight.bold, color: Colors.white,fontSize: 14)),),
                 SizedBox (height: 5,),
                 (productDetail.id == "121212")
-                    ? Text(S.current.economiser , style: TextStyle(fontWeight: FontWeight.bold , color: Colors.white,fontSize: 14),)
+                    ? Text(S.current.economiser , style:GoogleFonts.lato(textStyle:  TextStyle(fontWeight: FontWeight.bold , color: Colors.white,fontSize: 14)),)
                     : SizedBox()
               ],
             ),

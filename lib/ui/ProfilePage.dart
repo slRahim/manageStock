@@ -27,6 +27,7 @@ import 'package:material_design_icons_flutter/material_design_icons_flutter.dart
 import 'package:gestmob/Helpers/country_utils.dart';
 import 'package:flutter/services.dart';
 import 'dart:convert';
+import 'package:google_fonts/google_fonts.dart';
 
 class ProfilePage extends StatefulWidget {
   @override
@@ -291,9 +292,9 @@ class _ProfilePageState extends State<ProfilePage> with TickerProviderStateMixin
               bottomNavigationBar: BottomTabBar(
                 controller: _tabController,
                 tabs: [
-                  Tab(child: Column( children: [ Icon(Icons.insert_drive_file),SizedBox(height: 1), Text( S.current.fiche), ], )),
-                  Tab(child: Column( children: [ Icon(Icons.image), SizedBox(height: 1), Text( S.current.logo), ], )),
-                  Tab(child: Column( children: [ Icon(Icons.fingerprint), SizedBox(height: 1), Text( S.current.securite), ], )),
+                  Tab(child: Column( children: [ Icon(Icons.insert_drive_file),SizedBox(height: 1), Text( S.current.fiche,style: GoogleFonts.lato(),), ], )),
+                  Tab(child: Column( children: [ Icon(Icons.image), SizedBox(height: 1), Text( S.current.logo,style: GoogleFonts.lato(),), ], )),
+                  Tab(child: Column( children: [ Icon(Icons.fingerprint), SizedBox(height: 1), Text( S.current.securite,style: GoogleFonts.lato(),), ], )),
                 ],
               ),
               body: Builder(
@@ -334,7 +335,7 @@ class _ProfilePageState extends State<ProfilePage> with TickerProviderStateMixin
                     },
                     decoration: InputDecoration(
                       labelText:  S.current.rs,
-                      labelStyle: TextStyle(color: Colors.green),
+                      labelStyle: GoogleFonts.lato(textStyle: TextStyle(color: Colors.green)),
                       prefixIcon: Icon(
                         MdiIcons.idCard,
                         color: Colors.green,
@@ -390,7 +391,7 @@ class _ProfilePageState extends State<ProfilePage> with TickerProviderStateMixin
               // },
               decoration: InputDecoration(
                 labelText:  S.current.activite,
-                labelStyle: TextStyle(color: Theme.of(context).hintColor),
+                labelStyle: GoogleFonts.lato(textStyle: TextStyle(color: Theme.of(context).hintColor)),
                 prefixIcon: Icon(
                   MdiIcons.homeCityOutline,
                   color: Colors.blue,
@@ -423,7 +424,7 @@ class _ProfilePageState extends State<ProfilePage> with TickerProviderStateMixin
               // },
               decoration: InputDecoration(
                 labelText:  S.current.adresse,
-                labelStyle: TextStyle(color: Theme.of(context).hintColor),
+                labelStyle: GoogleFonts.lato(textStyle: TextStyle(color: Theme.of(context).hintColor)),
                 prefixIcon: Icon(
                   Icons.home_outlined,
                   color: Colors.blue,
@@ -469,7 +470,7 @@ class _ProfilePageState extends State<ProfilePage> with TickerProviderStateMixin
                           items: _countries.map((String dropDownStringItem) {
                             return DropdownMenuItem<String>(
                               value: dropDownStringItem,
-                              child: Text(dropDownStringItem,),
+                              child: Text(dropDownStringItem, style: GoogleFonts.lato(),),
                             );
                           }).toList(),
                           onChanged: editMode ? (value) {
@@ -517,7 +518,7 @@ class _ProfilePageState extends State<ProfilePage> with TickerProviderStateMixin
                           items: _provinces.map((String dropDownStringItem) {
                             return DropdownMenuItem<String>(
                               value: dropDownStringItem,
-                              child: Text(dropDownStringItem,),
+                              child: Text(dropDownStringItem, style: GoogleFonts.lato(),),
                             );
                           }).toList(),
                           onChanged:editMode ? (value){
@@ -562,7 +563,7 @@ class _ProfilePageState extends State<ProfilePage> with TickerProviderStateMixin
                           items: _cities.map((String dropDownStringItem) {
                             return DropdownMenuItem<String>(
                               value: dropDownStringItem,
-                              child: Text(dropDownStringItem),
+                              child: Text(dropDownStringItem, style:GoogleFonts.lato() ,),
                             );
                           }).toList(),
                           onChanged:editMode? (value) {
@@ -591,7 +592,7 @@ class _ProfilePageState extends State<ProfilePage> with TickerProviderStateMixin
               // },
               decoration: InputDecoration(
                 labelText:  S.current.telephone,
-                labelStyle: TextStyle(color: Theme.of(context).hintColor),
+                labelStyle: GoogleFonts.lato(textStyle: TextStyle(color: Theme.of(context).hintColor)),
                 prefixIcon: Icon(
                   Icons.phone,
                   color: Colors.blue,
@@ -624,7 +625,7 @@ class _ProfilePageState extends State<ProfilePage> with TickerProviderStateMixin
               // },
               decoration: InputDecoration(
                 labelText:  S.current.telephone2,
-                labelStyle: TextStyle(color: Theme.of(context).hintColor),
+                labelStyle: GoogleFonts.lato(textStyle: TextStyle(color: Theme.of(context).hintColor)),
                 prefixIcon: Icon(
                   Icons.phone,
                   color: Colors.blue,
@@ -657,7 +658,7 @@ class _ProfilePageState extends State<ProfilePage> with TickerProviderStateMixin
               },
               decoration: InputDecoration(
                 labelText:  S.current.mobile,
-                labelStyle: TextStyle(color: Theme.of(context).hintColor),
+                labelStyle: GoogleFonts.lato(textStyle: TextStyle(color: Theme.of(context).hintColor)),
                 prefixIcon: Icon(
                   Icons.phone_android,
                   color: Colors.blue,
@@ -690,7 +691,7 @@ class _ProfilePageState extends State<ProfilePage> with TickerProviderStateMixin
               // },
               decoration: InputDecoration(
                 labelText:  S.current.mobile2,
-                labelStyle: TextStyle(color: Theme.of(context).hintColor),
+                labelStyle: GoogleFonts.lato(textStyle: TextStyle(color: Theme.of(context).hintColor)),
                 prefixIcon: Icon(
                   Icons.phone_android,
                   color: Colors.blue,
@@ -723,7 +724,7 @@ class _ProfilePageState extends State<ProfilePage> with TickerProviderStateMixin
               // },
               decoration: InputDecoration(
                 labelText:  S.current.fax,
-                labelStyle: TextStyle(color: Theme.of(context).hintColor),
+                labelStyle: GoogleFonts.lato(textStyle: TextStyle(color: Theme.of(context).hintColor)),
                 prefixIcon: Icon(
                   MdiIcons.fax,
                   color: Colors.blue,
@@ -756,7 +757,7 @@ class _ProfilePageState extends State<ProfilePage> with TickerProviderStateMixin
               // },
               decoration: InputDecoration(
                 labelText:  S.current.mail,
-                labelStyle: TextStyle(color: Theme.of(context).hintColor),
+                labelStyle: GoogleFonts.lato(textStyle: TextStyle(color: Theme.of(context).hintColor)),
                 prefixIcon: Icon(
                   Icons.email,
                   color: Colors.blue,
@@ -789,7 +790,7 @@ class _ProfilePageState extends State<ProfilePage> with TickerProviderStateMixin
               // },
               decoration: InputDecoration(
                 labelText:  S.current.adresse_web,
-                labelStyle: TextStyle(color: Theme.of(context).hintColor),
+                labelStyle: GoogleFonts.lato(textStyle: TextStyle(color: Theme.of(context).hintColor)),
                 prefixIcon: Icon(
                   MdiIcons.searchWeb,
                   color: Colors.blue,
@@ -822,7 +823,7 @@ class _ProfilePageState extends State<ProfilePage> with TickerProviderStateMixin
               // },
               decoration: InputDecoration(
                 labelText:  S.current.n_rc,
-                labelStyle: TextStyle(color: Theme.of(context).hintColor),
+                labelStyle: GoogleFonts.lato(textStyle: TextStyle(color: Theme.of(context).hintColor)),
                 prefixIcon: Icon(
                   MdiIcons.cardAccountDetails,
                   color: Colors.blue,
@@ -855,7 +856,7 @@ class _ProfilePageState extends State<ProfilePage> with TickerProviderStateMixin
               // },
               decoration: InputDecoration(
                 labelText:  S.current.art_imp,
-                labelStyle: TextStyle(color: Theme.of(context).hintColor),
+                labelStyle: GoogleFonts.lato(textStyle: TextStyle(color: Theme.of(context).hintColor)),
                 prefixIcon: Icon(
                   MdiIcons.cardAccountDetails,
                   color: Colors.blue,
@@ -888,7 +889,7 @@ class _ProfilePageState extends State<ProfilePage> with TickerProviderStateMixin
               // },
               decoration: InputDecoration(
                 labelText:  S.current.nif,
-                labelStyle: TextStyle(color: Theme.of(context).hintColor),
+                labelStyle: GoogleFonts.lato(textStyle: TextStyle(color: Theme.of(context).hintColor)),
                 prefixIcon: Icon(
                   MdiIcons.cardAccountDetails,
                   color: Colors.blue,
@@ -921,7 +922,7 @@ class _ProfilePageState extends State<ProfilePage> with TickerProviderStateMixin
               // },
               decoration: InputDecoration(
                 labelText:  S.current.nis,
-                labelStyle: TextStyle(color: Theme.of(context).hintColor),
+                labelStyle: GoogleFonts.lato(textStyle: TextStyle(color: Theme.of(context).hintColor)),
                 prefixIcon: Icon(
                   MdiIcons.cardAccountDetails,
                   color: Colors.blue,
@@ -954,7 +955,7 @@ class _ProfilePageState extends State<ProfilePage> with TickerProviderStateMixin
               // },
               decoration: InputDecoration(
                 labelText:  S.current.capitale_sociale,
-                labelStyle: TextStyle(color: Theme.of(context).hintColor),
+                labelStyle: GoogleFonts.lato(textStyle: TextStyle(color: Theme.of(context).hintColor)),
                 prefixIcon: Icon(
                   Icons.monetization_on,
                   color: Colors.blue,
@@ -998,14 +999,16 @@ class _ProfilePageState extends State<ProfilePage> with TickerProviderStateMixin
                       onTap: () {
                         arguments.codePinEnabled = !arguments.codePinEnabled;
                       },
-                      child: new Text( S.current.code_pin,
-                        style: TextStyle(
-                            fontSize: 16,
-                            color:
-                            editMode ? Theme.of(context).primaryColorDark : Theme.of(context).tabBarTheme.unselectedLabelColor)),
+                      child: Text( S.current.code_pin,
+                        style:GoogleFonts.lato(
+                          textStyle: TextStyle(
+                              fontSize: 16,
+                              color:
+                              editMode ? Theme.of(context).primaryColorDark : Theme.of(context).tabBarTheme.unselectedLabelColor)
+                        )
+                      ),
                     ),
                   ),
-
                   Switch(
                     value: arguments.codePinEnabled,
                     onChanged: editMode?(bool isOn) {

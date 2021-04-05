@@ -28,6 +28,8 @@ import 'package:gestmob/services/push_notifications.dart';
 import 'package:gestmob/models/MyParams.dart';
 import 'package:feature_discovery/feature_discovery.dart';
 import 'package:flutter/scheduler.dart';
+import 'package:google_fonts/google_fonts.dart';
+
 
 class ClientFourFragment extends StatefulWidget {
   final int clientFourn;
@@ -167,7 +169,7 @@ class _ClientFourFragmentState extends State<ClientFourFragment> {
 
   Widget hasCreditCheckBox(StateSetter _setState) {
     return CheckboxListTile(
-      title: Text(S.current.a_credit),
+      title: Text(S.current.a_credit , style: GoogleFonts.lato(),),
       value: _filterInHasCredit,
       onChanged: (bool value){
         _setState(() {
@@ -179,7 +181,7 @@ class _ClientFourFragmentState extends State<ClientFourFragment> {
 
   Widget tierBloquer(StateSetter _setState) {
     return CheckboxListTile(
-      title: Text(S.current.aff_bloquer),
+      title: Text(S.current.aff_bloquer , style: GoogleFonts.lato(),),
       value: _filterTierBloquer,
       onChanged: (bool value){
         _setState(() {

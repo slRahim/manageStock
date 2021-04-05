@@ -28,6 +28,7 @@ import 'Statics.dart';
 import 'package:intl/intl.dart' as intl;
 import 'package:archive/archive.dart';
 import 'package:gestmob/models/MyParams.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 class Helpers {
   static Widget buildLoading() {
@@ -160,7 +161,7 @@ class Helpers {
     // showToast(message);
     Flushbar(
       isDismissible: false,
-      message: message,
+      messageText: Text(message , style: GoogleFonts.lato(),),
       icon: Icon(
         Icons.info_outline,
         size: 28.0,

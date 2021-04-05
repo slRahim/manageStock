@@ -242,15 +242,17 @@ class _GridHomeWidgetState extends State<GridHomeWidget> {
                                           size: 40,
                                         ),
                                         SizedBox(
-                                          width: 5,
+                                          width: 1,
                                         ),
                                         Container(
                                           child: Wrap(
                                             direction: Axis.vertical,
                                             children: [Text("${S.current.ca_mois}",
-                                                style: TextStyle(
-                                                    fontWeight: FontWeight.bold,
-                                                    color: Colors.white))],
+                                                style: GoogleFonts.lato(
+                                                  textStyle: TextStyle(
+                                                      fontWeight: FontWeight.bold,
+                                                      color: Colors.white)
+                                                ))],
                                           ),
                                         ),
                                       ],
@@ -264,15 +266,18 @@ class _GridHomeWidgetState extends State<GridHomeWidget> {
                                         children: [
                                           Text(
                                               "${Helpers.numberFormat((_indiceFinanciere[0] != null) ? _indiceFinanciere[0]: 0.0)}",
-                                              style: TextStyle(
-                                                  fontWeight:
-                                                  FontWeight.bold,
-                                                  color: Colors.white,fontSize: 18)),
+                                              style: GoogleFonts.lato(
+                                                textStyle: TextStyle(
+                                                    fontWeight: FontWeight.bold,
+                                                    color: Colors.white,
+                                                    fontSize: 18)
+                                              )),
                                           Text(" ${_devise}",
-                                              style: TextStyle(
-                                                  fontWeight:
-                                                  FontWeight.bold,
-                                                  color: Colors.white)),
+                                              style: GoogleFonts.lato(
+                                                textStyle: TextStyle(
+                                                    fontWeight: FontWeight.bold,
+                                                    color: Colors.white)
+                                              )),
                                         ],
                                       ),
                                     ),
@@ -282,7 +287,7 @@ class _GridHomeWidgetState extends State<GridHomeWidget> {
                             ),
                           ),
                           SizedBox(
-                            width: 5,
+                            width: 3,
                           ),
                           Expanded(
                             child: Container(
@@ -300,15 +305,18 @@ class _GridHomeWidgetState extends State<GridHomeWidget> {
                                           size: 40,
                                         ),
                                         SizedBox(
-                                          width: 5,
+                                          width: 1,
                                         ),
                                         Container(
                                           child: Wrap(
                                             direction: Axis.vertical,
                                             children: [Text("${S.current.achat_mois}",
-                                                style: TextStyle(
-                                                    fontWeight: FontWeight.bold,
-                                                    color: Colors.white))],
+                                                style: GoogleFonts.lato(
+                                                  textStyle: TextStyle(
+                                                      fontWeight: FontWeight.bold,
+                                                      color: Colors.white)
+                                                )
+                                            )],
                                           ),
                                         ),
                                       ],
@@ -322,13 +330,17 @@ class _GridHomeWidgetState extends State<GridHomeWidget> {
                                         children: [
                                           Text(
                                               "${Helpers.numberFormat((_indiceFinanciere[1] != null) ? _indiceFinanciere[1] : 0.0)}",
-                                              style: TextStyle(
-                                                  fontWeight: FontWeight.bold,fontSize: 18,
-                                                  color: Colors.white)),
+                                              style: GoogleFonts.lato(
+                                                textStyle: TextStyle(
+                                                    fontWeight: FontWeight.bold,fontSize: 18,
+                                                    color: Colors.white)
+                                              )),
                                           Text(" ${_devise}",
-                                              style: TextStyle(
-                                                  fontWeight: FontWeight.bold,
-                                                  color: Colors.white)),
+                                              style: GoogleFonts.lato(
+                                                textStyle: TextStyle(
+                                                    fontWeight: FontWeight.bold,
+                                                    color: Colors.white)
+                                              )),
                                         ],
                                       ),
                                     ),

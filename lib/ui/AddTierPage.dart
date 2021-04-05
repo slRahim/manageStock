@@ -28,6 +28,7 @@ import 'package:pdf/pdf.dart';
 import 'package:pdf/widgets.dart' as pw;
 import 'package:printing/printing.dart';
 import 'package:gestmob/services/push_notifications.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 class AddTierPage extends StatefulWidget {
 
@@ -358,10 +359,10 @@ class _AddTierPageState extends State<AddTierPage>
                   selectedIndex: _tabSelectedIndex,
                   controller: _tabController,
                   tabs: [
-                    Tab(child: Column( children: [ Icon(Icons.insert_drive_file),SizedBox(height: 1), Text(S.current.fiche), ], )),
-                    Tab(child: Column( children: [ Icon(Icons.image), SizedBox(height: 1), Text(S.current.photo), ], )),
-                    Tab(child: Column( children: [ Icon(Icons.map), SizedBox(height: 1), Text(S.current.map), ], )),
-                    Tab(child: Column( children: [ Icon(MdiIcons.qrcode), SizedBox(height: 1), Text(S.current.qr_code), ], )),
+                    Tab(child: Column( children: [ Icon(Icons.insert_drive_file),SizedBox(height: 1), Text(S.current.fiche, style: GoogleFonts.lato(),), ], )),
+                    Tab(child: Column( children: [ Icon(Icons.image), SizedBox(height: 1), Text(S.current.photo, style: GoogleFonts.lato(),), ], )),
+                    Tab(child: Column( children: [ Icon(Icons.map), SizedBox(height: 1), Text(S.current.map, style: GoogleFonts.lato(),), ], )),
+                    Tab(child: Column( children: [ Icon(MdiIcons.qrcode), SizedBox(height: 1), Text(S.current.qr_code, style: GoogleFonts.lato(),), ], )),
                   ],
                 ),
                 body: Builder(
@@ -414,7 +415,7 @@ class _AddTierPageState extends State<AddTierPage>
                       focusedBorder: OutlineInputBorder(
                           borderSide: BorderSide(color: Colors.green),
                           borderRadius: BorderRadius.circular(20)),
-                      labelStyle: TextStyle(color: Colors.green),
+                      labelStyle: GoogleFonts.lato(textStyle: TextStyle(color: Colors.green)),
                       enabledBorder: OutlineInputBorder(
                         gapPadding: 3.3,
                         borderRadius: BorderRadius.circular(20),
@@ -463,7 +464,7 @@ class _AddTierPageState extends State<AddTierPage>
               // },
               decoration: InputDecoration(
                 labelText: S.current.adresse,
-                labelStyle: TextStyle(color: Theme.of(context).hintColor),
+                labelStyle: GoogleFonts.lato(textStyle: TextStyle(color: Theme.of(context).hintColor)),
                 prefixIcon: Icon(
                   MdiIcons.homeCityOutline,
                   color: Colors.blue,
@@ -496,7 +497,7 @@ class _AddTierPageState extends State<AddTierPage>
               // },
               decoration: InputDecoration(
                 labelText: S.current.ville,
-                labelStyle: TextStyle(color: Theme.of(context).hintColor),
+                labelStyle: GoogleFonts.lato(textStyle: TextStyle(color: Theme.of(context).hintColor)),
                 prefixIcon: Icon(
                   Icons.add_location,
                   color: Colors.blue,
@@ -529,7 +530,7 @@ class _AddTierPageState extends State<AddTierPage>
               // },
               decoration: InputDecoration(
                 labelText: S.current.telephone,
-                labelStyle: TextStyle(color: Theme.of(context).hintColor),
+                labelStyle:  GoogleFonts.lato(textStyle: TextStyle(color: Theme.of(context).hintColor)),
                 prefixIcon: Icon(
                   Icons.phone,
                   color: Colors.blue,
@@ -562,7 +563,7 @@ class _AddTierPageState extends State<AddTierPage>
               // },
               decoration: InputDecoration(
                 labelText: S.current.mobile,
-                labelStyle: TextStyle(color: Theme.of(context).hintColor),
+                labelStyle: GoogleFonts.lato(textStyle: TextStyle(color: Theme.of(context).hintColor)),
                 prefixIcon: Icon(
                   Icons.phone_android,
                   color: Colors.blue,
@@ -595,7 +596,7 @@ class _AddTierPageState extends State<AddTierPage>
               // },
               decoration: InputDecoration(
                 labelText: S.current.fax,
-                labelStyle: TextStyle(color: Theme.of(context).hintColor),
+                labelStyle: GoogleFonts.lato(textStyle: TextStyle(color: Theme.of(context).hintColor)),
                 prefixIcon: Icon(
                   MdiIcons.fax,
                   color: Colors.blue,
@@ -628,7 +629,7 @@ class _AddTierPageState extends State<AddTierPage>
               // },
               decoration: InputDecoration(
                 labelText: S.current.mail,
-                labelStyle: TextStyle(color: Theme.of(context).hintColor),
+                labelStyle: GoogleFonts.lato(textStyle: TextStyle(color: Theme.of(context).hintColor)),
                 prefixIcon: Icon(
                   Icons.email,
                   color: Colors.blue,
@@ -667,7 +668,7 @@ class _AddTierPageState extends State<AddTierPage>
               },
               decoration: InputDecoration(
                 labelText: S.current.solde_depart,
-                labelStyle: TextStyle(color: Theme.of(context).hintColor),
+                labelStyle: GoogleFonts.lato(textStyle: TextStyle(color: Theme.of(context).hintColor)),
                 prefixIcon: Icon(
                   Icons.monetization_on,
                   color: Colors.blue,
@@ -702,7 +703,7 @@ class _AddTierPageState extends State<AddTierPage>
                 // },
                 decoration: InputDecoration(
                   labelText: S.current.chifre_affaire,
-                  labelStyle: TextStyle(color: Theme.of(context).hintColor),
+                  labelStyle: GoogleFonts.lato(textStyle: TextStyle(color: Theme.of(context).hintColor)),
                   prefixIcon: Icon(
                     Icons.monetization_on,
                     color: Colors.blue,
@@ -738,7 +739,7 @@ class _AddTierPageState extends State<AddTierPage>
                 // },
                 decoration: InputDecoration(
                   labelText: S.current.regler,
-                  labelStyle: TextStyle(color: Theme.of(context).hintColor),
+                  labelStyle: GoogleFonts.lato(textStyle: TextStyle(color: Theme.of(context).hintColor)),
                   prefixIcon: Icon(
                     Icons.monetization_on,
                     color: Colors.blue,
@@ -774,7 +775,7 @@ class _AddTierPageState extends State<AddTierPage>
                       borderSide: BorderSide(color: Colors.blue),
                       borderRadius: BorderRadius.circular(20)),
                   labelText: S.current.credit,
-                  labelStyle: TextStyle(color: Theme.of(context).hintColor),
+                  labelStyle: GoogleFonts.lato(textStyle: TextStyle(color: Theme.of(context).hintColor)),
                   enabledBorder: OutlineInputBorder(
                     gapPadding: 3.3,
                     borderRadius: BorderRadius.circular(20),
@@ -793,7 +794,8 @@ class _AddTierPageState extends State<AddTierPage>
                 ) : null,
                 child: CheckboxListTile(
                   title: Text(S.current.client_four,
-                    style: TextStyle(color: editMode ? Theme.of(context).primaryColorDark : Theme.of(context).tabBarTheme.unselectedLabelColor ),
+                    style: GoogleFonts.lato(
+                      textStyle: TextStyle(color: editMode ? Theme.of(context).primaryColorDark : Theme.of(context).tabBarTheme.unselectedLabelColor ),)
                   ),
                   value: _clientFournBool,
                   onChanged: editMode? (bool value) {
@@ -810,7 +812,8 @@ class _AddTierPageState extends State<AddTierPage>
                   borderRadius: BorderRadius.circular(20.0),
                 ) : null,
                 child: SwitchListTile(
-                  title: Text(S.current.bloquer , style: TextStyle(color: Theme.of(context).primaryColorDark),),
+                  title: Text(S.current.bloquer ,
+                    style: GoogleFonts.lato(textStyle: TextStyle(color: Theme.of(context).primaryColorDark)),),
                   value: _controlBloquer,
                   onChanged: editMode ? (bool value){
                     setState(() {
@@ -867,7 +870,11 @@ class _AddTierPageState extends State<AddTierPage>
                     size: 0.5 * bodyHeight,
                   )
                 : Center(
-                  child: Text(S.current.msg_no_qr ,style: TextStyle(fontSize: 16 , color:Colors.black , fontWeight: FontWeight.bold)),
+                  child: Text(S.current.msg_no_qr ,
+                      style:GoogleFonts.lato(
+                        textStyle: TextStyle(fontSize: 16 , color:Colors.black , fontWeight: FontWeight.bold)
+                      )
+                  ),
                 ),
 
               ),
@@ -1123,9 +1130,11 @@ class _AddTierPageState extends State<AddTierPage>
                             padding: const EdgeInsets.only(bottom: 20),
                             child: Text(
                               "${S.current.ajouter} ${S.current.famile}",
-                              style: TextStyle(
-                                fontSize: 18,
-                                fontWeight: FontWeight.w400,
+                              style:GoogleFonts.lato(
+                                textStyle:  TextStyle(
+                                  fontSize: 18,
+                                  fontWeight: FontWeight.bold,
+                                )
                               ),
                             ),
                           )),
@@ -1144,8 +1153,7 @@ class _AddTierPageState extends State<AddTierPage>
                                         BorderSide(color: Colors.orange[900]),
                                     borderRadius: BorderRadius.circular(20)),
                                 contentPadding: EdgeInsets.only(left: 10),
-                                labelStyle:
-                                    TextStyle(color: Colors.orange[900]),
+                                labelStyle:GoogleFonts.lato(textStyle: TextStyle(color: Colors.orange[900]),),
                                 enabledBorder: OutlineInputBorder(
                                   gapPadding: 3.3,
                                   borderRadius: BorderRadius.circular(20),
@@ -1175,10 +1183,12 @@ class _AddTierPageState extends State<AddTierPage>
                                   final snackBar = SnackBar(
                                     content: Text(
                                       S.current.msg_fam_ajout,
-                                      style: TextStyle(
-                                          color: Colors.white,
-                                          fontSize: 15,
-                                          fontWeight: FontWeight.w500),
+                                      style: GoogleFonts.lato(
+                                        textStyle: TextStyle(
+                                            color: Colors.white,
+                                            fontSize: 15,
+                                            fontWeight: FontWeight.w500)
+                                      ),
                                     ),
                                     backgroundColor: Colors.red,
                                     duration: Duration(seconds: 1),
@@ -1189,7 +1199,7 @@ class _AddTierPageState extends State<AddTierPage>
                                 },
                                 child: Text(
                                   S.current.ajouter,
-                                  style: TextStyle(color: Colors.white),
+                                  style: GoogleFonts.lato(textStyle: TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
                                 ),
                                 color: Colors.red,
                               ),

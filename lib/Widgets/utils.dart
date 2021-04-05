@@ -8,6 +8,7 @@ import 'package:gestmob/models/CompteTresorie.dart';
 import 'package:gestmob/models/Tiers.dart';
 import 'package:gestmob/models/TiersFamille.dart';
 import 'package:gestmob/models/TresorieCategories.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 // dropdown menus : marque , prix , famille article , famille tier , tiers  ,
 //    && statut tier , tarification tiers , tva article
@@ -18,7 +19,7 @@ List<DropdownMenuItem<ArticleMarque>> buildMarqueDropDownMenuItems(
   for (ArticleMarque listItem in listItems) {
     items.add(
       DropdownMenuItem(
-        child: Text(listItem.libelle),
+        child: Text(listItem.libelle , style: GoogleFonts.lato(),),
         value: listItem,
       ),
     );
@@ -31,7 +32,7 @@ List<DropdownMenuItem<int>> buildPriceDropDownMenuItems(List listItems) {
   for (int listItem in listItems) {
     items.add(
       DropdownMenuItem(
-        child: Text(listItem.toString()),
+        child: Text(listItem.toString(), style: GoogleFonts.lato(),),
         value: listItem,
       ),
     );
@@ -44,7 +45,7 @@ List<DropdownMenuItem<ArticleFamille>> buildDropFamilleArticle(List listItems) {
   for (ArticleFamille listItem in listItems) {
     items.add(
       DropdownMenuItem(
-        child: Text(listItem.libelle),
+        child: Text(listItem.libelle, style: GoogleFonts.lato(),),
         value: listItem,
       ),
     );
@@ -57,7 +58,7 @@ List<DropdownMenuItem<TiersFamille>> buildDropFamilleTier(List listItems) {
   for (TiersFamille listItem in listItems) {
     items.add(
       DropdownMenuItem(
-        child: Text(listItem.libelle),
+        child: Text(listItem.libelle, style: GoogleFonts.lato(),),
         value: listItem,
       ),
     );
@@ -70,7 +71,7 @@ List<DropdownMenuItem<Tiers>> buildDropClients(List listItems) {
   for (Tiers listItem in listItems) {
     items.add(
       DropdownMenuItem(
-        child: Text(listItem.raisonSociale),
+        child: Text(listItem.raisonSociale, style: GoogleFonts.lato(),),
         value: listItem,
       ),
     );
@@ -83,7 +84,7 @@ List<DropdownMenuItem<String>> buildDropStatutTier(List listItems) {
   for (String listItem in listItems) {
     items.add(
       DropdownMenuItem(
-        child: Text(listItem),
+        child: Text(listItem, style: GoogleFonts.lato(),),
         value: listItem,
       ),
     );
@@ -96,7 +97,7 @@ List<DropdownMenuItem<String>> buildDropTypeTier(List listItems) {
   for (String listItem in listItems) {
     items.add(
       DropdownMenuItem(
-        child: Text(listItem),
+        child: Text(listItem, style: GoogleFonts.lato(),),
         value: listItem,
       ),
     );
@@ -109,7 +110,7 @@ List<DropdownMenuItem<int>> buildDropTarificationTier(List listItems) {
   for (int listItem in listItems) {
     items.add(
       DropdownMenuItem(
-        child: Text(listItem.toString()),
+        child: Text(listItem.toString(), style: GoogleFonts.lato(),),
         value: listItem,
       ),
     );
@@ -122,7 +123,7 @@ List<DropdownMenuItem<ArticleTva>> buildDropTvaDownMenuItems(List listItems) {
   for (ArticleTva listItem in listItems) {
     items.add(
       DropdownMenuItem(
-        child: Text( "${S.current.taux_tva}: ${listItem.tva.toString()} %"),
+        child: Text( "${S.current.taux_tva}: ${listItem.tva.toString()} %", style: GoogleFonts.lato(),),
         value: listItem,
       ),
     );
@@ -135,7 +136,7 @@ List<DropdownMenuItem<String>> buildDropStatutDownMenuItems(List listItems) {
   for (String listItem in listItems) {
     items.add(
       DropdownMenuItem(
-        child: Text(listItem),
+        child: Text(listItem, style: GoogleFonts.lato(),),
         value: listItem,
       ),
     );
@@ -148,7 +149,7 @@ List<DropdownMenuItem<String>> buildDropLanguageDownMenuItems(List listItems) {
   for (String listItem in listItems) {
     items.add(
       DropdownMenuItem(
-        child: Text(listItem),
+        child: Text(listItem, style: GoogleFonts.lato(),),
         value: listItem,
       ),
     );
@@ -161,7 +162,7 @@ List<DropdownMenuItem<TresorieCategories>> buildDropTresorieCategoriesDownMenuIt
   for (TresorieCategories listItem in listItems) {
     items.add(
       DropdownMenuItem(
-        child: Text(listItem.libelle),
+        child: Text(listItem.libelle, style: GoogleFonts.lato(),),
         value: listItem,
       ),
     );
@@ -174,7 +175,7 @@ List<DropdownMenuItem<CompteTresorie>> buildDropCompteTresorieDownMenuItems(List
   for (CompteTresorie listItem in listItems) {
     items.add(
       DropdownMenuItem(
-        child: Text(listItem.nomCompte+"(${listItem.nomCompte})"),
+        child: Text(listItem.nomCompte+"(${listItem.nomCompte})", style: GoogleFonts.lato(),),
         value: listItem,
       ),
     );
@@ -187,7 +188,7 @@ List<DropdownMenuItem<ChargeTresorie>> buildDropChargeTresorieDownMenuItems(List
   for (ChargeTresorie listItem in listItems) {
     items.add(
       DropdownMenuItem(
-        child: Text(listItem.libelle),
+        child: Text(listItem.libelle, style: GoogleFonts.lato(),),
         value: listItem,
       ),
     );

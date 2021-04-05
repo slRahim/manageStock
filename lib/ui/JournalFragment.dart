@@ -20,8 +20,8 @@ import 'package:gestmob/search/sliver_list_data_source.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 import 'package:gestmob/Widgets/utils.dart' as utils;
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
-
 import 'AddArticlePage.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 class JournalFragment extends StatefulWidget {
   final Function(List<dynamic>) onConfirmSelectedItems;
@@ -98,11 +98,11 @@ class _JournalFragmentState extends State<JournalFragment> {
             startDate(_setState),
             endDate(_setState),
             ListTile(
-              title: new Text(S.current.marque),
+              title: new Text(S.current.marque , style: GoogleFonts.lato(),),
               trailing: marquesDropDown(_setState),
             ),
             ListTile(
-              title: new Text(S.current.famile),
+              title: new Text(S.current.famile , style: GoogleFonts.lato(),),
               trailing: famillesDropDown(_setState),
             ),
           ],
@@ -177,7 +177,7 @@ class _JournalFragmentState extends State<JournalFragment> {
               borderSide: BorderSide(color: Colors.blue),
               borderRadius: BorderRadius.circular(20)),
           labelText: S.current.start_date,
-          labelStyle: TextStyle(color: Colors.blue),
+          labelStyle: GoogleFonts.lato(textStyle: TextStyle(color: Colors.blue)),
           enabledBorder: OutlineInputBorder(
             gapPadding: 3.3,
             borderRadius: BorderRadius.circular(20),
@@ -220,7 +220,7 @@ class _JournalFragmentState extends State<JournalFragment> {
               borderSide: BorderSide(color: Colors.blue),
               borderRadius: BorderRadius.circular(20)),
           labelText: S.current.end_date,
-          labelStyle: TextStyle(color: Colors.blue),
+          labelStyle: GoogleFonts.lato(textStyle: TextStyle(color: Colors.blue)),
           enabledBorder: OutlineInputBorder(
             gapPadding: 3.3,
             borderRadius: BorderRadius.circular(20),

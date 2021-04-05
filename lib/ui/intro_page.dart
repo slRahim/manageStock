@@ -22,6 +22,7 @@ import 'package:esc_pos_utils/esc_pos_utils.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'dart:io';
 import 'package:gestmob/services/push_notifications.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 class IntroPage extends StatefulWidget {
   @override
@@ -190,7 +191,7 @@ class _IntroPageState extends State<IntroPage> {
       body: IntroductionScreen(
         pages: _getPageViews(context),
         next: const Icon(Icons.navigate_next),
-        done: Text(S.current.start , style: TextStyle(fontWeight: FontWeight.w600)),
+        done: Text(S.current.start , style: GoogleFonts.lato(textStyle: TextStyle(fontWeight: FontWeight.w600))),
         onDone: () async {
           if(_formKey.currentState.validate()){
             await saveConfig().then((value) => Phoenix.rebirth(context));
@@ -223,7 +224,7 @@ class _IntroPageState extends State<IntroPage> {
               ),
               Text(
                 S.current.intro_select_lang ,
-                style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                style: GoogleFonts.lato(textStyle: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
               )
             ],
           ),
@@ -247,7 +248,7 @@ class _IntroPageState extends State<IntroPage> {
                 child: Center(
                   child: DropdownButtonHideUnderline(
                     child: DropdownButton<String>(
-                        disabledHint: Text(S.current.param_lang_title),
+                        disabledHint: Text(S.current.param_lang_title , style: GoogleFonts.lato(),),
                         value: _selectedLanguage,
                         items: _languages,
                         onChanged: (value) {
@@ -313,7 +314,7 @@ class _IntroPageState extends State<IntroPage> {
               ),
               Text(
                 S.current.intro_select_region,
-                style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                style: GoogleFonts.lato(textStyle: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
               )
             ],
           ),
@@ -347,7 +348,7 @@ class _IntroPageState extends State<IntroPage> {
                               items: _countries.map((String dropDownStringItem) {
                                 return DropdownMenuItem<String>(
                                   value: dropDownStringItem,
-                                  child: Text(dropDownStringItem,),
+                                  child: Text(dropDownStringItem,style: GoogleFonts.lato(),),
                                 );
                               }).toList(),
                               onChanged: (value) {
@@ -399,7 +400,7 @@ class _IntroPageState extends State<IntroPage> {
                                 items: _provinces.map((String dropDownStringItem) {
                                   return DropdownMenuItem<String>(
                                     value: dropDownStringItem,
-                                    child: Text(dropDownStringItem,),
+                                    child: Text(dropDownStringItem,style: GoogleFonts.lato(),),
                                   );
                                 }).toList(),
                                 onChanged: (value){
@@ -446,7 +447,7 @@ class _IntroPageState extends State<IntroPage> {
                             items: _cities.map((String dropDownStringItem) {
                               return DropdownMenuItem<String>(
                                 value: dropDownStringItem,
-                                child: Text(dropDownStringItem),
+                                child: Text(dropDownStringItem , style: GoogleFonts.lato(),),
                               );
                             }).toList(),
                             onChanged: (value) {
@@ -477,6 +478,7 @@ class _IntroPageState extends State<IntroPage> {
                       contentPadding:
                       EdgeInsets.only(left: 20, top: 20, bottom: 20),
                       labelText: S.current.devise,
+                      labelStyle: GoogleFonts.lato(),
                       alignLabelWithHint: true,
                       hintText: S.current.msg_search,
                       enabledBorder: OutlineInputBorder(
@@ -519,7 +521,7 @@ class _IntroPageState extends State<IntroPage> {
                       child: SingleChildScrollView(
                         child: Text(
                             "${_currencycode} (${_countryname})",
-                            style: TextStyle(fontSize: 18),
+                            style: GoogleFonts.lato(textStyle: TextStyle(fontSize: 18)),
                           ),
                         ),
                     )
@@ -542,7 +544,7 @@ class _IntroPageState extends State<IntroPage> {
                 ),
                 Text(
                   S.current.intro_infor,
-                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                  style: GoogleFonts.lato(textStyle: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
                 )
               ],
             ),
@@ -564,6 +566,7 @@ class _IntroPageState extends State<IntroPage> {
                     },
                     decoration: InputDecoration(
                       labelText: S.current.rs,
+                      labelStyle: GoogleFonts.lato(),
                       prefixIcon: Icon(
                         MdiIcons.idCard,
                         color: Theme.of(context).accentColor,
@@ -589,6 +592,7 @@ class _IntroPageState extends State<IntroPage> {
                     keyboardType: TextInputType.text,
                     decoration: InputDecoration(
                       labelText: S.current.activite,
+                      labelStyle: GoogleFonts.lato(),
                       prefixIcon: Icon(
                         Icons.local_activity,
                         color: Theme.of(context).accentColor,
@@ -614,6 +618,7 @@ class _IntroPageState extends State<IntroPage> {
                     keyboardType: TextInputType.number,
                     decoration: InputDecoration(
                       labelText: S.current.telephone,
+                      labelStyle: GoogleFonts.lato(),
                       prefixIcon: Icon(
                         Icons.phone_enabled,
                         color: Theme.of(context).accentColor,
@@ -638,6 +643,7 @@ class _IntroPageState extends State<IntroPage> {
                     controller: _adresseControl,
                     keyboardType: TextInputType.text,
                     decoration: InputDecoration(
+                      labelStyle: GoogleFonts.lato(),
                       labelText: S.current.adresse,
                       prefixIcon: Icon(
                         Icons.map,
@@ -663,6 +669,7 @@ class _IntroPageState extends State<IntroPage> {
                     controller: _rcControl,
                     keyboardType: TextInputType.text,
                     decoration: InputDecoration(
+                      labelStyle: GoogleFonts.lato(),
                       labelText: S.current.rc,
                       prefixIcon: Icon(
                         Icons.backup_table_outlined,
@@ -689,6 +696,7 @@ class _IntroPageState extends State<IntroPage> {
                     keyboardType: TextInputType.text,
                     decoration: InputDecoration(
                       labelText: S.current.nif,
+                      labelStyle: GoogleFonts.lato(),
                       prefixIcon: Icon(
                         Icons.list_alt_outlined,
                         color: Theme.of(context).accentColor,
@@ -715,9 +723,9 @@ class _IntroPageState extends State<IntroPage> {
       children: <Widget>[
         CurrencyPickerUtils.getDefaultFlagImage(country),
         SizedBox(width: 8.0),
-        Text("(${country.currencyCode})"),
+        Text("(${country.currencyCode})", style: GoogleFonts.lato(),),
         SizedBox(width: 8.0),
-        Flexible(child: Text(country.name))
+        Flexible(child: Text(country.name, style: GoogleFonts.lato(),))
       ],
     );
   }

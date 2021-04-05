@@ -13,6 +13,7 @@ import 'package:gestmob/services/push_notifications.dart';
 import 'package:gestmob/ui/home.dart';
 import 'HomeItemsWidgets.dart';
 import 'package:gestmob/models/Profile.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 
 class NavDrawer extends  StatelessWidget {
@@ -116,11 +117,23 @@ class NavDrawer extends  StatelessWidget {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
-                            Text("${profile.raisonSociale}" , style: TextStyle(color: Colors.white , fontWeight: FontWeight.bold , fontSize: 20),),
+                            Text("${profile.raisonSociale}" ,
+                              style: GoogleFonts.lato(
+                                textStyle : TextStyle(color: Colors.white , fontWeight: FontWeight.bold , fontSize: 22)
+                              ),
+                            ),
                             SizedBox(height: 2,),
-                            Text(getTranslateVersion() , style: TextStyle(color: Colors.white , fontWeight: FontWeight.bold ,),),
+                            Text(getTranslateVersion() ,
+                              style: GoogleFonts.lato(
+                                textStyle: TextStyle(color: Colors.white , fontWeight: FontWeight.w800 ,)
+                              ),
+                            ),
                             SizedBox(height: 2,),
-                            Text("${S.current.until}: ${Helpers.dateToText(Helpers.getDateExpiration(myparams))}" , style: TextStyle(color: Colors.white),),
+                            Text("${S.current.until}: ${Helpers.dateToText(Helpers.getDateExpiration(myparams))}" ,
+                              style: GoogleFonts.lato(
+                                textStyle: TextStyle(color: Colors.white,fontWeight: FontWeight.w600)
+                              ),
+                            ),
                           ],
                         )
                     ),
@@ -156,7 +169,9 @@ class NavDrawer extends  StatelessWidget {
         leading: iconsSet(data.id, 20),
         title: Text(
           data.title,
-          style: TextStyle(color: Colors.white, fontSize: 15),
+          style: GoogleFonts.lato(
+            textStyle: TextStyle(color: Colors.white, fontSize: 15,fontWeight: FontWeight.w600),
+          )
         ),
         trailing: (Helpers.isDirectionRTL(context))
             ? Icon(
@@ -176,7 +191,9 @@ class NavDrawer extends  StatelessWidget {
                   leading: iconsSet(e.id, 20),
                   title: Text(
                     e.title,
-                    style: TextStyle(color: Colors.white, fontSize: 15),
+                    style: GoogleFonts.lato(
+                      textStyle: TextStyle(color: Colors.white, fontSize: 15,fontWeight: FontWeight.w600),
+                    )
                   ),
                   onTap: () {
                     print(e.title);
@@ -196,7 +213,9 @@ class NavDrawer extends  StatelessWidget {
                     leading: iconsSet(e.id, 20),
                     title: Text(
                       e.title,
-                      style: TextStyle(color: Colors.white, fontSize: 15),
+                      style: GoogleFonts.lato(
+                        textStyle: TextStyle(color: Colors.white, fontSize: 15,fontWeight: FontWeight.w600),
+                      )
                     ),
                     onTap: () {
                       print(e.title);
@@ -215,7 +234,9 @@ class NavDrawer extends  StatelessWidget {
         leading: iconsSet(data.id, 20),
         title: Text(
           data.title,
-          style: TextStyle(color: Colors.white, fontSize: 15),
+          style: GoogleFonts.lato(
+            textStyle: TextStyle(color: Colors.white, fontSize: 15, fontWeight: FontWeight.w600),
+          )
         ),
         onTap: () {
           print(data.title);

@@ -22,6 +22,7 @@ import 'package:gestmob/services/push_notifications.dart';
 import 'package:gestmob/models/MyParams.dart';
 import 'package:feature_discovery/feature_discovery.dart';
 import 'package:flutter/scheduler.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 class PiecesFragment extends StatefulWidget {
   final int clientFourn;
@@ -177,7 +178,7 @@ class _PiecesFragmentState extends State<PiecesFragment> {
                 borderSide: BorderSide(color: Colors.blue),
                 borderRadius: BorderRadius.circular(20)),
             labelText: S.current.start_date,
-            labelStyle: TextStyle(color: Colors.blue),
+            labelStyle: GoogleFonts.lato(textStyle: TextStyle(color: Colors.blue)),
             enabledBorder: OutlineInputBorder(
               gapPadding: 3.3,
               borderRadius: BorderRadius.circular(20),
@@ -220,7 +221,7 @@ class _PiecesFragmentState extends State<PiecesFragment> {
               borderSide: BorderSide(color: Colors.blue),
               borderRadius: BorderRadius.circular(20)),
           labelText: S.current.end_date,
-          labelStyle: TextStyle(color: Colors.blue),
+          labelStyle:GoogleFonts.lato(textStyle: TextStyle(color: Colors.blue)),
           enabledBorder: OutlineInputBorder(
             gapPadding: 3.3,
             borderRadius: BorderRadius.circular(20),
@@ -236,7 +237,7 @@ class _PiecesFragmentState extends State<PiecesFragment> {
 
   Widget isDraftCheckBox(StateSetter _setState) {
     return CheckboxListTile(
-      title: Text(S.current.aff_draft),
+      title: Text(S.current.aff_draft, style: GoogleFonts.lato(),),
       value: _filterIsDraft,
       onChanged: (bool value){
         _setState(() {
@@ -248,7 +249,7 @@ class _PiecesFragmentState extends State<PiecesFragment> {
 
   Widget hasCreditCheckBox(StateSetter _setState) {
     return CheckboxListTile(
-      title: Text(S.current.a_credit),
+      title: Text(S.current.a_credit, style: GoogleFonts.lato(),),
       value: _filterInHasCredit,
       onChanged: (bool value){
         _setState(() {

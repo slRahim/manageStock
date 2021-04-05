@@ -10,6 +10,7 @@ import 'package:gestmob/generated/l10n.dart';
 import 'package:gestmob/models/Profile.dart';
 import 'package:intl/intl.dart';
 import 'package:vibration/vibration.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 class LoginApp extends StatefulWidget {
   @override
@@ -130,12 +131,9 @@ class _OtpSceernState extends State<OtpSceern> {
     borderSide: BorderSide(color: Colors.white30),
   );
   int pinIndex = 0;
-  // MyLocalization localization;
+
   @override
   Widget build(BuildContext context) {
-    /*localization = new MyLocalization(Provider
-        .of<AppStateNotifier>(context, listen: false)
-        .language);*/
     return SafeArea(
       child: Column(
         children: <Widget>[
@@ -359,10 +357,12 @@ class _OtpSceernState extends State<OtpSceern> {
   buildSecuritytext() {
     return Text(
       S.current.msg_login_pin,
-      style: TextStyle(
-        color: Colors.white70,
-        fontSize: 21.0,
-        fontWeight: FontWeight.bold,
+      style: GoogleFonts.lato(
+        textStyle: TextStyle(
+          color: Colors.white70,
+          fontSize: 21.0,
+          fontWeight: FontWeight.bold,
+        )
       ),
     );
   }
@@ -412,8 +412,10 @@ class PinNumber extends StatelessWidget {
           filled: true,
           fillColor: Colors.transparent,
         ),
-        style: TextStyle(
-            fontWeight: FontWeight.bold, fontSize: 21.0, color: Colors.white),
+        style: GoogleFonts.lato(
+          textStyle: TextStyle(
+              fontWeight: FontWeight.bold, fontSize: 21.0, color: Colors.white)
+        ),
       ),
     );
   }
@@ -442,10 +444,12 @@ class keyboardNumber extends StatelessWidget {
         child: Text(
           "$n",
           textAlign: TextAlign.center,
-          style: TextStyle(
-            fontSize: 24 * MediaQuery.of(context).textScaleFactor,
-            color: Colors.white70,
-            fontWeight: FontWeight.bold,
+          style: GoogleFonts.lato(
+            textStyle: TextStyle(
+              fontSize: 24 * MediaQuery.of(context).textScaleFactor,
+              color: Colors.white70,
+              fontWeight: FontWeight.bold,
+            )
           ),
         ),
       ),

@@ -3,6 +3,7 @@ import 'package:gestmob/Helpers/Helpers.dart';
 import 'package:gestmob/generated/l10n.dart';
 import 'package:gestmob/models/MyParams.dart';
 import 'package:gestmob/models/Piece.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 // montant de facture à afficher ds le bas de screen add piece
 class TotalDevis extends StatelessWidget{
@@ -33,30 +34,30 @@ class TotalDevis extends StatelessWidget{
               Row(
                 mainAxisSize: MainAxisSize.max,
                 children: [
-                  Text("${S.current.total_ht}",style: TextStyle(color: Colors.white),),
+                  Text("${S.current.total_ht}",style: GoogleFonts.lato(textStyle : TextStyle(color: Colors.white)),),
                   Expanded(child: Text(".............................................................................................................",
-                    maxLines: 1,style: TextStyle(color: Colors.white),)),
-                  Text(Helpers.numberFormat(total_ht).toString() + " ${(_devise)}",style: TextStyle(color: Colors.white),),
+                    maxLines: 1,style: GoogleFonts.lato(textStyle : TextStyle(color: Colors.white)),)),
+                  Text(Helpers.numberFormat(total_ht).toString() + " ${(_devise)}",style: GoogleFonts.lato(textStyle : TextStyle(color: Colors.white)),),
                 ],
               ),
               SizedBox(height: 5),
               Row(
                 mainAxisSize: MainAxisSize.max,
                 children: [
-                  Text("${S.current.remise}",style: TextStyle(color: Colors.white),),
+                  Text("${S.current.remise}",style: GoogleFonts.lato(textStyle : TextStyle(color: Colors.white)),),
                   Expanded(child: Text(".............................................................................................................",
-                    maxLines: 1,style: TextStyle(color: Colors.white),)),
-                  Text("${Helpers.numberFormat((total_ht*remise)/100)} ${_devise} (${Helpers.numberFormat(remise)} %)",style: TextStyle(color: Colors.white),),
+                    maxLines: 1,style: GoogleFonts.lato(textStyle : TextStyle(color: Colors.white)),)),
+                  Text("${Helpers.numberFormat((total_ht*remise)/100)} ${_devise} (${Helpers.numberFormat(remise)} %)",style: GoogleFonts.lato(textStyle : TextStyle(color: Colors.white)),),
                 ],
               ),
               SizedBox(height: 5),
               Row(
                 mainAxisSize: MainAxisSize.max,
                 children: [
-                  Text("${S.current.net_ht}",style: TextStyle(color: Colors.white),),
+                  Text("${S.current.net_ht}",style: GoogleFonts.lato(textStyle : TextStyle(color: Colors.white)),),
                   Expanded(child: Text(".............................................................................................................",
-                    maxLines: 1,style: TextStyle(color: Colors.white),)),
-                  Text(net_ht.toString() + " ${_devise}",style: TextStyle(color: Colors.white),),
+                    maxLines: 1,style: GoogleFonts.lato(textStyle : TextStyle(color: Colors.white)),)),
+                  Text(net_ht.toString() + " ${_devise}",style: GoogleFonts.lato(textStyle : TextStyle(color: Colors.white)),),
                 ],
               ),
               SizedBox(height: 5),
@@ -65,10 +66,10 @@ class TotalDevis extends StatelessWidget{
                 child: Row(
                   mainAxisSize: MainAxisSize.max,
                   children: [
-                    Text("${S.current.total_tva}",style: TextStyle(color: Colors.white),),
+                    Text("${S.current.total_tva}",style: GoogleFonts.lato(textStyle : TextStyle(color: Colors.white)),),
                     Expanded(child: Text(".............................................................................................................",
-                      maxLines: 1,style: TextStyle(color: Colors.white),)),
-                    Text(total_tva.toString() + " ${_devise}",style: TextStyle(color: Colors.white),),
+                      maxLines: 1,style: GoogleFonts.lato(textStyle : TextStyle(color: Colors.white)),)),
+                    Text(total_tva.toString() + " ${_devise}",style: GoogleFonts.lato(textStyle : TextStyle(color: Colors.white)),),
                   ],
                 ),
               ),
@@ -78,10 +79,10 @@ class TotalDevis extends StatelessWidget{
                 child: Row(
                   mainAxisSize: MainAxisSize.max,
                   children: [
-                    Text("${S.current.total}",style: TextStyle(color: Colors.white),),
+                    Text("${S.current.total}",style: GoogleFonts.lato(textStyle : TextStyle(color: Colors.white)),),
                     Expanded(child: Text(".............................................................................................................",
-                      maxLines: 1,style: TextStyle(color: Colors.white),)),
-                    Text(total_ttc.toString() + " ${_devise}",style: TextStyle(color: Colors.white),),
+                      maxLines: 1,style: GoogleFonts.lato(textStyle : TextStyle(color: Colors.white)),)),
+                    Text(total_ttc.toString() + " ${_devise}",style: GoogleFonts.lato(textStyle : TextStyle(color: Colors.white)),),
                   ],
                 ),
               ),
@@ -91,10 +92,10 @@ class TotalDevis extends StatelessWidget{
                 child: Row(
                   mainAxisSize: MainAxisSize.max,
                   children: [
-                    Text("${S.current.timbre}",style: TextStyle(color: Colors.white),),
+                    Text("${S.current.timbre}",style: GoogleFonts.lato(textStyle : TextStyle(color: Colors.white)),),
                     Expanded(child: Text(".............................................................................................................",
-                      maxLines: 1,style: TextStyle(color: Colors.white),)),
-                    Text(timbre.toString() + " ${_devise}",style: TextStyle(color: Colors.white),),
+                      maxLines: 1,style: GoogleFonts.lato(textStyle : TextStyle(color: Colors.white)),)),
+                    Text(timbre.toString() + " ${_devise}",style: GoogleFonts.lato(textStyle : TextStyle(color: Colors.white)),),
                   ],
                 ),
               ),
@@ -102,10 +103,10 @@ class TotalDevis extends StatelessWidget{
               Row(
                 mainAxisSize: MainAxisSize.max,
                 children: [
-                  Text("${S.current.net_payer}",style: TextStyle(color: Colors.white),),
+                  Text("${S.current.net_payer}",style: GoogleFonts.lato(textStyle : TextStyle(color: Colors.white , fontWeight: FontWeight.bold)),),
                   Expanded(child: Text(".............................................................................................................",
-                    maxLines: 1,style: TextStyle(color: Colors.white),)),
-                  Text(net_payer.toString() + " ${_devise}",style: TextStyle(color: Colors.white),),
+                    maxLines: 1,style: GoogleFonts.lato(textStyle : TextStyle(color: Colors.white)),)),
+                  Text(net_payer.toString() + " ${_devise}",style: GoogleFonts.lato(textStyle : TextStyle(color: Colors.white , fontWeight: FontWeight.bold)),),
                 ],
               ),
               SizedBox(height: 20),

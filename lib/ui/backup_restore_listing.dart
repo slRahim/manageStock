@@ -6,6 +6,7 @@ import 'package:gestmob/Helpers/QueryCtr.dart';
 import 'package:gestmob/generated/l10n.dart';
 import 'package:gestmob/services/cloud_backup_restore.dart';
 import 'package:googleapis/drive/v3.dart' as ga;
+import 'package:google_fonts/google_fonts.dart';
 
 class Selectfromdrive extends StatefulWidget {
   @override
@@ -59,7 +60,7 @@ class _SelectfromdriveState extends State<Selectfromdrive> {
                   googleapi.GoogleLogout();
                   Navigator.pop(context);
                 }),
-            title: Text("${S.current.backups}"),
+            title: Text("${S.current.backups}", style: GoogleFonts.lato(fontWeight: FontWeight.bold),),
             centerTitle: true,
             backgroundColor: Theme.of(context).appBarTheme.color,
           ),
@@ -76,8 +77,8 @@ class _SelectfromdriveState extends State<Selectfromdrive> {
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: <Widget>[
                       Expanded(
-                        child: new Container(
-                            padding: new EdgeInsets.all(5.0),
+                        child:  Container(
+                            padding:  EdgeInsets.all(5.0),
                             child:FutureBuilder(
                                 future: refreshfileslist(),
                                 builder: (context, snapshot) {
@@ -161,11 +162,14 @@ class _SelectfromdriveState extends State<Selectfromdrive> {
         },
         title: Text(
             '${file.name.replaceAll('.bkp', '')}',
-            style: TextStyle(
+            style: GoogleFonts.lato(
+              textStyle: TextStyle(
                 color: Colors.black,
-                fontSize: 16,)),
+                fontWeight: FontWeight.bold,
+                fontSize: 16,)
+            )),
         subtitle: Text(
-            ".bkp" , style: TextStyle(color: Colors.black),
+            ".bkp" , style: GoogleFonts.lato(textStyle: TextStyle(color: Colors.black)),
         ),
       ),
     );

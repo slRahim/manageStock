@@ -18,6 +18,7 @@ import 'CustomWidgets/list_tile_card.dart';
 import 'package:gestmob/services/push_notifications.dart';
 import 'package:feature_discovery/feature_discovery.dart';
 import 'package:flutter/scheduler.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 // element à afficher lors de listing des clients ou des fournisseurs
 class TierListItem extends StatefulWidget {
@@ -35,7 +36,7 @@ class TierListItem extends StatefulWidget {
 }
 
 class _TierListItemState extends State<TierListItem> {
-  final QueryCtr _queryCtr = new QueryCtr() ;
+  final QueryCtr _queryCtr = new QueryCtr();
   bool _confirmDell = false ;
   bool _visible = true ;
   SlidingCardController controller ;
@@ -57,7 +58,6 @@ class _TierListItemState extends State<TierListItem> {
     _devise = Helpers.getDeviseTranslate(data.myParams.devise) ;
   }
 
-
   @override
   Widget build(BuildContext context) {
     SizeConfig().init(context);
@@ -68,7 +68,7 @@ class _TierListItemState extends State<TierListItem> {
           tapTarget: Icon(MdiIcons.arrowExpandRight , color: Colors.black,),
           backgroundColor: Colors.green,
           contentLocation: ContentLocation.below,
-          title: Text(S.current.swipe),
+          title: Text(S.current.swipe , style: GoogleFonts.lato(fontWeight: FontWeight.bold),),
           description: Container(width:100,child: Text(S.current.msg_swipe_start)),
           onBackgroundTap: () async{
             await FeatureDiscovery.completeCurrentStep(context);
@@ -82,7 +82,7 @@ class _TierListItemState extends State<TierListItem> {
               tapTarget: Icon(MdiIcons.gestureTapHold , color: Colors.black,),
               backgroundColor: Colors.green,
               contentLocation: ContentLocation.below,
-              title: Text(S.current.long_presse),
+              title: Text(S.current.long_presse, style: GoogleFonts.lato(fontWeight: FontWeight.bold),),
               description: Container(width:100,child: Text(S.current.msg_long_press_select)),
               onBackgroundTap: () async{
                 await FeatureDiscovery.completeCurrentStep(context);
@@ -125,8 +125,10 @@ class _TierListItemState extends State<TierListItem> {
                       child: Row(
                         children: [
                           Text("(${Statics.statutItems[widget.tier.statut]}) ${widget.tier.raisonSociale}" ,
-                              style: TextStyle(
+                              style: GoogleFonts.lato(
+                                textStyle: TextStyle(
                                   fontSize: 14,)
+                              )
                           ),
                         ],
                       ),
@@ -138,22 +140,28 @@ class _TierListItemState extends State<TierListItem> {
                   ),
                   Text(
                    "${Helpers.numberFormat(widget.tier.credit).toString()} ${_devise}",
-                    style: TextStyle(
-                        color: widget.tier.credit > 0 ? Colors.redAccent : Theme.of(context).primaryColorDark,
-                        fontSize: 16, fontWeight: FontWeight.bold),
+                    style: GoogleFonts.lato(
+                      textStyle: TextStyle(
+                          color: widget.tier.credit > 0 ? Colors.redAccent : Theme.of(context).primaryColorDark,
+                          fontSize: 16, fontWeight: FontWeight.bold)
+                    ),
                   ),
                   RichText(
                     text: TextSpan(
                         children: [
                           TextSpan(
                               text: "${S.current.mobile} : ",
-                              style: TextStyle(fontSize: 14,fontWeight: FontWeight.bold,color: Theme.of(context).primaryColorDark,)
+                              style:GoogleFonts.lato(
+                                textStyle:  TextStyle(fontSize: 14,fontWeight: FontWeight.bold,color: Theme.of(context).primaryColorDark,)
+                              )
                           ),
                           TextSpan(
                             text:"${widget.tier.mobile} ",
-                            style: TextStyle(
-                                color: Theme.of(context).primaryColorDark,
-                                fontSize: 14),
+                            style: GoogleFonts.lato(
+                              textStyle: TextStyle(
+                                  color: Theme.of(context).primaryColorDark,
+                                  fontSize: 14)
+                            ),
                           ),
                         ]
                     ),
@@ -163,13 +171,17 @@ class _TierListItemState extends State<TierListItem> {
                         children: [
                           TextSpan(
                               text: "${S.current.chifre_affaire} : ",
-                              style: TextStyle(fontSize: 14,fontWeight: FontWeight.bold,color: Theme.of(context).primaryColorDark,)
+                              style: GoogleFonts.lato(
+                                textStyle: TextStyle(fontSize: 14,fontWeight: FontWeight.bold,color: Theme.of(context).primaryColorDark,)
+                              )
                           ),
                           TextSpan(
                             text:"${Helpers.numberFormat(widget.tier.chiffre_affaires)} ${_devise}",
-                            style: TextStyle(
-                                color: Theme.of(context).primaryColorDark,
-                                fontSize: 14),
+                            style: GoogleFonts.lato(
+                              textStyle: TextStyle(
+                                  color: Theme.of(context).primaryColorDark,
+                                  fontSize: 14)
+                            ),
                           ),
                         ]
                     ),
@@ -179,13 +191,17 @@ class _TierListItemState extends State<TierListItem> {
                         children: [
                           TextSpan(
                               text: "${S.current.adresse} : ",
-                              style: TextStyle(fontSize: 14 , fontWeight: FontWeight.bold,color: Theme.of(context).primaryColorDark,)
+                              style: GoogleFonts.lato(
+                                textStyle: TextStyle(fontSize: 14 , fontWeight: FontWeight.bold,color: Theme.of(context).primaryColorDark,)
+                              )
                           ),
                           TextSpan(
                             text:"${widget.tier.adresse}",
-                            style: TextStyle(
-                                color: Theme.of(context).primaryColorDark,
-                                fontSize: 14.0),
+                            style: GoogleFonts.lato(
+                              textStyle: TextStyle(
+                                  color: Theme.of(context).primaryColorDark,
+                                  fontSize: 14.0)
+                            ),
                           ),
                         ]
                     ),

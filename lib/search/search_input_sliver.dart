@@ -4,6 +4,7 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:gestmob/generated/l10n.dart';
 import 'package:rxdart/rxdart.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 class SearchInputSliver extends StatefulWidget {
   const SearchInputSliver({
@@ -50,7 +51,7 @@ class _SearchInputSliverState extends State<SearchInputSliver> {
   @override
   Widget build(BuildContext context) => TextFormField(
     controller: widget.searchController,
-    style: TextStyle(color: Colors.white),
+    style: GoogleFonts.lato(textStyle : TextStyle(color: Colors.white),),
     autofocus: true,
     cursorColor: Colors.white,
     decoration: new InputDecoration(
@@ -60,7 +61,7 @@ class _SearchInputSliverState extends State<SearchInputSliver> {
         errorBorder: InputBorder.none,
         disabledBorder: InputBorder.none,
         contentPadding: EdgeInsetsDirectional.only(start: 15, bottom: 11, top: 11, end: 15),
-        hintStyle: TextStyle(color: Colors.white),
+        hintStyle: GoogleFonts.lato(textStyle: TextStyle(color: Colors.white),),
         hintText: S.current.msg_search
 
     ),

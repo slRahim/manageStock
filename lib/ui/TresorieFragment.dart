@@ -24,6 +24,7 @@ import 'package:gestmob/models/MyParams.dart';
 import 'AddArticlePage.dart';
 import 'package:feature_discovery/feature_discovery.dart';
 import 'package:flutter/scheduler.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 class TresorieFragment extends StatefulWidget {
 
@@ -179,7 +180,7 @@ class _TresorieFragmentState extends State<TresorieFragment> {
               borderSide: BorderSide(color: Colors.blue),
               borderRadius: BorderRadius.circular(20)),
           labelText: S.current.start_date,
-          labelStyle: TextStyle(color: Colors.blue),
+          labelStyle: GoogleFonts.lato(textStyle: TextStyle(color: Colors.blue)),
           enabledBorder: OutlineInputBorder(
             gapPadding: 3.3,
             borderRadius: BorderRadius.circular(20),
@@ -222,7 +223,7 @@ class _TresorieFragmentState extends State<TresorieFragment> {
               borderSide: BorderSide(color: Colors.blue),
               borderRadius: BorderRadius.circular(20)),
           labelText: S.current.end_date,
-          labelStyle: TextStyle(color: Colors.blue),
+          labelStyle: GoogleFonts.lato(textStyle: TextStyle(color: Colors.blue)),
           enabledBorder: OutlineInputBorder(
             gapPadding: 3.3,
             borderRadius: BorderRadius.circular(20),

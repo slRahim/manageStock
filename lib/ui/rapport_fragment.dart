@@ -13,6 +13,7 @@ import 'package:pdf/widgets.dart' as pw;
 import 'package:printing/printing.dart';
 import 'package:gestmob/services/push_notifications.dart';
 import 'package:gestmob/models/MyParams.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 class Rapport extends StatefulWidget {
   @override
@@ -165,7 +166,7 @@ class _RapportState extends State<Rapport> {
                                 ),
                                 child: DropdownButtonHideUnderline(
                                   child: DropdownButton<String>(
-                                      disabledHint: Text(_selectedParent),
+                                      disabledHint: Text(_selectedParent , style: GoogleFonts.lato(),),
                                       value: _selectedParent,
                                       items: _parentDropdownItems,
                                       onChanged: (value) {
@@ -192,7 +193,7 @@ class _RapportState extends State<Rapport> {
                           Container(
                               margin: EdgeInsetsDirectional.only(
                                   start: 20, bottom: 8),
-                              child: Text("${S.current.type_rapport}"))
+                              child: Text("${S.current.type_rapport}" ,  style: GoogleFonts.lato(),))
                         ],
                       ),
                       Row(
@@ -210,7 +211,7 @@ class _RapportState extends State<Rapport> {
                                 ),
                                 child: DropdownButtonHideUnderline(
                                   child: DropdownButton<String>(
-                                      disabledHint: Text(_selectedSubItem),
+                                      disabledHint: Text(_selectedSubItem , style: GoogleFonts.lato(),),
                                       value: _selectedSubItem,
                                       items: _subDropdownItems,
                                       onChanged: (value) {
@@ -247,7 +248,7 @@ class _RapportState extends State<Rapport> {
                                     Statics.rapportGeneralItems
                                         .indexOf(_selectedSubItem) ==
                                         1)
-                                    ?Text("${S.current.annee}"):Text("${S.current.date_d_f}")
+                                    ?Text("${S.current.annee}" , style: GoogleFonts.lato()):Text("${S.current.date_d_f}" , style: GoogleFonts.lato(),)
                             ),
                           ],
                         ),

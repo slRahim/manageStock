@@ -19,9 +19,9 @@ import 'package:intl/intl.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:settings_ui/settings_ui.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-
 import 'AddArticlePage.dart';
 import 'home.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 class SettingsPage extends StatefulWidget {
   @override
@@ -158,7 +158,7 @@ class _SettingsPageState extends State<SettingsPage> {
                 Navigator.pop(context);
               },
             ),
-            title: Text(S.current.settings),
+            title: Text(S.current.settings , style: GoogleFonts.lato(fontWeight: FontWeight.bold),),
             backgroundColor: Theme.of(context).appBarTheme.color,
             centerTitle: true,
             actions: [
@@ -187,10 +187,13 @@ class _SettingsPageState extends State<SettingsPage> {
             sections: [
               SettingsSection(
                 title: '${S.current.param_general}',
+                titleTextStyle: GoogleFonts.lato(),
                 tiles: [
                   SettingsTile(
                     title: '${S.current.param_lang}',
                     subtitle: _language,
+                    titleTextStyle:  GoogleFonts.lato(),
+                    subtitleTextStyle:  GoogleFonts.lato(),
                     leading: Icon(Icons.language),
                     onTap: () async {
                       AwesomeDialog(
@@ -226,6 +229,8 @@ class _SettingsPageState extends State<SettingsPage> {
                   SettingsTile(
                     title: '${S.current.app_theme}',
                     subtitle: _themStyle,
+                    titleTextStyle:  GoogleFonts.lato(),
+                    subtitleTextStyle:  GoogleFonts.lato(),
                     leading: Icon(Icons.style_sharp),
                     onTap: () async {
                       AwesomeDialog(
@@ -248,6 +253,8 @@ class _SettingsPageState extends State<SettingsPage> {
                   SettingsTile(
                     title: S.current.devise,
                     subtitle: "($_currencycode) $_countryname",
+                    titleTextStyle:  GoogleFonts.lato(),
+                    subtitleTextStyle:  GoogleFonts.lato(),
                     leading: Icon(Icons.monetization_on),
                     onTap: () async {
                       await showDialog(
@@ -285,6 +292,8 @@ class _SettingsPageState extends State<SettingsPage> {
                   SettingsTile(
                     title: '${S.current.tarification}',
                     subtitle:("${S.current.use} : "+_tarification.toString()),
+                    titleTextStyle:  GoogleFonts.lato(),
+                    subtitleTextStyle:  GoogleFonts.lato(),
                     leading: Icon(Icons.attach_money),
                     onTap: () async {
                       AwesomeDialog(
@@ -306,6 +315,8 @@ class _SettingsPageState extends State<SettingsPage> {
                   ),
                   SettingsTile.switchTile(
                     title: '${S.current.param_tva}',
+                    titleTextStyle:  GoogleFonts.lato(),
+                    subtitleTextStyle:  GoogleFonts.lato(),
                     leading: Icon(Icons.money_outlined),
                     switchValue: _tva,
                     onToggle: (bool value) {
@@ -316,6 +327,8 @@ class _SettingsPageState extends State<SettingsPage> {
                   ),
                   SettingsTile.switchTile(
                     title: '${S.current.param_timbre}',
+                    titleTextStyle:  GoogleFonts.lato(),
+                    subtitleTextStyle:  GoogleFonts.lato(),
                     leading: Icon(Icons.fact_check),
                     switchValue: _timbre,
                     onToggle: (bool value) {
@@ -328,10 +341,13 @@ class _SettingsPageState extends State<SettingsPage> {
               ),
               SettingsSection(
                 title: '${S.current.impression_titre}',
+                titleTextStyle:  GoogleFonts.lato(),
                 tiles: [
                   SettingsTile(
                     title: '${S.current.imp_affichage}',
                     subtitle:("${_formatPrintDisplay}"),
+                    titleTextStyle:  GoogleFonts.lato(),
+                    subtitleTextStyle:  GoogleFonts.lato(),
                     leading: Icon(Icons.list_alt_outlined),
                     onTap: () async {
                       AwesomeDialog(
@@ -353,6 +369,8 @@ class _SettingsPageState extends State<SettingsPage> {
                   ),
                   SettingsTile.switchTile(
                     title: '${S.current.credit_tier}',
+                    titleTextStyle:  GoogleFonts.lato(),
+                    subtitleTextStyle:  GoogleFonts.lato(),
                     leading: Icon(Icons.person_sharp),
                     switchValue: _credit,
                     onToggle: (bool value) {
@@ -365,9 +383,12 @@ class _SettingsPageState extends State<SettingsPage> {
               ),
               SettingsSection(
                 title: '${S.current.param_notif_title}',
+                titleTextStyle:  GoogleFonts.lato(),
                 tiles: [
                   SettingsTile.switchTile(
                     title: '${S.current.param_notif}',
+                    titleTextStyle:  GoogleFonts.lato(),
+                    subtitleTextStyle:  GoogleFonts.lato(),
                     leading: Icon(Icons.notifications_active),
                     switchValue: _notifications,
                     onToggle: (bool value) {
@@ -378,71 +399,83 @@ class _SettingsPageState extends State<SettingsPage> {
                   ),
                   SettingsTile(
                     title: '${S.current.param_notif_time}',
+                    titleTextStyle:  GoogleFonts.lato(),
+                    subtitleTextStyle:  GoogleFonts.lato(),
                     leading: Icon(Icons.access_time_outlined),
                     subtitle: _dayTime,
-                    enabled: _notifications,
                     onTap: () async {
-                      await showTimePicker(
-                        context: context,
-                        initialTime: TimeOfDay.now(),
-                      ).then((value) {
-                        setState(() {
-                          _dayTime = "${value.hour}:${value.minute}";
+                      if(_notifications){
+                        await showTimePicker(
+                          context: context,
+                          initialTime: TimeOfDay.now(),
+                        ).then((value) {
+                          setState(() {
+                            _dayTime = "${value.hour}:${value.minute}";
+                          });
                         });
-                      });
+                      }
                     },
                   ),
                   SettingsTile(
                     title: '${S.current.param_notif_repeat}',
                     subtitle: _repeateNotification,
-                    enabled: _notifications,
+                    titleTextStyle:  GoogleFonts.lato(),
+                    subtitleTextStyle:  GoogleFonts.lato(),
                     leading: Icon(Icons.today_outlined),
                     onTap: () async {
-                      AwesomeDialog(
-                          context: context,
-                          dialogType: DialogType.QUESTION,
-                          animType: AnimType.BOTTOMSLIDE,
-                          body: _dayofWeekDialog(),
-                          btnCancelText: S.current.non,
-                          btnCancelOnPress: () {},
-                          btnOkText: S.current.oui,
-                          btnOkOnPress: () async {
-                            setState(() {
-                              _repeateNotification;
-                            });
-                          })
-                        ..show();
+                      if(_notifications){
+                        AwesomeDialog(
+                            context: context,
+                            dialogType: DialogType.QUESTION,
+                            animType: AnimType.BOTTOMSLIDE,
+                            body: _dayofWeekDialog(),
+                            btnCancelText: S.current.non,
+                            btnCancelOnPress: () {},
+                            btnOkText: S.current.oui,
+                            btnOkOnPress: () async {
+                              setState(() {
+                                _repeateNotification;
+                              });
+                            })
+                          ..show();
+                      }
                     },
                   ),
                   SettingsTile(
                     title: '${S.current.param_echeance}',
                     subtitle: "$_echeance ${S.current.day}",
-                    enabled: _notifications,
+                    titleTextStyle: GoogleFonts.lato(),
+                    subtitleTextStyle: GoogleFonts.lato(),
                     leading: Icon(Icons.calendar_today),
                     onTap: () async {
-                      AwesomeDialog(
-                          context: context,
-                          dialogType: DialogType.QUESTION,
-                          animType: AnimType.BOTTOMSLIDE,
-                          body: _echeanceDialog(),
-                          btnCancelText: S.current.non,
-                          btnCancelOnPress: () {},
-                          btnOkText: S.current.oui,
-                          btnOkOnPress: () async {
-                            setState(() {
-                              _echeance;
-                            });
-                          })
-                        ..show();
+                      if(_notifications){
+                        AwesomeDialog(
+                            context: context,
+                            dialogType: DialogType.QUESTION,
+                            animType: AnimType.BOTTOMSLIDE,
+                            body: _echeanceDialog(),
+                            btnCancelText: S.current.non,
+                            btnCancelOnPress: () {},
+                            btnOkText: S.current.oui,
+                            btnOkOnPress: () async {
+                              setState(() {
+                                _echeance;
+                              });
+                            })
+                          ..show();
+                      }
+
                     },
                   ),
                 ],
               ),
               SettingsSection(
                 title: '${S.current.param_back_title}',
+                titleTextStyle: GoogleFonts.lato(),
                 tiles: [
                   SettingsTile(
                     title: '${S.current.param_backup}',
+                    titleTextStyle: GoogleFonts.lato(),
                     leading: Icon(Icons.backup),
                     onTap: () async{
                       if(_myParams.versionType != "demo"){
@@ -468,6 +501,7 @@ class _SettingsPageState extends State<SettingsPage> {
                   ),
                   SettingsTile(
                     title: '${S.current.param_resto_data}',
+                    titleTextStyle: GoogleFonts.lato(),
                     leading: Icon(Icons.restore),
                     onTap: () async {
                       if(_myParams.versionType != "demo") {
@@ -497,7 +531,7 @@ class _SettingsPageState extends State<SettingsPage> {
                       RadioListTile(
                         value: Statics.languages[0],
                         groupValue: _language,
-                        title: Text('English (ENG)'),
+                        title: Text('English (ENG)' , style: GoogleFonts.lato(),),
                         onChanged: (value) {
                           setState(() {
                             _language = value;
@@ -507,7 +541,7 @@ class _SettingsPageState extends State<SettingsPage> {
                       RadioListTile(
                         value: Statics.languages[1],
                         groupValue: _language,
-                        title: Text('Français (FR)'),
+                        title: Text('Français (FR)' , style: GoogleFonts.lato(),),
                         onChanged: (value) {
                           setState(() {
                             _language = value;
@@ -517,7 +551,7 @@ class _SettingsPageState extends State<SettingsPage> {
                       RadioListTile(
                         value: Statics.languages[2],
                         groupValue: _language,
-                        title: Text('عربي (AR)'),
+                        title: Text('عربي (AR)' , style: GoogleFonts.lato(),),
                         onChanged: (value) {
                           setState(() {
                             _language = value;
@@ -542,7 +576,7 @@ class _SettingsPageState extends State<SettingsPage> {
                   RadioListTile(
                     value: Statics.themeStyle[0],
                     groupValue: _themStyle,
-                    title: Text(Statics.themeStyle[0]),
+                    title: Text(Statics.themeStyle[0] , style: GoogleFonts.lato(),),
                     onChanged: (value) {
                       setState(() {
                         _themStyle = value;
@@ -552,7 +586,7 @@ class _SettingsPageState extends State<SettingsPage> {
                   RadioListTile(
                     value: Statics.themeStyle[1],
                     groupValue: _themStyle,
-                    title: Text(Statics.themeStyle[1]),
+                    title: Text(Statics.themeStyle[1], style: GoogleFonts.lato(),),
                     onChanged: (value) {
                       setState(() {
                         _themStyle = value;
@@ -562,7 +596,7 @@ class _SettingsPageState extends State<SettingsPage> {
                   RadioListTile(
                     value: Statics.themeStyle[2],
                     groupValue: _themStyle,
-                    title: Text(Statics.themeStyle[2]),
+                    title: Text(Statics.themeStyle[2], style: GoogleFonts.lato(),),
                     onChanged: (value) {
                       setState(() {
                         _themStyle = value;
@@ -580,9 +614,9 @@ class _SettingsPageState extends State<SettingsPage> {
     children: <Widget>[
       CurrencyPickerUtils.getDefaultFlagImage(country),
       SizedBox(width: 8.0),
-      Text("(${country.currencyCode})"),
+      Text("(${country.currencyCode})", style: GoogleFonts.lato(),),
       SizedBox(width: 8.0),
-      Flexible(child: Text(country.name))
+      Flexible(child: Text(country.name, style: GoogleFonts.lato(),))
     ],
   );
 
@@ -600,12 +634,12 @@ class _SettingsPageState extends State<SettingsPage> {
                   controller: _controller,
                   children: [
                     SizedBox(height: 20,),
-                    Text(S.current.titre_dialog_tarification,textAlign: TextAlign.center, style: TextStyle(fontSize: 18),),
+                    Text(S.current.titre_dialog_tarification,textAlign: TextAlign.center, style: GoogleFonts.lato(textStyle: TextStyle(fontSize: 18)),),
                     SizedBox(height: 5,),
                     RadioListTile(
                       value: Statics.tarificationItems[0],
                       groupValue: _tarification,
-                      title: Text('1 ${S.current.tarif_s}'),
+                      title: Text('1 ${S.current.tarif_s}', style: GoogleFonts.lato(),),
                       onChanged: (value) {
                         setState(() {
                           _tarification = value;
@@ -615,7 +649,7 @@ class _SettingsPageState extends State<SettingsPage> {
                     RadioListTile(
                       value: Statics.tarificationItems[1],
                       groupValue: _tarification,
-                      title: Text('2 ${S.current.tarif_s}'),
+                      title: Text('2 ${S.current.tarif_s}', style: GoogleFonts.lato(),),
                       onChanged: (value) {
                         setState(() {
                           _tarification = value;
@@ -625,7 +659,7 @@ class _SettingsPageState extends State<SettingsPage> {
                     RadioListTile(
                       value: Statics.tarificationItems[2],
                       groupValue: _tarification,
-                      title: Text('3 ${S.current.tarif_s}'),
+                      title: Text('3 ${S.current.tarif_s}' , style: GoogleFonts.lato(),),
                       onChanged: (value) {
                         setState(() {
                           _tarification = value;
@@ -656,7 +690,7 @@ class _SettingsPageState extends State<SettingsPage> {
                     RadioListTile(
                       value: Statics.printDisplayItems[0],
                       groupValue: _formatPrintDisplay,
-                      title: Text('${S.current.referance}'),
+                      title: Text('${S.current.referance}',style: GoogleFonts.lato(),),
                       onChanged: (value) {
                         setState(() {
                           _formatPrintDisplay = value;
@@ -666,7 +700,7 @@ class _SettingsPageState extends State<SettingsPage> {
                     RadioListTile(
                       value: Statics.printDisplayItems[1],
                       groupValue: _formatPrintDisplay,
-                      title: Text('${S.current.designation}'),
+                      title: Text('${S.current.designation}',style: GoogleFonts.lato(),),
                       onChanged: (value) {
                         setState(() {
                           _formatPrintDisplay = value;
@@ -697,7 +731,7 @@ class _SettingsPageState extends State<SettingsPage> {
                         RadioListTile(
                           value: Statics.repeateNotifications[0],
                           groupValue: _repeateNotification,
-                          title: Text('${S.current.ev_day}'),
+                          title: Text('${S.current.ev_day}',style: GoogleFonts.lato(),),
                           onChanged: (value) {
                             setState(() {
                               _repeateNotification = value;
@@ -707,7 +741,7 @@ class _SettingsPageState extends State<SettingsPage> {
                         RadioListTile(
                           value: Statics.repeateNotifications[1],
                           groupValue: _repeateNotification,
-                          title: Text('${S.current.ev_sun}'),
+                          title: Text('${S.current.ev_sun}',style: GoogleFonts.lato(),),
                           onChanged: (value) {
                             setState(() {
                               _repeateNotification = value;
@@ -717,7 +751,7 @@ class _SettingsPageState extends State<SettingsPage> {
                         RadioListTile(
                           value: Statics.repeateNotifications[2],
                           groupValue: _repeateNotification,
-                          title: Text('${S.current.ev_mon}'),
+                          title: Text('${S.current.ev_mon}',style: GoogleFonts.lato(),),
                           onChanged: (value) {
                             setState(() {
                               _repeateNotification = value;
@@ -727,7 +761,7 @@ class _SettingsPageState extends State<SettingsPage> {
                         RadioListTile(
                           value: Statics.repeateNotifications[3],
                           groupValue: _repeateNotification,
-                          title: Text('${S.current.ev_tue}'),
+                          title: Text('${S.current.ev_tue}', style: GoogleFonts.lato(),),
                           onChanged: (value) {
                             setState(() {
                               _repeateNotification = value;
@@ -737,7 +771,7 @@ class _SettingsPageState extends State<SettingsPage> {
                         RadioListTile(
                           value: Statics.repeateNotifications[4],
                           groupValue: _repeateNotification,
-                          title: Text('${S.current.ev_wedn}'),
+                          title: Text('${S.current.ev_wedn}', style: GoogleFonts.lato(),),
                           onChanged: (value) {
                             setState(() {
                               _repeateNotification = value;
@@ -747,7 +781,7 @@ class _SettingsPageState extends State<SettingsPage> {
                         RadioListTile(
                           value: Statics.repeateNotifications[5],
                           groupValue: _repeateNotification,
-                          title: Text('${S.current.ev_thur}'),
+                          title: Text('${S.current.ev_thur}', style: GoogleFonts.lato(),),
                           onChanged: (value) {
                             setState(() {
                               _repeateNotification = value;
@@ -757,7 +791,7 @@ class _SettingsPageState extends State<SettingsPage> {
                         RadioListTile(
                           value: Statics.repeateNotifications[6],
                           groupValue: _repeateNotification,
-                          title: Text('${S.current.ev_fri}'),
+                          title: Text('${S.current.ev_fri}', style: GoogleFonts.lato(),),
                           onChanged: (value) {
                             setState(() {
                               _repeateNotification = value;
@@ -767,7 +801,7 @@ class _SettingsPageState extends State<SettingsPage> {
                         RadioListTile(
                           value: Statics.repeateNotifications[7],
                           groupValue: _repeateNotification,
-                          title: Text('${S.current.ev_sat}'),
+                          title: Text('${S.current.ev_sat}', style: GoogleFonts.lato(),),
                           onChanged: (value) {
                             setState(() {
                               _repeateNotification = value;
@@ -798,7 +832,7 @@ class _SettingsPageState extends State<SettingsPage> {
                     RadioListTile(
                       value: Statics.echeances[0],
                       groupValue: _echeance,
-                      title: Text('1 ${S.current.day}'),
+                      title: Text('1 ${S.current.day}', style: GoogleFonts.lato(),),
                       onChanged: (value) {
                         setState(() {
                           _echeance = value;
@@ -808,7 +842,7 @@ class _SettingsPageState extends State<SettingsPage> {
                     RadioListTile(
                       value: Statics.echeances[1],
                       groupValue: _echeance,
-                      title: Text('3 ${S.current.day} (s)'),
+                      title: Text('3 ${S.current.day} (s)', style: GoogleFonts.lato(),),
                       onChanged: (value) {
                         setState(() {
                           _echeance = value;
@@ -818,7 +852,7 @@ class _SettingsPageState extends State<SettingsPage> {
                     RadioListTile(
                       value: Statics.echeances[2],
                       groupValue: _echeance,
-                      title: Text('7 ${S.current.day} (s)'),
+                      title: Text('7 ${S.current.day} (s)', style: GoogleFonts.lato(),),
                       onChanged: (value) {
                         setState(() {
                           _echeance = value;
@@ -828,7 +862,7 @@ class _SettingsPageState extends State<SettingsPage> {
                     RadioListTile(
                       value: Statics.echeances[3],
                       groupValue: _echeance,
-                      title: Text('15 ${S.current.day} (s)'),
+                      title: Text('15 ${S.current.day} (s)', style: GoogleFonts.lato(),),
                       onChanged: (value) {
                         setState(() {
                           _echeance = value;
@@ -838,7 +872,7 @@ class _SettingsPageState extends State<SettingsPage> {
                     RadioListTile(
                       value: Statics.echeances[4],
                       groupValue: _echeance,
-                      title: Text('21 ${S.current.day} (s)'),
+                      title: Text('21 ${S.current.day} (s)', style: GoogleFonts.lato(),),
                       onChanged: (value) {
                         setState(() {
                           _echeance = value;
@@ -848,7 +882,7 @@ class _SettingsPageState extends State<SettingsPage> {
                     RadioListTile(
                       value: Statics.echeances[5],
                       groupValue: _echeance,
-                      title: Text('30 ${S.current.day} (s)'),
+                      title: Text('30 ${S.current.day} (s)', style: GoogleFonts.lato(),),
                       onChanged: (value) {
                         setState(() {
                           _echeance = value;

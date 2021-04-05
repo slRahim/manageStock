@@ -4,6 +4,7 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:gestmob/generated/l10n.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 // represante la page de l'ajout ou representation de l'image (profile , article , tiers )
 class ImagePickerWidget extends StatefulWidget {
@@ -51,7 +52,7 @@ class ImagePickerWidgetState extends State<ImagePickerWidget> {
                 ],
               ),
               child: _imageFile == null
-                  ? Center(child: Text(S.current.ajout_image))
+                  ? Center(child: Text(S.current.ajout_image , style: GoogleFonts.lato(textStyle : TextStyle(color : Colors.black)),))
                   : new CircleAvatar(
                       backgroundColor: Colors.transparent,
                       backgroundImage: new FileImage(_imageFile),

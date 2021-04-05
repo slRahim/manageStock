@@ -2,8 +2,9 @@ import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:gestmob/generated/l10n.dart';
 import 'package:gestmob/models/CompteTresorie.dart';
-
 import 'CustomWidgets/chart_indicator.dart';
+import 'package:google_fonts/google_fonts.dart';
+
 
 class ChartBar extends StatefulWidget {
   final String chartTitle ;
@@ -58,14 +59,14 @@ class _ChartBarState extends State<ChartBar> {
                   ),
                   Text(
                     '${S.current.indice}',
-                    style: TextStyle(color: widget.textColor, fontSize: 22),
+                    style: GoogleFonts.lato(textStyle : GoogleFonts.lato(textStyle: TextStyle(color: widget.textColor, fontSize: 22))),
                   ),
                   SizedBox(
                     width: 4,
                   ),
                   Text(
                     '${S.current.financiere}',
-                    style: TextStyle(color: widget.textColor, fontSize: 16),
+                    style: GoogleFonts.lato(textStyle: TextStyle(color: widget.textColor, fontSize: 16)),
                   ),
                 ],
               )
@@ -87,21 +88,21 @@ class _ChartBarState extends State<ChartBar> {
                         show: true,
                         topTitles: SideTitles(
                           showTitles: true,
-                          getTextStyles: (value) => TextStyle(color: widget.textColor, fontSize: 10),
+                          getTextStyles: (value) => GoogleFonts.lato(textStyle: TextStyle(color: widget.textColor, fontSize: 10)),
                           margin: 10,
                           rotateAngle: 0,
                           getTitles: (double value)=>(getTitle(value.toInt()))
                         ),
                         bottomTitles: SideTitles(
                           showTitles: true,
-                          getTextStyles: (value) => TextStyle(color: widget.textColor, fontSize: 10),
+                          getTextStyles: (value) => GoogleFonts.lato(textStyle: TextStyle(color: widget.textColor, fontSize: 10)),
                           margin: 10,
                           rotateAngle: 0,
                           getTitles: (double value)=>(getTitle(value.toInt()))
                         ),
                         leftTitles: SideTitles(
                           showTitles: true,
-                          getTextStyles: (value) => TextStyle(color: widget.textColor, fontSize: 10),
+                          getTextStyles: (value) => GoogleFonts.lato(textStyle: TextStyle(color: widget.textColor, fontSize: 10)),
                           rotateAngle: 0,
                         ),
                         rightTitles: SideTitles(

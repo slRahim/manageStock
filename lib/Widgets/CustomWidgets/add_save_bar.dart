@@ -6,6 +6,7 @@ import 'package:gestmob/search/search_input_sliver.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:feature_discovery/feature_discovery.dart';
 import 'package:flutter/scheduler.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 // app bar de la partie detail et modification
 class AddEditBar extends StatefulWidget with PreferredSizeWidget{
@@ -48,7 +49,7 @@ class AddEditBarState extends State<AddEditBar>{
         icon: Icon(widget.editMode && widget.modification? Icons.cancel: Icons.arrow_back, size: 25),
         onPressed: widget.onCancelPressed
       ),
-      title: Text(widget.title),
+      title: Text(widget.title, style: GoogleFonts.lato(textStyle: TextStyle(fontWeight: FontWeight.bold)),),
       backgroundColor: widget.editMode ? Colors.green : Theme.of(context).appBarTheme.color,
       centerTitle: true,
       bottom: widget.bottom,
@@ -59,10 +60,10 @@ class AddEditBarState extends State<AddEditBar>{
               tapTarget: Icon(MdiIcons.transfer , color: Colors.black,),
               backgroundColor: Colors.blue,
               contentLocation: ContentLocation.below,
-              title: Text(S.current.transformer),
+              title: Text(S.current.transformer , style: GoogleFonts.lato(textStyle: TextStyle(fontWeight: FontWeight.bold)),),
               description:  Container(
                   width: 150,
-                  child: Text(S.current.msg_transformer)),
+                  child: Text(S.current.msg_transformer, style: GoogleFonts.lato(),)),
               onBackgroundTap: () async{
                 await FeatureDiscovery.completeCurrentStep(context);
                 return true ;

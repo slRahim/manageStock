@@ -15,6 +15,7 @@ import 'CustomWidgets/list_tile_card.dart';
 import 'package:gestmob/services/push_notifications.dart';
 import 'package:feature_discovery/feature_discovery.dart';
 import 'package:flutter/scheduler.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 // element à afficher lors de listing des tresorie
 class TresorieListItem extends StatefulWidget {
@@ -62,7 +63,7 @@ class _TresorieListItemState extends State<TresorieListItem> {
           tapTarget: Icon(MdiIcons.arrowExpandRight , color: Colors.black,),
           backgroundColor: Colors.red,
           contentLocation: ContentLocation.below,
-          title: Text(S.current.swipe),
+          title: Text(S.current.swipe ,style: GoogleFonts.lato(fontWeight: FontWeight.bold),),
           description:  Container(width:100,child: Text(S.current.msg_swipe_start)),
           onBackgroundTap: () async{
             await FeatureDiscovery.completeCurrentStep(context);
@@ -104,49 +105,38 @@ class _TresorieListItemState extends State<TresorieListItem> {
                     child: Row(
                       children: [
                         Text("(# : ${widget.tresorie.numTresorie}) ${widget.tresorie.tierRS}" ,
-                            style: TextStyle(fontSize: 14,)
+                            style: GoogleFonts.lato(textStyle: TextStyle(fontSize: 14,))
                           ),
                       ],
                     ),
                   )
                   :Text("(# : ${widget.tresorie.numTresorie}) __" ,
-                      style: TextStyle(fontSize: 14,)
+                      style:GoogleFonts.lato(textStyle:  TextStyle(fontSize: 14,))
                   ),
               trailingChildren: [
                 Text(
                   "${S.current.objet}: ${widget.tresorie.objet}",
-                  style: TextStyle(
-                      fontSize: 14.0),
+                  style: GoogleFonts.lato(textStyle: TextStyle(
+                      fontSize: 14.0)),
                 ),
-                (widget.tresorie.montant >= 0)
-                  ? Row(
-                    children: [
-                      Icon(MdiIcons.cashMultiple,
-                        size: 16,
-                        color: Theme.of(context).primaryColorDark,
-                      ),
-                      SizedBox(
-                        width: 3,
-                      ),
-                      Text(
+                Row(
+                  children: [
+                    Icon(MdiIcons.cashMultiple,
+                      size: 16,
+                      color: Theme.of(context).primaryColorDark,
+                    ),
+                    SizedBox(
+                      width: 3,
+                    ),
+                    (widget.tresorie.montant >= 0) ?
+                    Text(
                         '${Helpers.numberFormat(widget.tresorie.montant).toString()} ${_devise}',
-                        style: TextStyle(fontSize: 16.0, fontWeight: FontWeight.bold),),
-                    ],
-                  )
-                  : Row(
-                    children: [
-                      Icon(MdiIcons.cashMultiple,
-                        size: 16,
-                        color: Theme.of(context).primaryColorDark,
-                      ),
-                      SizedBox(
-                        width: 3,
-                      ),
-                      Text(
+                        style: GoogleFonts.lato(textStyle: TextStyle(fontSize: 16.0, fontWeight: FontWeight.bold),))
+                    :Text(
                       '${Helpers.numberFormat(widget.tresorie.montant * -1).toString()} ${_devise}',
-                      style: TextStyle(fontSize: 16.0, fontWeight: FontWeight.bold),),
-                    ],
-                  ),
+                      style: GoogleFonts.lato(textStyle: TextStyle(fontSize: 16.0, fontWeight: FontWeight.bold),)),
+                  ],
+                ),
               ],
             ),
             actions: <Widget>[

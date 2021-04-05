@@ -20,6 +20,7 @@ import 'package:gestmob/models/MyParams.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:gestmob/Widgets/utils.dart' as utils;
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 class AddArticlePage extends StatefulWidget {
   final QueryCtr _queryCtr = QueryCtr();
@@ -275,7 +276,7 @@ class _AddArticlePageState extends State<AddArticlePage>
                     children: [
                       Icon(Icons.insert_drive_file),
                       SizedBox(height: 1),
-                      Text("${S.current.fiche_art}"),
+                      Text("${S.current.fiche_art}" , style: GoogleFonts.lato(),),
                     ],
                   )),
                   Tab(
@@ -283,7 +284,7 @@ class _AddArticlePageState extends State<AddArticlePage>
                     children: [
                       Icon(Icons.image),
                       SizedBox(height: 1),
-                      Text(S.current.photo),
+                      Text(S.current.photo, style: GoogleFonts.lato(),),
                     ],
                   )),
                   Tab(
@@ -291,7 +292,7 @@ class _AddArticlePageState extends State<AddArticlePage>
                     children: [
                       Icon(Icons.description),
                       SizedBox(height: 1),
-                      Text(S.current.description),
+                      Text(S.current.description, style: GoogleFonts.lato(),),
                     ],
                   )),
                 ],
@@ -331,11 +332,12 @@ class _AddArticlePageState extends State<AddArticlePage>
               },
               decoration: InputDecoration(
                 labelText: S.current.designation,
-                labelStyle: TextStyle(color: Colors.green),
+                labelStyle: GoogleFonts.lato(textStyle: TextStyle(color: Colors.green),),
                 hintText: S.current.msg_entre_design,
+                hintStyle: GoogleFonts.lato(),
                 prefixIcon: Icon(
                   Icons.assignment,
-                  color: Colors.blue,
+                  color: Colors.green,
                 ),
                 focusedBorder: OutlineInputBorder(
                     borderSide: BorderSide(color: Colors.green),
@@ -365,7 +367,7 @@ class _AddArticlePageState extends State<AddArticlePage>
               // },
               decoration: InputDecoration(
                 labelText: S.current.referance,
-                labelStyle: TextStyle(color: Theme.of(context).hintColor),
+                labelStyle: GoogleFonts.lato(textStyle: TextStyle(color: Theme.of(context).hintColor)),
                 prefixIcon: Icon(
                   Icons.archive,
                   color: Colors.blue,
@@ -402,7 +404,7 @@ class _AddArticlePageState extends State<AddArticlePage>
                 // },
                 decoration: InputDecoration(
                   labelText: S.current.msg_scan_barcode,
-                  labelStyle: TextStyle(color: Theme.of(context).hintColor),
+                  labelStyle: GoogleFonts.lato(textStyle: TextStyle(color: Theme.of(context).hintColor)),
                   prefixIcon: Icon(
                     MdiIcons.barcode,
                     color: Colors.blue,
@@ -448,7 +450,7 @@ class _AddArticlePageState extends State<AddArticlePage>
 
                       decoration: InputDecoration(
                           labelText: S.current.prix_achat,
-                          labelStyle: TextStyle(color: Theme.of(context).hintColor),
+                          labelStyle: GoogleFonts.lato(textStyle: TextStyle(color: Theme.of(context).hintColor)),
                           prefixIcon: Icon(
                             Icons.attach_money,
                             color: Colors.blue,
@@ -488,8 +490,10 @@ class _AddArticlePageState extends State<AddArticlePage>
                         title: Text(
                           S.current.stockable,
                           maxLines: 1,
-                          style: TextStyle(
-                              color: Theme.of(context).primaryColorDark),
+                          style: GoogleFonts.lato(
+                            textStyle: TextStyle(
+                                color: Theme.of(context).primaryColorDark),
+                          )
                         ),
                         value: _stockable,
                         onChanged: editMode
@@ -525,7 +529,7 @@ class _AddArticlePageState extends State<AddArticlePage>
                     labelText: (modification)
                         ? S.current.pmp
                         : "${S.current.pmp} ${S.current.init}",
-                    labelStyle: TextStyle(color: Theme.of(context).hintColor),
+                    labelStyle: GoogleFonts.lato(textStyle: TextStyle(color: Theme.of(context).hintColor),),
                     prefixIcon: Icon(
                       Icons.archive,
                       color: Colors.blue,
@@ -563,7 +567,7 @@ class _AddArticlePageState extends State<AddArticlePage>
                       labelText: modification
                           ? S.current.quantit
                           : S.current.stock_init,
-                      labelStyle: TextStyle(color: Theme.of(context).hintColor),
+                      labelStyle: GoogleFonts.lato(textStyle: TextStyle(color: Theme.of(context).hintColor),),
                       prefixIcon: Icon(
                         Icons.apps,
                         color: Colors.blue,
@@ -599,7 +603,7 @@ class _AddArticlePageState extends State<AddArticlePage>
                     // },
                     decoration: InputDecoration(
                       labelText: S.current.stock_min,
-                      labelStyle: TextStyle(color: Theme.of(context).hintColor),
+                      labelStyle: GoogleFonts.lato(textStyle: TextStyle(color: Theme.of(context).hintColor),),
                       prefixIcon: Icon(
                         Icons.apps,
                         color: Colors.blue,
@@ -640,7 +644,7 @@ class _AddArticlePageState extends State<AddArticlePage>
                       // },
                       decoration: InputDecoration(
                         labelText: S.current.qte_colis,
-                        labelStyle: TextStyle(color: Theme.of(context).hintColor),
+                        labelStyle: GoogleFonts.lato(textStyle: TextStyle(color: Theme.of(context).hintColor),),
                         prefixIcon: Icon(
                           Icons.shopping_bag_rounded,
                           color: Colors.blue[700],
@@ -685,7 +689,7 @@ class _AddArticlePageState extends State<AddArticlePage>
                           borderSide: BorderSide(color: Colors.blue),
                           borderRadius: BorderRadius.circular(20)),
                       labelText: S.current.qte_cmd,
-                      labelStyle: TextStyle(color: Theme.of(context).hintColor),
+                      labelStyle:  GoogleFonts.lato(textStyle: TextStyle(color: Theme.of(context).hintColor),),
                       enabledBorder: OutlineInputBorder(
                         gapPadding: 3.3,
                         borderRadius: BorderRadius.circular(20),
@@ -723,7 +727,7 @@ class _AddArticlePageState extends State<AddArticlePage>
                       borderSide: BorderSide(color: Colors.blue),
                       borderRadius: BorderRadius.circular(20)),
                   labelText: S.current.colis,
-                  labelStyle: TextStyle(color: Theme.of(context).hintColor),
+                  labelStyle: GoogleFonts.lato(textStyle: TextStyle(color: Theme.of(context).hintColor),),
                   enabledBorder: OutlineInputBorder(
                     gapPadding: 3.3,
                     borderRadius: BorderRadius.circular(20),
@@ -750,7 +754,7 @@ class _AddArticlePageState extends State<AddArticlePage>
               // },
               decoration: InputDecoration(
                 labelText: S.current.prix_v1,
-                labelStyle: TextStyle(color: Theme.of(context).hintColor),
+                labelStyle:  GoogleFonts.lato(textStyle: TextStyle(color: Theme.of(context).hintColor),),
                 prefixIcon: Icon(
                   Icons.monetization_on,
                   color: Colors.blue,
@@ -785,7 +789,7 @@ class _AddArticlePageState extends State<AddArticlePage>
                 // },
                 decoration: InputDecoration(
                   labelText: S.current.prix_v2,
-                  labelStyle: TextStyle(color: Theme.of(context).hintColor),
+                  labelStyle:  GoogleFonts.lato(textStyle: TextStyle(color: Theme.of(context).hintColor),),
                   prefixIcon: Icon(
                     Icons.monetization_on,
                     color: Colors.blueGrey[700],
@@ -821,7 +825,7 @@ class _AddArticlePageState extends State<AddArticlePage>
                 // },
                 decoration: InputDecoration(
                   labelText: S.current.prix_v3,
-                  labelStyle: TextStyle(color: Theme.of(context).hintColor),
+                  labelStyle: GoogleFonts.lato(textStyle: TextStyle(color: Theme.of(context).hintColor),),
                   prefixIcon: Icon(
                     Icons.monetization_on,
                     color: Colors.blueGrey[500],
@@ -880,9 +884,10 @@ class _AddArticlePageState extends State<AddArticlePage>
                 borderRadius: BorderRadius.circular(20)),
             contentPadding: EdgeInsets.only(left: 20, top: 20, bottom: 20),
             labelText: S.current.description,
-            labelStyle: TextStyle(color: Theme.of(context).hintColor),
+            labelStyle:  GoogleFonts.lato(textStyle: TextStyle(color: Theme.of(context).hintColor),),
             alignLabelWithHint: true,
             hintText: S.current.msg_description,
+            hintStyle: GoogleFonts.lato(),
             enabledBorder: OutlineInputBorder(
               gapPadding: 3.3,
               borderRadius: BorderRadius.circular(20),
@@ -1015,7 +1020,7 @@ class _AddArticlePageState extends State<AddArticlePage>
                             borderRadius: BorderRadius.circular(20)),
                         contentPadding: EdgeInsets.only(left: 10),
                         labelText: S.current.marque,
-                        labelStyle: TextStyle(color: Colors.orange[900]),
+                        labelStyle: GoogleFonts.lato(textStyle: TextStyle(color: Theme.of(context).hintColor),),
                         enabledBorder: OutlineInputBorder(
                           gapPadding: 3.3,
                           borderRadius: BorderRadius.circular(20),
@@ -1046,11 +1051,13 @@ class _AddArticlePageState extends State<AddArticlePage>
                           final snackBar = SnackBar(
                             content: Text(
                               S.current.msg_ajout_item,
-                              style: TextStyle(
-                                  color: Colors.white,
-                                  fontSize: 15,
-                                  fontWeight: FontWeight.w500),
-                            ),
+                              style: GoogleFonts.lato(
+                                textStyle: TextStyle(
+                                    color: Colors.white,
+                                    fontSize: 15,
+                                    fontWeight: FontWeight.w500),
+                                )
+                              ),
                             backgroundColor: Colors.blue,
                             duration: Duration(seconds: 1),
                           );
@@ -1060,7 +1067,7 @@ class _AddArticlePageState extends State<AddArticlePage>
                       },
                       child: Text(
                         S.current.ajouter,
-                        style: TextStyle(color: Colors.white),
+                        style: GoogleFonts.lato(textStyle: TextStyle(color: Colors.white)),
                       ),
                       color: Colors.blue,
                     ),
@@ -1135,8 +1142,7 @@ class _AddArticlePageState extends State<AddArticlePage>
                                       borderRadius: BorderRadius.circular(20)),
                                   contentPadding: EdgeInsets.only(left: 10),
                                   labelText: S.current.famile,
-                                  labelStyle:
-                                      TextStyle(color: Colors.orange[900]),
+                                  labelStyle:GoogleFonts.lato(textStyle: TextStyle(color: Theme.of(context).hintColor),),
                                   enabledBorder: OutlineInputBorder(
                                     gapPadding: 3.3,
                                     borderRadius: BorderRadius.circular(20),
@@ -1169,10 +1175,10 @@ class _AddArticlePageState extends State<AddArticlePage>
                                     final snackBar = SnackBar(
                                       content: Text(
                                         S.current.msg_ajout_item,
-                                        style: TextStyle(
+                                        style: GoogleFonts.lato(textStyle: TextStyle(
                                             color: Colors.white,
                                             fontSize: 15,
-                                            fontWeight: FontWeight.w500),
+                                            fontWeight: FontWeight.w500)),
                                       ),
                                       backgroundColor: Colors.red,
                                       duration: Duration(seconds: 1),
@@ -1183,7 +1189,7 @@ class _AddArticlePageState extends State<AddArticlePage>
                                 },
                                 child: Text(
                                   S.current.ajouter,
-                                  style: TextStyle(color: Colors.white),
+                                  style: GoogleFonts.lato(textStyle: TextStyle(color: Colors.white),)
                                 ),
                                 color: Colors.red,
                               ),
@@ -1230,10 +1236,12 @@ class _AddArticlePageState extends State<AddArticlePage>
                   padding: const EdgeInsets.only(bottom: 20),
                   child: Text(
                     "${S.current.ajouter} ${S.current.tva}",
-                    style: TextStyle(
-                      fontSize: 18,
-                      fontWeight: FontWeight.w400,
-                    ),
+                    style: GoogleFonts.lato(
+                      textStyle: TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.w600,
+                      ),
+                    )
                   ),
                 )),
                 Padding(
@@ -1259,7 +1267,7 @@ class _AddArticlePageState extends State<AddArticlePage>
                             borderRadius: BorderRadius.circular(20)),
                         contentPadding: EdgeInsets.only(left: 10),
                         labelText: S.current.taux_tva,
-                        labelStyle: TextStyle(color: Colors.orange[900]),
+                        labelStyle:GoogleFonts.lato(textStyle: TextStyle(color: Theme.of(context).hintColor),),
                         enabledBorder: OutlineInputBorder(
                           gapPadding: 3.3,
                           borderRadius: BorderRadius.circular(20),
@@ -1300,7 +1308,7 @@ class _AddArticlePageState extends State<AddArticlePage>
                       },
                       child: Text(
                         S.current.ajouter,
-                        style: TextStyle(color: Colors.white),
+                        style: GoogleFonts.lato(textStyle: TextStyle(color: Colors.white),)
                       ),
                       color: Colors.green[900],
                     ),
