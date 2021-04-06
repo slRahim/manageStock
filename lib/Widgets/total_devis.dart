@@ -103,10 +103,18 @@ class TotalDevis extends StatelessWidget{
               Row(
                 mainAxisSize: MainAxisSize.max,
                 children: [
-                  Text("${S.current.net_payer}",style: GoogleFonts.lato(textStyle : TextStyle(color: Colors.white , fontWeight: FontWeight.bold)),),
+                  Text("${S.current.net_payer}",
+                    style: GoogleFonts.lato(
+                        textStyle : TextStyle(color: Colors.white , fontWeight: FontWeight.bold ,fontSize: 18)
+                    ),
+                  ),
                   Expanded(child: Text(".............................................................................................................",
                     maxLines: 1,style: GoogleFonts.lato(textStyle : TextStyle(color: Colors.white)),)),
-                  Text(net_payer.toString() + " ${_devise}",style: GoogleFonts.lato(textStyle : TextStyle(color: Colors.white , fontWeight: FontWeight.bold)),),
+                  Text(net_payer.toString() + " ${_devise}",
+                    style: GoogleFonts.lato(
+                        textStyle : TextStyle(color: Colors.white , fontWeight: FontWeight.bold, fontSize: 18)
+                    ),
+                  ),
                 ],
               ),
               SizedBox(height: 20),

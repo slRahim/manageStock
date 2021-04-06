@@ -50,7 +50,7 @@ class AddEditBarState extends State<AddEditBar>{
         onPressed: widget.onCancelPressed
       ),
       title: Text(widget.title, style: GoogleFonts.lato(textStyle: TextStyle(fontWeight: FontWeight.bold)),),
-      backgroundColor: widget.editMode ? Colors.green : Theme.of(context).appBarTheme.color,
+      backgroundColor: (widget.editMode && Theme.of(context).brightness == Brightness.light) ? Colors.green : Theme.of(context).appBarTheme.color,
       centerTitle: true,
       bottom: widget.bottom,
       actions: [

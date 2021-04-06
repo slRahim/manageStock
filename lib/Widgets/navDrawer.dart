@@ -32,7 +32,6 @@ class NavDrawer extends  StatelessWidget {
     homeItemTresorerie,
     homeItemTableauDeBord,
     homeItemRapports,
-    homeItemParametres,
     drawerItemExit
   ];
 
@@ -70,78 +69,94 @@ class NavDrawer extends  StatelessWidget {
 
   List<Widget> getNavDrawerWidgetList(context) {
     homeItemWidgetList = <Widget>[
-      DrawerHeader(
-          decoration: BoxDecoration(
-            // color: Colors.blue[900],
-              gradient: LinearGradient(
-                  colors: [Colors.blue[700], Colors.blue[900]],
-                  begin: FractionalOffset.topCenter,
-                  end: FractionalOffset.bottomCenter,
-                  stops: [0.0, 0.5],
-                  tileMode: TileMode.clamp)
-          ),
-          child: InkWell(
-            onTap: () {
-              Navigator.pop(context);
-              Navigator.of(context).pushNamed(
-                RoutesKeys.profilePage,
-              );
-            },
+      Container(
+        height: 160,
+        child: DrawerHeader(
+            decoration: BoxDecoration(
+              // color: Colors.blue[900],
+                gradient: LinearGradient(
+                    colors: [Colors.blue[700], Colors.blue[900]],
+                    begin: FractionalOffset.topCenter,
+                    end: FractionalOffset.bottomCenter,
+                    stops: [0.0, 0.5],
+                    tileMode: TileMode.clamp)
+            ),
             child: Container(
-              child: SingleChildScrollView(
-                scrollDirection: Axis.horizontal,
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  children: [
-                    CircleAvatar(
-                      radius: 40,
-                      backgroundColor: Theme.of(context).secondaryHeaderColor,
-                      child:(profile.imageUint8List == null)? CircleAvatar(
-                        radius: 35,
-                        backgroundColor: Colors.white,
-                        child: Icon(
-                          Icons.person,
-                          size: 60,
-                          color: Colors.blue[700],
-                        ),
-                      ):CircleAvatar(
-                        radius: 35,
-                        backgroundColor: Colors.white,
-                        backgroundImage: MemoryImage(profile.imageUint8List),
+                child: SingleChildScrollView(
+                  scrollDirection: Axis.horizontal,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.end,
+                    children: [
+                      InkWell(
+                        onTap: () {
+                          print(homeItemParametres.title);
+                          Helpers.handleIdClick(context, homeItemParametres.id);
+                        },
+                        child: Icon(Icons.settings , color: Colors.white,)
                       ),
-                    ),
-                    SizedBox(width: 8,),
-                    Container(
-                        width: 180,
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          mainAxisAlignment: MainAxisAlignment.center,
+                      InkWell(
+                        onTap: () {
+                          Navigator.pop(context);
+                          Navigator.of(context).pushNamed(
+                            RoutesKeys.profilePage,
+                          );
+                        },
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.start,
                           children: [
-                            Text("${profile.raisonSociale}" ,
-                              style: GoogleFonts.lato(
-                                textStyle : TextStyle(color: Colors.white , fontWeight: FontWeight.bold , fontSize: 22)
+                            CircleAvatar(
+                              radius: 30,
+                              backgroundColor: Theme.of(context).secondaryHeaderColor,
+                              child:(profile.imageUint8List == null)? CircleAvatar(
+                                radius: 25,
+                                backgroundColor: Colors.white,
+                                child: Icon(
+                                  Icons.person,
+                                  size: 60,
+                                  color: Colors.blue[700],
+                                ),
+                              ):CircleAvatar(
+                                radius: 25,
+                                backgroundColor: Colors.white,
+                                backgroundImage: MemoryImage(profile.imageUint8List),
                               ),
                             ),
-                            SizedBox(height: 2,),
-                            Text(getTranslateVersion() ,
-                              style: GoogleFonts.lato(
-                                textStyle: TextStyle(color: Colors.white , fontWeight: FontWeight.w800 ,)
-                              ),
-                            ),
-                            SizedBox(height: 2,),
-                            Text("${S.current.until}: ${Helpers.dateToText(Helpers.getDateExpiration(myparams))}" ,
-                              style: GoogleFonts.lato(
-                                textStyle: TextStyle(color: Colors.white,fontWeight: FontWeight.w600)
-                              ),
+                            SizedBox(width: 8,),
+                            Container(
+                                width: 200,
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    Text("${profile.raisonSociale}" ,
+                                      style: GoogleFonts.lato(
+                                        textStyle : TextStyle(color: Colors.white , fontWeight: FontWeight.bold , fontSize: 20)
+                                      ),
+                                    ),
+                                    SizedBox(height: 2,),
+                                    Text(getTranslateVersion() ,
+                                      style: GoogleFonts.lato(
+                                        textStyle: TextStyle(color: Colors.white , fontWeight: FontWeight.w800 , fontSize: 14)
+                                      ),
+                                    ),
+                                    SizedBox(height: 2,),
+                                    Text("${S.current.until}: ${Helpers.dateToText(Helpers.getDateExpiration(myparams))}" ,
+                                      style: GoogleFonts.lato(
+                                        textStyle: TextStyle(color: Colors.white,fontWeight: FontWeight.w600 , fontSize: 12)
+                                      ),
+                                    ),
+                                  ],
+                                )
                             ),
                           ],
-                        )
-                    ),
-                  ],
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
               ),
-            ),
-          ))
+            )
+      ),
     ];
 
     if(myparams.versionType == "demo" ||
@@ -197,9 +212,7 @@ class NavDrawer extends  StatelessWidget {
                   ),
                   onTap: () {
                     print(e.title);
-                    if(e.id != homeItemParametres.id){
-                      Navigator.of(context).pop();
-                    }
+                    Navigator.of(context).pop();
                     Helpers.handleIdClick(context, e.id);
                   },
                 ),
@@ -219,9 +232,7 @@ class NavDrawer extends  StatelessWidget {
                     ),
                     onTap: () {
                       print(e.title);
-                      if(e.id != homeItemParametres.id){
-                        Navigator.of(context).pop();
-                      }
+                      Navigator.of(context).pop();
                       Helpers.handleIdClick(context, e.id);
                     },
                   ),
@@ -229,22 +240,24 @@ class NavDrawer extends  StatelessWidget {
           ],
       );
     }else{
-      return ListTile(
-        dense: true,
-        leading: iconsSet(data.id, 20),
-        title: Text(
-          data.title,
-          style: GoogleFonts.lato(
-            textStyle: TextStyle(color: Colors.white, fontSize: 15, fontWeight: FontWeight.w600),
-          )
-        ),
-        onTap: () {
-          print(data.title);
-          if(data.id != homeItemParametres.id){
+      return Container(
+        height: 45,
+        // padding: EdgeInsets.only(bottom: 8 ,),
+        child: ListTile(
+          dense: true,
+          leading: iconsSet(data.id, 20),
+          title: Text(
+            data.title,
+            style: GoogleFonts.lato(
+              textStyle: TextStyle(color: Colors.white, fontSize: 15, fontWeight: FontWeight.w600),
+            )
+          ),
+          onTap: () {
+            print(data.title);
             Navigator.of(context).pop();
-          }
-          Helpers.handleIdClick(context, data.id);
-        },
+            Helpers.handleIdClick(context, data.id);
+          },
+        ),
       );
     }
 

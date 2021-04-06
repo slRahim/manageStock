@@ -261,7 +261,7 @@ Widget iconsSet(String itemId, double iconSize){
       break;
 
     case drawerItemPurchaseId:
-      return Icon(Icons.star_purple500_outlined ,size: 35,color: Colors.yellow[700],);
+      return Icon(Icons.star_purple500_outlined ,size: 30,color: Colors.yellow[700],);
 
     case drawerItemVenteId:
       return Icon(MdiIcons.basketUnfill,size: iconSize,color: Colors.white,);
