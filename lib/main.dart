@@ -32,11 +32,11 @@ void main(){
 
   runZoned(() {
     runApp(
-        Phoenix(
-            child: PushNotificationsManager (
-                child: MyApp()
-            )
-        )
+          PushNotificationsManager(
+              child: Phoenix (
+                  child: MyApp()
+              )
+          )
     );
 
   }, onError:(exception , stackTrace) => Crashlytics.instance.recordError(exception, stackTrace));
@@ -76,7 +76,6 @@ class _MyAppState extends State<MyApp> {
 
   Future futureInit()async{
     SharedPreferences prefs = await SharedPreferences.getInstance();
-
 
     String _locale = prefs.getString("myLocale");
     String _theme = prefs.getString("myStyle");

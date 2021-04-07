@@ -2830,38 +2830,38 @@ class _AddPiecePageState extends State<AddPiecePage>
                           : pw.SizedBox(),
                       (_profile.telephone != null)
                           ? pw.Text(
-                              "${S.current.telephone}\t ${_profile.telephone}",
+                              "${S.current.telephone}\t: ${_profile.telephone}",
                               style: pw.TextStyle(
                                   font: ttf, fontWeight: pw.FontWeight.bold))
                           : pw.SizedBox(),
                       (_profile.fax != null)
-                          ? pw.Text("${S.current.fax}\t ${_profile.fax}",
+                          ? pw.Text("${S.current.fax}\t: ${_profile.fax}",
                               style: pw.TextStyle(
                                   font: ttf, fontWeight: pw.FontWeight.bold))
                           : pw.SizedBox(),
                       (_profile.mobile != null)
-                          ? pw.Text("${S.current.mobile}\t ${_profile.mobile}",
+                          ? pw.Text("${S.current.mobile}\t: ${_profile.mobile}",
                               style: pw.TextStyle(
                                   font: ttf, fontWeight: pw.FontWeight.bold))
                           : pw.SizedBox(),
                       (_profile.email != null)
-                          ? pw.Text("${S.current.mail}\t ${_profile.email}",
+                          ? pw.Text("${S.current.mail}\t: ${_profile.email}",
                               style: pw.TextStyle(
                                   font: ttf, fontWeight: pw.FontWeight.bold))
                           : pw.SizedBox(),
                       (_profile.rc != null)
-                          ? pw.Text("${S.current.rc}\t ${_profile.rc}",
+                          ? pw.Text("${S.current.rc}\t: ${_profile.rc}",
                               style: pw.TextStyle(
                                   font: ttf, fontWeight: pw.FontWeight.bold))
                           : pw.SizedBox(),
                       (_profile.nif != null)
-                          ? pw.Text("${S.current.rc}\t ${_profile.nif}",
+                          ? pw.Text("${S.current.nif}\t: ${_profile.nif}",
                               style: pw.TextStyle(
                                   font: ttf, fontWeight: pw.FontWeight.bold))
                           : pw.SizedBox(),
                       (_profile.capital != null)
                           ? pw.Text(
-                              "${S.current.capitale_sociale}\t ${_profile.capital}",
+                              "${S.current.capitale_sociale}\t: ${Helpers.numberFormat(_profile.capital)} ${Helpers.getDeviseTranslate(_myParams.devise)}",
                               style: pw.TextStyle(
                                   font: ttf, fontWeight: pw.FontWeight.bold))
                           : pw.SizedBox(),

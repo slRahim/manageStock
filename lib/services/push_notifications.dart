@@ -41,8 +41,8 @@ class PushNotificationsManagerState extends State<PushNotificationsManager> {
     notificationPlugin.setOnNotificationClick(onNotificationClick);
     notificationPlugin
         .setListenerForLowerVersions(onNotificationInLowerVersions);
-    await configureCloudMessaginCallbacks();
     await configureLocalNotification();
+    await configureCloudMessaginCallbacks();
     await updateCurrentIndexPiece () ;
   }
 
