@@ -30,11 +30,16 @@ class PushNotificationsManagerState extends State<PushNotificationsManager> {
   Profile _profile ;
   bool _pieceHasCredit;
   QueryCtr _queryCtr = new QueryCtr();
+  bool  _finishLoading = false ;
 
   @override
   void initState() {
     super.initState();
-    futurinit();
+    futurinit().then((value){
+      setState(() {
+        _finishLoading = true ;
+      });
+    });
   }
 
   Future futurinit() async {
@@ -63,9 +68,16 @@ class PushNotificationsManagerState extends State<PushNotificationsManager> {
 
   @override
   Widget build(BuildContext context) {
-    return MyInheritedWidget(
-        data: this,
-        child: widget.child
+    if(_finishLoading){
+      return MyInheritedWidget(
+          data: this,
+          child: widget.child
+      );
+    }
+    return Center(
+        child: CircularProgressIndicator(
+            valueColor: new AlwaysStoppedAnimation<Color>(Colors.transparent)
+        )
     );
   }
 
