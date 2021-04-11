@@ -187,14 +187,18 @@ class _SettingsPageState extends State<SettingsPage> {
             sections: [
               SettingsSection(
                 title: '${S.current.param_general}',
-                titleTextStyle: GoogleFonts.lato(),
+                titleTextStyle: GoogleFonts.lato(
+                    textStyle: TextStyle(
+                        color: Theme.of(context).accentColor,fontWeight: FontWeight.bold
+                    )
+                ),
                 tiles: [
                   SettingsTile(
                     title: '${S.current.param_lang}',
                     subtitle: _language,
                     titleTextStyle:  GoogleFonts.lato(),
                     subtitleTextStyle:  GoogleFonts.lato(),
-                    leading: Icon(Icons.language),
+                    leading: Icon(Icons.language, color: Theme.of(context).primaryColorDark ,),
                     onTap: () async {
                       AwesomeDialog(
                           context: context,
@@ -231,7 +235,7 @@ class _SettingsPageState extends State<SettingsPage> {
                     subtitle: _themStyle,
                     titleTextStyle:  GoogleFonts.lato(),
                     subtitleTextStyle:  GoogleFonts.lato(),
-                    leading: Icon(Icons.style_sharp),
+                    leading: Icon(Icons.style_sharp, color: Theme.of(context).primaryColorDark),
                     onTap: () async {
                       AwesomeDialog(
                           context: context,
@@ -255,7 +259,7 @@ class _SettingsPageState extends State<SettingsPage> {
                     subtitle: "($_currencycode) $_countryname",
                     titleTextStyle:  GoogleFonts.lato(),
                     subtitleTextStyle:  GoogleFonts.lato(),
-                    leading: Icon(Icons.monetization_on),
+                    leading: Icon(Icons.monetization_on, color: Theme.of(context).primaryColorDark),
                     onTap: () async {
                       await showDialog(
                         context: context,
@@ -294,7 +298,7 @@ class _SettingsPageState extends State<SettingsPage> {
                     subtitle:("${S.current.use} : "+_tarification.toString()),
                     titleTextStyle:  GoogleFonts.lato(),
                     subtitleTextStyle:  GoogleFonts.lato(),
-                    leading: Icon(Icons.attach_money),
+                    leading: Icon(Icons.attach_money, color: Theme.of(context).primaryColorDark),
                     onTap: () async {
                       AwesomeDialog(
                           context: context,
@@ -317,7 +321,7 @@ class _SettingsPageState extends State<SettingsPage> {
                     title: '${S.current.param_tva}',
                     titleTextStyle:  GoogleFonts.lato(),
                     subtitleTextStyle:  GoogleFonts.lato(),
-                    leading: Icon(Icons.money_outlined),
+                    leading: Icon(Icons.money_outlined, color: Theme.of(context).primaryColorDark),
                     switchValue: _tva,
                     onToggle: (bool value) {
                       setState(() {
@@ -329,7 +333,7 @@ class _SettingsPageState extends State<SettingsPage> {
                     title: '${S.current.param_timbre}',
                     titleTextStyle:  GoogleFonts.lato(),
                     subtitleTextStyle:  GoogleFonts.lato(),
-                    leading: Icon(Icons.fact_check),
+                    leading: Icon(Icons.fact_check, color: Theme.of(context).primaryColorDark),
                     switchValue: _timbre,
                     onToggle: (bool value) {
                       setState(() {
@@ -341,14 +345,18 @@ class _SettingsPageState extends State<SettingsPage> {
               ),
               SettingsSection(
                 title: '${S.current.impression_titre}',
-                titleTextStyle:  GoogleFonts.lato(),
+                titleTextStyle:  GoogleFonts.lato(
+                    textStyle: TextStyle(
+                        color: Theme.of(context).accentColor,fontWeight: FontWeight.bold
+                    )
+                ),
                 tiles: [
                   SettingsTile(
                     title: '${S.current.imp_affichage}',
                     subtitle:("${_formatPrintDisplay}"),
                     titleTextStyle:  GoogleFonts.lato(),
                     subtitleTextStyle:  GoogleFonts.lato(),
-                    leading: Icon(Icons.list_alt_outlined),
+                    leading: Icon(Icons.list_alt_outlined, color: Theme.of(context).primaryColorDark),
                     onTap: () async {
                       AwesomeDialog(
                           context: context,
@@ -371,7 +379,7 @@ class _SettingsPageState extends State<SettingsPage> {
                     title: '${S.current.credit_tier}',
                     titleTextStyle:  GoogleFonts.lato(),
                     subtitleTextStyle:  GoogleFonts.lato(),
-                    leading: Icon(Icons.person_sharp),
+                    leading: Icon(Icons.person_sharp, color: Theme.of(context).primaryColorDark),
                     switchValue: _credit,
                     onToggle: (bool value) {
                       setState(() {
@@ -383,13 +391,17 @@ class _SettingsPageState extends State<SettingsPage> {
               ),
               SettingsSection(
                 title: '${S.current.param_notif_title}',
-                titleTextStyle:  GoogleFonts.lato(),
+                titleTextStyle:  GoogleFonts.lato(
+                    textStyle: TextStyle(
+                        color: Theme.of(context).accentColor,fontWeight: FontWeight.bold
+                    )
+                ),
                 tiles: [
                   SettingsTile.switchTile(
                     title: '${S.current.param_notif}',
                     titleTextStyle:  GoogleFonts.lato(),
                     subtitleTextStyle:  GoogleFonts.lato(),
-                    leading: Icon(Icons.notifications_active),
+                    leading: Icon(Icons.notifications_active, color: Theme.of(context).primaryColorDark),
                     switchValue: _notifications,
                     onToggle: (bool value) {
                       setState(() {
@@ -399,9 +411,15 @@ class _SettingsPageState extends State<SettingsPage> {
                   ),
                   SettingsTile(
                     title: '${S.current.param_notif_time}',
-                    titleTextStyle:  GoogleFonts.lato(),
+                    titleTextStyle:  GoogleFonts.lato(
+                        textStyle: TextStyle(
+                            color: (!_notifications)
+                                ? Theme.of(context).tabBarTheme.unselectedLabelColor
+                                : null
+                        )
+                    ),
                     subtitleTextStyle:  GoogleFonts.lato(),
-                    leading: Icon(Icons.access_time_outlined),
+                    leading: Icon(Icons.access_time_outlined, color: Theme.of(context).primaryColorDark),
                     subtitle: _dayTime,
                     onTap: () async {
                       if(_notifications){
@@ -419,9 +437,15 @@ class _SettingsPageState extends State<SettingsPage> {
                   SettingsTile(
                     title: '${S.current.param_notif_repeat}',
                     subtitle: _repeateNotification,
-                    titleTextStyle:  GoogleFonts.lato(),
+                    titleTextStyle:  GoogleFonts.lato(
+                        textStyle: TextStyle(
+                            color: (!_notifications)
+                                ? Theme.of(context).tabBarTheme.unselectedLabelColor
+                                : null
+                        )
+                    ),
                     subtitleTextStyle:  GoogleFonts.lato(),
-                    leading: Icon(Icons.today_outlined),
+                    leading: Icon(Icons.today_outlined, color: Theme.of(context).primaryColorDark),
                     onTap: () async {
                       if(_notifications){
                         AwesomeDialog(
@@ -444,9 +468,15 @@ class _SettingsPageState extends State<SettingsPage> {
                   SettingsTile(
                     title: '${S.current.param_echeance}',
                     subtitle: "$_echeance ${S.current.day}",
-                    titleTextStyle: GoogleFonts.lato(),
+                    titleTextStyle: GoogleFonts.lato(
+                        textStyle: TextStyle(
+                            color: (!_notifications)
+                                ? Theme.of(context).tabBarTheme.unselectedLabelColor
+                                : null
+                        )
+                    ),
                     subtitleTextStyle: GoogleFonts.lato(),
-                    leading: Icon(Icons.calendar_today),
+                    leading: Icon(Icons.calendar_today, color: Theme.of(context).primaryColorDark),
                     onTap: () async {
                       if(_notifications){
                         AwesomeDialog(
@@ -471,17 +501,28 @@ class _SettingsPageState extends State<SettingsPage> {
               ),
               SettingsSection(
                 title: '${S.current.param_back_title}',
-                titleTextStyle: GoogleFonts.lato(),
+                titleTextStyle: GoogleFonts.lato(
+                    textStyle: TextStyle(
+                        color: Theme.of(context).accentColor,fontWeight: FontWeight.bold
+                    )
+                ),
                 tiles: [
                   SettingsTile(
                     title: '${S.current.param_backup}',
-                    titleTextStyle: GoogleFonts.lato(),
-                    leading: Icon(Icons.backup),
+                    titleTextStyle: GoogleFonts.lato(
+                        textStyle: TextStyle(
+                          color: (_myParams.versionType == "demo")
+                              ? Theme.of(context).tabBarTheme.unselectedLabelColor
+                              : null
+                        )
+                    ),
+                    leading: Icon(Icons.backup, color: Theme.of(context).primaryColorDark),
                     onTap: () async{
                       if(_myParams.versionType != "demo"){
                         await showDialog(
                             context: context,
                             builder: (context)  {
+
                               _queryCtr.createBackup()
                                   .then((value){
                                 Navigator.pop(context);
@@ -490,7 +531,8 @@ class _SettingsPageState extends State<SettingsPage> {
                                 }else{
                                   Helpers.showFlushBar(context, "${S.current.msg_back_err}");
                                 }
-                              });
+                              }).catchError((e)=>Navigator.pop(context));
+
                               return Center(child: CircularProgressIndicator());
                             }
                         );
@@ -501,8 +543,14 @@ class _SettingsPageState extends State<SettingsPage> {
                   ),
                   SettingsTile(
                     title: '${S.current.param_resto_data}',
-                    titleTextStyle: GoogleFonts.lato(),
-                    leading: Icon(Icons.restore),
+                    titleTextStyle: GoogleFonts.lato(
+                        textStyle: TextStyle(
+                            color: (_myParams.versionType == "demo")
+                                ? Theme.of(context).tabBarTheme.unselectedLabelColor
+                                : null
+                        )
+                    ),
+                    leading: Icon(Icons.restore, color: Theme.of(context).primaryColorDark),
                     onTap: () async {
                       if(_myParams.versionType != "demo") {
                         Navigator.pushNamed(context, RoutesKeys.driveListing);

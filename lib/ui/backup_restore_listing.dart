@@ -164,12 +164,12 @@ class _SelectfromdriveState extends State<Selectfromdrive> {
             '${file.name.replaceAll('.bkp', '')}',
             style: GoogleFonts.lato(
               textStyle: TextStyle(
-                color: Colors.black,
+                color: Theme.of(context).primaryColorDark,
                 fontWeight: FontWeight.bold,
                 fontSize: 16,)
             )),
         subtitle: Text(
-            ".bkp" , style: GoogleFonts.lato(textStyle: TextStyle(color: Colors.black)),
+            ".bkp" , style: GoogleFonts.lato(textStyle: TextStyle(color: Theme.of(context).primaryColorDark,)),
         ),
       ),
     );
