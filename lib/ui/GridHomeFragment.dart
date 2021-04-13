@@ -107,7 +107,7 @@ class _GridHomeWidgetState extends State<GridHomeWidget> {
               },
               textColor: Colors.white,
               icon: Icon(Icons.add_box, size: 20),
-              label: Text(S.current.ajouter, style: TextStyle(fontSize: 12)))),
+              label: Text(S.current.ajouter, style: GoogleFonts.lato(textStyle: TextStyle(fontSize: 12))))),
     );
   }
 
