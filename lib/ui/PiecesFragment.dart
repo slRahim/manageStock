@@ -96,7 +96,7 @@ class _PiecesFragmentState extends State<PiecesFragment> {
   Future<Widget> futureInitState() async {
     _filterInHasCredit = _savedFilterHasCredit;
     _filterIsDraft = _savedFilterIsDraft ;
-    _filterStartDate = _savedFilterEndDate ;
+    _filterStartDate = _savedFilterStartDate ;
     _filterEndDate = _savedFilterEndDate ;
 
     final tile = StatefulBuilder(builder: (context, StateSetter _setState) {
@@ -198,7 +198,7 @@ class _PiecesFragmentState extends State<PiecesFragment> {
         DateTime order = await getDate(DateTime.now());
         if (order != null) {
           DateTime time = new DateTime(
-              order.year, order.month, order.day);
+              order.year, order.month, order.day, 23 , 59 , 0 , 0);
           _setState(() {
             _endDateControl.text = Helpers.dateToText(time);
             _filterEndDate = order ;

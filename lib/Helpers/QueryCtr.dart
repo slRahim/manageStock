@@ -165,7 +165,8 @@ class QueryCtr {
     int _mov = filters["Mov"] != null? filters["Mov"] : 0;
     int _tier_id = filters["Tierid"] != null ? filters["Tierid"] : null ;
     int _startDate = filters["Start_date"] != null ? filters["Start_date"].millisecondsSinceEpoch : null ;
-    int _endDate = filters["End_date"] != null ? filters["End_date"].millisecondsSinceEpoch : null ;
+    int _endDate = filters["End_date"] != null ? filters["End_date"].millisecondsSinceEpoch+89940000 : null ;
+
 
     String _pieceFilter = _piece != null? " AND Piece like '$_piece'" : " AND (Piece like 'BL' OR Piece like 'FC')";
     String _movFilter = " AND Mov >= $_mov";
@@ -383,7 +384,7 @@ class QueryCtr {
     }
 
     int _startDate = filters["Start_date"] != null ? filters["Start_date"].millisecondsSinceEpoch : null ;
-    int _endDate = filters["End_date"] != null ? filters["End_date"].millisecondsSinceEpoch : null ;
+    int _endDate = filters["End_date"] != null ? filters["End_date"].millisecondsSinceEpoch+89940000 : null ;
 
     String _startDateFilter = ' AND Date >= $_startDate' ;
     String _endDateFilter = ' AND Date <= $_endDate' ;

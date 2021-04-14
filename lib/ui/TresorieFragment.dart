@@ -96,7 +96,7 @@ class _TresorieFragmentState extends State<TresorieFragment> {
 
     _categorieDropdownItems= utils.buildDropTresorieCategoriesDownMenuItems(_categorieItems);
     _selectedCategorie = _categorieItems[_savedSelectedCategorie];
-    _filterStartDate = _savedFilterEndDate ;
+    _filterStartDate = _savedFilterStartDate ;
     _filterEndDate = _savedFilterEndDate ;
 
     final tile = StatefulBuilder(builder: (context, StateSetter _setState) {
@@ -200,7 +200,7 @@ class _TresorieFragmentState extends State<TresorieFragment> {
         DateTime order = await getDate(DateTime.now());
         if (order != null) {
           DateTime time = new DateTime(
-              order.year, order.month, order.day);
+              order.year, order.month, order.day , 23,59,0,0);
           _setState(() {
             _endDateControl.text = Helpers.dateToText(time);
             _filterEndDate = order ;
