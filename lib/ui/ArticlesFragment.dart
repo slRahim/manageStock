@@ -321,7 +321,8 @@ class _ArticlesFragmentState extends State<ArticlesFragment> {
                 ? (selectedItem) {
                     onItemSelected(setState, selectedItem);
                   }
-                : null));
+                : null)
+    );
   }
 
   _addNewArticle(context){
