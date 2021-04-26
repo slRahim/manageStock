@@ -228,6 +228,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "cc" : MessageLookupByLibrary.simpleMessage("طلب"),
     "centime" : MessageLookupByLibrary.simpleMessage("سنتيم"),
     "charge" : MessageLookupByLibrary.simpleMessage("مصاريف"),
+    "chargement" : MessageLookupByLibrary.simpleMessage("تحميل"),
     "chifre_affaire" : MessageLookupByLibrary.simpleMessage("رأس المال"),
     "chois_lang" : MessageLookupByLibrary.simpleMessage("إختيار اللغة"),
     "choisir" : MessageLookupByLibrary.simpleMessage("لا توجد فئة"),

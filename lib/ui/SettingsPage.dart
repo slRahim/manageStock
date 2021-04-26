@@ -1,6 +1,7 @@
 import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:future_progress_dialog/future_progress_dialog.dart';
 import 'package:gestmob/Helpers/Helpers.dart';
 import 'package:gestmob/Helpers/QueryCtr.dart';
 import 'package:gestmob/Helpers/Statics.dart';
@@ -521,20 +522,25 @@ class _SettingsPageState extends State<SettingsPage> {
                       if(_myParams.versionType != "demo"){
                         await showDialog(
                             context: context,
-                            builder: (context)  {
-
-                              _queryCtr.createBackup()
-                                  .then((value){
-                                Navigator.pop(context);
-                                if(value["name"] != null){
-                                  Helpers.showFlushBar(context, "${S.current.msg_back_suce}");
-                                }else{
-                                  Helpers.showFlushBar(context, "${S.current.msg_back_err}");
-                                }
-                              }).catchError((e)=>Navigator.pop(context));
-
-                              return Center(child: CircularProgressIndicator());
-                            }
+                            barrierDismissible: false,
+                            builder: (context) => FutureProgressDialog(
+                                _queryCtr.createBackup()
+                                    .then((value){
+                                  Navigator.pop(context);
+                                  if(value["name"] != null){
+                                    Helpers.showFlushBar(context, "${S.current.msg_back_suce}");
+                                  }else{
+                                    Helpers.showFlushBar(context, "${S.current.msg_back_err}");
+                                  }
+                                }).catchError((e)=>Navigator.pop(context)),
+                                message:Text('${S.current.chargement}...'),
+                                progress: CircularProgressIndicator(),
+                                decoration: BoxDecoration(
+                                  color: Theme.of(context).cardColor,
+                                  shape: BoxShape.rectangle,
+                                  borderRadius: BorderRadius.all(Radius.circular(10)),
+                                ),
+                              )
                         );
                       }else{
                         Helpers.showFlushBar(context, S.current.msg_demo_option);

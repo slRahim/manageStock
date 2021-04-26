@@ -5534,6 +5534,16 @@ class S {
       args: [],
     );
   }
+
+  /// `Loading`
+  String get chargement {
+    return Intl.message(
+      'Loading',
+      name: 'chargement',
+      desc: '',
+      args: [],
+    );
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<S> {

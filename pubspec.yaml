@@ -104,6 +104,7 @@ dependencies:
   in_app_purchase: ^0.3.4
   introduction_screen: ^1.0.7
   feature_discovery: ^0.13.0+2
+  future_progress_dialog: any
 
   flutter_localizations:
     sdk: flutter

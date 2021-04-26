@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:flutter/services.dart';
 import 'package:flutter_icons/flutter_icons.dart';
 import 'package:gestmob/Helpers/SqlLiteDatabaseHelper.dart';
@@ -1082,5 +1084,72 @@ class QueryCtr {
     var res = await dbClient.rawQuery(query);
     return res ;
   }
+
+//  **************************************************************************************************************************************************
+//************************************************************************fill database*******************************************************************
+
+  Future<String> fillDB () async {
+    try{
+      var dbClient = await _databaseHelper.db;
+      Batch batch = dbClient.batch();
+
+      const _chars = 'AaBbCcDdEeFfGgHhIiJjKkLlMmNnOoPpQqRrSsTtUuVvWwXxYyZz1234567890';
+      Random _rnd = Random();
+
+      for (int i=0 ; i<250 ; i++){
+        ArticleFamille famille = ArticleFamille(1,"fam ${i}");
+        batch.insert(DbTablesNames.articlesFamilles, famille.toMap()) ;
+      }
+
+      for (int i=0 ; i<250 ; i++){
+        ArticleMarque marque = ArticleMarque(1,"marq ${i}");
+        batch.insert(DbTablesNames.articlesMarques, marque.toMap()) ;
+      }
+
+      for (int i=0 ; i<1020 ; i++){
+        batch.rawInsert('''
+        INSERT INTO Articles (Ref,Designation,Id_Famille,Id_Marque,
+                           Qte_init,Qte,Qte_Min, Qte_Colis,Colis, Cmd_client,
+                           PrixAchat, PMP_init, PMP, TVA,
+                           PrixVente1, PrixVente2, PrixVente3,
+                           PrixVente1TTC, PrixVente2TTC, PrixVente3TTC,
+                           Bloquer, Stockable
+                       )
+        VALUES ('Ref #0${i+2}','${getRandomString(10 , _chars , _rnd)}', ${(i+5/5).round()},${(i+5/5).round()} ,
+         ${i+50},${i+50},10,10,${(i+50)/10}, 0,${(i+80)*60},${(i+80)*60},${(i+80)*60},0,
+         ${(i+80)*78.486}, ${(i+80)*80},${(i+80)*75},${(i+80)*78.486},${(i+80)*80},${(i+80)*75},0, 1);
+      ''');
+      }
+
+      for (int i=0 ; i<250 ; i++){
+        TiersFamille famille = TiersFamille("tier fam ${i+1}");
+        batch.insert(DbTablesNames.tiersFamille, famille.toMap()) ;
+      }
+
+      for (int i=0 ; i<2040 ; i++){
+        batch.rawInsert('''
+        INSERT INTO Tiers ( Clientfour,RaisonSociale, Latitude,Longitude, Id_Famille, Statut,
+                              Tarification, Adresse, Ville,Telephone,Mobile,Fax, Email,
+                              Solde_depart,Chiffre_affaires, Regler,Credit, Bloquer)
+        
+        VALUES (${(i%2)>0 ? 2 : 0 },'Raison_${getRandomString(10 , _chars , _rnd)}',36.2568015016388,6.59222602844238,
+                ${(i+5/10).round()},5,
+                ${(i%2)>0 ? 2 : 1 },'Adresse ${getRandomString(15 , _chars , _rnd)}','${getRandomString(10 , _chars , _rnd)}','03136486','055689756','03698745','mail@mail.com',
+                ${i*50}, 0,0,0,0 );
+      ''');
+      }
+
+      await batch.commit();
+
+    }catch (e){
+      return "error cnx" ;
+    }
+
+    return "success" ;
+  }
+
+
+  String getRandomString(int length , chars , rnd) => String.fromCharCodes(Iterable.generate(
+      length, (_) => chars.codeUnitAt(rnd.nextInt(chars.length))));
 
 }

@@ -3,6 +3,7 @@ import 'package:draggable_container/draggable_container.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:future_progress_dialog/future_progress_dialog.dart';
 import 'package:gestmob/Helpers/Helpers.dart';
 import 'package:gestmob/Helpers/QueryCtr.dart';
 import 'package:gestmob/Helpers/Statics.dart';
@@ -216,6 +217,30 @@ class _GridHomeWidgetState extends State<GridHomeWidget> {
                         } else {
                           throw 'Could not launch $url';
                         }
+                        // await showDialog(
+                        //     context: context,
+                        //     barrierDismissible: false,
+                        //     builder: (context) => FutureProgressDialog(
+                        //       _queryCtr.fillDB().then((value) {
+                        //         switch(value){
+                        //           case "success" :
+                        //             Helpers.showToast("fill ok") ;
+                        //             break;
+                        //           case "error cnx" :
+                        //             Helpers.showToast("fill error") ;
+                        //             break;
+                        //         }
+                        //       }) ,
+                        //       message:Text('Loading...'),
+                        //       progress: CircularProgressIndicator(),
+                        //       decoration: BoxDecoration(
+                        //         color: Theme.of(context).cardColor,
+                        //         shape: BoxShape.rectangle,
+                        //         borderRadius: BorderRadius.all(Radius.circular(10)),
+                        //       ),
+                        //     )
+                        // );
+
                       },
                     )
                   ],

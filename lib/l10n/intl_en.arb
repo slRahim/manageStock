@@ -587,7 +587,8 @@
   "THB_name" : "Thai baht",
   "UGX_name" : "Ugandan shilling",
 
-  "msg_change_tarif" : "Do you want to change the rates?"
+  "msg_change_tarif" : "Do you want to change the rates?",
+  "chargement" : "Loading"
 
 
 }

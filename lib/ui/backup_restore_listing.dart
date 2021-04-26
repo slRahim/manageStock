@@ -1,6 +1,7 @@
 import 'dart:io';
 import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:flutter/material.dart';
+import 'package:future_progress_dialog/future_progress_dialog.dart';
 import 'package:gestmob/Helpers/Helpers.dart';
 import 'package:gestmob/Helpers/QueryCtr.dart';
 import 'package:gestmob/generated/l10n.dart';
@@ -90,16 +91,17 @@ class _SelectfromdriveState extends State<Selectfromdrive> {
                                           child: CircularProgressIndicator(),
                                         )
                                     );
-                                  } else {
-                                    return ListView.builder(
-                                        padding: EdgeInsets.all(5),
-                                        itemCount: files.files.length,
-                                        itemBuilder: (context, i) {
-                                          if (files.files[i].name.startsWith('gestmob_'))
-                                            return buildList(files.files[i]);
-                                        }
-                                    );
                                   }
+                                  return ListView.builder(
+                                      padding: EdgeInsets.all(5),
+                                      itemCount: files.files.length,
+                                      itemBuilder: (context, i) {
+                                        if (files.files[i].name.startsWith('gestmob_'))
+                                          return buildList(files.files[i]);
+
+                                        return null;
+                                      }
+                                  );
                                 })
                         ),
                       ),
@@ -145,18 +147,31 @@ class _SelectfromdriveState extends State<Selectfromdrive> {
               btnOkText: S.current.oui,
               btnOkOnPress: () async {
                 File backupFile = await googleapi.DownloadGoogleDriveFile(file.name, file.id);
-                _query.restoreBackup(backupFile).then((value){
-                  if(value != null){
-                    Navigator.pop(context);
-                    Navigator.pop(context);
-                    Helpers.showFlushBar(context, "${S.current.msg_succes_restoration}");
+                await showDialog(
+                    context: context,
+                    barrierDismissible: false,
+                    builder: (context) => FutureProgressDialog(
+                      _query.restoreBackup(backupFile).then((value){
+                        if(value != null){
+                          Navigator.pop(context);
+                          Navigator.pop(context);
+                          Helpers.showFlushBar(context, "${S.current.msg_succes_restoration}");
 
-                  }else{
-                    Navigator.pop(context);
-                    Navigator.pop(context);
-                    Helpers.showFlushBar(context, "${S.current.msg_err_restoration}");
-                  }
-                });
+                        }else{
+                          Navigator.pop(context);
+                          Navigator.pop(context);
+                          Helpers.showFlushBar(context, "${S.current.msg_err_restoration}");
+                        }
+                      }),
+                      message:Text('${S.current.chargement}...'),
+                      progress: CircularProgressIndicator(),
+                      decoration: BoxDecoration(
+                        color: Theme.of(context).cardColor,
+                        shape: BoxShape.rectangle,
+                        borderRadius: BorderRadius.all(Radius.circular(10)),
+                      ),
+                    )
+                );
               })
             ..show();
         },
