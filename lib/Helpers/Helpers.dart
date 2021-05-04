@@ -330,7 +330,7 @@ class Helpers {
         return myParam.startDate.add(Duration(days: 30));
         break;
       case ('annuel'):
-        return myParam.startDate.add(Duration(days: 180));
+        return myParam.startDate.add(Duration(days: 365));
         break;
       case ('illimit'):
         return DateTime(2100, 1, 1);
