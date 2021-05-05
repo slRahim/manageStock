@@ -161,7 +161,7 @@ class Helpers {
     // showToast(message);
     Flushbar(
       isDismissible: false,
-      messageText: Text(message , style: GoogleFonts.lato(),),
+      messageText: Text(message , style: GoogleFonts.lato(textStyle: TextStyle(color: Colors.white)),),
       icon: Icon(
         Icons.info_outline,
         size: 28.0,

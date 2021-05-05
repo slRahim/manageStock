@@ -359,8 +359,8 @@
   "start_date" : "Date du début",
   "end_date" : "Date de fin",
 
-  "choix_province" : "Choisissez votre département",
-  "choix_city" : "Choisissez votre ville",
+  "choix_province" : "Choisissez le département",
+  "choix_city" : "Choisissez la ville",
   "department" : "Département",
 
   "abonnement_title" : "Passer au Premium",
