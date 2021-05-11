@@ -812,6 +812,7 @@ class _AddTresoriePageState extends State<AddTresoriePage>
   choosePieceDialog() {
     return PiecesFragment(
       tierId: _selectedClient.id,
+      peaceType: "TR",
       onConfirmSelectedItem: (selectedItem) {
         setState(() {
           _selectedPieces.add(selectedItem);

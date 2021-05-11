@@ -294,7 +294,7 @@ class _PiecesFragmentState extends State<PiecesFragment> {
         appBar: SearchBar(
           searchController: searchController,
           mainContext: widget.onConfirmSelectedItem != null ? null : context,
-          title: (widget.peaceType !=null) ? Helpers.getPieceTitle(widget.peaceType) : S.current.piece_titre,
+          title: (widget.peaceType !=null && widget.peaceType != "TR") ? Helpers.getPieceTitle(widget.peaceType) : S.current.piece_titre,
           isFilterOn: isFilterOn,
           onSearchChanged: (String search) => _dataSource.updateSearchTerm(search),
           onFilterPressed: () async {

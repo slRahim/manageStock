@@ -460,7 +460,7 @@ class _ArticleListItemState extends State<ArticleListItem> {
                                   _quntiteControler.text = _qte.toString();
                                 },
                                 elevation: 2.0,
-                                fillColor: Colors.red[600],
+                                fillColor: Colors.redAccent,
                                 child: Icon(
                                   Icons.remove,
                                   color: Colors.white,

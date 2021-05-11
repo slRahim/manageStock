@@ -71,91 +71,91 @@ class NavDrawer extends  StatelessWidget {
     homeItemWidgetList = <Widget>[
       Container(
         height: 160,
-        child: DrawerHeader(
-            decoration: BoxDecoration(
-              // color: Colors.blue[900],
-                gradient: LinearGradient(
-                    colors: [Colors.blue[700], Colors.blue[900]],
-                    begin: FractionalOffset.topCenter,
-                    end: FractionalOffset.bottomCenter,
-                    stops: [0.0, 0.5],
-                    tileMode: TileMode.clamp)
-            ),
-            child: Container(
-                child: SingleChildScrollView(
-                  scrollDirection: Axis.horizontal,
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.end,
-                    children: [
-                      InkWell(
-                        onTap: () {
-                          print(homeItemParametres.title);
-                          Helpers.handleIdClick(context, homeItemParametres.id);
-                        },
-                        child: Icon(Icons.settings , color: Colors.white,)
-                      ),
-                      InkWell(
-                        onTap: () {
-                          Navigator.pop(context);
-                          Navigator.of(context).pushNamed(
-                            RoutesKeys.profilePage,
-                          );
-                        },
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          children: [
-                            CircleAvatar(
-                              radius: 30,
-                              backgroundColor: Theme.of(context).secondaryHeaderColor,
-                              child:(profile.imageUint8List == null)? CircleAvatar(
-                                radius: 25,
-                                backgroundColor: Colors.white,
-                                child: Icon(
-                                  Icons.person,
-                                  size: 60,
-                                  color: Colors.blue[700],
-                                ),
-                              ):CircleAvatar(
-                                radius: 25,
-                                backgroundColor: Colors.white,
-                                backgroundImage: MemoryImage(profile.imageUint8List),
+        child: SingleChildScrollView(
+          child: DrawerHeader(
+              decoration: BoxDecoration(
+                color: Colors.blue[700],
+                  // gradient: LinearGradient(
+                  //     colors: [Colors.blue[700], Colors.blue[900]],
+                  //     begin: FractionalOffset.topCenter,
+                  //     end: FractionalOffset.bottomCenter,
+                  //     stops: [0.0, 0.7],
+                  //     tileMode: TileMode.clamp)
+              ),
+              child: SingleChildScrollView(
+                scrollDirection: Axis.horizontal,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.end,
+                  children: [
+                    InkWell(
+                      onTap: () {
+                        print(homeItemParametres.title);
+                        Helpers.handleIdClick(context, homeItemParametres.id);
+                      },
+                      child: Icon(Icons.settings , color: Colors.white,)
+                    ),
+                    InkWell(
+                      onTap: () {
+                        Navigator.pop(context);
+                        Navigator.of(context).pushNamed(
+                          RoutesKeys.profilePage,
+                        );
+                      },
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        children: [
+                          CircleAvatar(
+                            radius: 30,
+                            backgroundColor: Theme.of(context).secondaryHeaderColor,
+                            child:(profile.imageUint8List == null)? CircleAvatar(
+                              radius: 25,
+                              backgroundColor: Colors.white,
+                              child: Icon(
+                                Icons.person,
+                                size: 60,
+                                color: Colors.blue[700],
                               ),
+                            ):CircleAvatar(
+                              radius: 25,
+                              backgroundColor: Colors.white,
+                              backgroundImage: MemoryImage(profile.imageUint8List),
                             ),
-                            SizedBox(width: 8,),
-                            Container(
-                                width: 200,
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    Text("${profile.raisonSociale}" ,
-                                      style: GoogleFonts.lato(
-                                        textStyle : TextStyle(color: Colors.white , fontWeight: FontWeight.bold , fontSize: 20)
-                                      ),
+                          ),
+                          SizedBox(width: 8,),
+                          Container(
+                              width: 200,
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Text("${profile.raisonSociale}" ,
+                                    style: GoogleFonts.lato(
+                                      textStyle : TextStyle(color: Colors.white , fontWeight: FontWeight.bold , fontSize: 20)
                                     ),
-                                    SizedBox(height: 2,),
-                                    Text(getTranslateVersion() ,
-                                      style: GoogleFonts.lato(
-                                        textStyle: TextStyle(color: Colors.white , fontWeight: FontWeight.w800 , fontSize: 14)
-                                      ),
+                                  ),
+                                  SizedBox(height: 2,),
+                                  Text(getTranslateVersion() ,
+                                    style: GoogleFonts.lato(
+                                      textStyle: TextStyle(color: Colors.white , fontWeight: FontWeight.w800 , fontSize: 14)
                                     ),
-                                    SizedBox(height: 2,),
-                                    Text("${S.current.until}: ${Helpers.dateToText(Helpers.getDateExpiration(myparams))}" ,
-                                      style: GoogleFonts.lato(
-                                        textStyle: TextStyle(color: Colors.white,fontWeight: FontWeight.w600 , fontSize: 12)
-                                      ),
+                                  ),
+                                  SizedBox(height: 2,),
+                                  Text("${S.current.until}: ${Helpers.dateToText(Helpers.getDateExpiration(myparams))}" ,
+                                    style: GoogleFonts.lato(
+                                      textStyle: TextStyle(color: Colors.white,fontWeight: FontWeight.w600 , fontSize: 12)
                                     ),
-                                  ],
-                                )
-                            ),
-                          ],
-                        ),
+                                  ),
+                                ],
+                              )
+                          ),
+                        ],
                       ),
-                    ],
-                  ),
+                    ),
+                  ],
                 ),
               ),
-            )
+              ),
+        )
       ),
     ];
 

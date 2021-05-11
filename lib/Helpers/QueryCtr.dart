@@ -164,13 +164,13 @@ class QueryCtr {
     String query = 'SELECT Pieces.*,Tiers.RaisonSociale,Tiers.Mobile FROM Pieces JOIN Tiers ON Pieces.Tier_id = Tiers.id';
 
     String _piece = filters["Piece"];
-    int _mov = filters["Mov"] != null? filters["Mov"] : 0;
+    int _mov = filters["Mov"] != null ? filters["Mov"] : 0;
     int _tier_id = filters["Tierid"] != null ? filters["Tierid"] : null ;
     int _startDate = filters["Start_date"] != null ? filters["Start_date"].millisecondsSinceEpoch : null ;
     int _endDate = filters["End_date"] != null ? filters["End_date"].millisecondsSinceEpoch+89940000 : null ;
 
 
-    String _pieceFilter = _piece != null? " AND Piece like '$_piece'" : " AND (Piece like 'BL' OR Piece like 'FC')";
+    String _pieceFilter = (_piece != null && _piece != "TR" ) ? " AND Piece like '$_piece'" : " AND (Piece like 'BL' OR Piece like 'FC')";
     String _movFilter = " AND Mov >= $_mov";
     String _startDateFilter = ' AND Date >= $_startDate' ;
     String _endDateFilter = ' AND Date <= $_endDate' ;
@@ -221,7 +221,7 @@ class QueryCtr {
       list.add(piece);
     }
 
-    if(filters["Piece"] == null){
+    if(_piece == null){
       MyParams _params = await getAllParams();
       List<Piece> listcredit = new List<Piece>();
       for(int i=0 ; i<list.length;i++){
