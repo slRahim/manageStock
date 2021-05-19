@@ -176,7 +176,7 @@ class _GridHomeWidgetState extends State<GridHomeWidget> {
         appBar: PreferredSize(
           preferredSize:
           (MediaQuery.of(context).orientation == Orientation.portrait)
-              ? Size.fromHeight(MediaQuery.of(context).size.height / 5)
+              ? Size.fromHeight(MediaQuery.of(context).size.height / 4.2)
               :Size.fromHeight(MediaQuery.of(context).size.height / 2),
           child: Container(
             decoration: BoxDecoration(
@@ -217,30 +217,6 @@ class _GridHomeWidgetState extends State<GridHomeWidget> {
                         } else {
                           throw 'Could not launch $url';
                         }
-                        // await showDialog(
-                        //     context: context,
-                        //     barrierDismissible: false,
-                        //     builder: (context) => FutureProgressDialog(
-                        //       _queryCtr.fillDB().then((value) {
-                        //         switch(value){
-                        //           case "success" :
-                        //             Helpers.showToast("fill ok") ;
-                        //             break;
-                        //           case "error cnx" :
-                        //             Helpers.showToast("fill error") ;
-                        //             break;
-                        //         }
-                        //       }) ,
-                        //       message:Text('Loading...'),
-                        //       progress: CircularProgressIndicator(),
-                        //       decoration: BoxDecoration(
-                        //         color: Theme.of(context).cardColor,
-                        //         shape: BoxShape.rectangle,
-                        //         borderRadius: BorderRadius.all(Radius.circular(10)),
-                        //       ),
-                        //     )
-                        // );
-
                       },
                     )
                   ],
@@ -392,7 +368,7 @@ class _GridHomeWidgetState extends State<GridHomeWidget> {
                   } else {
                     return SingleChildScrollView(
                       child: Container(
-                        padding: EdgeInsets.only(left: padding,),
+                        padding: EdgeInsets.only(left: padding, top: 10),
                         child: DescribedFeatureOverlay(
                           featureId: feature11,
                           tapTarget: Icon(MdiIcons.gestureTapHold , color: Colors.black,),

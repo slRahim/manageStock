@@ -1,5 +1,4 @@
 import 'dart:ui';
-
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_icons/flutter_icons.dart';
@@ -86,9 +85,16 @@ class _ArticleListItemState extends State<ArticleListItem> {
         ),
         backgroundColor: Colors.green,
         contentLocation: ContentLocation.below,
-        title: Text(S.current.long_presse , style: GoogleFonts.lato(fontWeight: FontWeight.bold),),
-        description:
-            Container(width: 150, child: Text(S.current.msg_long_press_select , style: GoogleFonts.lato(),)),
+        title: Text(
+          S.current.long_presse,
+          style: GoogleFonts.lato(fontWeight: FontWeight.bold),
+        ),
+        description: Container(
+            width: 150,
+            child: Text(
+              S.current.msg_long_press_select,
+              style: GoogleFonts.lato(),
+            )),
         onBackgroundTap: () async {
           await FeatureDiscovery.completeCurrentStep(context);
           return true;
@@ -104,9 +110,16 @@ class _ArticleListItemState extends State<ArticleListItem> {
             ),
             backgroundColor: Colors.red,
             contentLocation: ContentLocation.below,
-            title: Text(S.current.swipe, style: GoogleFonts.lato(fontWeight: FontWeight.bold),),
-            description:
-                Container(width: 150, child: Text(S.current.msg_swipe_start, style: GoogleFonts.lato(),)),
+            title: Text(
+              S.current.swipe,
+              style: GoogleFonts.lato(fontWeight: FontWeight.bold),
+            ),
+            description: Container(
+                width: 150,
+                child: Text(
+                  S.current.msg_swipe_start,
+                  style: GoogleFonts.lato(),
+                )),
             onBackgroundTap: () async {
               await FeatureDiscovery.completeCurrentStep(context);
               return true;
@@ -132,14 +145,29 @@ class _ArticleListItemState extends State<ArticleListItem> {
                           builder: (BuildContext context) {
                             return addQtedialogue();
                           }).then((val) {
-                        if (widget.pieceOrigin == 'BR' ||
-                            widget.pieceOrigin == 'FF' ||
-                            widget.pieceOrigin == 'RF' ||
-                            widget.pieceOrigin == 'AF') {
+                        if (widget.pieceOrigin == 'BL' ||
+                            widget.pieceOrigin == 'FC') {
                           if ((widget.article.quantite -
                                   widget.article.cmdClient) <
                               widget.article.selectedQuantite) {
-                            Helpers.showToast(S.current.msg_qte_select_sup);
+                            AwesomeDialog(
+                                context: context,
+                                dialogType: DialogType.WARNING,
+                                dismissOnBackKeyPress: false,
+                                dismissOnTouchOutside: false,
+                                animType: AnimType.BOTTOMSLIDE,
+                                title: "",
+                                desc: S.current.msg_qte_select_sup,
+                                btnCancelText: S.current.confirme,
+                                btnCancelOnPress: () {},
+                                btnOkText: S.current.annuler,
+                                btnOkOnPress: () {
+                                  setState(() {
+                                    widget.article.selectedQuantite = 1;
+                                  });
+                                })
+                              ..show();
+                            // Helpers.showToast(S.current.msg_qte_select_sup);
                           }
                         }
 
@@ -147,14 +175,29 @@ class _ArticleListItemState extends State<ArticleListItem> {
                       });
                     } else {
                       selectThisItem();
-                      if (widget.pieceOrigin == 'BR' ||
-                          widget.pieceOrigin == 'FF' ||
-                          widget.pieceOrigin == 'RF' ||
-                          widget.pieceOrigin == 'AF') {
+                      if (widget.pieceOrigin == 'BL' ||
+                          widget.pieceOrigin == 'FC') {
                         if ((widget.article.quantite -
                                 widget.article.cmdClient) <
                             1) {
-                          Helpers.showToast(S.current.msg_qte_zero);
+                          AwesomeDialog(
+                              context: context,
+                              dismissOnBackKeyPress: false,
+                              dismissOnTouchOutside: false,
+                              dialogType: DialogType.WARNING,
+                              animType: AnimType.BOTTOMSLIDE,
+                              title: "",
+                              desc: S.current.msg_qte_zero,
+                              btnCancelText: S.current.confirme,
+                              btnCancelOnPress: () {},
+                              btnOkText: S.current.annuler,
+                              btnOkOnPress: () {
+                                setState(() {
+                                  widget.article.selectedQuantite = 1;
+                                });
+                              })
+                            ..show();
+                          // Helpers.showToast(S.current.msg_qte_zero);
                         }
                       }
                     }
@@ -190,9 +233,16 @@ class _ArticleListItemState extends State<ArticleListItem> {
                 ),
                 backgroundColor: Colors.yellow[700],
                 contentLocation: ContentLocation.below,
-                title: Text(S.current.tap_element , style: GoogleFonts.lato(fontWeight: FontWeight.bold),),
-                description:
-                    Container(width: 150, child: Text(S.current.msg_tap, style: GoogleFonts.lato(),)),
+                title: Text(
+                  S.current.tap_element,
+                  style: GoogleFonts.lato(fontWeight: FontWeight.bold),
+                ),
+                description: Container(
+                    width: 150,
+                    child: Text(
+                      S.current.msg_tap,
+                      style: GoogleFonts.lato(),
+                    )),
                 onBackgroundTap: () async {
                   await FeatureDiscovery.completeCurrentStep(context);
                   return true;
@@ -212,10 +262,9 @@ class _ArticleListItemState extends State<ArticleListItem> {
                             ),
                             Text("${widget.article.designation}",
                                 style: GoogleFonts.lato(
-                                  textStyle: TextStyle(
-                                    fontSize: 16.0,
-                                  )
-                                )),
+                                    textStyle: TextStyle(
+                                  fontSize: 16.0,
+                                ))),
                           ],
                         ),
                       )
@@ -233,13 +282,64 @@ class _ArticleListItemState extends State<ArticleListItem> {
                           SizedBox(
                             width: 3,
                           ),
-                          (widget.article.ref != '')?
-                          Text("${widget.article.ref}",
+                          (widget.article.ref != '')
+                              ? Text("${widget.article.ref}",
+                                  style: GoogleFonts.lato(
+                                      textStyle: TextStyle(
+                                    fontSize: 16.0,
+                                  )))
+                              : Text(
+                                  "__",
+                                  style: GoogleFonts.lato(),
+                                ),
+                        ],
+                      ),
+                      Row(
+                        children: [
+                          Icon(
+                            Icons.widgets_rounded,
+                            size: 12,
+                            color: Theme.of(context).primaryColorDark,
+                          ),
+                          SizedBox(
+                            width: 3,
+                          ),
+                          Text("${widget.article.selectedQuantite.toString()}",
                               style: GoogleFonts.lato(
-                                textStyle: TextStyle(
-                                  fontSize: 16.0,
-                                )
-                              )):Text("__" , style: GoogleFonts.lato(),),
+                                textStyle: TextStyle(fontSize: 16.0),
+                              )),
+                        ],
+                      ),
+                      Text(
+                        "${Helpers.numberFormat(widget.article.selectedQuantite * widget.article.selectedPrice).toString()} ${_devise}",
+                        style: GoogleFonts.lato(
+                            textStyle: TextStyle(
+                                fontSize: 16.0, fontWeight: FontWeight.bold)),
+                      ),
+                    ]
+                  :
+                  // listing des articles ds le fragement article
+                  [
+                      Row(
+                        children: [
+                          Icon(
+                            MdiIcons.pound,
+                            size: 12,
+                            color: Theme.of(context).primaryColorDark,
+                          ),
+                          SizedBox(
+                            width: 3,
+                          ),
+                          (widget.article.ref != '')
+                              ? Text("${widget.article.ref}",
+                                  style: GoogleFonts.lato(
+                                      textStyle: TextStyle(
+                                    fontSize: 16.0,
+                                  )))
+                              : Text(
+                                  "__",
+                                  style: GoogleFonts.lato(),
+                                ),
                         ],
                       ),
                       Row(
@@ -253,68 +353,19 @@ class _ArticleListItemState extends State<ArticleListItem> {
                             width: 3,
                           ),
                           Text(
-                            "${widget.article.selectedQuantite.toString()}",
+                            "${(widget.article.quantite - widget.article.cmdClient).toString()}",
                             style: GoogleFonts.lato(
-                              textStyle: TextStyle(fontSize: 16.0),
-                            )
+                                textStyle: TextStyle(
+                                    color: widget.article.quantite <=
+                                            widget.article.quantiteMinimum
+                                        ? Colors.redAccent
+                                        : Theme.of(context).primaryColorDark,
+                                    fontSize: 16.0)),
                           ),
                         ],
                       ),
-                      Text(
-                        "${Helpers.numberFormat(widget.article.selectedQuantite * widget.article.selectedPrice).toString()} ${_devise}",
-                        style: GoogleFonts.lato(
-                          textStyle: TextStyle(
-                              fontSize: 16.0, fontWeight: FontWeight.bold)
-                        ),
-                      ),
-                    ]
-                  :
-                  // listing des articles ds le fragement article
-                  [
-                    Row(
-                      children: [
-                        Icon(
-                          MdiIcons.pound,
-                          size: 12,
-                          color: Theme.of(context).primaryColorDark,
-                        ),
-                        SizedBox(
-                          width: 3,
-                        ),
-                        (widget.article.ref != '')?
-                        Text("${widget.article.ref}",
-                            style:GoogleFonts.lato(
-                              textStyle:  TextStyle(
-                                fontSize: 16.0,
-                              )
-                            )):Text("__" , style: GoogleFonts.lato(),),
-                      ],
-                    ),
-                    Row(
-                      children: [
-                        Icon(
-                          Icons.widgets_rounded,
-                          size: 12,
-                          color: Theme.of(context).primaryColorDark,
-                        ),
-                        SizedBox(
-                          width: 3,
-                        ),
-                        Text(
-                          "${(widget.article.quantite - widget.article.cmdClient).toString()}",
-                          style: GoogleFonts.lato(
-                            textStyle: TextStyle(
-                                color: widget.article.quantite <=
-                                    widget.article.quantiteMinimum
-                                    ? Colors.redAccent
-                                    : Theme.of(context).primaryColorDark,
-                                fontSize: 16.0)
-                          ),
-                        ),
-                      ],
-                    ),
-                    trailingChildrenOnArticleFragment(),
-                  ],
+                      trailingChildrenOnArticleFragment(),
+                    ],
             ),
           ),
           actions: (widget.onItemSelected == null)
@@ -344,28 +395,35 @@ class _ArticleListItemState extends State<ArticleListItem> {
         widget.pieceOrigin == 'AF') {
       return Text(
         "${Helpers.numberFormat(widget.article.prixAchat).toString()} ${_devise}",
-        style: GoogleFonts.lato(textStyle: TextStyle(fontSize: 16.0, fontWeight: FontWeight.bold)),
+        style: GoogleFonts.lato(
+            textStyle: TextStyle(fontSize: 16.0, fontWeight: FontWeight.bold)),
       );
     } else {
       switch (widget.tarification) {
         case 1:
           return Text(
             "${Helpers.numberFormat(widget.article.prixVente1).toString()} ${_devise}",
-            style: GoogleFonts.lato(textStyle: TextStyle(fontSize: 16.0, fontWeight: FontWeight.bold)),
+            style: GoogleFonts.lato(
+                textStyle:
+                    TextStyle(fontSize: 16.0, fontWeight: FontWeight.bold)),
           );
           break;
 
         case 2:
           return Text(
             "${Helpers.numberFormat(widget.article.prixVente2).toString()} ${_devise}",
-            style: GoogleFonts.lato(textStyle: TextStyle(fontSize: 16.0, fontWeight: FontWeight.bold)),
+            style: GoogleFonts.lato(
+                textStyle:
+                    TextStyle(fontSize: 16.0, fontWeight: FontWeight.bold)),
           );
           break;
 
         case 3:
           return Text(
             "${Helpers.numberFormat(widget.article.prixVente3).toString()} ${_devise}",
-            style: GoogleFonts.lato(textStyle: TextStyle(fontSize: 16.0, fontWeight: FontWeight.bold)),
+            style: GoogleFonts.lato(
+                textStyle:
+                    TextStyle(fontSize: 16.0, fontWeight: FontWeight.bold)),
           );
           break;
 
@@ -373,12 +431,16 @@ class _ArticleListItemState extends State<ArticleListItem> {
           if (widget.article.selectedPrice > 0) {
             return Text(
               "${Helpers.numberFormat(widget.article.selectedPrice).toString()} ${_devise}",
-              style: GoogleFonts.lato(textStyle: TextStyle(fontSize: 16.0, fontWeight: FontWeight.bold)),
+              style: GoogleFonts.lato(
+                  textStyle:
+                      TextStyle(fontSize: 16.0, fontWeight: FontWeight.bold)),
             );
           }
           return Text(
             "${Helpers.numberFormat(widget.article.prixVente1).toString()} ${_devise}",
-            style: GoogleFonts.lato(textStyle: TextStyle(fontSize: 16.0, fontWeight: FontWeight.bold)),
+            style: GoogleFonts.lato(
+                textStyle:
+                    TextStyle(fontSize: 16.0, fontWeight: FontWeight.bold)),
           );
           break;
       }
@@ -394,7 +456,7 @@ class _ArticleListItemState extends State<ArticleListItem> {
           margin: EdgeInsets.all(10),
           child: Wrap(children: [
             Padding(
-              padding: const EdgeInsets.all(10),
+              padding: EdgeInsets.all(10),
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -404,7 +466,8 @@ class _ArticleListItemState extends State<ArticleListItem> {
                     padding: const EdgeInsets.only(bottom: 20),
                     child: Text(
                       S.current.modification_titre,
-                      style: GoogleFonts.lato(textStyle: TextStyle(
+                      style: GoogleFonts.lato(
+                          textStyle: TextStyle(
                         fontSize: 18,
                         fontWeight: FontWeight.w400,
                       )),
@@ -432,7 +495,8 @@ class _ArticleListItemState extends State<ArticleListItem> {
                             borderRadius: BorderRadius.circular(20)),
                         contentPadding: EdgeInsets.only(left: 10),
                         labelText: S.current.quantit,
-                        labelStyle: GoogleFonts.lato(textStyle: TextStyle(color: Colors.orange[900])),
+                        labelStyle: GoogleFonts.lato(
+                            textStyle: TextStyle(color: Colors.orange[900])),
                         enabledBorder: OutlineInputBorder(
                           gapPadding: 3.3,
                           borderRadius: BorderRadius.circular(20),
@@ -454,10 +518,11 @@ class _ArticleListItemState extends State<ArticleListItem> {
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
                               RawMaterialButton(
-                                onPressed: () async {
+                                onPressed: () {
                                   double _qte =
                                       double.parse(_quntiteControler.text) - 1;
-                                  _quntiteControler.text = _qte.toString();
+                                  _quntiteControler.text =
+                                      _qte.toStringAsFixed(2);
                                 },
                                 elevation: 2.0,
                                 fillColor: Colors.redAccent,
@@ -469,10 +534,11 @@ class _ArticleListItemState extends State<ArticleListItem> {
                                 shape: CircleBorder(),
                               ),
                               RawMaterialButton(
-                                onPressed: () async {
+                                onPressed: () {
                                   double _qte =
                                       double.parse(_quntiteControler.text) + 1;
-                                  _quntiteControler.text = _qte.toString();
+                                  _quntiteControler.text =
+                                      _qte.toStringAsFixed(2);
                                 },
                                 elevation: 2.0,
                                 fillColor: Colors.greenAccent[700],
@@ -510,7 +576,9 @@ class _ArticleListItemState extends State<ArticleListItem> {
                                     borderRadius: BorderRadius.circular(20)),
                                 contentPadding: EdgeInsets.only(left: 10),
                                 labelText: S.current.prix,
-                                labelStyle:GoogleFonts.lato(textStyle: TextStyle(color: Colors.orange[900])),
+                                labelStyle: GoogleFonts.lato(
+                                    textStyle:
+                                        TextStyle(color: Colors.orange[900])),
                                 enabledBorder: OutlineInputBorder(
                                   gapPadding: 3.3,
                                   borderRadius: BorderRadius.circular(20),
@@ -521,29 +589,40 @@ class _ArticleListItemState extends State<ArticleListItem> {
                             ),
                           ),
                           SizedBox(height: 10),
+                          //buttons
                           Row(
                             mainAxisSize: MainAxisSize.max,
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
-                              RaisedButton(
-                                onPressed: () {
-                                  _quntiteControler.text = "0";
-                                  Navigator.pop(context);
+                              InkWell(
+                                onTap: () {
+                                      _quntiteControler.text = "0";
+                                      Navigator.pop(context);
                                 },
-                                child: Text(
-                                  S.current.annuler,
-                                  style: GoogleFonts.lato(textStyle: TextStyle(color: Colors.white , fontWeight: FontWeight.w600)),
+                                child: Container(
+                                  padding: EdgeInsets.all(8.0),
+                                  width: 100,
+                                  decoration: BoxDecoration(
+                                    color: Colors.red,
+                                    borderRadius:BorderRadius.all(Radius.circular(100))
+                                  ),
+                                  child: Text(
+                                    S.current.annuler,
+                                    textAlign: TextAlign.center,
+                                    style: TextStyle(
+                                        color: Colors.white,
+                                        fontWeight: FontWeight.w700,fontSize: 14),
+                                  ),
                                 ),
-                                color: Colors.redAccent[600],
                               ),
                               SizedBox(width: 10),
-                              RaisedButton(
-                                onPressed: () {
+                              InkWell(
+                                onTap: () {
                                   try {
                                     double _qte =
-                                        double.parse(_quntiteControler.text);
+                                    double.parse(_quntiteControler.text);
                                     double _price =
-                                        double.parse(_priceControler.text);
+                                    double.parse(_priceControler.text);
                                     if (_qte > 0) {
                                       _validateQteError = null;
                                     } else {
@@ -572,11 +651,21 @@ class _ArticleListItemState extends State<ArticleListItem> {
                                     print(e);
                                   }
                                 },
-                                child: Text(
-                                  S.current.confirme,
-                                  style: GoogleFonts.lato(textStyle: TextStyle(color: Colors.white , fontWeight: FontWeight.w600)),
+                                child: Container(
+                                  padding: EdgeInsets.all(8.0),
+                                  width: 100,
+                                  decoration: BoxDecoration(
+                                      color: Color(0xFF00CA71),
+                                      borderRadius:BorderRadius.all(Radius.circular(100))
+                                  ),
+                                  child: Text(
+                                    S.current.confirme,
+                                    textAlign: TextAlign.center,
+                                    style: TextStyle(
+                                        color: Colors.white,
+                                        fontWeight: FontWeight.w700,fontSize: 14),
+                                  ),
                                 ),
-                                color: Colors.greenAccent[700],
                               ),
                             ],
                           ),
@@ -591,7 +680,7 @@ class _ArticleListItemState extends State<ArticleListItem> {
         ),
       );
       _quntiteControler.text = widget.article.selectedQuantite.toString();
-      _priceControler.text = widget.article.selectedPrice.toString();
+      _priceControler.text = widget.article.selectedPrice.toStringAsFixed(2);
       return dialog;
     });
   }

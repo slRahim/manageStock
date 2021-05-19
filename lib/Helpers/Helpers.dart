@@ -215,8 +215,10 @@ class Helpers {
   static String dateToText(DateTime dateTime) {
     var month = dateTime.month.toString().padLeft(2, '0');
     var day = dateTime.day.toString().padLeft(2, '0');
-    var dateText =
-        '${dateTime.year}-$month-$day ${dateTime.hour}:${dateTime.minute}';
+    var hour = dateTime.hour.toString().padLeft(2, '0') ;
+    var minute = dateTime.minute.toString().padLeft(2, '0') ;
+
+    var dateText = '${dateTime.year}-$month-$day $hour:$minute';
     return dateText;
   }
 

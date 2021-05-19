@@ -30,13 +30,6 @@ class _PrintState extends State<Print> {
   String _devicesMsg;
   BluetoothManager bluetoothManager = BluetoothManager.instance;
 
-  // String _localIp = '';
-  // List<String> _wifidevices = [];
-  // String _wifidevicesMsg;
-  // bool _isDiscovering = false;
-  // int _found = -1;
-  // var _subscription ;
-
   QueryCtr _queryCtr = new QueryCtr();
   DefaultPrinter defaultPrinter = new DefaultPrinter.init();
 
@@ -47,16 +40,6 @@ class _PrintState extends State<Print> {
   @override
   void initState() {
     if (Platform.isAndroid) {
-      // _subscription = Connectivity().onConnectivityChanged.listen((ConnectivityResult result) {
-      //   if(result.index == ConnectivityResult.wifi.index){
-      //     initWifiPrinter();
-      //   }else{
-      //     setState(() {
-      //       _wifidevicesMsg= "Please turn wifi on";
-      //     });
-      //   }
-      //
-      // });
       bluetoothManager.state.listen((val) {
         if (!mounted) return;
         if (val == 12) {
@@ -67,10 +50,7 @@ class _PrintState extends State<Print> {
       });
     } else {
       initBlPrinter();
-      // initWifiPrinter();
     }
-
-
 
     super.initState();
   }
@@ -84,65 +64,11 @@ class _PrintState extends State<Print> {
     });
   }
 
-  // void initWifiPrinter() async {
-  //   setState(() {
-  //     _isDiscovering = true;
-  //     _wifidevices.clear();
-  //     _found = -1;
-  //   });
-  //
-  //   String ip;
-  //   try {
-  //     ip = await Wifi.ip;
-  //   } catch (e) {
-  //     setState(() {
-  //       _wifidevicesMsg = 'Please connect to network' ;
-  //     });
-  //     return;
-  //   }
-  //   setState(() {
-  //     _localIp = ip;
-  //   });
-  //
-  //   final String subnet = ip.substring(0, ip.lastIndexOf('.'));
-  //   int port = 9100;
-  //   print('subnet:\t$subnet, port:\t$port');
-  //
-  //   final stream = NetworkAnalyzer.discover2(subnet, port);
-  //
-  //   stream.listen((NetworkAddress addr) {
-  //     if (addr.exists) {
-  //       print('Found device: ${addr.ip}');
-  //       setState(() {
-  //         _wifidevices.add(addr.ip);
-  //         _found = _wifidevices.length;
-  //       });
-  //     }
-  //   })
-  //     ..onDone(() {
-  //       setState(() {
-  //         _isDiscovering = false;
-  //         _found = _wifidevices.length;
-  //       });
-  //       if(_found < 1){
-  //         setState(() {
-  //           _wifidevicesMsg = 'No Device is found' ;
-  //         });
-  //         return;
-  //       }
-  //     })
-  //     ..onError((dynamic e) {
-  //       setState(() {
-  //         _wifidevicesMsg = 'No Device is found' ;
-  //       });
-  //       return;
-  //     });
-  // }
+
 
   @override
   void dispose() {
     _printerManager.stopScan();
-    // _subscription.cancel();
     super.dispose();
   }
 
@@ -229,54 +155,6 @@ class _PrintState extends State<Print> {
                         },
                       ),
                     )),
-          // Container(
-          //   padding: EdgeInsets.all(5),
-          //   child: Text(
-          //     "Wifi Devices",
-          //     style: TextStyle(
-          //       fontWeight: FontWeight.bold,
-          //       fontSize: 16,
-          //     ),
-          //   ),
-          // ),
-          // Container(
-          //     margin: EdgeInsets.only(bottom: 10 , top : 5),
-          //     height: 300,
-          //     decoration: BoxDecoration(
-          //       color: Colors.white,
-          //     ),
-          //     padding: EdgeInsets.all(5),
-          //     child: (_wifidevices.isEmpty)
-          //         ? Center(
-          //           child: Column(
-          //             mainAxisAlignment: MainAxisAlignment.center,
-          //             children: [
-          //               (_wifidevicesMsg != null)?Icon(Icons.warning , color: Colors.yellow[700], size: 60,)
-          //                   :CircularProgressIndicator(),
-          //               SizedBox(height: 5,),
-          //               Text(_wifidevicesMsg ?? '' , style: TextStyle(fontWeight: FontWeight.bold),),
-          //             ],
-          //           )
-          //         )
-          //         : Scrollbar(
-          //             isAlwaysShown: true,
-          //             controller: _controller1,
-          //             child: ListView.builder(
-          //               controller: _controller1,
-          //               itemCount: _wifidevices.length,
-          //               itemBuilder: (c, i) {
-          //                 return ListTile(
-          //                   leading: Icon(Icons.print),
-          //                   title: Text(_wifidevices[i]),
-          //                   subtitle: Text("9100"),
-          //                   onTap: () async {
-          //                     // await printTicket(context, _devices[i]);
-          //                     Navigator.pop(context);
-          //                   },
-          //                 );
-          //               },
-          //             ),
-          //           )),
         ],
       ),
     );

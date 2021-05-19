@@ -321,7 +321,7 @@ class _PreviewPieceState extends State<PreviewPiece> {
               align: (_default_format == PaperSize.mm80)
                   ? PosAlign.center
                   : PosAlign.left));
-      if(_profile.activite != null){
+      if(_profile.activite != ""){
         input = "${_profile.activite}";
         encArabic = await CharsetConverter.encode("ISO-8859-6",
             "${input.split('').reversed.join()}");
@@ -332,7 +332,7 @@ class _PreviewPieceState extends State<PreviewPiece> {
                     ? PosAlign.center
                     : PosAlign.left));
       }
-      if(_profile.adresse != null){
+      if(_profile.adresse != ""){
         input = "${_profile.adresse}";
         encArabic = await CharsetConverter.encode("ISO-8859-6",
             "${input.split('').reversed.join()}");
@@ -343,7 +343,7 @@ class _PreviewPieceState extends State<PreviewPiece> {
                     ? PosAlign.center
                     : PosAlign.left));
       }
-      if(_profile.ville != null){
+      if(_profile.ville != ""){
         input = "${_profile.ville}";
         encArabic = await CharsetConverter.encode("ISO-8859-6",
             "${input.split('').reversed.join()}");
@@ -354,7 +354,7 @@ class _PreviewPieceState extends State<PreviewPiece> {
                     ? PosAlign.center
                     : PosAlign.left));
       }
-      if(_profile.telephone != null){
+      if(_profile.telephone != ""){
         input = "${_profile.telephone}";
         encArabic = await CharsetConverter.encode("ISO-8859-6",
             "${input.split('').reversed.join()}");
@@ -565,28 +565,28 @@ class _PreviewPieceState extends State<PreviewPiece> {
               align: (_default_format == PaperSize.mm80)
                   ? PosAlign.center
                   : PosAlign.left));
-      if(_profile.activite != null){
+      if(_profile.activite != ""){
         ticket.text("${_profile.activite}",
             styles: PosStyles(
                 align: (_default_format == PaperSize.mm80)
                     ? PosAlign.center
                     : PosAlign.left));
       }
-      if(_profile.adresse != null){
+      if(_profile.adresse != ""){
         ticket.text("${_profile.adresse}",
             styles: PosStyles(
                 align: (_default_format == PaperSize.mm80)
                     ? PosAlign.center
                     : PosAlign.left));
       }
-      if(_profile.ville != null){
+      if(_profile.ville != ""){
         ticket.text("${_profile.ville}",
             styles: PosStyles(
                 align: (_default_format == PaperSize.mm80)
                     ? PosAlign.center
                     : PosAlign.left));
       }
-      if(_profile.telephone != null){
+      if(_profile.telephone != ""){
         ticket.text("${_profile.telephone}",
             styles: PosStyles(
                 align: (_default_format == PaperSize.mm80)

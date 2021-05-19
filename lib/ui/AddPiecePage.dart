@@ -54,6 +54,7 @@ import 'package:pdf/widgets.dart' as pw;
 import 'package:printing/printing.dart';
 import 'package:feature_discovery/feature_discovery.dart';
 import 'package:google_fonts/google_fonts.dart';
+import "package:gestmob/Helpers/string_cap_extension.dart";
 
 class AddPiecePage extends StatefulWidget {
   var arguments;
@@ -216,7 +217,7 @@ class _AddPiecePageState extends State<AddPiecePage>
       _selectedTarification = _selectedClient.tarification;
       _selectedItems = await _queryCtr.getJournalPiece(item, local: false);
       _verssementControler.text = "0.0";
-      _resteControler.text = _piece.reste.toString();
+      _resteControler.text = _piece.reste.toStringAsFixed(2);
 
       _oldMov = _piece.mov;
       _restepiece = _piece.reste;
@@ -232,8 +233,8 @@ class _AddPiecePageState extends State<AddPiecePage>
       _remisepiece = (_piece.remise * _total_ht) / 100;
       _pourcentremise = _piece.remise;
 
-      _remisepieceControler.text = _remisepiece.toString();
-      _pourcentremiseControler.text = _pourcentremise.toString();
+      _remisepieceControler.text = _remisepiece.toStringAsFixed(2);
+      _pourcentremiseControler.text = _pourcentremise.toStringAsFixed(2);
     } else {
       _piece.piece = widget.arguments.piece;
 
@@ -1003,7 +1004,7 @@ class _AddPiecePageState extends State<AddPiecePage>
                                       calculPiece(),
                                       setState((){
                                         _remisepiece = (_total_ht * _pourcentremise) / 100 ;
-                                        _remisepieceControler.text = _restepiece.toString();
+                                        _remisepieceControler.text = _restepiece.toStringAsFixed(2);
                                       })
                                     }),
                                   ),
@@ -1182,15 +1183,15 @@ class _AddPiecePageState extends State<AddPiecePage>
                     if (_verssementpiece == 0) {
                       double _reste =
                           _total_ttc - (_piece.regler + double.parse(value));
-                      _resteControler.text = _reste.toString();
+                      _resteControler.text = _reste.toStringAsFixed(2);
                     } else {
                       double _reste =
                           _total_ttc - (_piece.regler + double.parse(value));
-                      _resteControler.text = _reste.toString();
+                      _resteControler.text = _reste.toStringAsFixed(2);
                     }
                   } else {
                     double _reste = _total_ttc - double.parse(value);
-                    _resteControler.text = _reste.toString();
+                    _resteControler.text = _reste.toStringAsFixed(2);
                   }
                 },
                 decoration: InputDecoration(
@@ -1290,7 +1291,7 @@ class _AddPiecePageState extends State<AddPiecePage>
                 },
                 onChanged: (value) {
                   double res = (double.parse(value) * 100) / _total_ht;
-                  _pourcentremiseControler.text = res.toString();
+                  _pourcentremiseControler.text = res.toStringAsFixed(2);
                 },
                 decoration: InputDecoration(
                   errorText: _validateVerssemntError ?? null,
@@ -1336,7 +1337,7 @@ class _AddPiecePageState extends State<AddPiecePage>
                         },
                         onChanged: (value) {
                           double res = (_total_ht * double.parse(value)) / 100;
-                          _remisepieceControler.text = res.toString();
+                          _remisepieceControler.text = res.toStringAsFixed(2);
                         },
                         decoration: InputDecoration(
                           prefixIcon: Icon(
@@ -1544,9 +1545,9 @@ class _AddPiecePageState extends State<AddPiecePage>
       if (_piece.id != null) {
         if (_net_a_payer <= _piece.net_a_payer) {
           _verssementpiece = 0.0;
-          _verssementControler.text = _verssementpiece.toString();
+          _verssementControler.text = _verssementpiece.toStringAsFixed(2);
           _restepiece = _net_a_payer - _piece.regler;
-          _resteControler.text = _restepiece.toString();
+          _resteControler.text = _restepiece.toStringAsFixed(2);
         } else {
           // le verssement est 0 tjr tq l'utilisateur ne le modifie pas
           // _verssementpiece = _net_a_payer - _piece.regler;
@@ -1554,7 +1555,7 @@ class _AddPiecePageState extends State<AddPiecePage>
           //   _verssementpiece = 0.0 ;
           // }
           _verssementpiece = 0.0;
-          _verssementControler.text = _verssementpiece.toString();
+          _verssementControler.text = _verssementpiece.toStringAsFixed(2);
           _restepiece = _net_a_payer - _piece.regler;
           _resteControler.text = "0.0";
         }
@@ -1565,7 +1566,7 @@ class _AddPiecePageState extends State<AddPiecePage>
         //   _verssementpiece = 0.0 ;
         // }
         _verssementpiece = 0.0;
-        _verssementControler.text = _verssementpiece.toString();
+        _verssementControler.text = _verssementpiece.toStringAsFixed(2);
         _restepiece = _net_a_payer - _verssementpiece;
       }
     });
@@ -2373,7 +2374,7 @@ class _AddPiecePageState extends State<AddPiecePage>
               align: (formatPrint == PaperSize.mm80)
                   ? PosAlign.center
                   : PosAlign.left));
-      if (_profile.activite != null) {
+      if (_profile.activite != "") {
         input = "${_profile.activite}";
         encArabic = await CharsetConverter.encode(
             "ISO-8859-6", "${input.split('').reversed.join()}");
@@ -2384,7 +2385,7 @@ class _AddPiecePageState extends State<AddPiecePage>
                     ? PosAlign.center
                     : PosAlign.left));
       }
-      if (_profile.adresse != null) {
+      if (_profile.adresse != "") {
         input = "${_profile.adresse}";
         encArabic = await CharsetConverter.encode(
             "ISO-8859-6", "${input.split('').reversed.join()}");
@@ -2395,7 +2396,7 @@ class _AddPiecePageState extends State<AddPiecePage>
                     ? PosAlign.center
                     : PosAlign.left));
       }
-      if (_profile.ville != null) {
+      if (_profile.ville != "") {
         input = "${_profile.ville}";
         encArabic = await CharsetConverter.encode(
             "ISO-8859-6", "${input.split('').reversed.join()}");
@@ -2406,7 +2407,7 @@ class _AddPiecePageState extends State<AddPiecePage>
                     ? PosAlign.center
                     : PosAlign.left));
       }
-      if (_profile.telephone != null) {
+      if (_profile.telephone != "") {
         input = "${_profile.telephone}";
         encArabic = await CharsetConverter.encode(
             "ISO-8859-6", "${input.split('').reversed.join()}");
@@ -2619,28 +2620,28 @@ class _AddPiecePageState extends State<AddPiecePage>
               align: (formatPrint == PaperSize.mm80)
                   ? PosAlign.center
                   : PosAlign.left));
-      if (_profile.activite != null) {
+      if (_profile.activite != "") {
         ticket.text("${_profile.activite}",
             styles: PosStyles(
                 align: (formatPrint == PaperSize.mm80)
                     ? PosAlign.center
                     : PosAlign.left));
       }
-      if (_profile.adresse != null) {
+      if (_profile.adresse != "") {
         ticket.text("${_profile.adresse}",
             styles: PosStyles(
                 align: (formatPrint == PaperSize.mm80)
                     ? PosAlign.center
                     : PosAlign.left));
       }
-      if (_profile.ville != null) {
+      if (_profile.ville != "") {
         ticket.text("${_profile.ville}",
             styles: PosStyles(
                 align: (formatPrint == PaperSize.mm80)
                     ? PosAlign.center
                     : PosAlign.left));
       }
-      if (_profile.telephone != null) {
+      if (_profile.telephone != "") {
         ticket.text("${_profile.telephone}",
             styles: PosStyles(
                 align: (formatPrint == PaperSize.mm80)
@@ -2817,56 +2818,56 @@ class _AddPiecePageState extends State<AddPiecePage>
                               style: pw.TextStyle(
                                   font: ttf, fontWeight: pw.FontWeight.bold))
                           : pw.SizedBox(),
-                      (_profile.activite != null)
+                      (_profile.activite != "")
                           ? pw.Text("${_profile.activite} ",
                               style: pw.TextStyle(
                                   font: ttf, fontWeight: pw.FontWeight.bold))
                           : pw.SizedBox(),
-                      (_profile.adresse != null)
+                      (_profile.adresse != "")
                           ? pw.Text(
                               "${_profile.adresse} ${_profile.departement} ${_profile.ville} ${_profile.pays}",
                               style: pw.TextStyle(
                                   font: ttf, fontWeight: pw.FontWeight.bold))
                           : pw.SizedBox(),
-                      (_profile.telephone != null)
+                      (_profile.telephone != "")
                           ? pw.Text(
                               "${S.current.telephone}\t: ${_profile.telephone}",
                               style: pw.TextStyle(
                                   font: ttf, fontWeight: pw.FontWeight.bold))
                           : pw.SizedBox(),
-                      (_profile.fax != null)
+                      (_profile.fax != "")
                           ? pw.Text("${S.current.fax}\t: ${_profile.fax}",
                               style: pw.TextStyle(
                                   font: ttf, fontWeight: pw.FontWeight.bold))
                           : pw.SizedBox(),
-                      (_profile.mobile != null)
+                      (_profile.mobile != "")
                           ? pw.Text("${S.current.mobile}\t: ${_profile.mobile}",
                               style: pw.TextStyle(
                                   font: ttf, fontWeight: pw.FontWeight.bold))
                           : pw.SizedBox(),
-                      (_profile.email != null)
+                      (_profile.email != "")
                           ? pw.Text("${S.current.mail}\t: ${_profile.email}",
                               style: pw.TextStyle(
                                   font: ttf, fontWeight: pw.FontWeight.bold))
                           : pw.SizedBox(),
-                      (_profile.rc != null)
+                      (_profile.rc != "")
                           ? pw.Text("${S.current.rc}\t: ${_profile.rc}",
                               style: pw.TextStyle(
                                   font: ttf, fontWeight: pw.FontWeight.bold))
                           : pw.SizedBox(),
-                      (_profile.nif != null)
+                      (_profile.nif != "")
                           ? pw.Text("${S.current.nif}\t: ${_profile.nif}",
                               style: pw.TextStyle(
                                   font: ttf, fontWeight: pw.FontWeight.bold))
                           : pw.SizedBox(),
-                      (_profile.capital != null)
+                      (_profile.capital != "")
                           ? pw.Text(
                               "${S.current.capitale_sociale}\t: ${Helpers.numberFormat(_profile.capital)} ${Helpers.getDeviseTranslate(_myParams.devise)}",
                               style: pw.TextStyle(
                                   font: ttf, fontWeight: pw.FontWeight.bold))
                           : pw.SizedBox(),
                     ]),
-                (_profile.imageUint8List != null)
+                (_profile.imageUint8List != "")
                     ? pw.Image(pw.MemoryImage(_profile.imageUint8List),
                         height: 100, width: 100)
                     : pw.SizedBox(),
@@ -2882,11 +2883,17 @@ class _AddPiecePageState extends State<AddPiecePage>
                           "${S.current.rs}\t ${_selectedClient.raisonSociale} ",
                           style: pw.TextStyle(font: ttf)),
                       pw.Divider(height: 2),
-                      pw.Text(
+
+                      (_selectedClient.adresse != "")
+                          ? pw.Text(
                           "${S.current.adresse}\t  ${_selectedClient.adresse} ",
-                          style: pw.TextStyle(font: ttf)),
-                      pw.Text("${S.current.ville}\t  ${_selectedClient.ville}",
-                          style: pw.TextStyle(font: ttf)),
+                          style: pw.TextStyle(font: ttf))
+                      :pw.SizedBox(),
+
+                      (_selectedClient.ville != "")
+                          ? pw.Text("${S.current.ville}\t  ${_selectedClient.ville}",
+                          style: pw.TextStyle(font: ttf))
+                      : pw.SizedBox(),
                     ])),
             pw.SizedBox(width: 3),
             pw.Expanded(
@@ -3111,11 +3118,11 @@ class _AddPiecePageState extends State<AddPiecePage>
   String getPieceSuminLetters() {
     String res = '';
     res = res +
-        "${Helpers.numberToWords((_piece.net_a_payer.toInt()).toString())} ${Helpers.currencyName(_myParams.devise)} ";
+        "${Helpers.numberToWords((_piece.net_a_payer.toInt()).toString()).capitalizeFirstofEach} ${Helpers.currencyName(_myParams.devise)} ";
 
     int a = (_piece.net_a_payer % 1 * 100).roundToDouble().toInt();
     if (a > 0) {
-      res = res + "${Helpers.numberToWords(a.toString())} ${S.current.centime}";
+      res = res + "${Helpers.numberToWords(a.toString()).capitalizeFirstofEach} ${S.current.centime}";
     }
 
     return res;

@@ -1,8 +1,10 @@
+import 'dart:async';
 import 'dart:math';
 import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:barcode_scan/barcode_scan.dart';
 import 'package:circular_menu/circular_menu.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 import 'package:gestmob/Helpers/Helpers.dart';
 import 'package:gestmob/Helpers/QueryCtr.dart';
@@ -70,6 +72,9 @@ class _ArticlesFragmentState extends State<ArticlesFragment> {
   String feature10 = 'feature10' ;
   String feature13 = 'feature13' ;
 
+  static const _stream = const EventChannel('pda.flutter.dev/scanEvent');
+  StreamSubscription subscription ;
+
   @override
   Future<void> initState() {
     super.initState();
@@ -79,12 +84,21 @@ class _ArticlesFragmentState extends State<ArticlesFragment> {
     fillFilter(_filterMap);
     fillFilter(_emptyFilterMap);
     _dataSource = SliverListDataSource(ItemsListTypes.articlesList, _filterMap);
+
+    subscription = _stream.receiveBroadcastStream().listen(_pdaScanner);
   }
 
   @override
   void didChangeDependencies() {
     PushNotificationsManagerState data = PushNotificationsManager.of(context);
     _myParams = data.myParams;
+  }
+
+
+  @override
+  void dispose() {
+     subscription.cancel();
+     super.dispose();
   }
 
   //***************************************************partie speciale pour le filtre de recherche***************************************
@@ -402,5 +416,13 @@ class _ArticlesFragmentState extends State<ArticlesFragment> {
       }
       Helpers.showToast(result.rawContent);
     }
+  }
+
+  void _pdaScanner (data) {
+    setState(() {
+      searchController.text = data;
+      _dataSource.updateSearchTerm(data);
+      FocusScope.of(context).requestFocus(null);
+    });
   }
 }

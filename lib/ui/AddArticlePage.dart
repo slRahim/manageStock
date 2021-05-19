@@ -1,8 +1,9 @@
+import 'dart:async';
 import 'dart:io';
 import 'dart:typed_data';
-
 import 'package:barcode_scan/barcode_scan.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_icons/flutter_icons.dart';
 import 'package:gestmob/Helpers/Helpers.dart';
 import 'package:gestmob/Helpers/QueryCtr.dart';
@@ -95,6 +96,9 @@ class _AddArticlePageState extends State<AddArticlePage>
   TabController _tabController;
   int _tabSelectedIndex = 0;
 
+  static const _stream = const EventChannel('pda.flutter.dev/scanEvent');
+  StreamSubscription subscription ;
+
   //*************************************************************************************************************************************************************************
   //************************************************************************special init data***********************************************************************************
   void initState() {
@@ -113,6 +117,14 @@ class _AddArticlePageState extends State<AddArticlePage>
         _tabSelectedIndex = _tabController.index;
       });
     });
+
+    subscription = _stream.receiveBroadcastStream().listen(_pdaScanner);
+  }
+
+  @override
+  void dispose() {
+    subscription.cancel();
+    super.dispose();
   }
 
   Future<bool> futureInitState() async {
@@ -151,7 +163,7 @@ class _AddArticlePageState extends State<AddArticlePage>
     _designationControl.text = article.designation;
     _stockInitialControl.text = article.quantite.toString();
     _stockMinimumControl.text = article.quantiteMinimum.toString();
-    _prixAchatControl.text = article.prixAchat.toString();
+    _prixAchatControl.text = article.prixAchat.toStringAsFixed(2);
     _refControl.text = article.ref;
     _stockable = article.stockable;
     _codeBarControl.text = article.codeBar;
@@ -160,13 +172,13 @@ class _AddArticlePageState extends State<AddArticlePage>
     _colisControl.text = article.colis.toString();
 
     if (_pmpControl.text != null) {
-      _pmpControl.text = article.pmp.toString();
+      _pmpControl.text = article.pmp.toStringAsFixed(2);
     }
 
     _descriptionControl.text = article.description;
-    _price1Control.text = article.prixVente1.toString();
-    _price2Control.text = article.prixVente2.toString();
-    _price3Control.text = article.prixVente3.toString();
+    _price1Control.text = article.prixVente1.toStringAsFixed(2);
+    _price2Control.text = article.prixVente2.toStringAsFixed(2);
+    _price3Control.text = article.prixVente3.toStringAsFixed(2);
     _selectedMarque = _marqueItems[article.idMarque];
     _selectedFamille = _familleItems[article.idFamille];
     _selectedTva = new ArticleTva(article.tva);
@@ -912,7 +924,7 @@ class _AddArticlePageState extends State<AddArticlePage>
             child: ListDropDown(
               editMode: editMode,
               libelle:
-                  ("${S.current.taux_tva}: ${_selectedTva.tva.toString()} %"),
+                  ("${S.current.taux_tva}: ${_selectedTva.tva.toStringAsFixed(2)} %"),
               value: _selectedTva,
               items: _tvaDropdownItems,
               onChanged: (value) {
@@ -1469,5 +1481,12 @@ class _AddArticlePageState extends State<AddArticlePage>
       }
       Helpers.showToast(result.rawContent);
     }
+  }
+
+  void _pdaScanner (data) {
+    setState(() {
+      _codeBarControl.text = data;
+      FocusScope.of(context).requestFocus(null);
+    });
   }
 }

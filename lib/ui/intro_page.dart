@@ -1,6 +1,5 @@
 import 'dart:convert';
 import 'dart:typed_data';
-
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_phoenix/flutter_phoenix.dart';
@@ -761,30 +760,30 @@ class _IntroPageState extends State<IntroPage> {
     _profile = new Profile(
         1,
         image01,
-        "_codepin",
+        "",
         _raisonSocialeControl.text,
         5,
         _adresseControl.text,
-        "_addressWeb",
+        "",
         city,
         province,
         country,
-        "_cp",
+        "",
         _telephoneControl.text,
-        "_telephone2",
-        "_fax",
-        "_mobile1",
-        "_mobile2",
-        "_email",
-        "_site",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
         _rcControl.text,
         _nifControl.text,
-        "_ai",
+        "",
         0.0,
         _activiteControl.text,
-        "_nis",
-        "_codedouane",
-        "_maposition",
+        "",
+        "",
+        "",
         false);
 
     _prefs.setInt("intro", 0);

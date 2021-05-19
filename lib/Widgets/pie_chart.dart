@@ -45,6 +45,9 @@ class _ChartPieState extends State<ChartPie> {
     for(int i =0 ; i<widget.data.length ; i++){
       _totalSum = _totalSum +  getYvalue(i);
     }
+    if(_totalSum.isNaN){
+      _totalSum = 0 ;
+    }
   }
 
   @override
@@ -152,7 +155,7 @@ class _ChartPieState extends State<ChartPie> {
       return PieChartSectionData(
         color: colors[index],
         value: (getYvalue(index) == 0 && widget.data.length == 1 )? 1 : getYvalue(index),
-        title: '${(getYvalue(index)*100/_totalSum).toStringAsFixed(2)}%'.toString(),
+        title: (!(getYvalue(index)*100/_totalSum).isNaN) ? '${(getYvalue(index)*100/_totalSum).toStringAsFixed(2)} %'.toString() : "0.0 %" ,
         radius: radius,
         titleStyle: GoogleFonts.lato(
             textStyle: TextStyle(

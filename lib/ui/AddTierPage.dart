@@ -187,10 +187,10 @@ class _AddTierPageState extends State<AddTierPage>
     _mobileControl.text = item.mobile;
     _faxControl.text = item.fax;
     _emailControl.text = item.email;
-    _solde_departControl.text = item.solde_depart.toString();
-    _chiffre_affairesControl.text = item.chiffre_affaires.toString();
-    _reglerControl.text = item.regler.toString();
-    _creditControl.text = item.credit.toString();
+    _solde_departControl.text = item.solde_depart.toStringAsFixed(2);
+    _chiffre_affairesControl.text = item.chiffre_affaires.toStringAsFixed(2);
+    _reglerControl.text = item.regler.toStringAsFixed(2);
+    _creditControl.text = item.credit.toStringAsFixed(2);
     _selectedFamille = _familleItems[item.id_famille];
     _selectedStatut = Statics.statutItems[item.statut];
     _selectedTarification = item.tarification;
@@ -664,7 +664,7 @@ class _AddTierPageState extends State<AddTierPage>
                 var ch_affaire = (_chiffre_affairesControl.text != '')? double.parse(_chiffre_affairesControl.text):0.0 ;
                 var regle = (_reglerControl.text != '')? double.parse(_reglerControl.text ):0.0 ;
 
-                _creditControl.text = ((double.parse(value)+ch_affaire)-regle).toString() ;
+                _creditControl.text = ((double.parse(value)+ch_affaire)-regle).toStringAsFixed(2) ;
               },
               decoration: InputDecoration(
                 labelText: S.current.solde_depart,

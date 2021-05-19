@@ -199,8 +199,8 @@ class _AddTresoriePageState extends State<AddTresoriePage>
       _objetControl.text = _tresorie.objet;
       _modaliteControl.text = _tresorie.modalite;
       _montantControl.text = (_tresorie.montant < 0)
-          ? ((_tresorie.montant * -1)).toString()
-          : (_tresorie.montant).toString();
+          ? ((_tresorie.montant * -1)).toStringAsFixed(2)
+          : (_tresorie.montant).toStringAsFixed(2);
     } else {
       _selectedTypeTiers = Statics.tiersItems[0];
       _selectedCategorie = _categorieItems[1];
@@ -800,7 +800,7 @@ class _AddTresoriePageState extends State<AddTresoriePage>
               _tresorie.tierId = _selectedClient.id;
               _tresorie.tierRS = _selectedClient.raisonSociale;
               _clientControl.text = _selectedClient.raisonSociale;
-              _montantControl.text = (_selectedClient.credit).toString();
+              _montantControl.text = (_selectedClient.credit).toStringAsFixed(2);
             });
           },
         );
@@ -817,7 +817,7 @@ class _AddTresoriePageState extends State<AddTresoriePage>
         setState(() {
           _selectedPieces.add(selectedItem);
           _restepiece = _selectedPieces.first.reste;
-          _montantControl.text = (_restepiece).toString();
+          _montantControl.text = (_restepiece).toStringAsFixed(2);
           _objetControl.text = _objetControl.text +
               " ${selectedItem.piece} ${selectedItem.num_piece}";
         });
@@ -842,8 +842,6 @@ class _AddTresoriePageState extends State<AddTresoriePage>
   }
 
   Future<DateTime> getDate(DateTime dateTime) {
-    // Imagine that this function is
-    // more complex and slow.
     return showDatePicker(
       context: context,
       initialDate: dateTime,

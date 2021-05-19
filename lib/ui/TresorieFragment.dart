@@ -101,14 +101,17 @@ class _TresorieFragmentState extends State<TresorieFragment> {
 
     final tile = StatefulBuilder(builder: (context, StateSetter _setState) {
       return Builder(
-        builder: (context) => Column(
-          children: [
-            startDate(_setState),
-            endDate(_setState),
-            ListTile(
-              trailing: categorieDropDown(_setState),
-            ),
-          ],
+        builder: (context) => SingleChildScrollView(
+          child: Column(
+            children: [
+              startDate(_setState),
+              endDate(_setState),
+              SingleChildScrollView(
+                scrollDirection: Axis.horizontal,
+                child: categorieDropDown(_setState),
+              )
+            ],
+          ),
         ),
       );
     });
@@ -146,7 +149,6 @@ class _TresorieFragmentState extends State<TresorieFragment> {
             );
           } else {
             return snapshot.data ;
-
           }
         });
   }

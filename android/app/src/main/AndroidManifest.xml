@@ -56,6 +56,13 @@
             </intent-filter>
         </receiver>
         <receiver android:name="com.dexterous.flutterlocalnotifications.ScheduledNotificationReceiver" />
+        <receiver android:name=".VolumeSettingReceiver" android:enabled="true" android:exported="true">
+            <intent-filter>
+                <action android:name="android.settings.SENRAISE_VOLUME_UP" />
+                <action android:name="android.settings.SENRAISE_VOLUME_DOWN" />
+            </intent-filter>
+        </receiver>
+        <service android:name=".ScanIntentService" />
         <!-- Don't delete the meta-data below.
              This is used by the Flutter tool to generate GeneratedPluginRegistrant.java -->
         <meta-data

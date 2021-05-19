@@ -1,4 +1,5 @@
 import 'dart:ui';
+import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:gestmob/Helpers/Helpers.dart';
@@ -57,11 +58,28 @@ class _ArticleListItemSelectedState extends State<ArticleListItemSelected> {
                   builder: (BuildContext context) {
                     return addQtedialogue();
                   }).then((val) {
-                    if(widget.pieceOrigin == 'BR' || widget.pieceOrigin == 'FF'
-                        || widget.pieceOrigin == 'RF' || widget.pieceOrigin == 'AF'){
+                    if(widget.pieceOrigin == 'BL' || widget.pieceOrigin == 'FC'){
 
                       if((widget.article.quantite - widget.article.cmdClient) < widget.article.selectedQuantite){
-                        Helpers.showFlushBar(context, S.current.msg_qte_select_sup);
+
+                        AwesomeDialog(
+                            context: context,
+                            dialogType: DialogType.WARNING,
+                            animType: AnimType.BOTTOMSLIDE,
+                            dismissOnBackKeyPress: false,
+                            dismissOnTouchOutside: false,
+                            title: "",
+                            desc: S.current.msg_qte_select_sup,
+                            btnCancelText: S.current.confirme,
+                            btnCancelOnPress: (){},
+                            btnOkText: S.current.annuler,
+                            btnOkOnPress: (){
+                              setState(() {
+                                widget.article.selectedQuantite = 1 ;
+                              });
+                            }
+                        )..show();
+                        // Helpers.showFlushBar(context, S.current.msg_qte_select_sup);
                       }
                     }
 
@@ -134,7 +152,7 @@ class _ArticleListItemSelectedState extends State<ArticleListItemSelected> {
                   children: [
                     Center(
                         child: Padding(
-                          padding: const EdgeInsets.only(bottom: 20),
+                          padding: EdgeInsets.only(bottom: 20),
                           child: Text(
                             S.current.modification_titre,
                             style: GoogleFonts.lato(
@@ -247,42 +265,55 @@ class _ArticleListItemSelectedState extends State<ArticleListItemSelected> {
                               mainAxisSize: MainAxisSize.max,
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
-                                RaisedButton(
-                                  onPressed: ()  {
+                                InkWell(
+                                  onTap: () {
                                     _quntiteControler.text = "0";
                                     Navigator.pop(context);
                                   },
-                                  child: Text(
-                                    S.current.annuler,
-                                    style: GoogleFonts.lato(textStyle: TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
+                                  child: Container(
+                                    padding: EdgeInsets.all(8.0),
+                                    width: 100,
+                                    decoration: BoxDecoration(
+                                        color: Colors.red,
+                                        borderRadius:BorderRadius.all(Radius.circular(100))
+                                    ),
+                                    child: Text(
+                                      S.current.annuler,
+                                      textAlign: TextAlign.center,
+                                      style: TextStyle(
+                                          color: Colors.white,
+                                          fontWeight: FontWeight.w700,fontSize: 14),
+                                    ),
                                   ),
-                                  color: Colors.red[600],
                                 ),
                                 SizedBox(width: 10),
-                                RaisedButton(
-                                  onPressed: ()  {
+                                InkWell(
+                                  onTap: () {
                                     try {
-                                      double _qte = double.parse(_quntiteControler.text);
-                                      double _price = double.parse(_priceControler.text);
-                                      if(_qte > 0){
+                                      double _qte =
+                                      double.parse(_quntiteControler.text);
+                                      double _price =
+                                      double.parse(_priceControler.text);
+                                      if (_qte > 0) {
                                         _validateQteError = null;
-                                      } else{
+                                      } else {
                                         _validateQteError = S.current.msg_qte_err;
                                       }
-                                      if(_price > 0){
+                                      if (_price > 0) {
                                         _validatePriceError = null;
-                                      } else{
-                                        _validatePriceError = S.current.msg_prix_err;
+                                      } else {
+                                        _validatePriceError =
+                                            S.current.msg_prix_err;
                                       }
-                                      if(_validateQteError == null && _validatePriceError == null){
+                                      if (_validateQteError == null &&
+                                          _validatePriceError == null) {
                                         widget.article.selectedQuantite = _qte;
                                         widget.article.selectedPrice = _price;
                                         widget.onItemSelected(null);
 
                                         Navigator.pop(context);
-                                      } else{
-                                        setState(() {
-                                        });
+                                      } else {
+                                        setState(() {});
                                       }
                                     } catch (e) {
                                       setState(() {
@@ -291,11 +322,21 @@ class _ArticleListItemSelectedState extends State<ArticleListItemSelected> {
                                       print(e);
                                     }
                                   },
-                                  child: Text(
-                                    S.current.confirme,
-                                    style: GoogleFonts.lato(textStyle: TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
+                                  child: Container(
+                                    padding: EdgeInsets.all(8.0),
+                                    width: 100,
+                                    decoration: BoxDecoration(
+                                        color: Color(0xFF00CA71),
+                                        borderRadius:BorderRadius.all(Radius.circular(100))
+                                    ),
+                                    child: Text(
+                                      S.current.confirme,
+                                      textAlign: TextAlign.center,
+                                      style: TextStyle(
+                                          color: Colors.white,
+                                          fontWeight: FontWeight.w700,fontSize: 14),
+                                    ),
                                   ),
-                                  color: Colors.greenAccent[700],
                                 ),
                               ],
                             ),
@@ -310,7 +351,7 @@ class _ArticleListItemSelectedState extends State<ArticleListItemSelected> {
         ),
       );
       _quntiteControler.text = widget.article.selectedQuantite.toString();
-      _priceControler.text = widget.article.selectedPrice.toString();
+      _priceControler.text = widget.article.selectedPrice.toStringAsFixed(2);
       return dialog;
     });
   }

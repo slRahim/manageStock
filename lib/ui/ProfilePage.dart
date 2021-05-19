@@ -149,7 +149,7 @@ class _ProfilePageState extends State<ProfilePage> with TickerProviderStateMixin
     _aiControl.text = item.ai;
     _nifControl.text = item.nif;
     _nisControl.text = item.nis;
-    _capitalsocialControl.text = item.capital.toString();
+    _capitalsocialControl.text = item.capital.toStringAsFixed(2);
 
   }
 
