@@ -58,9 +58,6 @@ class _PieceListItemState extends State<PieceListItem> {
     _devise = Helpers.getDeviseTranslate(data.myParams.devise) ;
   }
 
-
-
-
   @override
   Widget build(BuildContext context) {
     SizeConfig().init(context);
@@ -290,7 +287,7 @@ class _PieceListItemState extends State<PieceListItem> {
   }
 
   Color getColor() {
-    if(widget.piece.piece == "FP"){
+    if(widget.piece.piece == PieceType.devis){
       if(widget.piece.etat == 1){
         return Colors.green ;
       }else{
@@ -306,7 +303,11 @@ class _PieceListItemState extends State<PieceListItem> {
     }else{
       switch (widget.piece.mov){
         case 1 :
-          if(widget.piece.reste > 0){
+          if(widget.piece.reste > 0 &&
+              widget.piece.piece != PieceType.retourClient &&
+              widget.piece.piece != PieceType.avoirClient &&
+              widget.piece.piece != PieceType.retourFournisseur &&
+              widget.piece.piece != PieceType.avoirFournisseur){
             return Colors.red;
           }else{
             return Colors.green;

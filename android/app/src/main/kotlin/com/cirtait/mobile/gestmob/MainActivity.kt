@@ -48,12 +48,16 @@ class MainActivity : FlutterActivity() {
     }
 
     public override fun onPause() {
-        mBarcodeScanner!!.stopScan()
+        if(mBarcodeScanner != null){
+            mBarcodeScanner!!.stopScan()
+        }
         super.onPause()
     }
 
     public override fun onDestroy() {
-        mBarcodeScanner!!.destroyScanner()
+        if(mBarcodeScanner != null){
+            mBarcodeScanner!!.destroyScanner()
+        }
         super.onDestroy()
     }
 

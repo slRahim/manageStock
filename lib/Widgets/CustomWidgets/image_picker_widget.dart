@@ -6,7 +6,6 @@ import 'package:gestmob/generated/l10n.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-// represante la page de l'ajout ou representation de l'image (profile , article , tiers )
 class ImagePickerWidget extends StatefulWidget {
   final bool editMode;
   final int scallFactor;

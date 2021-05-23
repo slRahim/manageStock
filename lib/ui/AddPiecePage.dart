@@ -181,6 +181,7 @@ class _AddPiecePageState extends State<AddPiecePage>
     if (widget.arguments is Piece &&
         widget.arguments.id != null &&
         widget.arguments.id > -1) {
+      // le cas d'une nouvel piece
       editMode = false;
       modification = true;
       await setDataFromItem(widget.arguments);
@@ -194,6 +195,7 @@ class _AddPiecePageState extends State<AddPiecePage>
       }
       _selectedTarification = _piece.tarification;
     } else {
+      // modification de la piece
       await setDataFromItem(null);
       _selectedTarification = _selectedClient.tarification;
       await getNumPiece(widget.arguments);
@@ -226,15 +228,15 @@ class _AddPiecePageState extends State<AddPiecePage>
       _total_ht = _piece.total_ht;
       _net_ht = _piece.net_ht;
       _total_tva = _piece.total_tva;
-      _total_ttc =
-          (_piece.total_ttc < 0) ? _piece.total_ttc * -1 : _piece.total_ttc;
+      _total_ttc = _piece.total_ttc;
       _timbre = _piece.timbre;
-      _net_a_payer = _piece.net_a_payer;
+      _net_a_payer = (_piece.net_a_payer < 0) ? _piece.net_a_payer * -1 : _piece.net_a_payer;
       _remisepiece = (_piece.remise * _total_ht) / 100;
       _pourcentremise = _piece.remise;
 
       _remisepieceControler.text = _remisepiece.toStringAsFixed(2);
       _pourcentremiseControler.text = _pourcentremise.toStringAsFixed(2);
+
     } else {
       _piece.piece = widget.arguments.piece;
 
@@ -263,7 +265,7 @@ class _AddPiecePageState extends State<AddPiecePage>
       _total_tva = 0.0;
       _total_ttc = 0.0;
       _timbre = 0.0;
-      _net_a_payer = _total_ttc;
+      _net_a_payer = 0.0;
       _remisepiece = 0;
       _pourcentremise = 0;
     }
@@ -558,15 +560,11 @@ class _AddPiecePageState extends State<AddPiecePage>
                       onTap: () async {
                         if (editMode) {
                           if (_piece.piece != PieceType.devis &&
-                              _piece.piece != PieceType.bonCommande &&
-                              _piece.piece != PieceType.retourClient &&
-                              _piece.piece != PieceType.avoirClient &&
-                              _piece.piece != PieceType.retourFournisseur &&
-                              _piece.piece != PieceType.avoirFournisseur) {
+                              _piece.piece != PieceType.bonCommande) {
                             if (_selectedItems.isNotEmpty) {
                               if (_net_a_payer > _piece.regler) {
                                 setState(() {
-                                  double _reste = _total_ttc -
+                                  double _reste = _net_a_payer -
                                       (_piece.regler + _verssementpiece);
                                   _resteControler.text = _reste.toString();
                                 });
@@ -606,12 +604,7 @@ class _AddPiecePageState extends State<AddPiecePage>
                         decoration: BoxDecoration(
                             border: (editMode &&
                                     _piece.piece != PieceType.devis &&
-                                    _piece.piece != PieceType.bonCommande &&
-                                    _piece.piece != PieceType.retourClient &&
-                                    _piece.piece != PieceType.avoirClient &&
-                                    _piece.piece !=
-                                        PieceType.retourFournisseur &&
-                                    _piece.piece != PieceType.avoirFournisseur)
+                                    _piece.piece != PieceType.bonCommande)
                                 ? Border(
                                     bottom: BorderSide(
                                         color: Colors.blue, width: 1))
@@ -626,15 +619,7 @@ class _AddPiecePageState extends State<AddPiecePage>
                                     size: 20,
                                     color: (_piece.piece != PieceType.devis &&
                                             _piece.piece !=
-                                                PieceType.bonCommande &&
-                                            _piece.piece !=
-                                                PieceType.retourClient &&
-                                            _piece.piece !=
-                                                PieceType.avoirClient &&
-                                            _piece.piece !=
-                                                PieceType.retourFournisseur &&
-                                            _piece.piece !=
-                                                PieceType.avoirFournisseur &&
+                                                PieceType.bonCommande  &&
                                             editMode)
                                         ? Colors.blue
                                         : Theme.of(context).primaryColorDark),
@@ -1159,7 +1144,11 @@ class _AddPiecePageState extends State<AddPiecePage>
                 child: Padding(
               padding: const EdgeInsets.only(bottom: 20),
               child: Text(
-                "${S.current.modification_titre} ${S.current.verssement}",
+                (_piece.piece == 'RC' ||_piece.piece == 'AC')
+                    ? "${S.current.rembourcement_client}"
+                    :(_piece.piece == 'RF' ||_piece.piece == 'AF')
+                    ? "${S.current.rembourcement_four}"
+                    :"${S.current.modification_titre} ${S.current.verssement}",
                 style: GoogleFonts.lato(
                   textStyle: TextStyle(
                     fontSize: 18,
@@ -1182,15 +1171,15 @@ class _AddPiecePageState extends State<AddPiecePage>
                   if (_piece.id != null) {
                     if (_verssementpiece == 0) {
                       double _reste =
-                          _total_ttc - (_piece.regler + double.parse(value));
+                          _net_a_payer - (_piece.regler + double.parse(value));
                       _resteControler.text = _reste.toStringAsFixed(2);
                     } else {
                       double _reste =
-                          _total_ttc - (_piece.regler + double.parse(value));
+                          _net_a_payer - (_piece.regler + double.parse(value));
                       _resteControler.text = _reste.toStringAsFixed(2);
                     }
                   } else {
-                    double _reste = _total_ttc - double.parse(value);
+                    double _reste = _net_a_payer - double.parse(value);
                     _resteControler.text = _reste.toStringAsFixed(2);
                   }
                 },
@@ -1546,7 +1535,7 @@ class _AddPiecePageState extends State<AddPiecePage>
         if (_net_a_payer <= _piece.net_a_payer) {
           _verssementpiece = 0.0;
           _verssementControler.text = _verssementpiece.toStringAsFixed(2);
-          _restepiece = _net_a_payer - _piece.regler;
+          _restepiece = _net_a_payer - (_piece.regler + _verssementpiece);
           _resteControler.text = _restepiece.toStringAsFixed(2);
         } else {
           // le verssement est 0 tjr tq l'utilisateur ne le modifie pas
@@ -1556,7 +1545,7 @@ class _AddPiecePageState extends State<AddPiecePage>
           // }
           _verssementpiece = 0.0;
           _verssementControler.text = _verssementpiece.toStringAsFixed(2);
-          _restepiece = _net_a_payer - _piece.regler;
+          _restepiece = _net_a_payer - (_piece.regler + _verssementpiece);
           _resteControler.text = "0.0";
         }
       } else {
@@ -1567,7 +1556,7 @@ class _AddPiecePageState extends State<AddPiecePage>
         // }
         _verssementpiece = 0.0;
         _verssementControler.text = _verssementpiece.toStringAsFixed(2);
-        _restepiece = _net_a_payer - _verssementpiece;
+        _restepiece = _net_a_payer - _verssementpiece ;
       }
     });
   }
@@ -1821,11 +1810,7 @@ class _AddPiecePageState extends State<AddPiecePage>
                 "Mov", _piece.mov, "Piece_id", _piece.id);
           }
 
-          if (_piece.piece != PieceType.devis &&
-              _piece.piece != PieceType.retourClient &&
-              _piece.piece != PieceType.avoirClient &&
-              _piece.piece != PieceType.retourFournisseur &&
-              _piece.piece != PieceType.avoirFournisseur) {
+          if (_piece.piece != PieceType.devis ) {
             await addTresorie(_piece, transferer: false);
           }
 
@@ -1856,11 +1841,7 @@ class _AddPiecePageState extends State<AddPiecePage>
             await _queryCtr.addItemToTable(DbTablesNames.journaux, journaux);
           });
 
-          if (_piece.piece != PieceType.devis &&
-              _piece.piece != PieceType.retourClient &&
-              _piece.piece != PieceType.avoirClient &&
-              _piece.piece != PieceType.retourFournisseur &&
-              _piece.piece != PieceType.avoirFournisseur) {
+          if (_piece.piece != PieceType.devis) {
             await addTresorie(_piece, transferer: false);
           }
 
@@ -1920,6 +1901,7 @@ class _AddPiecePageState extends State<AddPiecePage>
         _piece.piece == PieceType.avoirClient ||
         _piece.piece == PieceType.retourFournisseur ||
         _piece.piece == PieceType.avoirFournisseur) {
+
       _piece.net_a_payer = _piece.net_a_payer * -1;
     }
 
@@ -1989,14 +1971,17 @@ class _AddPiecePageState extends State<AddPiecePage>
 
     await _queryCtr.addItemToTable(DbTablesNames.tresorie, tresorie);
 
-    ReglementTresorie reglementTresorie = new ReglementTresorie.init();
-    reglementTresorie.tresorie_id =
-        await _queryCtr.getLastId(DbTablesNames.tresorie);
-    reglementTresorie.piece_id =
-        await _queryCtr.getLastId(DbTablesNames.pieces);
-    reglementTresorie.regler = tresorie.montant;
-    await _queryCtr.addItemToTable(
-        DbTablesNames.reglementTresorie, reglementTresorie);
+    if(tresorie.categorie == 2 ||  tresorie.categorie == 3){
+      ReglementTresorie reglementTresorie = new ReglementTresorie.init();
+      reglementTresorie.tresorie_id =
+      await _queryCtr.getLastId(DbTablesNames.tresorie);
+      reglementTresorie.piece_id =
+      await _queryCtr.getLastId(DbTablesNames.pieces);
+      reglementTresorie.regler = tresorie.montant;
+      await _queryCtr.addItemToTable(
+          DbTablesNames.reglementTresorie, reglementTresorie);
+    }
+
   }
 
   //******************************************************************************************************************************************
