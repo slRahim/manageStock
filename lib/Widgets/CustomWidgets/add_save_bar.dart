@@ -81,7 +81,8 @@ class AddEditBarState extends State<AddEditBar>{
             onPressed: widget.onSavePressed)
             : IconButton(
             icon: Icon(Icons.mode_edit),
-            onPressed: widget.onEditPressed),
+            onPressed: widget.onEditPressed
+        ),
 
       ],
     );

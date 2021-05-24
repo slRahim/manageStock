@@ -1,1 +1,0 @@
-[1/1] Linking C shared library E:\AndroidStudio\FlutterProjects\gestmob\build\app\intermediates\cmake\release\obj\x86\libserial_port.so

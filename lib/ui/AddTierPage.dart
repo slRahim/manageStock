@@ -691,7 +691,8 @@ class _AddTierPageState extends State<AddTierPage>
             Visibility(
               visible: modification,
               child: TextFormField(
-                enabled: false,
+                enabled: editMode,
+                readOnly: true,
                 controller: _chiffre_affairesControl,
                 onTap: () => _chiffre_affairesControl.selection = TextSelection(baseOffset: 0, extentOffset: _chiffre_affairesControl.value.text.length),
                 keyboardType: TextInputType.number,
@@ -727,7 +728,8 @@ class _AddTierPageState extends State<AddTierPage>
             Visibility(
               visible: modification,
               child: TextFormField(
-                enabled: false,
+                enabled: editMode,
+                readOnly: true,
                 controller: _reglerControl,
                 onTap: () => _reglerControl.selection = TextSelection(baseOffset: 0, extentOffset: _reglerControl.value.text.length),
                 keyboardType: TextInputType.number,
@@ -763,7 +765,8 @@ class _AddTierPageState extends State<AddTierPage>
             Visibility(
               visible: modification,
               child: TextFormField(
-                enabled: false,
+                enabled: editMode,
+                readOnly: true,
                 controller: _creditControl,
                 keyboardType: TextInputType.number,
                 decoration: InputDecoration(

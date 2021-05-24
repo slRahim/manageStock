@@ -140,7 +140,7 @@ class _ArticleListItemState extends State<ArticleListItem> {
                         arguments: widget.article);
                   } else {
                     if (widget.article.selectedQuantite >= 0) {
-                      await showDialog(
+                      showDialog(
                           context: context,
                           builder: (BuildContext context) {
                             return addQtedialogue();
@@ -174,30 +174,29 @@ class _ArticleListItemState extends State<ArticleListItem> {
                         setState(() {});
                       });
                     } else {
-                      selectThisItem();
+                      selectThisItem() ;
                       if (widget.pieceOrigin == 'BL' ||
                           widget.pieceOrigin == 'FC') {
                         if ((widget.article.quantite -
-                                widget.article.cmdClient) <
-                            1) {
-                          AwesomeDialog(
-                              context: context,
-                              dismissOnBackKeyPress: false,
-                              dismissOnTouchOutside: false,
-                              dialogType: DialogType.WARNING,
-                              animType: AnimType.BOTTOMSLIDE,
-                              title: "",
-                              desc: S.current.msg_qte_zero,
-                              btnCancelText: S.current.confirme,
-                              btnCancelOnPress: () {},
-                              btnOkText: S.current.annuler,
-                              btnOkOnPress: () {
-                                setState(() {
-                                  widget.article.selectedQuantite = 1;
-                                });
-                              })
-                            ..show();
-                          // Helpers.showToast(S.current.msg_qte_zero);
+                                widget.article.cmdClient) < widget.article.selectedQuantite) {
+
+                              // AwesomeDialog(
+                              //     context: context,
+                              //     dialogType: DialogType.WARNING,
+                              //     animType: AnimType.BOTTOMSLIDE,
+                              //     title: "",
+                              //     desc: S.current.msg_qte_zero,
+                              //     btnCancelText: S.current.confirme,
+                              //     btnCancelOnPress: () {},
+                              //     btnOkText: S.current.annuler,
+                              //     btnOkOnPress: () {
+                              //       setState(() {
+                              //         widget.article.selectedQuantite = 0;
+                              //       });
+                              //     })
+                              //   ..show();
+
+                          Helpers.showToast(S.current.msg_qte_zero);
                         }
                       }
                     }
@@ -685,7 +684,7 @@ class _ArticleListItemState extends State<ArticleListItem> {
     });
   }
 
-  void selectThisItem() {
+  void selectThisItem(){
     widget.article.selectedQuantite = 1;
     if (widget.pieceOrigin == 'BR' ||
         widget.pieceOrigin == 'FF' ||

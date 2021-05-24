@@ -4,7 +4,7 @@
 	"cFileExtensions" : [ "c" ],
 	"cleanCommands" : 
 	[
-		"C:\\Users\\wassim\\AppData\\Local\\Android\\Sdk\\cmake\\3.6.4111459\\bin\\cmake.exe --build E:\\AndroidStudio\\FlutterProjects\\gestmob\\android\\app\\.cxx\\cmake\\debug\\x86_64 --target clean"
+		"C:\\Users\\wassim\\AppData\\Local\\Android\\sdk\\cmake\\3.6.4111459\\bin\\cmake.exe --build E:\\AndroidStudio\\FlutterProjects\\gestmob\\android\\app\\.cxx\\cmake\\debug\\x86_64 --target clean"
 	],
 	"libraries" : 
 	{
@@ -12,7 +12,7 @@
 		{
 			"abi" : "x86_64",
 			"artifactName" : "serial_port",
-			"buildCommand" : "C:\\Users\\wassim\\AppData\\Local\\Android\\Sdk\\cmake\\3.6.4111459\\bin\\cmake.exe --build E:\\AndroidStudio\\FlutterProjects\\gestmob\\android\\app\\.cxx\\cmake\\debug\\x86_64 --target serial_port",
+			"buildCommand" : "C:\\Users\\wassim\\AppData\\Local\\Android\\sdk\\cmake\\3.6.4111459\\bin\\cmake.exe --build E:\\AndroidStudio\\FlutterProjects\\gestmob\\android\\app\\.cxx\\cmake\\debug\\x86_64 --target serial_port",
 			"buildType" : "debug",
 			"files" : 
 			[

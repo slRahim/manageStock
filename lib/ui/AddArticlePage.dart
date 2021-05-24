@@ -679,38 +679,42 @@ class _AddArticlePageState extends State<AddArticlePage>
                   ),
                 ),
                 SizedBox(width: 5,),
-                Flexible(
-                  flex: 5,
-                  child: TextFormField(
-                    enabled: editMode,
-                    controller: _qteCmdCotrol,
-                    onTap: () => _qteCmdCotrol.selection = TextSelection(baseOffset: 0, extentOffset: _qteCmdCotrol.value.text.length),
-                    keyboardType: TextInputType.number,
-                    // validator: (value) {
-                    //   if (value.isEmpty) {
-                    //     return S.current.msg_champ_oblg;
-                    //   }
-                    //   return null;
-                    // },
-                    decoration: InputDecoration(
-                      prefixIcon: Icon(
-                        Icons.apps_outlined,
-                        color: Colors.blue,
-                      ),
-                      focusedBorder: OutlineInputBorder(
+                Visibility(
+                  visible: modification ,
+                  child: Flexible(
+                    flex: 5,
+                    child: TextFormField(
+                      enabled: editMode,
+                      readOnly: true,
+                      controller: _qteCmdCotrol,
+                      // onTap: () => _qteCmdCotrol.selection = TextSelection(baseOffset: 0, extentOffset: _qteCmdCotrol.value.text.length),
+                      keyboardType: TextInputType.number,
+                      // validator: (value) {
+                      //   if (value.isEmpty) {
+                      //     return S.current.msg_champ_oblg;
+                      //   }
+                      //   return null;
+                      // },
+                      decoration: InputDecoration(
+                        prefixIcon: Icon(
+                          Icons.apps_outlined,
+                          color: Colors.blue,
+                        ),
+                        focusedBorder: OutlineInputBorder(
+                            borderSide: BorderSide(color: Colors.blue),
+                            borderRadius: BorderRadius.circular(20)),
+                        labelText: S.current.qte_cmd,
+                        labelStyle:  GoogleFonts.lato(textStyle: TextStyle(color: Theme.of(context).hintColor),),
+                        enabledBorder: OutlineInputBorder(
+                          gapPadding: 3.3,
+                          borderRadius: BorderRadius.circular(20),
                           borderSide: BorderSide(color: Colors.blue),
-                          borderRadius: BorderRadius.circular(20)),
-                      labelText: S.current.qte_cmd,
-                      labelStyle:  GoogleFonts.lato(textStyle: TextStyle(color: Theme.of(context).hintColor),),
-                      enabledBorder: OutlineInputBorder(
-                        gapPadding: 3.3,
-                        borderRadius: BorderRadius.circular(20),
-                        borderSide: BorderSide(color: Colors.blue),
-                      ),
-                      errorBorder: OutlineInputBorder(
-                        gapPadding: 3.3,
-                        borderRadius: BorderRadius.circular(20),
-                        borderSide: BorderSide(color: Colors.red),
+                        ),
+                        errorBorder: OutlineInputBorder(
+                          gapPadding: 3.3,
+                          borderRadius: BorderRadius.circular(20),
+                          borderSide: BorderSide(color: Colors.red),
+                        ),
                       ),
                     ),
                   ),

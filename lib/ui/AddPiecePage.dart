@@ -1,7 +1,6 @@
 import 'dart:io';
 import 'dart:typed_data';
 import 'dart:ui';
-
 import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:charset_converter/charset_converter.dart';
 import 'package:esc_pos_bluetooth/esc_pos_bluetooth.dart';
@@ -350,9 +349,23 @@ class _AddPiecePageState extends State<AddPiecePage>
             },
             onEditPressed: (_piece.etat == 0)
                 ? () {
-                    setState(() {
-                      editMode = true;
-                    });
+                    if(_myParams.versionType == "demo"){
+                      setState(() {
+                        editMode = true;
+                      });
+                    }else{
+                      if(DateTime.now().isBefore(Helpers.getDateExpiration(_myParams))){
+                        setState(() {
+                          editMode = true;
+                        });
+
+                      }else{
+                        Navigator.pushNamed(context, RoutesKeys.appPurchase);
+                        var message = S.current.msg_premium_exp;
+                        Helpers.showFlushBar(context, message);
+                      }
+                    }
+
                   }
                 : () {
                     Helpers.showFlushBar(
@@ -714,18 +727,41 @@ class _AddPiecePageState extends State<AddPiecePage>
                               });
                             }
                           : () async {
-                              AwesomeDialog(
-                                context: context,
-                                dialogType: DialogType.QUESTION,
-                                animType: AnimType.BOTTOMSLIDE,
-                                body: printChoicesDialog(),
-                                closeIcon: Icon(
-                                  Icons.cancel_sharp,
-                                  color: Colors.red,
-                                  size: 26,
-                                ),
-                                showCloseIcon: true,
-                              )..show();
+                              if(_myParams.versionType == "demo"){
+                                AwesomeDialog(
+                                  context: context,
+                                  dialogType: DialogType.QUESTION,
+                                  animType: AnimType.BOTTOMSLIDE,
+                                  body: printChoicesDialog(),
+                                  closeIcon: Icon(
+                                    Icons.cancel_sharp,
+                                    color: Colors.red,
+                                    size: 26,
+                                  ),
+                                  showCloseIcon: true,
+                                )..show();
+                              }else{
+                                if(DateTime.now().isBefore(Helpers.getDateExpiration(_myParams))){
+                                  AwesomeDialog(
+                                    context: context,
+                                    dialogType: DialogType.QUESTION,
+                                    animType: AnimType.BOTTOMSLIDE,
+                                    body: printChoicesDialog(),
+                                    closeIcon: Icon(
+                                      Icons.cancel_sharp,
+                                      color: Colors.red,
+                                      size: 26,
+                                    ),
+                                    showCloseIcon: true,
+                                  )..show();
+
+                                }else{
+                                  Navigator.pushNamed(context, RoutesKeys.appPurchase);
+                                  var message = S.current.msg_premium_exp;
+                                  Helpers.showFlushBar(context, message);
+                                }
+                              }
+
                             }),
                   (editMode &&
                           (_piece.piece == PieceType.avoirClient ||
@@ -931,7 +967,15 @@ class _AddPiecePageState extends State<AddPiecePage>
                               focusedBorder: OutlineInputBorder(
                                   borderSide: BorderSide(color: Colors.blue),
                                   borderRadius: BorderRadius.circular(20)),
-                              labelText: S.current.client_titre,
+                              labelText:(_piece.piece == PieceType.devis ||
+                                  _piece.piece == PieceType.retourClient ||
+                                  _piece.piece == PieceType.avoirClient ||
+                                  _piece.piece == PieceType.commandeClient ||
+                                  _piece.piece == PieceType.bonLivraison ||
+                                  _piece.piece == PieceType.factureClient)
+
+                                  ? S.current.client_titre
+                                  : S.current.fournisseur_titre,
                               labelStyle: GoogleFonts.lato(textStyle: TextStyle(color: Colors.blue)),
                               enabledBorder: OutlineInputBorder(
                                 gapPadding: 3.3,
@@ -1956,11 +2000,13 @@ class _AddPiecePageState extends State<AddPiecePage>
         if (item.piece == PieceType.retourClient ||
             item.piece == PieceType.avoirClient) {
           tresorie.categorie = 6;
+          tresorie.objet = "${S.current.rembourcement_client}" ;
           tresorie.montant = tresorie.montant * -1;
         } else {
           if (item.piece == PieceType.retourFournisseur ||
               item.piece == PieceType.avoirFournisseur) {
             tresorie.categorie = 7;
+            tresorie.objet = "${S.current.rembourcement_four}" ;
             tresorie.montant = tresorie.montant * -1;
           }
         }

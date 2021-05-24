@@ -211,7 +211,7 @@ class _SettingsPageState extends State<SettingsPage> {
                           btnCancelOnPress: () {},
                           btnOkText: S.current.oui,
                           btnOkOnPress: () async {
-                            await _savelocale();
+                            // await _savelocale();
                             setState(() {
                               _language;
                               // switch (_language) {

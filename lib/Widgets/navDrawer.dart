@@ -53,6 +53,8 @@ class NavDrawer extends  StatelessWidget {
   ] ;
 
 
+
+
   @override
   Widget build(BuildContext context) {
     return Drawer(
@@ -75,12 +77,6 @@ class NavDrawer extends  StatelessWidget {
           child: DrawerHeader(
               decoration: BoxDecoration(
                 color: Colors.blue[700],
-                  // gradient: LinearGradient(
-                  //     colors: [Colors.blue[700], Colors.blue[900]],
-                  //     begin: FractionalOffset.topCenter,
-                  //     end: FractionalOffset.bottomCenter,
-                  //     stops: [0.0, 0.7],
-                  //     tileMode: TileMode.clamp)
               ),
               child: SingleChildScrollView(
                 scrollDirection: Axis.horizontal,

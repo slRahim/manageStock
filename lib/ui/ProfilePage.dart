@@ -650,12 +650,12 @@ class _ProfilePageState extends State<ProfilePage> with TickerProviderStateMixin
               controller: _mobileControl,
               onTap: () => _mobileControl.selection = TextSelection(baseOffset: 0, extentOffset: _mobileControl.value.text.length),
               keyboardType: TextInputType.number,
-              validator: (value) {
-                if (value.isEmpty) {
-                  return S.current.msg_champ_oblg;
-                }
-                return null;
-              },
+              // validator: (value) {
+              //   if (value.isEmpty) {
+              //     return S.current.msg_champ_oblg;
+              //   }
+              //   return null;
+              // },
               decoration: InputDecoration(
                 labelText:  S.current.mobile,
                 labelStyle: GoogleFonts.lato(textStyle: TextStyle(color: Theme.of(context).hintColor)),
