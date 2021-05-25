@@ -324,6 +324,7 @@ class _SettingsPageState extends State<SettingsPage> {
                     subtitleTextStyle:  GoogleFonts.lato(),
                     leading: Icon(Icons.money_outlined, color: Theme.of(context).primaryColorDark),
                     switchValue: _tva,
+                    switchActiveColor: Theme.of(context).primaryColor,
                     onToggle: (bool value) {
                       setState(() {
                         _tva = value;
@@ -336,6 +337,7 @@ class _SettingsPageState extends State<SettingsPage> {
                     subtitleTextStyle:  GoogleFonts.lato(),
                     leading: Icon(Icons.fact_check, color: Theme.of(context).primaryColorDark),
                     switchValue: _timbre,
+                    switchActiveColor: Theme.of(context).primaryColor,
                     onToggle: (bool value) {
                       setState(() {
                         _timbre = value;
@@ -382,6 +384,7 @@ class _SettingsPageState extends State<SettingsPage> {
                     subtitleTextStyle:  GoogleFonts.lato(),
                     leading: Icon(Icons.person_sharp, color: Theme.of(context).primaryColorDark),
                     switchValue: _credit,
+                    switchActiveColor: Theme.of(context).primaryColor,
                     onToggle: (bool value) {
                       setState(() {
                         _credit = value;
@@ -404,6 +407,7 @@ class _SettingsPageState extends State<SettingsPage> {
                     subtitleTextStyle:  GoogleFonts.lato(),
                     leading: Icon(Icons.notifications_active, color: Theme.of(context).primaryColorDark),
                     switchValue: _notifications,
+                    switchActiveColor: Theme.of(context).primaryColor,
                     onToggle: (bool value) {
                       setState(() {
                         _notifications = value;

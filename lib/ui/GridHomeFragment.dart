@@ -26,6 +26,7 @@ import 'package:feature_discovery/feature_discovery.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
+
 class GridHomeWidget extends StatefulWidget {
   static bool Global_Draggable_Mode = false;
 
@@ -55,8 +56,7 @@ class _GridHomeWidgetState extends State<GridHomeWidget> {
     homeItemBonDeReception,
     homeItemFactureDachat,
     homeItemTresorerie,
-    homeItemRapports,
-    homeItemParametres
+    homeItemRapports
   ];
 
   QueryCtr _queryCtr = new QueryCtr();
@@ -64,7 +64,6 @@ class _GridHomeWidgetState extends State<GridHomeWidget> {
   String _devise;
   bool _finishLoading = false;
   String feature11 = 'feature11';
-
 
   @override
   Future<void> initState() {
@@ -108,10 +107,11 @@ class _GridHomeWidgetState extends State<GridHomeWidget> {
               },
               textColor: Colors.white,
               icon: Icon(Icons.add_box, size: 20),
-              label: Text(S.current.ajouter, style: GoogleFonts.lato(textStyle: TextStyle(fontSize: 12))))),
+              label: Text(S.current.ajouter,
+                  style:
+                      GoogleFonts.lato(textStyle: TextStyle(fontSize: 12))))),
     );
   }
-
 
   @override
   void didChangeDependencies() {
@@ -131,10 +131,9 @@ class _GridHomeWidgetState extends State<GridHomeWidget> {
       homeItemList[9].title = S.current.facture_achat;
       homeItemList[10].title = S.current.tresories;
       homeItemList[11].title = S.current.rapports;
-      homeItemList[12].title = S.current.settings;
 
       homeItemAccueil.title = S.current.accueil;
-
+      homeItemParametres.title = S.current.settings;
       drawerItemAvoirFournisseur.title = S.current.avoir_fournisseur;
       drawerItemAvoirClient.title = S.current.avoir_client;
       drawerItemRetourClient.title = S.current.retour_client;
@@ -142,19 +141,17 @@ class _GridHomeWidgetState extends State<GridHomeWidget> {
       drawerItemBonDeCommande.title = S.current.bon_commande;
       drawerItemExit.title = S.current.quitter;
       drawerItemPurchase.title = S.current.abonnement;
-
-      drawerItemVente.title = S.current.vente ;
-      drawerItemAchat.title = S.current.achat ;
-
+      drawerItemVente.title = S.current.vente;
+      drawerItemAchat.title = S.current.achat;
 
       _appBarTitle = S.current.app_name;
 
-      Statics.statutItems[0] = S.current.statut_m ;
-      Statics.statutItems[1] = S.current.statut_mlle ;
-      Statics.statutItems[2] = S.current.statut_mme ;
-      Statics.statutItems[3] = S.current.statut_dr ;
-      Statics.statutItems[4] = S.current.statut_pr ;
-      Statics.statutItems[5] = S.current.statut_eurl ;
+      Statics.statutItems[0] = S.current.statut_m;
+      Statics.statutItems[1] = S.current.statut_mlle;
+      Statics.statutItems[2] = S.current.statut_mme;
+      Statics.statutItems[3] = S.current.statut_dr;
+      Statics.statutItems[4] = S.current.statut_pr;
+      Statics.statutItems[5] = S.current.statut_eurl;
     }
   }
 
@@ -171,277 +168,271 @@ class _GridHomeWidgetState extends State<GridHomeWidget> {
 
   @override
   Widget build(BuildContext context) {
-    var padding = (MediaQuery.of(context).size.width%112).toInt()/2;
+    var size = (MediaQuery.of(context).size.width % 127).toInt() / 2;
 
     if (!_finishLoading) {
       return Center(child: CircularProgressIndicator());
     } else {
       return Scaffold(
-        appBar: PreferredSize(
-          preferredSize:
-          (MediaQuery.of(context).orientation == Orientation.portrait)
-              ? Size.fromHeight(MediaQuery.of(context).size.height / 4.2)
-              :Size.fromHeight(MediaQuery.of(context).size.height / 2),
-          child: Container(
-            decoration: BoxDecoration(
-                color: Theme.of(context).appBarTheme.color,
-                boxShadow: [
-                  BoxShadow(
-                    color: Colors.black.withOpacity(0.5),
-                    spreadRadius: 1,
-                    blurRadius: 2,
-                    offset: Offset(2, 1), // changes position of shadow
-                  ),
-                ]),
-            child: Column(
-              children: [
-                AppBar(
-                  leading: IconButton(
-                    icon: Icon(Icons.menu, size: 25),
-                    // change this size and style
-                    onPressed: () => Scaffold.of(context).openDrawer(),
-                  ),
-                  title: Text(_appBarTitle , style: GoogleFonts.anton(fontSize: 28, )),
-                  centerTitle: true,
-                  elevation: 0,
-                  actions: [
-                    IconButton(
-                      icon: Icon(Icons.contact_support,size: 30,),
-                      onPressed: ()async{
-                        // Navigator.pushNamed(context, RoutesKeys.supportPage);
-                        var url = "https://cirtait.com/contact" ;
-                        if (await canLaunch(url)) {
-                          await launch(
-                          url,
-                          forceSafariVC: true,
-                          forceWebView: true,
-                          enableJavaScript: true,
-                          headers: <String, String>{'my_header_key': 'my_header_value'},
-                          );
-                        } else {
-                          throw 'Could not launch $url';
-                        }
-                      },
-                    )
-                  ],
-                ),
-                Expanded(
-                  child: SingleChildScrollView(
-                    child: Container(
-                      padding: EdgeInsets.only(left: 25, right: 25),
-                      child: Row(
-                        children: [
-                          Expanded(
-                            child: Container(
-                              padding: EdgeInsets.all(5),
-                              child: Column(
-                                mainAxisAlignment: MainAxisAlignment.center,
+        backgroundColor: Theme.of(context).backgroundColor,
+        appBar: AppBar(
+          leading: IconButton(
+            icon: Icon(Icons.menu, size: 25),
+            // change this size and style
+            onPressed: () => Scaffold.of(context).openDrawer(),
+          ),
+          title: Container(
+            padding: EdgeInsets.only(top: 10),
+            child: Text(_appBarTitle,
+                style: GoogleFonts.anton(
+                  fontSize: 28,
+                )),
+          ),
+          centerTitle: true,
+          actions: [
+            IconButton(
+              icon: Icon(
+                Icons.contact_support,
+                size: 30,
+              ),
+              onPressed: () async {
+                // Navigator.pushNamed(context, RoutesKeys.supportPage);
+                var url = "https://cirtait.com/contact";
+                if (await canLaunch(url)) {
+                  await launch(
+                    url,
+                    forceSafariVC: true,
+                    forceWebView: true,
+                    enableJavaScript: true,
+                    headers: <String, String>{
+                      'my_header_key': 'my_header_value'
+                    },
+                  );
+                } else {
+                  throw 'Could not launch $url';
+                }
+              },
+            )
+          ],
+          bottom: PreferredSize(
+            preferredSize:
+                (MediaQuery.of(context).orientation == Orientation.portrait)
+                    ? Size.fromHeight(MediaQuery.of(context).size.height / 6)
+                    : Size.fromHeight(MediaQuery.of(context).size.height / 3),
+            child: SingleChildScrollView(
+              child: Container(
+                margin: EdgeInsetsDirectional.only(start: 15 , end: 15),
+                height:
+                    (MediaQuery.of(context).orientation == Orientation.portrait)
+                        ? MediaQuery.of(context).size.height / 6
+                        : MediaQuery.of(context).size.height / 3,
+                child: Row(
+                  children: [
+                    Expanded(
+                      child: Container(
+                        padding: EdgeInsets.all(5),
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            SingleChildScrollView(
+                              scrollDirection: Axis.horizontal,
+                              child: Row(
                                 children: [
-                                  SingleChildScrollView(
-                                    scrollDirection: Axis.horizontal,
-                                    child: Row(
-                                      children: [
-                                        Icon(
-                                          Icons.arrow_upward,
-                                          color: Colors.white,
-                                          size: 40,
-                                        ),
-                                        SizedBox(
-                                          width: 1,
-                                        ),
-                                        Container(
-                                          child: Wrap(
-                                            direction: Axis.vertical,
-                                            children: [Text("${S.current.ca_mois}",
-                                                style: GoogleFonts.lato(
-                                                  textStyle: TextStyle(
-                                                      fontWeight: FontWeight.bold,
-                                                      color: Colors.white)
-                                                ))],
-                                          ),
-                                        ),
-                                      ],
-                                    ),
+                                  Icon(
+                                    Icons.arrow_upward,
+                                    color: Colors.white,
+                                    size: 40,
                                   ),
-                                  SingleChildScrollView(
-                                    scrollDirection: Axis.horizontal,
-                                    child: Container(
-                                      child: Wrap(
-                                        direction: Axis.horizontal,
-                                        children: [
-                                          Text(
-                                              "${Helpers.numberFormat((_indiceFinanciere[0] != null) ? _indiceFinanciere[0]: 0.0)}",
-                                              style: GoogleFonts.lato(
+                                  SizedBox(
+                                    width: 1,
+                                  ),
+                                  Container(
+                                    child: Wrap(
+                                      direction: Axis.vertical,
+                                      children: [
+                                        Text("${S.current.ca_mois}",
+                                            style: GoogleFonts.lato(
                                                 textStyle: TextStyle(
                                                     fontWeight: FontWeight.bold,
-                                                    color: Colors.white,
-                                                    fontSize: 18)
-                                              )),
-                                          Text(" ${_devise}",
-                                              style: GoogleFonts.lato(
-                                                textStyle: TextStyle(
-                                                    fontWeight: FontWeight.bold,
-                                                    color: Colors.white)
-                                              )),
-                                        ],
-                                      ),
+                                                    color: Colors.white)))
+                                      ],
                                     ),
                                   ),
                                 ],
                               ),
                             ),
-                          ),
-                          SizedBox(
-                            width: 3,
-                          ),
-                          Expanded(
-                            child: Container(
-                              padding: EdgeInsets.all(5),
-                              child: Column(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  SingleChildScrollView(
-                                    scrollDirection: Axis.horizontal,
-                                    child: Row(
-                                      children: [
-                                        Icon(
-                                          Icons.arrow_downward,
-                                          color: Colors.white,
-                                          size: 40,
-                                        ),
-                                        SizedBox(
-                                          width: 1,
-                                        ),
-                                        Container(
-                                          child: Wrap(
-                                            direction: Axis.vertical,
-                                            children: [Text("${S.current.achat_mois}",
-                                                style: GoogleFonts.lato(
-                                                  textStyle: TextStyle(
-                                                      fontWeight: FontWeight.bold,
-                                                      color: Colors.white)
-                                                )
-                                            )],
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                  SingleChildScrollView(
-                                    scrollDirection: Axis.horizontal,
-                                    child: Container(
-                                      child: Wrap(
-                                        direction: Axis.horizontal,
-                                        children: [
-                                          Text(
-                                              "${Helpers.numberFormat((_indiceFinanciere[1] != null) ? _indiceFinanciere[1] : 0.0)}",
-                                              style: GoogleFonts.lato(
-                                                textStyle: TextStyle(
-                                                    fontWeight: FontWeight.bold,fontSize: 18,
-                                                    color: Colors.white)
-                                              )),
-                                          Text(" ${_devise}",
-                                              style: GoogleFonts.lato(
-                                                textStyle: TextStyle(
-                                                    fontWeight: FontWeight.bold,
-                                                    color: Colors.white)
-                                              )),
-                                        ],
-                                      ),
-                                    ),
-                                  ),
-                                ],
+                            SingleChildScrollView(
+                              scrollDirection: Axis.horizontal,
+                              child: Container(
+                                child: Wrap(
+                                  direction: Axis.horizontal,
+                                  children: [
+                                    Text(
+                                        "${Helpers.numberFormat((_indiceFinanciere[0] != null) ? _indiceFinanciere[0] : 0.0)}",
+                                        style: GoogleFonts.lato(
+                                            textStyle: TextStyle(
+                                                fontWeight: FontWeight.bold,
+                                                color: Colors.white,
+                                                fontSize: 18))),
+                                    Text(" ${_devise}",
+                                        style: GoogleFonts.lato(
+                                            textStyle: TextStyle(
+                                                fontWeight: FontWeight.bold,
+                                                color: Colors.white))),
+                                  ],
+                                ),
                               ),
                             ),
-                          ),
-                        ],
+                          ],
+                        ),
                       ),
                     ),
-                  ),
+                    SizedBox(
+                      width: 3,
+                    ),
+                    Expanded(
+                      child: Container(
+                        padding: EdgeInsets.all(5),
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            SingleChildScrollView(
+                              scrollDirection: Axis.horizontal,
+                              child: Row(
+                                children: [
+                                  Icon(
+                                    Icons.arrow_downward,
+                                    color: Colors.white,
+                                    size: 40,
+                                  ),
+                                  SizedBox(
+                                    width: 1,
+                                  ),
+                                  Container(
+                                    child: Wrap(
+                                      direction: Axis.vertical,
+                                      children: [
+                                        Text("${S.current.achat_mois}",
+                                            style: GoogleFonts.lato(
+                                                textStyle: TextStyle(
+                                                    fontWeight: FontWeight.bold,
+                                                    color: Colors.white)))
+                                      ],
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                            SingleChildScrollView(
+                              scrollDirection: Axis.horizontal,
+                              child: Container(
+                                child: Wrap(
+                                  direction: Axis.horizontal,
+                                  children: [
+                                    Text(
+                                        "${Helpers.numberFormat((_indiceFinanciere[1] != null) ? _indiceFinanciere[1] : 0.0)}",
+                                        style: GoogleFonts.lato(
+                                            textStyle: TextStyle(
+                                                fontWeight: FontWeight.bold,
+                                                fontSize: 18,
+                                                color: Colors.white))),
+                                    Text(" ${_devise}",
+                                        style: GoogleFonts.lato(
+                                            textStyle: TextStyle(
+                                                fontWeight: FontWeight.bold,
+                                                color: Colors.white))),
+                                  ],
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ],
                 ),
-              ],
+              ),
             ),
           ),
         ),
-        body: Center(
-            child: FutureBuilder(
-                future: asyncStart(),
-                builder: (context, snapshot) {
-                  if (!snapshot.hasData) {
-                    return Center(child: CircularProgressIndicator());
-                  } else {
-                    return SingleChildScrollView(
-                      child: Container(
-                        padding: EdgeInsets.only(left: padding, top: 10),
-                        child: DescribedFeatureOverlay(
-                          featureId: feature11,
-                          tapTarget: Icon(MdiIcons.gestureTapHold , color: Colors.black,),
-                          backgroundColor: Colors.yellow[700],
-                          contentLocation: ContentLocation.below,
-                          title: Text(S.current.long_presse),
-                          description: Container(
-                               width: 150,
-                              child: Text(S.current.msg_long_presse,)),
-                          onBackgroundTap: () async{
-                            await FeatureDiscovery.completeCurrentStep(context);
-                            return true ;
-                          },
-                          child: DraggableContainer(
-                              key: _containerKey,
-                              draggableMode: false,
-                              autoReorder: true,
-                              // the decoration when dragging item
-                              dragDecoration: BoxDecoration(boxShadow: [
-                                BoxShadow(color: Colors.black, blurRadius: 10)
-                              ]),
-                              // slot margin
-                              slotMargin: EdgeInsets.only(
-                                  left: 10, right: 10, top: 5, bottom: 5),
-                              // the slot size
-
-                              // item list
-                              items: homeDraggableItemList,
-                              // onDragEnd: () {
-                              //   _containerKey.currentState.draggableMode = false;
-                              // },
-                              deleteButton: Container(
-                                width: 20,
-                                height: 20,
-                                decoration: BoxDecoration(
-                                  color: Colors.redAccent,
-                                  borderRadius:
-                                  BorderRadius.all(Radius.circular(8)),
-                                ),
-                                child: Icon(
-                                  Icons.delete_forever,
-                                  size: 18,
-                                  color: Colors.white,
-                                ),
-                              ),
-                              onDraggableModeChanged: (bool draggableMode) {
-                                GridHomeWidget.Global_Draggable_Mode =
-                                    draggableMode;
-
-                                final items = _containerKey.currentState.items;
-                                if (draggableMode) {
-                                  draggableItemsListOnChange(items);
-                                } else {
-                                  _containerKey.currentState
-                                      .removeItem(_addButton, triggerEvent: false);
-                                  if (items.isNotEmpty) {
-                                    saveCurrentItemsOrder(items);
-                                  }
-                                }
-                              },
-                              onChanged: (items) async {
-                                draggableItemsListOnChange(items);
-                              },
-                            ),
+        body: FutureBuilder(
+            future: asyncStart(),
+            builder: (context, snapshot) {
+              if (!snapshot.hasData) {
+                return Center(child: CircularProgressIndicator());
+              } else {
+                return SingleChildScrollView(
+                  child: Container(
+                    padding: EdgeInsets.only(left: size, top: size),
+                    child: DescribedFeatureOverlay(
+                      featureId: feature11,
+                      tapTarget: Icon(MdiIcons.gestureTapHold , color: Colors.black,),
+                      backgroundColor: Colors.yellow[700],
+                      contentLocation: ContentLocation.below,
+                      title: Text(S.current.long_presse),
+                      description: Container(
+                          width: 150,
+                          child: Text(S.current.msg_long_presse,)),
+                      onBackgroundTap: () async{
+                        await FeatureDiscovery.completeCurrentStep(context);
+                        return true ;
+                      },
+                      child: DraggableContainer(
+                        key: _containerKey,
+                        draggableMode: false,
+                        autoReorder: true,
+                        // the decoration when dragging item
+                        dragDecoration: BoxDecoration(boxShadow: [
+                          BoxShadow(color: Colors.black, blurRadius: 10)
+                        ]),
+                        // slot margin
+                        slotMargin: EdgeInsets.only(
+                            left: 5, right: 5, top: 2.5, bottom: 2.5),
+                        // the slot size
+                        slotSize: Size(120,120),
+                        // item list
+                        items: homeDraggableItemList,
+                        // onDragEnd: () {
+                        //   _containerKey.currentState.draggableMode = false;
+                        // },
+                        deleteButton: Container(
+                          width: 20,
+                          height: 20,
+                          decoration: BoxDecoration(
+                            color: Colors.redAccent,
+                            borderRadius:
+                            BorderRadius.all(Radius.circular(8)),
+                          ),
+                          child: Icon(
+                            Icons.delete_forever,
+                            size: 18,
+                            color: Colors.white,
                           ),
                         ),
-                    );
-                  }
-                })),
+                        onDraggableModeChanged: (bool draggableMode) {
+                          GridHomeWidget.Global_Draggable_Mode =
+                              draggableMode;
+
+                          final items = _containerKey.currentState.items;
+                          if (draggableMode) {
+                            draggableItemsListOnChange(items);
+                          } else {
+                            _containerKey.currentState
+                                .removeItem(_addButton, triggerEvent: false);
+                            if (items.isNotEmpty) {
+                              saveCurrentItemsOrder(items);
+                            }
+                          }
+                        },
+                        onChanged: (items) async {
+                          draggableItemsListOnChange(items);
+                        },
+                      ),
+                    ),
+                  ),
+                );
+              }
+            }),
       );
     }
   }
@@ -478,7 +469,8 @@ class _GridHomeWidgetState extends State<GridHomeWidget> {
     return homeDraggableItemList;
   }
 
-  DraggableItem getMissingItem(BuildContext context, List<DraggableItem> items, int count) {
+  DraggableItem getMissingItem(
+      BuildContext context, List<DraggableItem> items, int count) {
     for (DraggableItem item in originalHomeDraggableItemList) {
       if (!items.contains(item)) {
         return item;

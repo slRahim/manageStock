@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_icons/flutter_icons.dart';
 import 'package:gestmob/generated/l10n.dart';
+import 'package:line_icons/line_icons.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 
 
@@ -181,43 +182,43 @@ HomeItem drawerItemAchat= new HomeItem(
 Widget iconsSet(String itemId, double iconSize){
   switch (itemId) {
     case homeItemParametresId:
-      return Icon(Icons.settings,size: iconSize,color: Colors.white,);
+      return Icon(LineIcons.cog,size: iconSize,color: Colors.white,);
       break;
 
     case homeItemRapportsId:
-      return Icon(Icons.library_books,size: iconSize,color: Colors.white,);
+      return Icon(LineIcons.excelFile,size: iconSize,color: Colors.white,);
       break;
 
     case homeItemTresorerieId:
-      return Icon(Icons.monetization_on,size: iconSize,color: Colors.white,);
+      return Icon(LineIcons.cashRegister,size: iconSize,color: Colors.white,);
       break;
 
     case homeItemFactureDachatId:
-      return Icon(Icons.shopping_cart,size: iconSize,color: Colors.white,);
+      return Icon(LineIcons.shoppingCart,size: iconSize,color: Colors.white,);
       break;
 
     case homeItemBonDeReceptionId:
-      return Icon(Feather.file_minus,size: iconSize,color: Colors.white,);
+      return Icon(LineIcons.fileInvoiceWithUsDollar,size: iconSize,color: Colors.white,);
       break;
 
     case homeItemTableauDeBordId:
-      return Icon(Icons.insert_chart_outlined,size: iconSize,color: Colors.white,);
+      return Icon(LineIcons.barChartAlt,size: iconSize,color: Colors.white,);
       break;
 
       case homeItemAccueilId:
-      return Icon(Icons.developer_board,size: iconSize,color: Colors.white,);
+      return Icon(LineIcons.home,size: iconSize,color: Colors.white,);
       break;
 
     case homeItemArticlesId:
-      return Icon(Icons.list,size: iconSize,color: Colors.white,);
+      return Icon(LineIcons.list,size: iconSize,color: Colors.white,);
       break;
 
     case homeItemClientsId:
-      return Icon(Icons.people,size: iconSize,color: Colors.white,);
+      return Icon(LineIcons.users,size: iconSize,color: Colors.white,);
       break;
 
     case homeItemDevisId:
-      return Icon(AntDesign.calculator,size: iconSize,color: Colors.white,);
+      return Icon(LineIcons.calculator,size: iconSize,color: Colors.white,);
       break;
 
     case homeItemCommandeClientId:
@@ -225,11 +226,11 @@ Widget iconsSet(String itemId, double iconSize){
       break;
 
     case homeItemBonDeLivraisonId:
-      return Icon(Icons.assignment,size: iconSize,color: Colors.white,);
+      return Icon(Icons.assignment_outlined,size: iconSize,color: Colors.white,);
       break;
 
     case homeItemFactureDeVenteId:
-      return Icon(AntDesign.filetext1,size: iconSize,color: Colors.white,);
+      return Icon(LineIcons.fileInvoice,size: iconSize,color: Colors.white,);
       break;
 
     case homeItemFournisseursId:
@@ -257,7 +258,7 @@ Widget iconsSet(String itemId, double iconSize){
       break;
 
     case drawerItemExitId:
-      return Icon(Icons.exit_to_app,size: iconSize,color: Colors.red,);
+      return Icon(LineIcons.doorOpen,size: iconSize,color: Colors.red,);
       break;
 
     case drawerItemPurchaseId:
@@ -278,67 +279,69 @@ Widget iconsSet(String itemId, double iconSize){
 }
 
 
-dynamic colorSet(String itemId){
+dynamic homeIcons(String itemId, double iconSize){
   switch (itemId) {
-    case homeItemParametresId:
-      return Color.fromRGBO(142, 68, 173,1.0);
-      break;
-
     case homeItemRapportsId:
-      return Color.fromRGBO(241, 196, 15,1.0);
+      return Icon(LineIcons.excelFile,size: iconSize,color: Color.fromRGBO(241, 196, 15,1.0),);
+      // return Color.fromRGBO(241, 196, 15,1.0);
       break;
 
     case homeItemTresorerieId:
-      return Color.fromRGBO(26, 188, 156,1.0);
+      return Icon(LineIcons.cashRegister,size: iconSize,color: Color.fromRGBO(26, 188, 156,1.0));
+      // return Color.fromRGBO(26, 188, 156,1.0);
       break;
 
     case homeItemFactureDachatId:
-      return Color.fromRGBO(231, 76, 60,1.0);
+      return Icon(LineIcons.shoppingCart,size: iconSize,color: Color.fromRGBO(231, 76, 60,1.0),);
+      // return Color.fromRGBO(231, 76, 60,1.0);
       break;
 
     case homeItemBonDeReceptionId:
-      return Color.fromRGBO(243, 156, 18,1.0);
+      return Icon(LineIcons.fileInvoiceWithUsDollar,size: iconSize,color: Color.fromRGBO(243, 156, 18,1.0),);
+      // return Color.fromRGBO(243, 156, 18,1.0);
       break;
 
     case homeItemTableauDeBordId:
-      return Color.fromRGBO(230, 126, 34,1.0);
+      return Icon(LineIcons.barChartAlt,size: iconSize,color: Color.fromRGBO(230, 126, 34,1.0),);
+      // return Color.fromRGBO(230, 126, 34,1.0);
       break;
 
-    case homeItemAccueilId:
-      return Color.fromRGBO(211, 84, 0,1.0);
-      break;
 
     case homeItemArticlesId:
-      return Color.fromRGBO(41, 128, 185,1.0);
+      return Icon(LineIcons.list,size: iconSize,color: Color.fromRGBO(41, 128, 185,1.0),);
+      // return Color.fromRGBO(41, 128, 185,1.0);
       break;
 
     case homeItemClientsId:
-      return Color.fromRGBO(22, 160, 133,1.0);
+      return Icon(LineIcons.users,size: iconSize,color: Color.fromRGBO(22, 160, 133,1.0));
+      // return Color.fromRGBO(22, 160, 133,1.0);
       break;
 
     case homeItemDevisId:
-      return Color.fromRGBO(149, 165, 166,1.0);
+      return Icon(LineIcons.calculator,size: iconSize,color: Color.fromRGBO(149, 165, 166,1.0),);
+      // return Color.fromRGBO(149, 165, 166,1.0);
       break;
 
     case homeItemCommandeClientId:
-      return Color.fromRGBO(127, 140, 141,1.0);
+      return Icon(AntDesign.solution1,size: iconSize,color: Color.fromRGBO(127, 140, 141,1.0),);
+      // return Color.fromRGBO(127, 140, 141,1.0);
       break;
 
     case homeItemBonDeLivraisonId:
-      return Color.fromRGBO(46, 204, 113,1.0);
+      return Icon(Icons.assignment_outlined,size: iconSize,color: Color.fromRGBO(46, 204, 113,1.0),);
+      // return Color.fromRGBO(46, 204, 113,1.0);
       break;
 
     case homeItemFactureDeVenteId:
-      return Color.fromRGBO(52, 152, 219,1.0);
+      return Icon(LineIcons.fileInvoice,size: iconSize,color: Color.fromRGBO(52, 152, 219,1.0),);
+      // return Color.fromRGBO(52, 152, 219,1.0);
       break;
 
     case homeItemFournisseursId:
-      return Color.fromRGBO(44, 62, 80,1.0);
+      return Icon(Foundation.torso_business,size: iconSize,color: Color.fromRGBO(44, 62, 80,1.0),);
+      // return Color.fromRGBO(44, 62, 80,1.0);
       break;
 
-    default:
-      return Color.fromRGBO(39, 174, 96,1.0);
-      break;
   }
 }
 

@@ -374,7 +374,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "msg_err_tresorie" : MessageLookupByLibrary.simpleMessage("Pas de trésorerie associée à la pièce"),
     "msg_err_upd_param" : MessageLookupByLibrary.simpleMessage("Erreur à la modification des paramètres"),
     "msg_fam_ajout" : MessageLookupByLibrary.simpleMessage("Famille ajoutée"),
-    "msg_gen_qr" : MessageLookupByLibrary.simpleMessage("Veuillez déterminer au moins une RS et un numéro de téléphone"),
+    "msg_gen_qr" : MessageLookupByLibrary.simpleMessage("Veuillez déterminer au moins une RS et un numéro mobile"),
     "msg_get_abonnement" : MessageLookupByLibrary.simpleMessage("Cliquez sur abonnement pour récupérer votre licence"),
     "msg_imp_err" : MessageLookupByLibrary.simpleMessage("aucune imprimante par défaut"),
     "msg_info_article" : MessageLookupByLibrary.simpleMessage("Vous risquez d\'ajouter des articles inassociés aux pièces !"),

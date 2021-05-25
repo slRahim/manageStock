@@ -53,8 +53,7 @@ class _ListTileCardState extends State<ListTileCard> {
         onTap: widget.onTap,
         onLongPress: widget.onLongPress,
         child: SlidingCard(
-            slimeCardElevation: 2,
-            slimeCardBorderRadius: 10,
+            slimeCardBorderRadius: 5,
             cardsGap: SizeConfig.safeBlockVertical,
             controller: widget.slidingCardController,
             slidingCardWidth: SizeConfig.horizontalBloc * 95,
@@ -139,7 +138,7 @@ class _ListFrontCardState extends State<ListFrontCard> {
           color: (widget.itemSelected != null && widget.itemSelected)
               ? Colors.blue[200]
               : Theme.of(context).selectedRowColor,
-          borderRadius: BorderRadius.circular(10)
+          borderRadius: BorderRadius.circular(5)
       ),
       child: Column(
         children: <Widget>[
@@ -152,8 +151,8 @@ class _ListFrontCardState extends State<ListFrontCard> {
                       ? Colors.blue[200]
                       : Theme.of(context).selectedRowColor,
                   borderRadius: BorderRadius.only(
-                      topLeft: Radius.circular(10),
-                      topRight: Radius.circular(10))
+                      topLeft: Radius.circular(5),
+                      topRight: Radius.circular(5))
               ),
               child: SingleChildScrollView(
                 child: Row(
@@ -278,7 +277,7 @@ class ListBackCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(10)),
+          borderRadius: BorderRadius.circular(5)),
       child: SingleChildScrollView(
          padding:(Helpers.isDirectionRTL(context))
              ? EdgeInsetsDirectional.only(start: 15, end: 15, top: 5)

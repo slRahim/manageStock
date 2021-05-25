@@ -49,7 +49,6 @@ class _ItemsSliverListState extends State<ItemsSliverList> {
       slivers: <Widget>[
         PagedSliverList<int, Object>(
           dataSource: widget.dataSource,
-
           builderDelegate: PagedChildBuilderDelegate<Object>(
               noItemsFoundIndicatorBuilder : (context){
                    return Center(

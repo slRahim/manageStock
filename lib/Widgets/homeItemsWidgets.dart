@@ -33,35 +33,31 @@ class HomeDraggableItem extends DraggableItem {
       },
       child: Container(
         padding: EdgeInsetsDirectional.only(start: 5 , end :5),
-        width: 92.0,
-        height: 92.0,
         decoration: BoxDecoration(
-          color: colorSet(id),
-          borderRadius: BorderRadius.circular(10),
+          color: Theme.of(context).selectedRowColor,
           boxShadow: [
             BoxShadow(
-              color: Colors.grey.withOpacity(0.5),
-              spreadRadius: 1,
-              blurRadius: 2,
-              offset: Offset(2, 1), // changes position of shadow
+              color: Colors.grey.withOpacity(0.3),
+              blurRadius: 1,
+              offset: Offset(0, 1), // changes position of shadow
             ),
           ],
         ),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            iconsSet(id, 40),
+            homeIcons(id, 45),
             SizedBox(
               width: 10.0,
-              height: 2.0,
+              height: 10.0,
             ),
             Text(
               title,
               textAlign: TextAlign.center,
               style: GoogleFonts.lato(
                   textStyle: TextStyle(
-                      color: Colors.white,
-                      fontSize: 14,
+                      color: Theme.of(context).primaryColorDark,
+                      fontSize: 16,
                       fontWeight: FontWeight.bold)
               ),
             ),

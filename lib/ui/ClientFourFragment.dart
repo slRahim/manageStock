@@ -180,15 +180,18 @@ class _ClientFourFragmentState extends State<ClientFourFragment> {
   }
 
   Widget tierBloquer(StateSetter _setState) {
-    return CheckboxListTile(
-      title: Text(S.current.aff_bloquer , style: GoogleFonts.lato(),),
-      value: _filterTierBloquer,
-      onChanged: (bool value){
-        _setState(() {
-          _filterTierBloquer = value;
-        });
-      },
-    );
+    if(widget.onConfirmSelectedItem == null){
+      return CheckboxListTile(
+        title: Text(S.current.aff_bloquer , style: GoogleFonts.lato(),),
+        value: _filterTierBloquer,
+        onChanged: (bool value){
+          _setState(() {
+            _filterTierBloquer = value;
+          });
+        },
+      );
+    }
+    return SizedBox();
   }
 
   //***************************************************************************************************************************************************

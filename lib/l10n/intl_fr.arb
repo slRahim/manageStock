@@ -91,7 +91,7 @@
   "client_four" : "Client/Fournisseur",
   "bloquer" : "Bloquer",
   "msg_no_qr" : "Pas de QRCode associé au tier",
-  "msg_gen_qr" : "Veuillez déterminer au moins une RS et un numéro de téléphone",
+  "msg_gen_qr" : "Veuillez déterminer au moins une RS et un numéro mobile",
   "masquer" : "Masquer",
   "tarification" : "Tarifications: ",
   "msg_fam_ajout": "Famille ajoutée",

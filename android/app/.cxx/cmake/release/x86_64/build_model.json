@@ -1,0 +1,70 @@
+{
+  "variant": {
+    "module": {
+      "rootBuildGradleFolder": "E:\\AndroidStudio\\FlutterProjects\\gestmob\\android",
+      "sdkFolder": "C:\\Users\\wassim\\AppData\\Local\\Android\\sdk",
+      "isNativeCompilerSettingsCacheEnabled": false,
+      "isBuildOnlyTargetAbiEnabled": true,
+      "splitsAbiFilterSet": [],
+      "intermediatesFolder": "E:\\AndroidStudio\\FlutterProjects\\gestmob\\build\\app\\intermediates",
+      "gradleModulePathName": ":app",
+      "moduleRootFolder": "E:\\AndroidStudio\\FlutterProjects\\gestmob\\android\\app",
+      "makeFile": "E:\\AndroidStudio\\FlutterProjects\\gestmob\\android\\app\\CMakeLists.txt",
+      "buildSystem": "CMAKE",
+      "compilerSettingsCacheFolder": "E:\\AndroidStudio\\FlutterProjects\\gestmob\\android\\.cxx",
+      "cxxFolder": "E:\\AndroidStudio\\FlutterProjects\\gestmob\\android\\app\\.cxx",
+      "ndkFolder": "C:\\Users\\wassim\\AppData\\Local\\Android\\sdk\\ndk\\22.1.7171670",
+      "ndkVersion": "22.1.7171670",
+      "ndkSupportedAbiList": [
+        "ARMEABI_V7A",
+        "ARM64_V8A",
+        "X86",
+        "X86_64"
+      ],
+      "ndkDefaultAbiList": [
+        "ARMEABI_V7A",
+        "ARM64_V8A",
+        "X86",
+        "X86_64"
+      ],
+      "cmakeToolchainFile": "."
+    },
+    "buildSystemArgumentList": [],
+    "cFlagList": [],
+    "cppFlagsList": [],
+    "variantName": "release",
+    "soFolder": "E:\\AndroidStudio\\FlutterProjects\\gestmob\\build\\app\\intermediates\\cmake\\release\\lib",
+    "objFolder": "E:\\AndroidStudio\\FlutterProjects\\gestmob\\build\\app\\intermediates\\cmake\\release\\obj",
+    "jsonFolder": "E:\\AndroidStudio\\FlutterProjects\\gestmob\\android\\app\\.cxx\\cmake\\release",
+    "gradleBuildOutputFolder": "E:\\AndroidStudio\\FlutterProjects\\gestmob\\android\\app\\.cxx\\cxx\\release",
+    "isDebuggableEnabled": false,
+    "validAbiList": [
+      "ARMEABI_V7A",
+      "ARM64_V8A",
+      "X86",
+      "X86_64"
+    ],
+    "buildTargetSet": []
+  },
+  "abi": "X86_64",
+  "abiPlatformVersion": 23,
+  "cxxBuildFolder": "E:\\AndroidStudio\\FlutterProjects\\gestmob\\android\\app\\.cxx\\cmake\\release\\x86_64",
+  "jsonFile": "E:\\AndroidStudio\\FlutterProjects\\gestmob\\android\\app\\.cxx\\cmake\\release\\x86_64\\android_gradle_build.json",
+  "gradleBuildOutputFolder": "E:\\AndroidStudio\\FlutterProjects\\gestmob\\android\\app\\.cxx\\cxx\\release\\x86_64",
+  "objFolder": "E:\\AndroidStudio\\FlutterProjects\\gestmob\\build\\app\\intermediates\\cmake\\release\\obj\\x86_64",
+  "buildCommandFile": "E:\\AndroidStudio\\FlutterProjects\\gestmob\\android\\app\\.cxx\\cmake\\release\\x86_64\\build_command.txt",
+  "buildOutputFile": "E:\\AndroidStudio\\FlutterProjects\\gestmob\\android\\app\\.cxx\\cmake\\release\\x86_64\\build_output.txt",
+  "modelOutputFile": "E:\\AndroidStudio\\FlutterProjects\\gestmob\\android\\app\\.cxx\\cmake\\release\\x86_64\\build_model.json",
+  "cmake": {
+    "cmakeListsWrapperFile": "E:\\AndroidStudio\\FlutterProjects\\gestmob\\android\\app\\.cxx\\cxx\\release\\x86_64\\CMakeLists.txt",
+    "toolchainWrapperFile": "E:\\AndroidStudio\\FlutterProjects\\gestmob\\android\\app\\.cxx\\cxx\\release\\x86_64\\android_gradle_build.toolchain.cmake",
+    "buildGenerationStateFile": "E:\\AndroidStudio\\FlutterProjects\\gestmob\\android\\app\\.cxx\\cxx\\release\\x86_64\\build_generation_state.json",
+    "cacheKeyFile": "E:\\AndroidStudio\\FlutterProjects\\gestmob\\android\\app\\.cxx\\cxx\\release\\x86_64\\compiler_cache_key.json",
+    "compilerCacheUseFile": "E:\\AndroidStudio\\FlutterProjects\\gestmob\\android\\app\\.cxx\\cxx\\release\\x86_64\\compiler_cache_use.json",
+    "compilerCacheWriteFile": "E:\\AndroidStudio\\FlutterProjects\\gestmob\\android\\app\\.cxx\\cxx\\release\\x86_64\\compiler_cache_write.json",
+    "toolchainSettingsFromCacheFile": "E:\\AndroidStudio\\FlutterProjects\\gestmob\\android\\app\\.cxx\\cxx\\release\\x86_64\\compiler_settings_cache.cmake",
+    "cmakeWrappingBaseFolder": "."
+  },
+  "jsonGenerationLoggingRecordFile": "E:\\AndroidStudio\\FlutterProjects\\gestmob\\android\\app\\.cxx\\cmake\\release\\x86_64\\json_generation_record.json",
+  "compileCommandsJsonFile": "E:\\AndroidStudio\\FlutterProjects\\gestmob\\android\\app\\.cxx\\cmake\\release\\x86_64\\compile_commands.json"
+}

@@ -123,6 +123,7 @@ class _MyAppState extends State<MyApp> {
           theme: ThemeData(
               brightness: Brightness.light,
               primarySwatch: Colors.red,
+              primaryColor: Colors.blue,
               backgroundColor: Color(0xFFF1F8FA),
               floatingActionButtonTheme: FloatingActionButtonThemeData(
                   backgroundColor: Colors.redAccent
@@ -145,6 +146,7 @@ class _MyAppState extends State<MyApp> {
           ),
           darkTheme: ThemeData(
               brightness: Brightness.dark,
+              primaryColor: Colors.blue,
               primarySwatch: Colors.red,
               backgroundColor: Colors.white10,
               floatingActionButtonTheme: FloatingActionButtonThemeData(

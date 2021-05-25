@@ -802,7 +802,7 @@ class _AddPiecePageState extends State<AddPiecePage>
         padding: const EdgeInsets.all(10),
         child: Column(mainAxisSize: MainAxisSize.max, children: [
           Card(
-            elevation: 4,
+            elevation: 1,
             child: Container(
               padding: EdgeInsets.all(15),
               child: Wrap(

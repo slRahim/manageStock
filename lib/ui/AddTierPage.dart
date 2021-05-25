@@ -31,10 +31,10 @@ import 'package:gestmob/services/push_notifications.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class AddTierPage extends StatefulWidget {
-
   final QueryCtr _queryCtr = QueryCtr();
 
   var arguments;
+
   AddTierPage({Key key, @required this.arguments}) : super(key: key);
 
   @override
@@ -42,8 +42,7 @@ class AddTierPage extends StatefulWidget {
 }
 
 class _AddTierPageState extends State<AddTierPage>
-    with TickerProviderStateMixin , AutomaticKeepAliveClientMixin {
-
+    with TickerProviderStateMixin, AutomaticKeepAliveClientMixin {
   @override
   bool get wantKeepAlive => true;
 
@@ -71,7 +70,8 @@ class _AddTierPageState extends State<AddTierPage>
   List<DropdownMenuItem<String>> _statutDropdownItems;
   String _selectedStatut;
 
-  List<int> _tarificationItems = Statics.tarificationItems ;
+  List<int> _tarificationItems = Statics.tarificationItems;
+
   List<DropdownMenuItem<int>> _tarificationDropdownItems;
   int _selectedTarification;
 
@@ -92,19 +92,18 @@ class _AddTierPageState extends State<AddTierPage>
   TextEditingController _chiffre_affairesControl = new TextEditingController();
   TextEditingController _reglerControl = new TextEditingController();
   TextEditingController _creditControl = new TextEditingController();
-  bool _controlBloquer = false ;
+  bool _controlBloquer = false;
 
   var _famille = new TiersFamille.init();
 
   File _itemImage;
 
-  QueryCtr _queryCtr = new QueryCtr() ;
-  MyParams _myParams ;
+  QueryCtr _queryCtr = new QueryCtr();
+
+  MyParams _myParams;
 
   GlobalKey globalKey = new GlobalKey();
   final _formKey = GlobalKey<FormState>();
-
-
 
   @override
   void dispose() {
@@ -112,15 +111,14 @@ class _AddTierPageState extends State<AddTierPage>
     super.dispose();
   }
 
-
   @override
   void didChangeDependencies() {
-    Statics.statutItems[0] = S.current.statut_m ;
-    Statics.statutItems[1] = S.current.statut_mlle ;
+    Statics.statutItems[0] = S.current.statut_m;
+    Statics.statutItems[1] = S.current.statut_mlle;
     Statics.statutItems[2] = S.current.statut_mme;
-    Statics.statutItems[3] = S.current.statut_dr ;
-    Statics.statutItems[4] = S.current.statut_pr ;
-    Statics.statutItems[5] = S.current.statut_eurl ;
+    Statics.statutItems[3] = S.current.statut_dr;
+    Statics.statutItems[4] = S.current.statut_pr;
+    Statics.statutItems[5] = S.current.statut_eurl;
   }
 
   //**********************************************************************************************************************************************************************
@@ -146,12 +144,13 @@ class _AddTierPageState extends State<AddTierPage>
 
   Future<bool> futureInitState() async {
     _familleItems = await widget._queryCtr.getAllTierFamilles();
-    _familleItems[0].libelle = S.current.no_famille ;
+    _familleItems[0].libelle = S.current.no_famille;
 
     _familleDropdownItems = utils.buildDropFamilleTier(_familleItems);
     _statutDropdownItems = utils.buildDropStatutTier(Statics.statutItems);
-    await buildTarification() ;
-    _tarificationDropdownItems = utils.buildDropTarificationTier(_tarificationItems);
+    await buildTarification();
+    _tarificationDropdownItems =
+        utils.buildDropTarificationTier(_tarificationItems);
 
     _selectedStatut = Statics.statutItems[0];
     _selectedTarification = _tarificationItems[0];
@@ -172,11 +171,11 @@ class _AddTierPageState extends State<AddTierPage>
 
   Future<void> setDataFromItem(item) async {
     _raisonSocialeControl.text = item.raisonSociale;
-    _qrCodeControl.text =  (item.qrCode == null) ? '' : item.qrCode;
+    _qrCodeControl.text = (item.qrCode == null) ? '' : item.qrCode;
     _adresseControl.text = item.adresse;
     _clientFournBool = _clientFourn == 1;
 
-    if(item.latitude != null && item.longitude != null){
+    if (item.latitude != null && item.longitude != null) {
       _latitude = item.latitude;
       _longitude = item.longitude;
     }
@@ -194,26 +193,25 @@ class _AddTierPageState extends State<AddTierPage>
     _selectedFamille = _familleItems[item.id_famille];
     _selectedStatut = Statics.statutItems[item.statut];
     _selectedTarification = item.tarification;
-    _controlBloquer = item.bloquer ;
+    _controlBloquer = item.bloquer;
   }
 
-  void buildTarification () async {
-      _myParams = await _queryCtr.getAllParams() ;
-      switch(_myParams.tarification){
-        case 1 :
-          _tarificationItems = _tarificationItems.sublist(0,1);
-          break;
-        case 2 :
-          _tarificationItems = _tarificationItems.sublist(0,2);
-          break;
-        case 3 :
-          _tarificationItems = _tarificationItems.sublist(0,3);
-          break;
-        default:
-          _tarificationItems = _tarificationItems.sublist(0,3);
-          break;
-      }
-
+  void buildTarification() async {
+    _myParams = await _queryCtr.getAllParams();
+    switch (_myParams.tarification) {
+      case 1:
+        _tarificationItems = _tarificationItems.sublist(0, 1);
+        break;
+      case 2:
+        _tarificationItems = _tarificationItems.sublist(0, 2);
+        break;
+      case 3:
+        _tarificationItems = _tarificationItems.sublist(0, 3);
+        break;
+      default:
+        _tarificationItems = _tarificationItems.sublist(0, 3);
+        break;
+    }
   }
 
   //**********************************************************************************************************************************************************************
@@ -225,27 +223,27 @@ class _AddTierPageState extends State<AddTierPage>
       if (editMode) {
         appBarTitle = S.current.modification_titre;
       } else {
-        if(_clientFourn == 0){
+        if (_clientFourn == 0) {
           appBarTitle = S.current.client_titre;
-        } else if(_clientFourn == 1){
+        } else if (_clientFourn == 1) {
           appBarTitle = S.current.client_four;
-        } else{
+        } else {
           appBarTitle = S.current.fournisseur_titre;
         }
       }
     } else {
       if (editMode) {
-        if(_clientFourn == 0){
+        if (_clientFourn == 0) {
           appBarTitle = "${S.current.client_titre}";
-        } else{
-          appBarTitle ="${S.current.fournisseur_titre}";
+        } else {
+          appBarTitle = "${S.current.fournisseur_titre}";
         }
       } else {
-        if(_clientFourn == 0){
+        if (_clientFourn == 0) {
           appBarTitle = S.current.client_titre;
-        } else if(_clientFourn == 1){
+        } else if (_clientFourn == 1) {
           appBarTitle = S.current.client_four;
-        } else{
+        } else {
           appBarTitle = S.current.fournisseur_titre;
         }
       }
@@ -255,130 +253,177 @@ class _AddTierPageState extends State<AddTierPage>
       return Scaffold(body: Helpers.buildLoading());
     } else {
       return DefaultTabController(
-            length: 4,
-            child: Scaffold(
-                backgroundColor: Theme.of(context).backgroundColor,
-                floatingActionButton: Padding(
-                  padding: const EdgeInsetsDirectional.fromSTEB(40, 10, 10, 10),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.end,
-                    mainAxisSize: MainAxisSize.max,
-                    mainAxisAlignment: MainAxisAlignment.end,
+        length: 4,
+        child: Scaffold(
+            backgroundColor: Theme.of(context).backgroundColor,
+            floatingActionButton: Padding(
+              padding: const EdgeInsetsDirectional.fromSTEB(40, 10, 10, 10),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.end,
+                mainAxisSize: MainAxisSize.max,
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [
+                  Visibility(
+                    visible: _tabSelectedIndex == 2 && editMode,
+                    child: FloatingActionButton(
+                      backgroundColor: Colors.green,
+                      foregroundColor: Theme.of(context).primaryColorDark,
+                      onPressed: () async {
+                        GeoPoint geoPoint =
+                            await osmKey.currentState.selectPosition();
+                        if (geoPoint != null) {
+                          _latitude = geoPoint.latitude;
+                          _longitude = geoPoint.longitude;
+                        }
+                      },
+                      child: Icon(Icons.add_location),
+                    ),
+                  ),
+                  SizedBox(
+                    height: 15,
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
+                      Visibility(
+                        visible: _tabSelectedIndex == 2 && !editMode,
+                        child: FloatingActionButton(
+                          foregroundColor: Theme.of(context).primaryColorDark,
+                          backgroundColor: Colors.blueAccent,
+                          onPressed: () async {
+                            Helpers.openMapsSheet(
+                                context, new Coords(_latitude, _longitude));
+                          },
+                          child: Icon(Icons.directions),
+                        ),
+                      ),
                       Visibility(
                         visible: _tabSelectedIndex == 2 && editMode,
                         child: FloatingActionButton(
-                          backgroundColor: Colors.green,
-                          foregroundColor: Theme.of(context).primaryColorDark,
                           onPressed: () async {
-                            GeoPoint geoPoint = await osmKey.currentState.selectPosition();
-                            if(geoPoint != null){
-                              _latitude = geoPoint.latitude;
-                              _longitude = geoPoint.longitude;
-                            }
+                            await osmKey.currentState.currentLocation();
                           },
-                          child: Icon(Icons.add_location),
+                          child: Icon(Icons.my_location),
                         ),
                       ),
-                      SizedBox(
-                        height: 15,
-                      ),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Visibility(
-                            visible: _tabSelectedIndex == 2 && !editMode,
-                            child: FloatingActionButton(
-                              foregroundColor: Theme.of(context).primaryColorDark,
-                              backgroundColor: Colors.blueAccent,
-                              onPressed: () async {
-                                Helpers.openMapsSheet(context, new Coords(_latitude, _longitude));
-                              },
-                              child: Icon(Icons.directions),
-                            ),
-                          ),
-                          Visibility(
-                            visible: _tabSelectedIndex == 2 && editMode,
-                            child: FloatingActionButton(
-                              onPressed: () async {
-                                await osmKey.currentState.currentLocation();
-                              },
-                              child: Icon(Icons.my_location),
-                            ),
-                          ),
-                        ],
-                      ),
                     ],
                   ),
-                ),
-                key: _scaffoldKey,
-                appBar: AddEditBar(
-                  editMode: editMode,
-                  modification: modification,
-                  title: appBarTitle,
-                  onCancelPressed: () => {
-                    if(modification){
-                      if(editMode){
-                        Navigator.of(context)
-                            .pushReplacementNamed(RoutesKeys.addTier, arguments: widget.arguments)
-                      } else{
-                        Navigator.pop(context)
+                ],
+              ),
+            ),
+            key: _scaffoldKey,
+            appBar: AddEditBar(
+              editMode: editMode,
+              modification: modification,
+              title: appBarTitle,
+              onCancelPressed: () => {
+                if (modification)
+                  {
+                    if (editMode)
+                      {
+                        Navigator.of(context).pushReplacementNamed(
+                            RoutesKeys.addTier,
+                            arguments: widget.arguments)
                       }
-                    } else{
-                      Navigator.pop(context),
-                    }
-                  },
-                  onEditPressed: () {
-                    setState(() {
-                      editMode = true;
-                    });
-                  },
-                  onSavePressed: () async {
-                    if(_formKey.currentState != null){
-                      if(_formKey.currentState.validate()){
-                        int id = await addItemToDb();
-                        if (id > -1) {
-                          setState(() {
-                            modification = true;
-                            editMode = false;
-                          });
-                        }
-                      }else{
-                        Helpers.showFlushBar(context, "${S.current.msg_champs_obg}");
-                      }
-                    }else{
+                    else
+                      {Navigator.pop(context)}
+                  }
+                else
+                  {
+                    Navigator.pop(context),
+                  }
+              },
+              onEditPressed: () {
+                setState(() {
+                  editMode = true;
+                });
+              },
+              onSavePressed: () async {
+                if (_formKey.currentState != null) {
+                  if (_formKey.currentState.validate()) {
+                    int id = await addItemToDb();
+                    if (id > -1) {
                       setState(() {
-                        _tabSelectedIndex = 0 ;
-                        _tabController.index = _tabSelectedIndex ;
+                        modification = true;
+                        editMode = false;
                       });
                     }
-
-                  },
-                ),
-                bottomNavigationBar: BottomTabBar(
-                  selectedIndex: _tabSelectedIndex,
-                  controller: _tabController,
-                  tabs: [
-                    Tab(child: Column( children: [ Icon(Icons.insert_drive_file),SizedBox(height: 1), Text(S.current.fiche, style: GoogleFonts.lato(),), ], )),
-                    Tab(child: Column( children: [ Icon(Icons.image), SizedBox(height: 1), Text(S.current.photo, style: GoogleFonts.lato(),), ], )),
-                    Tab(child: Column( children: [ Icon(Icons.map), SizedBox(height: 1), Text(S.current.map, style: GoogleFonts.lato(),), ], )),
-                    Tab(child: Column( children: [ Icon(MdiIcons.qrcode), SizedBox(height: 1), Text(S.current.qr_code, style: GoogleFonts.lato(),), ], )),
+                  } else {
+                    Helpers.showFlushBar(
+                        context, "${S.current.msg_champs_obg}");
+                  }
+                } else {
+                  setState(() {
+                    _tabSelectedIndex = 0;
+                    _tabController.index = _tabSelectedIndex;
+                  });
+                }
+              },
+            ),
+            bottomNavigationBar: BottomTabBar(
+              selectedIndex: _tabSelectedIndex,
+              controller: _tabController,
+              tabs: [
+                Tab(
+                    child: Column(
+                  children: [
+                    Icon(Icons.insert_drive_file),
+                    SizedBox(height: 1),
+                    Text(
+                      S.current.fiche,
+                      style: GoogleFonts.lato(),
+                    ),
                   ],
-                ),
-                body: Builder(
-                  builder: (context) => TabBarView(
-                    controller: _tabController,
-                    physics: _tabSelectedIndex == 2
-                        ? NeverScrollableScrollPhysics()
-                        : ClampingScrollPhysics(),
-                    children: [
-                      fichetab(),
-                      imageTab(),
-                      mapTab(),
-                      qrCodeTab(),
-                    ],
-                  ),
                 )),
+                Tab(
+                    child: Column(
+                  children: [
+                    Icon(Icons.image),
+                    SizedBox(height: 1),
+                    Text(
+                      S.current.photo,
+                      style: GoogleFonts.lato(),
+                    ),
+                  ],
+                )),
+                Tab(
+                    child: Column(
+                  children: [
+                    Icon(Icons.map),
+                    SizedBox(height: 1),
+                    Text(
+                      S.current.map,
+                      style: GoogleFonts.lato(),
+                    ),
+                  ],
+                )),
+                Tab(
+                    child: Column(
+                  children: [
+                    Icon(MdiIcons.qrcode),
+                    SizedBox(height: 1),
+                    Text(
+                      S.current.qr_code,
+                      style: GoogleFonts.lato(),
+                    ),
+                  ],
+                )),
+              ],
+            ),
+            body: Builder(
+              builder: (context) => TabBarView(
+                controller: _tabController,
+                physics: _tabSelectedIndex == 2
+                    ? NeverScrollableScrollPhysics()
+                    : ClampingScrollPhysics(),
+                children: [
+                  fichetab(),
+                  imageTab(),
+                  mapTab(),
+                  qrCodeTab(),
+                ],
+              ),
+            )),
       );
     }
   }
@@ -415,13 +460,14 @@ class _AddTierPageState extends State<AddTierPage>
                       focusedBorder: OutlineInputBorder(
                           borderSide: BorderSide(color: Colors.green),
                           borderRadius: BorderRadius.circular(20)),
-                      labelStyle: GoogleFonts.lato(textStyle: TextStyle(color: Colors.green)),
+                      labelStyle: GoogleFonts.lato(
+                          textStyle: TextStyle(color: Colors.green)),
                       enabledBorder: OutlineInputBorder(
                         gapPadding: 3.3,
                         borderRadius: BorderRadius.circular(20),
                         borderSide: BorderSide(color: Colors.green),
                       ),
-                      errorBorder:  OutlineInputBorder(
+                      errorBorder: OutlineInputBorder(
                         gapPadding: 3.3,
                         borderRadius: BorderRadius.circular(20),
                         borderSide: BorderSide(color: Colors.red),
@@ -432,10 +478,14 @@ class _AddTierPageState extends State<AddTierPage>
                 Padding(padding: EdgeInsetsDirectional.fromSTEB(5, 5, 5, 5)),
                 Container(
                   padding: const EdgeInsets.all(3),
-                  decoration: editMode? new BoxDecoration(
-                    border: Border.all(color: Colors.blueAccent,),
-                    borderRadius: BorderRadius.circular(20.0),
-                  ) : null,
+                  decoration: editMode
+                      ? new BoxDecoration(
+                          border: Border.all(
+                            color: Colors.blueAccent,
+                          ),
+                          borderRadius: BorderRadius.circular(20.0),
+                        )
+                      : null,
                   child: DropdownButtonHideUnderline(
                     child: DropdownButton<String>(
                         disabledHint: Text(_selectedStatut),
@@ -443,11 +493,12 @@ class _AddTierPageState extends State<AddTierPage>
                         items: _statutDropdownItems,
                         onChanged: editMode
                             ? (value) {
-                          setState(() {
-                            _selectedStatut = value;
-                          });
-                        }
-                            : null),),
+                                setState(() {
+                                  _selectedStatut = value;
+                                });
+                              }
+                            : null),
+                  ),
                 ),
               ],
             ),
@@ -464,7 +515,8 @@ class _AddTierPageState extends State<AddTierPage>
               // },
               decoration: InputDecoration(
                 labelText: S.current.adresse,
-                labelStyle: GoogleFonts.lato(textStyle: TextStyle(color: Theme.of(context).hintColor)),
+                labelStyle: GoogleFonts.lato(
+                    textStyle: TextStyle(color: Theme.of(context).hintColor)),
                 prefixIcon: Icon(
                   MdiIcons.homeCityOutline,
                   color: Colors.blue,
@@ -477,7 +529,7 @@ class _AddTierPageState extends State<AddTierPage>
                   borderRadius: BorderRadius.circular(20),
                   borderSide: BorderSide(color: Colors.blue),
                 ),
-                errorBorder:  OutlineInputBorder(
+                errorBorder: OutlineInputBorder(
                   gapPadding: 3.3,
                   borderRadius: BorderRadius.circular(20),
                   borderSide: BorderSide(color: Colors.red),
@@ -497,7 +549,8 @@ class _AddTierPageState extends State<AddTierPage>
               // },
               decoration: InputDecoration(
                 labelText: S.current.ville,
-                labelStyle: GoogleFonts.lato(textStyle: TextStyle(color: Theme.of(context).hintColor)),
+                labelStyle: GoogleFonts.lato(
+                    textStyle: TextStyle(color: Theme.of(context).hintColor)),
                 prefixIcon: Icon(
                   Icons.add_location,
                   color: Colors.blue,
@@ -510,7 +563,7 @@ class _AddTierPageState extends State<AddTierPage>
                   borderRadius: BorderRadius.circular(20),
                   borderSide: BorderSide(color: Colors.blue),
                 ),
-                errorBorder:  OutlineInputBorder(
+                errorBorder: OutlineInputBorder(
                   gapPadding: 3.3,
                   borderRadius: BorderRadius.circular(20),
                   borderSide: BorderSide(color: Colors.red),
@@ -520,7 +573,9 @@ class _AddTierPageState extends State<AddTierPage>
             TextFormField(
               enabled: editMode,
               controller: _telephoneControl,
-              onTap: () => _telephoneControl.selection = TextSelection(baseOffset: 0, extentOffset: _telephoneControl.value.text.length),
+              onTap: () => _telephoneControl.selection = TextSelection(
+                  baseOffset: 0,
+                  extentOffset: _telephoneControl.value.text.length),
               keyboardType: TextInputType.phone,
               // validator: (value) {
               //   if (value.isEmpty) {
@@ -530,7 +585,8 @@ class _AddTierPageState extends State<AddTierPage>
               // },
               decoration: InputDecoration(
                 labelText: S.current.telephone,
-                labelStyle:  GoogleFonts.lato(textStyle: TextStyle(color: Theme.of(context).hintColor)),
+                labelStyle: GoogleFonts.lato(
+                    textStyle: TextStyle(color: Theme.of(context).hintColor)),
                 prefixIcon: Icon(
                   Icons.phone,
                   color: Colors.blue,
@@ -543,7 +599,7 @@ class _AddTierPageState extends State<AddTierPage>
                   borderRadius: BorderRadius.circular(20),
                   borderSide: BorderSide(color: Colors.blue),
                 ),
-                errorBorder:  OutlineInputBorder(
+                errorBorder: OutlineInputBorder(
                   gapPadding: 3.3,
                   borderRadius: BorderRadius.circular(20),
                   borderSide: BorderSide(color: Colors.red),
@@ -553,7 +609,9 @@ class _AddTierPageState extends State<AddTierPage>
             TextFormField(
               enabled: editMode,
               controller: _mobileControl,
-              onTap: () => _mobileControl.selection = TextSelection(baseOffset: 0, extentOffset: _mobileControl.value.text.length),
+              onTap: () => _mobileControl.selection = TextSelection(
+                  baseOffset: 0,
+                  extentOffset: _mobileControl.value.text.length),
               keyboardType: TextInputType.phone,
               // validator: (value) {
               //   if (value.isEmpty) {
@@ -563,7 +621,8 @@ class _AddTierPageState extends State<AddTierPage>
               // },
               decoration: InputDecoration(
                 labelText: S.current.mobile,
-                labelStyle: GoogleFonts.lato(textStyle: TextStyle(color: Theme.of(context).hintColor)),
+                labelStyle: GoogleFonts.lato(
+                    textStyle: TextStyle(color: Theme.of(context).hintColor)),
                 prefixIcon: Icon(
                   Icons.phone_android,
                   color: Colors.blue,
@@ -576,7 +635,7 @@ class _AddTierPageState extends State<AddTierPage>
                   borderRadius: BorderRadius.circular(20),
                   borderSide: BorderSide(color: Colors.blue),
                 ),
-                errorBorder:  OutlineInputBorder(
+                errorBorder: OutlineInputBorder(
                   gapPadding: 3.3,
                   borderRadius: BorderRadius.circular(20),
                   borderSide: BorderSide(color: Colors.red),
@@ -586,7 +645,8 @@ class _AddTierPageState extends State<AddTierPage>
             TextFormField(
               enabled: editMode,
               controller: _faxControl,
-              onTap: () => _faxControl.selection = TextSelection(baseOffset: 0, extentOffset: _faxControl.value.text.length),
+              onTap: () => _faxControl.selection = TextSelection(
+                  baseOffset: 0, extentOffset: _faxControl.value.text.length),
               keyboardType: TextInputType.phone,
               // validator: (value) {
               //   if (value.isEmpty) {
@@ -596,7 +656,8 @@ class _AddTierPageState extends State<AddTierPage>
               // },
               decoration: InputDecoration(
                 labelText: S.current.fax,
-                labelStyle: GoogleFonts.lato(textStyle: TextStyle(color: Theme.of(context).hintColor)),
+                labelStyle: GoogleFonts.lato(
+                    textStyle: TextStyle(color: Theme.of(context).hintColor)),
                 prefixIcon: Icon(
                   MdiIcons.fax,
                   color: Colors.blue,
@@ -609,7 +670,7 @@ class _AddTierPageState extends State<AddTierPage>
                   borderRadius: BorderRadius.circular(20),
                   borderSide: BorderSide(color: Colors.blue),
                 ),
-                errorBorder:  OutlineInputBorder(
+                errorBorder: OutlineInputBorder(
                   gapPadding: 3.3,
                   borderRadius: BorderRadius.circular(20),
                   borderSide: BorderSide(color: Colors.red),
@@ -629,7 +690,8 @@ class _AddTierPageState extends State<AddTierPage>
               // },
               decoration: InputDecoration(
                 labelText: S.current.mail,
-                labelStyle: GoogleFonts.lato(textStyle: TextStyle(color: Theme.of(context).hintColor)),
+                labelStyle: GoogleFonts.lato(
+                    textStyle: TextStyle(color: Theme.of(context).hintColor)),
                 prefixIcon: Icon(
                   Icons.email,
                   color: Colors.blue,
@@ -642,7 +704,7 @@ class _AddTierPageState extends State<AddTierPage>
                   borderRadius: BorderRadius.circular(20),
                   borderSide: BorderSide(color: Colors.blue),
                 ),
-                errorBorder:  OutlineInputBorder(
+                errorBorder: OutlineInputBorder(
                   gapPadding: 3.3,
                   borderRadius: BorderRadius.circular(20),
                   borderSide: BorderSide(color: Colors.red),
@@ -652,7 +714,9 @@ class _AddTierPageState extends State<AddTierPage>
             TextFormField(
               enabled: editMode,
               controller: _solde_departControl,
-              onTap: () => _solde_departControl.selection = TextSelection(baseOffset: 0, extentOffset: _solde_departControl.value.text.length),
+              onTap: () => _solde_departControl.selection = TextSelection(
+                  baseOffset: 0,
+                  extentOffset: _solde_departControl.value.text.length),
               keyboardType: TextInputType.number,
               // validator: (value) {
               //   if (value.isEmpty) {
@@ -660,15 +724,22 @@ class _AddTierPageState extends State<AddTierPage>
               //   }
               //   return null;
               // },
-              onChanged: (value){
-                var ch_affaire = (_chiffre_affairesControl.text != '')? double.parse(_chiffre_affairesControl.text):0.0 ;
-                var regle = (_reglerControl.text != '')? double.parse(_reglerControl.text ):0.0 ;
+              onChanged: (value) {
+                var ch_affaire = (_chiffre_affairesControl.text != '')
+                    ? double.parse(_chiffre_affairesControl.text)
+                    : 0.0;
+                var regle = (_reglerControl.text != '')
+                    ? double.parse(_reglerControl.text)
+                    : 0.0;
 
-                _creditControl.text = ((double.parse(value)+ch_affaire)-regle).toStringAsFixed(2) ;
+                _creditControl.text =
+                    ((double.parse(value) + ch_affaire) - regle)
+                        .toStringAsFixed(2);
               },
               decoration: InputDecoration(
                 labelText: S.current.solde_depart,
-                labelStyle: GoogleFonts.lato(textStyle: TextStyle(color: Theme.of(context).hintColor)),
+                labelStyle: GoogleFonts.lato(
+                    textStyle: TextStyle(color: Theme.of(context).hintColor)),
                 prefixIcon: Icon(
                   Icons.monetization_on,
                   color: Colors.blue,
@@ -681,7 +752,7 @@ class _AddTierPageState extends State<AddTierPage>
                   borderRadius: BorderRadius.circular(20),
                   borderSide: BorderSide(color: Colors.blue),
                 ),
-                errorBorder:  OutlineInputBorder(
+                errorBorder: OutlineInputBorder(
                   gapPadding: 3.3,
                   borderRadius: BorderRadius.circular(20),
                   borderSide: BorderSide(color: Colors.red),
@@ -694,7 +765,9 @@ class _AddTierPageState extends State<AddTierPage>
                 enabled: editMode,
                 readOnly: true,
                 controller: _chiffre_affairesControl,
-                onTap: () => _chiffre_affairesControl.selection = TextSelection(baseOffset: 0, extentOffset: _chiffre_affairesControl.value.text.length),
+                onTap: () => _chiffre_affairesControl.selection = TextSelection(
+                    baseOffset: 0,
+                    extentOffset: _chiffre_affairesControl.value.text.length),
                 keyboardType: TextInputType.number,
                 // validator: (value) {
                 //   if (value.isEmpty) {
@@ -704,7 +777,8 @@ class _AddTierPageState extends State<AddTierPage>
                 // },
                 decoration: InputDecoration(
                   labelText: S.current.chifre_affaire,
-                  labelStyle: GoogleFonts.lato(textStyle: TextStyle(color: Theme.of(context).hintColor)),
+                  labelStyle: GoogleFonts.lato(
+                      textStyle: TextStyle(color: Theme.of(context).hintColor)),
                   prefixIcon: Icon(
                     Icons.monetization_on,
                     color: Colors.blue,
@@ -717,7 +791,7 @@ class _AddTierPageState extends State<AddTierPage>
                     borderRadius: BorderRadius.circular(20),
                     borderSide: BorderSide(color: Colors.blue),
                   ),
-                  errorBorder:  OutlineInputBorder(
+                  errorBorder: OutlineInputBorder(
                     gapPadding: 3.3,
                     borderRadius: BorderRadius.circular(20),
                     borderSide: BorderSide(color: Colors.red),
@@ -731,7 +805,9 @@ class _AddTierPageState extends State<AddTierPage>
                 enabled: editMode,
                 readOnly: true,
                 controller: _reglerControl,
-                onTap: () => _reglerControl.selection = TextSelection(baseOffset: 0, extentOffset: _reglerControl.value.text.length),
+                onTap: () => _reglerControl.selection = TextSelection(
+                    baseOffset: 0,
+                    extentOffset: _reglerControl.value.text.length),
                 keyboardType: TextInputType.number,
                 // validator: (value) {
                 //   if (value.isEmpty) {
@@ -741,7 +817,8 @@ class _AddTierPageState extends State<AddTierPage>
                 // },
                 decoration: InputDecoration(
                   labelText: S.current.regler,
-                  labelStyle: GoogleFonts.lato(textStyle: TextStyle(color: Theme.of(context).hintColor)),
+                  labelStyle: GoogleFonts.lato(
+                      textStyle: TextStyle(color: Theme.of(context).hintColor)),
                   prefixIcon: Icon(
                     Icons.monetization_on,
                     color: Colors.blue,
@@ -754,7 +831,7 @@ class _AddTierPageState extends State<AddTierPage>
                     borderRadius: BorderRadius.circular(20),
                     borderSide: BorderSide(color: Colors.blue),
                   ),
-                  errorBorder:  OutlineInputBorder(
+                  errorBorder: OutlineInputBorder(
                     gapPadding: 3.3,
                     borderRadius: BorderRadius.circular(20),
                     borderSide: BorderSide(color: Colors.red),
@@ -778,7 +855,8 @@ class _AddTierPageState extends State<AddTierPage>
                       borderSide: BorderSide(color: Colors.blue),
                       borderRadius: BorderRadius.circular(20)),
                   labelText: S.current.credit,
-                  labelStyle: GoogleFonts.lato(textStyle: TextStyle(color: Theme.of(context).hintColor)),
+                  labelStyle: GoogleFonts.lato(
+                      textStyle: TextStyle(color: Theme.of(context).hintColor)),
                   enabledBorder: OutlineInputBorder(
                     gapPadding: 3.3,
                     borderRadius: BorderRadius.circular(20),
@@ -787,43 +865,68 @@ class _AddTierPageState extends State<AddTierPage>
                 ),
               ),
             ),
-            dropdowns() ,
+            dropdowns(),
             Visibility(
-              visible: false ,
+              visible: false,
               child: Container(
-                decoration: editMode? new BoxDecoration(
-                  border: Border.all(color: Colors.blueAccent,),
-                  borderRadius: BorderRadius.circular(20.0),
-                ) : null,
+                decoration: editMode
+                    ? new BoxDecoration(
+                        border: Border.all(
+                          color: Colors.blueAccent,
+                        ),
+                        borderRadius: BorderRadius.circular(20.0),
+                      )
+                    : null,
                 child: CheckboxListTile(
                   title: Text(S.current.client_four,
-                    style: GoogleFonts.lato(
-                      textStyle: TextStyle(color: editMode ? Theme.of(context).primaryColorDark : Theme.of(context).tabBarTheme.unselectedLabelColor ),)
-                  ),
+                      style: GoogleFonts.lato(
+                        textStyle: TextStyle(
+                            color: editMode
+                                ? Theme.of(context).primaryColorDark
+                                : Theme.of(context)
+                                    .tabBarTheme
+                                    .unselectedLabelColor),
+                      )),
                   value: _clientFournBool,
-                  onChanged: editMode? (bool value) {
-                    setState(() {
-                      _clientFournBool = value;
-                    });
-                  } : null,
+                  onChanged: editMode
+                      ? (bool value) {
+                          setState(() {
+                            _clientFournBool = value;
+                          });
+                        }
+                      : null,
                 ),
               ),
             ),
-             Container(
-                decoration: editMode? new BoxDecoration(
-                  border: Border.all(color: Colors.blueAccent,),
-                  borderRadius: BorderRadius.circular(20.0),
-                ) : null,
-                child: SwitchListTile(
-                  title: Text(S.current.bloquer ,
-                    style: GoogleFonts.lato(textStyle: TextStyle(color: Theme.of(context).primaryColorDark)),),
-                  value: _controlBloquer,
-                  onChanged: editMode ? (bool value){
-                    setState(() {
-                      _controlBloquer = value ;
-                    });
-                  }:null,
-                )
+            Visibility(
+              visible: (widget.arguments.id != null &&
+                  (widget.arguments.id != 1 && widget.arguments.id != 2)),
+              child: Container(
+                  decoration: editMode
+                      ? new BoxDecoration(
+                          border: Border.all(
+                            color: Colors.blueAccent,
+                          ),
+                          borderRadius: BorderRadius.circular(20.0),
+                        )
+                      : null,
+                  child: SwitchListTile(
+                    title: Text(
+                      S.current.bloquer,
+                      style: GoogleFonts.lato(
+                          textStyle: TextStyle(
+                              color: Theme.of(context).primaryColorDark)),
+                    ),
+                    value: _controlBloquer,
+                    activeColor: Theme.of(context).primaryColor,
+                    onChanged: editMode
+                        ? (bool value) {
+                            setState(() {
+                              _controlBloquer = value;
+                            });
+                          }
+                        : null,
+                  )),
             ),
           ],
         ),
@@ -836,201 +939,200 @@ class _AddTierPageState extends State<AddTierPage>
       child: ImagePickerWidget(
           imageFile: _itemImage,
           editMode: editMode,
-          onImageChange: (File imageFile)  {
+          onImageChange: (File imageFile) {
             setState(() {
-              _itemImage = imageFile ;
+              _itemImage = imageFile;
             });
-          }
-        ),
+          }),
     );
   }
 
   Widget qrCodeTab() {
-    final bodyHeight = MediaQuery.of(context).size.height - MediaQuery.of(context).viewInsets.bottom;
+    final bodyHeight = MediaQuery.of(context).size.height -
+        MediaQuery.of(context).viewInsets.bottom;
     return Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            RepaintBoundary(
-              key : globalKey,
-              child: Container(
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.grey.withOpacity(0.5),
-                      spreadRadius: 1,
-                      blurRadius: 2,
-                      offset:
-                      Offset(0, 2), // changes position of shadow
-                    ),
-                  ],
+      mainAxisAlignment: MainAxisAlignment.center,
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        RepaintBoundary(
+          key: globalKey,
+          child: Container(
+            decoration: BoxDecoration(
+              color: Colors.white,
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.grey.withOpacity(0.5),
+                  spreadRadius: 1,
+                  blurRadius: 2,
+                  offset: Offset(0, 2), // changes position of shadow
                 ),
-                width: 300,
-                height: 300,
-                child:(_qrCodeControl.text != "")? QrImage(
-                  data: _qrCodeControl.text,
+              ],
+            ),
+            width: 300,
+            height: 300,
+            child: (_qrCodeControl.text != "")
+                ? QrImage(
+                    data: _qrCodeControl.text,
                     size: 0.5 * bodyHeight,
                   )
                 : Center(
-                  child: Text(S.current.msg_no_qr ,
-                      style:GoogleFonts.lato(
-                        textStyle: TextStyle(fontSize: 16 , color:Colors.black , fontWeight: FontWeight.bold)
-                      )
+                    child: Text(S.current.msg_no_qr,
+                        style: GoogleFonts.lato(
+                            textStyle: TextStyle(
+                                fontSize: 16,
+                                color: Colors.black,
+                                fontWeight: FontWeight.bold))),
                   ),
-                ),
-
-              ),
-            ),
-            SizedBox(height: 25,),
-            (editMode) ? Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: [
-                Container(
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(50.0),
-                    color: Colors.white,
-                    boxShadow: [
-                      BoxShadow(
-                        color: Colors.grey.withOpacity(0.5),
-                        spreadRadius: 1,
-                        blurRadius: 2,
-                        offset:
-                        Offset(0, 2), // changes position of shadow
-                      ),
-                    ],
-                  ),
-                  child: new IconButton(
-                    color: Colors.black,
-                    icon: new Icon(
-                      MdiIcons.qrcodeScan,
-                      size: 30,
-                      color: Colors.blue,
+          ),
+        ),
+        SizedBox(
+          height: 25,
+        ),
+        (editMode)
+            ? Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  Container(
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(50.0),
+                      color: Colors.white,
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.grey.withOpacity(0.5),
+                          spreadRadius: 1,
+                          blurRadius: 2,
+                          offset: Offset(0, 2), // changes position of shadow
+                        ),
+                      ],
                     ),
-                    onPressed: editMode
-                        ? () async{
-                            await scanQRCode();
-                    }
-                        : null,
-                  ),
-                ),
-                Container(
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(50.0),
-                    color: Colors.white,
-                    boxShadow: [
-                      BoxShadow(
-                        color: Colors.grey.withOpacity(0.5),
-                        spreadRadius: 1,
-                        blurRadius: 2,
-                        offset:
-                        Offset(0, 2), // changes position of shadow
+                    child: new IconButton(
+                      color: Colors.black,
+                      icon: new Icon(
+                        MdiIcons.qrcodeScan,
+                        size: 30,
+                        color: Colors.blue,
                       ),
-                    ],
-                  ),
-                  child: new IconButton(
-                    color: Colors.black,
-                    icon: new Icon(
-                      Icons.autorenew_outlined,
-                      size: 30,
-                      color: Colors.blueGrey,
+                      onPressed: editMode
+                          ? () async {
+                              await scanQRCode();
+                            }
+                          : null,
                     ),
-                    onPressed: editMode
-                        ? () {
-                        if(_raisonSocialeControl.text != "" && _mobileControl.text != ""){
-                          setState(() {
-                            _qrCodeControl.text = "Tier://"+_raisonSocialeControl.text+"/"+_mobileControl.text;
-                          });
-                        }else{
-                          var message = S.current.msg_gen_qr;
-                          Helpers.showFlushBar(context, message);
-                        }
-                    }
-                        : null,
                   ),
-                ),
-              ],
-            )
+                  Container(
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(50.0),
+                      color: Colors.white,
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.grey.withOpacity(0.5),
+                          spreadRadius: 1,
+                          blurRadius: 2,
+                          offset: Offset(0, 2), // changes position of shadow
+                        ),
+                      ],
+                    ),
+                    child: new IconButton(
+                      color: Colors.black,
+                      icon: new Icon(
+                        Icons.autorenew_outlined,
+                        size: 30,
+                        color: Colors.blueGrey,
+                      ),
+                      onPressed: editMode
+                          ? () {
+                              if (_raisonSocialeControl.text != "" &&
+                                  _mobileControl.text != "") {
+                                setState(() {
+                                  _qrCodeControl.text = "Tier://" +
+                                      _raisonSocialeControl.text +
+                                      "/" +
+                                      _mobileControl.text;
+                                });
+                              } else {
+                                var message = S.current.msg_gen_qr;
+                                Helpers.showFlushBar(context, message);
+                              }
+                            }
+                          : null,
+                    ),
+                  ),
+                ],
+              )
             : Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: [
-                Container(
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(50.0),
-                    color: Colors.white,
-                    boxShadow: [
-                      BoxShadow(
-                        color: Colors.grey.withOpacity(0.5),
-                        spreadRadius: 1,
-                        blurRadius: 2,
-                        offset:
-                        Offset(0, 2), // changes position of shadow
-                      ),
-                    ],
-                  ),
-                  child: IconButton(
-                    icon: new Icon(
-                      Icons.share,
-                      size: 30,
-                      color: Colors.blue,
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  Container(
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(50.0),
+                      color: Colors.white,
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.grey.withOpacity(0.5),
+                          spreadRadius: 1,
+                          blurRadius: 2,
+                          offset: Offset(0, 2), // changes position of shadow
+                        ),
+                      ],
                     ),
-                    onPressed: () async{
-                      if(_qrCodeControl.text != ""){
-                        if(_myParams.versionType != "demo"){
-                          await _captureAndSharePng();
-                        }else{
-                          var message = S.current.msg_demo_option;
-                          Helpers.showFlushBar(context, message);
-                        }
-                      }else{
-                        var message = S.current.msg_no_qr;
-                        Helpers.showFlushBar(context, message);
-                      }
-
-                    }
+                    child: IconButton(
+                        icon: new Icon(
+                          Icons.share,
+                          size: 30,
+                          color: Colors.blue,
+                        ),
+                        onPressed: () async {
+                          if (_qrCodeControl.text != "") {
+                            if (_myParams.versionType != "demo") {
+                              await _captureAndSharePng();
+                            } else {
+                              var message = S.current.msg_demo_option;
+                              Helpers.showFlushBar(context, message);
+                            }
+                          } else {
+                            var message = S.current.msg_no_qr;
+                            Helpers.showFlushBar(context, message);
+                          }
+                        }),
                   ),
-                ),
-                Container(
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(50.0),
-                    color: Colors.white,
-                    boxShadow: [
-                      BoxShadow(
-                        color: Colors.grey.withOpacity(0.5),
-                        spreadRadius: 1,
-                        blurRadius: 2,
-                        offset:
-                        Offset(0, 2), // changes position of shadow
-                      ),
-                    ],
-                  ),
-                  child: IconButton(
+                  Container(
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(50.0),
+                      color: Colors.white,
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.grey.withOpacity(0.5),
+                          spreadRadius: 1,
+                          blurRadius: 2,
+                          offset: Offset(0, 2), // changes position of shadow
+                        ),
+                      ],
+                    ),
+                    child: IconButton(
                       icon: new Icon(
                         Icons.print_rounded,
                         size: 30,
-                        color:Colors.green,
+                        color: Colors.green,
                       ),
-                      onPressed:() async{
-                        if(_qrCodeControl.text != ""){
-                          if(_myParams.versionType != "demo"){
+                      onPressed: () async {
+                        if (_qrCodeControl.text != "") {
+                          if (_myParams.versionType != "demo") {
                             await _printQr();
-                          }else{
+                          } else {
                             var message = S.current.msg_demo_option;
                             Helpers.showFlushBar(context, message);
                           }
-                        }else{
+                        } else {
                           var message = S.current.msg_no_qr;
                           Helpers.showFlushBar(context, message);
                         }
-
                       },
+                    ),
                   ),
-                ),
-              ],
-            )
-          ],
-      );
-
+                ],
+              )
+      ],
+    );
   }
 
   Widget mapTab() {
@@ -1068,8 +1170,7 @@ class _AddTierPageState extends State<AddTierPage>
             size: 56,
           ),
         ),
-        initPosition:
-            GeoPoint(latitude: _latitude, longitude: _longitude),
+        initPosition: GeoPoint(latitude: _latitude, longitude: _longitude),
         showZoomController: false,
         useSecureURL: false);
   }
@@ -1097,11 +1198,13 @@ class _AddTierPageState extends State<AddTierPage>
             });
           },
         ),
-        Padding(padding: EdgeInsetsDirectional.fromSTEB(10, 10, 10, 10),),
+        Padding(
+          padding: EdgeInsetsDirectional.fromSTEB(10, 10, 10, 10),
+        ),
         Visibility(
-          visible : (_clientFourn != 2),
+          visible: (_clientFourn != 2),
           child: ListDropDown(
-            libelle: "${S.current.tarif }",
+            libelle: "${S.current.tarif}",
             editMode: editMode,
             value: _selectedTarification,
             items: _tarificationDropdownItems,
@@ -1109,7 +1212,8 @@ class _AddTierPageState extends State<AddTierPage>
               setState(() {
                 _selectedTarification = value;
               });
-            },),
+            },
+          ),
         ),
       ],
     );
@@ -1133,16 +1237,16 @@ class _AddTierPageState extends State<AddTierPage>
                             padding: const EdgeInsets.only(bottom: 20),
                             child: Text(
                               "${S.current.ajouter} ${S.current.famile}",
-                              style:GoogleFonts.lato(
-                                textStyle:  TextStyle(
-                                  fontSize: 18,
-                                  fontWeight: FontWeight.bold,
-                                )
-                              ),
+                              style: GoogleFonts.lato(
+                                  textStyle: TextStyle(
+                                fontSize: 18,
+                                fontWeight: FontWeight.bold,
+                              )),
                             ),
                           )),
                           Padding(
-                            padding: EdgeInsetsDirectional.fromSTEB(5, 20, 5, 20),
+                            padding:
+                                EdgeInsetsDirectional.fromSTEB(5, 20, 5, 20),
                             child: TextField(
                               controller: _libelleFamilleControl,
                               keyboardType: TextInputType.text,
@@ -1156,7 +1260,10 @@ class _AddTierPageState extends State<AddTierPage>
                                         BorderSide(color: Colors.orange[900]),
                                     borderRadius: BorderRadius.circular(20)),
                                 contentPadding: EdgeInsets.only(left: 10),
-                                labelStyle:GoogleFonts.lato(textStyle: TextStyle(color: Colors.orange[900]),),
+                                labelStyle: GoogleFonts.lato(
+                                  textStyle:
+                                      TextStyle(color: Colors.orange[900]),
+                                ),
                                 enabledBorder: OutlineInputBorder(
                                   gapPadding: 3.3,
                                   borderRadius: BorderRadius.circular(20),
@@ -1169,7 +1276,8 @@ class _AddTierPageState extends State<AddTierPage>
                           SizedBox(
                             width: 320.0,
                             child: Padding(
-                              padding: EdgeInsetsDirectional.only(start: 0, end: 0),
+                              padding:
+                                  EdgeInsetsDirectional.only(start: 0, end: 0),
                               child: RaisedButton(
                                 shape: RoundedRectangleBorder(
                                   borderRadius: BorderRadius.circular(18.0),
@@ -1187,11 +1295,10 @@ class _AddTierPageState extends State<AddTierPage>
                                     content: Text(
                                       S.current.msg_fam_ajout,
                                       style: GoogleFonts.lato(
-                                        textStyle: TextStyle(
-                                            color: Colors.white,
-                                            fontSize: 15,
-                                            fontWeight: FontWeight.w500)
-                                      ),
+                                          textStyle: TextStyle(
+                                              color: Colors.white,
+                                              fontSize: 15,
+                                              fontWeight: FontWeight.w500)),
                                     ),
                                     backgroundColor: Colors.red,
                                     duration: Duration(seconds: 1),
@@ -1202,7 +1309,10 @@ class _AddTierPageState extends State<AddTierPage>
                                 },
                                 child: Text(
                                   S.current.ajouter,
-                                  style: GoogleFonts.lato(textStyle: TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
+                                  style: GoogleFonts.lato(
+                                      textStyle: TextStyle(
+                                          color: Colors.white,
+                                          fontWeight: FontWeight.bold)),
                                 ),
                                 color: Colors.red,
                               ),
@@ -1271,17 +1381,17 @@ class _AddTierPageState extends State<AddTierPage>
     var item = new Tiers.empty();
     item.id = widget.arguments.id;
 
-    if(_clientFournBool){
+    if (_clientFournBool) {
       item.clientFour = 1;
-    } else if (widget.arguments.originClientOrFourn != null){
+    } else if (widget.arguments.originClientOrFourn != null) {
       item.clientFour = widget.arguments.originClientOrFourn;
-    } else{
+    } else {
       item.clientFour = _clientFourn;
     }
 
     item.raisonSociale = _raisonSocialeControl.text;
 
-    if(_qrCodeControl.text != ""){
+    if (_qrCodeControl.text != "") {
       item.qrCode = _qrCodeControl.text;
     }
 
@@ -1291,17 +1401,24 @@ class _AddTierPageState extends State<AddTierPage>
     item.longitude = _longitude;
     item.ville = _villeControl.text;
     item.telephone = _telephoneControl.text;
-    item.mobile = (_mobileControl.text != '')?_mobileControl.text : '';
+    item.mobile = (_mobileControl.text != '') ? _mobileControl.text : '';
     item.fax = _faxControl.text;
     item.email = _emailControl.text;
 
-    item.solde_depart =(_solde_departControl.text != "")? double.tryParse(_solde_departControl.text):0.0;
-    item.chiffre_affaires = (_chiffre_affairesControl.text != "")?double.tryParse(_chiffre_affairesControl.text):0.0;
-    item.regler =(_reglerControl.text != "")? double.tryParse(_reglerControl.text):0.0;
-    item.credit =(_creditControl.text != '')? double.parse(_creditControl.text):0.0;
+    item.solde_depart = (_solde_departControl.text != "")
+        ? double.tryParse(_solde_departControl.text)
+        : 0.0;
+    item.chiffre_affaires = (_chiffre_affairesControl.text != "")
+        ? double.tryParse(_chiffre_affairesControl.text)
+        : 0.0;
+    item.regler = (_reglerControl.text != "")
+        ? double.tryParse(_reglerControl.text)
+        : 0.0;
+    item.credit =
+        (_creditControl.text != '') ? double.parse(_creditControl.text) : 0.0;
 
     if (_itemImage != null) {
-      item.imageUint8List =  await Helpers.getUint8ListFromFile(_itemImage);
+      item.imageUint8List = await Helpers.getUint8ListFromFile(_itemImage);
     } else {
       Uint8List image = await Helpers.getDefaultImageUint8List(from: "tier");
       item.imageUint8List = image;
@@ -1327,13 +1444,12 @@ class _AddTierPageState extends State<AddTierPage>
       );
 
       var result = await BarcodeScanner.scan(options: options);
-      if(result.rawContent.isNotEmpty){
+      if (result.rawContent.isNotEmpty) {
         setState(() {
           _qrCodeControl.text = result.rawContent;
           FocusScope.of(context).requestFocus(null);
         });
       }
-
     } catch (e) {
       var result = ScanResult(
         type: ResultType.Error,
@@ -1353,7 +1469,8 @@ class _AddTierPageState extends State<AddTierPage>
 
   Future<void> _captureAndSharePng() async {
     try {
-      RenderRepaintBoundary boundary = globalKey.currentContext.findRenderObject();
+      RenderRepaintBoundary boundary =
+          globalKey.currentContext.findRenderObject();
       var image = await boundary.toImage();
       ByteData byteData = await image.toByteData(format: ImageByteFormat.png);
       Uint8List pngBytes = byteData.buffer.asUint8List();
@@ -1363,21 +1480,23 @@ class _AddTierPageState extends State<AddTierPage>
       await file.writeAsBytes(pngBytes);
 
       final RenderBox box = context.findRenderObject();
-      List<String> paths =new List<String>();
+      List<String> paths = new List<String>();
       paths.add('${tempDir.path}/image.png');
-      await Share.shareFiles(paths,
-          subject: 'Share',
-          text: 'Hey, check it out the sharefiles repo!',
-          sharePositionOrigin: box.localToGlobal(Offset.zero) & box.size ,
+      await Share.shareFiles(
+        paths,
+        subject: 'Share',
+        text: 'Hey, check it out the sharefiles repo!',
+        sharePositionOrigin: box.localToGlobal(Offset.zero) & box.size,
       );
-    } catch(e) {
+    } catch (e) {
       print(e.toString());
     }
   }
 
-  Future _printQr()async{
+  Future _printQr() async {
     try {
-      RenderRepaintBoundary boundary = globalKey.currentContext.findRenderObject();
+      RenderRepaintBoundary boundary =
+          globalKey.currentContext.findRenderObject();
       var image = await boundary.toImage();
       ByteData byteData = await image.toByteData(format: ImageByteFormat.png);
       Uint8List pngBytes = byteData.buffer.asUint8List();
@@ -1399,13 +1518,8 @@ class _AddTierPageState extends State<AddTierPage>
 
       await Printing.layoutPdf(
           onLayout: (PdfPageFormat format) async => doc.save());
-
-    } catch(e) {
+    } catch (e) {
       print(e.toString());
     }
   }
-
-
-
-
 }

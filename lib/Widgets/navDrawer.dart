@@ -11,6 +11,7 @@ import 'package:gestmob/models/HomeItem.dart';
 import 'package:gestmob/models/MyParams.dart';
 import 'package:gestmob/services/push_notifications.dart';
 import 'package:gestmob/ui/home.dart';
+import 'package:line_icons/line_icons.dart';
 import 'HomeItemsWidgets.dart';
 import 'package:gestmob/models/Profile.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -88,7 +89,7 @@ class NavDrawer extends  StatelessWidget {
                         print(homeItemParametres.title);
                         Helpers.handleIdClick(context, homeItemParametres.id);
                       },
-                      child: Icon(Icons.settings , color: Colors.white,)
+                      child: Icon(LineIcons.cog , color: Colors.white,)
                     ),
                     InkWell(
                       onTap: () {
