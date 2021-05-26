@@ -1,5 +1,6 @@
 import 'package:draggable_container/draggable_container.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gestmob/Helpers/Helpers.dart';
@@ -9,7 +10,6 @@ import 'package:gestmob/models/Article.dart';
 import 'package:gestmob/models/HomeItem.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-// element de menu de home
 class HomeDraggableItem extends DraggableItem {
   int index;
   final String key;
@@ -22,7 +22,7 @@ class HomeDraggableItem extends DraggableItem {
     String title = data == null ? "Add Button" : data.title;
     String id = data == null ? "addButtonHomeItemId" : data.id;
 
-    this.child = GestureDetector(
+    this.child = InkWell(
       onTap: () {
         if (onTap != null) {
           onTap();
@@ -34,7 +34,8 @@ class HomeDraggableItem extends DraggableItem {
       child: Container(
         padding: EdgeInsetsDirectional.only(start: 5 , end :5),
         decoration: BoxDecoration(
-          color: Theme.of(context).selectedRowColor,
+          color: colorSet(id),
+          borderRadius: BorderRadius.circular(5),
           boxShadow: [
             BoxShadow(
               color: Colors.grey.withOpacity(0.3),
@@ -46,7 +47,7 @@ class HomeDraggableItem extends DraggableItem {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            homeIcons(id, 45),
+            iconsSet(id, 40),
             SizedBox(
               width: 10.0,
               height: 10.0,
@@ -56,8 +57,8 @@ class HomeDraggableItem extends DraggableItem {
               textAlign: TextAlign.center,
               style: GoogleFonts.lato(
                   textStyle: TextStyle(
-                      color: Theme.of(context).primaryColorDark,
-                      fontSize: 16,
+                      color: Colors.white,
+                      fontSize: 15,
                       fontWeight: FontWeight.bold)
               ),
             ),
@@ -65,6 +66,8 @@ class HomeDraggableItem extends DraggableItem {
         ),
       ),
     );
+
+
   }
 
   @override

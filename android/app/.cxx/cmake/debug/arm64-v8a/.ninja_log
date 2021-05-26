@@ -1,3 +1,4 @@
 # ninja log v5
 1	157	0	CMakeFiles/serial_port.dir/src/main/jni/com_cirtait_mobile_gestmob_serialport_SerialPort.c.o	f125cc17e67b05b2
 159	296	0	E:/AndroidStudio/FlutterProjects/gestmob/build/app/intermediates/cmake/debug/obj/arm64-v8a/libserial_port.so	fee2e08e87d2cab3
+3	140	0	E:/AndroidStudio/FlutterProjects/gestmob/build/app/intermediates/cmake/debug/obj/arm64-v8a/libserial_port.so	fee2e08e87d2cab3

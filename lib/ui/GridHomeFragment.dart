@@ -17,6 +17,8 @@ import 'package:gestmob/services/local_notification.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:gestmob/cubit/home_cubit.dart';
 import 'package:gestmob/models/HomeItem.dart';
+import 'package:line_icons/line_icon.dart';
+import 'package:line_icons/line_icons.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:reorderables/reorderables.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -71,45 +73,70 @@ class _GridHomeWidgetState extends State<GridHomeWidget> {
     SchedulerBinding.instance.addPostFrameCallback((Duration duration) {
       FeatureDiscovery.discoverFeatures(context, <String>{feature11});
     });
+
     futurInit().then((value) {
       setState(() {
         _finishLoading = true;
       });
     });
+
     _addButton = DraggableItem(
       fixed: true,
       deletable: false,
-      child: Container(
+      child: InkWell(
+        onTap: () async {
+          final items = _containerKey.currentState.items;
+          final buttonIndex = items.indexOf(_addButton),
+              nullIndex = items.indexOf(null);
+
+          /// use new item to instead of the button position
+          if (buttonIndex > -1) {
+            await _containerKey.currentState.insteadOfIndex(
+                buttonIndex, getMissingItem(context, items, _count),
+                force: true, triggerEvent: false);
+            _count++;
+
+            /// use the button instead of the first null position
+            if (nullIndex > -1) {
+              await _containerKey.currentState.insteadOfIndex(
+                  nullIndex, _addButton,
+                  force: true, triggerEvent: false);
+            }
+          }
+        },
+        child: Container(
           decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(10),
+            color: Colors.blueAccent,
+            boxShadow: [
+              BoxShadow(
+                color: Colors.grey.withOpacity(0.3),
+                blurRadius: 1,
+                offset: Offset(0, 1), // changes position of shadow
+              ),
+            ],
           ),
-          child: RaisedButton.icon(
-              color: Colors.orange,
-              onPressed: () async {
-                final items = _containerKey.currentState.items;
-                final buttonIndex = items.indexOf(_addButton),
-                    nullIndex = items.indexOf(null);
-
-                /// use new item to instead of the button position
-                if (buttonIndex > -1) {
-                  await _containerKey.currentState.insteadOfIndex(
-                      buttonIndex, getMissingItem(context, items, _count),
-                      force: true, triggerEvent: false);
-                  _count++;
-
-                  /// use the button instead of the first null position
-                  if (nullIndex > -1) {
-                    await _containerKey.currentState.insteadOfIndex(
-                        nullIndex, _addButton,
-                        force: true, triggerEvent: false);
-                  }
-                }
-              },
-              textColor: Colors.white,
-              icon: Icon(Icons.add_box, size: 20),
-              label: Text(S.current.ajouter,
-                  style:
-                      GoogleFonts.lato(textStyle: TextStyle(fontSize: 12))))),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: <Widget>[
+              Icon(LineIcons.plus, size: 45 , color: Colors.white,),
+              SizedBox(
+                width: 10.0,
+                height: 10.0,
+              ),
+              Text(
+                S.current.ajouter,
+                textAlign: TextAlign.center,
+                style: GoogleFonts.lato(
+                    textStyle: TextStyle(
+                        color: Colors.white,
+                        fontSize: 16,
+                        fontWeight: FontWeight.bold)
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
     );
   }
 
@@ -168,14 +195,16 @@ class _GridHomeWidgetState extends State<GridHomeWidget> {
 
   @override
   Widget build(BuildContext context) {
-    var size = (MediaQuery.of(context).size.width % 127).toInt() / 2;
+    var size = (MediaQuery.of(context).size.width % 115).toInt() / 2;
 
     if (!_finishLoading) {
       return Center(child: CircularProgressIndicator());
     } else {
       return Scaffold(
         backgroundColor: Theme.of(context).backgroundColor,
+        key: _key,
         appBar: AppBar(
+          elevation: 0,
           leading: IconButton(
             icon: Icon(Icons.menu, size: 25),
             // change this size and style
@@ -221,7 +250,7 @@ class _GridHomeWidgetState extends State<GridHomeWidget> {
                     : Size.fromHeight(MediaQuery.of(context).size.height / 3),
             child: SingleChildScrollView(
               child: Container(
-                margin: EdgeInsetsDirectional.only(start: 15 , end: 15),
+                margin: EdgeInsetsDirectional.only(start: 15, end: 15),
                 height:
                     (MediaQuery.of(context).orientation == Orientation.portrait)
                         ? MediaQuery.of(context).size.height / 6
@@ -366,16 +395,21 @@ class _GridHomeWidgetState extends State<GridHomeWidget> {
                     padding: EdgeInsets.only(left: size, top: size),
                     child: DescribedFeatureOverlay(
                       featureId: feature11,
-                      tapTarget: Icon(MdiIcons.gestureTapHold , color: Colors.black,),
+                      tapTarget: Icon(
+                        MdiIcons.gestureTapHold,
+                        color: Colors.black,
+                      ),
                       backgroundColor: Colors.yellow[700],
                       contentLocation: ContentLocation.below,
                       title: Text(S.current.long_presse),
                       description: Container(
                           width: 150,
-                          child: Text(S.current.msg_long_presse,)),
-                      onBackgroundTap: () async{
+                          child: Text(
+                            S.current.msg_long_presse,
+                          )),
+                      onBackgroundTap: () async {
                         await FeatureDiscovery.completeCurrentStep(context);
-                        return true ;
+                        return true;
                       },
                       child: DraggableContainer(
                         key: _containerKey,
@@ -383,13 +417,13 @@ class _GridHomeWidgetState extends State<GridHomeWidget> {
                         autoReorder: true,
                         // the decoration when dragging item
                         dragDecoration: BoxDecoration(boxShadow: [
-                          BoxShadow(color: Colors.black, blurRadius: 10)
+                          BoxShadow(color: Colors.blue.withOpacity(0.3), blurRadius: 10)
                         ]),
                         // slot margin
                         slotMargin: EdgeInsets.only(
                             left: 5, right: 5, top: 2.5, bottom: 2.5),
                         // the slot size
-                        slotSize: Size(120,120),
+                        slotSize: Size(110, 110),
                         // item list
                         items: homeDraggableItemList,
                         // onDragEnd: () {
@@ -400,8 +434,7 @@ class _GridHomeWidgetState extends State<GridHomeWidget> {
                           height: 20,
                           decoration: BoxDecoration(
                             color: Colors.redAccent,
-                            borderRadius:
-                            BorderRadius.all(Radius.circular(8)),
+                            borderRadius: BorderRadius.all(Radius.circular(8)),
                           ),
                           child: Icon(
                             Icons.delete_forever,
@@ -410,8 +443,7 @@ class _GridHomeWidgetState extends State<GridHomeWidget> {
                           ),
                         ),
                         onDraggableModeChanged: (bool draggableMode) {
-                          GridHomeWidget.Global_Draggable_Mode =
-                              draggableMode;
+                          GridHomeWidget.Global_Draggable_Mode = draggableMode;
 
                           final items = _containerKey.currentState.items;
                           if (draggableMode) {

@@ -1,2 +1,1 @@
-[1/2] Building C object CMakeFiles/serial_port.dir/src/main/jni/com_cirtait_mobile_gestmob_serialport_SerialPort.c.o
-[2/2] Linking C shared library E:\AndroidStudio\FlutterProjects\gestmob\build\app\intermediates\cmake\release\obj\arm64-v8a\libserial_port.so
+ninja: no work to do.
