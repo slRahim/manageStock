@@ -22,27 +22,30 @@ import 'package:google_fonts/google_fonts.dart';
 
 // element à afficher lors de listing des factures
 class PieceListItem extends StatefulWidget {
-
- PieceListItem({
-    @required this.piece,
-    Key key, this.onItemSelected ,
-  })  : assert(piece != null),
+  PieceListItem(
+      {@required this.piece, Key key, this.onItemSelected, this.dataSource})
+      : assert(piece != null),
         super(key: key);
 
   final Piece piece;
   final Function(Object) onItemSelected;
+  final dataSource;
 
   @override
   _PieceListItemState createState() => _PieceListItemState();
 }
 
 class _PieceListItemState extends State<PieceListItem> {
+  QueryCtr _queryCtr = new QueryCtr();
 
-  QueryCtr _queryCtr = new QueryCtr() ;
-  bool _confirmDell = false ;
-  bool _visible = true ;
-  SlidingCardController controller ;
-  String _devise ;
+  bool _confirmDell = false;
+
+  bool _visible = true;
+
+  SlidingCardController controller;
+
+  String _devise;
+
   String feature5 = 'feature5';
 
   @override
@@ -55,273 +58,296 @@ class _PieceListItemState extends State<PieceListItem> {
   void didChangeDependencies() {
     super.didChangeDependencies();
     PushNotificationsManagerState data = PushNotificationsManager.of(context);
-    _devise = Helpers.getDeviseTranslate(data.myParams.devise) ;
+    _devise = Helpers.getDeviseTranslate(data.myParams.devise);
   }
 
   @override
   Widget build(BuildContext context) {
     SizeConfig().init(context);
     return Visibility(
-        visible: _visible,
-        child: DescribedFeatureOverlay(
-          featureId: feature5,
-          tapTarget: Icon(MdiIcons.arrowSplitVertical , color: Colors.black,),
-          backgroundColor: Colors.red,
-          contentLocation: ContentLocation.below,
-          title: Text(S.current.swipe, style: GoogleFonts.lato(fontWeight: FontWeight.bold),),
-          description: Container(width:150,child: Text(S.current.msg_swipe_lr)),
-          onBackgroundTap: () async{
-            await FeatureDiscovery.completeCurrentStep(context);
-            return true ;
-          },
-          child: Slidable(
-            actionPane: SlidableDrawerActionPane(),
-            actionExtentRatio: 0.25,
-            child: ListTileCard(
-              from: widget.piece,
-              onLongPress:  () => widget.onItemSelected != null? widget.onItemSelected(widget.piece) : null,
-              onTap: () => {
-                if(widget.onItemSelected == null){
-                  Navigator.of(context).pushNamed(RoutesKeys.addPiece, arguments: widget.piece)
+      visible: _visible,
+      child: DescribedFeatureOverlay(
+        featureId: feature5,
+        tapTarget: Icon(
+          MdiIcons.arrowSplitVertical,
+          color: Colors.black,
+        ),
+        backgroundColor: Colors.red,
+        contentLocation: ContentLocation.below,
+        title: Text(
+          S.current.swipe,
+          style: GoogleFonts.lato(fontWeight: FontWeight.bold),
+        ),
+        description: Container(width: 150, child: Text(S.current.msg_swipe_lr)),
+        onBackgroundTap: () async {
+          await FeatureDiscovery.completeCurrentStep(context);
+          return true;
+        },
+        child: Slidable(
+          actionPane: SlidableDrawerActionPane(),
+          actionExtentRatio: 0.25,
+          child: ListTileCard(
+            from: widget.piece,
+            onLongPress: () => widget.onItemSelected != null
+                ? widget.onItemSelected(widget.piece)
+                : null,
+            onTap: () => {
+              if (widget.onItemSelected == null)
+                {
+                  Navigator.of(context)
+                      .pushNamed(RoutesKeys.addPiece, arguments: widget.piece)
+                      .then((value) => widget.dataSource.refresh())
                 }
-              },
-              slidingCardController: controller,
-              onCardTapped: () {
-                if(controller.isCardSeparated == true) {
-                  controller.collapseCard();
-                } else {
-                  controller.expandCard();
-                }
-              },
-              leading: CircleAvatar(
-                radius: 25,
-                backgroundColor: getColor(),
-                child: CircleAvatar(
-                  child: Text(getPiecetype(), style: GoogleFonts.lato(),),
-                  radius:23,
-                  backgroundColor: Colors.grey[200],
-                  foregroundColor: Colors.black,
+            },
+            slidingCardController: controller,
+            onCardTapped: () {
+              if (controller.isCardSeparated == true) {
+                controller.collapseCard();
+              } else {
+                controller.expandCard();
+              }
+            },
+            leading: CircleAvatar(
+              radius: 25,
+              backgroundColor: getColor(),
+              child: CircleAvatar(
+                child: Text(
+                  getPiecetype(),
+                  style: GoogleFonts.lato(),
                 ),
+                radius: 23,
+                backgroundColor: Colors.grey[200],
+                foregroundColor: Colors.black,
               ),
-              title:(widget.piece.raisonSociale != '')
-                  ?SingleChildScrollView(
+            ),
+            title: (widget.piece.raisonSociale != '')
+                ? SingleChildScrollView(
                     scrollDirection: Axis.horizontal,
                     child: Row(
                       children: [
-                        Text("(# : ${widget.piece.num_piece}) ${widget.piece.raisonSociale}" ,
-                            style: GoogleFonts.lato(textStyle: TextStyle(
-                              fontSize: 14,))
-                          ),
+                        Text(
+                            "(# : ${widget.piece.num_piece}) ${widget.piece.raisonSociale}",
+                            style: GoogleFonts.lato(
+                                textStyle: TextStyle(
+                              fontSize: 14,
+                            ))),
                       ],
                     ),
                   )
-                  : null,
-              trailingChildren: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  children: <Widget>[
-                    Icon(Icons.date_range,
-                      size: 12,
-                      color: Theme.of(context).primaryColorDark,
-                    ),
-                    SizedBox(
-                      width: 3,
-                    ),
-                    Text(
-                      "${Helpers.dateToText(widget.piece.date)}",
-                      style: GoogleFonts.lato(textStyle: TextStyle(
-                          fontSize: 14 , color: Theme.of(context).primaryColorDark)),
-                    ),
-                  ],
-                ),
-                Row(
-                  children: [
-                    Icon(MdiIcons.sigma,
-                      size: 16,
-                      color: Theme.of(context).primaryColorDark,
-                    ),
-                    SizedBox(
-                      width: 3,
-                    ),
-                    (widget.piece.net_a_payer < 0)?
-                    Text("${Helpers.numberFormat(widget.piece.net_a_payer * -1).toString() } ${_devise}",
-                      style: GoogleFonts.lato(
+                : null,
+            trailingChildren: [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: <Widget>[
+                  Icon(
+                    Icons.date_range,
+                    size: 12,
+                    color: Theme.of(context).primaryColorDark,
+                  ),
+                  SizedBox(
+                    width: 3,
+                  ),
+                  Text(
+                    "${Helpers.dateToText(widget.piece.date)}",
+                    style: GoogleFonts.lato(
                         textStyle: TextStyle(
-                            fontSize: 16.0,
-                            fontWeight: FontWeight.bold ,
-                            color:Theme.of(context).primaryColorDark )
-                      ),
-                    ) :
-                    Text('${Helpers.numberFormat(widget.piece.net_a_payer).toString()} ${_devise}',
-                      style: GoogleFonts.lato(
-                        textStyle: TextStyle(
-                            fontSize: 16.0,
-                            fontWeight: FontWeight.bold ,
-                            color: Theme.of(context).primaryColorDark )
-                      ),
-                    ),
-                  ],
-                ),
-                RichText(
-                  text: TextSpan(
-                      children: [
-                        TextSpan(
-                            text: "${S.current.regler} : ",
-                            style: GoogleFonts.lato(
-                              textStyle: TextStyle(fontSize: 14 , fontWeight: FontWeight.bold,color: Colors.blue)
-                            )
-                        ),
-                        TextSpan(
-                          text:"${Helpers.numberFormat(widget.piece.regler)} ${_devise}",
-                          style: GoogleFonts.lato(
-                            textStyle: TextStyle(
-                                color: Theme.of(context).primaryColorDark,
-                                fontSize: 14)
-                          ),
-                        ),
-                      ]
+                            fontSize: 14,
+                            color: Theme.of(context).primaryColorDark)),
                   ),
-                ),
-                RichText(
-                  text: TextSpan(
-                      children: [
-                        TextSpan(
-                            text: "${S.current.reste} : ",
-                            style: GoogleFonts.lato(
-                              textStyle: TextStyle(fontSize: 14 , fontWeight: FontWeight.bold,color: Colors.redAccent)
-                            )
-                        ),
-                        TextSpan(
-                          text:"${Helpers.numberFormat(widget.piece.reste)} ${_devise}",
-                          style: GoogleFonts.lato(
-                            textStyle: TextStyle(
-                                color: Theme.of(context).primaryColorDark,
-                                fontSize: 15.0)
-                          ),
-                        ),
-                      ]
-                  ),
-                ),
-                RichText(
-                  text: TextSpan(
-                    children: [
-                      TextSpan(
-                        text: "${S.current.marge} : ",
-                        style: GoogleFonts.lato(
-                          textStyle: TextStyle(fontSize: 14 , fontWeight: FontWeight.bold,color: Colors.green)
-                        )
-                      ),
-                      TextSpan(
-                        text:"${Helpers.numberFormat(widget.piece.marge)} ${_devise}",
-                        style: GoogleFonts.lato(
-                          textStyle: TextStyle(
-                              color: Theme.of(context).primaryColorDark,
-                              fontSize: 14.0)
-                        ),
-                      ),
-                    ]
-                  ),
-                ),
-              ],
-            ),
-            actions: <Widget>[
-              IconSlideAction(
-                  color: Colors.white10,
-                  iconWidget: Icon(Icons.delete_forever,size: 50, color: Colors.red,),
-                  onTap: () async {
-                     dellDialog(context);
-                  }
+                ],
               ),
-            ],
-            secondaryActions: [
-              IconSlideAction(
-                color: Colors.white10,
-                iconWidget: Icon(Icons.phone_enabled,size: 50, color: Colors.green,),
-                onTap: () async{
-                  await _makePhoneCall("tel:${widget.piece.mobileTier}");
-                },
-                foregroundColor: Colors.green,
+              Row(
+                children: [
+                  Icon(
+                    MdiIcons.sigma,
+                    size: 16,
+                    color: Theme.of(context).primaryColorDark,
+                  ),
+                  SizedBox(
+                    width: 3,
+                  ),
+                  (widget.piece.net_a_payer < 0)
+                      ? Text(
+                          "${Helpers.numberFormat(widget.piece.net_a_payer * -1).toString()} ${_devise}",
+                          style: GoogleFonts.lato(
+                              textStyle: TextStyle(
+                                  fontSize: 16.0,
+                                  fontWeight: FontWeight.bold,
+                                  color: Theme.of(context).primaryColorDark)),
+                        )
+                      : Text(
+                          '${Helpers.numberFormat(widget.piece.net_a_payer).toString()} ${_devise}',
+                          style: GoogleFonts.lato(
+                              textStyle: TextStyle(
+                                  fontSize: 16.0,
+                                  fontWeight: FontWeight.bold,
+                                  color: Theme.of(context).primaryColorDark)),
+                        ),
+                ],
+              ),
+              RichText(
+                text: TextSpan(children: [
+                  TextSpan(
+                      text: "${S.current.regler} : ",
+                      style: GoogleFonts.lato(
+                          textStyle: TextStyle(
+                              fontSize: 14,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.blue))),
+                  TextSpan(
+                    text:
+                        "${Helpers.numberFormat(widget.piece.regler)} ${_devise}",
+                    style: GoogleFonts.lato(
+                        textStyle: TextStyle(
+                            color: Theme.of(context).primaryColorDark,
+                            fontSize: 14)),
+                  ),
+                ]),
+              ),
+              RichText(
+                text: TextSpan(children: [
+                  TextSpan(
+                      text: "${S.current.reste} : ",
+                      style: GoogleFonts.lato(
+                          textStyle: TextStyle(
+                              fontSize: 14,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.redAccent))),
+                  TextSpan(
+                    text:
+                        "${Helpers.numberFormat(widget.piece.reste)} ${_devise}",
+                    style: GoogleFonts.lato(
+                        textStyle: TextStyle(
+                            color: Theme.of(context).primaryColorDark,
+                            fontSize: 15.0)),
+                  ),
+                ]),
+              ),
+              RichText(
+                text: TextSpan(children: [
+                  TextSpan(
+                      text: "${S.current.marge} : ",
+                      style: GoogleFonts.lato(
+                          textStyle: TextStyle(
+                              fontSize: 14,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.green))),
+                  TextSpan(
+                    text:
+                        "${Helpers.numberFormat(widget.piece.marge)} ${_devise}",
+                    style: GoogleFonts.lato(
+                        textStyle: TextStyle(
+                            color: Theme.of(context).primaryColorDark,
+                            fontSize: 14.0)),
+                  ),
+                ]),
               ),
             ],
           ),
+          actions: <Widget>[
+            IconSlideAction(
+                color: Colors.white10,
+                iconWidget: Icon(
+                  Icons.delete_forever,
+                  size: 50,
+                  color: Colors.red,
+                ),
+                onTap: () async {
+                  dellDialog(context);
+                }),
+          ],
+          secondaryActions: [
+            IconSlideAction(
+              color: Colors.white10,
+              iconWidget: Icon(
+                Icons.phone_enabled,
+                size: 50,
+                color: Colors.green,
+              ),
+              onTap: () async {
+                await _makePhoneCall("tel:${widget.piece.mobileTier}");
+              },
+              foregroundColor: Colors.green,
+            ),
+          ],
         ),
+      ),
     );
   }
 
-  String getPiecetype(){
-    switch(widget.piece.piece){
+  String getPiecetype() {
+    switch (widget.piece.piece) {
       case "FP":
         return S.current.fp;
-        break ;
+        break;
       case "CC":
         return S.current.cc;
-        break ;
+        break;
       case "BL":
         return S.current.bl;
-        break ;
+        break;
       case "FC":
         return S.current.fc;
-        break ;
+        break;
       case "RC":
         return S.current.rc;
-        break ;
+        break;
       case "AC":
         return S.current.ac;
-        break ;
+        break;
       case "BC":
         return S.current.bc;
-        break ;
+        break;
       case "BR":
         return S.current.br;
-        break ;
+        break;
       case "FF":
         return S.current.ff;
-        break ;
+        break;
       case "RF":
         return S.current.rf;
-        break ;
+        break;
       case "AF":
         return S.current.af;
-        break ;
+        break;
     }
   }
 
   Color getColor() {
-    if(widget.piece.piece == PieceType.devis){
-      if(widget.piece.etat == 1){
-        return Colors.green ;
-      }else{
-        switch (widget.piece.mov){
-          case 2 :
+    if (widget.piece.piece == PieceType.devis) {
+      if (widget.piece.etat == 1) {
+        return Colors.green;
+      } else {
+        switch (widget.piece.mov) {
+          case 2:
             return Colors.black26;
             break;
-          case 0 :
+          case 0:
             return Colors.red;
             break;
         }
       }
-    }else{
-      switch (widget.piece.mov){
-        case 1 :
-          if(widget.piece.reste > 0 &&
+    } else {
+      switch (widget.piece.mov) {
+        case 1:
+          if (widget.piece.reste > 0 &&
               widget.piece.piece != PieceType.retourClient &&
               widget.piece.piece != PieceType.avoirClient &&
               widget.piece.piece != PieceType.retourFournisseur &&
-              widget.piece.piece != PieceType.avoirFournisseur){
+              widget.piece.piece != PieceType.avoirFournisseur) {
             return Colors.red;
-          }else{
+          } else {
             return Colors.green;
           }
           break;
-        case 2 :
+        case 2:
           return Colors.black26;
           break;
-        case 0 :
+        case 0:
           return Colors.yellow[700];
           break;
       }
     }
-
   }
 
   Future<void> _makePhoneCall(String phone) async {
@@ -339,79 +365,88 @@ class _PieceListItemState extends State<PieceListItem> {
       animType: AnimType.BOTTOMSLIDE,
       title: S.current.supp,
       desc: '${S.current.msg_supp} ... ',
-      closeIcon: Icon(Icons.close , color: Colors.red,size: 26,),
+      closeIcon: Icon(
+        Icons.close,
+        color: Colors.red,
+        size: 26,
+      ),
       showCloseIcon: true,
-      btnCancelText:(widget.piece.piece != PieceType.devis)? S.current.sans_tresorie : S.current.non,
-      btnCancelOnPress: () async{
-        if(widget.piece.piece != PieceType.devis){
-          int res = await _queryCtr.removeItemFromTable(DbTablesNames.pieces, widget.piece);
-          var message = "" ;
-          if(res > 0){
-            message =S.current.msg_supp_ok;
-            _confirmDell =true ;
-          }else{
-            message =S.current.msg_ereure;
+      btnCancelText: (widget.piece.piece != PieceType.devis)
+          ? S.current.sans_tresorie
+          : S.current.non,
+      btnCancelOnPress: () async {
+        if (widget.piece.piece != PieceType.devis) {
+          int res = await _queryCtr.removeItemFromTable(
+              DbTablesNames.pieces, widget.piece);
+          var message = "";
+          if (res > 0) {
+            message = S.current.msg_supp_ok;
+            _confirmDell = true;
+          } else {
+            message = S.current.msg_ereure;
           }
           Helpers.showFlushBar(context, message);
-          if(_confirmDell){
+          if (_confirmDell) {
             setState(() {
-              _visible = false ;
+              _visible = false;
             });
           }
         }
       },
-      btnOkText:(widget.piece.piece != PieceType.devis)? S.current.avec_tresorie : S.current.oui,
-      btnOkOnPress: () async{
-        if(widget.piece.piece != PieceType.devis){
-          int res = await _queryCtr.removeItemWithForeignKey (DbTablesNames.tresorie , widget.piece.id , "Piece_id");
-          var message = "" ;
-          if(res < 0){
-            message =S.current.msg_err_tresorie;
+      btnOkText: (widget.piece.piece != PieceType.devis)
+          ? S.current.avec_tresorie
+          : S.current.oui,
+      btnOkOnPress: () async {
+        if (widget.piece.piece != PieceType.devis) {
+          int res = await _queryCtr.removeItemWithForeignKey(
+              DbTablesNames.tresorie, widget.piece.id, "Piece_id");
+          var message = "";
+          if (res < 0) {
+            message = S.current.msg_err_tresorie;
             Helpers.showFlushBar(context, message);
           }
 
-          int res1 = await _queryCtr.removeItemFromTable(DbTablesNames.pieces, widget.piece);
-          if(res1 > 0){
-            message =S.current.msg_supp_ok;
-            _confirmDell =true ;
-          }else{
-            message =S.current.msg_ereure;
+          int res1 = await _queryCtr.removeItemFromTable(
+              DbTablesNames.pieces, widget.piece);
+          if (res1 > 0) {
+            message = S.current.msg_supp_ok;
+            _confirmDell = true;
+          } else {
+            message = S.current.msg_ereure;
           }
 
           Helpers.showFlushBar(context, message);
-          if(_confirmDell){
+          if (_confirmDell) {
             setState(() {
-              _visible = false ;
+              _visible = false;
             });
           }
 
           Helpers.showFlushBar(context, message);
-          if(_confirmDell){
+          if (_confirmDell) {
             setState(() {
-              _visible = false ;
+              _visible = false;
             });
           }
-        }else{
+        } else {
           //ds le cas d'un devis uniquement
-          int res = await _queryCtr.removeItemFromTable(DbTablesNames.pieces, widget.piece);
-          var message = "" ;
-          if(res > 0){
-            message =S.current.msg_supp_ok;
-            _confirmDell =true ;
-          }else{
-            message =S.current.msg_ereure;
+          int res = await _queryCtr.removeItemFromTable(
+              DbTablesNames.pieces, widget.piece);
+          var message = "";
+          if (res > 0) {
+            message = S.current.msg_supp_ok;
+            _confirmDell = true;
+          } else {
+            message = S.current.msg_ereure;
           }
           Helpers.showFlushBar(context, message);
-          if(_confirmDell){
+          if (_confirmDell) {
             setState(() {
-              _visible = false ;
+              _visible = false;
             });
           }
         }
       },
     )..show();
   }
-
-
 }
-

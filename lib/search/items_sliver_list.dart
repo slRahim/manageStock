@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_icons/flutter_icons.dart';
@@ -24,10 +23,18 @@ class ItemsSliverList extends StatefulWidget {
   final SliverListDataSource dataSource;
   final Function(Object) onItemSelected;
   final bool canRefresh;
-  final int tarification ;
-  final String pieceOrigin ;
+  final int tarification;
 
-  ItemsSliverList({Key key, @required this.dataSource, this.onItemSelected, this.canRefresh , this.tarification,this.pieceOrigin}) : super(key: key);
+  final String pieceOrigin;
+
+  ItemsSliverList(
+      {Key key,
+      @required this.dataSource,
+      this.onItemSelected,
+      this.canRefresh,
+      this.tarification,
+      this.pieceOrigin})
+      : super(key: key);
 
   @override
   _ItemsSliverListState createState() => _ItemsSliverListState();
@@ -36,56 +43,74 @@ class ItemsSliverList extends StatefulWidget {
 class _ItemsSliverListState extends State<ItemsSliverList> {
   @override
   Widget build(BuildContext context) {
-    return (widget.canRefresh == null || widget.canRefresh)? RefreshIndicator(
-        onRefresh: () => Future.sync(
-          widget.dataSource.refresh,
-        ),
-        child: scrollView()
-    ) : scrollView();
+    return (widget.canRefresh == null || widget.canRefresh)
+        ? RefreshIndicator(
+            onRefresh: () => Future.sync(
+                  widget.dataSource.refresh,
+                ),
+            child: scrollView())
+        : scrollView();
   }
 
-  Widget scrollView(){
+  Widget scrollView() {
     return new CustomScrollView(
       slivers: <Widget>[
         PagedSliverList<int, Object>(
           dataSource: widget.dataSource,
           builderDelegate: PagedChildBuilderDelegate<Object>(
-              noItemsFoundIndicatorBuilder : (context){
-                   return Center(
-                       child: Container(
-                           padding: EdgeInsets.only(top: 100,bottom: 100),
-                           child: Column(
-                             children: [
-                               Text(S.current.no_element ,
-                                 style:  TextStyle(fontSize: 24 , fontWeight: FontWeight.bold),
-                               ),
-                               SizedBox(height: 2,),
-                               Text(S.current.liste_vide ,
-                                 style:  TextStyle(fontSize: 16),
-                               ),
-                             ],
-                           )
-                       )
-                   );
+              noItemsFoundIndicatorBuilder: (context) {
+                return Center(
+                    child: Container(
+                        padding: EdgeInsets.only(top: 100, bottom: 100),
+                        child: Column(
+                          children: [
+                            Text(
+                              S.current.no_element,
+                              style: TextStyle(
+                                  fontSize: 24, fontWeight: FontWeight.bold),
+                            ),
+                            SizedBox(
+                              height: 2,
+                            ),
+                            Text(
+                              S.current.liste_vide,
+                              style: TextStyle(fontSize: 16),
+                            ),
+                          ],
+                        )));
               },
-              itemBuilder: (context, _item, index) => createItemWidget(_item)
-          ),
+              itemBuilder: (context, _item, index) => createItemWidget(_item)),
         ),
       ],
     );
   }
 
-  Widget createItemWidget(item){
-    if(item is Article){
-      return ArticleListItem(article: item, onItemSelected: widget.onItemSelected,tarification: widget.tarification,pieceOrigin: widget.pieceOrigin,);
-    } else if(item is Tiers){
-      item.originClientOrFourn = widget.dataSource.listType == ItemsListTypes.clientsList? 0 : 2;
-      return TierListItem(tier: item, onItemSelected: widget.onItemSelected,);
-    } else if(item is Piece){
-      return PieceListItem(piece: item , onItemSelected: widget.onItemSelected,);
-    }else if (item is Tresorie){
-      return TresorieListItem(tresorie : item);
-    } else{
+  Widget createItemWidget(item) {
+    if (item is Article) {
+      return ArticleListItem(
+        article: item,
+        onItemSelected: widget.onItemSelected,
+        tarification: widget.tarification,
+        pieceOrigin: widget.pieceOrigin,
+        dataSource: widget.dataSource,
+      );
+    } else if (item is Tiers) {
+      item.originClientOrFourn =
+          widget.dataSource.listType == ItemsListTypes.clientsList ? 0 : 2;
+      return TierListItem(
+        tier: item,
+        onItemSelected: widget.onItemSelected,
+        dataSource: widget.dataSource,
+      );
+    } else if (item is Piece) {
+      return PieceListItem(
+        piece: item,
+        onItemSelected: widget.onItemSelected,
+        dataSource: widget.dataSource,
+      );
+    } else if (item is Tresorie) {
+      return TresorieListItem(tresorie: item ,dataSource: widget.dataSource,);
+    } else {
       return null;
     }
   }

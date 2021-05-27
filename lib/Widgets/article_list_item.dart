@@ -26,7 +26,8 @@ class ArticleListItem extends StatefulWidget {
       this.onItemSelected,
       this.tarification,
       this.fromListing = false,
-      this.pieceOrigin})
+      this.pieceOrigin,
+      this.dataSource})
       : assert(article != null),
         super(key: key);
 
@@ -37,6 +38,8 @@ class ArticleListItem extends StatefulWidget {
   final bool fromListing;
 
   final String pieceOrigin;
+
+  final dataSource;
 
   @override
   _ArticleListItemState createState() => _ArticleListItemState();
@@ -136,8 +139,10 @@ class _ArticleListItemState extends State<ArticleListItem> {
               onTap: () async {
                 if (widget.fromListing == false) {
                   if (widget.onItemSelected == null) {
-                    Navigator.of(context).pushNamed(RoutesKeys.addArticle,
-                        arguments: widget.article);
+                    Navigator.of(context)
+                        .pushNamed(RoutesKeys.addArticle,
+                            arguments: widget.article)
+                        .then((value) => widget.dataSource.refresh());
                   } else {
                     if (widget.article.selectedQuantite >= 0) {
                       showDialog(
@@ -174,27 +179,27 @@ class _ArticleListItemState extends State<ArticleListItem> {
                         setState(() {});
                       });
                     } else {
-                      selectThisItem() ;
+                      selectThisItem();
                       if (widget.pieceOrigin == 'BL' ||
                           widget.pieceOrigin == 'FC') {
                         if ((widget.article.quantite -
-                                widget.article.cmdClient) < widget.article.selectedQuantite) {
-
-                              // AwesomeDialog(
-                              //     context: context,
-                              //     dialogType: DialogType.WARNING,
-                              //     animType: AnimType.BOTTOMSLIDE,
-                              //     title: "",
-                              //     desc: S.current.msg_qte_zero,
-                              //     btnCancelText: S.current.confirme,
-                              //     btnCancelOnPress: () {},
-                              //     btnOkText: S.current.annuler,
-                              //     btnOkOnPress: () {
-                              //       setState(() {
-                              //         widget.article.selectedQuantite = 0;
-                              //       });
-                              //     })
-                              //   ..show();
+                                widget.article.cmdClient) <
+                            widget.article.selectedQuantite) {
+                          // AwesomeDialog(
+                          //     context: context,
+                          //     dialogType: DialogType.WARNING,
+                          //     animType: AnimType.BOTTOMSLIDE,
+                          //     title: "",
+                          //     desc: S.current.msg_qte_zero,
+                          //     btnCancelText: S.current.confirme,
+                          //     btnCancelOnPress: () {},
+                          //     btnOkText: S.current.annuler,
+                          //     btnOkOnPress: () {
+                          //       setState(() {
+                          //         widget.article.selectedQuantite = 0;
+                          //       });
+                          //     })
+                          //   ..show();
 
                           Helpers.showToast(S.current.msg_qte_zero);
                         }
@@ -595,22 +600,23 @@ class _ArticleListItemState extends State<ArticleListItem> {
                             children: [
                               InkWell(
                                 onTap: () {
-                                      _quntiteControler.text = "0";
-                                      Navigator.pop(context);
+                                  _quntiteControler.text = "0";
+                                  Navigator.pop(context);
                                 },
                                 child: Container(
                                   padding: EdgeInsets.all(8.0),
                                   width: 100,
                                   decoration: BoxDecoration(
-                                    color: Colors.red,
-                                    borderRadius:BorderRadius.all(Radius.circular(100))
-                                  ),
+                                      color: Colors.red,
+                                      borderRadius: BorderRadius.all(
+                                          Radius.circular(100))),
                                   child: Text(
                                     S.current.annuler,
                                     textAlign: TextAlign.center,
                                     style: TextStyle(
                                         color: Colors.white,
-                                        fontWeight: FontWeight.w700,fontSize: 14),
+                                        fontWeight: FontWeight.w700,
+                                        fontSize: 14),
                                   ),
                                 ),
                               ),
@@ -619,9 +625,9 @@ class _ArticleListItemState extends State<ArticleListItem> {
                                 onTap: () {
                                   try {
                                     double _qte =
-                                    double.parse(_quntiteControler.text);
+                                        double.parse(_quntiteControler.text);
                                     double _price =
-                                    double.parse(_priceControler.text);
+                                        double.parse(_priceControler.text);
                                     if (_qte > 0) {
                                       _validateQteError = null;
                                     } else {
@@ -655,14 +661,15 @@ class _ArticleListItemState extends State<ArticleListItem> {
                                   width: 100,
                                   decoration: BoxDecoration(
                                       color: Color(0xFF00CA71),
-                                      borderRadius:BorderRadius.all(Radius.circular(100))
-                                  ),
+                                      borderRadius: BorderRadius.all(
+                                          Radius.circular(100))),
                                   child: Text(
                                     S.current.confirme,
                                     textAlign: TextAlign.center,
                                     style: TextStyle(
                                         color: Colors.white,
-                                        fontWeight: FontWeight.w700,fontSize: 14),
+                                        fontWeight: FontWeight.w700,
+                                        fontSize: 14),
                                   ),
                                 ),
                               ),
@@ -684,7 +691,7 @@ class _ArticleListItemState extends State<ArticleListItem> {
     });
   }
 
-  void selectThisItem(){
+  void selectThisItem() {
     widget.article.selectedQuantite = 1;
     if (widget.pieceOrigin == 'BR' ||
         widget.pieceOrigin == 'FF' ||

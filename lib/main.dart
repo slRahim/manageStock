@@ -141,7 +141,7 @@ class _MyAppState extends State<MyApp> {
                 unselectedLabelColor: Colors.black54,
               ),
               appBarTheme: AppBarTheme(
-                color: Colors.blue[600],
+                color: Colors.blue[700],
               )
           ),
           darkTheme: ThemeData(

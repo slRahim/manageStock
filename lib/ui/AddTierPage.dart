@@ -267,13 +267,17 @@ class _AddTierPageState extends State<AddTierPage>
                     visible: _tabSelectedIndex == 2 && editMode,
                     child: FloatingActionButton(
                       backgroundColor: Colors.green,
-                      foregroundColor: Theme.of(context).primaryColorDark,
+                      foregroundColor: Colors.white,
                       onPressed: () async {
                         GeoPoint geoPoint =
                             await osmKey.currentState.selectPosition();
                         if (geoPoint != null) {
-                          _latitude = geoPoint.latitude;
-                          _longitude = geoPoint.longitude;
+                          osmKey.currentState.changeLocation(geoPoint);
+                          setState(() {
+                            _latitude = geoPoint.latitude;
+                            _longitude = geoPoint.longitude;
+                          });
+
                         }
                       },
                       child: Icon(Icons.add_location),
@@ -288,7 +292,7 @@ class _AddTierPageState extends State<AddTierPage>
                       Visibility(
                         visible: _tabSelectedIndex == 2 && !editMode,
                         child: FloatingActionButton(
-                          foregroundColor: Theme.of(context).primaryColorDark,
+                          foregroundColor: Colors.white,
                           backgroundColor: Colors.blueAccent,
                           onPressed: () async {
                             Helpers.openMapsSheet(
@@ -1157,21 +1161,21 @@ class _AddTierPageState extends State<AddTierPage>
           startIcon: MarkerIcon(
             icon: Icon(
               Icons.person,
-              size: 64,
-              color: Colors.brown,
+              size: 80,
+              color: Colors.blue,
             ),
           ),
-          roadColor: Colors.yellowAccent,
+          roadColor: Colors.lightGreenAccent,
         ),
         markerIcon: MarkerIcon(
           icon: Icon(
-            Icons.person_pin_circle,
-            color: Colors.blue,
-            size: 56,
+            Icons.location_pin,
+            color: Colors.red[700],
+            size: 200,
           ),
         ),
         initPosition: GeoPoint(latitude: _latitude, longitude: _longitude),
-        showZoomController: false,
+        showZoomController: true,
         useSecureURL: false);
   }
 
