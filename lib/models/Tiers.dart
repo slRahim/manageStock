@@ -21,6 +21,9 @@ class Tiers{
       this._mobile,
       this._fax,
       this._email,
+      this._rc ,
+      this._nif ,
+      this._ai ,
       this._solde_depart,
       this._chiffre_affaires,
       this._regler,
@@ -63,6 +66,9 @@ class Tiers{
   String _mobile;
   String _fax;
   String _email;
+  String _rc;
+  String _nif;
+  String _ai;
   double _solde_depart;
   double _chiffre_affaires;
   double _regler;
@@ -86,6 +92,9 @@ class Tiers{
     this._mobile = obj["Mobile"];
     this._fax = obj["Fax"];
     this._email = obj["Email"];
+    this._rc = obj["Rc"];
+    this._nif = obj["Nif"];
+    this._ai = obj["Ai"];
     this._solde_depart = obj["Solde_depart"];
     this._chiffre_affaires = obj["Chiffre_affaires"];
     this._regler = obj["Regler"];
@@ -115,6 +124,9 @@ class Tiers{
     map["Mobile"] = this._mobile;
     map["Fax"] = this._fax;
     map["Email"] = this._email;
+    map["Rc"] = this._rc;
+    map["Nif"] = this._nif;
+    map["Ai"] = this._ai;
     map["Solde_depart"] = this._solde_depart;
     map["Chiffre_affaires"] = this._chiffre_affaires;
     map["Regler"] = this._regler;
@@ -233,6 +245,24 @@ class Tiers{
   }
 
 
+  String get rc => _rc;
+
+  set rc(String value) {
+    _rc = value;
+  }
+
+  String get nif => _nif;
+
+  set nif(String value) {
+    _nif = value;
+  }
+
+  String get ai => _ai;
+
+  set ai(String value) {
+    _ai = value;
+  }
+
   @override
   String toString() {
     return 'Tiers{_id: $_id, _clientFour: $_clientFour, originClientOrFourn: $originClientOrFourn, _raisonSociale: $_raisonSociale, _latitude: $_latitude, _longitude: $_longitude, _qrCode: $_qrCode, _imageUint8List: $_imageUint8List, _id_famille: $_id_famille, _statut: $_statut, _tarification: $_tarification, _adresse: $_adresse, _ville: $_ville, _telephone: $_telephone, _mobile: $_mobile, _fax: $_fax, _email: $_email, _solde_depart: $_solde_depart, _chiffre_affaires: $_chiffre_affaires, _regler: $_regler, _credit: $_credit, _bloquer: $_bloquer}';
@@ -245,4 +275,5 @@ class Tiers{
 
   @override
   int get hashCode => _id.hashCode;
+
 }

@@ -1,3 +1,4 @@
+import 'package:gestmob/Helpers/Statics.dart';
 import 'package:gestmob/models/Piece.dart';
 
 import 'Article.dart';
@@ -99,7 +100,12 @@ class Journaux{
     this._piece_id = piece.id;
     this._piece_type = piece.piece ;
     this._article_id = article.id;
-    this._qte = article.selectedQuantite;
+    this._qte = (piece.piece == PieceType.avoirClient ||
+        piece.piece == PieceType.retourClient||
+        piece.piece == PieceType.retourFournisseur||
+        piece.piece == PieceType.avoirFournisseur)
+        ? article.selectedQuantite * -1
+        : article.selectedQuantite ;
     this._prix_ht = article.selectedPrice ;
     this._net_ht = this._prix_ht-((this._prix_ht*piece.remise)/100);
     this._tva = article.tva;

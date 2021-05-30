@@ -529,7 +529,7 @@ class _RapportState extends State<Rapport> {
                     for(var value in map.values)
                       pw.Container(
                         padding: pw.EdgeInsets.only(left: 5 , right: 5),
-                        child: (value is double )
+                        child: (value is double || value is int)
                             ?pw.Text("${Helpers.numberFormat(value)}",
                             style: pw.TextStyle(font: ttf , fontSize: 9))
                             :pw.Text("${getValue(value)}",

@@ -188,7 +188,13 @@ class _PieceListItemState extends State<PieceListItem> {
               RichText(
                 text: TextSpan(children: [
                   TextSpan(
-                      text: "${S.current.regler} : ",
+                      text: (widget.piece.piece != PieceType.avoirClient &&
+                          widget.piece.piece != PieceType.retourClient &&
+                          widget.piece.piece != PieceType.avoirFournisseur &&
+                          widget.piece.piece != PieceType.retourFournisseur
+                      )
+                          ? "${S.current.regler} : "
+                          : "${S.current.rembourcement} : ",
                       style: GoogleFonts.lato(
                           textStyle: TextStyle(
                               fontSize: 14,

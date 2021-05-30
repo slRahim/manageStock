@@ -583,7 +583,7 @@ class _ProfilePageState extends State<ProfilePage> with TickerProviderStateMixin
               enabled: editMode,
               controller: _telephoneControl,
               onTap: () => _telephoneControl.selection = TextSelection(baseOffset: 0, extentOffset: _telephoneControl.value.text.length),
-              keyboardType: TextInputType.number,
+              keyboardType: TextInputType.phone,
               // validator: (value) {
               //   if (value.isEmpty) {
               //     return S.current.msg_champ_oblg;
@@ -616,7 +616,7 @@ class _ProfilePageState extends State<ProfilePage> with TickerProviderStateMixin
               enabled: editMode,
               controller: _telephone2Control,
               onTap: () => _telephone2Control.selection = TextSelection(baseOffset: 0, extentOffset: _telephone2Control.value.text.length),
-              keyboardType: TextInputType.number,
+              keyboardType: TextInputType.phone,
               // validator: (value) {
               //   if (value.isEmpty) {
               //     return S.current.msg_champ_oblg;
@@ -649,7 +649,7 @@ class _ProfilePageState extends State<ProfilePage> with TickerProviderStateMixin
               enabled: editMode,
               controller: _mobileControl,
               onTap: () => _mobileControl.selection = TextSelection(baseOffset: 0, extentOffset: _mobileControl.value.text.length),
-              keyboardType: TextInputType.number,
+              keyboardType: TextInputType.phone,
               // validator: (value) {
               //   if (value.isEmpty) {
               //     return S.current.msg_champ_oblg;
@@ -682,7 +682,7 @@ class _ProfilePageState extends State<ProfilePage> with TickerProviderStateMixin
               enabled: editMode,
               controller: _mobile2Control,
               onTap: () => _mobile2Control.selection = TextSelection(baseOffset: 0, extentOffset: _mobile2Control.value.text.length),
-              keyboardType: TextInputType.number,
+              keyboardType: TextInputType.phone,
               // validator: (value) {
               //   if (value.isEmpty) {
               //     return S.current.msg_champ_oblg;
@@ -715,7 +715,7 @@ class _ProfilePageState extends State<ProfilePage> with TickerProviderStateMixin
               enabled: editMode,
               controller: _faxControl,
               onTap: () => _faxControl.selection = TextSelection(baseOffset: 0, extentOffset: _faxControl.value.text.length),
-              keyboardType: TextInputType.number,
+              keyboardType: TextInputType.phone,
               // validator: (value) {
               //   if (value.isEmpty) {
               //     return S.current.msg_champ_oblg;

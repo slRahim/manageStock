@@ -195,6 +195,7 @@
   "charge" : "Fees",
   "rembourcement_client": "Customer Refund",
   "rembourcement_four": "Provider Refund",
+  "rembourcement" : "Refund",
   "sans_tresorie" : "Not Treasury",
   "avec_tresorie": "With Treasury",
   "msg_err_tresorie": "No treasurer is associate",

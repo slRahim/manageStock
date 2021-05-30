@@ -498,6 +498,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "reglement_piece" : MessageLookupByLibrary.simpleMessage("Bill Payment"),
     "reglemnt_client" : MessageLookupByLibrary.simpleMessage("Customer Payment"),
     "regler" : MessageLookupByLibrary.simpleMessage("Payment"),
+    "rembourcement" : MessageLookupByLibrary.simpleMessage("Refund"),
     "rembourcement_client" : MessageLookupByLibrary.simpleMessage("Customer Refund"),
     "rembourcement_four" : MessageLookupByLibrary.simpleMessage("Provider Refund"),
     "remise" : MessageLookupByLibrary.simpleMessage("Discount"),

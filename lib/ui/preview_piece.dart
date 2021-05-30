@@ -96,7 +96,6 @@ class _PreviewPieceState extends State<PreviewPiece> {
   }
 
 
-
   @override
   Widget build(BuildContext context) {
     directionRtl = Helpers.isDirectionRTL(context);
@@ -146,14 +145,41 @@ class _PreviewPieceState extends State<PreviewPiece> {
                         children: [
                           Text(
                             "${_profile.raisonSociale}" , style: TextStyle(color: Colors.black),),
-                          (_profile.activite != null)?Text(
-                            "${_profile.activite}", style: TextStyle(color: Colors.black),):SizedBox(),
-                          (_profile.adresse != null)?Text(
-                            "${_profile.adresse}", style: TextStyle(color: Colors.black),):SizedBox(),
-                          (_profile.ville != null)?Text(
-                            "${_profile.ville}", style: TextStyle(color: Colors.black),):SizedBox(),
-                          (_profile.telephone != null)?Text(
-                            "${_profile.telephone}", style: TextStyle(color: Colors.black),):SizedBox(),
+
+                          (_profile.activite != '')
+                              ?Text(
+                            "${_profile.activite}", style: TextStyle(color: Colors.black),)
+                              :SizedBox(),
+
+                          (_profile.adresse != '')
+                              ?Text(
+                            "${_profile.adresse}", style: TextStyle(color: Colors.black),)
+                              :SizedBox(),
+
+                          (_profile.ville != '')
+                              ?Text(
+                            "${_profile.ville}", style: TextStyle(color: Colors.black),)
+                              :SizedBox(),
+
+                          (_profile.telephone != '')
+                              ?Text(
+                            "${_profile.telephone}", style: TextStyle(color: Colors.black),)
+                              :SizedBox(),
+
+                          (_profile.rc != '')
+                              ?Text(
+                            "${_profile.rc}", style: TextStyle(color: Colors.black),)
+                              :SizedBox(),
+
+                          (_profile.nif != '')
+                              ?Text(
+                            "${_profile.nif}", style: TextStyle(color: Colors.black),)
+                              :SizedBox(),
+
+                          (_profile.ai != '')
+                              ?Text(
+                            "${_profile.ai}", style: TextStyle(color: Colors.black),)
+                              :SizedBox(),
                           Text(
                             "----------------------------------------------------------------------------------------", style: TextStyle(color: Colors.black),),
                           Text(
@@ -162,6 +188,37 @@ class _PreviewPieceState extends State<PreviewPiece> {
                               "${S.current.date} :${Helpers.dateToText(widget.piece.date)}", style: TextStyle(color: Colors.black),),
                           Text(
                               "${S.current.rs} : ${widget.tier.raisonSociale}", style: TextStyle(color: Colors.black),),
+
+                          (widget.tier.rc != '' &&
+                              (widget.piece.piece == PieceType.factureClient ||
+                                  widget.piece.piece == PieceType.factureFournisseur ||
+                                  widget.piece.piece == PieceType.avoirClient ||
+                                  widget.piece.piece == PieceType.avoirFournisseur)
+                          )
+                              ?Text(
+                            "${widget.tier.rc}", style: TextStyle(color: Colors.black),)
+                              :SizedBox(),
+
+                          (widget.tier.nif != '' &&
+                              (widget.piece.piece == PieceType.factureClient ||
+                                  widget.piece.piece == PieceType.factureFournisseur ||
+                                  widget.piece.piece == PieceType.avoirClient ||
+                                  widget.piece.piece == PieceType.avoirFournisseur)
+                          )
+                              ?Text(
+                            "${widget.tier.nif}", style: TextStyle(color: Colors.black),)
+                              :SizedBox(),
+
+                          (widget.tier.ai != '' &&
+                              (widget.piece.piece == PieceType.factureClient ||
+                                  widget.piece.piece == PieceType.factureFournisseur ||
+                                  widget.piece.piece == PieceType.avoirClient ||
+                                  widget.piece.piece == PieceType.avoirFournisseur)
+                          )
+                              ?Text(
+                            "${widget.tier.ai}", style: TextStyle(color: Colors.black),)
+                              :SizedBox(),
+
                           Text(
                               "----------------------------------------------------------------------------------------", style: TextStyle(color: Colors.black),),
                           Table(
@@ -225,7 +282,8 @@ class _PreviewPieceState extends State<PreviewPiece> {
                               : SizedBox(),
                           Text("============================================", style: TextStyle(color: Colors.black),),
                           Text(
-                            "${S.current.net_payer} :${Helpers.numberFormat(widget.piece.net_a_payer)}",
+                              (widget.piece.net_a_payer > 0)
+                            ? "${S.current.net_payer} :${Helpers.numberFormat(widget.piece.net_a_payer)}" : "${S.current.net_payer} :${Helpers.numberFormat(widget.piece.net_a_payer * -1)}",
                             style: TextStyle(fontSize: 20,color: Colors.black),
                           ),
                           Text("============================================", style: TextStyle(color: Colors.black),),
@@ -236,12 +294,15 @@ class _PreviewPieceState extends State<PreviewPiece> {
                             children: [
                               Expanded(
                                 child: Text(
-                                    "${S.current.regler} :${Helpers.numberFormat(widget.piece.regler)}", style: TextStyle(color: Colors.black),),
+                              (widget.piece.regler > 0)
+                                    ? "${S.current.regler} :${Helpers.numberFormat(widget.piece.regler)}" :"${S.current.regler} :${Helpers.numberFormat(widget.piece.regler * -1)}" , style: TextStyle(color: Colors.black) ,
+                                ),
                               ),
                               Expanded(
-                                child: (widget.piece.reste > 0)
+                                child: (widget.piece.reste != 0)
                                     ? Text(
-                                        "${S.current.reste} :${Helpers.numberFormat(widget.piece.reste)}", style: TextStyle(color: Colors.black),)
+                                    (widget.piece.reste > 0)
+                                        ? "${S.current.reste} :${Helpers.numberFormat(widget.piece.reste)}" :"${S.current.reste} :${Helpers.numberFormat(widget.piece.reste * -1)}" , style: TextStyle(color: Colors.black),)
                                     : SizedBox(),
                               )
                             ],
@@ -365,6 +426,39 @@ class _PreviewPieceState extends State<PreviewPiece> {
                     ? PosAlign.center
                     : PosAlign.left));
       }
+      if(_profile.rc != ""){
+        input = "${_profile.rc}";
+        encArabic = await CharsetConverter.encode("ISO-8859-6",
+            "${input.split('').reversed.join()}");
+        ticket.textEncoded(encArabic,
+            styles: PosStyles(
+                codeTable: PosCodeTable.arabic,
+                align: (_default_format == PaperSize.mm80)
+                    ? PosAlign.center
+                    : PosAlign.left));
+      }
+      if(_profile.nif != ""){
+        input = "${_profile.nif}";
+        encArabic = await CharsetConverter.encode("ISO-8859-6",
+            "${input.split('').reversed.join()}");
+        ticket.textEncoded(encArabic,
+            styles: PosStyles(
+                codeTable: PosCodeTable.arabic,
+                align: (_default_format == PaperSize.mm80)
+                    ? PosAlign.center
+                    : PosAlign.left));
+      }
+      if(_profile.ai != ""){
+        input = "${_profile.ai}";
+        encArabic = await CharsetConverter.encode("ISO-8859-6",
+            "${input.split('').reversed.join()}");
+        ticket.textEncoded(encArabic,
+            styles: PosStyles(
+                codeTable: PosCodeTable.arabic,
+                align: (_default_format == PaperSize.mm80)
+                    ? PosAlign.center
+                    : PosAlign.left));
+      }
       ticket.hr(ch: '=');
 
        input = "${S.current.n} ${getPiecetype()}";
@@ -396,6 +490,50 @@ class _PreviewPieceState extends State<PreviewPiece> {
               align: (_default_format == PaperSize.mm80)
                   ? PosAlign.center
                   : PosAlign.left));
+
+
+      if(widget.tier.rc != "" && (widget.piece.piece == PieceType.factureClient ||
+          widget.piece.piece == PieceType.factureFournisseur ||
+          widget.piece.piece == PieceType.avoirClient ||
+          widget.piece.piece == PieceType.avoirFournisseur)){
+        input = "${widget.tier.rc}";
+        encArabic = await CharsetConverter.encode("ISO-8859-6",
+            "${input.split('').reversed.join()}");
+        ticket.textEncoded(encArabic,
+            styles: PosStyles(
+                codeTable: PosCodeTable.arabic,
+                align: (_default_format == PaperSize.mm80)
+                    ? PosAlign.center
+                    : PosAlign.left));
+      }
+      if(widget.tier.nif != "" && (widget.piece.piece == PieceType.factureClient ||
+          widget.piece.piece == PieceType.factureFournisseur ||
+          widget.piece.piece == PieceType.avoirClient ||
+          widget.piece.piece == PieceType.avoirFournisseur)){
+        input = "${widget.tier.nif}";
+        encArabic = await CharsetConverter.encode("ISO-8859-6",
+            "${input.split('').reversed.join()}");
+        ticket.textEncoded(encArabic,
+            styles: PosStyles(
+                codeTable: PosCodeTable.arabic,
+                align: (_default_format == PaperSize.mm80)
+                    ? PosAlign.center
+                    : PosAlign.left));
+      }
+      if(widget.tier.ai != "" && (widget.piece.piece == PieceType.factureClient ||
+          widget.piece.piece == PieceType.factureFournisseur ||
+          widget.piece.piece == PieceType.avoirClient ||
+          widget.piece.piece == PieceType.avoirFournisseur)){
+        input = "${widget.tier.ai}";
+        encArabic = await CharsetConverter.encode("ISO-8859-6",
+            "${input.split('').reversed.join()}");
+        ticket.textEncoded(encArabic,
+            styles: PosStyles(
+                codeTable: PosCodeTable.arabic,
+                align: (_default_format == PaperSize.mm80)
+                    ? PosAlign.center
+                    : PosAlign.left));
+      }
 
       ticket.hr(ch: '-');
       ticket.row([
@@ -524,8 +662,11 @@ class _PreviewPieceState extends State<PreviewPiece> {
 
       ticket.hr(ch: '=');
       input = "${S.current.net_payer}";
-      encArabic = await CharsetConverter.encode("ISO-8859-6",
-          "${_devise} ${Helpers.numberFormat(widget.piece.net_a_payer).toString()}: ${input.split('').reversed.join()}");
+      encArabic =(widget.piece.net_a_payer > 0)
+          ? await CharsetConverter.encode("ISO-8859-6",
+          "${_devise} ${Helpers.numberFormat(widget.piece.net_a_payer).toString()}: ${input.split('').reversed.join()}")
+      : await CharsetConverter.encode("ISO-8859-6",
+          "${_devise} ${Helpers.numberFormat(widget.piece.net_a_payer * -1).toString()}: ${input.split('').reversed.join()}");
       ticket.textEncoded(encArabic,
           styles: PosStyles(
             codeTable: PosCodeTable.arabic,
@@ -539,13 +680,19 @@ class _PreviewPieceState extends State<PreviewPiece> {
 
       ticket.row([
         PosColumn(
-            textEncoded: await CharsetConverter.encode("ISO-8859-6",
-                "${Helpers.numberFormat(widget.piece.regler).toString()}: ${S.current.regler.split('').reversed.join()}"),
+            textEncoded:(widget.piece.regler > 0)
+                ? await CharsetConverter.encode("ISO-8859-6",
+                "${Helpers.numberFormat(widget.piece.regler).toString()}: ${S.current.regler.split('').reversed.join()}")
+            :  await CharsetConverter.encode("ISO-8859-6",
+                "${Helpers.numberFormat(widget.piece.regler * -1).toString()}: ${S.current.regler.split('').reversed.join()}"),
             width: 6),
-        (widget.piece.reste > 0)
+        (widget.piece.reste != 0)
             ? PosColumn(
-                textEncoded: await CharsetConverter.encode("ISO-8859-6",
-                    "${Helpers.numberFormat(widget.piece.reste).toString()}: ${S.current.reste.split('').reversed.join()}"),
+                textEncoded:(widget.piece.reste > 0)
+                    ? await CharsetConverter.encode("ISO-8859-6",
+                    "${Helpers.numberFormat(widget.piece.reste).toString()}: ${S.current.reste.split('').reversed.join()}")
+            : await CharsetConverter.encode("ISO-8859-6",
+                    "${Helpers.numberFormat(widget.piece.reste * -1).toString()}: ${S.current.reste.split('').reversed.join()}"),
                 width: 6)
             : PosColumn(width: 6),
       ]);
@@ -708,7 +855,9 @@ class _PreviewPieceState extends State<PreviewPiece> {
       }
 
       ticket.hr(ch: '=');
-      encode = await CharsetConverter.encode("ISO-8859-6", "${S.current.net_payer} : ${Helpers.numberFormat(widget.piece.net_a_payer).toString()} ${_devise}");
+      encode =(widget.piece.net_a_payer > 0)
+          ? await CharsetConverter.encode("ISO-8859-6", "${S.current.net_payer} : ${Helpers.numberFormat(widget.piece.net_a_payer).toString()} ${_devise}")
+          :await CharsetConverter.encode("ISO-8859-6", "${S.current.net_payer} : ${Helpers.numberFormat(widget.piece.net_a_payer * -1).toString()} ${_devise}");
       ticket.textEncoded(
           encode,
           styles: PosStyles(
@@ -721,13 +870,15 @@ class _PreviewPieceState extends State<PreviewPiece> {
       ticket.hr(ch: '=');
       ticket.row([
         PosColumn(
-            textEncoded:
-               await CharsetConverter.encode("ISO-8859-6","${S.current.regler} : ${Helpers.numberFormat(widget.piece.regler).toString()}"),
+            textEncoded: (widget.piece.regler > 0)
+               ? await CharsetConverter.encode("ISO-8859-6","${S.current.regler} : ${Helpers.numberFormat(widget.piece.regler).toString()}")
+            :await CharsetConverter.encode("ISO-8859-6","${S.current.regler} : ${Helpers.numberFormat(widget.piece.regler * -1).toString()}"),
             width: 6),
-        (widget.piece.reste > 0)
+        (widget.piece.reste != 0)
             ? PosColumn(
-                textEncoded:
-                  await CharsetConverter.encode("ISO-8859-6", "${S.current.reste} : ${Helpers.numberFormat(widget.piece.reste).toString()}"),
+                textEncoded: (widget.piece.reste > 0)
+                  ? await CharsetConverter.encode("ISO-8859-6", "${S.current.reste} : ${Helpers.numberFormat(widget.piece.reste).toString()}")
+            : await CharsetConverter.encode("ISO-8859-6", "${S.current.reste} : ${Helpers.numberFormat(widget.piece.reste * -1).toString()}"),
                 width: 6)
             : PosColumn(width: 6),
       ]);

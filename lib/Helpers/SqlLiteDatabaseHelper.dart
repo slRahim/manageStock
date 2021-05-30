@@ -247,7 +247,7 @@ class SqlLiteDatabaseHelper {
         PrixVente3TTC Double, 
         Bloquer integer, 
         Description TEXT, 
-        Stockable integer
+        Stockable
       )""");
 
   }
@@ -279,6 +279,9 @@ class SqlLiteDatabaseHelper {
         Mobile VARCHAR (20), 
         Fax VARCHAR (20), 
         Email VARCHAR (100), 
+        Rc VARCHAR (25), 
+        Nif VARCHAR (25), 
+        Ai VARCHAR (25), 
         Solde_depart Double, 
         Chiffre_affaires Double, 
         Regler Double, 
@@ -721,11 +724,14 @@ class SqlLiteDatabaseHelper {
         WHEN NEW.Mov = 1 AND (NEW.Piece_type = 'RC' OR NEW.Piece_type = 'AC')
         BEGIN
             UPDATE Articles
-               SET PMP = ((Qte * PMP)+(NEW.Qte * NEW.Prix_revient))/(Qte + NEW.Qte) , 
-                   Qte = Qte + NEW.Qte,
+               SET PMP = ((Qte * PMP)+((NEW.Qte*-1) * NEW.Prix_revient))/(Qte + (NEW.Qte*-1)) , 
+                   Qte = Qte + (NEW.Qte*-1),
                    Colis = Qte / Qte_Colis
              WHERE id = New.Article_id;
              
+            Update Pieces
+              Set Marge = IFNULL((Select SUM(Marge) from Journaux where Piece_id = NEW.Piece_id AND New.Mov <> -2),0) * -1 
+            where id = New.Piece_id ;
         END;
      ''');
 
@@ -738,11 +744,14 @@ class SqlLiteDatabaseHelper {
         WHEN NEW.Mov = 1 AND (NEW.Piece_type = 'RC' OR NEW.Piece_type = 'AC')
         BEGIN
             UPDATE Articles
-               SET PMP = ((Qte * PMP)+((NEW.Qte-OLD.Qte) * NEW.Prix_revient))/(Qte + (NEW.Qte-OLD.Qte)) , 
-                   Qte = Qte + (NEW.Qte-OLD.Qte),
+               SET PMP = ((Qte * PMP)+(((NEW.Qte*-1)-(OLD.Qte*-1)) * NEW.Prix_revient))/(Qte + ((NEW.Qte*-1)-(OLD.Qte*-1))) , 
+                   Qte = Qte + ((NEW.Qte*-1)-(OLD.Qte*-1)),
                    Colis = Qte / Qte_Colis
              WHERE id = New.Article_id;
             
+            Update Pieces
+              Set Marge = IFNULL((Select SUM(Marge) from Journaux where Piece_id = NEW.Piece_id AND New.Mov <> -2),0) * -1 
+            where id = New.Piece_id ;
         END;
      ''');
 
@@ -754,15 +763,17 @@ class SqlLiteDatabaseHelper {
         WHEN (OLD.Mov <> NEW.Mov) AND NEW.Mov = 1 AND (NEW.Piece_type = 'RC' OR NEW.Piece_type = 'AC')
         BEGIN
            UPDATE Articles
-               SET PMP = ((Qte * PMP)+(NEW.Qte * NEW.Prix_revient))/(Qte + NEW.Qte) , 
-                   Qte = Qte + NEW.Qte,
+               SET PMP = ((Qte * PMP)+((NEW.Qte*-1) * NEW.Prix_revient))/(Qte + (NEW.Qte*-1)) , 
+                   Qte = Qte + (NEW.Qte*-1),
                    Colis = Qte / Qte_Colis
              WHERE id = New.Article_id;
 
+           Update Pieces
+              Set Marge = IFNULL((Select SUM(Marge) from Journaux where Piece_id = NEW.Piece_id AND New.Mov <> -2),0) * -1 
+            where id = New.Piece_id ;
         END;
      ''');
 
-    // à reviser
     await db.execute('''
         CREATE TRIGGER IF NOT EXISTS update_articles_qte_onUpdate_retour_mov
         AFTER UPDATE ON Journaux
@@ -771,8 +782,8 @@ class SqlLiteDatabaseHelper {
               AND (NEW.Piece_type = 'RC' OR NEW.Piece_type = 'AC') 
         BEGIN
             UPDATE Articles
-               SET PMP = ((Qte * PMP)-(OLD.Qte * OLD.Prix_revient))/(Qte - OLD.Qte) , 
-                   Qte = Qte - OLD.Qte,
+               SET PMP = ((Qte * PMP)-((OLD.Qte*-1) * OLD.Prix_revient))/(Qte - (OLD.Qte*-1)) , 
+                   Qte = Qte - (OLD.Qte*-1),
                    Colis = Qte / Qte_Colis
              WHERE id = New.Article_id;
         
@@ -789,14 +800,13 @@ class SqlLiteDatabaseHelper {
         WHEN  NEW.Mov = 1 AND (NEW.Piece_type = 'RF' OR NEW.Piece_type = 'AF')
         BEGIN
             UPDATE Articles
-               SET PMP = ((Qte * PMP)-(NEW.Qte * NEW.Prix_revient))/(Qte - NEW.Qte) ,
-                   Qte = Qte - NEW.Qte,
+               SET PMP = ((Qte * PMP)-((NEW.Qte*-1) * NEW.Prix_revient))/(Qte - (NEW.Qte*-1)) ,
+                   Qte = Qte - (NEW.Qte*-1),
                    Colis = Qte / Qte_Colis
              WHERE id = New.Article_id;
              
         END;
      ''');
-
 
     await db.execute('''
         CREATE TRIGGER IF NOT EXISTS update_articles_qte_onUpdate_retour_four
@@ -805,8 +815,8 @@ class SqlLiteDatabaseHelper {
         WHEN NEW.Mov = 1 AND (NEW.Piece_type = 'RF' OR NEW.Piece_type = 'AF')
         BEGIN
             UPDATE Articles
-               SET PMP = ((Qte * PMP)-((NEW.Qte - OLD.Qte) * NEW.Prix_revient))/(Qte - (NEW.Qte - OLD.Qte)) ,
-                   Qte = Qte - (NEW.Qte - OLD.Qte) ,
+               SET PMP = ((Qte * PMP)-(((NEW.Qte*-1) - (OLD.Qte*-1)) * NEW.Prix_revient))/(Qte - ((NEW.Qte*-1) - (OLD.Qte*-1))) ,
+                   Qte = Qte - ((NEW.Qte*-1) - (OLD.Qte*-1)) ,
                    Colis = Qte / Qte_Colis
              WHERE id = NEW.Article_id ;
              
@@ -820,8 +830,8 @@ class SqlLiteDatabaseHelper {
         WHEN (OLD.Mov <> NEW.Mov) AND NEW.Mov = 1 AND (NEW.Piece_type = 'RF' OR NEW.Piece_type = 'AF')
         BEGIN
             UPDATE Articles
-               SET PMP = ((Qte * PMP)-(NEW.Qte * NEW.Prix_revient))/(Qte - NEW.Qte) ,
-                   Qte = Qte - NEW.Qte ,
+               SET PMP = ((Qte * PMP)-((NEW.Qte*-1) * NEW.Prix_revient))/(Qte - (NEW.Qte*-1)) ,
+                   Qte = Qte - (NEW.Qte*-1) ,
                    Colis = Qte / Qte_Colis
              WHERE id = NEW.Article_id ;
              
@@ -836,8 +846,8 @@ class SqlLiteDatabaseHelper {
               AND (NEW.Piece_type = 'RF' OR NEW.Piece_type = 'AF')      
         BEGIN
             UPDATE Articles
-               SET PMP = ((Qte * PMP)+(OLD.Qte * OLD.Prix_revient))/(Qte + OLD.Qte) ,
-                   Qte = Qte + OLD.Qte ,
+               SET PMP = ((Qte * PMP)+((OLD.Qte*-1) * OLD.Prix_revient))/(Qte + (OLD.Qte*-1)) ,
+                   Qte = Qte + (OLD.Qte*-1) ,
                    Colis = Qte / Qte_Colis,
                    PrixAchat = OLD.Prix_ht
              WHERE id = New.Article_id;
@@ -1393,11 +1403,11 @@ class SqlLiteDatabaseHelper {
     batch.rawInsert("INSERT INTO MyParams VALUES(1,2,0,0,1,1,'80',1,'9:01',0,0,'United States of America','USD' , 'demo' , 0 , 'mensuel')");
 
     Uint8List image = await Helpers.getDefaultImageUint8List(from: "tier");
-    Tiers tier0 = new Tiers(image ,"Client 00", null, 0, 0, 1, "", "", "", "", "", "", 0.0, 0, 0, false);
+    Tiers tier0 = new Tiers(image ,"Client 00", null, 0, 0, 1, "", "", "", "", "", "","" ,"","",0.0, 0, 0, false);
     tier0.clientFour = 0 ;
     batch.insert(DbTablesNames.tiers, tier0.toMap());
 
-    Tiers tier2 = new Tiers(image,"Prov 00", null, 0, 0, 1, "", "", "", "", "", "", 0.0, 0, 0, false);
+    Tiers tier2 = new Tiers(image,"Prov 00", null, 0, 0, 1, "", "", "", "", "", "", "","","",0.0, 0, 0, false);
     tier2.clientFour = 2 ;
     batch.insert(DbTablesNames.tiers, tier2.toMap());
 

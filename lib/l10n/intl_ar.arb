@@ -196,6 +196,7 @@
   "charge" : "مصاريف",
   "rembourcement_client": "دفع لزبون",
   "rembourcement_four": "دفع من مورد",
+  "rembourcement" : "تعويض",
   "sans_tresorie" : "بدون مدفوعات",
   "avec_tresorie": "مع المدفوعات",
   "msg_err_tresorie": "لا يوجد مدفوعات مرتبطة بالفاتورة",

@@ -1895,6 +1895,16 @@ class S {
     );
   }
 
+  /// `Refund`
+  String get rembourcement {
+    return Intl.message(
+      'Refund',
+      name: 'rembourcement',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `Not Treasury`
   String get sans_tresorie {
     return Intl.message(

@@ -614,7 +614,7 @@ class _IntroPageState extends State<IntroPage> {
                   margin: EdgeInsetsDirectional.only(start: 25 ,end: 25),
                   child: TextFormField(
                     controller: _telephoneControl,
-                    keyboardType: TextInputType.number,
+                    keyboardType: TextInputType.phone,
                     decoration: InputDecoration(
                       labelText: S.current.telephone,
                       labelStyle: GoogleFonts.lato(),

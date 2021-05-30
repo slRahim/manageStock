@@ -498,6 +498,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "reglement_piece" : MessageLookupByLibrary.simpleMessage("دفع لفاتورة"),
     "reglemnt_client" : MessageLookupByLibrary.simpleMessage("دفع من زبون"),
     "regler" : MessageLookupByLibrary.simpleMessage("المدفوع"),
+    "rembourcement" : MessageLookupByLibrary.simpleMessage("تعويض"),
     "rembourcement_client" : MessageLookupByLibrary.simpleMessage("دفع لزبون"),
     "rembourcement_four" : MessageLookupByLibrary.simpleMessage("دفع من مورد"),
     "remise" : MessageLookupByLibrary.simpleMessage("الخصم"),

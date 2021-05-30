@@ -232,7 +232,7 @@ class Article{
     this._ref = obj["Ref"].toString();
     this._qte = obj["qte_article"] ;
     this._cmdClient = obj["Cmd_client"];
-    this._selectedQuantite = obj["Qte"];
+    this._selectedQuantite =(obj["Qte"] > 0)? obj["Qte"] : obj["Qte"] * -1;
     this._selectedPrice = obj["Prix_ht"];
     this._tva = obj["Tva"];
     this._pmp = obj["Prix_revient"];

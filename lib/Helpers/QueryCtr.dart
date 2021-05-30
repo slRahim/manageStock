@@ -1,5 +1,4 @@
 import 'dart:math';
-
 import 'package:flutter/services.dart';
 import 'package:flutter_icons/flutter_icons.dart';
 import 'package:gestmob/Helpers/SqlLiteDatabaseHelper.dart';
@@ -546,7 +545,7 @@ class QueryCtr {
     return new MyParams.frommMap(res[0]);
   }
 
-  Future<DefaultPrinter> getPrinter () async {
+         Future<DefaultPrinter> getPrinter () async {
     Database dbClient = await _databaseHelper.db;
     var res = await dbClient.query(DbTablesNames.defaultPrinter);
 
@@ -651,8 +650,8 @@ class QueryCtr {
     int startDate = DateTime(DateTime.now().year , DateTime.now().month , 1).millisecondsSinceEpoch;
     int endDate = DateTime.now().millisecondsSinceEpoch;
     Map<int , dynamic> result = new Map<int , dynamic>();
-    String query1="Select Sum(Net_a_payer) as chf From Pieces Where Mov=1 AND (Piece LIKE 'BL' OR Piece LIKE 'FC') AND Date Between ${startDate} AND ${endDate} ";
-    String query2="Select Sum(Net_a_payer) as achat From Pieces Where Mov=1 AND (Piece LIKE 'BR' OR Piece LIKE 'FF') AND Date Between ${startDate} AND ${endDate} ";
+    String query1="Select Sum(Net_a_payer) as chf From Pieces Where Mov=1 AND (Piece LIKE 'BL' OR Piece LIKE 'FC' OR Piece LIKE 'RC' OR Piece LIKE 'AC') AND Date Between ${startDate} AND ${endDate} ";
+    String query2="Select Sum(Net_a_payer) as achat From Pieces Where Mov=1 AND (Piece LIKE 'BR' OR Piece LIKE 'FF' OR Piece LIKE 'RF' OR Piece LIKE 'AF') AND Date Between ${startDate} AND ${endDate} ";
     var res1 = await dbClient.rawQuery(query1);
     var res2 = await dbClient.rawQuery(query2);
     result={
@@ -669,8 +668,8 @@ class QueryCtr {
     String query1="Select Sum(Chiffre_affaires) From Tiers Where Clientfour = 0 ;";
     String query2="Select Sum(Regler) From Tiers Where Clientfour = 0 ;";
     String query3="Select Sum(Regler) From Tiers Where Clientfour = 2 ;";
-    String query4="Select Sum(Net_a_payer) From Pieces Where Mov=1 AND (Piece LIKE 'BR' OR Piece LIKE 'FF') ;";
-    String query5="Select Sum(Marge) From Pieces Where Mov=1 AND (Piece LIKE 'BL' OR Piece LIKE 'FC') ;";
+    String query4="Select Sum(Net_a_payer) From Pieces Where Mov=1 AND (Piece LIKE 'BR' OR Piece LIKE 'FF' OR Piece LIKE 'RF' OR Piece LIKE 'AF') ;";
+    String query5="Select Sum(Marge) From Pieces Where Mov=1 AND (Piece LIKE 'BL' OR Piece LIKE 'FC' OR Piece LIKE 'RC' OR Piece LIKE 'AC') ;";
 
     var res1 = await dbClient.rawQuery(query1);
     var res2 = await dbClient.rawQuery(query2);
@@ -714,8 +713,10 @@ class QueryCtr {
 
   Future statVenteArticle()async{
     var dbClient = await _databaseHelper.db;
-    String query = "Select Journaux.Article_id ,Articles.Ref, Articles.Designation ,Articles.BytesImageString, Sum(Journaux.Qte*Journaux.Net_ht) From Journaux JOIN Articles ON Journaux.Article_id = Articles.id "+
-        "Where Mov = 1 AND (Piece_type LIKE 'BL' OR Piece_type LIKE 'FC') Group BY Article_id ORDER BY Sum(Journaux.Qte*Journaux.Net_ht) DESC LIMIT 5 ;";
+    String query = "Select Journaux.Article_id ,Articles.Ref, Articles.Designation ,Articles.BytesImageString, Sum(Journaux.Qte*Journaux.Net_ht) "
+        "From Journaux JOIN Articles ON Journaux.Article_id = Articles.id "+
+        "Where Mov = 1 AND (Piece_type LIKE 'BL' OR Piece_type LIKE 'FC' OR Piece_type LIKE 'RC' OR Piece_type LIKE 'AC') "
+            "Group BY Article_id ORDER BY Sum(Journaux.Qte*Journaux.Net_ht) DESC LIMIT 5 ;";
 
     var res = await dbClient.rawQuery(query);
 
@@ -742,7 +743,7 @@ class QueryCtr {
     String query = "Select ArticlesFamilles.*, Sum(Journaux.Qte*Journaux.Net_ht) From Journaux "+
       "LEFT JOIN Articles ON Journaux.Article_id = Articles.id "+
       "LEFT JOIN ArticlesFamilles ON Articles.Id_Famille+1 = ArticlesFamilles.id "+
-      "Where Mov = 1 AND (Piece_type LIKE 'BL' OR Piece_type LIKE 'FC')  "+
+      "Where Mov = 1 AND (Piece_type LIKE 'BL' OR Piece_type LIKE 'FC' OR Piece_type LIKE 'RC' OR Piece_type LIKE 'AC')  "+
       "Group BY ArticlesFamilles.id "+
       "ORDER BY Sum(Journaux.Qte*Journaux.Net_ht) DESC LIMIT 5 ;";
 
@@ -755,8 +756,10 @@ class QueryCtr {
 
   Future statAchatArticle()async{
     var dbClient = await _databaseHelper.db;
-    String query = "Select Journaux.Article_id , Articles.Ref , Articles.Designation,Articles.BytesImageString, Sum(Journaux.Qte*Journaux.Net_ht) From Journaux JOIN Articles ON Journaux.Article_id = Articles.id "+
-        "Where Mov = 1 AND (Piece_type LIKE 'BR' OR Piece_type LIKE 'FF') Group BY Article_id ORDER BY Sum(Journaux.Qte*Journaux.Net_ht) DESC LIMIT 5 ;";
+    String query = "Select Journaux.Article_id , Articles.Ref , Articles.Designation,Articles.BytesImageString, Sum(Journaux.Qte*Journaux.Net_ht) "
+        "From Journaux JOIN Articles ON Journaux.Article_id = Articles.id "+
+        "Where Mov = 1 AND (Piece_type LIKE 'BR' OR Piece_type LIKE 'FF' OR Piece_type LIKE 'RF' OR Piece_type LIKE 'AF') "
+            "Group BY Article_id ORDER BY Sum(Journaux.Qte*Journaux.Net_ht) DESC LIMIT 5 ;";
 
     var res = await dbClient.rawQuery(query);
 
@@ -791,26 +794,27 @@ class QueryCtr {
      switch(rapport){
        case 0 :
          query = """
-         Select Articles.Ref as referance, Articles.Designation as designation, Sum(Journaux.Qte) as qte , 
+         Select Articles.Designation as designation, Articles.Ref as referance , Sum(Journaux.Qte) as qte , 
                 Sum(Journaux.Marge*Journaux.Qte)/Sum(Journaux.Qte) as marge ,
                 (Sum(Journaux.Marge*Journaux.Qte)/Sum(Journaux.Qte)*Sum(Journaux.Qte)) as total
          From Journaux 
          Join Articles ON Journaux.Article_id = Articles.id 
-         Where Journaux.Mov = 1 AND (Piece_type like 'BL' OR Piece_type like 'FC') AND  Journaux.Date Between ${dateStart} AND ${dateEnd}
-         Group By Articles.Ref 
-         order by Articles.Ref
+         Where Journaux.Mov = 1 AND (Piece_type like 'BL' OR Piece_type like 'FC'  OR Piece_type like 'RC'  OR Piece_type like 'AC') 
+                AND  Journaux.Date Between ${dateStart} AND ${dateEnd}
+         Group By Articles.Designation 
+         order by Articles.Designation
          """;
          break;
        case 1 :
          query = """
-         Select Articles.Ref as referance , Articles.Designation as designation, Sum(Journaux.Qte) as qte , 
+         Select  Articles.Designation as designation, Articles.Ref as referance, Sum(Journaux.Qte) as qte , 
                 Sum(Journaux.Net_ht*Journaux.Qte)/Sum(Journaux.Qte) as prix,
                 (Sum(Journaux.Net_ht*Journaux.Qte)/Sum(Journaux.Qte)*Sum(Journaux.Qte)) as montant
          From Journaux 
          Join Articles ON Journaux.Article_id = Articles.id 
          Where Journaux.Mov = 1 AND Piece_type like 'CC'  AND  Journaux.Date Between ${dateStart} AND ${dateEnd}
-         Group By Articles.Ref 
-         order by Articles.Ref
+         Group By Articles.Designation 
+         order by Articles.Designation
          """;
          break;
        case 2 :
@@ -823,7 +827,8 @@ class QueryCtr {
          Left Join Pieces ON Journaux.Piece_id = Pieces.id 
          Left Join Tiers ON Pieces.Tier_id = Tiers.id 
          Left Join Articles ON Journaux.Article_id = Articles.id 
-         Where Journaux.Mov = 1 AND (Piece_type like 'BL' OR Piece_type like 'FC')  AND  Journaux.Date Between ${dateStart} AND ${dateEnd}
+         Where Journaux.Mov = 1 AND (Piece_type like 'BL' OR Piece_type like 'FC' OR Piece_type like 'RC'  OR Piece_type like 'AC') 
+               AND  Journaux.Date Between ${dateStart} AND ${dateEnd}
          Order by Pieces.Num_piece
          """;
          break;
@@ -855,26 +860,27 @@ class QueryCtr {
     switch(rapport){
       case 0 :
         query = """
-         Select Articles.Ref as referance, Articles.Designation as designation, Sum(Journaux.Qte) as qte , 
+         Select Articles.Designation as designation, Articles.Ref as referance, Sum(Journaux.Qte) as qte , 
                 Sum(Journaux.Marge*Journaux.Qte)/Sum(Journaux.Qte) as  marge,
                 (Sum(Journaux.Marge*Journaux.Qte)/Sum(Journaux.Qte)*Sum(Journaux.Qte)) as total
          From Journaux 
          Join Articles ON Journaux.Article_id = Articles.id 
-         Where Journaux.Mov = 1 AND (Piece_type like 'BR' OR Piece_type like 'FF') AND  Journaux.Date Between ${dateStart} AND ${dateEnd}
-         Group By Articles.Ref 
-         order by Articles.Ref
+         Where Journaux.Mov = 1 AND (Piece_type like 'BR' OR Piece_type like 'FF' OR Piece_type like 'RF'  OR Piece_type like 'AF')
+             AND  Journaux.Date Between ${dateStart} AND ${dateEnd}
+         Group By Articles.Designation 
+         order by Articles.Designation
          """;
         break;
       case 1 :
         query = """
-         Select Articles.Ref as referance, Articles.Designation as designation, Sum(Journaux.Qte) as qte , 
+         Select Articles.Designation as designation, Articles.Ref as referance, Sum(Journaux.Qte) as qte , 
                 Sum(Journaux.Net_ht*Journaux.Qte)/Sum(Journaux.Qte) as prix,
                 (Sum(Journaux.Net_ht*Journaux.Qte)/Sum(Journaux.Qte)*Sum(Journaux.Qte)) as montant
          From Journaux 
          Join Articles ON Journaux.Article_id = Articles.id 
          Where Journaux.Mov = 0 AND Piece_type like 'BC'  AND  Journaux.Date Between ${dateStart} AND ${dateEnd}
-         Group By Articles.Ref 
-         order by Articles.Ref
+         Group By Articles.Designation 
+         order by Articles.Designation
          """;
         break;
       case 2 :
@@ -888,7 +894,8 @@ class QueryCtr {
          Left Join Pieces ON Journaux.Piece_id = Pieces.id 
          Left Join Tiers ON Pieces.Tier_id = Tiers.id 
          Left Join Articles ON Journaux.Article_id = Articles.id 
-         Where Journaux.Mov = 1 AND (Piece_type like 'BR' OR Piece_type like 'FF')  AND  Journaux.Date Between ${dateStart} AND ${dateEnd}
+         Where Journaux.Mov = 1 AND (Piece_type like 'BR' OR Piece_type like 'FF' OR Piece_type like 'RF'  OR Piece_type like 'AF')  
+              AND  Journaux.Date Between ${dateStart} AND ${dateEnd}
          order by Pieces.Num_piece
          """;
         break;
@@ -919,21 +926,21 @@ class QueryCtr {
     switch(rapport){
       case 0 :
         query = """
-        Select Ref as referance ,Designation as designation, Qte as qte, 
+        Select Designation as designation, Ref as referance , Qte as qte, 
                 PMP as pmp, (Qte*PMP) as montant
         From Articles where Qte > 0
         """;
         break;
       case 1 :
         query = """
-        Select Ref as referance ,Designation as designation, Qte as qte, Qte_Min as qte_min, PMP as pmp, 
+        Select Designation as designation, Ref as referance , Qte as qte, Qte_Min as qte_min, PMP as pmp, 
               (Qte*PMP) as montant
         From Articles where Qte < 1 OR Qte < Qte_Min
         """;
         break;
       case 2 :
         query = """
-        Select Ref as referance,Designation as designation, Qte as qte, 
+        Select Designation as designation, Ref as referance, Qte as qte, 
               PrixVente1 as prix, (Qte*PrixVente1) as chifre_affaire
         From Articles where Qte > 0
         """;
@@ -987,7 +994,7 @@ class QueryCtr {
                    0 as Achat , 0 as Reg_four , 0 as dette , 
                    0 as charge , Sum(Marge) as marge
             from Pieces 
-            where Pieces.Mov = 1 And (Pieces.Piece Like 'BL' Or  Pieces.Piece Like 'FC') And Date Between ${dateStart} And ${dateEnd}
+            where Pieces.Mov = 1 And (Pieces.Piece Like 'BL' Or  Pieces.Piece Like 'FC' Or  Pieces.Piece Like 'RC' Or  Pieces.Piece Like 'AC') And Date Between ${dateStart} And ${dateEnd}
             Group by Date
             
             Union
@@ -996,7 +1003,7 @@ class QueryCtr {
                     Sum(Net_a_payer) as achat , Sum(Regler) as Reg_four ,Sum(Reste) as dette ,
                     0 as charge , 0 as marge
             from Pieces
-            where Pieces.Mov = 1 And (Pieces.Piece Like 'BR' Or  Pieces.Piece Like 'FF') And Date Between ${dateStart} And ${dateEnd}
+            where Pieces.Mov = 1 And (Pieces.Piece Like 'BR' Or  Pieces.Piece Like 'FF' Or  Pieces.Piece Like 'RF' Or  Pieces.Piece Like 'AF') And Date Between ${dateStart} And ${dateEnd}
             Group by Date 
             
             Union
@@ -1021,7 +1028,7 @@ class QueryCtr {
                    0 as Achat , 0 as Reg_four , 0 as dette , 
                    0 as charge , Sum(Marge) as marge
             from Pieces 
-            where Pieces.Mov = 1 And (Pieces.Piece Like 'BL' Or  Pieces.Piece Like 'FC') And Date Between ${dateStart} And ${dateEnd}
+            where Pieces.Mov = 1 And (Pieces.Piece Like 'BL' Or  Pieces.Piece Like 'FC' Or  Pieces.Piece Like 'RC' Or  Pieces.Piece Like 'AC') And Date Between ${dateStart} And ${dateEnd}
             Group by Date
             
             Union
@@ -1030,7 +1037,7 @@ class QueryCtr {
                     Sum(Net_a_payer) as achat , Sum(Regler) as Reg_four ,Sum(Reste) as dette ,
                     0 as charge , 0 as marge
             from Pieces
-            where Pieces.Mov = 1 And (Pieces.Piece Like 'BR' Or  Pieces.Piece Like 'FF') And Date Between ${dateStart} And ${dateEnd}
+            where Pieces.Mov = 1 And (Pieces.Piece Like 'BR' Or  Pieces.Piece Like 'FF' Or  Pieces.Piece Like 'RF' Or  Pieces.Piece Like 'AF') And Date Between ${dateStart} And ${dateEnd}
             Group by Date 
             
             Union
@@ -1055,7 +1062,7 @@ class QueryCtr {
                    0 as Achat , 0 as Reg_four , 0 as dette , 
                    0 as charge , Sum(Marge) as marge
             from Pieces 
-            where Pieces.Mov = 1 And (Pieces.Piece Like 'BL' Or  Pieces.Piece Like 'FC') 
+            where Pieces.Mov = 1 And (Pieces.Piece Like 'BL' Or  Pieces.Piece Like 'FC' Or  Pieces.Piece Like 'RC' Or  Pieces.Piece Like 'AC') 
             Group by Date
             
             Union
@@ -1064,7 +1071,7 @@ class QueryCtr {
                     Sum(Net_a_payer) as achat , Sum(Regler) as Reg_four ,Sum(Reste) as dette ,
                     0 as charge , 0 as marge
             from Pieces
-            where Pieces.Mov = 1 And (Pieces.Piece Like 'BR' Or  Pieces.Piece Like 'FF') 
+            where Pieces.Mov = 1 And (Pieces.Piece Like 'BR' Or  Pieces.Piece Like 'FF' Or  Pieces.Piece Like 'RF' Or  Pieces.Piece Like 'AF') 
             Group by Date 
             
             Union
@@ -1085,71 +1092,5 @@ class QueryCtr {
     return res ;
   }
 
-//  **************************************************************************************************************************************************
-//************************************************************************fill database*******************************************************************
-
-  Future<String> fillDB () async {
-    try{
-      var dbClient = await _databaseHelper.db;
-      Batch batch = dbClient.batch();
-
-      const _chars = 'AaBbCcDdEeFfGgHhIiJjKkLlMmNnOoPpQqRrSsTtUuVvWwXxYyZz1234567890';
-      Random _rnd = Random();
-
-      for (int i=0 ; i<250 ; i++){
-        ArticleFamille famille = ArticleFamille(1,"fam ${i}");
-        batch.insert(DbTablesNames.articlesFamilles, famille.toMap()) ;
-      }
-
-      for (int i=0 ; i<250 ; i++){
-        ArticleMarque marque = ArticleMarque(1,"marq ${i}");
-        batch.insert(DbTablesNames.articlesMarques, marque.toMap()) ;
-      }
-
-      for (int i=0 ; i<1020 ; i++){
-        batch.rawInsert('''
-        INSERT INTO Articles (Ref,Designation,Id_Famille,Id_Marque,
-                           Qte_init,Qte,Qte_Min, Qte_Colis,Colis, Cmd_client,
-                           PrixAchat, PMP_init, PMP, TVA,
-                           PrixVente1, PrixVente2, PrixVente3,
-                           PrixVente1TTC, PrixVente2TTC, PrixVente3TTC,
-                           Bloquer, Stockable
-                       )
-        VALUES ('Ref #0${i+2}','${getRandomString(10 , _chars , _rnd)}', ${(i+5/5).round()},${(i+5/5).round()} ,
-         ${i+50},${i+50},10,10,${(i+50)/10}, 0,${(i+80)*60},${(i+80)*60},${(i+80)*60},0,
-         ${(i+80)*78.486}, ${(i+80)*80},${(i+80)*75},${(i+80)*78.486},${(i+80)*80},${(i+80)*75},0, 1);
-      ''');
-      }
-
-      for (int i=0 ; i<250 ; i++){
-        TiersFamille famille = TiersFamille("tier fam ${i+1}");
-        batch.insert(DbTablesNames.tiersFamille, famille.toMap()) ;
-      }
-
-      for (int i=0 ; i<2040 ; i++){
-        batch.rawInsert('''
-        INSERT INTO Tiers ( Clientfour,RaisonSociale, Latitude,Longitude, Id_Famille, Statut,
-                              Tarification, Adresse, Ville,Telephone,Mobile,Fax, Email,
-                              Solde_depart,Chiffre_affaires, Regler,Credit, Bloquer)
-        
-        VALUES (${(i%2)>0 ? 2 : 0 },'Raison_${getRandomString(10 , _chars , _rnd)}',36.2568015016388,6.59222602844238,
-                ${(i+5/10).round()},5,
-                ${(i%2)>0 ? 2 : 1 },'Adresse ${getRandomString(15 , _chars , _rnd)}','${getRandomString(10 , _chars , _rnd)}','03136486','055689756','03698745','mail@mail.com',
-                ${i*50}, 0,0,0,0 );
-      ''');
-      }
-
-      await batch.commit();
-
-    }catch (e){
-      return "error cnx" ;
-    }
-
-    return "success" ;
-  }
-
-
-  String getRandomString(int length , chars , rnd) => String.fromCharCodes(Iterable.generate(
-      length, (_) => chars.codeUnitAt(rnd.nextInt(chars.length))));
 
 }
