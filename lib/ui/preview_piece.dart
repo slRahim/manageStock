@@ -114,7 +114,7 @@ class _PreviewPieceState extends State<PreviewPiece> {
             title: Text(S.current.preview_titre, style: GoogleFonts.lato(fontWeight: FontWeight.bold),),
             centerTitle: true,
           ),
-          body: (widget.format == 45)
+          body: (widget.format == 45 || widget.format == 0)
               ? PDFViewer(
                 document: _doc,
                 showIndicator: true,
@@ -335,7 +335,7 @@ class _PreviewPieceState extends State<PreviewPiece> {
                     size: 30,
                   ),
                 )
-              : FloatingActionButton(
+              : (widget.format != 0)? FloatingActionButton(
                   onPressed: () {
                       _printTicket(context);
                   },
@@ -344,7 +344,8 @@ class _PreviewPieceState extends State<PreviewPiece> {
                     color: Theme.of(context).floatingActionButtonTheme.foregroundColor,
                     size: 30,
                   ),
-                ));
+                ):null
+      );
     }
   }
 

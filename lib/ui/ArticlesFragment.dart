@@ -66,6 +66,9 @@ class _ArticlesFragmentState extends State<ArticlesFragment> {
   int _savedSelectedFamille = 0;
   bool _savedFilterOutStock = false;
 
+  bool _filterArtilceBloquer = false ;
+  bool _savedFilterArticleBloquer = false ;
+
   SliverListDataSource _dataSource;
   MyParams _myParams;
   String feature9 = 'feature9' ;
@@ -106,6 +109,7 @@ class _ArticlesFragmentState extends State<ArticlesFragment> {
     filter["Id_Marque"] = _savedSelectedMarque;
     filter["Id_Famille"] = _savedSelectedFamille;
     filter["outStock"] = _savedFilterOutStock;
+    filter["articleBloquer"] = _savedFilterArticleBloquer ;
   }
 
   Future<Widget> futureInitState() async {
@@ -121,6 +125,7 @@ class _ArticlesFragmentState extends State<ArticlesFragment> {
     _selectedMarque = _marqueItems[_savedSelectedMarque];
     _selectedFamille = _familleItems[_savedSelectedFamille];
     _filterOutStock = _savedFilterOutStock;
+    _filterArtilceBloquer = _savedFilterArticleBloquer ;
 
     final tile = StatefulBuilder(builder: (context, StateSetter _setState) {
       return Builder(
@@ -135,6 +140,7 @@ class _ArticlesFragmentState extends State<ArticlesFragment> {
               trailing: famillesDropDown(_setState),
             ),
             stockCheckBox(_setState),
+            articleBloquer(_setState)
           ],
         ),
       );
@@ -214,6 +220,21 @@ class _ArticlesFragmentState extends State<ArticlesFragment> {
     );
   }
 
+  Widget articleBloquer(StateSetter _setState) {
+    if(widget.onConfirmSelectedItems == null){
+      return CheckboxListTile(
+        title: Text(S.current.aff_bloquer , style: GoogleFonts.lato(),),
+        value: _filterArtilceBloquer,
+        onChanged: (bool value){
+          _setState(() {
+            _filterArtilceBloquer = value;
+          });
+        },
+      );
+    }
+    return SizedBox();
+  }
+
   //********************************************listing des pieces**********************************************************************
   Widget getAppBar(setState) {
     if (_selectedItems.length > 0) {
@@ -261,6 +282,7 @@ class _ArticlesFragmentState extends State<ArticlesFragment> {
                   _savedSelectedFamille =
                       _familleItems.indexOf(_selectedFamille);
                   _savedFilterOutStock = _filterOutStock;
+                  _savedFilterArticleBloquer = _filterArtilceBloquer ;
 
                   fillFilter(_filterMap);
 

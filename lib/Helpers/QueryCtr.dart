@@ -61,15 +61,19 @@ class QueryCtr {
       int marque = filters["Id_Marque"] != null? filters["Id_Marque"] : -1;
       int famille = filters["Id_Famille"] != null? filters["Id_Famille"] : -1;
       bool stock = filters["outStock"] != null ? filters["outStock"] : false;
+      bool bloquer = filters["articleBloquer"] != null ? filters["articleBloquer"] : false;
+
       String marqueFilter = marque > 0 ? " AND Id_Marque = $marque" : "";
       String familleFilter = famille > 0 ? " AND Id_Famille = $famille" : "";
       String stockFilter = stock ? " AND (Qte < 1 OR Qte < Qte_Min)" : "";
+      String articleBloquerFilter = bloquer ? " AND Bloquer > 0" : " AND Bloquer = 0";
 
       query += " where (Designation like '%${searchTerm??''}%' OR CodeBar like '%${searchTerm??''}%' OR Ref like '%${searchTerm??''}%')";
 
       query += marqueFilter;
       query += familleFilter;
       query += stockFilter;
+      query += articleBloquerFilter ;
     }
 
 
@@ -794,27 +798,31 @@ class QueryCtr {
      switch(rapport){
        case 0 :
          query = """
-         Select Articles.Designation as designation, Articles.Ref as referance , Sum(Journaux.Qte) as qte , 
-                Sum(Journaux.Marge*Journaux.Qte)/Sum(Journaux.Qte) as marge ,
-                (Sum(Journaux.Marge*Journaux.Qte)/Sum(Journaux.Qte)*Sum(Journaux.Qte)) as total
-         From Journaux 
-         Join Articles ON Journaux.Article_id = Articles.id 
-         Where Journaux.Mov = 1 AND (Piece_type like 'BL' OR Piece_type like 'FC'  OR Piece_type like 'RC'  OR Piece_type like 'AC') 
-                AND  Journaux.Date Between ${dateStart} AND ${dateEnd}
-         Group By Articles.Designation 
-         order by Articles.Designation
+         Select designation,  referance , qte ,  marge , total
+         From
+           (Select Articles.id , Articles.Designation as designation, Articles.Ref as referance , Sum(Journaux.Qte) as qte , 
+                  Sum(Journaux.Marge*Journaux.Qte)/Sum(Journaux.Qte) as marge ,
+                  (Sum(Journaux.Marge*Journaux.Qte)/Sum(Journaux.Qte)*Sum(Journaux.Qte)) as total
+           From Journaux 
+           Join Articles ON Journaux.Article_id = Articles.id 
+           Where Journaux.Mov = 1 AND (Piece_type like 'BL' OR Piece_type like 'FC'  OR Piece_type like 'RC'  OR Piece_type like 'AC') 
+                  AND  Journaux.Date Between ${dateStart} AND ${dateEnd}
+           Group By Articles.id 
+           order by Articles.Designation) ;
          """;
          break;
        case 1 :
          query = """
-         Select  Articles.Designation as designation, Articles.Ref as referance, Sum(Journaux.Qte) as qte , 
-                Sum(Journaux.Net_ht*Journaux.Qte)/Sum(Journaux.Qte) as prix,
-                (Sum(Journaux.Net_ht*Journaux.Qte)/Sum(Journaux.Qte)*Sum(Journaux.Qte)) as montant
-         From Journaux 
-         Join Articles ON Journaux.Article_id = Articles.id 
-         Where Journaux.Mov = 1 AND Piece_type like 'CC'  AND  Journaux.Date Between ${dateStart} AND ${dateEnd}
-         Group By Articles.Designation 
-         order by Articles.Designation
+         Select designation, referance, qte , prix, montant
+         From
+           (Select Articles.id , Articles.Designation as designation, Articles.Ref as referance, Sum(Journaux.Qte) as qte , 
+                  Sum(Journaux.Net_ht*Journaux.Qte)/Sum(Journaux.Qte) as prix,
+                  (Sum(Journaux.Net_ht*Journaux.Qte)/Sum(Journaux.Qte)*Sum(Journaux.Qte)) as montant
+           From Journaux 
+           Join Articles ON Journaux.Article_id = Articles.id 
+           Where Journaux.Mov = 1 AND Piece_type like 'CC'  AND  Journaux.Date Between ${dateStart} AND ${dateEnd}
+           Group By Articles.id 
+           order by Articles.Designation);
          """;
          break;
        case 2 :
@@ -860,27 +868,31 @@ class QueryCtr {
     switch(rapport){
       case 0 :
         query = """
-         Select Articles.Designation as designation, Articles.Ref as referance, Sum(Journaux.Qte) as qte , 
-                Sum(Journaux.Marge*Journaux.Qte)/Sum(Journaux.Qte) as  marge,
-                (Sum(Journaux.Marge*Journaux.Qte)/Sum(Journaux.Qte)*Sum(Journaux.Qte)) as total
-         From Journaux 
-         Join Articles ON Journaux.Article_id = Articles.id 
-         Where Journaux.Mov = 1 AND (Piece_type like 'BR' OR Piece_type like 'FF' OR Piece_type like 'RF'  OR Piece_type like 'AF')
-             AND  Journaux.Date Between ${dateStart} AND ${dateEnd}
-         Group By Articles.Designation 
-         order by Articles.Designation
+         Select designation,referance, qte , marge, total
+         From 
+           (Select Aricles.id, Articles.Designation as designation, Articles.Ref as referance, Sum(Journaux.Qte) as qte , 
+                  Sum(Journaux.Marge*Journaux.Qte)/Sum(Journaux.Qte) as  marge,
+                  (Sum(Journaux.Marge*Journaux.Qte)/Sum(Journaux.Qte)*Sum(Journaux.Qte)) as total
+           From Journaux 
+           Join Articles ON Journaux.Article_id = Articles.id 
+           Where Journaux.Mov = 1 AND (Piece_type like 'BR' OR Piece_type like 'FF' OR Piece_type like 'RF'  OR Piece_type like 'AF')
+               AND  Journaux.Date Between ${dateStart} AND ${dateEnd}
+           Group By Articles.id 
+           order by Articles.Designation) ;
          """;
         break;
       case 1 :
         query = """
-         Select Articles.Designation as designation, Articles.Ref as referance, Sum(Journaux.Qte) as qte , 
-                Sum(Journaux.Net_ht*Journaux.Qte)/Sum(Journaux.Qte) as prix,
-                (Sum(Journaux.Net_ht*Journaux.Qte)/Sum(Journaux.Qte)*Sum(Journaux.Qte)) as montant
-         From Journaux 
-         Join Articles ON Journaux.Article_id = Articles.id 
-         Where Journaux.Mov = 0 AND Piece_type like 'BC'  AND  Journaux.Date Between ${dateStart} AND ${dateEnd}
-         Group By Articles.Designation 
-         order by Articles.Designation
+         Select designation, referance, qte , prix, montant
+         From 
+           (Select Articles.id, Articles.Designation as designation, Articles.Ref as referance, Sum(Journaux.Qte) as qte , 
+                  Sum(Journaux.Net_ht*Journaux.Qte)/Sum(Journaux.Qte) as prix,
+                  (Sum(Journaux.Net_ht*Journaux.Qte)/Sum(Journaux.Qte)*Sum(Journaux.Qte)) as montant
+           From Journaux 
+           Join Articles ON Journaux.Article_id = Articles.id 
+           Where Journaux.Mov = 0 AND Piece_type like 'BC'  AND  Journaux.Date Between ${dateStart} AND ${dateEnd}
+           Group By Articles.id 
+           order by Articles.Designation);
          """;
         break;
       case 2 :

@@ -577,7 +577,7 @@ class SqlLiteDatabaseHelper {
         BEGIN
             UPDATE Articles
                SET Qte = Qte - NEW.Qte,
-                   Colis = Qte / Qte_Colis
+                   Colis = (Qte - NEW.Qte) / Qte_Colis
              WHERE id = New.Article_id;
              
             Update Pieces
@@ -594,7 +594,7 @@ class SqlLiteDatabaseHelper {
         BEGIN
             UPDATE Articles
                SET Qte = Qte - (NEW.Qte - OLD.Qte) ,
-               Colis = Qte / Qte_Colis
+               Colis = (Qte - (NEW.Qte - OLD.Qte)) / Qte_Colis
              WHERE id = NEW.Article_id ;
              
             Update Pieces
@@ -611,7 +611,7 @@ class SqlLiteDatabaseHelper {
         BEGIN
             UPDATE Articles
                SET Qte = Qte - NEW.Qte ,
-               Colis = Qte / Qte_Colis
+               Colis = (Qte - NEW.Qte) / Qte_Colis
              WHERE id = NEW.Article_id ;
              
             Update Pieces
@@ -629,7 +629,7 @@ class SqlLiteDatabaseHelper {
         BEGIN
             UPDATE Articles
                SET Qte = Qte + OLD.Qte ,
-                   Colis = Qte / Qte_Colis
+                   Colis = (Qte + OLD.Qte) / Qte_Colis
              WHERE id = New.Article_id;
             
         END;
@@ -648,7 +648,7 @@ class SqlLiteDatabaseHelper {
             UPDATE Articles
                SET PMP = ((Qte * PMP)+(NEW.Qte * NEW.Net_ht))/(Qte + NEW.Qte) , 
                    Qte = Qte + NEW.Qte,
-                   Colis = Qte / Qte_Colis,
+                   Colis = (Qte + NEW.Qte) / Qte_Colis,
                    PrixAchat = NEW.Net_ht
              WHERE id = New.Article_id;
              
@@ -668,7 +668,7 @@ class SqlLiteDatabaseHelper {
             UPDATE Articles
                SET PMP = ((Qte * PMP)+((NEW.Qte-OLD.Qte) * NEW.Net_ht))/(Qte + (NEW.Qte-OLD.Qte)) , 
                    Qte = Qte + (NEW.Qte-OLD.Qte),
-                   Colis = Qte / Qte_Colis
+                   Colis = (Qte + (NEW.Qte-OLD.Qte)) / Qte_Colis
              WHERE id = New.Article_id;
              
             Update Pieces
@@ -687,7 +687,7 @@ class SqlLiteDatabaseHelper {
            UPDATE Articles
                SET PMP = ((Qte * PMP)+(NEW.Qte * NEW.Net_ht))/(Qte + NEW.Qte) , 
                    Qte = Qte + NEW.Qte,
-                   Colis = Qte / Qte_Colis,
+                   Colis = (Qte + NEW.Qte) / Qte_Colis,
                    PrixAchat = NEW.Net_ht
              WHERE id = New.Article_id;
              
@@ -708,7 +708,7 @@ class SqlLiteDatabaseHelper {
             UPDATE Articles
                SET PMP = ((Qte * PMP)-(OLD.Qte * OLD.Net_ht))/(Qte - OLD.Qte) , 
                    Qte = Qte - OLD.Qte,
-                   Colis = Qte / Qte_Colis
+                   Colis = (Qte - OLD.Qte) / Qte_Colis
              WHERE id = New.Article_id;
             
         END;
@@ -726,7 +726,7 @@ class SqlLiteDatabaseHelper {
             UPDATE Articles
                SET PMP = ((Qte * PMP)+((NEW.Qte*-1) * NEW.Prix_revient))/(Qte + (NEW.Qte*-1)) , 
                    Qte = Qte + (NEW.Qte*-1),
-                   Colis = Qte / Qte_Colis
+                   Colis = (Qte + (NEW.Qte*-1)) / Qte_Colis
              WHERE id = New.Article_id;
              
             Update Pieces
@@ -746,7 +746,7 @@ class SqlLiteDatabaseHelper {
             UPDATE Articles
                SET PMP = ((Qte * PMP)+(((NEW.Qte*-1)-(OLD.Qte*-1)) * NEW.Prix_revient))/(Qte + ((NEW.Qte*-1)-(OLD.Qte*-1))) , 
                    Qte = Qte + ((NEW.Qte*-1)-(OLD.Qte*-1)),
-                   Colis = Qte / Qte_Colis
+                   Colis = (Qte + ((NEW.Qte*-1)-(OLD.Qte*-1))) / Qte_Colis
              WHERE id = New.Article_id;
             
             Update Pieces
@@ -765,7 +765,7 @@ class SqlLiteDatabaseHelper {
            UPDATE Articles
                SET PMP = ((Qte * PMP)+((NEW.Qte*-1) * NEW.Prix_revient))/(Qte + (NEW.Qte*-1)) , 
                    Qte = Qte + (NEW.Qte*-1),
-                   Colis = Qte / Qte_Colis
+                   Colis = (Qte + (NEW.Qte*-1)) / Qte_Colis
              WHERE id = New.Article_id;
 
            Update Pieces
@@ -784,7 +784,7 @@ class SqlLiteDatabaseHelper {
             UPDATE Articles
                SET PMP = ((Qte * PMP)-((OLD.Qte*-1) * OLD.Prix_revient))/(Qte - (OLD.Qte*-1)) , 
                    Qte = Qte - (OLD.Qte*-1),
-                   Colis = Qte / Qte_Colis
+                   Colis = (Qte - (OLD.Qte*-1)) / Qte_Colis
              WHERE id = New.Article_id;
         
         END;
@@ -802,7 +802,7 @@ class SqlLiteDatabaseHelper {
             UPDATE Articles
                SET PMP = ((Qte * PMP)-((NEW.Qte*-1) * NEW.Prix_revient))/(Qte - (NEW.Qte*-1)) ,
                    Qte = Qte - (NEW.Qte*-1),
-                   Colis = Qte / Qte_Colis
+                   Colis = (Qte - (NEW.Qte*-1)) / Qte_Colis
              WHERE id = New.Article_id;
              
         END;
@@ -817,7 +817,7 @@ class SqlLiteDatabaseHelper {
             UPDATE Articles
                SET PMP = ((Qte * PMP)-(((NEW.Qte*-1) - (OLD.Qte*-1)) * NEW.Prix_revient))/(Qte - ((NEW.Qte*-1) - (OLD.Qte*-1))) ,
                    Qte = Qte - ((NEW.Qte*-1) - (OLD.Qte*-1)) ,
-                   Colis = Qte / Qte_Colis
+                   Colis = (Qte - ((NEW.Qte*-1) - (OLD.Qte*-1))) / Qte_Colis
              WHERE id = NEW.Article_id ;
              
         END;
@@ -832,7 +832,7 @@ class SqlLiteDatabaseHelper {
             UPDATE Articles
                SET PMP = ((Qte * PMP)-((NEW.Qte*-1) * NEW.Prix_revient))/(Qte - (NEW.Qte*-1)) ,
                    Qte = Qte - (NEW.Qte*-1) ,
-                   Colis = Qte / Qte_Colis
+                   Colis = (Qte - (NEW.Qte*-1)) / Qte_Colis
              WHERE id = NEW.Article_id ;
              
         END;
@@ -848,7 +848,7 @@ class SqlLiteDatabaseHelper {
             UPDATE Articles
                SET PMP = ((Qte * PMP)+((OLD.Qte*-1) * OLD.Prix_revient))/(Qte + (OLD.Qte*-1)) ,
                    Qte = Qte + (OLD.Qte*-1) ,
-                   Colis = Qte / Qte_Colis,
+                   Colis = (Qte + (OLD.Qte*-1)) / Qte_Colis,
                    PrixAchat = OLD.Prix_ht
              WHERE id = New.Article_id;
             

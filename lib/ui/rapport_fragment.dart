@@ -517,7 +517,6 @@ class _RapportState extends State<Rapport> {
                           style: pw.TextStyle(
                               fontWeight: pw.FontWeight.bold, font: ttf ,fontSize: 10)),
                     )
-
                 ]
             ),
             for(var map in _resultList)
@@ -551,7 +550,7 @@ class _RapportState extends State<Rapport> {
   }
 
   Future _getData() async {
-    var res;
+    List<Map<String , dynamic>> res;
     switch (Statics.rapportItems.indexOf(_selectedParent)) {
       case 0:
         res = await _queryCtr.rapportVente(
@@ -581,6 +580,7 @@ class _RapportState extends State<Rapport> {
             Statics.rapportGeneralItems.indexOf(_selectedSubItem),
             _dateRange.start,
             _dateRange.end);
+
         break;
     }
 
@@ -668,6 +668,7 @@ class _RapportState extends State<Rapport> {
       case "credit":
         return S.current.credit ;
         break ;
+
     }
   }
 

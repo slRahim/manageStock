@@ -270,11 +270,8 @@ class Article{
     map["PMP_init"] = this._pmpInit;
     map["PMP"] = this._pmp;
     map["TVA"] = this._tva;
-    int bloq = this._bloquer? 1 : 0;
-    map["Bloquer"] = bloq;
-
-    int stockable = this._stockable? 1 : 0;
-    map["Stockable"] = stockable;
+    map["Bloquer"] = this._bloquer ? 1 : 0;
+    map["Stockable"] = this._stockable? 1 : 0;
     map["Description"] = this._description;
 
     return map;

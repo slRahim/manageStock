@@ -82,6 +82,7 @@ class _AddArticlePageState extends State<AddArticlePage>
   TextEditingController _colisControl = new TextEditingController();
   TextEditingController _qteColisCotrol = new TextEditingController();
   TextEditingController _qteCmdCotrol = new TextEditingController();
+  bool _controlBloquer = false;
 
   ArticleFamille _famille = new ArticleFamille.init();
   ArticleMarque _marque = new ArticleMarque.init();
@@ -170,6 +171,7 @@ class _AddArticlePageState extends State<AddArticlePage>
     _qteColisCotrol.text = article.quantiteColis.toString();
     _qteCmdCotrol.text = article.cmdClient.toString();
     _colisControl.text = article.colis.toString();
+    _controlBloquer = article.bloquer;
 
     if (_pmpControl.text != null) {
       _pmpControl.text = article.pmp.toStringAsFixed(2);
@@ -182,6 +184,8 @@ class _AddArticlePageState extends State<AddArticlePage>
     _selectedMarque = _marqueItems[article.idMarque];
     _selectedFamille = _familleItems[article.idFamille];
     _selectedTva = new ArticleTva(article.tva);
+
+
   }
 
   void getParams() async {
@@ -863,6 +867,32 @@ class _AddArticlePageState extends State<AddArticlePage>
               ),
             ),
             dropdowns(),
+            Container(
+                decoration: editMode
+                    ? new BoxDecoration(
+                  border: Border.all(
+                    color: Colors.blueAccent,
+                  ),
+                  borderRadius: BorderRadius.circular(20.0),
+                )
+                    : null,
+                child: SwitchListTile(
+                  title: Text(
+                    S.current.bloquer,
+                    style: GoogleFonts.lato(
+                        textStyle: TextStyle(
+                            color: Theme.of(context).primaryColorDark)),
+                  ),
+                  value: _controlBloquer,
+                  activeColor: Theme.of(context).primaryColor,
+                  onChanged: editMode
+                      ? (bool value) {
+                    setState(() {
+                      _controlBloquer = value;
+                    });
+                  }
+                      : null,
+                ))
           ],
         ),
       ),
@@ -1438,7 +1468,7 @@ class _AddArticlePageState extends State<AddArticlePage>
 
 
     article.setDescription(_descriptionControl.text);
-    article.setbloquer(false);
+    article.setbloquer(_controlBloquer);
     article.setStockable(true);
 
     if (_articleImage != null) {
