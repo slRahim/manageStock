@@ -32,7 +32,7 @@ class _IntroPageState extends State<IntroPage> {
   String _selectedLanguage;
   List<DropdownMenuItem<String>> _languages;
 
-  List<String> _countries =["${S.current.selec_pays}"];
+  List<CountryModel> _countries =[CountryModel.init(name: "${S.current.selec_pays}")];
   String  _selectedCountry = S.current.selec_pays ;
   String _countryname ;
   String _currencycode;
@@ -40,8 +40,8 @@ class _IntroPageState extends State<IntroPage> {
   List<String> _cities = ["${S.current.choix_city}"];
   String _selectedCity = S.current.choix_city;
 
-  List<String> _provinces = ["${S.current.choix_province}"];
-  String _selectedProvince = S.current.choix_province;
+  List<String> _states = ["${S.current.choix_province}"];
+  String _selectedState = S.current.choix_province;
 
   String defaultLocale = Platform.localeName;
 
@@ -74,35 +74,35 @@ class _IntroPageState extends State<IntroPage> {
       case "en":
         _selectedLanguage = Statics.languages[0];
         S.load(Locale("en")).then((value){
-          _countries[0] = "${S.current.selec_pays}";
-          _selectedCountry = S.current.selec_pays ;
+          _countries[0].name = "${S.current.selec_pays}";
+          _selectedCountry = "${S.current.selec_pays}" ;
           _cities[0] = "${S.current.choix_city}";
           _selectedCity = S.current.choix_city;
-          _provinces[0] = "${S.current.choix_province}";
-          _selectedProvince =S.current.choix_province;
+          _states[0] = "${S.current.choix_province}";
+          _selectedState =S.current.choix_province;
         });
         break;
       case "fr":
         _selectedLanguage = Statics.languages[1];
         S.load(Locale("fr")).then((value){
-          _countries[0] = "${S.current.selec_pays}";
+          _countries[0].name = "${S.current.selec_pays}";
           _selectedCountry = S.current.selec_pays ;
           _cities[0] = "${S.current.choix_city}";
           _selectedCity = S.current.choix_city;
-          _provinces[0] = "${S.current.choix_province}";
-          _selectedProvince =S.current.choix_province;
+          _states[0] = "${S.current.choix_province}";
+          _selectedState =S.current.choix_province;
         });
 
         break;
       case "ar":
         S.load(Locale("ar")).then((value){
           _selectedLanguage = Statics.languages[2];
-          _countries[0] = "${S.current.selec_pays}";
+          _countries[0].name = "${S.current.selec_pays}";
           _selectedCountry = S.current.selec_pays ;
           _cities[0] = "${S.current.choix_city}";
           _selectedCity = S.current.choix_city;
-          _provinces[0] = "${S.current.choix_province}";
-          _selectedProvince =S.current.choix_province;
+          _states[0] = "${S.current.choix_province}";
+          _selectedState =S.current.choix_province;
         });
 
         break;
@@ -126,52 +126,56 @@ class _IntroPageState extends State<IntroPage> {
   Future getCounty() async {
     var countryres = await getResponse() as List;
     countryres.forEach((data) {
-      var model = CountryModel();
-      model.name = data['name'];
+      var model = CountryModel.fromJson(data);
       if (!mounted) return;
+
+      switch(_selectedLanguage){
+        case "Français (FR)" :
+          model.name = model.translations.fr ;
+          break;
+        case "عربي (AR)" :
+          model.name = model.translations.fa ;
+          break;
+      }
       setState(() {
-        _countries.add(model.name);
+        _countries.add(model);
       });
     });
 
     return _countries;
   }
 
-  Future getProvince() async {
-    var response = await getResponse();
-
-    var takeProvince = response
-        .map((map) => CountryModel.fromJson(map))
+  Future getStates() async {
+    var takeState = _countries
         .where((item) => item.name == _selectedCountry)
-        .map((item) => item.province)
+        .map((item) => item.states)
         .toList();
 
-    var provinces = takeProvince as List;
-    provinces.forEach((f) {
+    var states = takeState as List;
+    states.forEach((f) {
       if (!mounted) return;
       setState(() {
-        var name = f.map((item) => item.name).toList();
-        for (String statename in name) {
-          _provinces.add(statename.split('Province').first);
+        var listStateName = f.map((item) => item.name).toList();
+        for (String statename in listStateName) {
+          _states.add(statename);
         }
       });
     });
 
-    return _provinces;
+    return _states;
   }
 
   Future getCity() async {
-    var response = await getResponse();
-    var takestate = response
-        .map((map) => CountryModel.fromJson(map))
+    var takestate = _countries
         .where((item) => item.name == _selectedCountry)
-        .map((item) => item.province)
+        .map((item) => item.states)
         .toList();
+
     var states = takestate as List;
     states.forEach((f) {
-      var name = f.where((item) => item.name == (_selectedProvince+'Province') || item.name == _selectedProvince);
-      var cityname = name.map((item) => item.city).toList();
-      cityname.forEach((ci) {
+      var stateName = f.where((item) => item.name == _selectedState);
+      var cities = stateName.map((item) => item.cities).toList();
+      cities.forEach((ci) {
         if (!mounted) return;
         setState(() {
           var citiesname = ci.map((item) => item.name).toList();
@@ -183,6 +187,7 @@ class _IntroPageState extends State<IntroPage> {
     });
     return _cities;
   }
+
 
   @override
   Widget build(BuildContext context) {
@@ -256,33 +261,51 @@ class _IntroPageState extends State<IntroPage> {
                             switch (_selectedLanguage) {
                               case ("English (ENG)"):
                                 S.load(Locale("en")).then((value){
-                                  _countries[0] = "${S.current.selec_pays}";
-                                  _selectedCountry = S.current.selec_pays ;
-                                  _cities[0] = "${S.current.choix_city}";
+                                  _countries.clear();
+                                  _countries.add(CountryModel.init(name:"${S.current.selec_pays}"));
+                                  _selectedCountry = S.current.selec_pays;
+                                  getCounty();
+
+                                  _cities.clear();
+                                  _cities.add("${S.current.choix_city}");
                                   _selectedCity = S.current.choix_city;
-                                  _provinces[0] = "${S.current.choix_province}";
-                                  _selectedProvince =S.current.choix_province;
+
+                                  _states.clear();
+                                  _states.add("${S.current.choix_province}");
+                                  _selectedState =S.current.choix_province;
                                 });
                                 break;
                               case ("Français (FR)"):
                                 S.load(Locale("fr")).then((value){
-                                  _countries[0] = "${S.current.selec_pays}";
+                                  _countries.clear();
+                                  _countries.add(CountryModel.init(name:"${S.current.selec_pays}"));
                                   _selectedCountry = S.current.selec_pays ;
-                                  _cities[0] = "${S.current.choix_city}";
+                                  getCounty();
+
+                                  _cities.clear();
+                                  _cities.add("${S.current.choix_city}");
                                   _selectedCity = S.current.choix_city;
-                                  _provinces[0] = "${S.current.choix_province}";
-                                  _selectedProvince =S.current.choix_province;
+
+                                  _states.clear();
+                                  _states.add("${S.current.choix_province}");
+                                  _selectedState =S.current.choix_province;
                                 });
                                 break;
 
                               case ("عربي (AR)"):
                                 S.load(Locale("ar")).then((value){
-                                  _countries[0] = "${S.current.selec_pays}";
+                                  _countries.clear();
+                                  _countries.add(CountryModel.init(name:"${S.current.selec_pays}"));
                                   _selectedCountry = S.current.selec_pays ;
-                                  _cities[0] = "${S.current.choix_city}";
+                                  getCounty();
+
+                                  _cities.clear();
+                                  _cities.add("${S.current.choix_city}");
                                   _selectedCity = S.current.choix_city;
-                                  _provinces[0] = "${S.current.choix_province}";
-                                  _selectedProvince =S.current.choix_province;
+
+                                  _states.clear();
+                                  _states.add("${S.current.choix_province}");
+                                  _selectedState =S.current.choix_province;
                                 });
                                 break;
                             }
@@ -344,26 +367,26 @@ class _IntroPageState extends State<IntroPage> {
                         child:  DropdownButtonHideUnderline(
                             child: DropdownButton<String>(
                               value: _selectedCountry,
-                              items: _countries.map((String dropDownStringItem) {
+                              items: _countries.map((item) {
                                 return DropdownMenuItem<String>(
-                                  value: dropDownStringItem,
-                                  child: Text(dropDownStringItem,style: GoogleFonts.lato(),),
+                                  value: item.name,
+                                  child: Text("${item.name}",style: GoogleFonts.lato(),),
                                 );
                               }).toList(),
                               onChanged: (value) {
                                 if (!mounted) return;
                                 setState(() {
                                   _selectedCountry = value;
-                                  _selectedProvince = S.current.choix_province;
-                                  _provinces = ["${S.current.choix_province}"];
+                                  _selectedState = S.current.choix_province;
+                                  _states = ["${S.current.choix_province}"];
                                   _cities = ["${S.current.choix_city}"];
                                   _selectedCity = S.current.choix_city;
-                                  getProvince();
-                                  var country = countryList.where((element) => element.name == _selectedCountry).toList();
+                                  getStates();
+                                  String iso3Code = _countries.where((item) => item.name == _selectedCountry).toList().first.iso3;
+                                  var country = countryList.where((element) => element.iso3Code == iso3Code).toList();
                                   _countryname = country.first.name ;
                                   _currencycode = country.first.currencyCode ;
                                 });
-
                               },
                             ),
                           ),
@@ -396,7 +419,7 @@ class _IntroPageState extends State<IntroPage> {
                           scrollDirection: Axis.horizontal,
                           child: DropdownButtonHideUnderline(
                               child: DropdownButton<String>(
-                                items: _provinces.map((String dropDownStringItem) {
+                                items: _states.map((String dropDownStringItem) {
                                   return DropdownMenuItem<String>(
                                     value: dropDownStringItem,
                                     child: Text(dropDownStringItem,style: GoogleFonts.lato(),),
@@ -405,13 +428,13 @@ class _IntroPageState extends State<IntroPage> {
                                 onChanged: (value){
                                   if (!mounted) return;
                                   setState(() {
-                                    _selectedProvince = value;
+                                    _selectedState = value;
                                     _cities = ["${S.current.choix_city}"];
                                     _selectedCity = "${S.current.choix_city}" ;
                                     getCity();
                                   });
                                 },
-                                value: _selectedProvince,
+                                value: _selectedState,
                               ),
                             ),
                           ),
@@ -519,10 +542,10 @@ class _IntroPageState extends State<IntroPage> {
                     Expanded(
                       child: SingleChildScrollView(
                         child: Text(
-                            "${_currencycode} (${_countryname})",
-                            style: GoogleFonts.lato(textStyle: TextStyle(fontSize: 18)),
-                          ),
+                          "${_currencycode} (${_countryname})",
+                          style: GoogleFonts.lato(textStyle: TextStyle(fontSize: 18)),
                         ),
+                      ),
                     )
                   ],
                 ),
@@ -729,13 +752,14 @@ class _IntroPageState extends State<IntroPage> {
     );
   }
 
+
 //  *******************************************************************************************************************************************************************************
 //****************************************************************************save config*******************************************************************************************
 
   Future saveConfig() async {
     Uint8List image01 = await Helpers.getDefaultImageUint8List(from: "profile");
-    var country = (_countries.indexOf(_selectedCountry) == 0)? _countryname : _selectedCountry ;
-    var province = (_provinces.indexOf(_selectedProvince) == 0)? '' : _selectedProvince ;
+    var country = (_countries.first.name == _selectedCountry)? '' : _selectedCountry ;
+    var province = (_states.indexOf(_selectedState) == 0)? '' : _selectedState ;
     var city = (_cities.indexOf(_selectedCity) == 0)? '' : _selectedCity ;
 
     _myParams = new MyParams(

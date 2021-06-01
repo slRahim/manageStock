@@ -130,6 +130,7 @@ class Profile{
     map["Statut"] = this._statut;
     map["CodePin"] = this._codepin;
     map["Adresse"] = this._adresse;
+    map["AdresseWeb"] = this._addressWeb ;
     map["Ville"] = this._ville;
     map["Departement"] = this._departement;
     map["Pays"] = this._pays;

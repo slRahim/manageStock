@@ -1,6 +1,5 @@
 import 'dart:io';
 import 'dart:typed_data';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_osm_plugin/flutter_osm_plugin.dart';
 import 'package:gestmob/Helpers/Helpers.dart';
@@ -20,6 +19,7 @@ import 'package:gestmob/models/TiersFamille.dart';
 import 'package:gestmob/search/items_sliver_list.dart';
 import 'package:gestmob/search/sliver_list_data_source.dart';
 import 'package:gestmob/services/push_notifications.dart';
+import 'package:googleapis/people/v1.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:gestmob/Widgets/utils.dart' as utils;
 import 'package:map_launcher/map_launcher.dart';
@@ -35,7 +35,7 @@ class ProfilePage extends StatefulWidget {
 }
 
 class _ProfilePageState extends State<ProfilePage> with TickerProviderStateMixin {
-  
+
   var arguments;
 
   TabController _tabController;
@@ -67,28 +67,30 @@ class _ProfilePageState extends State<ProfilePage> with TickerProviderStateMixin
   TextEditingController _nisControl = new TextEditingController();
   TextEditingController _capitalsocialControl = new TextEditingController();
 
-  List<String> _countries =["${S.current.selec_pays}"];
+  List<CountryModel> _countries =[CountryModel.init(name: "${S.current.selec_pays}")];
   String  _selectedCountry = S.current.selec_pays ;
 
   List<String> _cities = ["${S.current.choix_city}"];
   String _selectedCity = S.current.choix_city;
 
-  List<String> _provinces = ["${S.current.choix_province}"];
-  String _selectedProvince = S.current.choix_province;
+  List<String> _states = ["${S.current.choix_province}"];
+  String _selectedState = S.current.choix_province;
 
   File _itemImage;
 
   SliverListDataSource _dataSource;
   QueryCtr _queryCtr;
 
+
   final _formKey = GlobalKey<FormState>();
-  
+
   void initState() {
     super.initState();
     _tabController = TabController(length: 3, vsync: this);
 
     _dataSource = SliverListDataSource(ItemsListTypes.articlesList, new Map<String, dynamic>());
     _queryCtr = _dataSource.queryCtr;
+
 
     getCounty();
     futureInitState().then((val) {
@@ -106,26 +108,14 @@ class _ProfilePageState extends State<ProfilePage> with TickerProviderStateMixin
   //****************************************************************************************************************************************************************************
   //*************************************************************************partie special pour l'initialisation********************************************************************
 
-  Future<bool> futureInitState() async {
+  Future futureInitState() async {
     _statutDropdownItems = utils.buildDropStatutTier(Statics.statutItems);
     _selectedStatut = Statics.statutItems[0];
     arguments = await _queryCtr.getProfileById(1);
-    if(arguments.pays != ''){
-      _selectedCountry = arguments.pays ;
-      getProvince() ;
-    }
-    if(arguments.departement != ''){
-      _selectedProvince = arguments.departement ;
-      getCity() ;
-    }
-    if(arguments.ville != ''){
-      _selectedCity =arguments.ville ;
-    }
 
     editMode = false;
     modification = true;
     await setDataFromItem(arguments);
-    return Future<bool>.value(editMode);
   }
 
   Future<void> setDataFromItem(Profile item) async {
@@ -135,7 +125,7 @@ class _ProfilePageState extends State<ProfilePage> with TickerProviderStateMixin
     _selectedStatut = Statics.statutItems[item.statut];
     _activiteControl.text = item.activite;
     _adresseControl.text = item.adresse;
-    _selectedProvince = (item.departement != '')?item.departement : _selectedProvince ;
+    _selectedState = (item.departement != '')?item.departement : _selectedState ;
     _selectedCity = (item.ville != '')? item.ville : _selectedCity;
     _selectedCountry = (item.pays != '')? item.pays : _selectedCountry;
     _telephoneControl.text = item.telephone;
@@ -162,52 +152,55 @@ class _ProfilePageState extends State<ProfilePage> with TickerProviderStateMixin
   Future getCounty() async {
     var countryres = await getResponse() as List;
     countryres.forEach((data) {
-      var model = CountryModel();
-      model.name = data['name'];
+      var model = CountryModel.fromJson(data);
       if (!mounted) return;
+      switch(Localizations.localeOf(context).languageCode){
+        case "fr" :
+          model.name = model.translations.fr ;
+          break;
+        case "ar" :
+          model.name = model.translations.fa ;
+          break;
+      }
       setState(() {
-        _countries.add(model.name);
+        _countries.add(model);
       });
     });
 
     return _countries;
   }
 
-  Future getProvince() async {
-    var response = await getResponse();
-
-    var takeProvince = response
-        .map((map) => CountryModel.fromJson(map))
+  Future getStates() async {
+    var takeState = _countries
         .where((item) => item.name == _selectedCountry)
-        .map((item) => item.province)
+        .map((item) => item.states)
         .toList();
 
-    var provinces = takeProvince as List;
-    provinces.forEach((f) {
+    var states = takeState as List;
+    states.forEach((f) {
       if (!mounted) return;
       setState(() {
-        var name = f.map((item) => item.name).toList();
-        for (String statename in name) {
-          _provinces.add(statename.split('Province').first);
+        var listStateName = f.map((item) => item.name).toList();
+        for (String statename in listStateName) {
+          _states.add(statename);
         }
       });
     });
 
-    return _provinces;
+    return _states;
   }
 
   Future getCity() async {
-    var response = await getResponse();
-    var takestate = response
-        .map((map) => CountryModel.fromJson(map))
+    var takestate = _countries
         .where((item) => item.name == _selectedCountry)
-        .map((item) => item.province)
+        .map((item) => item.states)
         .toList();
+
     var states = takestate as List;
     states.forEach((f) {
-      var name = f.where((item) => item.name == (_selectedProvince+'Province') || item.name == _selectedProvince);
-      var cityname = name.map((item) => item.city).toList();
-      cityname.forEach((ci) {
+      var stateName = f.where((item) => item.name == _selectedState);
+      var cities = stateName.map((item) => item.cities).toList();
+      cities.forEach((ci) {
         if (!mounted) return;
         setState(() {
           var citiesname = ci.map((item) => item.name).toList();
@@ -467,21 +460,21 @@ class _ProfilePageState extends State<ProfilePage> with TickerProviderStateMixin
                         child: DropdownButton<String>(
                           disabledHint: Text(_selectedCountry),
                           value: _selectedCountry,
-                          items: _countries.map((String dropDownStringItem) {
+                          items: _countries.map((item) {
                             return DropdownMenuItem<String>(
-                              value: dropDownStringItem,
-                              child: Text(dropDownStringItem, style: GoogleFonts.lato(),),
+                              value: item.name,
+                              child: Text(item.name, style: GoogleFonts.lato(),),
                             );
                           }).toList(),
                           onChanged: editMode ? (value) {
                             if (!mounted) return;
                             setState(() {
                               _selectedCountry = value;
-                              _selectedProvince = S.current.choix_province;
-                              _provinces = ["${S.current.choix_province}"];
+                              _selectedState = S.current.choix_province;
+                              _states = ["${S.current.choix_province}"];
                               _cities = ["${S.current.choix_city}"];
                               _selectedCity = S.current.choix_city;
-                              getProvince();
+                              getStates();
                             });
 
                           }:null,
@@ -513,9 +506,9 @@ class _ProfilePageState extends State<ProfilePage> with TickerProviderStateMixin
                       scrollDirection: Axis.horizontal,
                       child: DropdownButtonHideUnderline(
                         child: DropdownButton<String>(
-                          value: _selectedProvince,
-                          disabledHint: Text(_selectedProvince),
-                          items: _provinces.map((String dropDownStringItem) {
+                          value: _selectedState,
+                          disabledHint: Text(_selectedState),
+                          items: _states.map((String dropDownStringItem) {
                             return DropdownMenuItem<String>(
                               value: dropDownStringItem,
                               child: Text(dropDownStringItem, style: GoogleFonts.lato(),),
@@ -524,7 +517,7 @@ class _ProfilePageState extends State<ProfilePage> with TickerProviderStateMixin
                           onChanged:editMode ? (value){
                             if (!mounted) return;
                             setState(() {
-                              _selectedProvince = value;
+                              _selectedState = value;
                               _cities = ["${S.current.choix_city}"];
                               _selectedCity = "${S.current.choix_city}" ;
                               getCity();
@@ -1110,9 +1103,9 @@ class _ProfilePageState extends State<ProfilePage> with TickerProviderStateMixin
     item.statut = Statics.statutItems.indexOf(_selectedStatut);
     item.activite = (_activiteControl.text != '')? _activiteControl.text : '';
     item.adresse = (_adresseControl.text != '')?_adresseControl.text : '';
-    item.departement = (_provinces.indexOf(_selectedProvince)==0)? '' : _selectedProvince ;
+    item.departement = (_states.indexOf(_selectedState)==0)? '' : _selectedState ;
     item.ville = (_cities.indexOf(_selectedCity) == 0) ? '' :_selectedCity ;
-    item.pays =( _countries.indexOf(_selectedCountry) == 0) ? '' : _selectedCountry;
+    item.pays =( _countries.first.name == _selectedCountry) ? '' : _selectedCountry;
     item.telephone = _telephoneControl.text;
     item.telephone2 = _telephone2Control.text;
     item.mobile = _mobileControl.text;
