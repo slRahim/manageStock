@@ -545,6 +545,7 @@ class _AddTresoriePageState extends State<AddTresoriePage>
                                     itemBuilder: (BuildContext ctxt, int index) {
                                       return PieceListItem(
                                         piece: _selectedPieces[index],
+                                        fromTresory: true,
                                       );
                                     })
                               ],
@@ -815,6 +816,7 @@ class _AddTresoriePageState extends State<AddTresoriePage>
       peaceType: "TR",
       onConfirmSelectedItem: (selectedItem) {
         setState(() {
+          _selectedPieces.clear();
           _selectedPieces.add(selectedItem);
           _restepiece = _selectedPieces.first.reste;
           _montantControl.text = (_restepiece).toStringAsFixed(2);

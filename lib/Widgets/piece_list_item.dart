@@ -23,13 +23,14 @@ import 'package:google_fonts/google_fonts.dart';
 // element à afficher lors de listing des factures
 class PieceListItem extends StatefulWidget {
   PieceListItem(
-      {@required this.piece, Key key, this.onItemSelected, this.dataSource})
+      {@required this.piece, Key key, this.onItemSelected, this.dataSource , this.fromTresory})
       : assert(piece != null),
         super(key: key);
 
   final Piece piece;
   final Function(Object) onItemSelected;
   final dataSource;
+  final bool fromTresory;
 
   @override
   _PieceListItemState createState() => _PieceListItemState();
@@ -37,15 +38,10 @@ class PieceListItem extends StatefulWidget {
 
 class _PieceListItemState extends State<PieceListItem> {
   QueryCtr _queryCtr = new QueryCtr();
-
   bool _confirmDell = false;
-
   bool _visible = true;
-
   SlidingCardController controller;
-
   String _devise;
-
   String feature5 = 'feature5';
 
   @override
@@ -88,16 +84,19 @@ class _PieceListItemState extends State<PieceListItem> {
           actionExtentRatio: 0.25,
           child: ListTileCard(
             from: widget.piece,
-            onLongPress: () => widget.onItemSelected != null
+            onLongPress: () => (widget.onItemSelected != null && widget.fromTresory == null)
                 ? widget.onItemSelected(widget.piece)
                 : null,
             onTap: () => {
-              if (widget.onItemSelected == null)
-                {
+              if(widget.fromTresory == null){
+                if (widget.onItemSelected == null){
                   Navigator.of(context)
                       .pushNamed(RoutesKeys.addPiece, arguments: widget.piece)
                       .then((value) => widget.dataSource.refresh())
+                }else{
+                  widget.onItemSelected(widget.piece)
                 }
+              }
             },
             slidingCardController: controller,
             onCardTapped: () {
@@ -250,7 +249,7 @@ class _PieceListItemState extends State<PieceListItem> {
               ),
             ],
           ),
-          actions: <Widget>[
+          actions:(widget.fromTresory == null && widget.onItemSelected == null)? <Widget>[
             IconSlideAction(
                 color: Colors.white10,
                 iconWidget: Icon(
@@ -261,8 +260,8 @@ class _PieceListItemState extends State<PieceListItem> {
                 onTap: () async {
                   dellDialog(context);
                 }),
-          ],
-          secondaryActions: [
+          ]:[],
+          secondaryActions:(widget.fromTresory == null && widget.onItemSelected == null)? [
             IconSlideAction(
               color: Colors.white10,
               iconWidget: Icon(
@@ -275,7 +274,7 @@ class _PieceListItemState extends State<PieceListItem> {
               },
               foregroundColor: Colors.green,
             ),
-          ],
+          ]:[],
         ),
       ),
     );

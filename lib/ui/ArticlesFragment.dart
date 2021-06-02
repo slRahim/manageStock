@@ -304,7 +304,8 @@ class _ArticlesFragmentState extends State<ArticlesFragment> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        floatingActionButton:CircularMenu(
+        floatingActionButton:(widget.onConfirmSelectedItems == null)
+            ? CircularMenu(
             alignment: (Helpers.isDirectionRTL(context))
                 ? Alignment.bottomLeft
                 : Alignment.bottomRight,
@@ -346,6 +347,10 @@ class _ArticlesFragmentState extends State<ArticlesFragment> {
                 },
               )
             ]
+        )
+            :FloatingActionButton(
+           child: Icon(MdiIcons.barcode),
+          onPressed : scanBarCode,
         ),
         appBar: getAppBar(setState),
         body: ItemsSliverList(

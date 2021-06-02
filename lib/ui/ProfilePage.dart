@@ -91,8 +91,6 @@ class _ProfilePageState extends State<ProfilePage> with TickerProviderStateMixin
     _dataSource = SliverListDataSource(ItemsListTypes.articlesList, new Map<String, dynamic>());
     _queryCtr = _dataSource.queryCtr;
 
-
-    getCounty();
     futureInitState().then((val) {
       setState(() {
         finishedLoading = true;
@@ -111,7 +109,19 @@ class _ProfilePageState extends State<ProfilePage> with TickerProviderStateMixin
   Future futureInitState() async {
     _statutDropdownItems = utils.buildDropStatutTier(Statics.statutItems);
     _selectedStatut = Statics.statutItems[0];
+    await getCounty();
     arguments = await _queryCtr.getProfileById(1);
+    if(arguments.pays != ''){
+      _selectedCountry = arguments.pays ;
+      getStates() ;
+    }
+    if(arguments.departement != ''){
+      _selectedState = arguments.departement ;
+      getCity() ;
+    }
+    if(arguments.ville != ''){
+      _selectedCity =arguments.ville ;
+    }
 
     editMode = false;
     modification = true;

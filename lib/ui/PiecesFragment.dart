@@ -105,8 +105,8 @@ class _PiecesFragmentState extends State<PiecesFragment> {
           children: [
             startDate(_setState),
             endDate(_setState),
-            isDraftCheckBox(_setState),
-            hasCreditCheckBox(_setState)
+            (widget.tierId == null)?isDraftCheckBox(_setState):SizedBox(),
+            (widget.tierId == null)?hasCreditCheckBox(_setState):SizedBox()
           ],
         ),
       );
@@ -298,10 +298,6 @@ class _PiecesFragmentState extends State<PiecesFragment> {
           isFilterOn: isFilterOn,
           onSearchChanged: (String search) => _dataSource.updateSearchTerm(search),
           onFilterPressed: () async {
-            if(widget.tierId != null){
-              var message = S.current.filtre_non_dispo;
-              Helpers.showFlushBar(context, message);
-            }else{
               AwesomeDialog(
                   context: context,
                   dialogType: DialogType.INFO,
@@ -328,7 +324,6 @@ class _PiecesFragmentState extends State<PiecesFragment> {
                     });
                   }
               )..show();
-            }
           },
         ),
         body: ItemsSliverList(
