@@ -494,20 +494,27 @@ class _AddTresoriePageState extends State<AddTresoriePage>
                       onChanged: (value) {
                         setState(() {
                           _selectedCategorie = value;
+                          _objetControl.text = _selectedCategorie.libelle;
+                          _selectedPieces.clear();
+                          _montantControl.text = "0.0" ;
+
                           if (_selectedCategorie.id == 2 ||
                               _selectedCategorie.id == 3 ||
                               _selectedCategorie.id == 6 ||
                               _selectedCategorie.id == 7) {
+                            _clientControl.text = "";
+                            _selectedClient = null ;
                             _showTierController = true;
                           } else {
                             _showTierController = false;
                           }
-                          _objetControl.text = _selectedCategorie.libelle;
 
                           if (_selectedCategorie.id == 2 ||
                               _selectedCategorie.id == 6) {
                             _selectedTypeTiers = Statics.tiersItems[0];
-                          } else {
+
+                          } else if(_selectedCategorie.id == 3 ||
+                              _selectedCategorie.id == 7){
                             _selectedTypeTiers = Statics.tiersItems[2];
                           }
                         });
