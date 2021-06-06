@@ -329,7 +329,7 @@ class _PurchasePageState extends State<PurchasePage> {
           break;
         case '121212':
           _myParams.versionType= "premium" ;
-          _myParams.codeAbonnement = "mensuel";
+          _myParams.codeAbonnement = "annuel";
           _myParams.startDate = DateTime.fromMillisecondsSinceEpoch(purchase.billingClientPurchase.purchaseTime);
           await _queryCtr.updateItemInDb(DbTablesNames.myparams, _myParams);
           PushNotificationsManager.of(context).onMyParamsChange(_myParams);
@@ -337,7 +337,7 @@ class _PurchasePageState extends State<PurchasePage> {
           break;
         case '010101':
           _myParams.versionType= "premium" ;
-          _myParams.codeAbonnement = "mensuel";
+          _myParams.codeAbonnement = "illimit";
           _myParams.startDate = DateTime.fromMillisecondsSinceEpoch(purchase.billingClientPurchase.purchaseTime);
           await _queryCtr.updateItemInDb(DbTablesNames.myparams, _myParams);
           PushNotificationsManager.of(context).onMyParamsChange(_myParams);
