@@ -284,7 +284,10 @@ class _AddTresoriePageState extends State<AddTresoriePage>
             },
           ),
           // extendBody: true,
-          bottomNavigationBar: BottomExpandableAppBar(
+          bottomNavigationBar:((_selectedCategorie.id == 2 ||
+              _selectedCategorie.id == 3 ||
+              _selectedCategorie.id == 6 ||
+              _selectedCategorie.id == 7) && !modification)? BottomExpandableAppBar(
             controller: bottomBarControler,
             horizontalMargin: 10,
             shape: AutomaticNotchedShape(
@@ -372,14 +375,16 @@ class _AddTresoriePageState extends State<AddTresoriePage>
                 ],
               ),
             ),
-          ),
+          ):null,
           floatingActionButtonLocation:
               FloatingActionButtonLocation.centerDocked,
-          floatingActionButton: FloatingActionButton(
+          floatingActionButton:((_selectedCategorie.id == 2 ||
+              _selectedCategorie.id == 3 ||
+              _selectedCategorie.id == 6 ||
+              _selectedCategorie.id == 7) && !modification)? FloatingActionButton(
             child: Icon(Icons.add),
             elevation: 2,
-            backgroundColor:
-                (editMode && !modification) ? Colors.blue : Colors.grey,
+            backgroundColor: Colors.blue ,
             foregroundColor: Colors.white,
             onPressed: () async {
               if (editMode && !modification) {
@@ -395,7 +400,7 @@ class _AddTresoriePageState extends State<AddTresoriePage>
                 }
               }
             },
-          ),
+          ):null,
           body: Builder(
             builder: (context) => fichetab(),
           ));

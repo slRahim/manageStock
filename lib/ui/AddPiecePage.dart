@@ -483,19 +483,15 @@ class _AddPiecePageState extends State<AddPiecePage>
                                 btnCancelText: S.current.annuler,
                                 btnCancelOnPress: () {
                                   setState(() {
-                                    _pourcentremiseControler.text =
-                                        _pourcentremise.toString();
-                                    _remisepieceControler.text =
-                                        _remisepiece.toString();
+                                    _pourcentremiseControler.text = _pourcentremise.toString();
+                                    _remisepieceControler.text = _remisepiece.toString();
                                   });
                                 },
                                 btnOkText: S.current.confirme,
                                 btnOkOnPress: () {
                                   setState(() {
-                                    _pourcentremise = double.parse(
-                                        _pourcentremiseControler.text);
-                                    _remisepiece = double.parse(
-                                        _remisepieceControler.text);
+                                    _pourcentremise = double.parse(_pourcentremiseControler.text);
+                                    _remisepiece = double.parse(_remisepieceControler.text);
                                   });
                                   calculPiece();
                                 })
@@ -1038,8 +1034,10 @@ class _AddPiecePageState extends State<AddPiecePage>
                                       removeItemfromPiece(selectedItem),
                                       calculPiece(),
                                       setState((){
-                                        _remisepiece = (_total_ht * _pourcentremise) / 100 ;
-                                        _remisepieceControler.text = _restepiece.toStringAsFixed(2);
+                                        if(_pourcentremise > 0){
+                                          _remisepiece = (_total_ht * _pourcentremise) / 100 ;
+                                          _remisepieceControler.text = _restepiece.toStringAsFixed(2);
+                                        }
                                       })
                                     }),
                                   ),
@@ -1330,7 +1328,7 @@ class _AddPiecePageState extends State<AddPiecePage>
                 },
                 onChanged: (value) {
                   double res = (double.parse(value) * 100) / _total_ht;
-                  _pourcentremiseControler.text = res.toStringAsFixed(2);
+                  _pourcentremiseControler.text = res.toString();
                 },
                 decoration: InputDecoration(
                   errorText: _validateVerssemntError ?? null,
@@ -3204,7 +3202,7 @@ class _AddPiecePageState extends State<AddPiecePage>
                           : pw.SizedBox(),
                       (_piece.remise > 0)
                           ? pw.Text(
-                              "${S.current.remise}\t  ${((_piece.total_ht * _piece.remise) / 100).toStringAsFixed(2)}  (${_piece.remise}\t  %)\t ${_devise}",
+                              "${S.current.remise}\t  ${Helpers.numberFormat((_piece.total_ht * _piece.remise) / 100)}  (${_piece.remise.toStringAsFixed(2)}\t  %)\t ${_devise}",
                               style: pw.TextStyle(font: ttf))
                           : pw.SizedBox(),
                       (_piece.remise > 0)

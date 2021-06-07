@@ -1505,10 +1505,10 @@ class S {
     );
   }
 
-  /// `Init`
+  /// `Initial`
   String get init {
     return Intl.message(
-      'Init',
+      'Initial',
       name: 'init',
       desc: '',
       args: [],
@@ -1525,10 +1525,10 @@ class S {
     );
   }
 
-  /// `Init Stock`
+  /// `Initial Stock`
   String get stock_init {
     return Intl.message(
-      'Init Stock',
+      'Initial Stock',
       name: 'stock_init',
       desc: '',
       args: [],

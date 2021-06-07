@@ -242,7 +242,7 @@ class QueryCtr {
     Database dbClient = await _databaseHelper.db;
     var res;
 
-    res = await dbClient.query(DbTablesNames.pieces , where: "Reste > 0 AND Tier_id = ?" , whereArgs: [tier_id]);
+    res = await dbClient.query(DbTablesNames.pieces , where: "Reste > 0 AND Mov = 1 AND Piece != 'FP' Piece != 'CC' AND Tier_id = ?" , whereArgs: [tier_id]);
 
     List<Piece> list = new List<Piece>();
     for (var i = 0, j = res.length; i < j; i++) {
