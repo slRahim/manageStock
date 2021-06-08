@@ -443,214 +443,125 @@ class _AddArticlePageState extends State<AddArticlePage>
             ),
             Row(
               children: [
-                Visibility(
-                  visible: true,
-                  child: Flexible(
-                    flex: 5,
-                    child: TextFormField(
-                      enabled: editMode && _stockable,
-                      controller: _prixAchatControl,
-                      onTap: () => _prixAchatControl.selection = TextSelection(baseOffset: 0, extentOffset: _prixAchatControl.value.text.length),
-                      onChanged: (value){
-                        setState(() {
-                          _pmpControl.text = value ;
-                        });
-                      },
-                      keyboardType: TextInputType.number,
-                      // validator: (value) {
-                      //   if (value.isEmpty) {
-                      //     return S.current.msg_champ_oblg;
-                      //   }
-                      //   return null;
-                      // },
+                Flexible(
+                  flex: 5,
+                  child: TextFormField(
+                    enabled: editMode ,
+                    controller: _prixAchatControl,
+                    onTap: () => _prixAchatControl.selection = TextSelection(baseOffset: 0, extentOffset: _prixAchatControl.value.text.length),
+                    onChanged: (value){
+                      setState(() {
+                        _pmpControl.text = value ;
+                      });
+                    },
+                    keyboardType: TextInputType.number,
+                    // validator: (value) {
+                    //   if (value.isEmpty) {
+                    //     return S.current.msg_champ_oblg;
+                    //   }
+                    //   return null;
+                    // },
 
-                      decoration: InputDecoration(
-                          labelText: S.current.prix_achat,
-                          labelStyle: GoogleFonts.lato(textStyle: TextStyle(color: Theme.of(context).hintColor)),
-                          prefixIcon: Icon(
-                            Icons.attach_money,
-                            color: Colors.blue,
-                          ),
-                          focusedBorder: OutlineInputBorder(
-                              borderSide: BorderSide(color: Colors.blue),
-                              borderRadius: BorderRadius.circular(20)),
-                          enabledBorder: OutlineInputBorder(
-                            gapPadding: 3.3,
-                            borderRadius: BorderRadius.circular(20),
+                    decoration: InputDecoration(
+                        labelText: S.current.prix_achat,
+                        labelStyle: GoogleFonts.lato(textStyle: TextStyle(color: Theme.of(context).hintColor)),
+                        prefixIcon: Icon(
+                          Icons.attach_money,
+                          color: Colors.blue,
+                        ),
+                        focusedBorder: OutlineInputBorder(
                             borderSide: BorderSide(color: Colors.blue),
-                          ),
-                          errorBorder: OutlineInputBorder(
-                            gapPadding: 3.3,
-                            borderRadius: BorderRadius.circular(20),
-                            borderSide: BorderSide(color: Colors.red),
-                          )),
-                    ),
+                            borderRadius: BorderRadius.circular(20)),
+                        enabledBorder: OutlineInputBorder(
+                          gapPadding: 3.3,
+                          borderRadius: BorderRadius.circular(20),
+                          borderSide: BorderSide(color: Colors.blue),
+                        ),
+                        errorBorder: OutlineInputBorder(
+                          gapPadding: 3.3,
+                          borderRadius: BorderRadius.circular(20),
+                          borderSide: BorderSide(color: Colors.red),
+                        )),
                   ),
                 ),
                 Padding(
                     padding: EdgeInsets.fromLTRB(_stockable ? 8 : 0, 0, 0, 0)),
-                Visibility(
-                  visible: false,
-                  child: Flexible(
-                    flex: 5,
-                    child: Container(
-                      decoration: editMode
-                          ? new BoxDecoration(
-                              border: Border.all(
-                                color: Colors.blueAccent,
-                              ),
-                              borderRadius: BorderRadius.circular(20.0),
-                            )
-                          : null,
-                      child: CheckboxListTile(
-                        title: Text(
-                          S.current.stockable,
-                          maxLines: 1,
-                          style: GoogleFonts.lato(
-                            textStyle: TextStyle(
-                                color: Theme.of(context).primaryColorDark),
+                Flexible(
+                  flex: 5,
+                  child: Container(
+                    decoration: editMode
+                        ? new BoxDecoration(
+                            border: Border.all(
+                              color: Colors.blueAccent,
+                            ),
+                            borderRadius: BorderRadius.circular(20.0),
                           )
-                        ),
-                        value: _stockable,
-                        onChanged: editMode
-                            ? (bool value) {
-                                setState(() {
-                                  _stockable = value;
-                                  if (!_stockable) {
-                                    _prixAchatControl.text = "";
-                                  }
-                                });
-                              }
-                            : null,
+                        : null,
+                    child: CheckboxListTile(
+                      title: Text(
+                        S.current.stockable,
+                        maxLines: 1,
+                        style: GoogleFonts.lato(
+                          textStyle: TextStyle(
+                              color: Theme.of(context).primaryColorDark),
+                        )
                       ),
+                      value: _stockable,
+                      onChanged: editMode
+                          ? (bool value) {
+                              setState(() {
+                                _stockable = value;
+                              });
+                            }
+                          : null,
                     ),
                   ),
                 )
               ],
             ),
-            Visibility(
-              visible: true,
-              child: TextFormField(
-                enabled: editMode,
-                controller: _pmpControl,
-                onTap: () => _pmpControl.selection = TextSelection(baseOffset: 0, extentOffset: _pmpControl.value.text.length),
-                keyboardType: TextInputType.number,
-                // validator: (value) {
-                //   if (value.isEmpty) {
-                //     return S.current.msg_champ_oblg;
-                //   }
-                //   return null;
-                // },
-                decoration: InputDecoration(
-                    labelText: (modification)
-                        ? S.current.pmp
-                        : "${S.current.pmp} ${S.current.init}",
-                    labelStyle: GoogleFonts.lato(textStyle: TextStyle(color: Theme.of(context).hintColor),),
-                    prefixIcon: Icon(
-                      Icons.archive,
-                      color: Colors.blue,
-                    ),
-                    focusedBorder: OutlineInputBorder(
-                        borderSide: BorderSide(color: Colors.blue),
-                        borderRadius: BorderRadius.circular(20)),
-                    enabledBorder: OutlineInputBorder(
-                      gapPadding: 3.3,
-                      borderRadius: BorderRadius.circular(20),
+            TextFormField(
+              enabled: editMode,
+              controller: _pmpControl,
+              onTap: () => _pmpControl.selection = TextSelection(baseOffset: 0, extentOffset: _pmpControl.value.text.length),
+              keyboardType: TextInputType.number,
+              // validator: (value) {
+              //   if (value.isEmpty) {
+              //     return S.current.msg_champ_oblg;
+              //   }
+              //   return null;
+              // },
+              decoration: InputDecoration(
+                  labelText: (modification)
+                      ? S.current.pmp
+                      : "${S.current.pmp} ${S.current.init}",
+                  labelStyle: GoogleFonts.lato(textStyle: TextStyle(color: Theme.of(context).hintColor),),
+                  prefixIcon: Icon(
+                    Icons.archive,
+                    color: Colors.blue,
+                  ),
+                  focusedBorder: OutlineInputBorder(
                       borderSide: BorderSide(color: Colors.blue),
-                    ),
-                    errorBorder: OutlineInputBorder(
-                      gapPadding: 3.3,
-                      borderRadius: BorderRadius.circular(20),
-                      borderSide: BorderSide(color: Colors.red),
-                    )),
-              ),
-            ),
-            Row(
-              children: [
-                Flexible(
-                  child: TextFormField(
-                    enabled: editMode,
-                    controller: _stockInitialControl,
-                    onTap: () => _stockInitialControl.selection = TextSelection(baseOffset: 0, extentOffset: _stockInitialControl.value.text.length),
-                    keyboardType: TextInputType.number,
-                    // validator: (value) {
-                    //   if (value.isEmpty) {
-                    //     return S.current.msg_champ_oblg;
-                    //   }
-                    //   return null;
-                    // },
-                    decoration: InputDecoration(
-                      labelText: modification
-                          ? S.current.quantit
-                          : S.current.stock_init,
-                      labelStyle: GoogleFonts.lato(textStyle: TextStyle(color: Theme.of(context).hintColor),),
-                      prefixIcon: Icon(
-                        Icons.apps,
-                        color: Colors.blue,
-                      ),
-                      focusedBorder: OutlineInputBorder(
-                          borderSide: BorderSide(color: Colors.blue),
-                          borderRadius: BorderRadius.circular(20)),
-                      enabledBorder: OutlineInputBorder(
-                        gapPadding: 3.3,
-                        borderRadius: BorderRadius.circular(20),
-                        borderSide: BorderSide(color: Colors.blue),
-                      ),
-                      errorBorder: OutlineInputBorder(
-                        gapPadding: 3.3,
-                        borderRadius: BorderRadius.circular(20),
-                        borderSide: BorderSide(color: Colors.red),
-                      ),
-                    ),
+                      borderRadius: BorderRadius.circular(20)),
+                  enabledBorder: OutlineInputBorder(
+                    gapPadding: 3.3,
+                    borderRadius: BorderRadius.circular(20),
+                    borderSide: BorderSide(color: Colors.blue),
                   ),
-                ),
-                Padding(padding: EdgeInsets.all(4)),
-                Flexible(
-                  child: TextFormField(
-                    enabled: editMode,
-                    controller: _stockMinimumControl,
-                    onTap: () => _stockMinimumControl.selection = TextSelection(baseOffset: 0, extentOffset: _stockMinimumControl.value.text.length),
-                    keyboardType: TextInputType.number,
-                    // validator: (value) {
-                    //   if (value.isEmpty) {
-                    //     return S.current.msg_champ_oblg;
-                    //   }
-                    //   return null;
-                    // },
-                    decoration: InputDecoration(
-                      labelText: S.current.stock_min,
-                      labelStyle: GoogleFonts.lato(textStyle: TextStyle(color: Theme.of(context).hintColor),),
-                      prefixIcon: Icon(
-                        Icons.apps,
-                        color: Colors.blue,
-                      ),
-                      focusedBorder: OutlineInputBorder(
-                          borderSide: BorderSide(color: Colors.blue),
-                          borderRadius: BorderRadius.circular(20)),
-                      enabledBorder: OutlineInputBorder(
-                        gapPadding: 3.3,
-                        borderRadius: BorderRadius.circular(20),
-                        borderSide: BorderSide(color: Colors.blue),
-                      ),
-                      errorBorder: OutlineInputBorder(
-                        gapPadding: 3.3,
-                        borderRadius: BorderRadius.circular(20),
-                        borderSide: BorderSide(color: Colors.red),
-                      ),
-                    ),
-                  ),
-                ),
-              ],
+                  errorBorder: OutlineInputBorder(
+                    gapPadding: 3.3,
+                    borderRadius: BorderRadius.circular(20),
+                    borderSide: BorderSide(color: Colors.red),
+                  )),
             ),
-            Row(
-              children: [
-                Flexible(
-                  flex: 5,
-                  child: Visibility(
+            Visibility(
+              visible: _stockable,
+              child: Row(
+                children: [
+                  Flexible(
                     child: TextFormField(
                       enabled: editMode,
-                      controller: _qteColisCotrol,
-                      onTap: () => _qteColisCotrol.selection = TextSelection(baseOffset: 0, extentOffset: _qteColisCotrol.value.text.length),
+                      controller: _stockInitialControl,
+                      onTap: () => _stockInitialControl.selection = TextSelection(baseOffset: 0, extentOffset: _stockInitialControl.value.text.length),
                       keyboardType: TextInputType.number,
                       // validator: (value) {
                       //   if (value.isEmpty) {
@@ -659,11 +570,13 @@ class _AddArticlePageState extends State<AddArticlePage>
                       //   return null;
                       // },
                       decoration: InputDecoration(
-                        labelText: S.current.qte_colis,
+                        labelText: modification
+                            ? S.current.quantit
+                            : S.current.stock_init,
                         labelStyle: GoogleFonts.lato(textStyle: TextStyle(color: Theme.of(context).hintColor),),
                         prefixIcon: Icon(
-                          Icons.shopping_bag_rounded,
-                          color: Colors.blue[700],
+                          Icons.apps,
+                          color: Colors.blue,
                         ),
                         focusedBorder: OutlineInputBorder(
                             borderSide: BorderSide(color: Colors.blue),
@@ -678,6 +591,82 @@ class _AddArticlePageState extends State<AddArticlePage>
                           borderRadius: BorderRadius.circular(20),
                           borderSide: BorderSide(color: Colors.red),
                         ),
+                      ),
+                    ),
+                  ),
+                  Padding(padding: EdgeInsets.all(4)),
+                  Flexible(
+                    child: TextFormField(
+                      enabled: editMode,
+                      controller: _stockMinimumControl,
+                      onTap: () => _stockMinimumControl.selection = TextSelection(baseOffset: 0, extentOffset: _stockMinimumControl.value.text.length),
+                      keyboardType: TextInputType.number,
+                      // validator: (value) {
+                      //   if (value.isEmpty) {
+                      //     return S.current.msg_champ_oblg;
+                      //   }
+                      //   return null;
+                      // },
+                      decoration: InputDecoration(
+                        labelText: S.current.stock_min,
+                        labelStyle: GoogleFonts.lato(textStyle: TextStyle(color: Theme.of(context).hintColor),),
+                        prefixIcon: Icon(
+                          Icons.apps,
+                          color: Colors.blue,
+                        ),
+                        focusedBorder: OutlineInputBorder(
+                            borderSide: BorderSide(color: Colors.blue),
+                            borderRadius: BorderRadius.circular(20)),
+                        enabledBorder: OutlineInputBorder(
+                          gapPadding: 3.3,
+                          borderRadius: BorderRadius.circular(20),
+                          borderSide: BorderSide(color: Colors.blue),
+                        ),
+                        errorBorder: OutlineInputBorder(
+                          gapPadding: 3.3,
+                          borderRadius: BorderRadius.circular(20),
+                          borderSide: BorderSide(color: Colors.red),
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            Row(
+              children: [
+                Flexible(
+                  flex: 5,
+                  child: TextFormField(
+                    enabled: editMode,
+                    controller: _qteColisCotrol,
+                    onTap: () => _qteColisCotrol.selection = TextSelection(baseOffset: 0, extentOffset: _qteColisCotrol.value.text.length),
+                    keyboardType: TextInputType.number,
+                    // validator: (value) {
+                    //   if (value.isEmpty) {
+                    //     return S.current.msg_champ_oblg;
+                    //   }
+                    //   return null;
+                    // },
+                    decoration: InputDecoration(
+                      labelText: S.current.qte_colis,
+                      labelStyle: GoogleFonts.lato(textStyle: TextStyle(color: Theme.of(context).hintColor),),
+                      prefixIcon: Icon(
+                        Icons.shopping_bag_rounded,
+                        color: Colors.blue[700],
+                      ),
+                      focusedBorder: OutlineInputBorder(
+                          borderSide: BorderSide(color: Colors.blue),
+                          borderRadius: BorderRadius.circular(20)),
+                      enabledBorder: OutlineInputBorder(
+                        gapPadding: 3.3,
+                        borderRadius: BorderRadius.circular(20),
+                        borderSide: BorderSide(color: Colors.blue),
+                      ),
+                      errorBorder: OutlineInputBorder(
+                        gapPadding: 3.3,
+                        borderRadius: BorderRadius.circular(20),
+                        borderSide: BorderSide(color: Colors.red),
                       ),
                     ),
                   ),
@@ -726,7 +715,7 @@ class _AddArticlePageState extends State<AddArticlePage>
               ],
             ),
             Visibility(
-              visible: modification && !editMode,
+              visible: (modification && !editMode) && _stockable ,
               child: TextFormField(
                 enabled: false,
                 controller: _colisControl,
@@ -892,7 +881,8 @@ class _AddArticlePageState extends State<AddArticlePage>
                     });
                   }
                       : null,
-                ))
+                )
+            ),
           ],
         ),
       ),
@@ -1442,7 +1432,8 @@ class _AddArticlePageState extends State<AddArticlePage>
     }
 
     (_qteColisCotrol.text != "" )?article.setQteColis(double.parse(_qteColisCotrol.text)):article.setQteColis(1.0);
-    if(_stockInitialControl.text != "" && _qteColisCotrol.text != ""){
+
+    if(_stockInitialControl.text != "" && _qteColisCotrol.text != "" && article.quantite > 0){
       double colis = double.parse(_stockInitialControl.text) /
           double.parse(_qteColisCotrol.text);
       article.setColis(colis);
@@ -1469,7 +1460,7 @@ class _AddArticlePageState extends State<AddArticlePage>
 
     article.setDescription(_descriptionControl.text);
     article.setbloquer(_controlBloquer);
-    article.setStockable(true);
+    article.setStockable(_stockable);
 
     if (_articleImage != null) {
       article

@@ -58,31 +58,30 @@ class _ArticleListItemSelectedState extends State<ArticleListItemSelected> {
                   builder: (BuildContext context) {
                     return addQtedialogue();
                   }).then((val) {
-                    if(widget.pieceOrigin == 'BL' || widget.pieceOrigin == 'FC'){
-
-                      if((widget.article.quantite - widget.article.cmdClient) < widget.article.selectedQuantite){
-
-                        AwesomeDialog(
-                            context: context,
-                            dialogType: DialogType.WARNING,
-                            animType: AnimType.BOTTOMSLIDE,
-                            dismissOnBackKeyPress: false,
-                            dismissOnTouchOutside: false,
-                            title: "",
-                            desc: S.current.msg_qte_select_sup,
-                            btnCancelText: S.current.confirme,
-                            btnCancelOnPress: (){},
-                            btnOkText: S.current.annuler,
-                            btnOkOnPress: (){
-                              setState(() {
-                                widget.article.selectedQuantite = 1 ;
-                              });
-                            }
-                        )..show();
-                        // Helpers.showFlushBar(context, S.current.msg_qte_select_sup);
+                    if(widget.article.stockable){
+                      if(widget.pieceOrigin == 'BL' || widget.pieceOrigin == 'FC'){
+                        if((widget.article.quantite - widget.article.cmdClient) < widget.article.selectedQuantite){
+                          AwesomeDialog(
+                              context: context,
+                              dialogType: DialogType.WARNING,
+                              animType: AnimType.BOTTOMSLIDE,
+                              dismissOnBackKeyPress: false,
+                              dismissOnTouchOutside: false,
+                              title: "",
+                              desc: S.current.msg_qte_select_sup,
+                              btnCancelText: S.current.confirme,
+                              btnCancelOnPress: (){},
+                              btnOkText: S.current.annuler,
+                              btnOkOnPress: (){
+                                setState(() {
+                                  widget.article.selectedQuantite = 1 ;
+                                });
+                              }
+                          )..show();
+                          // Helpers.showFlushBar(context, S.current.msg_qte_select_sup);
+                        }
                       }
                     }
-
                 setState(() {});
               }
               );
@@ -355,7 +354,6 @@ class _ArticleListItemSelectedState extends State<ArticleListItemSelected> {
       return dialog;
     });
   }
-
 
 }
 

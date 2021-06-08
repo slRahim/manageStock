@@ -588,7 +588,11 @@
   "UGX_name" : "Shilling Ugandien",
 
   "msg_change_tarif" : "Voulez-vous changer les tarifs ?",
-  "chargement" : "Chargemeent"
+  "chargement" : "Chargemeent",
+
+  "service" : "Service",
+  "non_stockable" : "Non stockable",
+  "famille_marque" : "Famille / Marque"
 
 
 

@@ -62,11 +62,13 @@ class QueryCtr {
       int famille = filters["Id_Famille"] != null? filters["Id_Famille"] : -1;
       bool stock = filters["outStock"] != null ? filters["outStock"] : false;
       bool bloquer = filters["articleBloquer"] != null ? filters["articleBloquer"] : false;
+      bool nonStockable = filters["nonStockable"] != null ? filters["nonStockable"] : false;
 
       String marqueFilter = marque > 0 ? " AND Id_Marque = $marque" : "";
       String familleFilter = famille > 0 ? " AND Id_Famille = $famille" : "";
       String stockFilter = stock ? " AND (Qte < 1 OR Qte < Qte_Min)" : "";
       String articleBloquerFilter = bloquer ? " AND Bloquer > 0" : " AND Bloquer = 0";
+      String nonStockableFilter = nonStockable ? " AND Stockable < 1" : "" ;
 
       query += " where (Designation like '%${searchTerm??''}%' OR CodeBar like '%${searchTerm??''}%' OR Ref like '%${searchTerm??''}%')";
 
@@ -74,6 +76,7 @@ class QueryCtr {
       query += familleFilter;
       query += stockFilter;
       query += articleBloquerFilter ;
+      query += nonStockableFilter ;
     }
 
 
@@ -599,7 +602,7 @@ class QueryCtr {
 
   Future<int> removeItemFromTable(String tableName , item)async {
     var dbClient = await _databaseHelper.db ;
-    int res = await dbClient.delete(tableName , where: "id=?" , whereArgs: [item.id]);
+    int res = await dbClient.delete(tableName , where: "id = ?" , whereArgs: [item.id]);
 
     return res ;
   }

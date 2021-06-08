@@ -9,6 +9,7 @@ import 'package:gestmob/ui/PiecesFragment.dart';
 import 'package:gestmob/ui/TresorieFragment.dart';
 import 'package:gestmob/ui/dashboard_fragment.dart';
 import 'package:gestmob/ui/rapport_fragment.dart';
+import 'package:gestmob/ui/familleMarqueFragment.dart';
 import 'package:meta/meta.dart';
 import 'package:gestmob/models/HomeItem.dart';
 import 'package:gestmob/ui/purchase_page.dart';
@@ -96,6 +97,10 @@ class HomeCubit extends Cubit<HomeState> {
 
       case drawerItemPurchaseId:
         emit(new FragmentLoaded(PurchasePage()));
+        break;
+
+      case drawerItemFamilleMarqueId:
+        emit(new FragmentLoaded(FamilleMarqueFragment()));
         break;
 
 

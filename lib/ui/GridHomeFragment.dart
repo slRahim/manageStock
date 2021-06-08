@@ -170,6 +170,7 @@ class _GridHomeWidgetState extends State<GridHomeWidget> {
       drawerItemPurchase.title = S.current.abonnement;
       drawerItemVente.title = S.current.vente;
       drawerItemAchat.title = S.current.achat;
+      drawerItemFamilleMarque.title = S.current.famille_marque ;
 
       _appBarTitle = S.current.app_name;
 

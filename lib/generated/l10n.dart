@@ -1485,10 +1485,10 @@ class S {
     );
   }
 
-  /// `In Stock`
+  /// `Storable`
   String get stockable {
     return Intl.message(
-      'In Stock',
+      'Storable',
       name: 'stockable',
       desc: '',
       args: [],
@@ -5550,6 +5550,36 @@ class S {
     return Intl.message(
       'Loading',
       name: 'chargement',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Service`
+  String get service {
+    return Intl.message(
+      'Service',
+      name: 'service',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Not Storable`
+  String get non_stockable {
+    return Intl.message(
+      'Not Storable',
+      name: 'non_stockable',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Family / Brand`
+  String get famille_marque {
+    return Intl.message(
+      'Family / Brand',
+      name: 'famille_marque',
       desc: '',
       args: [],
     );

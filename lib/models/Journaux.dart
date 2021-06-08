@@ -110,7 +110,7 @@ class Journaux{
     this._net_ht = this._prix_ht-((this._prix_ht*piece.remise)/100);
     this._tva = article.tva;
     this._prix_revient = article.pmp ;
-    this.marge = (this._prix_ht - this.prix_revient)*this._qte;
+    this.marge = (this._net_ht - this.prix_revient)*this._qte;
   }
 
   Journaux(this._mov, this._date, this._piece_id,this._piece_type, this._article_id,

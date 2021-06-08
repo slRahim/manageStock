@@ -22,6 +22,115 @@ class Article{
 
   String _designation, _ref, _description, _codeBar;
 
+  int _id, _idFamille,_idMarque;
+
+  double _cmdClient , _colis ,  _prixVente1TTC, _prixVente1, _prixVente2TTC, _prixVente2,
+      _prixVente3TTC, _prixVente3,_qteInit, _qte, _qteMin, _qteColis,
+      _prixAchat, _pmpInit, _pmp, _tva;
+
+  double _selectedQuantite = -1;
+  double _selectedPrice = 0;
+
+  bool _bloquer;
+  bool _stockable ;
+
+  Article.init();
+
+  //constructor with all params
+  Article(
+      this._image, this._designation, this._ref, this._codeBar, this._description,
+      this._idFamille, this._idMarque, this._colis, this._prixVente1TTC,
+      this._prixVente1, this._prixVente2TTC, this._prixVente2, this._prixVente3TTC,
+      this._prixVente3, this._qteInit, this._qte, this._cmdClient ,
+      this._qteMin, this._qteColis, this._prixAchat, this._pmpInit,
+      this._pmp, this._tva, this._bloquer, this._stockable);
+
+  // constructor to convert map to object
+  Article.fromMap(dynamic obj) {
+    this._imageUint8List = Helpers.getUint8ListFromByteString(obj["BytesImageString"]);
+
+    this._id = obj["id"];
+    this._designation = obj["Designation"];
+    this._ref = obj["Ref"].toString();
+    this._idFamille = obj["Id_Famille"];
+    this._idMarque = obj["Id_Marque"];
+    this._colis = obj["Colis"];
+    this._codeBar = obj["CodeBar"];
+    this._prixVente1TTC = obj["PrixVente1TTC"];
+    this._prixVente1 = obj["PrixVente1"];
+    this._prixVente2TTC = obj["PrixVente2TTC"];
+    this._prixVente2 = obj["PrixVente2"];
+    this._prixVente3TTC = obj["PrixVente3TTC"];
+    this._prixVente3 = obj["PrixVente3"];
+    this._qteInit = obj["Qte_init"];
+    this._qte = obj["Qte"];
+    this._qteMin = obj["Qte_Min"];
+    this._qteColis = obj["Qte_Colis"];
+    this._cmdClient = obj["Cmd_client"];
+    this._prixAchat = obj["PrixAchat"];
+    this._pmpInit = obj["PMP_init"];
+    this._pmp = obj["PMP"];
+    this._tva = obj["TVA"];
+    this._bloquer = obj["Bloquer"] == 1? true : false;
+    this._stockable = obj["Stockable"] == 1? true : false;
+    this._description = obj["Description"];
+  }
+
+  //conver an object to map for persistance
+  Article.fromMapJournaux(dynamic obj) {
+    this._imageUint8List = Helpers.getUint8ListFromByteString(obj["BytesImageString"]);
+
+    this._id = obj["Article_id"];
+    this._designation = obj["Designation"];
+    this._ref = obj["Ref"].toString();
+    this._qte = obj["qte_article"] ;
+    this._cmdClient = obj["Cmd_client"];
+    this._selectedQuantite =(obj["Qte"] > 0)? obj["Qte"] : obj["Qte"] * -1;
+    this._selectedPrice = obj["Prix_ht"];
+    this._tva = obj["Tva"];
+    this._pmp = obj["Prix_revient"];
+    this._codeBar = obj["CodeBar"];
+    this._idFamille = obj["Id_Famille"];
+    this._idMarque = obj["Id_Marque"];
+    this.stockable = obj["Stockable"];
+  }
+
+  //convert an object to a map for persistance
+  Map<String, dynamic> toMap() {
+    var map = new Map<String, dynamic>();
+
+    if(_imageUint8List != null && _imageUint8List.isNotEmpty){
+      map["BytesImageString"] = Helpers.getEncodedByteStringFromUint8List(_imageUint8List);
+    }
+
+    map["Designation"] = this._designation;
+    map["Ref"] = this._ref;
+    map["CodeBar"] = this._codeBar;
+    map["Id_Famille"] = this._idFamille;
+    map["Id_Marque"] = this._idMarque;
+    map["Colis"] = this._colis;
+    map["PrixVente1TTC"] = this._prixVente1TTC;
+    map["PrixVente1"] = this._prixVente1;
+    map["PrixVente2TTC"] = this._prixVente2TTC;
+    map["PrixVente2"] = this._prixVente2;
+    map["PrixVente3TTC"] = this._prixVente3TTC;
+    map["PrixVente3"] = this._prixVente3;
+    map["Qte_init"] = this._qteInit;
+    map["Qte"] = this._qte;
+    map["Qte_Min"] = this._qteMin;
+    map["Qte_Colis"] = this._qteColis;
+    map["Cmd_client"] = this._cmdClient ;
+    map["PrixAchat"] = this._prixAchat;
+    map["PMP_init"] = this._pmpInit;
+    map["PMP"] = this._pmp;
+    map["TVA"] = this._tva;
+    map["Bloquer"] = this._bloquer ? 1 : 0;
+    map["Stockable"] = this._stockable? 1 : 0;
+    map["Description"] = this._description;
+
+    return map;
+  }
+
   get codeBar => _codeBar;
 
   set codeBar(value) {
@@ -34,15 +143,6 @@ class Article{
     _description = value;
   }
 
-  int _id, _idFamille,_idMarque;
-
-  double _cmdClient , _colis ,  _prixVente1TTC, _prixVente1, _prixVente2TTC, _prixVente2,
-         _prixVente3TTC, _prixVente3,_qteInit, _qte, _qteMin, _qteColis,
-         _prixAchat, _pmpInit, _pmp, _tva;
-
-  double _selectedQuantite = -1;
-  double _selectedPrice = 0;
-
   double get selectedPrice => _selectedPrice;
 
   set selectedPrice(double value) {
@@ -54,16 +154,12 @@ class Article{
   }
 
   double get selectedQuantite => _selectedQuantite;
-  bool _bloquer;
-  bool _stockable;
 
   bool get stockable => _stockable;
 
   set stockable(bool value) {
     _stockable = value;
   }
-
-  Article.init();
 
   String get designation => _designation;
   String get ref => _ref;
@@ -192,99 +288,6 @@ class Article{
     this._imageUint8List= await Helpers.getUint8ListFromFile(img);
   }
 
-  // constructor to convert map to object
-  Article.fromMap(dynamic obj) {
-    this._imageUint8List = Helpers.getUint8ListFromByteString(obj["BytesImageString"]);
-
-    this._id = obj["id"];
-    this._designation = obj["Designation"];
-    this._ref = obj["Ref"].toString();
-    this._idFamille = obj["Id_Famille"];
-    this._idMarque = obj["Id_Marque"];
-    this._colis = obj["Colis"];
-    this._codeBar = obj["CodeBar"];
-    this._prixVente1TTC = obj["PrixVente1TTC"];
-    this._prixVente1 = obj["PrixVente1"];
-    this._prixVente2TTC = obj["PrixVente2TTC"];
-    this._prixVente2 = obj["PrixVente2"];
-    this._prixVente3TTC = obj["PrixVente3TTC"];
-    this._prixVente3 = obj["PrixVente3"];
-    this._qteInit = obj["Qte_init"];
-    this._qte = obj["Qte"];
-    this._qteMin = obj["Qte_Min"];
-    this._qteColis = obj["Qte_Colis"];
-    this._cmdClient = obj["Cmd_client"];
-    this._prixAchat = obj["PrixAchat"];
-    this._pmpInit = obj["PMP_init"];
-    this._pmp = obj["PMP"];
-    this._tva = obj["TVA"];
-    this._bloquer = obj["Bloquer"] == 1? true : false;
-    this._stockable = obj["Stockable"] == 1? true : false;
-    this._description = obj["Description"];
-  }
-
-  //conver an object to map for persistance
-  Article.fromMapJournaux(dynamic obj) {
-    this._imageUint8List = Helpers.getUint8ListFromByteString(obj["BytesImageString"]);
-
-    this._id = obj["Article_id"];
-    this._designation = obj["Designation"];
-    this._ref = obj["Ref"].toString();
-    this._qte = obj["qte_article"] ;
-    this._cmdClient = obj["Cmd_client"];
-    this._selectedQuantite =(obj["Qte"] > 0)? obj["Qte"] : obj["Qte"] * -1;
-    this._selectedPrice = obj["Prix_ht"];
-    this._tva = obj["Tva"];
-    this._pmp = obj["Prix_revient"];
-    this._codeBar = obj["CodeBar"];
-    this._idFamille = obj["Id_Famille"];
-    this._idMarque = obj["Id_Marque"];
-  }
-
-  //convert an object to a map for persistance
-  Map<String, dynamic> toMap() {
-    var map = new Map<String, dynamic>();
-
-    if(_imageUint8List != null && _imageUint8List.isNotEmpty){
-      map["BytesImageString"] = Helpers.getEncodedByteStringFromUint8List(_imageUint8List);
-    }
-
-    map["Designation"] = this._designation;
-    map["Ref"] = this._ref;
-    map["CodeBar"] = this._codeBar;
-    map["Id_Famille"] = this._idFamille;
-    map["Id_Marque"] = this._idMarque;
-    map["Colis"] = this._colis;
-    map["PrixVente1TTC"] = this._prixVente1TTC;
-    map["PrixVente1"] = this._prixVente1;
-    map["PrixVente2TTC"] = this._prixVente2TTC;
-    map["PrixVente2"] = this._prixVente2;
-    map["PrixVente3TTC"] = this._prixVente3TTC;
-    map["PrixVente3"] = this._prixVente3;
-    map["Qte_init"] = this._qteInit;
-    map["Qte"] = this._qte;
-    map["Qte_Min"] = this._qteMin;
-    map["Qte_Colis"] = this._qteColis;
-    map["Cmd_client"] = this._cmdClient ;
-    map["PrixAchat"] = this._prixAchat;
-    map["PMP_init"] = this._pmpInit;
-    map["PMP"] = this._pmp;
-    map["TVA"] = this._tva;
-    map["Bloquer"] = this._bloquer ? 1 : 0;
-    map["Stockable"] = this._stockable? 1 : 0;
-    map["Description"] = this._description;
-
-    return map;
-  }
-
-  //constructor with all params
-  Article(
-      this._image, this._designation, this._ref, this._codeBar, this._description,
-      this._idFamille, this._idMarque, this._colis, this._prixVente1TTC,
-      this._prixVente1, this._prixVente2TTC, this._prixVente2, this._prixVente3TTC,
-      this._prixVente3, this._qteInit, this._qte, this._cmdClient ,
-      this._qteMin, this._qteColis, this._prixAchat, this._pmpInit,
-      this._pmp, this._tva, this._bloquer, this._stockable);
 
   //return article object in string format
   @override

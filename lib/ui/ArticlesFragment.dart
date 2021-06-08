@@ -62,9 +62,13 @@ class _ArticlesFragmentState extends State<ArticlesFragment> {
   ArticleFamille _selectedFamille;
   bool _filterOutStock = false;
 
+
   int _savedSelectedMarque = 0;
   int _savedSelectedFamille = 0;
   bool _savedFilterOutStock = false;
+
+  bool _filterNonStockable = false;
+  bool _savedFilterNonStockable = false;
 
   bool _filterArtilceBloquer = false ;
   bool _savedFilterArticleBloquer = false ;
@@ -110,6 +114,7 @@ class _ArticlesFragmentState extends State<ArticlesFragment> {
     filter["Id_Famille"] = _savedSelectedFamille;
     filter["outStock"] = _savedFilterOutStock;
     filter["articleBloquer"] = _savedFilterArticleBloquer ;
+    filter["nonStockable"] = _savedFilterNonStockable ;
   }
 
   Future<Widget> futureInitState() async {
@@ -126,6 +131,7 @@ class _ArticlesFragmentState extends State<ArticlesFragment> {
     _selectedFamille = _familleItems[_savedSelectedFamille];
     _filterOutStock = _savedFilterOutStock;
     _filterArtilceBloquer = _savedFilterArticleBloquer ;
+    _filterNonStockable = _savedFilterNonStockable ;
 
     final tile = StatefulBuilder(builder: (context, StateSetter _setState) {
       return Builder(
@@ -140,7 +146,8 @@ class _ArticlesFragmentState extends State<ArticlesFragment> {
               trailing: famillesDropDown(_setState),
             ),
             stockCheckBox(_setState),
-            articleBloquer(_setState)
+            articleBloquer(_setState),
+            showNonStockable(_setState)
           ],
         ),
       );
@@ -235,6 +242,19 @@ class _ArticlesFragmentState extends State<ArticlesFragment> {
     return SizedBox();
   }
 
+  Widget showNonStockable(StateSetter _setState) {
+    return CheckboxListTile(
+      title: Text(S.current.non_stockable , style: GoogleFonts.lato(),),
+      value: _filterNonStockable,
+      onChanged: (bool value){
+        _setState(() {
+          _filterNonStockable = value;
+        });
+      },
+    );
+
+  }
+
   //********************************************listing des pieces**********************************************************************
   Widget getAppBar(setState) {
     if (_selectedItems.length > 0) {
@@ -283,6 +303,7 @@ class _ArticlesFragmentState extends State<ArticlesFragment> {
                       _familleItems.indexOf(_selectedFamille);
                   _savedFilterOutStock = _filterOutStock;
                   _savedFilterArticleBloquer = _filterArtilceBloquer ;
+                  _savedFilterNonStockable = _filterNonStockable ;
 
                   fillFilter(_filterMap);
 
@@ -304,8 +325,7 @@ class _ArticlesFragmentState extends State<ArticlesFragment> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        floatingActionButton:(widget.onConfirmSelectedItems == null)
-            ? CircularMenu(
+        floatingActionButton: CircularMenu(
             alignment: (Helpers.isDirectionRTL(context))
                 ? Alignment.bottomLeft
                 : Alignment.bottomRight,
@@ -347,10 +367,6 @@ class _ArticlesFragmentState extends State<ArticlesFragment> {
                 },
               )
             ]
-        )
-            :FloatingActionButton(
-           child: Icon(MdiIcons.barcode),
-          onPressed : scanBarCode,
         ),
         appBar: getAppBar(setState),
         body: ItemsSliverList(

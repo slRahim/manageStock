@@ -153,9 +153,9 @@
   "referance" : "رمز المنتج",
   "msg_scan_barcode": "الضغظ نقؤتين لمسح البار كود",
   "prix_achat": "ثمن الشراء",
-  "stockable" : "مخزن",
+  "stockable" : "قابل للتخزين",
   "pmp": "PMP",
-  "init" : "Init",
+  "init" : "Initial",
   "quantit": "الكمية",
   "stock_init" : "المخزون الإبتدائي",
   "stock_min": "الكمية الدنيا",
@@ -589,7 +589,11 @@
   "UGX_name" : "شلن أوغندي",
 
   "msg_change_tarif" : "هل تريد تغيير الأسعار؟",
-  "chargement" : "تحميل"
+  "chargement" : "تحميل",
+
+  "service" : "خدمة",
+  "non_stockable" : "غير قابل للتخزين",
+  "famille_marque" : "الفئة / العلامة التجارية"
 
 
 

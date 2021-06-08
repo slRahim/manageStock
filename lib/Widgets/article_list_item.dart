@@ -150,58 +150,62 @@ class _ArticleListItemState extends State<ArticleListItem> {
                           builder: (BuildContext context) {
                             return addQtedialogue();
                           }).then((val) {
-                        if (widget.pieceOrigin == 'BL' ||
-                            widget.pieceOrigin == 'FC') {
-                          if ((widget.article.quantite -
-                                  widget.article.cmdClient) <
-                              widget.article.selectedQuantite) {
-                            AwesomeDialog(
-                                context: context,
-                                dialogType: DialogType.WARNING,
-                                dismissOnBackKeyPress: false,
-                                dismissOnTouchOutside: false,
-                                animType: AnimType.BOTTOMSLIDE,
-                                title: "",
-                                desc: S.current.msg_qte_select_sup,
-                                btnCancelText: S.current.confirme,
-                                btnCancelOnPress: () {},
-                                btnOkText: S.current.annuler,
-                                btnOkOnPress: () {
-                                  setState(() {
-                                    widget.article.selectedQuantite = 1;
-                                  });
-                                })
-                              ..show();
-                            // Helpers.showToast(S.current.msg_qte_select_sup);
-                          }
-                        }
+                            if(widget.article.stockable){
+                              if (widget.pieceOrigin == 'BL' ||
+                                  widget.pieceOrigin == 'FC') {
+                                if ((widget.article.quantite -
+                                    widget.article.cmdClient) <
+                                    widget.article.selectedQuantite) {
+                                  AwesomeDialog(
+                                      context: context,
+                                      dialogType: DialogType.WARNING,
+                                      dismissOnBackKeyPress: false,
+                                      dismissOnTouchOutside: false,
+                                      animType: AnimType.BOTTOMSLIDE,
+                                      title: "",
+                                      desc: S.current.msg_qte_select_sup,
+                                      btnCancelText: S.current.confirme,
+                                      btnCancelOnPress: () {},
+                                      btnOkText: S.current.annuler,
+                                      btnOkOnPress: () {
+                                        setState(() {
+                                          widget.article.selectedQuantite = 1;
+                                        });
+                                      })
+                                    ..show();
+                                  // Helpers.showToast(S.current.msg_qte_select_sup);
+                                }
+                              }
+                            }
 
                         setState(() {});
                       });
                     } else {
                       selectThisItem();
-                      if (widget.pieceOrigin == 'BL' ||
-                          widget.pieceOrigin == 'FC') {
-                        if ((widget.article.quantite -
-                                widget.article.cmdClient) <
-                            widget.article.selectedQuantite) {
-                          // AwesomeDialog(
-                          //     context: context,
-                          //     dialogType: DialogType.WARNING,
-                          //     animType: AnimType.BOTTOMSLIDE,
-                          //     title: "",
-                          //     desc: S.current.msg_qte_zero,
-                          //     btnCancelText: S.current.confirme,
-                          //     btnCancelOnPress: () {},
-                          //     btnOkText: S.current.annuler,
-                          //     btnOkOnPress: () {
-                          //       setState(() {
-                          //         widget.article.selectedQuantite = 0;
-                          //       });
-                          //     })
-                          //   ..show();
+                      if(widget.article.stockable){
+                        if (widget.pieceOrigin == 'BL' ||
+                            widget.pieceOrigin == 'FC') {
+                          if ((widget.article.quantite -
+                              widget.article.cmdClient) <
+                              widget.article.selectedQuantite) {
+                            // AwesomeDialog(
+                            //     context: context,
+                            //     dialogType: DialogType.WARNING,
+                            //     animType: AnimType.BOTTOMSLIDE,
+                            //     title: "",
+                            //     desc: S.current.msg_qte_zero,
+                            //     btnCancelText: S.current.confirme,
+                            //     btnCancelOnPress: () {},
+                            //     btnOkText: S.current.annuler,
+                            //     btnOkOnPress: () {
+                            //       setState(() {
+                            //         widget.article.selectedQuantite = 0;
+                            //       });
+                            //     })
+                            //   ..show();
 
-                          Helpers.showToast(S.current.msg_qte_zero);
+                            Helpers.showToast(S.current.msg_qte_zero);
+                          }
                         }
                       }
                     }
@@ -356,7 +360,7 @@ class _ArticleListItemState extends State<ArticleListItem> {
                           SizedBox(
                             width: 3,
                           ),
-                          Text(
+                          (widget.article.stockable)?Text(
                             "${(widget.article.quantite - widget.article.cmdClient).toString()}",
                             style: GoogleFonts.lato(
                                 textStyle: TextStyle(
@@ -365,6 +369,12 @@ class _ArticleListItemState extends State<ArticleListItem> {
                                         ? Colors.redAccent
                                         : Theme.of(context).primaryColorDark,
                                     fontSize: 16.0)),
+                          ):Text(
+                            S.current.service,
+                            style: GoogleFonts.lato(
+                                textStyle: TextStyle(
+                                    color: Theme.of(context).primaryColorDark,
+                                    fontSize: 12.0)),
                           ),
                         ],
                       ),

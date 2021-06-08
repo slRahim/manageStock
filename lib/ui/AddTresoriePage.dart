@@ -537,7 +537,7 @@ class _AddTresoriePageState extends State<AddTresoriePage>
                   ),
                 ],
               ),
-              SizedBox(height: 15),
+              SizedBox(height: 5),
               Visibility(
                 visible: (_selectedCategorie.id == 2 ||
                     _selectedCategorie.id == 3 ||
@@ -562,42 +562,38 @@ class _AddTresoriePageState extends State<AddTresoriePage>
                                     })
                               ],
                             ))
-                        : Container(
-                            margin:
-                                EdgeInsets.symmetric(vertical: 20, horizontal: 20),
-                            padding:
-                                EdgeInsets.symmetric(vertical: 10, horizontal: 10),
-                            decoration: BoxDecoration(
-                                color: Colors.green[300],
-                                borderRadius: BorderRadius.circular(10)),
-                            child: ListTile(
-                              title: Text(
-                                S.current.msg_credit_total,
-                                style: GoogleFonts.lato(
-                                    textStyle: TextStyle(
-                                  fontSize: 16,fontWeight: FontWeight.bold
-                                )),
+                        : Card(
+                          color: Theme.of(context).backgroundColor,
+                          child: Container(
+                              margin:
+                                  EdgeInsets.symmetric(vertical: 10, horizontal: 10),
+                              decoration: BoxDecoration(
+                                  color: Theme.of(context).backgroundColor,
+                                  borderRadius: BorderRadius.circular(5)
                               ),
-                              leading: Container(
-                                child: Center(
-                                  child: Text("TR",style: TextStyle(color: Colors.black),),
+                              child: ListTile(
+                                title: Text(
+                                  S.current.msg_credit_total,
+                                  style: GoogleFonts.lato(
+                                      textStyle: TextStyle(
+                                    fontSize: 14,fontWeight: FontWeight.bold ,color: Colors.green
+                                  )),
                                 ),
-                                height: 50,
-                                width: 50,
-                                decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(50),
-                                  border: Border.all(
-                                    width: 3,
-                                    color: Colors.blue,
+                                leading: CircleAvatar(
+                                  backgroundColor: Colors.blue,
+                                  radius: 25,
+                                  child: CircleAvatar(
+                                    radius: 22,
+                                    backgroundColor: Colors.white,
+                                    child: Text("TR",style: TextStyle(color: Colors.black),),
                                   ),
-                                  color: Colors.white,
-                                ),
+                                )
                               ),
                             ),
-                          )),
+                        )),
               ),
               SingleChildScrollView(
-                padding: const EdgeInsets.fromLTRB(15, 10, 15, 15),
+                padding: const EdgeInsets.fromLTRB(15, 10, 15, 10),
                 child: Form(
                   key : _formKey,
                   child: Wrap(

@@ -211,6 +211,7 @@ class _TresorieListItemState extends State<TresorieListItem> {
       btnOkOnPress: () async {
         int res = await _queryCtr.removeItemFromTable(
             DbTablesNames.tresorie, widget.tresorie);
+
         var message = "";
         if (res > 0) {
           message = S.current.msg_supp_ok;

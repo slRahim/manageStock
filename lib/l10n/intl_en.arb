@@ -152,7 +152,7 @@
   "referance" : "Reference",
   "msg_scan_barcode": "Double tap to scan barcode",
   "prix_achat": "Buying price",
-  "stockable" : "In Stock",
+  "stockable" : "Storable",
   "pmp": "PMP",
   "init" : "Initial",
   "quantit": "Quantity",
@@ -589,7 +589,11 @@
   "UGX_name" : "Ugandan shilling",
 
   "msg_change_tarif" : "Do you want to change the rates?",
-  "chargement" : "Loading"
+  "chargement" : "Loading",
+
+  "service" : "Service",
+  "non_stockable" : "Not Storable",
+  "famille_marque" : "Family / Brand"
 
 
 }

@@ -247,7 +247,7 @@ class SqlLiteDatabaseHelper {
         PrixVente3TTC Double, 
         Bloquer integer, 
         Description TEXT, 
-        Stockable
+        Stockable integer
       )""");
 
   }
@@ -1270,17 +1270,20 @@ class SqlLiteDatabaseHelper {
         BEFORE DELETE ON Tresories 
         FOR EACH ROW 
         BEGIN 
+           DELETE FROM ReglementTresorie WHERE Tresorie_id = OLD.id ;
+           
            UPDATE Tiers
                SET Chiffre_affaires = IFNULL((Select Sum(Net_a_payer) From Pieces where Tier_id = OLD.Tier_id AND Mov = 1 AND Piece <> "CC"),0)
            WHERE id = OLD.Tier_id; 
-           UPDATE Tiers
-             SET Regler = IFNULL((SELECT (SUM(Montant)-OLD.Montant) FROM Tresories WHERE Tier_id = OLD.Tier_id AND Mov = 1),0)
-           WHERE id = OLD.Tier_id ;  
+           
+          UPDATE Tiers
+              SET Regler = IFNULL((SELECT SUM(Montant)-OLD.Montant FROM Tresories WHERE Tier_id = OLD.Tier_id AND Mov = 1),0)
+            WHERE id = OLD.Tier_id ; 
+    
            UPDATE Tiers
              SET  Credit = (Solde_depart + Chiffre_affaires) - Regler 
            WHERE id = OLD.Tier_id;
            
-           DELETE FROM ReglementTresorie WHERE Tresorie_id = OLD.id ;
         END;
       ''');
 
