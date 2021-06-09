@@ -58,6 +58,21 @@ class SliverListDataSource extends PagedDataSource<int, Object> {
       case ItemsListTypes.tresorieList:
         return _queryCtr.getAllTresories(offset, _pageSize, searchTerm: _searchTerm, filters: filterMap);
         break;
+      case ItemsListTypes.familleArticleList:
+        return _queryCtr.getArticleFamilles(offset, _pageSize, searchTerm: _searchTerm);
+        break;
+      case ItemsListTypes.marqueArticleList:
+        return _queryCtr.getArticleMarques(offset, _pageSize, searchTerm: _searchTerm);
+        break;
+      case ItemsListTypes.tvaArticleList:
+        return _queryCtr.getArticleTva(offset, _pageSize, searchTerm: _searchTerm);
+        break;
+      case ItemsListTypes.familleTiersList:
+        return _queryCtr.getTiersFamille(offset, _pageSize, searchTerm: _searchTerm);
+        break;
+      case ItemsListTypes.chargeList:
+        return _queryCtr.getChargeTresorie(offset, _pageSize, searchTerm: _searchTerm);
+        break;
       default:
         return null;
     }

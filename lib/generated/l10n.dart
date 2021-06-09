@@ -5575,10 +5575,10 @@ class S {
     );
   }
 
-  /// `Family / Brand`
+  /// `Tables`
   String get famille_marque {
     return Intl.message(
-      'Family / Brand',
+      'Tables',
       name: 'famille_marque',
       desc: '',
       args: [],

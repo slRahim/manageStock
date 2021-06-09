@@ -1,6 +1,7 @@
 import 'dart:io';
 import 'dart:typed_data';
 import 'dart:ui';
+import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:barcode_scan/barcode_scan.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_osm_plugin/flutter_osm_plugin.dart';
@@ -1310,13 +1311,13 @@ class _AddTierPageState extends State<AddTierPage>
             });
           },
           onAddPressed: () async {
-            await showDialog(
-                context: context,
-                builder: (BuildContext context) {
-                  return addFamilledialogue();
-                }).then((val) {
-              setState(() {});
-            });
+            AwesomeDialog(
+              context: context,
+              dialogType: DialogType.NO_HEADER,
+              animType: AnimType.BOTTOMSLIDE,
+              title: S.current.supp,
+              body: addFamilledialogue(),
+            )..show().then((value) => setState(() {}));
           },
         ),
         Padding(
@@ -1344,107 +1345,83 @@ class _AddTierPageState extends State<AddTierPage>
     _famille = TiersFamille.init();
     return StatefulBuilder(builder: (context, StateSetter setState) {
       return Builder(
-          builder: (context) => Dialog(
-                child: SingleChildScrollView(
-                  child: Column(children: [
-                    Padding(
-                      padding: const EdgeInsets.all(20),
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Center(
-                              child: Padding(
-                            padding: const EdgeInsets.only(bottom: 20),
-                            child: Text(
-                              "${S.current.ajouter} ${S.current.famile}",
-                              style: GoogleFonts.lato(
-                                  textStyle: TextStyle(
-                                fontSize: 18,
-                                fontWeight: FontWeight.bold,
-                              )),
-                            ),
-                          )),
-                          Padding(
-                            padding:
-                                EdgeInsetsDirectional.fromSTEB(5, 20, 5, 20),
-                            child: TextField(
-                              controller: _libelleFamilleControl,
-                              keyboardType: TextInputType.text,
-                              decoration: InputDecoration(
-                                prefixIcon: Icon(
-                                  Icons.view_agenda,
-                                  color: Colors.orange[900],
-                                ),
-                                focusedBorder: OutlineInputBorder(
-                                    borderSide:
-                                        BorderSide(color: Colors.orange[900]),
-                                    borderRadius: BorderRadius.circular(20)),
-                                contentPadding: EdgeInsets.only(left: 10),
-                                labelStyle: GoogleFonts.lato(
-                                  textStyle:
-                                      TextStyle(color: Colors.orange[900]),
-                                ),
-                                enabledBorder: OutlineInputBorder(
-                                  gapPadding: 3.3,
-                                  borderRadius: BorderRadius.circular(20),
-                                  borderSide:
-                                      BorderSide(color: Colors.orange[900]),
-                                ),
-                              ),
-                            ),
-                          ),
-                          SizedBox(
-                            width: 320.0,
-                            child: Padding(
-                              padding:
-                                  EdgeInsetsDirectional.only(start: 0, end: 0),
-                              child: RaisedButton(
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(18.0),
-                                ),
-                                onPressed: () async {
-                                  setState(() {
-                                    _famille.libelle =
-                                        _libelleFamilleControl.text;
-                                    _libelleFamilleControl.text = "";
-                                  });
-                                  await addFamilleIfNotExist(_famille);
-
-                                  Navigator.pop(context);
-                                  final snackBar = SnackBar(
-                                    content: Text(
-                                      S.current.msg_fam_ajout,
-                                      style: GoogleFonts.lato(
-                                          textStyle: TextStyle(
-                                              color: Colors.white,
-                                              fontSize: 15,
-                                              fontWeight: FontWeight.w500)),
-                                    ),
-                                    backgroundColor: Colors.red,
-                                    duration: Duration(seconds: 1),
-                                  );
-                                  _scaffoldKey.currentState
-                                      .showSnackBar(snackBar);
-                                  print(_famille.libelle);
-                                },
-                                child: Text(
-                                  S.current.ajouter,
-                                  style: GoogleFonts.lato(
-                                      textStyle: TextStyle(
-                                          color: Colors.white,
-                                          fontWeight: FontWeight.bold)),
-                                ),
-                                color: Colors.red,
-                              ),
-                            ),
-                          )
-                        ],
+          builder: (context) => SingleChildScrollView(
+            padding: EdgeInsets.all(10),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                Text(
+                  "${S.current.ajouter} ${S.current.famile}",
+                  style: GoogleFonts.lato(
+                      textStyle: TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.bold,
+                      )),
+                ),
+                Padding(
+                  padding:
+                  EdgeInsetsDirectional.fromSTEB(5, 20, 5, 20),
+                  child: TextField(
+                    controller: _libelleFamilleControl,
+                    keyboardType: TextInputType.text,
+                    decoration: InputDecoration(
+                      prefixIcon: Icon(
+                        Icons.view_agenda,
+                        color: Colors.blue,
+                      ),
+                      focusedBorder: OutlineInputBorder(
+                          borderSide:
+                          BorderSide(color: Colors.blue),
+                          borderRadius: BorderRadius.circular(20)),
+                      contentPadding: EdgeInsets.only(left: 10),
+                      labelText: S.current.famile,
+                      labelStyle: GoogleFonts.lato(
+                        textStyle:
+                        TextStyle(color: Theme.of(context).hintColor),
+                      ),
+                      enabledBorder: OutlineInputBorder(
+                        gapPadding: 3.3,
+                        borderRadius: BorderRadius.circular(20),
+                        borderSide:
+                        BorderSide(color: Colors.blue),
                       ),
                     ),
-                  ]),
+                  ),
                 ),
-              ));
+                SizedBox(
+                  width: 150.0,
+                  child: Padding(
+                    padding:
+                    EdgeInsetsDirectional.only(start: 0, end: 0),
+                    child: RaisedButton(
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(18.0),
+                      ),
+                      onPressed: () async {
+                        setState(() {
+                          _famille.libelle =
+                              _libelleFamilleControl.text;
+                          _libelleFamilleControl.text = "";
+                        });
+                        await addFamilleIfNotExist(_famille);
+                        Navigator.pop(context);
+                      },
+                      child: Text(
+                        "+ ${S.current.ajouter}",
+                        style: GoogleFonts.lato(
+                            textStyle: TextStyle(
+                              color: Colors.white,
+                              fontWeight: FontWeight.bold, fontSize: 15 ,
+                            )),
+                      ),
+                      color: Colors.green,
+                    ),
+                  ),
+                )
+              ],
+            ),
+          ));
     });
   }
 

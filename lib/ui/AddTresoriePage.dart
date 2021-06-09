@@ -2,6 +2,7 @@ import 'dart:io';
 import 'dart:typed_data';
 import 'dart:ui';
 
+import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:expandable_bottom_bar/expandable_bottom_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_icons/flutter_icons.dart';
@@ -525,13 +526,13 @@ class _AddTresoriePageState extends State<AddTresoriePage>
                         });
                       },
                       onAddPressed: () async {
-                        await showDialog(
-                            context: context,
-                            builder: (BuildContext context) {
-                              return addTresoreCategorie();
-                            }).then((val) {
-                          setState(() {});
-                        });
+                        AwesomeDialog(
+                          context: context,
+                          dialogType: DialogType.NO_HEADER,
+                          animType: AnimType.BOTTOMSLIDE,
+                          title: S.current.supp,
+                          body: addTresoreCategorie(),
+                        )..show().then((value) => setState(() {}));
                       },
                     ),
                   ),
@@ -658,13 +659,13 @@ class _AddTresoriePageState extends State<AddTresoriePage>
                             });
                           },
                           onAddPressed: () async {
-                            await showDialog(
-                                context: context,
-                                builder: (BuildContext context) {
-                                  return addCharge();
-                                }).then((val) {
-                              setState(() {});
-                            });
+                            AwesomeDialog(
+                              context: context,
+                              dialogType: DialogType.NO_HEADER,
+                              animType: AnimType.BOTTOMSLIDE,
+                              title: S.current.supp,
+                              body: addCharge(),
+                            )..show().then((value) => setState(() {}));
                           },
                         ),
                       ),
@@ -745,13 +746,13 @@ class _AddTresoriePageState extends State<AddTresoriePage>
                           });
                         },
                         onAddPressed: () async {
-                          await showDialog(
-                              context: context,
-                              builder: (BuildContext context) {
-                                return addCompte();
-                              }).then((val) {
-                            setState(() {});
-                          });
+                          AwesomeDialog(
+                            context: context,
+                            dialogType: DialogType.NO_HEADER,
+                            animType: AnimType.BOTTOMSLIDE,
+                            title: S.current.supp,
+                            body: addCompte(),
+                          )..show().then((value) => setState(() {}));
                         },
                       ),
                       TextFormField(
@@ -876,95 +877,88 @@ class _AddTresoriePageState extends State<AddTresoriePage>
     var _formKey = GlobalKey<FormState>() ;
     return StatefulBuilder(builder: (context, StateSetter setState) {
       return Builder(
-          builder: (context) => Dialog(
-                //this right here
-                child: SingleChildScrollView(
-                  child: Container(
-                    height: 250,
-                    padding: EdgeInsets.all(10),
-                    child: Form(
-                      key: _formKey,
-                      child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: [
-                            Padding(
-                              padding: EdgeInsets.only(
-                                  left: 5, right: 5, bottom: 20, top: 20),
-                              child: Text(
-                                "${S.current.ajouter} ${S.current.categorie}:",
-                                style: GoogleFonts.lato(textStyle: TextStyle(
-                                    fontSize: 18, color: Colors.redAccent , fontWeight: FontWeight.bold)),
-                              ),
-                            ),
-                            Padding(
-                              padding: EdgeInsets.only(
-                                  left: 5, right: 5, bottom: 20, top: 20),
-                              child: TextFormField(
-                                controller: _libelleCategorieControl,
-                                keyboardType: TextInputType.text,
-                                validator: (value) {
-                                  if (value.isEmpty) {
-                                    return S.current.msg_champ_oblg;
-                                  }
-                                  return null;
-                                },
-                                decoration: InputDecoration(
-                                  prefixIcon: Icon(
-                                    Icons.view_agenda,
-                                    color: Colors.orange[900],
-                                  ),
-                                  focusedBorder: OutlineInputBorder(
-                                      borderSide:
-                                          BorderSide(color: Colors.orange[900]),
-                                      borderRadius: BorderRadius.circular(20)),
-                                  contentPadding: EdgeInsets.only(left: 10),
-                                  labelText: S.current.categorie,
-                                  labelStyle: GoogleFonts.lato(textStyle: TextStyle(color: Colors.orange[900])),
-                                  enabledBorder: OutlineInputBorder(
-                                    gapPadding: 3.3,
-                                    borderRadius: BorderRadius.circular(20),
-                                    borderSide:
-                                        BorderSide(color: Colors.orange[900]),
-                                  ),
-                                ),
-                              ),
-                            ),
-                            SizedBox(
-                              width: 320.0,
-                              child: Padding(
-                                padding: EdgeInsets.only(right: 0, left: 0),
-                                child: RaisedButton(
-                                  shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(18.0),
-                                  ),
-                                  onPressed: () async {
-                                    if(_formKey.currentState.validate()){
-                                      setState(() {
-                                        _categorieTresorie.libelle =
-                                            _libelleCategorieControl.text;
-                                        _libelleCategorieControl.text = "";
-                                      });
-                                      await addTresoreCategorieIfNotExist(
-                                          _categorieTresorie);
-                                      Navigator.pop(context);
-                                      print(_categorieTresorie.libelle);
-                                    }
-                                  },
-                                  child: Text(
-                                    S.current.ajouter,
-                                    style: TextStyle(color: Colors.white),
-                                  ),
-                                  color: Colors.red,
-                                ),
-                              ),
-                            )
-                          ],
+          builder: (context) => SingleChildScrollView(
+            padding: EdgeInsets.all(10),
+            child: Form(
+              key: _formKey,
+              child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    Text(
+                      "${S.current.ajouter} ${S.current.categorie}",
+                      style:GoogleFonts.lato(
+                          textStyle: TextStyle(
+                            fontSize: 18,
+                            fontWeight: FontWeight.bold,
+                          )),
+                    ),
+                    Padding(
+                      padding: EdgeInsets.only(
+                          left: 5, right: 5, bottom: 20, top: 20),
+                      child: TextFormField(
+                        controller: _libelleCategorieControl,
+                        keyboardType: TextInputType.text,
+                        validator: (value) {
+                          if (value.isEmpty) {
+                            return S.current.msg_champ_oblg;
+                          }
+                          return null;
+                        },
+                        decoration: InputDecoration(
+                          prefixIcon: Icon(
+                            Icons.view_agenda,
+                            color: Colors.blue,
+                          ),
+                          focusedBorder: OutlineInputBorder(
+                              borderSide:
+                                  BorderSide(color: Colors.blue),
+                              borderRadius: BorderRadius.circular(20)),
+                          contentPadding: EdgeInsets.only(left: 10),
+                          labelText: S.current.categorie,
+                          labelStyle: GoogleFonts.lato(textStyle: TextStyle(color: Colors.blue)),
+                          enabledBorder: OutlineInputBorder(
+                            gapPadding: 3.3,
+                            borderRadius: BorderRadius.circular(20),
+                            borderSide:
+                                BorderSide(color: Colors.blue),
+                          ),
                         ),
+                      ),
                     ),
-                    ),
-                  ),
+                    SizedBox(
+                      width: 150.0,
+                      child: Padding(
+                        padding: EdgeInsets.only(right: 0, left: 0),
+                        child: RaisedButton(
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(18.0),
+                          ),
+                          onPressed: () async {
+                            if(_formKey.currentState.validate()){
+                              setState(() {
+                                _categorieTresorie.libelle =
+                                    _libelleCategorieControl.text;
+                                _libelleCategorieControl.text = "";
+                              });
+                              await addTresoreCategorieIfNotExist(
+                                  _categorieTresorie);
+                              Navigator.pop(context);
+                            }
+                          },
+                          child: Text(
+                            "+ ${S.current.ajouter}",
+                            style: GoogleFonts.lato(
+                                textStyle: TextStyle(color: Colors.white , fontSize: 15 , fontWeight: FontWeight.bold)),
+                          ),
+                          color: Colors.green,
+                        ),
+                      ),
+                    )
+                  ],
                 ),
+            ),
+            ),
               );
     });
   }
@@ -995,198 +989,188 @@ class _AddTresoriePageState extends State<AddTresoriePage>
     var _formKey = GlobalKey<FormState>() ;
     return StatefulBuilder(builder: (context, StateSetter setState) {
       return Builder(
-          builder: (context) => Dialog(
-                child: SingleChildScrollView(
-                  child: Container(
-                    height: 350,
-                    padding: EdgeInsets.all(10),
-                    child: Scrollbar(
-                      isAlwaysShown: true,
-                      controller: _controller,
-                      child: Form(
-                        key: _formKey,
-                        child: ListView(
-                          controller: _controller,
-                          padding: EdgeInsets.all(15),
-                          children: [
-                            Padding(
-                              padding: EdgeInsets.only(
-                                  left: 5, right: 5, bottom: 20, top: 10),
-                              child: Text(
-                                "${S.current.ajouter} ${S.current.compte}:",
-                                textAlign: TextAlign.center,
-                                style: TextStyle(
-                                  fontSize: 20,
-                                ),
-                              ),
+          builder: (context) => SingleChildScrollView(
+            padding: EdgeInsets.all(10),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                Text(
+                  "${S.current.ajouter} ${S.current.compte}",
+                  textAlign: TextAlign.center,
+                  style: GoogleFonts.lato(
+                      textStyle: TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.bold,
+                      )),
+                ),
+                Padding(
+                  padding: EdgeInsets.only(left: 5, right: 5, bottom: 20, top: 20),
+                  child: Form(
+                    key : _formKey,
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        TextFormField(
+                          controller: _numCompteControl,
+                          keyboardType: TextInputType.text,
+                          // validator: (value) {
+                          //   if (value.isEmpty) {
+                          //     return S.current.msg_champ_oblg;
+                          //   }
+                          //   return null;
+                          // },
+                          decoration: InputDecoration(
+                            prefixIcon: Icon(
+                              Icons.view_agenda,
+                              color: Colors.blue,
                             ),
-                            TextFormField(
-                              controller: _numCompteControl,
-                              keyboardType: TextInputType.text,
-                              // validator: (value) {
-                              //   if (value.isEmpty) {
-                              //     return S.current.msg_champ_oblg;
-                              //   }
-                              //   return null;
-                              // },
-                              decoration: InputDecoration(
-                                prefixIcon: Icon(
-                                  Icons.view_agenda,
-                                  color: Colors.blue,
-                                ),
-                                focusedBorder: OutlineInputBorder(
-                                    borderSide: BorderSide(color: Colors.blue),
-                                    borderRadius: BorderRadius.circular(20)),
-                                contentPadding: EdgeInsets.only(left: 10),
-                                labelText: "N°:",
-                                labelStyle: GoogleFonts.lato(),
-                                enabledBorder: OutlineInputBorder(
-                                  gapPadding: 3.3,
-                                  borderRadius: BorderRadius.circular(20),
-                                  borderSide: BorderSide(color: Colors.blue),
-                                ),
-                              ),
+                            focusedBorder: OutlineInputBorder(
+                                borderSide: BorderSide(color: Colors.blue),
+                                borderRadius: BorderRadius.circular(20)),
+                            contentPadding: EdgeInsets.only(left: 10),
+                            labelText: "N°:",
+                            labelStyle: GoogleFonts.lato(),
+                            enabledBorder: OutlineInputBorder(
+                              gapPadding: 3.3,
+                              borderRadius: BorderRadius.circular(20),
+                              borderSide: BorderSide(color: Colors.blue),
                             ),
-                            SizedBox(
-                              height: 5,
-                            ),
-                            TextFormField(
-                              controller: _libelleCompteControl,
-                              keyboardType: TextInputType.text,
-                              validator: (value) {
-                                if (value.isEmpty) {
-                                  return S.current.msg_champ_oblg;
-                                }
-                                return null;
-                              },
-                              decoration: InputDecoration(
-                                prefixIcon: Icon(
-                                  Icons.description,
-                                  color: Colors.blue,
-                                ),
-                                focusedBorder: OutlineInputBorder(
-                                    borderSide: BorderSide(color: Colors.blue),
-                                    borderRadius: BorderRadius.circular(20)),
-                                contentPadding: EdgeInsets.only(left: 10),
-                                labelText: S.current.designation,
-                                labelStyle: GoogleFonts.lato(),
-                                enabledBorder: OutlineInputBorder(
-                                  gapPadding: 3.3,
-                                  borderRadius: BorderRadius.circular(20),
-                                  borderSide: BorderSide(color: Colors.blue),
-                                ),
-                              ),
-                            ),
-                            SizedBox(
-                              height: 10,
-                            ),
-                            TextFormField(
-                              controller: _codeCompteControl,
-                              keyboardType: TextInputType.text,
-                              // validator: (value) {
-                              //   if (value.isEmpty) {
-                              //     return S.current.msg_champ_oblg;
-                              //   }
-                              //   return null;
-                              // },
-                              decoration: InputDecoration(
-                                prefixIcon: Icon(
-                                  Icons.vpn_key,
-                                  color: Colors.blue,
-                                ),
-                                focusedBorder: OutlineInputBorder(
-                                    borderSide: BorderSide(color: Colors.blue),
-                                    borderRadius: BorderRadius.circular(20)),
-                                contentPadding: EdgeInsets.only(left: 10),
-                                labelText: S.current.code_pin,
-                                labelStyle: GoogleFonts.lato(),
-                                enabledBorder: OutlineInputBorder(
-                                  gapPadding: 3.3,
-                                  borderRadius: BorderRadius.circular(20),
-                                  borderSide: BorderSide(color: Colors.blue),
-                                ),
-                              ),
-                            ),
-                            SizedBox(
-                              height: 10,
-                            ),
-                            TextFormField(
-                              controller: _soldeCompteControl,
-                              keyboardType: TextInputType.text,
-                              validator: (value) {
-                                if (value.isEmpty) {
-                                  return S.current.msg_champ_oblg;
-                                }
-                                return null;
-                              },
-                              decoration: InputDecoration(
-                                prefixIcon: Icon(
-                                  Icons.monetization_on,
-                                  color: Colors.blue,
-                                ),
-                                focusedBorder: OutlineInputBorder(
-                                    borderSide: BorderSide(color: Colors.blue),
-                                    borderRadius: BorderRadius.circular(20)),
-                                contentPadding: EdgeInsets.only(left: 10),
-                                labelText: S.current.solde_depart,
-                                labelStyle: GoogleFonts.lato(),
-                                enabledBorder: OutlineInputBorder(
-                                  gapPadding: 3.3,
-                                  borderRadius: BorderRadius.circular(20),
-                                  borderSide: BorderSide(color: Colors.blue),
-                                ),
-                              ),
-                            ),
-                            SizedBox(
-                              height: 10,
-                            ),
-                            SizedBox(
-                              width: 320.0,
-                              child: Padding(
-                                padding: EdgeInsets.only(right: 0, left: 0),
-                                child: RaisedButton(
-                                  shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(18.0),
-                                  ),
-                                  onPressed: () async {
-                                    if(_formKey.currentState.validate()){
-                                      setState(() {
-                                        _compteTresorie.numCompte =
-                                            _numCompteControl.text;
-                                        _numCompteControl.text = "";
-                                        _compteTresorie.nomCompte =
-                                            _libelleCompteControl.text;
-                                        _libelleCompteControl.text = "";
-                                        _compteTresorie.codeCompte =
-                                            _codeCompteControl.text;
-                                        _codeCompteControl.text = "";
-                                        _compteTresorie.soldeDepart =
-                                            double.parse(_soldeCompteControl.text);
-                                        _soldeCompteControl.text = "";
-                                        _compteTresorie.solde = 0.0;
-                                      });
-                                      await addCompteIfNotExist(_compteTresorie);
-                                      Navigator.pop(context);
-                                    }
-
-                                  },
-                                  child: Text(
-                                    S.current.ajouter,
-                                    style: GoogleFonts.lato(
-                                      textStyle: TextStyle(color: Colors.white , fontWeight: FontWeight.bold),
-                                    )
-                                  ),
-                                  color: Colors.green,
-                                ),
-                              ),
-                            )
-                          ],
+                          ),
                         ),
-                      ),
+                        SizedBox(height: 10,),
+                        TextFormField(
+                          controller: _libelleCompteControl,
+                          keyboardType: TextInputType.text,
+                          validator: (value) {
+                            if (value.isEmpty) {
+                              return S.current.msg_champ_oblg;
+                            }
+                            return null;
+                          },
+                          decoration: InputDecoration(
+                            prefixIcon: Icon(
+                              Icons.description,
+                              color: Colors.blue,
+                            ),
+                            focusedBorder: OutlineInputBorder(
+                                borderSide: BorderSide(color: Colors.blue),
+                                borderRadius: BorderRadius.circular(20)),
+                            contentPadding: EdgeInsets.only(left: 10),
+                            labelText: S.current.designation,
+                            labelStyle: GoogleFonts.lato(),
+                            enabledBorder: OutlineInputBorder(
+                              gapPadding: 3.3,
+                              borderRadius: BorderRadius.circular(20),
+                              borderSide: BorderSide(color: Colors.blue),
+                            ),
+                          ),
+                        ),
+                        SizedBox(height: 10,),
+                        TextFormField(
+                          controller: _codeCompteControl,
+                          keyboardType: TextInputType.text,
+                          // validator: (value) {
+                          //   if (value.isEmpty) {
+                          //     return S.current.msg_champ_oblg;
+                          //   }
+                          //   return null;
+                          // },
+                          decoration: InputDecoration(
+                            prefixIcon: Icon(
+                              Icons.vpn_key,
+                              color: Colors.blue,
+                            ),
+                            focusedBorder: OutlineInputBorder(
+                                borderSide: BorderSide(color: Colors.blue),
+                                borderRadius: BorderRadius.circular(20)),
+                            contentPadding: EdgeInsets.only(left: 10),
+                            labelText: S.current.code_pin,
+                            labelStyle: GoogleFonts.lato(),
+                            enabledBorder: OutlineInputBorder(
+                              gapPadding: 3.3,
+                              borderRadius: BorderRadius.circular(20),
+                              borderSide: BorderSide(color: Colors.blue),
+                            ),
+                          ),
+                        ),
+                        SizedBox(height: 10,),
+                        TextFormField(
+                          controller: _soldeCompteControl,
+                          keyboardType: TextInputType.text,
+                          validator: (value) {
+                            if (value.isEmpty) {
+                              return S.current.msg_champ_oblg;
+                            }
+                            return null;
+                          },
+                          decoration: InputDecoration(
+                            prefixIcon: Icon(
+                              Icons.monetization_on,
+                              color: Colors.blue,
+                            ),
+                            focusedBorder: OutlineInputBorder(
+                                borderSide: BorderSide(color: Colors.blue),
+                                borderRadius: BorderRadius.circular(20)),
+                            contentPadding: EdgeInsets.only(left: 10),
+                            labelText: S.current.solde_depart,
+                            labelStyle: GoogleFonts.lato(),
+                            enabledBorder: OutlineInputBorder(
+                              gapPadding: 3.3,
+                              borderRadius: BorderRadius.circular(20),
+                              borderSide: BorderSide(color: Colors.blue),
+                            ),
+                          ),
+                        ),
+                        SizedBox(height: 20,),
+                        SizedBox(
+                          width: 150.0,
+                          child: Padding(
+                            padding: EdgeInsets.only(right: 0, left: 0),
+                            child: RaisedButton(
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(18.0),
+                              ),
+                              onPressed: () async {
+                                if(_formKey.currentState.validate()){
+                                  setState(() {
+                                    _compteTresorie.numCompte =
+                                        _numCompteControl.text;
+                                    _numCompteControl.text = "";
+                                    _compteTresorie.nomCompte =
+                                        _libelleCompteControl.text;
+                                    _libelleCompteControl.text = "";
+                                    _compteTresorie.codeCompte =
+                                        _codeCompteControl.text;
+                                    _codeCompteControl.text = "";
+                                    _compteTresorie.soldeDepart =
+                                        double.parse(_soldeCompteControl.text);
+                                    _soldeCompteControl.text = "";
+                                    _compteTresorie.solde = 0.0;
+                                  });
+                                  await addCompteIfNotExist(_compteTresorie);
+                                  Navigator.pop(context);
+                                }
+
+                              },
+                              child: Text(
+                                "+ ${S.current.ajouter}",
+                                style: GoogleFonts.lato(
+                                    textStyle: TextStyle(color: Colors.white , fontSize: 15 , fontWeight: FontWeight.bold)),
+                              ),
+                              color: Colors.green,
+                            ),
+                          ),
+                        )
+                      ],
                     ),
                   ),
                 ),
-              ));
+
+              ],
+            ),
+          ));
     });
   }
 
@@ -1208,95 +1192,94 @@ class _AddTresoriePageState extends State<AddTresoriePage>
 
   Widget addCharge() {
     TextEditingController _libelleChargeControl = new TextEditingController();
-    var _formKey = GlobalKey<FormState>() ;
+    var _formKey = GlobalKey<FormState>();
     ChargeTresorie _chargeTresorie = new ChargeTresorie.init();
     return StatefulBuilder(builder: (context, StateSetter setState) {
       return Builder(
-          builder: (context) => Dialog(
-                child: SingleChildScrollView(
-                  child: Container(
-                    height: 250,
-                    padding: EdgeInsets.all(10),
-                    child:  Form(
-                      key: _formKey,
-                      child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: [
-                            Padding(
-                              padding: EdgeInsets.only(
-                                  left: 8, right: 8, bottom: 10, top: 10),
-                              child: Text(
-                                "${S.current.ajouter} ${S.current.charge}:",
-                                style: GoogleFonts.lato(textStyle: TextStyle(fontSize: 18 , fontWeight: FontWeight.bold)),
-                              ),
-                            ),
-                            Padding(
-                              padding: EdgeInsets.only(
-                                  left: 5, right: 5, bottom: 20, top: 20),
-                              child: TextFormField(
-                                controller: _libelleChargeControl,
-                                keyboardType: TextInputType.text,
-                                validator: (value) {
-                                  if (value.isEmpty) {
-                                    return S.current.msg_champ_oblg;
-                                  }
-                                  return null;
-                                },
-                                decoration: InputDecoration(
-                                  prefixIcon: Icon(
-                                    Icons.view_agenda,
-                                    color: Colors.green,
-                                  ),
-                                  focusedBorder: OutlineInputBorder(
-                                    borderSide: BorderSide(color: Colors.blue),
-                                    borderRadius: BorderRadius.circular(20),
-                                  ),
-                                  contentPadding: EdgeInsets.only(left: 10),
-                                  labelText: S.current.categorie,
-                                  labelStyle: GoogleFonts.lato(),
-                                  enabledBorder: OutlineInputBorder(
-                                    gapPadding: 3.3,
-                                    borderRadius: BorderRadius.circular(20),
-                                    borderSide: BorderSide(color: Colors.green),
-                                  ),
-                                ),
-                              ),
-                            ),
-                            SizedBox(
-                              width: 320.0,
-                              child: Padding(
-                                padding: EdgeInsets.only(right: 0, left: 0),
-                                child: RaisedButton(
-                                  shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(18.0),
-                                  ),
-                                  onPressed: () async {
-                                    if(_formKey.currentState.validate()){
-                                      setState(() {
-                                        _chargeTresorie.libelle =
-                                            _libelleChargeControl.text;
-                                        _libelleChargeControl.text = "";
-                                      });
-                                      await addChargeIfNotExist(_chargeTresorie);
-                                      Navigator.pop(context);
-                                    }
-                                  },
-                                  child: Text(
-                                    S.current.ajouter,
-                                    style: GoogleFonts.lato(textStyle: TextStyle(color: Colors.white , fontWeight: FontWeight.bold)),
-                                  ),
-                                  color: Colors.green,
-                                ),
-                              ),
-                            )
-                          ],
-                        ),
-                    ),
+        builder: (context) => SingleChildScrollView(
+          padding: EdgeInsets.all(10),
+          child: Form(
+            key: _formKey,
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                Text(
+                  "${S.current.ajouter} ${S.current.charge}",
+                  style: GoogleFonts.lato(
+                      textStyle: TextStyle(
+                          fontSize: 18, fontWeight: FontWeight.bold)),
+                ),
+                Padding(
+                  padding: EdgeInsets.only(
+                      left: 5, right: 5, bottom: 20, top: 20),
+                  child: TextFormField(
+                    controller: _libelleChargeControl,
+                    keyboardType: TextInputType.text,
+                    validator: (value) {
+                      if (value.isEmpty) {
+                        return S.current.msg_champ_oblg;
+                      }
+                      return null;
+                    },
+                    decoration: InputDecoration(
+                      prefixIcon: Icon(
+                        Icons.view_agenda,
+                        color: Colors.blue,
+                      ),
+                      focusedBorder: OutlineInputBorder(
+                        borderSide: BorderSide(color: Colors.blue),
+                        borderRadius: BorderRadius.circular(20),
+                      ),
+                      contentPadding: EdgeInsets.only(left: 10),
+                      labelText: S.current.categorie,
+                      labelStyle: GoogleFonts.lato(
+                        textStyle:
+                        TextStyle(color: Theme.of(context).hintColor),
+                      ),
+                      enabledBorder: OutlineInputBorder(
+                        gapPadding: 3.3,
+                        borderRadius: BorderRadius.circular(20),
+                        borderSide: BorderSide(color: Colors.blue),
+                      ),
                     ),
                   ),
                 ),
-              );
+                SizedBox(
+                  width: 150.0,
+                  child: Padding(
+                    padding: EdgeInsets.only(right: 0, left: 0),
+                    child: RaisedButton(
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(18.0),
+                      ),
+                      onPressed: () async {
+                        if (_formKey.currentState.validate()) {
+                          setState(() {
+                            _chargeTresorie.libelle =
+                                _libelleChargeControl.text;
+                            _libelleChargeControl.text = "";
+                          });
+                          await addChargeIfNotExist(_chargeTresorie);
+                          Navigator.pop(context);
+                        }
+                      },
+                      child: Text(
+                        "+ ${S.current.ajouter}",
+                        style: GoogleFonts.lato(
+                            textStyle: TextStyle(
+                                color: Colors.white,
+                                fontWeight: FontWeight.bold , fontSize: 15)),
+                      ),
+                      color: Colors.green,
+                    ),
+                  ),
+                )
+              ],
+            ),
+          ),
+        ),
+      );
     });
   }
 

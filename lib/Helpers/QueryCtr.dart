@@ -552,7 +552,7 @@ class QueryCtr {
     return new MyParams.frommMap(res[0]);
   }
 
-         Future<DefaultPrinter> getPrinter () async {
+  Future<DefaultPrinter> getPrinter () async {
     Database dbClient = await _databaseHelper.db;
     var res = await dbClient.query(DbTablesNames.defaultPrinter);
 
@@ -647,6 +647,101 @@ class QueryCtr {
     }
 
     return list ;
+  }
+
+  //***************************************************************************************************************************************************************************
+  //************************************************************************special fragment tableau****************************************************************************
+  Future<List<ArticleFamille>> getArticleFamilles(int offset, int limit, {String searchTerm})async {
+    Database dbClient = await _databaseHelper.db;
+    String query = "SELECT * FROM ${DbTablesNames.articlesFamilles} Where Libelle like '%${searchTerm??''}%'";
+    query += ' ORDER BY id DESC';
+    query += " LIMIT ${limit} OFFSET ${offset}";
+
+    var res = await dbClient.rawQuery(query);
+
+    List<ArticleFamille> list = new List<ArticleFamille>();
+    for (var i = 0, j = res.length; i < j; i++) {
+      ArticleFamille famille = ArticleFamille.fromMap(res[i]);
+      if(famille.id != 1){
+        list.add(famille);
+      }
+    }
+
+    return list;
+  }
+
+  Future<List<ArticleMarque>> getArticleMarques(int offset, int limit, {String searchTerm})async {
+    Database dbClient = await _databaseHelper.db;
+    String query = "SELECT * FROM ${DbTablesNames.articlesMarques} Where Libelle like '%${searchTerm??''}%'";
+    query += ' ORDER BY id DESC';
+    query += " LIMIT ${limit} OFFSET ${offset}";
+
+    var res = await dbClient.rawQuery(query);
+
+    List<ArticleMarque> list = new List<ArticleMarque>();
+    for (var i = 0, j = res.length; i < j; i++) {
+      ArticleMarque marque = ArticleMarque.fromMap(res[i]);
+      if(marque.id != 1){
+        list.add(marque);
+      }
+    }
+
+    return list;
+  }
+
+  Future<List<ArticleTva>> getArticleTva(int offset, int limit, {String searchTerm})async {
+    Database dbClient = await _databaseHelper.db;
+    String query = "SELECT * FROM ${DbTablesNames.articlesTva}";
+    query += ' ORDER BY id DESC';
+    query += " LIMIT ${limit} OFFSET ${offset}";
+
+    var res = await dbClient.rawQuery(query);
+
+    List<ArticleTva> list = new List<ArticleTva>();
+    for (var i = 0, j = res.length; i < j; i++) {
+      ArticleTva tva = ArticleTva.fromMap(res[i]);
+      list.add(tva);
+    }
+
+    return list;
+  }
+
+  Future<List<TiersFamille>> getTiersFamille(int offset, int limit,{String searchTerm})async {
+    Database dbClient = await _databaseHelper.db;
+    String query = "SELECT * FROM ${DbTablesNames.tiersFamille} Where Libelle like '%${searchTerm??''}%'";
+    query += ' ORDER BY id DESC';
+    query += " LIMIT ${limit} OFFSET ${offset}";
+
+    var res = await dbClient.rawQuery(query);
+
+    List<TiersFamille> list = new List<TiersFamille>();
+    for (var i = 0, j = res.length; i < j; i++) {
+      TiersFamille famille = TiersFamille.fromMap(res[i]);
+      if(famille.id != 1){
+        list.add(famille);
+      }
+    }
+
+    return list;
+  }
+
+  Future<List<ChargeTresorie>> getChargeTresorie(int offset, int limit, {String searchTerm})async {
+    Database dbClient = await _databaseHelper.db;
+    String query = "SELECT * FROM "+DbTablesNames.chargeTresorie+" Where Libelle like '%${searchTerm??''}%'";
+    query += ' ORDER BY id DESC';
+    query += " LIMIT ${limit} OFFSET ${offset}";
+
+    var res = await dbClient.rawQuery(query);
+
+    List<ChargeTresorie> list = new List<ChargeTresorie>();
+    for (var i = 0, j = res.length; i < j; i++) {
+      ChargeTresorie charge = ChargeTresorie.fromMap(res[i]);
+      if(charge.id != 1){
+        list.add(charge);
+      }
+    }
+
+    return list;
   }
 
   //*****************************************************************************************************************************************************************

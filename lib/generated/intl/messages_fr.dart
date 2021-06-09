@@ -291,7 +291,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "facture_achat" : MessageLookupByLibrary.simpleMessage("Facture d\'achat"),
     "facture_vente" : MessageLookupByLibrary.simpleMessage("Facture de vente"),
     "famile" : MessageLookupByLibrary.simpleMessage("Famille"),
-    "famille_marque" : MessageLookupByLibrary.simpleMessage("Famille / Marque"),
+    "famille_marque" : MessageLookupByLibrary.simpleMessage("Tables"),
     "fax" : MessageLookupByLibrary.simpleMessage("Fax"),
     "fc" : MessageLookupByLibrary.simpleMessage("FC"),
     "ff" : MessageLookupByLibrary.simpleMessage("FF"),

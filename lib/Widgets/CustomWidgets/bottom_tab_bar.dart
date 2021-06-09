@@ -14,7 +14,7 @@ class BottomTabBar extends StatelessWidget{
   Widget build(BuildContext context) {
     return Container(
       color: Theme.of(context).disabledColor,
-      child: SizedBox(height: 58,
+      child: SizedBox(height: 65,
         child: TabBar(
             controller: controller,
             labelColor: Theme.of(context).tabBarTheme.labelColor,
@@ -24,6 +24,11 @@ class BottomTabBar extends StatelessWidget{
             unselectedLabelColor: Theme.of(context).tabBarTheme.unselectedLabelColor,
             indicatorSize: TabBarIndicatorSize.tab,
             indicatorColor: Colors.black,
+            onTap: (index){
+              if(onItemSelected != null){
+                onItemSelected(index);
+              }
+            },
             tabs: tabs
         ),
       ),

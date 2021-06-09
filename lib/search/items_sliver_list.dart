@@ -9,12 +9,18 @@ import 'package:gestmob/Widgets/piece_list_item.dart';
 import 'package:gestmob/Widgets/tier_list_item.dart';
 import 'package:gestmob/Widgets/tresorie_list_item.dart';
 import 'package:gestmob/models/Article.dart';
+import 'package:gestmob/models/ArticleFamille.dart';
+import 'package:gestmob/models/ArticleMarque.dart';
+import 'package:gestmob/models/ArticleTva.dart';
+import 'package:gestmob/models/ChargeTresorie.dart';
 import 'package:gestmob/models/Journaux.dart';
 import 'package:gestmob/models/Piece.dart';
 import 'package:gestmob/models/Tiers.dart';
+import 'package:gestmob/models/TiersFamille.dart';
 import 'package:gestmob/models/Tresorie.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
-
+import 'package:gestmob/Widgets/categorie_list_item.dart';
 import 'search_input_sliver.dart';
 import 'sliver_list_data_source.dart';
 import 'package:gestmob/generated/l10n.dart';
@@ -109,15 +115,24 @@ class _ItemsSliverListState extends State<ItemsSliverList> {
         dataSource: widget.dataSource,
       );
     } else if (item is Tresorie) {
-      return TresorieListItem(tresorie: item ,dataSource: widget.dataSource,);
+      return TresorieListItem(
+        tresorie: item,
+        dataSource: widget.dataSource,
+      );
+    } else if (item is ArticleFamille ||
+        item is ArticleMarque ||
+        item is TiersFamille ||
+        item is ChargeTresorie ||
+        item is ArticleTva) {
+      return CategoryListItem(item: item);
     } else {
       return null;
     }
   }
 
-  @override
-  void dispose() {
-    widget.dataSource.dispose();
-    super.dispose();
-  }
+// @override
+// void dispose() {
+//   widget.dataSource.dispose();
+//   super.dispose();
+// }
 }

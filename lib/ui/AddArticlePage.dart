@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:io';
 import 'dart:typed_data';
+import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:barcode_scan/barcode_scan.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -957,13 +958,13 @@ class _AddArticlePageState extends State<AddArticlePage>
                 });
               },
               onAddPressed: () async {
-                await showDialog(
-                    context: context,
-                    builder: (BuildContext context) {
-                      return addTVAdialogue();
-                    }).then((val) {
-                  setState(() {});
-                });
+                AwesomeDialog(
+                  context: context,
+                  dialogType: DialogType.NO_HEADER,
+                  animType: AnimType.BOTTOMSLIDE,
+                  title: S.current.supp,
+                  body: addTVAdialogue(),
+                )..show().then((value) => setState(() {}));
               },
             ),
           ),
@@ -978,13 +979,13 @@ class _AddArticlePageState extends State<AddArticlePage>
               });
             },
             onAddPressed: () async {
-              await showDialog(
-                  context: context,
-                  builder: (BuildContext context) {
-                    return addMarquedialogue();
-                  }).then((val) {
-                setState(() {});
-              });
+              AwesomeDialog(
+                context: context,
+                dialogType: DialogType.NO_HEADER,
+                animType: AnimType.BOTTOMSLIDE,
+                title: S.current.supp,
+                body: addMarquedialogue(),
+              )..show().then((value) => setState(() {}));
             },
           ),
           ListDropDown(
@@ -998,13 +999,13 @@ class _AddArticlePageState extends State<AddArticlePage>
               });
             },
             onAddPressed: () async {
-              await showDialog(
-                  context: context,
-                  builder: (BuildContext context) {
-                    return addFamilledialogue();
-                  }).then((val) {
-                setState(() {});
-              });
+              AwesomeDialog(
+                context: context,
+                dialogType: DialogType.NO_HEADER,
+                animType: AnimType.BOTTOMSLIDE,
+                title: S.current.supp,
+                body: addFamilledialogue(),
+              )..show().then((value) => setState(() {}));
             },
           ),
         ],
@@ -1014,106 +1015,98 @@ class _AddArticlePageState extends State<AddArticlePage>
 
   Widget addMarquedialogue() {
     _marque = new ArticleMarque.init();
-    var _formKey = GlobalKey<FormState>() ;
+    var _formKey = GlobalKey<FormState>();
     return StatefulBuilder(builder: (context, StateSetter setState) {
-      return Dialog(
-          //this right here
-          child: SingleChildScrollView(
-        child: Container(
-          height: 200,
+      return Builder(
+        builder: (context)=>SingleChildScrollView(
           padding: EdgeInsets.all(10),
-          child:  Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                // ImagePickerWidget(
-                //     editMode: editMode,
-                //     scallFactor: 1,
-                //     onImageChange: (File imageFile) {
-                //       _marque.setpic(imageFile) ;
-                //     }
-                // ),
-                Padding(
-                  padding: EdgeInsets.only(left: 5, right: 5, bottom: 20),
-                  child: Form(
-                    key: _formKey,
-                    child: TextFormField(
-                      controller: _libelleMarqueControl,
-                      keyboardType: TextInputType.text,
-                      validator: (value) {
-                        if (value.isEmpty) {
-                          return S.current.msg_champ_oblg;
-                        }
-                        return null;
-                      },
-                      decoration: InputDecoration(
-                        prefixIcon: Icon(
-                          Icons.label,
-                          color: Colors.orange[900],
-                        ),
-                        focusedBorder: OutlineInputBorder(
-                            borderSide: BorderSide(color: Colors.orange[900]),
-                            borderRadius: BorderRadius.circular(20)),
-                        contentPadding: EdgeInsets.only(left: 10),
-                        labelText: S.current.marque,
-                        labelStyle: GoogleFonts.lato(textStyle: TextStyle(color: Theme.of(context).hintColor),),
-                        enabledBorder: OutlineInputBorder(
-                          gapPadding: 3.3,
-                          borderRadius: BorderRadius.circular(20),
-                          borderSide: BorderSide(color: Colors.orange[900]),
-                        ),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              Text(
+                "${S.current.ajouter} ${S.current.marque}",
+                style: GoogleFonts.lato(
+                    textStyle: TextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.bold,
+                    )),
+              ),
+              // ImagePickerWidget(
+              //     editMode: editMode,
+              //     scallFactor: 1,
+              //     onImageChange: (File imageFile) {
+              //       _marque.setpic(imageFile) ;
+              //     }
+              // ),
+              Padding(
+                padding: EdgeInsets.only(left: 5, right: 5, bottom: 20, top: 20),
+                child: Form(
+                  key: _formKey,
+                  child: TextFormField(
+                    controller: _libelleMarqueControl,
+                    keyboardType: TextInputType.text,
+                    validator: (value) {
+                      if (value.isEmpty) {
+                        return S.current.msg_champ_oblg;
+                      }
+                      return null;
+                    },
+                    decoration: InputDecoration(
+                      prefixIcon: Icon(
+                        Icons.label,
+                        color: Colors.blue,
+                      ),
+                      focusedBorder: OutlineInputBorder(
+                          borderSide: BorderSide(color: Colors.blue),
+                          borderRadius: BorderRadius.circular(20)),
+                      contentPadding: EdgeInsets.only(left: 10),
+                      labelText: S.current.marque,
+                      labelStyle: GoogleFonts.lato(
+                        textStyle:
+                        TextStyle(color: Theme.of(context).hintColor),
+                      ),
+                      enabledBorder: OutlineInputBorder(
+                        gapPadding: 3.3,
+                        borderRadius: BorderRadius.circular(20),
+                        borderSide: BorderSide(color: Colors.blue),
                       ),
                     ),
                   ),
                 ),
-                SizedBox(
-                  width: 320.0,
-                  child: Padding(
-                    padding: EdgeInsets.only(right: 0, left: 0),
-                    child: RaisedButton(
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(18.0),
-                      ),
-                      onPressed: () async {
-                        if(_formKey.currentState.validate()){
-                          setState(() {
-                            _marque.setLibelle(_libelleMarqueControl.text);
-                            _libelleMarqueControl.text = "";
-                          });
-
-                          await addMarqueIfNotExist(_marque);
-
-                          Navigator.pop(context);
-                          final snackBar = SnackBar(
-                            content: Text(
-                              S.current.msg_ajout_item,
-                              style: GoogleFonts.lato(
-                                textStyle: TextStyle(
-                                    color: Colors.white,
-                                    fontSize: 15,
-                                    fontWeight: FontWeight.w500),
-                                )
-                              ),
-                            backgroundColor: Colors.blue,
-                            duration: Duration(seconds: 1),
-                          );
-                          _scaffoldKey.currentState.showSnackBar(snackBar);
-                        }
-
-                      },
-                      child: Text(
-                        S.current.ajouter,
-                        style: GoogleFonts.lato(textStyle: TextStyle(color: Colors.white)),
-                      ),
-                      color: Colors.blue,
+              ),
+              SizedBox(
+                width: 150,
+                child: Padding(
+                  padding: EdgeInsets.only(right: 0, left: 0),
+                  child: RaisedButton(
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(18.0),
                     ),
+                    onPressed: () async {
+                      if (_formKey.currentState.validate()) {
+                        setState(() {
+                          _marque.setLibelle(_libelleMarqueControl.text);
+                          _libelleMarqueControl.text = "";
+                        });
+
+                        await addMarqueIfNotExist(_marque);
+                        Navigator.pop(context);
+                      }
+                    },
+                    child: Text(
+                      "+ ${S.current.ajouter}",
+                      style: GoogleFonts.lato(
+                          textStyle: TextStyle(color: Colors.white , fontSize: 15 , fontWeight: FontWeight.bold)),
+                    ),
+                    color: Colors.green,
                   ),
-                )
-              ],
-            ),
+                ),
+              )
+            ],
           ),
         ),
-      );
+      ) ;
     });
   }
 
@@ -1135,108 +1128,95 @@ class _AddArticlePageState extends State<AddArticlePage>
 
   Widget addFamilledialogue() {
     _famille = ArticleFamille.init();
-    var _formKey = GlobalKey<FormState>() ;
+    var _formKey = GlobalKey<FormState>();
     return StatefulBuilder(builder: (context, StateSetter setState) {
       return Builder(
-          builder: (context) => Dialog(
-                //this right here
-                child: SingleChildScrollView(
-                  child: Container(
-                    height: 200,
-                    padding: EdgeInsets.all(10),
-                    child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          // ImagePickerWidget(
-                          //     editMode: editMode,
-                          //     scallFactor: 1,
-                          //     onImageChange: (File imageFile) =>
-                          //         {_famille.setpic(imageFile)}),
-                          Padding(
-                            padding: EdgeInsets.only(
-                                left: 5, right: 5, bottom: 20, top: 20),
-                            child: Form(
-                              key: _formKey,
-                              child: TextFormField(
-                                controller: _libelleFamilleControl,
-                                keyboardType: TextInputType.text,
-                                validator: (value) {
-                                  if (value.isEmpty) {
-                                    return S.current.msg_champ_oblg;
-                                  }
-                                  return null;
-                                },
-                                decoration: InputDecoration(
-                                  prefixIcon: Icon(
-                                    Icons.view_agenda,
-                                    color: Colors.orange[900],
-                                  ),
-                                  focusedBorder: OutlineInputBorder(
-                                      borderSide:
-                                          BorderSide(color: Colors.orange[900]),
-                                      borderRadius: BorderRadius.circular(20)),
-                                  contentPadding: EdgeInsets.only(left: 10),
-                                  labelText: S.current.famile,
-                                  labelStyle:GoogleFonts.lato(textStyle: TextStyle(color: Theme.of(context).hintColor),),
-                                  enabledBorder: OutlineInputBorder(
-                                    gapPadding: 3.3,
-                                    borderRadius: BorderRadius.circular(20),
-                                    borderSide:
-                                        BorderSide(color: Colors.orange[900]),
-                                  ),
-                                ),
-                              ),
-                            ),
-                          ),
-                          SizedBox(
-                            width: 320.0,
-                            child: Padding(
-                              padding: EdgeInsets.only(right: 0, left: 0),
-                              child: RaisedButton(
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(18.0),
-                                ),
-                                onPressed: () async {
-                                  if(_formKey.currentState.validate()){
-                                    setState(() {
-                                      _famille.setLibelle(
-                                          _libelleFamilleControl.text);
-                                      _libelleFamilleControl.text = "";
-                                    });
-
-                                    await addFamilleIfNotExist(_famille);
-
-                                    Navigator.pop(context);
-                                    final snackBar = SnackBar(
-                                      content: Text(
-                                        S.current.msg_ajout_item,
-                                        style: GoogleFonts.lato(textStyle: TextStyle(
-                                            color: Colors.white,
-                                            fontSize: 15,
-                                            fontWeight: FontWeight.w500)),
-                                      ),
-                                      backgroundColor: Colors.red,
-                                      duration: Duration(seconds: 1),
-                                    );
-                                    _scaffoldKey.currentState
-                                        .showSnackBar(snackBar);
-                                  }
-                                },
-                                child: Text(
-                                  S.current.ajouter,
-                                  style: GoogleFonts.lato(textStyle: TextStyle(color: Colors.white),)
-                                ),
-                                color: Colors.red,
-                              ),
-                            ),
-                          )
-                        ],
+        builder: (context) => SingleChildScrollView(
+          padding: EdgeInsets.all(10),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              Text(
+                "${S.current.ajouter} ${S.current.famile}",
+                style: GoogleFonts.lato(
+                    textStyle: TextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.bold,
+                    )),
+              ),
+              // ImagePickerWidget(
+              //     editMode: editMode,
+              //     scallFactor: 1,
+              //     onImageChange: (File imageFile) =>
+              //         {_famille.setpic(imageFile)}),
+              Padding(
+                padding:
+                EdgeInsets.only(left: 5, right: 5, bottom: 20, top: 20),
+                child: Form(
+                  key: _formKey,
+                  child: TextFormField(
+                    controller: _libelleFamilleControl,
+                    keyboardType: TextInputType.text,
+                    validator: (value) {
+                      if (value.isEmpty) {
+                        return S.current.msg_champ_oblg;
+                      }
+                      return null;
+                    },
+                    decoration: InputDecoration(
+                      prefixIcon: Icon(
+                        Icons.view_agenda,
+                        color: Colors.blue,
+                      ),
+                      focusedBorder: OutlineInputBorder(
+                          borderSide: BorderSide(color: Colors.blue),
+                          borderRadius: BorderRadius.circular(20)),
+                      contentPadding: EdgeInsets.only(left: 10),
+                      labelText: S.current.famile,
+                      labelStyle: GoogleFonts.lato(
+                        textStyle:
+                        TextStyle(color: Theme.of(context).hintColor),
+                      ),
+                      enabledBorder: OutlineInputBorder(
+                        gapPadding: 3.3,
+                        borderRadius: BorderRadius.circular(20),
+                        borderSide: BorderSide(color: Colors.blue),
                       ),
                     ),
                   ),
                 ),
-              );
+              ),
+              SizedBox(
+                width: 150.0,
+                child: Padding(
+                  padding: EdgeInsets.only(right: 0, left: 0),
+                  child: RaisedButton(
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(18.0),
+                    ),
+                    onPressed: () async {
+                      if (_formKey.currentState.validate()) {
+                        setState(() {
+                          _famille.setLibelle(_libelleFamilleControl.text);
+                          _libelleFamilleControl.text = "";
+                        });
+                        await addFamilleIfNotExist(_famille);
+                        Navigator.pop(context);
+                      }
+                    },
+                    child: Text("+ ${S.current.ajouter}",
+                        style: GoogleFonts.lato(
+                          textStyle: TextStyle(color: Colors.white , fontWeight: FontWeight.bold , fontSize: 15),
+                        )),
+                    color: Colors.green,
+                  ),
+                ),
+              )
+            ],
+          ),
+        ),
+      );
     });
   }
 
@@ -1256,103 +1236,85 @@ class _AddArticlePageState extends State<AddArticlePage>
   }
 
   Widget addTVAdialogue() {
-    var _formKey = GlobalKey<FormState>() ;
+    var _formKey = GlobalKey<FormState>();
     return StatefulBuilder(builder: (context, StateSetter setState) {
-      return Dialog(
-        //this right here
-        child: Container(
-          height: 200,
+      return Builder(
+        builder: (context)=>SingleChildScrollView(
           padding: EdgeInsets.all(10),
-          child:  Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Center(
-                    child: Padding(
-                  padding: const EdgeInsets.only(bottom: 20),
-                  child: Text(
-                    "${S.current.ajouter} ${S.current.tva}",
-                    style: GoogleFonts.lato(
-                      textStyle: TextStyle(
-                        fontSize: 18,
-                        fontWeight: FontWeight.w600,
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              Text("${S.current.ajouter} ${S.current.tva}",
+                  style: GoogleFonts.lato(
+                    textStyle: TextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.w600,
+                    ),
+                  )),
+              Padding(
+                padding: EdgeInsets.only(left: 5, right: 5, bottom: 20, top: 20),
+                child: Form(
+                  key: _formKey,
+                  child: TextFormField(
+                    controller: _tauxTVAControl,
+                    keyboardType: TextInputType.number,
+                    validator: (value) {
+                      if (value.isEmpty) {
+                        return S.current.msg_champ_oblg;
+                      }
+                      return null;
+                    },
+                    decoration: InputDecoration(
+                      prefixIcon: Icon(
+                        MdiIcons.percent,
+                        color: Colors.blue,
                       ),
-                    )
-                  ),
-                )),
-                Padding(
-                  padding: EdgeInsets.only(left: 5, right: 5, bottom: 20),
-                  child: Form(
-                    key: _formKey,
-                    child: TextFormField(
-                      controller: _tauxTVAControl,
-                      keyboardType: TextInputType.number,
-                      validator: (value) {
-                        if (value.isEmpty) {
-                          return S.current.msg_champ_oblg;
-                        }
-                        return null;
-                      },
-                      decoration: InputDecoration(
-                        prefixIcon: Icon(
-                          FontAwesome.percent,
-                          color: Colors.orange[900],
-                        ),
-                        focusedBorder: OutlineInputBorder(
-                            borderSide: BorderSide(color: Colors.orange[900]),
-                            borderRadius: BorderRadius.circular(20)),
-                        contentPadding: EdgeInsets.only(left: 10),
-                        labelText: S.current.taux_tva,
-                        labelStyle:GoogleFonts.lato(textStyle: TextStyle(color: Theme.of(context).hintColor),),
-                        enabledBorder: OutlineInputBorder(
-                          gapPadding: 3.3,
-                          borderRadius: BorderRadius.circular(20),
-                          borderSide: BorderSide(color: Colors.orange[900]),
-                        ),
+                      focusedBorder: OutlineInputBorder(
+                          borderSide: BorderSide(color: Colors.blue),
+                          borderRadius: BorderRadius.circular(20)),
+                      contentPadding: EdgeInsets.only(left: 10),
+                      labelText: S.current.taux_tva,
+                      labelStyle: GoogleFonts.lato(
+                        textStyle:
+                        TextStyle(color: Theme.of(context).hintColor),
+                      ),
+                      enabledBorder: OutlineInputBorder(
+                        gapPadding: 3.3,
+                        borderRadius: BorderRadius.circular(20),
+                        borderSide: BorderSide(color: Colors.blue),
                       ),
                     ),
                   ),
                 ),
-                SizedBox(
-                  width: 320.0,
-                  child: Padding(
-                    padding: EdgeInsets.only(right: 0, left: 0),
-                    child: RaisedButton(
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(18.0),
-                      ),
-                      onPressed: () async {
-                        if(_formKey.currentState.validate()){
-                          double _taux = double.parse(_tauxTVAControl.text);
-                          _tauxTVAControl.text = "";
-                          await addTvaIfNotExist(_taux);
-                          Navigator.pop(context);
-                          final snackBar = SnackBar(
-                            content: Text(
-                              '${S.current.tva} ' + _taux.toString() + '%',
-                              style: TextStyle(
-                                  color: Colors.white,
-                                  fontSize: 15,
-                                  fontWeight: FontWeight.w500),
-                            ),
-                            backgroundColor: Colors.green[900],
-                            duration: Duration(seconds: 1),
-                          );
-                          _scaffoldKey.currentState.showSnackBar(snackBar);
-                        }
-
-                      },
-                      child: Text(
-                        S.current.ajouter,
-                        style: GoogleFonts.lato(textStyle: TextStyle(color: Colors.white),)
-                      ),
-                      color: Colors.green[900],
+              ),
+              SizedBox(
+                width: 150.0,
+                child: Padding(
+                  padding: EdgeInsets.only(right: 0, left: 0),
+                  child: RaisedButton(
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(18.0),
                     ),
+                    onPressed: () async {
+                      if (_formKey.currentState.validate()) {
+                        double _taux = double.parse(_tauxTVAControl.text);
+                        _tauxTVAControl.text = "";
+                        await addTvaIfNotExist(_taux);
+                        Navigator.pop(context);
+                      }
+                    },
+                    child: Text("+ ${S.current.ajouter}",
+                        style: GoogleFonts.lato(
+                          textStyle: TextStyle(color: Colors.white , fontWeight: FontWeight.bold , fontSize: 15),
+                        )),
+                    color: Colors.green,
                   ),
-                )
-              ],
-            ),
+                ),
+              )
+            ],
           ),
+        ),
       );
     });
   }

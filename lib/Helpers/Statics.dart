@@ -109,6 +109,11 @@ class ItemsListTypes {
   static const fournisseursList = 'fournisseursList';
   static const pieceList = 'pieceList';
   static const tresorieList = "tresorieList";
+  static const familleArticleList = "familleArticleList";
+  static const marqueArticleList = "marqueArticleList";
+  static const tvaArticleList = "tvaArticleList";
+  static const familleTiersList = "familleTiersList";
+  static const chargeList = "chargeList";
 }
 
 class DbTablesNames {
