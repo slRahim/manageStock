@@ -29,6 +29,7 @@ import 'package:path/path.dart';
 import 'package:path_provider/path_provider.dart';
 import 'Helpers.dart';
 import 'package:gestmob/models/Transformer.dart';
+import "package:gestmob/Helpers/string_cap_extension.dart";
 
 class QueryCtr {
   SqlLiteDatabaseHelper _databaseHelper = SqlLiteDatabaseHelper();
@@ -692,6 +693,10 @@ class QueryCtr {
   Future<List<ArticleTva>> getArticleTva(int offset, int limit, {String searchTerm})async {
     Database dbClient = await _databaseHelper.db;
     String query = "SELECT * FROM ${DbTablesNames.articlesTva}";
+
+    if(searchTerm != null && searchTerm != '' && searchTerm.isNumericUsingRegularExpression){
+      query += " Where Tva = ${double.parse(searchTerm)}";
+    }
     query += ' ORDER BY id DESC';
     query += " LIMIT ${limit} OFFSET ${offset}";
 

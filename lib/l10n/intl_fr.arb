@@ -592,7 +592,14 @@
 
   "service" : "Service",
   "non_stockable" : "Non stockable",
-  "famille_marque" : "Tables"
+  "famille_marque" : "Tables",
+
+  "famille_article" : "Familles des articles",
+  "marque_article" : "Marques des articles",
+  "tva_article" : "Taux tva",
+  "famille_tiers" : "Familles des tiers",
+  "cat_charge" : "Catégories des charges"
+
 
 
 

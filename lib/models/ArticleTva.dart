@@ -10,6 +10,10 @@ class ArticleTva {
 
   ArticleTva(this._tva);
 
+  set tva(double value) {
+    _tva = value;
+  }
+
   ArticleTva.fromMap(dynamic obj) {
     this._tva = obj["Tva"];
   }

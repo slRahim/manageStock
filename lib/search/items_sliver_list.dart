@@ -124,7 +124,7 @@ class _ItemsSliverListState extends State<ItemsSliverList> {
         item is TiersFamille ||
         item is ChargeTresorie ||
         item is ArticleTva) {
-      return CategoryListItem(item: item);
+      return CategoryListItem(item: item , dataSource: widget.dataSource,);
     } else {
       return null;
     }

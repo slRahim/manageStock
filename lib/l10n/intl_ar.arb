@@ -593,7 +593,13 @@
 
   "service" : "خدمة",
   "non_stockable" : "غير قابل للتخزين",
-  "famille_marque" : "الفئات"
+  "famille_marque" : "الفئات",
+
+  "famille_article" : "عائلات البضائع",
+  "marque_article" : "ماركات البضائع",
+  "tva_article" : "قيمة الضريبة",
+  "famille_tiers" : "عائلات المتعاملين",
+  "cat_charge" : "فئات الأعباء"
 
 
 

@@ -27,7 +27,7 @@ class _FamilleMarqueFragmentState extends State<FamilleMarqueFragment> {
   bool _finishLoading = false;
   TabController _tabController;
   int _tabSelectedIndex = 0;
-  String _tabTitle = "Famille article";
+  String _tabTitle = S.current.famille_article;
 
   final TextEditingController searchController = new TextEditingController();
   SliverListDataSource _dataSourceFamilleArticle;
@@ -88,7 +88,7 @@ class _FamilleMarqueFragmentState extends State<FamilleMarqueFragment> {
                 _dataSourceMarqueArticle.updateSearchTerm(search);
                 break;
               case 2:
-                Helpers.showToast("Option non disponible");
+                _dataSourceTvaArticle.updateSearchTerm(search);
                 break;
               case 3:
                 _dataSourceFamilleTiers.updateSearchTerm(search);
@@ -108,19 +108,19 @@ class _FamilleMarqueFragmentState extends State<FamilleMarqueFragment> {
               searchController.clear();
               switch (index) {
                 case 0:
-                  _tabTitle = "Famille article";
+                  _tabTitle = S.current.famille_article;
                   break;
                 case 1:
-                  _tabTitle = "Marque article";
+                  _tabTitle = S.current.marque_article;
                   break;
                 case 2:
-                  _tabTitle = "Tva article";
+                  _tabTitle = S.current.tva_article;
                   break;
                 case 3:
-                  _tabTitle = "Famille tiers";
+                  _tabTitle = S.current.famille_tiers;
                   break;
                 case 4:
-                  _tabTitle = "Catégorie charge";
+                  _tabTitle = S.current.cat_charge;
                   break;
               }
             });

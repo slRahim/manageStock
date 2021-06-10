@@ -593,7 +593,13 @@
 
   "service" : "Service",
   "non_stockable" : "Not Storable",
-  "famille_marque" : "Tables"
+  "famille_marque" : "Tables",
+
+  "famille_article" : "Item Families",
+  "marque_article" : "Item Brands",
+  "tva_article" : "Tva Rate",
+  "famille_tiers" : "Families of third parties",
+  "cat_charge" : "charges Categories"
 
 
 }

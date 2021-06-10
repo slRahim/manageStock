@@ -5584,6 +5584,56 @@ class S {
       args: [],
     );
   }
+
+  /// `Item Families`
+  String get famille_article {
+    return Intl.message(
+      'Item Families',
+      name: 'famille_article',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Item Brands`
+  String get marque_article {
+    return Intl.message(
+      'Item Brands',
+      name: 'marque_article',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Tva Rate`
+  String get tva_article {
+    return Intl.message(
+      'Tva Rate',
+      name: 'tva_article',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Families of third parties`
+  String get famille_tiers {
+    return Intl.message(
+      'Families of third parties',
+      name: 'famille_tiers',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `charges Categories`
+  String get cat_charge {
+    return Intl.message(
+      'charges Categories',
+      name: 'cat_charge',
+      desc: '',
+      args: [],
+    );
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<S> {

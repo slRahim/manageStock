@@ -14,6 +14,10 @@ class ArticleMarque {
 
   Uint8List get imageUint8List => _imageUint8List;
 
+  set libelle(String value) {
+    _libelle = value;
+  }
+
   set imageUint8List(Uint8List value) {
     _imageUint8List = value;
   }
@@ -68,4 +72,8 @@ class ArticleMarque {
 
   @override
   int get hashCode => _libelle.hashCode;
+
+  set image(File value) {
+    _image = value;
+  }
 }

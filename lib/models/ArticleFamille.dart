@@ -17,6 +17,10 @@ class ArticleFamille {
     _imageUint8List = value;
   }
 
+  set libelle(String value) {
+    _libelle = value;
+  }
+
   set id(int value) {
     _id = value;
   }
@@ -69,4 +73,8 @@ class ArticleFamille {
 
   @override
   int get hashCode => _libelle.hashCode;
+
+  set image(File value) {
+    _image = value;
+  }
 }
