@@ -152,13 +152,13 @@ class _TresorieListItemState extends State<TresorieListItem> {
                   ),
                   (widget.tresorie.montant >= 0)
                       ? Text(
-                          '${Helpers.numberFormat(widget.tresorie.montant).toString()} ${_devise}',
+                          '${Helpers.numberFormat(widget.tresorie.montant).toString()} $_devise',
                           style: GoogleFonts.lato(
                             textStyle: TextStyle(
                                 fontSize: 16.0, fontWeight: FontWeight.bold),
                           ))
                       : Text(
-                          '${Helpers.numberFormat(widget.tresorie.montant * -1).toString()} ${_devise}',
+                          '${Helpers.numberFormat(widget.tresorie.montant * -1).toString()} $_devise',
                           style: GoogleFonts.lato(
                             textStyle: TextStyle(
                                 fontSize: 16.0, fontWeight: FontWeight.bold),

@@ -486,7 +486,7 @@ class _RapportState extends State<Rapport> {
                 child: pw.Column(
                     crossAxisAlignment: pw.CrossAxisAlignment.start,
                     children: [
-                      pw.Text("${_selectedSubItem}",
+                      pw.Text("$_selectedSubItem",
                           style: pw.TextStyle(font: ttf , fontWeight: pw.FontWeight.bold)),
                       pw.Divider(height: 2),
                       pw.Text("${S.current.demonstration}\t  ${Helpers.dateToText(DateTime.now())}",

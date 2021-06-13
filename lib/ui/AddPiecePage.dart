@@ -54,6 +54,7 @@ import 'package:printing/printing.dart';
 import 'package:feature_discovery/feature_discovery.dart';
 import 'package:google_fonts/google_fonts.dart';
 import "package:gestmob/Helpers/string_cap_extension.dart";
+import 'package:intl/intl.dart';
 
 class AddPiecePage extends StatefulWidget {
   var arguments;
@@ -523,7 +524,7 @@ class _AddPiecePageState extends State<AddPiecePage>
                                   size: 18,
                                 ),
                                 Text(
-                                  "${_devise}",
+                                  "$_devise",
                                   style: GoogleFonts.lato(
                                     textStyle:TextStyle(
                                         fontSize: 12,
@@ -2516,7 +2517,7 @@ class _AddPiecePageState extends State<AddPiecePage>
                   ? PosAlign.center
                   : PosAlign.left));
 
-      input = "${S.current.rs}";
+      input = "${S.current.client_titre}";
       encArabic = await CharsetConverter.encode("ISO-8859-6",
           "${_piece.raisonSociale}: ${input.split('').reversed.join()}");
       ticket.textEncoded(encArabic,
@@ -2630,7 +2631,7 @@ class _AddPiecePageState extends State<AddPiecePage>
         ]);
       }
       ticket.hr(ch: '-');
-      if (_piece.total_tva > 0 && _myParams.tva) {
+      if ((_piece.total_tva > 0 && _myParams.tva) || _piece.remise > 0) {
         input = "${S.current.total_ht}";
         encArabic = await CharsetConverter.encode("ISO-8859-6",
             "${Helpers.numberFormat(_piece.total_ht).toString()}: ${input.split('').reversed.join()}");
@@ -2698,11 +2699,11 @@ class _AddPiecePageState extends State<AddPiecePage>
 
       ticket.hr(ch: '=');
       input = "${S.current.net_payer}";
-      encArabic =(_piece.net_a_payer > 0)
+      encArabic =(_piece.net_a_payer >= 0)
           ?  await CharsetConverter.encode("ISO-8859-6",
-          "${_devise} ${Helpers.numberFormat(_piece.net_a_payer).toString()}: ${input.split('').reversed.join()}")
+          "$_devise ${Helpers.numberFormat(_piece.net_a_payer).toString()}: ${input.split('').reversed.join()}")
       :await CharsetConverter.encode("ISO-8859-6",
-          "${_devise} ${Helpers.numberFormat((_piece.net_a_payer * -1)).toString()}: ${input.split('').reversed.join()}");
+          "$_devise ${Helpers.numberFormat((_piece.net_a_payer * -1)).toString()}: ${input.split('').reversed.join()}");
       ticket.textEncoded(encArabic,
           styles: PosStyles(
             codeTable: PosCodeTable.arabic,
@@ -2716,7 +2717,7 @@ class _AddPiecePageState extends State<AddPiecePage>
       ticket.hr(ch: '=');
       ticket.row([
         PosColumn(
-            textEncoded:(_piece.regler > 0)
+            textEncoded:(_piece.regler >= 0)
                 ? await CharsetConverter.encode("ISO-8859-6",
                 "${Helpers.numberFormat(_piece.regler).toString()}: ${S.current.regler.split('').reversed.join()}")
             :  await CharsetConverter.encode("ISO-8859-6",
@@ -2724,7 +2725,7 @@ class _AddPiecePageState extends State<AddPiecePage>
             width: 6),
         (_piece.reste != 0)
             ? PosColumn(
-                textEncoded:(_piece.reste > 0)
+                textEncoded:(_piece.reste >= 0)
                     ? await CharsetConverter.encode("ISO-8859-6",
                     "${Helpers.numberFormat(_piece.reste).toString()}: ${S.current.reste.split('').reversed.join()}")
                     :await CharsetConverter.encode("ISO-8859-6",
@@ -2787,11 +2788,42 @@ class _AddPiecePageState extends State<AddPiecePage>
               align: (formatPrint == PaperSize.mm80)
                   ? PosAlign.center
                   : PosAlign.left));
-      ticket.text("${S.current.rs} : ${_piece.raisonSociale}",
+      ticket.text("${S.current.client_titre} : ${_piece.raisonSociale}",
           styles: PosStyles(
               align: (formatPrint == PaperSize.mm80)
                   ? PosAlign.center
                   : PosAlign.left));
+
+      if(_selectedClient.rc != "" && (_piece.piece == PieceType.factureClient ||
+          _piece.piece == PieceType.factureFournisseur ||
+          _piece.piece == PieceType.avoirClient ||
+          _piece.piece == PieceType.avoirFournisseur)){
+        ticket.text("${S.current.rc} : ${_selectedClient.rc}",
+            styles: PosStyles(
+                align: (formatPrint == PaperSize.mm80)
+                    ? PosAlign.center
+                    : PosAlign.left));
+      }
+      if(_selectedClient.nif != "" && (_piece.piece == PieceType.factureClient ||
+          _piece.piece == PieceType.factureFournisseur ||
+          _piece.piece == PieceType.avoirClient ||
+          _piece.piece == PieceType.avoirFournisseur)){
+        ticket.text("${S.current.nif} : ${_selectedClient.nif}",
+            styles: PosStyles(
+                align: (formatPrint == PaperSize.mm80)
+                    ? PosAlign.center
+                    : PosAlign.left));
+      }
+      if(_selectedClient.ai != "" && (_piece.piece == PieceType.factureClient ||
+          _piece.piece == PieceType.factureFournisseur ||
+          _piece.piece == PieceType.avoirClient ||
+          _piece.piece == PieceType.avoirFournisseur)){
+        ticket.text("${S.current.art_imp} : ${_selectedClient.ai}",
+            styles: PosStyles(
+                align: (formatPrint == PaperSize.mm80)
+                    ? PosAlign.center
+                    : PosAlign.left));
+      }
       ticket.hr(ch: '-');
       ticket.row([
         PosColumn(
@@ -2834,7 +2866,7 @@ class _AddPiecePageState extends State<AddPiecePage>
       });
       ticket.hr(ch: '-');
       var encode;
-      if (_piece.total_tva > 0 && _myParams.tva) {
+      if ((_piece.total_tva > 0 && _myParams.tva) || _piece.remise > 0) {
         encode = await CharsetConverter.encode("ISO-8859-6",
             "${S.current.total_ht} : ${Helpers.numberFormat(_piece.total_ht).toString()}");
         ticket.textEncoded(encode,
@@ -2889,7 +2921,7 @@ class _AddPiecePageState extends State<AddPiecePage>
       }
 
       ticket.hr(ch: '=');
-      encode = (_piece.net_a_payer > 0)
+      encode = (_piece.net_a_payer >= 0)
           ? await CharsetConverter.encode("ISO-8859-6",
           "${S.current.net_payer} : ${Helpers.numberFormat(_piece.net_a_payer).toString()} ${_devise}")
           :await CharsetConverter.encode("ISO-8859-6",
@@ -2906,7 +2938,7 @@ class _AddPiecePageState extends State<AddPiecePage>
 
       ticket.row([
         PosColumn(
-            textEncoded:(_piece.regler > 0)
+            textEncoded:(_piece.regler >= 0)
                 ? await CharsetConverter.encode("ISO-8859-6",
                 "${S.current.regler} : ${Helpers.numberFormat(_piece.regler).toString()}")
             : await CharsetConverter.encode("ISO-8859-6",
@@ -3022,7 +3054,7 @@ class _AddPiecePageState extends State<AddPiecePage>
                     crossAxisAlignment: pw.CrossAxisAlignment.start,
                     children: [
                       pw.Text(
-                          "${S.current.rs}\t ${_selectedClient.raisonSociale} ",
+                          "${S.current.client_titre}\t ${_selectedClient.raisonSociale} ",
                           style: pw.TextStyle(font: ttf)),
                       pw.Divider(height: 2),
 
@@ -3168,9 +3200,11 @@ class _AddPiecePageState extends State<AddPiecePage>
           pw.Row(children: [
             pw.Expanded(
                 flex: 6,
-                child: pw.Column(children: [
+                child: pw.Column(
+                    crossAxisAlignment:(Intl.getCurrentLocale() == "ar")? pw.CrossAxisAlignment.end : pw.CrossAxisAlignment.start ,
+                children: [
                   pw.Text(
-                    (_piece.regler > 0)
+                    (_piece.regler >= 0)
                       ? "${S.current.regler}\t ${Helpers.numberFormat(_piece.regler)} ${_devise}" : "${S.current.regler}\t ${Helpers.numberFormat(_piece.regler * -1)} ${_devise}" ,
                       style: pw.TextStyle(font: ttf)),
                   (_piece.reste != 0)
@@ -3188,26 +3222,28 @@ class _AddPiecePageState extends State<AddPiecePage>
                   pw.Text(getPieceSuminLetters(),
                       style: pw.TextStyle(
                           font: ttf, fontWeight: pw.FontWeight.bold)),
-                ])),
+                ]
+                )
+            ),
             pw.SizedBox(width: 10),
             pw.Expanded(
                 flex: 6,
                 child: pw.Column(
-                    crossAxisAlignment: pw.CrossAxisAlignment.start,
+                    crossAxisAlignment:(Intl.getCurrentLocale() == "ar")? pw.CrossAxisAlignment.end : pw.CrossAxisAlignment.start ,
                     children: [
-                      (_piece.total_tva > 0 && _myParams.tva)
+                      ((_piece.total_tva > 0 && _myParams.tva) || _piece.remise > 0)
                           ? pw.Text(
                               "${S.current.total_ht}\t  ${Helpers.numberFormat(_piece.total_ht)}\t ${_devise}",
                               style: pw.TextStyle(font: ttf))
                           : pw.SizedBox(),
                       (_piece.remise > 0)
                           ? pw.Text(
-                              "${S.current.remise}\t  ${Helpers.numberFormat((_piece.total_ht * _piece.remise) / 100)}  (${_piece.remise.toStringAsFixed(2)}\t  %)\t ${_devise}",
+                              "${S.current.remise}\t  ${Helpers.numberFormat((_piece.total_ht * _piece.remise) / 100)}\t ${_devise}\t (${_piece.remise.toStringAsFixed(2)}\t %)",
                               style: pw.TextStyle(font: ttf))
                           : pw.SizedBox(),
                       (_piece.remise > 0)
                           ? pw.Text(
-                              "${S.current.net_ht}\t  ${Helpers.numberFormat(_piece.net_ht)}\t  ${_devise}",
+                              "${S.current.net_ht}\t  ${Helpers.numberFormat(_piece.net_ht)}\t ${_devise}",
                               style: pw.TextStyle(font: ttf))
                           : pw.SizedBox(),
                       (_piece.total_tva > 0 && _myParams.tva)
@@ -3227,8 +3263,8 @@ class _AddPiecePageState extends State<AddPiecePage>
                               style: pw.TextStyle(font: ttf))
                           : pw.SizedBox(),
                       pw.Text(
-                          (_piece.net_a_payer > 0)
-                          ? "${S.current.net_payer}\t  ${Helpers.numberFormat(_piece.net_a_payer)}\t  ${_devise}" : "${S.current.net_payer}\t  ${Helpers.numberFormat(_piece.net_a_payer * -1)}\t  ${_devise}",
+                          (_piece.net_a_payer >= 0)
+                          ? "${S.current.net_payer}\t  ${Helpers.numberFormat(_piece.net_a_payer)}\t  $_devise" : "${S.current.net_payer}\t  ${Helpers.numberFormat(_piece.net_a_payer * -1)}\t  ${_devise}",
                           style: pw.TextStyle(font: ttf)),
                       pw.Divider(height: 2),
                     ])),

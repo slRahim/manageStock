@@ -318,7 +318,7 @@ class _AddTresoriePageState extends State<AddTresoriePage>
                                     size: 18,
                                   ),
                                   Text(
-                                    "(${_devise})",
+                                    "($_devise)",
                                     style: GoogleFonts.lato(
                                       textStyle: TextStyle(
                                           fontSize: 12, fontWeight: FontWeight.bold)
@@ -355,7 +355,7 @@ class _AddTresoriePageState extends State<AddTresoriePage>
                                     size: 20,
                                     color: Theme.of(context).primaryColorDark),
                                 Text(
-                                  "(${_devise})",
+                                  "($_devise)",
                                   style: GoogleFonts.lato(
                                     textStyle: TextStyle(
                                         fontSize: 12, fontWeight: FontWeight.bold)

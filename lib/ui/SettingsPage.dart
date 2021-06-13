@@ -156,7 +156,19 @@ class _SettingsPageState extends State<SettingsPage> {
                 Icons.arrow_back,
               ),
               onPressed: () {
-                Navigator.pop(context);
+                AwesomeDialog(
+                    context: context,
+                    title: "",
+                    desc: "${S.current.msg_retour_no_save} ?",
+                    dialogType: DialogType.QUESTION,
+                    animType: AnimType.BOTTOMSLIDE,
+                    btnCancelText: S.current.non,
+                    btnCancelOnPress: () {},
+                    btnOkText: S.current.oui,
+                    btnOkOnPress: () async {
+                      Navigator.pop(context);
+                    })
+                  ..show();
               },
             ),
             title: Text(S.current.settings , style: GoogleFonts.lato(fontWeight: FontWeight.bold),),
@@ -356,7 +368,7 @@ class _SettingsPageState extends State<SettingsPage> {
                 tiles: [
                   SettingsTile(
                     title: '${S.current.imp_affichage}',
-                    subtitle:("${_formatPrintDisplay}"),
+                    subtitle:("$_formatPrintDisplay"),
                     titleTextStyle:  GoogleFonts.lato(),
                     subtitleTextStyle:  GoogleFonts.lato(),
                     leading: Icon(Icons.list_alt_outlined, color: Theme.of(context).primaryColorDark),
@@ -972,7 +984,7 @@ class _SettingsPageState extends State<SettingsPage> {
         break;
     }
 
-    _prefs.setString("myDevise", "${_currencycode}");
+    _prefs.setString("myDevise", "$_currencycode");
   }
 
   _saveStyle() async {

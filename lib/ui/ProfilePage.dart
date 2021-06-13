@@ -28,6 +28,7 @@ import 'package:gestmob/Helpers/country_utils.dart';
 import 'package:flutter/services.dart';
 import 'dart:convert';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:gestmob/models/MyParams.dart';
 
 class ProfilePage extends StatefulWidget {
   @override
@@ -80,7 +81,7 @@ class _ProfilePageState extends State<ProfilePage> with TickerProviderStateMixin
 
   SliverListDataSource _dataSource;
   QueryCtr _queryCtr;
-
+  MyParams _myParams;
 
   final _formKey = GlobalKey<FormState>();
 
@@ -96,6 +97,12 @@ class _ProfilePageState extends State<ProfilePage> with TickerProviderStateMixin
         finishedLoading = true;
       });
     });
+  }
+
+  @override
+  void didChangeDependencies() {
+    PushNotificationsManagerState data = PushNotificationsManager.of(context);
+    _myParams = data.myParams;
   }
 
   @override
@@ -846,36 +853,39 @@ class _ProfilePageState extends State<ProfilePage> with TickerProviderStateMixin
                 ),
               ),
             ),
-            TextFormField(
-              enabled: editMode,
-              controller: _aiControl,
-              onTap: () => _aiControl.selection = TextSelection(baseOffset: 0, extentOffset: _aiControl.value.text.length),
-              keyboardType: TextInputType.text,
-              // validator: (value) {
-              //   if (value.isEmpty) {
-              //     return S.current.msg_champ_oblg;
-              //   }
-              //   return null;
-              // },
-              decoration: InputDecoration(
-                labelText:  S.current.art_imp,
-                labelStyle: GoogleFonts.lato(textStyle: TextStyle(color: Theme.of(context).hintColor)),
-                prefixIcon: Icon(
-                  MdiIcons.cardAccountDetails,
-                  color: Colors.blue,
-                ),
-                focusedBorder: OutlineInputBorder(
+            Visibility(
+              visible: (_myParams.pays == "Algeria"),
+              child: TextFormField(
+                enabled: editMode,
+                controller: _aiControl,
+                onTap: () => _aiControl.selection = TextSelection(baseOffset: 0, extentOffset: _aiControl.value.text.length),
+                keyboardType: TextInputType.text,
+                // validator: (value) {
+                //   if (value.isEmpty) {
+                //     return S.current.msg_champ_oblg;
+                //   }
+                //   return null;
+                // },
+                decoration: InputDecoration(
+                  labelText:  S.current.art_imp,
+                  labelStyle: GoogleFonts.lato(textStyle: TextStyle(color: Theme.of(context).hintColor)),
+                  prefixIcon: Icon(
+                    MdiIcons.cardAccountDetails,
+                    color: Colors.blue,
+                  ),
+                  focusedBorder: OutlineInputBorder(
+                      borderSide: BorderSide(color: Colors.blue),
+                      borderRadius: BorderRadius.circular(20)),
+                  enabledBorder: OutlineInputBorder(
+                    gapPadding: 3.3,
+                    borderRadius: BorderRadius.circular(20),
                     borderSide: BorderSide(color: Colors.blue),
-                    borderRadius: BorderRadius.circular(20)),
-                enabledBorder: OutlineInputBorder(
-                  gapPadding: 3.3,
-                  borderRadius: BorderRadius.circular(20),
-                  borderSide: BorderSide(color: Colors.blue),
-                ),
-                errorBorder:  OutlineInputBorder(
-                  gapPadding: 3.3,
-                  borderRadius: BorderRadius.circular(20),
-                  borderSide: BorderSide(color: Colors.red),
+                  ),
+                  errorBorder:  OutlineInputBorder(
+                    gapPadding: 3.3,
+                    borderRadius: BorderRadius.circular(20),
+                    borderSide: BorderSide(color: Colors.red),
+                  ),
                 ),
               ),
             ),

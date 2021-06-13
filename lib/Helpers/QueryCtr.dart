@@ -128,7 +128,7 @@ class QueryCtr {
     var res;
 
     query += ' ORDER BY id DESC';
-    query += " LIMIT ${limit} OFFSET ${offset}";
+    query += " LIMIT $limit OFFSET $offset";
 
     res = await dbClient.rawQuery(query);
 
@@ -594,9 +594,9 @@ class QueryCtr {
   Future<int> updateItemByForeignKey (String tableName , item ,value, String column , key) async {
     var dbClient = await _databaseHelper.db ;
     int res = await dbClient.rawUpdate('''
-      UPDATE ${tableName}
-        SET ${item} = ${value}
-      WHERE ${column} = ${key} ;
+      UPDATE $tableName
+        SET $item = $value
+      WHERE $column = $key ;
     ''');
     return res ;
   }
@@ -610,7 +610,7 @@ class QueryCtr {
 
   Future<int> removeItemWithForeignKey (String tableName , item , String column) async {
     var dbClient = await _databaseHelper.db ;
-    int res = await dbClient.delete(tableName , where: "${column} = ?" , whereArgs: [item]);
+    int res = await dbClient.delete(tableName , where: "$column = ?" , whereArgs: [item]);
 
     return res ;
   }
@@ -656,7 +656,7 @@ class QueryCtr {
     Database dbClient = await _databaseHelper.db;
     String query = "SELECT * FROM ${DbTablesNames.articlesFamilles} Where Libelle like '%${searchTerm??''}%'";
     query += ' ORDER BY id DESC';
-    query += " LIMIT ${limit} OFFSET ${offset}";
+    query += " LIMIT $limit OFFSET $offset";
 
     var res = await dbClient.rawQuery(query);
 
@@ -698,7 +698,7 @@ class QueryCtr {
       query += " Where Tva = ${double.parse(searchTerm)}";
     }
     query += ' ORDER BY id DESC';
-    query += " LIMIT ${limit} OFFSET ${offset}";
+    query += " LIMIT $limit OFFSET $offset";
 
     var res = await dbClient.rawQuery(query);
 
@@ -715,7 +715,7 @@ class QueryCtr {
     Database dbClient = await _databaseHelper.db;
     String query = "SELECT * FROM ${DbTablesNames.tiersFamille} Where Libelle like '%${searchTerm??''}%'";
     query += ' ORDER BY id DESC';
-    query += " LIMIT ${limit} OFFSET ${offset}";
+    query += " LIMIT $limit OFFSET $offset";
 
     var res = await dbClient.rawQuery(query);
 
@@ -757,8 +757,8 @@ class QueryCtr {
     int startDate = DateTime(DateTime.now().year , DateTime.now().month , 1).millisecondsSinceEpoch;
     int endDate = DateTime.now().millisecondsSinceEpoch;
     Map<int , dynamic> result = new Map<int , dynamic>();
-    String query1="Select Sum(Net_a_payer) as chf From Pieces Where Mov=1 AND (Piece LIKE 'BL' OR Piece LIKE 'FC' OR Piece LIKE 'RC' OR Piece LIKE 'AC') AND Date Between ${startDate} AND ${endDate} ";
-    String query2="Select Sum(Net_a_payer) as achat From Pieces Where Mov=1 AND (Piece LIKE 'BR' OR Piece LIKE 'FF' OR Piece LIKE 'RF' OR Piece LIKE 'AF') AND Date Between ${startDate} AND ${endDate} ";
+    String query1="Select Sum(Net_a_payer) as chf From Pieces Where Mov=1 AND (Piece LIKE 'BL' OR Piece LIKE 'FC' OR Piece LIKE 'RC' OR Piece LIKE 'AC') AND Date Between $startDate AND $endDate ";
+    String query2="Select Sum(Net_a_payer) as achat From Pieces Where Mov=1 AND (Piece LIKE 'BR' OR Piece LIKE 'FF' OR Piece LIKE 'RF' OR Piece LIKE 'AF') AND Date Between $startDate AND $endDate ";
     var res1 = await dbClient.rawQuery(query1);
     var res2 = await dbClient.rawQuery(query2);
     result={
@@ -923,7 +923,7 @@ class QueryCtr {
                   (Sum(Journaux.Net_ht*Journaux.Qte)/Sum(Journaux.Qte)*Sum(Journaux.Qte)) as montant
            From Journaux 
            Join Articles ON Journaux.Article_id = Articles.id 
-           Where Journaux.Mov = 1 AND Piece_type like 'CC'  AND  Journaux.Date Between ${dateStart} AND ${dateEnd}
+           Where Journaux.Mov = 1 AND Piece_type like 'CC'  AND  Journaux.Date Between $dateStart AND $dateEnd
            Group By Articles.id 
            order by Articles.Designation);
          """;
@@ -952,7 +952,7 @@ class QueryCtr {
          Left Join Pieces ON Journaux.Piece_id = Pieces.id 
          Left Join Tiers ON Pieces.Tier_id = Tiers.id 
          Left Join Articles ON Journaux.Article_id = Articles.id 
-         Where Journaux.Mov = 1 AND Piece_type like 'CC'   AND  Journaux.Date Between ${dateStart} AND ${dateEnd}
+         Where Journaux.Mov = 1 AND Piece_type like 'CC'   AND  Journaux.Date Between $dateStart AND $dateEnd
          order by Pieces.Num_piece
          """;
          break;
@@ -979,7 +979,7 @@ class QueryCtr {
            From Journaux 
            Join Articles ON Journaux.Article_id = Articles.id 
            Where Journaux.Mov = 1 AND (Piece_type like 'BR' OR Piece_type like 'FF' OR Piece_type like 'RF'  OR Piece_type like 'AF')
-               AND  Journaux.Date Between ${dateStart} AND ${dateEnd}
+               AND  Journaux.Date Between $dateStart AND $dateEnd
            Group By Articles.id 
            order by Articles.Designation) ;
          """;
@@ -1024,7 +1024,7 @@ class QueryCtr {
          Left Join Pieces ON Journaux.Piece_id = Pieces.id 
          Left Join Tiers ON Pieces.Tier_id = Tiers.id 
          Left Join Articles ON Journaux.Article_id = Articles.id 
-         Where Journaux.Mov = 0 AND Piece_type like 'BC'   AND  Journaux.Date Between ${dateStart} AND ${dateEnd}
+         Where Journaux.Mov = 0 AND Piece_type like 'BC'   AND  Journaux.Date Between $dateStart AND $dateEnd
          order by Pieces.Num_piece
          """;
         break;
@@ -1109,7 +1109,7 @@ class QueryCtr {
                    0 as Achat , 0 as Reg_four , 0 as dette , 
                    0 as charge , Sum(Marge) as marge
             from Pieces 
-            where Pieces.Mov = 1 And (Pieces.Piece Like 'BL' Or  Pieces.Piece Like 'FC' Or  Pieces.Piece Like 'RC' Or  Pieces.Piece Like 'AC') And Date Between ${dateStart} And ${dateEnd}
+            where Pieces.Mov = 1 And (Pieces.Piece Like 'BL' Or  Pieces.Piece Like 'FC' Or  Pieces.Piece Like 'RC' Or  Pieces.Piece Like 'AC') And Date Between $dateStart And $dateEnd
             Group by Date
             
             Union
@@ -1118,7 +1118,7 @@ class QueryCtr {
                     Sum(Net_a_payer) as achat , Sum(Regler) as Reg_four ,Sum(Reste) as dette ,
                     0 as charge , 0 as marge
             from Pieces
-            where Pieces.Mov = 1 And (Pieces.Piece Like 'BR' Or  Pieces.Piece Like 'FF' Or  Pieces.Piece Like 'RF' Or  Pieces.Piece Like 'AF') And Date Between ${dateStart} And ${dateEnd}
+            where Pieces.Mov = 1 And (Pieces.Piece Like 'BR' Or  Pieces.Piece Like 'FF' Or  Pieces.Piece Like 'RF' Or  Pieces.Piece Like 'AF') And Date Between $dateStart And $dateEnd
             Group by Date 
             
             Union
@@ -1127,7 +1127,7 @@ class QueryCtr {
                     0 achat , 0 as Reg_four ,0 as dette , 
                     Sum(Tresories.Montant) as charge , 0 as marge
             from Tresories
-            where Mov = 1 And Categorie_id = 5 And Date Between ${dateStart} And ${dateEnd}
+            where Mov = 1 And Categorie_id = 5 And Date Between $dateStart And $dateEnd
             Group by Date ) a 
             
         Group by date
@@ -1143,7 +1143,7 @@ class QueryCtr {
                    0 as Achat , 0 as Reg_four , 0 as dette , 
                    0 as charge , Sum(Marge) as marge
             from Pieces 
-            where Pieces.Mov = 1 And (Pieces.Piece Like 'BL' Or  Pieces.Piece Like 'FC' Or  Pieces.Piece Like 'RC' Or  Pieces.Piece Like 'AC') And Date Between ${dateStart} And ${dateEnd}
+            where Pieces.Mov = 1 And (Pieces.Piece Like 'BL' Or  Pieces.Piece Like 'FC' Or  Pieces.Piece Like 'RC' Or  Pieces.Piece Like 'AC') And Date Between $dateStart And $dateEnd
             Group by Date
             
             Union
@@ -1152,7 +1152,7 @@ class QueryCtr {
                     Sum(Net_a_payer) as achat , Sum(Regler) as Reg_four ,Sum(Reste) as dette ,
                     0 as charge , 0 as marge
             from Pieces
-            where Pieces.Mov = 1 And (Pieces.Piece Like 'BR' Or  Pieces.Piece Like 'FF' Or  Pieces.Piece Like 'RF' Or  Pieces.Piece Like 'AF') And Date Between ${dateStart} And ${dateEnd}
+            where Pieces.Mov = 1 And (Pieces.Piece Like 'BR' Or  Pieces.Piece Like 'FF' Or  Pieces.Piece Like 'RF' Or  Pieces.Piece Like 'AF') And Date Between $dateStart And $dateEnd
             Group by Date 
             
             Union
@@ -1161,7 +1161,7 @@ class QueryCtr {
                     0 achat , 0 as Reg_four ,0 as dette , 
                     Sum(Tresories.Montant) as charge , 0 as marge
             from Tresories
-            where Mov = 1 And Categorie_id = 5 And Date Between ${dateStart} And ${dateEnd}
+            where Mov = 1 And Categorie_id = 5 And Date Between $dateStart And $dateEnd
             Group by Date ) a 
             
         Group by date

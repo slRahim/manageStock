@@ -282,7 +282,7 @@ class _PurchasePageState extends State<PurchasePage> {
           color: Theme.of(context).selectedRowColor
         ),
         child: ListTile(
-          title: Text("${_devise_product} ${Helpers.numberFormat(double.parse(_prix_product))}", style: GoogleFonts.lato(textStyle: TextStyle(fontWeight: FontWeight.bold , fontSize: 22)),),
+          title: Text("$_devise_product ${Helpers.numberFormat(double.parse(_prix_product))}", style: GoogleFonts.lato(textStyle: TextStyle(fontWeight: FontWeight.bold , fontSize: 22)),),
           subtitle: Text("${productDetail.title.replaceAll('(Virtual Plexus)', '')}" , style: GoogleFonts.lato(textStyle: TextStyle(fontWeight: FontWeight.bold)),),
           trailing: (productDetail.id != "010101")? Container(
             padding: EdgeInsets.all(4),

@@ -419,7 +419,12 @@ class Helpers {
             tradBillions = _convertLessThanOneThousand(billions) + " milliard";
             break;
           default:
-            tradBillions = _convertLessThanOneThousand(billions) + " milliards";
+            if(millions > 0 || thousands > 0 || handreds > 0){
+              tradBillions = _convertLessThanOneThousand(billions) + " milliard";
+            }else{
+              tradBillions = _convertLessThanOneThousand(billions) + " milliards";
+            }
+            break ;
         }
         String result = tradBillions;
 
@@ -433,7 +438,12 @@ class Helpers {
             tradMillions = _convertLessThanOneThousand(millions) + " million";
             break;
           default:
-            tradMillions = _convertLessThanOneThousand(millions) + " millions";
+            if(thousands > 0 || handreds > 0){
+              tradMillions = _convertLessThanOneThousand(millions) + " million";
+            }else{
+              tradMillions = _convertLessThanOneThousand(millions) + " millions";
+            }
+
         }
         result = result + tradMillions;
 
@@ -446,7 +456,11 @@ class Helpers {
             tradThousands = "mille";
             break;
           default:
-            tradThousands = _convertLessThanOneThousand(thousands) + " milles";
+            if(handreds > 0){
+              tradThousands = _convertLessThanOneThousand(thousands) + " mille";
+            }else{
+              tradThousands = _convertLessThanOneThousand(thousands) + " milles";
+            }
         }
         result = result + tradThousands;
 
@@ -714,7 +728,7 @@ class Helpers {
         }
         if (number == 0) return soFar;
         return number > 1
-            ? ("${numNames[number]} cent$soFar")
+            ? ("${numNames[number]} cents$soFar")
             : (" cent$soFar");
         break;
       case 'ar':
@@ -782,8 +796,14 @@ class Helpers {
         }
         if (number == 0) return soFar;
         if (number == 1) {
+          if(soFar.trim().length == 0){
+            return " مائة " ;
+          }
           return " مائة " + ' و ' + soFar;
         } else if (number == 2) {
+          if(soFar.trim().length == 0){
+            return " مائتان " ;
+          }
           return " مائتان " + ' و ' + soFar;
         } else if (number < 11) {
           if (soFar.trim().length == 0) {

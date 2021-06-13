@@ -114,7 +114,7 @@ class Profile{
     this._nis = obj["Nis"];
     this._codedouane = obj["Codedouane"];
     this._maposition = obj["Maposition"];
-    this._codePinEnabled = obj["CodePinEnabled"] == 1? true : false;;
+    this._codePinEnabled = obj["CodePinEnabled"] == 1? true : false;
 
   }
 

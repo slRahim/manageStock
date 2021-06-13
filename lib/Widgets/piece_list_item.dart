@@ -167,7 +167,7 @@ class _PieceListItemState extends State<PieceListItem> {
                   ),
                   (widget.piece.net_a_payer < 0)
                       ? Text(
-                          "${Helpers.numberFormat(widget.piece.net_a_payer * -1).toString()} ${_devise}",
+                          "${Helpers.numberFormat(widget.piece.net_a_payer * -1).toString()} $_devise",
                           style: GoogleFonts.lato(
                               textStyle: TextStyle(
                                   fontSize: 16.0,
@@ -175,7 +175,7 @@ class _PieceListItemState extends State<PieceListItem> {
                                   color: Theme.of(context).primaryColorDark)),
                         )
                       : Text(
-                          '${Helpers.numberFormat(widget.piece.net_a_payer).toString()} ${_devise}',
+                          '${Helpers.numberFormat(widget.piece.net_a_payer).toString()} $_devise',
                           style: GoogleFonts.lato(
                               textStyle: TextStyle(
                                   fontSize: 16.0,
@@ -201,7 +201,7 @@ class _PieceListItemState extends State<PieceListItem> {
                               color: Colors.blue))),
                   TextSpan(
                     text:
-                        "${Helpers.numberFormat(widget.piece.regler)} ${_devise}",
+                        "${Helpers.numberFormat(widget.piece.regler)} $_devise",
                     style: GoogleFonts.lato(
                         textStyle: TextStyle(
                             color: Theme.of(context).primaryColorDark,
@@ -220,7 +220,7 @@ class _PieceListItemState extends State<PieceListItem> {
                               color: Colors.redAccent))),
                   TextSpan(
                     text:
-                        "${Helpers.numberFormat(widget.piece.reste)} ${_devise}",
+                        "${Helpers.numberFormat(widget.piece.reste)} $_devise",
                     style: GoogleFonts.lato(
                         textStyle: TextStyle(
                             color: Theme.of(context).primaryColorDark,
@@ -239,7 +239,7 @@ class _PieceListItemState extends State<PieceListItem> {
                               color: Colors.green))),
                   TextSpan(
                     text:
-                        "${Helpers.numberFormat(widget.piece.marge)} ${_devise}",
+                        "${Helpers.numberFormat(widget.piece.marge)} $_devise",
                     style: GoogleFonts.lato(
                         textStyle: TextStyle(
                             color: Theme.of(context).primaryColorDark,

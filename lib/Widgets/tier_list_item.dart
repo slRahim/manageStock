@@ -154,10 +154,10 @@ class _TierListItemState extends State<TierListItem> {
                   : null,
               trailingChildren: [
                 Text(
-                  "${S.current.regler}: ${Helpers.numberFormat(widget.tier.regler).toString()} ${_devise}",
+                  "${S.current.regler}: ${Helpers.numberFormat(widget.tier.regler).toString()} $_devise",
                 ),
                 Text(
-                  "${Helpers.numberFormat(widget.tier.credit).toString()} ${_devise}",
+                  "${Helpers.numberFormat(widget.tier.credit).toString()} $_devise",
                   style: GoogleFonts.lato(
                       textStyle: TextStyle(
                           color: widget.tier.credit > 0
@@ -197,7 +197,7 @@ class _TierListItemState extends State<TierListItem> {
                         ))),
                     TextSpan(
                       text:
-                          "${Helpers.numberFormat(widget.tier.chiffre_affaires)} ${_devise}",
+                          "${Helpers.numberFormat(widget.tier.chiffre_affaires)} $_devise",
                       style: GoogleFonts.lato(
                           textStyle: TextStyle(
                               color: Theme.of(context).primaryColorDark,

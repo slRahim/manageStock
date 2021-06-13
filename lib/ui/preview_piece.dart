@@ -255,13 +255,13 @@ class _PreviewPieceState extends State<PreviewPiece> {
                           ),
                           Text(
                               "---------------------------------------------------------------------------------------", style: TextStyle(color: Colors.black),),
-                          (widget.piece.total_tva > 0)
+                          ((widget.piece.total_tva > 0 && _myParams.tva) || widget.piece.remise > 0)
                               ? Text(
                                   "\n ${S.current.total_ht}:${Helpers.numberFormat(widget.piece.total_ht)}", style: TextStyle(color: Colors.black),)
                               : SizedBox(),
                           (widget.piece.remise > 0)
                               ? Text(
-                                  "${S.current.remise}:${Helpers.numberFormat((widget.piece.total_ht * widget.piece.remise) / 100)}(${Helpers.numberFormat(widget.piece.remise)}%)"
+                                  "${S.current.remise}:${Helpers.numberFormat((widget.piece.total_ht * widget.piece.remise) / 100)} (${Helpers.numberFormat(widget.piece.remise)}%)"
                             , style: TextStyle(color: Colors.black),)
                               : SizedBox(),
                           (widget.piece.remise > 0)
@@ -282,8 +282,8 @@ class _PreviewPieceState extends State<PreviewPiece> {
                               : SizedBox(),
                           Text("============================================", style: TextStyle(color: Colors.black),),
                           Text(
-                              (widget.piece.net_a_payer > 0)
-                            ? "${S.current.net_payer} :${Helpers.numberFormat(widget.piece.net_a_payer)}" : "${S.current.net_payer} :${Helpers.numberFormat(widget.piece.net_a_payer * -1)}",
+                              (widget.piece.net_a_payer >= 0)
+                            ? "${S.current.net_payer} :${Helpers.numberFormat(widget.piece.net_a_payer)} $_devise" : "${S.current.net_payer} :${Helpers.numberFormat(widget.piece.net_a_payer * -1)} $_devise",
                             style: TextStyle(fontSize: 20,color: Colors.black),
                           ),
                           Text("============================================", style: TextStyle(color: Colors.black),),
@@ -294,7 +294,7 @@ class _PreviewPieceState extends State<PreviewPiece> {
                             children: [
                               Expanded(
                                 child: Text(
-                              (widget.piece.regler > 0)
+                              (widget.piece.regler >= 0)
                                     ? "${S.current.regler} :${Helpers.numberFormat(widget.piece.regler)}" :"${S.current.regler} :${Helpers.numberFormat(widget.piece.regler * -1)}" , style: TextStyle(color: Colors.black) ,
                                 ),
                               ),
@@ -482,7 +482,7 @@ class _PreviewPieceState extends State<PreviewPiece> {
                   ? PosAlign.center
                   : PosAlign.left));
 
-      input = "${S.current.rs}";
+      input = "${S.current.client_titre}";
       encArabic = await CharsetConverter.encode("ISO-8859-6",
           "${widget.piece.raisonSociale}: ${input.split('').reversed.join()}");
       ticket.textEncoded(encArabic,
@@ -594,7 +594,7 @@ class _PreviewPieceState extends State<PreviewPiece> {
         ]);
       }
       ticket.hr(ch: '-');
-      if (widget.piece.total_tva > 0) {
+      if ((widget.piece.total_tva > 0 && _myParams.tva) || widget.piece.remise > 0) {
         input = "${S.current.total_ht}";
         encArabic = await CharsetConverter.encode("ISO-8859-6",
             "${Helpers.numberFormat(widget.piece.total_ht).toString()}: ${input.split('').reversed.join()}");
@@ -663,11 +663,11 @@ class _PreviewPieceState extends State<PreviewPiece> {
 
       ticket.hr(ch: '=');
       input = "${S.current.net_payer}";
-      encArabic =(widget.piece.net_a_payer > 0)
+      encArabic =(widget.piece.net_a_payer >= 0)
           ? await CharsetConverter.encode("ISO-8859-6",
-          "${_devise} ${Helpers.numberFormat(widget.piece.net_a_payer).toString()}: ${input.split('').reversed.join()}")
+          "$_devise ${Helpers.numberFormat(widget.piece.net_a_payer).toString()}: ${input.split('').reversed.join()}")
       : await CharsetConverter.encode("ISO-8859-6",
-          "${_devise} ${Helpers.numberFormat(widget.piece.net_a_payer * -1).toString()}: ${input.split('').reversed.join()}");
+          "$_devise ${Helpers.numberFormat(widget.piece.net_a_payer * -1).toString()}: ${input.split('').reversed.join()}");
       ticket.textEncoded(encArabic,
           styles: PosStyles(
             codeTable: PosCodeTable.arabic,
@@ -681,7 +681,7 @@ class _PreviewPieceState extends State<PreviewPiece> {
 
       ticket.row([
         PosColumn(
-            textEncoded:(widget.piece.regler > 0)
+            textEncoded:(widget.piece.regler >= 0)
                 ? await CharsetConverter.encode("ISO-8859-6",
                 "${Helpers.numberFormat(widget.piece.regler).toString()}: ${S.current.regler.split('').reversed.join()}")
             :  await CharsetConverter.encode("ISO-8859-6",
@@ -754,11 +754,42 @@ class _PreviewPieceState extends State<PreviewPiece> {
               align: (_default_format == PaperSize.mm80)
                   ? PosAlign.center
                   : PosAlign.left));
-      ticket.text("${S.current.rs} : ${widget.piece.raisonSociale}",
+      ticket.text("${S.current.client_titre} : ${widget.piece.raisonSociale}",
           styles: PosStyles(
               align: (_default_format == PaperSize.mm80)
                   ? PosAlign.center
                   : PosAlign.left));
+      if(widget.tier.rc != "" && (widget.piece.piece == PieceType.factureClient ||
+          widget.piece.piece == PieceType.factureFournisseur ||
+          widget.piece.piece == PieceType.avoirClient ||
+          widget.piece.piece == PieceType.avoirFournisseur)){
+
+        ticket.text("${S.current.rc} : ${widget.tier.rc}",
+            styles: PosStyles(
+                align: (_default_format == PaperSize.mm80)
+                    ? PosAlign.center
+                    : PosAlign.left));
+      }
+      if(widget.tier.nif != "" && (widget.piece.piece == PieceType.factureClient ||
+          widget.piece.piece == PieceType.factureFournisseur ||
+          widget.piece.piece == PieceType.avoirClient ||
+          widget.piece.piece == PieceType.avoirFournisseur)){
+        ticket.text("${S.current.nif} : ${widget.tier.nif}",
+            styles: PosStyles(
+                align: (_default_format == PaperSize.mm80)
+                    ? PosAlign.center
+                    : PosAlign.left));
+      }
+      if(widget.tier.ai != "" && (widget.piece.piece == PieceType.factureClient ||
+          widget.piece.piece == PieceType.factureFournisseur ||
+          widget.piece.piece == PieceType.avoirClient ||
+          widget.piece.piece == PieceType.avoirFournisseur)){
+        ticket.text("${S.current.art_imp} : ${widget.tier.ai}",
+            styles: PosStyles(
+                align: (_default_format == PaperSize.mm80)
+                    ? PosAlign.center
+                    : PosAlign.left));
+      }
       ticket.hr(ch: '-');
       ticket.row([
         PosColumn(
@@ -799,7 +830,7 @@ class _PreviewPieceState extends State<PreviewPiece> {
       });
       ticket.hr(ch: '-');
       var encode ;
-      if (widget.piece.total_tva > 0) {
+      if ((widget.piece.total_tva > 0 && _myParams.tva) || widget.piece.remise > 0) {
         encode = await CharsetConverter.encode("ISO-8859-6", "${S.current.total_ht} : ${Helpers.numberFormat(widget.piece.total_ht).toString()}");
         ticket.textEncoded(
             encode,
@@ -856,9 +887,9 @@ class _PreviewPieceState extends State<PreviewPiece> {
       }
 
       ticket.hr(ch: '=');
-      encode =(widget.piece.net_a_payer > 0)
-          ? await CharsetConverter.encode("ISO-8859-6", "${S.current.net_payer} : ${Helpers.numberFormat(widget.piece.net_a_payer).toString()} ${_devise}")
-          :await CharsetConverter.encode("ISO-8859-6", "${S.current.net_payer} : ${Helpers.numberFormat(widget.piece.net_a_payer * -1).toString()} ${_devise}");
+      encode =(widget.piece.net_a_payer >= 0)
+          ? await CharsetConverter.encode("ISO-8859-6", "${S.current.net_payer} : ${Helpers.numberFormat(widget.piece.net_a_payer).toString()} $_devise")
+          :await CharsetConverter.encode("ISO-8859-6", "${S.current.net_payer} : ${Helpers.numberFormat(widget.piece.net_a_payer * -1).toString()} $_devise");
       ticket.textEncoded(
           encode,
           styles: PosStyles(
@@ -871,7 +902,7 @@ class _PreviewPieceState extends State<PreviewPiece> {
       ticket.hr(ch: '=');
       ticket.row([
         PosColumn(
-            textEncoded: (widget.piece.regler > 0)
+            textEncoded: (widget.piece.regler >= 0)
                ? await CharsetConverter.encode("ISO-8859-6","${S.current.regler} : ${Helpers.numberFormat(widget.piece.regler).toString()}")
             :await CharsetConverter.encode("ISO-8859-6","${S.current.regler} : ${Helpers.numberFormat(widget.piece.regler * -1).toString()}"),
             width: 6),

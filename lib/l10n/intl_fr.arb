@@ -70,7 +70,7 @@
   "filtrer_btn" : "Filtrer",
   "ajouter": "Ajouter ",
   "scan_qr": "Scanner QR",
-  "client_titre" : "Clients",
+  "client_titre" : "Client",
   "fournisseur_titre" : "Fournisseurs",
   "a_credit" : "Avec Crédit" ,
   "aff_bloquer" : "Afficher / Bloquer",
@@ -429,8 +429,8 @@
   "lan_print" : "Impression A4/A5",
   "export_pdf" : "Exporter pdf",
 
-  "centime" : "centime",
-  "DZD_name" : "Dinar algérien",
+  "centime" : "centimes",
+  "DZD_name" : "Dinars Algériens",
   "AFN_name" : "Afghan afghani",
   "EUR_name" : "Euro",
   "ALL_name" : "Lek albanien",
@@ -598,7 +598,9 @@
   "marque_article" : "Marques des articles",
   "tva_article" : "Taux tva",
   "famille_tiers" : "Familles des tiers",
-  "cat_charge" : "Catégories des charges"
+  "cat_charge" : "Catégories des charges",
+
+  "msg_retour_no_save" : "Voulez-vous quitter sans valider les dernier changements"
 
 
 

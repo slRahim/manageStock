@@ -5634,6 +5634,16 @@ class S {
       args: [],
     );
   }
+
+  /// `Do you want to quit without validating the last changes`
+  String get msg_retour_no_save {
+    return Intl.message(
+      'Do you want to quit without validating the last changes',
+      name: 'msg_retour_no_save',
+      desc: '',
+      args: [],
+    );
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<S> {

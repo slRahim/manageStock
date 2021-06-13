@@ -366,7 +366,7 @@ class _GridHomeWidgetState extends State<GridHomeWidget> {
                                                 fontWeight: FontWeight.bold,
                                                 fontSize: 18,
                                                 color: Colors.white))),
-                                    Text(" ${_devise}",
+                                    Text(" $_devise",
                                         style: GoogleFonts.lato(
                                             textStyle: TextStyle(
                                                 fontWeight: FontWeight.bold,

@@ -599,7 +599,9 @@
   "marque_article" : "Item Brands",
   "tva_article" : "Tva Rate",
   "famille_tiers" : "Families of third parties",
-  "cat_charge" : "charges Categories"
+  "cat_charge" : "charges Categories",
+
+  "msg_retour_no_save" : "Do you want to quit without validating the last changes"
 
 
 }

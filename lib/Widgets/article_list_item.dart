@@ -408,7 +408,7 @@ class _ArticleListItemState extends State<ArticleListItem> {
         widget.pieceOrigin == 'RF' ||
         widget.pieceOrigin == 'AF') {
       return Text(
-        "${Helpers.numberFormat(widget.article.prixAchat).toString()} ${_devise}",
+        "${Helpers.numberFormat(widget.article.prixAchat).toString()} $_devise",
         style: GoogleFonts.lato(
             textStyle: TextStyle(fontSize: 16.0, fontWeight: FontWeight.bold)),
       );
@@ -416,7 +416,7 @@ class _ArticleListItemState extends State<ArticleListItem> {
       switch (widget.tarification) {
         case 1:
           return Text(
-            "${Helpers.numberFormat(widget.article.prixVente1).toString()} ${_devise}",
+            "${Helpers.numberFormat(widget.article.prixVente1).toString()} $_devise",
             style: GoogleFonts.lato(
                 textStyle:
                     TextStyle(fontSize: 16.0, fontWeight: FontWeight.bold)),
@@ -425,7 +425,7 @@ class _ArticleListItemState extends State<ArticleListItem> {
 
         case 2:
           return Text(
-            "${Helpers.numberFormat(widget.article.prixVente2).toString()} ${_devise}",
+            "${Helpers.numberFormat(widget.article.prixVente2).toString()} $_devise",
             style: GoogleFonts.lato(
                 textStyle:
                     TextStyle(fontSize: 16.0, fontWeight: FontWeight.bold)),
@@ -434,7 +434,7 @@ class _ArticleListItemState extends State<ArticleListItem> {
 
         case 3:
           return Text(
-            "${Helpers.numberFormat(widget.article.prixVente3).toString()} ${_devise}",
+            "${Helpers.numberFormat(widget.article.prixVente3).toString()} $_devise",
             style: GoogleFonts.lato(
                 textStyle:
                     TextStyle(fontSize: 16.0, fontWeight: FontWeight.bold)),
@@ -444,14 +444,14 @@ class _ArticleListItemState extends State<ArticleListItem> {
         default:
           if (widget.article.selectedPrice > 0) {
             return Text(
-              "${Helpers.numberFormat(widget.article.selectedPrice).toString()} ${_devise}",
+              "${Helpers.numberFormat(widget.article.selectedPrice).toString()} $_devise",
               style: GoogleFonts.lato(
                   textStyle:
                       TextStyle(fontSize: 16.0, fontWeight: FontWeight.bold)),
             );
           }
           return Text(
-            "${Helpers.numberFormat(widget.article.prixVente1).toString()} ${_devise}",
+            "${Helpers.numberFormat(widget.article.prixVente1).toString()} $_devise",
             style: GoogleFonts.lato(
                 textStyle:
                     TextStyle(fontSize: 16.0, fontWeight: FontWeight.bold)),

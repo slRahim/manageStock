@@ -542,7 +542,7 @@ class _IntroPageState extends State<IntroPage> {
                     Expanded(
                       child: SingleChildScrollView(
                         child: Text(
-                          "${_currencycode} (${_countryname})",
+                          "$_currencycode ($_countryname)",
                           style: GoogleFonts.lato(textStyle: TextStyle(fontSize: 18)),
                         ),
                       ),

@@ -408,6 +408,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "msg_quitter" : MessageLookupByLibrary.simpleMessage("Do You Want to Exit..."),
     "msg_quitter1" : MessageLookupByLibrary.simpleMessage("Tap back again to exit"),
     "msg_rapport_vide" : MessageLookupByLibrary.simpleMessage("Report is empty"),
+    "msg_retour_no_save" : MessageLookupByLibrary.simpleMessage("Do you want to quit without validating the last changes"),
     "msg_save_pass" : MessageLookupByLibrary.simpleMessage("Click save to store your password"),
     "msg_scan_barcode" : MessageLookupByLibrary.simpleMessage("Double tap to scan barcode"),
     "msg_scan_qr" : MessageLookupByLibrary.simpleMessage("Double tap to scan qr"),
