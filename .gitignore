@@ -32,8 +32,8 @@
 /build/
 
 # Keystore files
-*.jks
-*.keystore
+/key.jks
+
 
 # Web related
 lib/generated_plugin_registrant.dart
