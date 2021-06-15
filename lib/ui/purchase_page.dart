@@ -14,6 +14,7 @@ import 'package:gestmob/models/MyParams.dart';
 import 'package:gestmob/services/push_notifications.dart';
 import 'package:gestmob/Helpers/Statics.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:intl/intl.dart';
 
 class PurchasePage extends StatefulWidget {
   @override
@@ -107,7 +108,7 @@ class _PurchasePageState extends State<PurchasePage> {
   Future<List<ProductDetails>> retrieveProducts() async {
     final bool available = await _instance.isAvailable();
     if (available) {
-      final ProductDetailsResponse response = await InAppPurchaseConnection.instance.queryProductDetails(_productIds);
+      final ProductDetailsResponse response = await _instance.queryProductDetails(_productIds);
       return new Future(() => response.productDetails);
     }
     return null;
@@ -119,110 +120,110 @@ class _PurchasePageState extends State<PurchasePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Theme.of(context).selectedRowColor,
-      appBar: SearchBar(
-        mainContext: context,
-        title: S.current.abonnement_title,
-        isFilterOn: false,
-      ),
-      body: SingleChildScrollView(
-        padding: EdgeInsets.all(10),
-        child: Column(
-          children: [
-            for (var e in _avantages)
-              _buildAvantage(e),
-            SizedBox(height: 10,),
-            FutureBuilder<List<PurchaseDetails>>(
-                future: retrieveoldPurchase(),
-                initialData: List<PurchaseDetails>(),
-                builder: (BuildContext context, AsyncSnapshot<List<PurchaseDetails>> products) {
-                  if (products.data != null) {
-                    if (products.data.length != 0) {
-                      // le produit deja acheté
-                      return new SingleChildScrollView(
-                          padding: EdgeInsets.all(8.0),
-                          child: Column(
-                              children: products.data.map((item) {
-                                   _selectedProduct = item.productID;
-                                   _verifyPurchase(context);
-                            return Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                InkWell(
-                                  onTap: () async {
-                                    _selectedProduct = item.productID;
-                                    await _verifyPurchase(context);
-                                  },
-                                  child: Container(
-                                    padding: EdgeInsets.all(8),
-                                    margin: EdgeInsetsDirectional.only(bottom: 10),
-                                    decoration: BoxDecoration(
-                                        borderRadius: BorderRadius.circular(10),
-                                        border: Border.all(color: Colors.indigo,width: 2),
-                                        color: Theme.of(context).selectedRowColor
-                                    ),
-                                    child: ListTile(
-                                      title: Text("${item.productID == '010101' ? "Mensuel" : item.productID == '121212' ? "Annuel" : "A vie"}",
-                                        style: GoogleFonts.lato(textStyle : GoogleFonts.lato(textStyle: TextStyle(fontWeight: FontWeight.bold , fontSize: 22))),
-                                      ),
-                                      subtitle: Text("${item.transactionDate}" , style: GoogleFonts.lato(textStyle: TextStyle(fontWeight: FontWeight.bold)),),
-                                      trailing:  Icon(Icons.check_circle ,color: Colors.green, size: 30,)
-                                    ),
-                                  ),
-                                ),
-                                SizedBox(height: 5,),
-                                Text(S.current.msg_get_abonnement ,
-                                  style:GoogleFonts.lato(textStyle: TextStyle(
-                                      color: Theme.of(context).tabBarTheme.unselectedLabelColor ,
-                                      fontWeight: FontWeight.bold
-                                  )),
-                                )
-                              ],
-                            );
-                          }).toList()));
-                    } else {
-                      // get tous les produits
-                      return FutureBuilder<List<ProductDetails>>(
-                          future: retrieveProducts(),
-                          initialData: List<ProductDetails>(),
-                          builder: (BuildContext context,
-                              AsyncSnapshot<List<ProductDetails>> products) {
-                            if (products.data != null) {
-                              return SingleChildScrollView(
-                                  padding:  EdgeInsets.all(8.0),
-                                  child:  Column(
-                                      children:_buildListPurchasedCard(products.data)
-                                  )
-                              );
-                            }
-                            return CircularProgressIndicator();
-                          });
-                    }
-                  }
-                  return Container(
-                      height: 300,
-                      child: Center(child: CircularProgressIndicator())
-                  );
-                }),
-          ],
+        backgroundColor: Theme.of(context).selectedRowColor,
+        appBar: SearchBar(
+          mainContext: context,
+          title: S.current.abonnement_title,
+          isFilterOn: false,
         ),
-      )
+        body: SingleChildScrollView(
+          padding: EdgeInsets.all(10),
+          child: Column(
+            children: [
+              for (var e in _avantages)
+                _buildAvantage(e),
+              SizedBox(height: 10,),
+              FutureBuilder<List<PurchaseDetails>>(
+                  future: retrieveoldPurchase(),
+                  initialData: List<PurchaseDetails>(),
+                  builder: (BuildContext context, AsyncSnapshot<List<PurchaseDetails>> products) {
+                    if (products.data != null) {
+                      if (products.data.length != 0) {
+                        // le produit deja acheté
+                        return new SingleChildScrollView(
+                            padding: EdgeInsets.all(8.0),
+                            child: Column(
+                                children: products.data.map((item) {
+                                  _selectedProduct = item.productID;
+                                  _verifyPurchase(context);
+                                  return Column(
+                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    children: [
+                                      InkWell(
+                                        onTap: () async {
+                                          _selectedProduct = item.productID;
+                                          await _verifyPurchase(context);
+                                        },
+                                        child: Container(
+                                          padding: EdgeInsets.all(8),
+                                          margin: EdgeInsetsDirectional.only(bottom: 10),
+                                          decoration: BoxDecoration(
+                                              borderRadius: BorderRadius.circular(10),
+                                              border: Border.all(color: Colors.indigo,width: 2),
+                                              color: Theme.of(context).selectedRowColor
+                                          ),
+                                          child: ListTile(
+                                              title: Text("${item.productID == '010101' ? "Mensuel" : item.productID == '121212' ? "Annuel" : "A vie"}",
+                                                style: GoogleFonts.lato(textStyle : GoogleFonts.lato(textStyle: TextStyle(fontWeight: FontWeight.bold , fontSize: 22))),
+                                              ),
+                                              subtitle: Text("${item.transactionDate}" , style: GoogleFonts.lato(textStyle: TextStyle(fontWeight: FontWeight.bold)),),
+                                              trailing:  Icon(Icons.check_circle ,color: Colors.green, size: 30,)
+                                          ),
+                                        ),
+                                      ),
+                                      SizedBox(height: 5,),
+                                      Text(S.current.msg_get_abonnement ,
+                                        style:GoogleFonts.lato(textStyle: TextStyle(
+                                            color: Theme.of(context).tabBarTheme.unselectedLabelColor ,
+                                            fontWeight: FontWeight.bold
+                                        )),
+                                      )
+                                    ],
+                                  );
+                                }).toList()));
+                      } else {
+                        // get tous les produits
+                        return FutureBuilder<List<ProductDetails>>(
+                            future: retrieveProducts(),
+                            initialData: List<ProductDetails>(),
+                            builder: (BuildContext context,
+                                AsyncSnapshot<List<ProductDetails>> products) {
+                              if (products.data != null) {
+                                return SingleChildScrollView(
+                                    padding:  EdgeInsets.all(8.0),
+                                    child:  Column(
+                                        children:_buildListPurchasedCard(products.data)
+                                    )
+                                );
+                              }
+                              return CircularProgressIndicator();
+                            });
+                      }
+                    }
+                    return Container(
+                        height: 300,
+                        child: Center(child: CircularProgressIndicator())
+                    );
+                  }),
+            ],
+          ),
+        )
     );
   }
 
   Widget _buildAvantage(item) {
-     return Container(
-       decoration: BoxDecoration(
-         color: Theme.of(context).selectedRowColor
-       ),
-       padding: EdgeInsets.all(8),
-       child: ListTile(
-         leading: item["icon"],
-         title: Text(item["title"] , style: GoogleFonts.lato(),),
-         subtitle: Text(item["small_description"], style: GoogleFonts.lato(),),
-         trailing: Icon(Icons.check , color: Colors.green,),
-       ),
-     );
+    return Container(
+      decoration: BoxDecoration(
+          color: Theme.of(context).selectedRowColor
+      ),
+      padding: EdgeInsets.all(8),
+      child: ListTile(
+        leading: item["icon"],
+        title: Text(item["title"] , style: GoogleFonts.lato(),),
+        subtitle: Text(item["small_description"], style: GoogleFonts.lato(),),
+        trailing: Icon(Icons.check , color: Colors.green,),
+      ),
+    );
   }
 
   List<Widget> _buildListPurchasedCard(data){
@@ -238,12 +239,15 @@ class _PurchasePageState extends State<PurchasePage> {
   }
 
   Widget _buildPurchaseCard(ProductDetails productDetail){
-
     double _remisePercent = 0;
-    
+
     //traitement de string
     String _prix_product = productDetail.price;
-    _prix_product = _prix_product.replaceAll(",", "").replaceAll(new RegExp('[a-zA-Z]'), '').trim();
+    if(Platform.localeName.substring(0,(2)) == 'fr'){
+      _prix_product = _prix_product.replaceAll(",", ".").replaceAll(new RegExp(r"\s+\b|\b\s"), "").replaceAll(new RegExp('[a-zA-Z]'), '').replaceAll(" ", "").trim();
+    }else{
+      _prix_product = _prix_product.replaceAll(",", "").replaceAll(new RegExp('[a-zA-Z]'), '').trim();
+    }
     _prix_product = _prix_product.replaceAll('\u00A0', '');
     _prix_product= _prix_product.replaceAll('&nbsp;', '');
 
@@ -251,7 +255,6 @@ class _PurchasePageState extends State<PurchasePage> {
     _devise_product = _devise_product.replaceAll(new RegExp('[0-9,.]'), '').trim();
     _devise_product = _devise_product.replaceAll('\u00A0', '');
     _devise_product= _devise_product.replaceAll('&nbsp;', '');
-    
 
     switch(productDetail.id){
       case "010101":
@@ -264,7 +267,6 @@ class _PurchasePageState extends State<PurchasePage> {
         _remisePercent = (_remiseMontant * 100) / _prixmensuelle_12;
         break ;
     }
-
     return InkWell(
       onTap: () async{
         print("purchase");
@@ -274,12 +276,12 @@ class _PurchasePageState extends State<PurchasePage> {
         padding: EdgeInsets.all(8),
         margin: EdgeInsetsDirectional.only(bottom: 8),
         decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(10),
-          border: Border.all(color: (productDetail.id == "010101")
-              ? Colors.blue : (productDetail.id == "121212")
-              ?Colors.green:Colors.red,
-              width: 2),
-          color: Theme.of(context).selectedRowColor
+            borderRadius: BorderRadius.circular(10),
+            border: Border.all(color: (productDetail.id == "010101")
+                ? Colors.blue : (productDetail.id == "121212")
+                ?Colors.green:Colors.red,
+                width: 2),
+            color: Theme.of(context).selectedRowColor
         ),
         child: ListTile(
           title: Text("$_devise_product ${Helpers.numberFormat(double.parse(_prix_product))}", style: GoogleFonts.lato(textStyle: TextStyle(fontWeight: FontWeight.bold , fontSize: 22)),),

@@ -27,7 +27,7 @@ void main(){
   timeDilation = 1.0;
   InAppPurchaseConnection.enablePendingPurchases();
 
-  Crashlytics.instance.enableInDevMode = true;
+  Crashlytics.instance.enableInDevMode = false;
   FlutterError.onError = Crashlytics.instance.recordFlutterError;
 
   runZoned(() {
