@@ -42,19 +42,30 @@ class _CategoryListItemState extends State<CategoryListItem> {
             padding: EdgeInsets.all(2),
             child: ListTile(
                 title: Text(
-                  "${S.current.tva} ${widget.item.tva}%",
+                  "${widget.item.tva}%",
                   style: GoogleFonts.lato(
                       fontSize: 16, fontWeight: FontWeight.bold),
                 ),
                 leading: IconButton(
-                  onPressed: () {},
+                  onPressed: () {
+                    setState(() {
+                      _libelleControl.text =  widget.item.tva.toString();
+                    });
+                    AwesomeDialog(
+                      context: context,
+                      dialogType: DialogType.NO_HEADER,
+                      animType: AnimType.BOTTOMSLIDE,
+                      title: S.current.supp,
+                      body: editDialogue(),
+                    )..show();
+                  },
                   icon: Icon(
                     Icons.edit,
                     color: Colors.blue,
                   ),
                 ),
                 trailing: IconButton(
-                  onPressed: () {},
+                  onPressed: ()=>dellDialog(context),
                   icon: Icon(
                     Icons.delete,
                     color: Colors.red,
@@ -83,7 +94,7 @@ class _CategoryListItemState extends State<CategoryListItem> {
               leading: IconButton(
                 onPressed: () {
                   setState(() {
-                    _libelleControl.text = (widget.item is ArticleTva) ? widget.item.tva.toString() : widget.item.libelle ;
+                    _libelleControl.text = widget.item.libelle ;
                   });
                   AwesomeDialog(
                     context: context,
@@ -128,11 +139,6 @@ class _CategoryListItemState extends State<CategoryListItem> {
                   fontWeight: FontWeight.bold,
                 )),
               ),
-              // ImagePickerWidget(
-              //     editMode: editMode,
-              //     scallFactor: 1,
-              //     onImageChange: (File imageFile) =>
-              //         {_famille.setpic(imageFile)}),
               Padding(
                 padding:
                     EdgeInsets.only(left: 5, right: 5, bottom: 20, top: 20),
@@ -207,26 +213,30 @@ class _CategoryListItemState extends State<CategoryListItem> {
   Future<void> updateItem() async {
     var res = 0;
 
-    if (widget.item is ArticleFamille) {
-      widget.item.libelle = _libelleControl.text ;
-      res = await _queryCtr.updateItemInDb(
-          DbTablesNames.articlesFamilles, widget.item);
-    } else if (widget.item is ArticleMarque) {
-      widget.item.libelle = _libelleControl.text ;
-      res = await _queryCtr.updateItemInDb(
-          DbTablesNames.articlesMarques, widget.item);
-    } else if (widget.item is TiersFamille) {
-      widget.item.libelle = _libelleControl.text ;
-      res = await _queryCtr.updateItemInDb(
-          DbTablesNames.tiersFamille, widget.item);
-    } else if (widget.item is ChargeTresorie) {
-      widget.item.libelle = _libelleControl.text ;
-      res = await _queryCtr.updateItemInDb(
-          DbTablesNames.chargeTresorie, widget.item);
-    } else if (widget.item is ArticleTva) {
-      widget.item.tva = double.parse(_libelleControl.text) ;
-      res = await _queryCtr.updateItemInDb(
-          DbTablesNames.articlesTva, widget.item);
+    if(_libelleControl.text.trim() != ''){
+      if (widget.item is ArticleFamille) {
+        widget.item.libelle = _libelleControl.text.trim() ;
+        res = await _queryCtr.updateItemInDb(
+            DbTablesNames.articlesFamilles, widget.item);
+      } else if (widget.item is ArticleMarque) {
+        widget.item.libelle = _libelleControl.text.trim() ;
+        res = await _queryCtr.updateItemInDb(
+            DbTablesNames.articlesMarques, widget.item);
+      } else if (widget.item is TiersFamille) {
+        widget.item.libelle = _libelleControl.text.trim() ;
+        res = await _queryCtr.updateItemInDb(
+            DbTablesNames.tiersFamille, widget.item);
+      } else if (widget.item is ChargeTresorie) {
+        widget.item.libelle = _libelleControl.text.trim() ;
+        res = await _queryCtr.updateItemInDb(
+            DbTablesNames.chargeTresorie, widget.item);
+      } else if (widget.item is ArticleTva) {
+        widget.item.tva = double.parse(_libelleControl.text.trim()) ;
+        print(widget.item.tva);
+        res = await _queryCtr.updateItemInDb(
+            DbTablesNames.articlesTva, widget.item);
+      }
+
     }
 
     var message = "";

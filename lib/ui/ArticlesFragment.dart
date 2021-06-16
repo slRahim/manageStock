@@ -280,7 +280,7 @@ class _ArticlesFragmentState extends State<ArticlesFragment> {
         title: S.current.articles,
         isFilterOn: isFilterOn,
         onSearchChanged: (String search) => {
-          _dataSource.updateSearchTerm(search),
+          _dataSource.updateSearchTerm(search.trim()),
         },
         onFilterPressed: () async {
           AwesomeDialog(

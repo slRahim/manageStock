@@ -46,7 +46,7 @@ class _PiecesScreenState extends State<PiecesScreen> {
           searchController: searchController,
           mainContext: context,
           title: S.current.piece_titre,
-          onSearchChanged: (String search) => _dataSource.updateSearchTerm(search),
+          onSearchChanged: (String search) => _dataSource.updateSearchTerm(search.trim()),
         ),
         body: ItemsSliverList(
             dataSource: _dataSource,

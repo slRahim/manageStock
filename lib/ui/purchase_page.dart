@@ -285,7 +285,7 @@ class _PurchasePageState extends State<PurchasePage> {
         ),
         child: ListTile(
           title: Text("$_devise_product ${Helpers.numberFormat(double.parse(_prix_product))}", style: GoogleFonts.lato(textStyle: TextStyle(fontWeight: FontWeight.bold , fontSize: 22)),),
-          subtitle: Text("${productDetail.title.replaceAll('(Virtual Plexus)', '')}" , style: GoogleFonts.lato(textStyle: TextStyle(fontWeight: FontWeight.bold)),),
+          subtitle: Text("${productDetail.title.replaceAll('(Gestmob)', '')}" , style: GoogleFonts.lato(textStyle: TextStyle(fontWeight: FontWeight.bold)),),
           trailing: (productDetail.id != "010101")? Container(
             padding: EdgeInsets.all(4),
             decoration: BoxDecoration(
@@ -323,7 +323,7 @@ class _PurchasePageState extends State<PurchasePage> {
       switch (purchase.productID) {
         case '999999':
           _myParams.versionType= "premium" ;
-          _myParams.codeAbonnement = "mensuel";
+          _myParams.codeAbonnement = "illimit";
           _myParams.startDate = DateTime.fromMillisecondsSinceEpoch(purchase.billingClientPurchase.purchaseTime);
           await _queryCtr.updateItemInDb(DbTablesNames.myparams, _myParams);
           PushNotificationsManager.of(context).onMyParamsChange(_myParams);
@@ -339,7 +339,7 @@ class _PurchasePageState extends State<PurchasePage> {
           break;
         case '010101':
           _myParams.versionType= "premium" ;
-          _myParams.codeAbonnement = "illimit";
+          _myParams.codeAbonnement = "mensuel";
           _myParams.startDate = DateTime.fromMillisecondsSinceEpoch(purchase.billingClientPurchase.purchaseTime);
           await _queryCtr.updateItemInDb(DbTablesNames.myparams, _myParams);
           PushNotificationsManager.of(context).onMyParamsChange(_myParams);

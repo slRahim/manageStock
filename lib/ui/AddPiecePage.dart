@@ -491,8 +491,8 @@ class _AddPiecePageState extends State<AddPiecePage>
                                 btnOkText: S.current.confirme,
                                 btnOkOnPress: () {
                                   setState(() {
-                                    _pourcentremise = double.parse(_pourcentremiseControler.text);
-                                    _remisepiece = double.parse(_remisepieceControler.text);
+                                    _pourcentremise = double.parse(_pourcentremiseControler.text.trim());
+                                    _remisepiece = double.parse(_remisepieceControler.text.trim());
                                   });
                                   calculPiece();
                                 })
@@ -596,9 +596,9 @@ class _AddPiecePageState extends State<AddPiecePage>
                                     btnOkOnPress: () {
                                       setState(() {
                                         _restepiece =
-                                            double.parse(_resteControler.text);
+                                            double.parse(_resteControler.text.trim());
                                         _verssementpiece = double.parse(
-                                            _verssementControler.text);
+                                            _verssementControler.text.trim());
                                       });
                                     })
                                   ..show();
@@ -1220,15 +1220,15 @@ class _AddPiecePageState extends State<AddPiecePage>
                   if (_piece.id != null) {
                     if (_verssementpiece == 0) {
                       double _reste =
-                          _net_a_payer - (_piece.regler + double.parse(value));
+                          _net_a_payer - (_piece.regler + double.parse(value.trim()));
                       _resteControler.text = _reste.toStringAsFixed(2);
                     } else {
                       double _reste =
-                          _net_a_payer - (_piece.regler + double.parse(value));
+                          _net_a_payer - (_piece.regler + double.parse(value.trim()));
                       _resteControler.text = _reste.toStringAsFixed(2);
                     }
                   } else {
-                    double _reste = _net_a_payer - double.parse(value);
+                    double _reste = _net_a_payer - double.parse(value.trim());
                     _resteControler.text = _reste.toStringAsFixed(2);
                   }
                 },
@@ -1328,7 +1328,7 @@ class _AddPiecePageState extends State<AddPiecePage>
                       extentOffset: _remisepieceControler.value.text.length),
                 },
                 onChanged: (value) {
-                  double res = (double.parse(value) * 100) / _total_ht;
+                  double res = (double.parse(value.trim()) * 100) / _total_ht;
                   _pourcentremiseControler.text = res.toString();
                 },
                 decoration: InputDecoration(
@@ -1374,7 +1374,7 @@ class _AddPiecePageState extends State<AddPiecePage>
                                   _pourcentremiseControler.value.text.length),
                         },
                         onChanged: (value) {
-                          double res = (_total_ht * double.parse(value)) / 100;
+                          double res = (_total_ht * double.parse(value.trim())) / 100;
                           _remisepieceControler.text = res.toStringAsFixed(2);
                         },
                         decoration: InputDecoration(
@@ -1926,7 +1926,7 @@ class _AddPiecePageState extends State<AddPiecePage>
     var tiers = _selectedClient;
     var _old_num_piece = _piece.num_piece;
 
-    _piece.num_piece = _numeroControl.text;
+    _piece.num_piece = _numeroControl.text.trim();
     _piece.tier_id = tiers.id;
     _piece.raisonSociale = tiers.raisonSociale;
     _piece.tarification = _selectedTarification;

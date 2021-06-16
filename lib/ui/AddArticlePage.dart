@@ -186,7 +186,6 @@ class _AddArticlePageState extends State<AddArticlePage>
     _selectedFamille = _familleItems[article.idFamille];
     _selectedTva = new ArticleTva(article.tva);
 
-
   }
 
   void getParams() async {
@@ -486,7 +485,7 @@ class _AddArticlePageState extends State<AddArticlePage>
                   ),
                 ),
                 Padding(
-                    padding: EdgeInsets.fromLTRB(_stockable ? 8 : 0, 0, 0, 0)),
+                    padding: EdgeInsets.fromLTRB( 8 , 0, 0, 0)),
                 Flexible(
                   flex: 5,
                   child: Container(
@@ -498,7 +497,8 @@ class _AddArticlePageState extends State<AddArticlePage>
                             borderRadius: BorderRadius.circular(20.0),
                           )
                         : null,
-                    child: CheckboxListTile(
+                    child: SwitchListTile(
+                      activeColor: Theme.of(context).primaryColor,
                       title: Text(
                         S.current.stockable,
                         maxLines: 1,
@@ -514,7 +514,7 @@ class _AddArticlePageState extends State<AddArticlePage>
                                 _stockable = value;
                               });
                             }
-                          : null,
+                          : (bool value){},
                     ),
                   ),
                 )
@@ -636,38 +636,41 @@ class _AddArticlePageState extends State<AddArticlePage>
             ),
             Row(
               children: [
-                Flexible(
-                  flex: 5,
-                  child: TextFormField(
-                    enabled: editMode,
-                    controller: _qteColisCotrol,
-                    onTap: () => _qteColisCotrol.selection = TextSelection(baseOffset: 0, extentOffset: _qteColisCotrol.value.text.length),
-                    keyboardType: TextInputType.number,
-                    // validator: (value) {
-                    //   if (value.isEmpty) {
-                    //     return S.current.msg_champ_oblg;
-                    //   }
-                    //   return null;
-                    // },
-                    decoration: InputDecoration(
-                      labelText: S.current.qte_colis,
-                      labelStyle: GoogleFonts.lato(textStyle: TextStyle(color: Theme.of(context).hintColor),),
-                      prefixIcon: Icon(
-                        Icons.shopping_bag_rounded,
-                        color: Colors.blue[700],
-                      ),
-                      focusedBorder: OutlineInputBorder(
+                Visibility(
+                  visible: _stockable,
+                  child: Flexible(
+                    flex: 5,
+                    child: TextFormField(
+                      enabled: editMode,
+                      controller: _qteColisCotrol,
+                      onTap: () => _qteColisCotrol.selection = TextSelection(baseOffset: 0, extentOffset: _qteColisCotrol.value.text.length),
+                      keyboardType: TextInputType.number,
+                      // validator: (value) {
+                      //   if (value.isEmpty) {
+                      //     return S.current.msg_champ_oblg;
+                      //   }
+                      //   return null;
+                      // },
+                      decoration: InputDecoration(
+                        labelText: S.current.qte_colis,
+                        labelStyle: GoogleFonts.lato(textStyle: TextStyle(color: Theme.of(context).hintColor),),
+                        prefixIcon: Icon(
+                          Icons.shopping_bag_rounded,
+                          color: Colors.blue[700],
+                        ),
+                        focusedBorder: OutlineInputBorder(
+                            borderSide: BorderSide(color: Colors.blue),
+                            borderRadius: BorderRadius.circular(20)),
+                        enabledBorder: OutlineInputBorder(
+                          gapPadding: 3.3,
+                          borderRadius: BorderRadius.circular(20),
                           borderSide: BorderSide(color: Colors.blue),
-                          borderRadius: BorderRadius.circular(20)),
-                      enabledBorder: OutlineInputBorder(
-                        gapPadding: 3.3,
-                        borderRadius: BorderRadius.circular(20),
-                        borderSide: BorderSide(color: Colors.blue),
-                      ),
-                      errorBorder: OutlineInputBorder(
-                        gapPadding: 3.3,
-                        borderRadius: BorderRadius.circular(20),
-                        borderSide: BorderSide(color: Colors.red),
+                        ),
+                        errorBorder: OutlineInputBorder(
+                          gapPadding: 3.3,
+                          borderRadius: BorderRadius.circular(20),
+                          borderSide: BorderSide(color: Colors.red),
+                        ),
                       ),
                     ),
                   ),
@@ -881,7 +884,7 @@ class _AddArticlePageState extends State<AddArticlePage>
                       _controlBloquer = value;
                     });
                   }
-                      : null,
+                      : (bool value){},
                 )
             ),
           ],
@@ -1086,7 +1089,7 @@ class _AddArticlePageState extends State<AddArticlePage>
                     onPressed: () async {
                       if (_formKey.currentState.validate()) {
                         setState(() {
-                          _marque.setLibelle(_libelleMarqueControl.text);
+                          _marque.setLibelle(_libelleMarqueControl.text.trim());
                           _libelleMarqueControl.text = "";
                         });
 
@@ -1198,7 +1201,7 @@ class _AddArticlePageState extends State<AddArticlePage>
                     onPressed: () async {
                       if (_formKey.currentState.validate()) {
                         setState(() {
-                          _famille.setLibelle(_libelleFamilleControl.text);
+                          _famille.setLibelle(_libelleFamilleControl.text.trim());
                           _libelleFamilleControl.text = "";
                         });
                         await addFamilleIfNotExist(_famille);
@@ -1298,7 +1301,7 @@ class _AddArticlePageState extends State<AddArticlePage>
                     ),
                     onPressed: () async {
                       if (_formKey.currentState.validate()) {
-                        double _taux = double.parse(_tauxTVAControl.text);
+                        double _taux = double.parse(_tauxTVAControl.text.trim());
                         _tauxTVAControl.text = "";
                         await addTvaIfNotExist(_taux);
                         Navigator.pop(context);
@@ -1374,38 +1377,35 @@ class _AddArticlePageState extends State<AddArticlePage>
     Article article = new Article.init();
     article.setId(widget.arguments.id);
 
-    article.setdesignation(_designationControl.text);
-    article.setref(_refControl.text);
-    article.setCodeBar(_codeBarControl.text);
+    article.setdesignation(_designationControl.text.trim());
+    article.setref(_refControl.text.trim());
+    article.setCodeBar(_codeBarControl.text.trim());
 
-    //reliere à _stockable
-    if (true) {
-      (_prixAchatControl.text != "" )?article.setprixAchat(double.parse(_prixAchatControl.text)):article.setprixAchat(0.0);
-    }
 
-    (_stockInitialControl.text != "" )?article.setQteInit(double.parse(_stockInitialControl.text)):article.setQteInit(0.0);
-    (_stockInitialControl.text != "" )?article.setquantite(double.parse(_stockInitialControl.text)):article.setquantite(0.0);
-    (_stockMinimumControl.text != "" )?article.setQteMin(double.parse(_stockMinimumControl.text)):article.setQteMin(0.0);
-    (_qteCmdCotrol.text != "" )?article.cmdClient = double.parse(_qteCmdCotrol.text):article.cmdClient =0.0;
+    (_prixAchatControl.text.trim() != "" )?article.setprixAchat(double.parse(_prixAchatControl.text.trim())):article.setprixAchat(0.0);
+    (_stockInitialControl.text.trim() != "" )?article.setQteInit(double.parse(_stockInitialControl.text.trim())):article.setQteInit(0.0);
+    (_stockInitialControl.text.trim() != "" )?article.setquantite(double.parse(_stockInitialControl.text.trim())):article.setquantite(0.0);
+    (_stockMinimumControl.text.trim() != "" )?article.setQteMin(double.parse(_stockMinimumControl.text.trim())):article.setQteMin(0.0);
+    (_qteCmdCotrol.text.trim() != "" )?article.cmdClient = double.parse(_qteCmdCotrol.text.trim()):article.cmdClient =0.0;
 
-    (_pmpControl.text != "" )?article.setPmp(double.parse(_pmpControl.text)):article.setPmp(0.0);
+    (_pmpControl.text.trim() != "" )?article.setPmp(double.parse(_pmpControl.text.trim())):article.setPmp(0.0);
     if (!modification && editMode) {
-      (_pmpControl.text != "" )?article.setPmpInit(double.parse(_pmpControl.text)):article.setPmpInit(0.0);
+      (_pmpControl.text.trim() != "" )?article.setPmpInit(double.parse(_pmpControl.text.trim())):article.setPmpInit(0.0);
     }
 
-    (_qteColisCotrol.text != "" )?article.setQteColis(double.parse(_qteColisCotrol.text)):article.setQteColis(1.0);
+    (_qteColisCotrol.text.trim() != "" )?article.setQteColis(double.parse(_qteColisCotrol.text.trim())):article.setQteColis(1.0);
 
-    if(_stockInitialControl.text != "" && _qteColisCotrol.text != "" && article.quantite > 0){
-      double colis = double.parse(_stockInitialControl.text) /
-          double.parse(_qteColisCotrol.text);
+    if(_stockInitialControl.text.trim() != "" && _qteColisCotrol.text.trim() != "" && article.quantite > 0){
+      double colis = double.parse(_stockInitialControl.text.trim()) /
+          double.parse(_qteColisCotrol.text.trim());
       article.setColis(colis);
     }else{
       article.setColis(0.0);
     }
 
-    (_price1Control.text != "" )?article.setprixVente1(double.parse(_price1Control.text)):article.setprixVente1(0.0);
-    (_price2Control.text != "" )?article.setprixVente2(double.parse(_price2Control.text)):article.setprixVente2(0.0);
-    (_price3Control.text != "" )?article.setprixVente3(double.parse(_price3Control.text)):article.setprixVente3(0.0);
+    (_price1Control.text.trim() != "" )?article.setprixVente1(double.parse(_price1Control.text.trim())):article.setprixVente1(0.0);
+    (_price2Control.text.trim() != "" )?article.setprixVente2(double.parse(_price2Control.text.trim())):article.setprixVente2(0.0);
+    (_price3Control.text.trim() != "" )?article.setprixVente3(double.parse(_price3Control.text.trim())):article.setprixVente3(0.0);
 
     article.setIdFamille(_familleItems.indexOf(_selectedFamille));
     article.setIdMarque(_marqueItems.indexOf(_selectedMarque));
@@ -1420,7 +1420,7 @@ class _AddArticlePageState extends State<AddArticlePage>
     article.setprixVente3TTC(ttc3);
 
 
-    article.setDescription(_descriptionControl.text);
+    article.setDescription(_descriptionControl.text.trim());
     article.setbloquer(_controlBloquer);
     article.setStockable(_stockable);
 

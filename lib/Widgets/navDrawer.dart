@@ -137,7 +137,8 @@ class NavDrawer extends  StatelessWidget {
                                   ),
                                 ),
                                 SizedBox(height: 2,),
-                                Text("${S.current.until}: ${Helpers.dateToText(Helpers.getDateExpiration(myparams))}" ,
+                                Text((myparams.codeAbonnement != 'illimit')
+                                    ?"${S.current.until}: ${Helpers.dateToText(Helpers.getDateExpiration(myparams))}" : S.current.illimite ,
                                   style: GoogleFonts.lato(
                                     textStyle: TextStyle(color: Colors.white,fontWeight: FontWeight.w600 , fontSize: 12)
                                   ),

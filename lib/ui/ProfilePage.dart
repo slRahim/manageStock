@@ -1119,31 +1119,31 @@ class _ProfilePageState extends State<ProfilePage> with TickerProviderStateMixin
     item.codepin = arguments.codepin;
     item.codePinEnabled = arguments.codePinEnabled;
 
-    item.raisonSociale = _raisonSocialeControl.text;
+    item.raisonSociale = _raisonSocialeControl.text.trim();
     item.statut = Statics.statutItems.indexOf(_selectedStatut);
-    item.activite = (_activiteControl.text != '')? _activiteControl.text : '';
-    item.adresse = (_adresseControl.text != '')?_adresseControl.text : '';
+    item.activite = (_activiteControl.text.trim() != '')? _activiteControl.text.trim() : '';
+    item.adresse = (_adresseControl.text.trim() != '')?_adresseControl.text.trim() : '';
     item.departement = (_states.indexOf(_selectedState)==0)? '' : _selectedState ;
     item.ville = (_cities.indexOf(_selectedCity) == 0) ? '' :_selectedCity ;
     item.pays =( _countries.first.name == _selectedCountry) ? '' : _selectedCountry;
-    item.telephone = _telephoneControl.text;
-    item.telephone2 = _telephone2Control.text;
-    item.mobile = _mobileControl.text;
-    item.mobile2 = _mobile2Control.text;
-    item.fax = _faxControl.text;
-    item.email = _emailControl.text;
-    item.addressWeb = _addresseWebControl.text;
+    item.telephone = _telephoneControl.text.trim();
+    item.telephone2 = _telephone2Control.text.trim();
+    item.mobile = _mobileControl.text.trim();
+    item.mobile2 = _mobile2Control.text.trim();
+    item.fax = _faxControl.text.trim();
+    item.email = _emailControl.text.trim();
+    item.addressWeb = _addresseWebControl.text.trim();
     if (_itemImage != null) {
       item.imageUint8List = await Helpers.getUint8ListFromFile(_itemImage);
     } else {
       Uint8List image = await Helpers.getDefaultImageUint8List(from: "profile");
       item.imageUint8List = image;
     }
-    item.rc = (_rcControl.text != '')?_rcControl.text:'';
-    item.ai = _aiControl.text;
-    item.nif = _nifControl.text;
-    item.nis = _nisControl.text;
-    item.capital =(_capitalsocialControl.text != "")? double.tryParse(_capitalsocialControl.text):0.0;
+    item.rc = (_rcControl.text.trim() != '')?_rcControl.text.trim():'';
+    item.ai = _aiControl.text.trim();
+    item.nif = _nifControl.text.trim();
+    item.nis = _nisControl.text.trim();
+    item.capital =(_capitalsocialControl.text.trim() != "")? double.tryParse(_capitalsocialControl.text.trim()):0.0;
 
     return item;
   }

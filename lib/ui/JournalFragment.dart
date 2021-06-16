@@ -354,7 +354,7 @@ class _JournalFragmentState extends State<JournalFragment> {
         mainContext: widget.onConfirmSelectedItems != null ? null : context,
         title:S.current.journaux,
         isFilterOn: isFilterOn,
-        onSearchChanged: (String search) => _dataSource.updateSearchTerm(search),
+        onSearchChanged: (String search) => _dataSource.updateSearchTerm(search.trim()),
         onFilterPressed: () async {
           AwesomeDialog(
               context: context,

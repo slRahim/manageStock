@@ -284,7 +284,7 @@ class _TresorieFragmentState extends State<TresorieFragment> {
           mainContext: context,
           title: S.current.tresories,
           isFilterOn: isFilterOn,
-          onSearchChanged: (String search) => _dataSource.updateSearchTerm(search),
+          onSearchChanged: (String search) => _dataSource.updateSearchTerm(search.trim()),
           onFilterPressed: () async {
             AwesomeDialog(
                 context: context,

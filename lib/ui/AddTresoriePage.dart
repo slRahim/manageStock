@@ -938,7 +938,7 @@ class _AddTresoriePageState extends State<AddTresoriePage>
                             if(_formKey.currentState.validate()){
                               setState(() {
                                 _categorieTresorie.libelle =
-                                    _libelleCategorieControl.text;
+                                    _libelleCategorieControl.text.trim();
                                 _libelleCategorieControl.text = "";
                               });
                               await addTresoreCategorieIfNotExist(
@@ -1098,7 +1098,7 @@ class _AddTresoriePageState extends State<AddTresoriePage>
                         SizedBox(height: 10,),
                         TextFormField(
                           controller: _soldeCompteControl,
-                          keyboardType: TextInputType.text,
+                          keyboardType: TextInputType.number,
                           validator: (value) {
                             if (value.isEmpty) {
                               return S.current.msg_champ_oblg;
@@ -1136,16 +1136,16 @@ class _AddTresoriePageState extends State<AddTresoriePage>
                                 if(_formKey.currentState.validate()){
                                   setState(() {
                                     _compteTresorie.numCompte =
-                                        _numCompteControl.text;
+                                        _numCompteControl.text.trim();
                                     _numCompteControl.text = "";
                                     _compteTresorie.nomCompte =
-                                        _libelleCompteControl.text;
+                                        _libelleCompteControl.text.trim();
                                     _libelleCompteControl.text = "";
                                     _compteTresorie.codeCompte =
-                                        _codeCompteControl.text;
+                                        _codeCompteControl.text.trim();
                                     _codeCompteControl.text = "";
                                     _compteTresorie.soldeDepart =
-                                        double.parse(_soldeCompteControl.text);
+                                        double.parse(_soldeCompteControl.text.trim());
                                     _soldeCompteControl.text = "";
                                     _compteTresorie.solde = 0.0;
                                   });
@@ -1257,7 +1257,7 @@ class _AddTresoriePageState extends State<AddTresoriePage>
                         if (_formKey.currentState.validate()) {
                           setState(() {
                             _chargeTresorie.libelle =
-                                _libelleChargeControl.text;
+                                _libelleChargeControl.text.trim();
                             _libelleChargeControl.text = "";
                           });
                           await addChargeIfNotExist(_chargeTresorie);
@@ -1483,7 +1483,7 @@ class _AddTresoriePageState extends State<AddTresoriePage>
       _tresorie.tierId = tiers.id;
       _tresorie.tierRS = tiers.raisonSociale;
     }
-    _tresorie.numTresorie = _numeroControl.text;
+    _tresorie.numTresorie = _numeroControl.text.trim();
     _tresorie.categorie = _selectedCategorie.id;
     _tresorie.compte = _selectedCompte.id;
 
@@ -1493,9 +1493,9 @@ class _AddTresoriePageState extends State<AddTresoriePage>
       // mov de tresorie tjr 1 on new tresorie
       _tresorie.mov = 1;
     }
-    _tresorie.objet = _objetControl.text;
-    _tresorie.modalite = _modaliteControl.text;
-    _tresorie.montant = double.parse(_montantControl.text);
+    _tresorie.objet = _objetControl.text.trim();
+    _tresorie.modalite = _modaliteControl.text.trim();
+    _tresorie.montant = double.parse(_montantControl.text.trim());
     if (_selectedCategorie.id == 6 || _selectedCategorie.id == 7) {
       _tresorie.montant = _tresorie.montant * -1;
     }

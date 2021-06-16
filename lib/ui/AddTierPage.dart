@@ -1047,7 +1047,7 @@ class _AddTierPageState extends State<AddTierPage>
                               _controlBloquer = value;
                             });
                           }
-                        : null,
+                        : (bool value){},
                   )),
             ),
           ],
@@ -1401,7 +1401,7 @@ class _AddTierPageState extends State<AddTierPage>
                       onPressed: () async {
                         setState(() {
                           _famille.libelle =
-                              _libelleFamilleControl.text;
+                              _libelleFamilleControl.text.trim();
                           _libelleFamilleControl.text = "";
                         });
                         await addFamilleIfNotExist(_famille);
@@ -1487,36 +1487,36 @@ class _AddTierPageState extends State<AddTierPage>
       item.clientFour = _clientFourn;
     }
 
-    item.raisonSociale = _raisonSocialeControl.text;
+    item.raisonSociale = _raisonSocialeControl.text.trim();
 
-    if (_qrCodeControl.text != "") {
-      item.qrCode = _qrCodeControl.text;
+    if (_qrCodeControl.text.trim() != "") {
+      item.qrCode = _qrCodeControl.text.trim();
     }
 
-    item.adresse = _adresseControl.text;
+    item.adresse = _adresseControl.text.trim();
 
     item.latitude = _latitude;
     item.longitude = _longitude;
-    item.ville = _villeControl.text;
-    item.telephone = _telephoneControl.text;
-    item.mobile = (_mobileControl.text != '') ? _mobileControl.text : '';
-    item.fax = _faxControl.text;
-    item.email = _emailControl.text;
-    item.rc = _rcControl.text;
-    item.ai = _aiControl.text;
-    item.nif = _nifControl.text;
+    item.ville = _villeControl.text.trim();
+    item.telephone = _telephoneControl.text.trim();
+    item.mobile = (_mobileControl.text.trim() != '') ? _mobileControl.text.trim() : '';
+    item.fax = _faxControl.text.trim();
+    item.email = _emailControl.text.trim();
+    item.rc = _rcControl.text.trim();
+    item.ai = _aiControl.text.trim();
+    item.nif = _nifControl.text.trim();
 
-    item.solde_depart = (_solde_departControl.text != "")
-        ? double.tryParse(_solde_departControl.text)
+    item.solde_depart = (_solde_departControl.text.trim() != "")
+        ? double.tryParse(_solde_departControl.text.trim())
         : 0.0;
-    item.chiffre_affaires = (_chiffre_affairesControl.text != "")
-        ? double.tryParse(_chiffre_affairesControl.text)
+    item.chiffre_affaires = (_chiffre_affairesControl.text.trim() != "")
+        ? double.tryParse(_chiffre_affairesControl.text.trim())
         : 0.0;
-    item.regler = (_reglerControl.text != "")
-        ? double.tryParse(_reglerControl.text)
+    item.regler = (_reglerControl.text.trim() != "")
+        ? double.tryParse(_reglerControl.text.trim())
         : 0.0;
     item.credit =
-        (_creditControl.text != '') ? double.parse(_creditControl.text) : 0.0;
+        (_creditControl.text.trim() != '') ? double.parse(_creditControl.text.trim()) : 0.0;
 
     if (_itemImage != null) {
       item.imageUint8List = await Helpers.getUint8ListFromFile(_itemImage);

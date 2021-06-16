@@ -11,6 +11,7 @@ import 'package:gestmob/Helpers/curency/countries.dart';
 import 'package:gestmob/Helpers/curency/country.dart';
 import 'package:gestmob/Helpers/curency/currency_picker_dialog.dart';
 import 'package:gestmob/Helpers/curency/utils/utils.dart';
+import 'package:gestmob/models/ArticleTva.dart';
 import 'package:gestmob/models/MyParams.dart';
 import 'package:gestmob/models/Profile.dart';
 import 'package:introduction_screen/introduction_screen.dart';
@@ -785,26 +786,26 @@ class _IntroPageState extends State<IntroPage> {
         1,
         image01,
         "",
-        _raisonSocialeControl.text,
+        _raisonSocialeControl.text.trim(),
         5,
-        _adresseControl.text,
+        _adresseControl.text.trim(),
         "",
         city,
         province,
         country,
         "",
-        _telephoneControl.text,
+        _telephoneControl.text.trim(),
         "",
         "",
         "",
         "",
         "",
         "",
-        _rcControl.text,
-        _nifControl.text,
+        _rcControl.text.trim(),
+        _nifControl.text.trim(),
         "",
         0.0,
-        _activiteControl.text,
+        _activiteControl.text.trim(),
         "",
         "",
         "",
@@ -828,6 +829,52 @@ class _IntroPageState extends State<IntroPage> {
 
     await _queryCtr.updateItemInDb(DbTablesNames.myparams, _myParams);
     await _queryCtr.updateItemInDb(DbTablesNames.profile, _profile);
+    await configTva();
+
+  }
+
+  Future configTva() async{
+    List<ArticleTva> list = new List<ArticleTva> ();
+    switch(_countryname){
+      case 'Algeria':
+        list.add(ArticleTva(0.0));
+        list.add(ArticleTva(9.0));
+        list.add(ArticleTva(19.0));
+        break ;
+      case 'France':
+        list.add(ArticleTva(0.0));
+        list.add(ArticleTva(2.1));
+        list.add(ArticleTva(5.5));
+        list.add(ArticleTva(10.0));
+        list.add(ArticleTva(20.0));
+        break;
+      case 'United State of America':
+        list.add(ArticleTva(0.0));
+        list.add(ArticleTva(4.35));
+        list.add(ArticleTva(5.43));
+        list.add(ArticleTva(5.47));
+        list.add(ArticleTva(5.5));
+        list.add(ArticleTva(7.0));
+        list.add(ArticleTva(8.91));
+        list.add(ArticleTva(9.26));
+        list.add(ArticleTva(9.45));
+        break;
+      case 'Tunisia':
+        list.add(ArticleTva(0.0));
+        list.add(ArticleTva(6.0));
+        list.add(ArticleTva(12.0));
+        list.add(ArticleTva(18.0));
+        list.add(ArticleTva(29.0));
+        break;
+      default:
+        list.add(ArticleTva(0.0));
+        list.add(ArticleTva(19.0));
+        break;
+    }
+
+    list.forEach((element) async{
+      await _queryCtr.addItemToTable(DbTablesNames.articlesTva, element);
+    });
 
   }
 

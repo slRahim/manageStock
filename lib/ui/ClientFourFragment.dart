@@ -247,7 +247,7 @@ class _ClientFourFragmentState extends State<ClientFourFragment> {
           mainContext: widget.onConfirmSelectedItem != null ? null : context,
           title: widget.clientFourn == 0? S.current.client : S.current.fournisseur,
           isFilterOn: isFilterOn,
-          onSearchChanged: (String search) => _dataSource.updateSearchTerm(search),
+          onSearchChanged: (String search) => _dataSource.updateSearchTerm(search.trim()),
           onFilterPressed: () async {
             AwesomeDialog(
                 context: context,

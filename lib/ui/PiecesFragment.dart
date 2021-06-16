@@ -296,7 +296,7 @@ class _PiecesFragmentState extends State<PiecesFragment> {
           mainContext: widget.onConfirmSelectedItem != null ? null : context,
           title: (widget.peaceType !=null && widget.peaceType != "TR") ? Helpers.getPieceTitle(widget.peaceType) : S.current.piece_titre,
           isFilterOn: isFilterOn,
-          onSearchChanged: (String search) => _dataSource.updateSearchTerm(search),
+          onSearchChanged: (String search) => _dataSource.updateSearchTerm(search.trim()),
           onFilterPressed: () async {
               AwesomeDialog(
                   context: context,

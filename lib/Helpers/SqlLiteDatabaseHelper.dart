@@ -1369,11 +1369,6 @@ class SqlLiteDatabaseHelper {
     batch.rawInsert('INSERT INTO ArticlesFamilles(Libelle, BytesImageString) VALUES("No Famille", "")');
     batch.rawInsert('INSERT INTO TiersFamilles(Libelle) VALUES("No Famille")');
 
-    batch.rawInsert('INSERT INTO ArticlesTva(Tva) VALUES(0)');
-    batch.rawInsert('INSERT INTO ArticlesTva(Tva) VALUES(10)');
-    batch.rawInsert('INSERT INTO ArticlesTva(Tva) VALUES(19)');
-    batch.rawInsert('INSERT INTO ArticlesTva(Tva) VALUES(29)');
-
     batch.rawInsert('INSERT INTO TresorieCategories(Libelle) VALUES("No Categorie")');
     batch.rawInsert('INSERT INTO TresorieCategories(Libelle) VALUES("Reglement Client")');
     batch.rawInsert('INSERT INTO TresorieCategories(Libelle) VALUES("Reglement Fournisseur")');
