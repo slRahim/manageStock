@@ -102,14 +102,32 @@ class _ArticleListItemSelectedState extends State<ArticleListItemSelected> {
           children: [
             Icon(Icons.assignment,size: 14, color: Theme.of(context).primaryColorDark,),
             SizedBox(width: 2,),
-            (widget.article.designation != '')?Text(widget.article.designation , style: GoogleFonts.lato(),):Text('__'),
+            (widget.article.designation != '')
+                ?SingleChildScrollView(
+                scrollDirection: Axis.horizontal,
+                child: Row(
+                  children: [
+                    Text(widget.article.designation , style: GoogleFonts.lato(),),
+                  ],
+                )
+            )
+                :Text('__'),
           ],
         ),
         subtitle: Row(
           children: [
             Icon(MdiIcons.pound,size: 14, color: Theme.of(context).primaryColorDark,),
             SizedBox(width: 2,),
-            (widget.article.ref != '')?Text(widget.article.ref , style: GoogleFonts.lato(),):Text('__'),
+            (widget.article.ref != '')
+                ?SingleChildScrollView(
+                scrollDirection: Axis.horizontal,
+                  child: Row(
+                    children: [
+                      Text(widget.article.ref , style: GoogleFonts.lato(),),
+                    ],
+                  ),
+                )
+                :Text('__'),
           ],
         ),
         trailingChildren: [

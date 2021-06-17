@@ -600,7 +600,8 @@
   "famille_tiers" : "Familles des tiers",
   "cat_charge" : "Catégories des charges",
 
-  "msg_retour_no_save" : "Voulez-vous quitter sans valider les dernier changements"
+  "msg_retour_no_save" : "Voulez-vous quitter sans valider les dernier changements",
+  "msg_map_add_position" : "Cliquez sur la carte pour choisir la position"
 
 
 

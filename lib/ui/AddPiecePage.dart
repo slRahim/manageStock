@@ -79,6 +79,7 @@ class _AddPiecePageState extends State<AddPiecePage>
 
   String appBarTitle = S.current.devis;
 
+  List<Article> _originalItems = new List<Article> () ;
   List<Article> _selectedItems = new List<Article>();
   List<Article> _desSelectedItems = new List<Article>();
   Tiers _selectedClient;
@@ -217,7 +218,8 @@ class _AddPiecePageState extends State<AddPiecePage>
       _selectedClient = await _queryCtr.getTierById(_piece.tier_id);
       _clientControl.text = _selectedClient.raisonSociale;
       _selectedTarification = _selectedClient.tarification;
-      _selectedItems = await _queryCtr.getJournalPiece(item, local: false);
+      _originalItems = await _queryCtr.getJournalPiece(item, local: false) ;
+      _selectedItems = List.from(_originalItems);
       _verssementControler.text = "0.0";
       _resteControler.text = _piece.reste.toStringAsFixed(2);
 
@@ -1328,8 +1330,12 @@ class _AddPiecePageState extends State<AddPiecePage>
                       extentOffset: _remisepieceControler.value.text.length),
                 },
                 onChanged: (value) {
-                  double res = (double.parse(value.trim()) * 100) / _total_ht;
-                  _pourcentremiseControler.text = res.toString();
+                  if(value.trim() != ''){
+                    double res = (double.parse(value.trim()) * 100) / _total_ht;
+                    _pourcentremiseControler.text = res.toString();
+                  }else{
+                    _pourcentremiseControler.text = '0.0' ;
+                  }
                 },
                 decoration: InputDecoration(
                   errorText: _validateVerssemntError ?? null,
@@ -1374,8 +1380,12 @@ class _AddPiecePageState extends State<AddPiecePage>
                                   _pourcentremiseControler.value.text.length),
                         },
                         onChanged: (value) {
-                          double res = (_total_ht * double.parse(value.trim())) / 100;
-                          _remisepieceControler.text = res.toStringAsFixed(2);
+                          if(value.trim() != ''){
+                            double res = (_total_ht * double.parse(value.trim())) / 100;
+                            _remisepieceControler.text = res.toStringAsFixed(2);
+                          }else{
+                            _remisepieceControler.text = '0.0' ;
+                          }
                         },
                         decoration: InputDecoration(
                           prefixIcon: Icon(
@@ -1796,7 +1806,8 @@ class _AddPiecePageState extends State<AddPiecePage>
     _piece.mov = move;
     int id = await addItemToDb(isFromTransfer: isFromTransfer);
     if (id > -1) {
-      setState(() {
+      _selectedClient = await _queryCtr.getTierById(_selectedClient.id);
+      setState((){
         modification = true;
         editMode = false;
         _verssementpiece = 0.0;
@@ -1848,7 +1859,11 @@ class _AddPiecePageState extends State<AddPiecePage>
           id = await _queryCtr.updateItemInDb(DbTablesNames.pieces, item);
           _selectedItems.forEach((article) async {
             Journaux journaux = Journaux.fromPiece(item, article);
-            await _queryCtr.updateJournaux(DbTablesNames.journaux, journaux);
+            if(_originalItems.contains(article)){
+              await _queryCtr.updateJournaux(DbTablesNames.journaux, journaux);
+            }else{
+              await _queryCtr.addItemToTable(DbTablesNames.journaux, journaux);
+            }
           });
           _desSelectedItems.forEach((article) async {
             Journaux journaux = Journaux.fromPiece(item, article);
@@ -2977,15 +2992,21 @@ class _AddPiecePageState extends State<AddPiecePage>
             (directionRtl) ? pw.TextDirection.rtl : pw.TextDirection.ltr,
         build: (context) => [
           pw.Row(
-              mainAxisAlignment: pw.MainAxisAlignment.spaceBetween,
+              mainAxisAlignment: pw.MainAxisAlignment.start,
               children: [
+                (_profile.imageUint8List != "")
+                    ? pw.Image(pw.MemoryImage(_profile.imageUint8List ,),
+                  height: 100, width: 100 ,
+                )
+                    : pw.SizedBox(),
+                pw.SizedBox(width: 5),
                 pw.Column(
                     crossAxisAlignment: pw.CrossAxisAlignment.start,
                     children: [
                       (_profile.raisonSociale != null)
                           ? pw.Text("${_profile.raisonSociale} ",
                               style: pw.TextStyle(
-                                  font: ttf, fontWeight: pw.FontWeight.bold))
+                                  font: ttf, fontWeight: pw.FontWeight.bold , fontSize: 20))
                           : pw.SizedBox(),
                       (_profile.activite != "")
                           ? pw.Text("${_profile.activite} ",
@@ -3041,12 +3062,8 @@ class _AddPiecePageState extends State<AddPiecePage>
                                   font: ttf, fontWeight: pw.FontWeight.bold))
                           : pw.SizedBox(),
                     ]),
-                (_profile.imageUint8List != "")
-                    ? pw.Image(pw.MemoryImage(_profile.imageUint8List),
-                        height: 100, width: 100)
-                    : pw.SizedBox(),
               ]),
-          pw.SizedBox(height: 20),
+          pw.SizedBox(height: 10),
           pw.Row(children: [
             pw.Expanded(
                 flex: 6,
@@ -3099,14 +3116,14 @@ class _AddPiecePageState extends State<AddPiecePage>
             pw.SizedBox(width: 3),
             pw.Expanded(
                 flex: 6,
-                child: pw.Column(children: [
-                  pw.Text("|||||||||||||||||||||||||||||||"),
+                child: pw.Column(
+                    children: [
                   pw.Text("${Helpers.getPieceTitle(_piece.piece)}",
                       style: pw.TextStyle(
-                          fontWeight: pw.FontWeight.bold, font: ttf)),
+                          fontWeight: pw.FontWeight.bold, font: ttf, fontSize: 20)),
                   pw.Text("${S.current.n}\t  ${_piece.num_piece}",
                       style: pw.TextStyle(
-                          fontWeight: pw.FontWeight.bold, font: ttf)),
+                          fontWeight: pw.FontWeight.bold, font: ttf , fontSize: 16)),
                   pw.Text(
                       "${S.current.date}\t  ${Helpers.dateToText(_piece.date)}",
                       style: pw.TextStyle(font: ttf)),

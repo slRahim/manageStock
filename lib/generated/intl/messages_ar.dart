@@ -386,6 +386,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "msg_login_pin" : MessageLookupByLibrary.simpleMessage("الدخول عن طريق الرمز"),
     "msg_long_press_select" : MessageLookupByLibrary.simpleMessage("لحذف العنصر"),
     "msg_long_presse" : MessageLookupByLibrary.simpleMessage("على عناصر الجدول لتعديل , حذف أو إضافة عنصر آخر"),
+    "msg_map_add_position" : MessageLookupByLibrary.simpleMessage("انقر على الخريطة لاختيار الموقع"),
     "msg_no_dispo" : MessageLookupByLibrary.simpleMessage("هذه الخاصية غير متوفرة"),
     "msg_no_edit_transformer" : MessageLookupByLibrary.simpleMessage("لا يمكن التعديل على وصل تم تحويله"),
     "msg_no_pass" : MessageLookupByLibrary.simpleMessage("الرمز السري غير مستخدم"),

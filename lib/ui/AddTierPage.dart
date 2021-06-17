@@ -106,7 +106,7 @@ class _AddTierPageState extends State<AddTierPage>
 
   MyParams _myParams;
 
-  bool isEntreprise = false ;
+  bool isEntreprise = false;
 
   GlobalKey globalKey = new GlobalKey();
   final _formKey = GlobalKey<FormState>();
@@ -275,32 +275,27 @@ class _AddTierPageState extends State<AddTierPage>
                   Visibility(
                     visible: _tabSelectedIndex == 2 && editMode,
                     child: FloatingActionButton(
-                      backgroundColor: Colors.green,
+                      backgroundColor: Colors.green[700],
                       foregroundColor: Colors.white,
                       onPressed: () async {
-                        GeoPoint geoPoint =
-                            await osmKey.currentState.selectPosition();
+                        Helpers.showToast(S.current.msg_map_add_position);
+                        GeoPoint geoPoint = await osmKey.currentState.selectPosition();
                         if (geoPoint != null) {
                           osmKey.currentState.changeLocation(geoPoint);
                           setState(() {
                             _latitude = geoPoint.latitude;
                             _longitude = geoPoint.longitude;
                           });
-
                         }
                       },
-                      child: Icon(Icons.add_location),
+                      child: Icon(Icons.add_location_alt , size: 28,),
                     ),
                   ),
                   SizedBox(
                     height: 15,
                   ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Visibility(
-                        visible: _tabSelectedIndex == 2 && !editMode,
-                        child: FloatingActionButton(
+                  (_tabSelectedIndex == 2 && !editMode)
+                      ? FloatingActionButton(
                           foregroundColor: Colors.white,
                           backgroundColor: Colors.blueAccent,
                           onPressed: () async {
@@ -308,19 +303,17 @@ class _AddTierPageState extends State<AddTierPage>
                                 context, new Coords(_latitude, _longitude));
                           },
                           child: Icon(Icons.directions),
-                        ),
-                      ),
-                      Visibility(
-                        visible: _tabSelectedIndex == 2 && editMode,
-                        child: FloatingActionButton(
-                          onPressed: () async {
-                            await osmKey.currentState.currentLocation();
-                          },
-                          child: Icon(Icons.my_location),
-                        ),
-                      ),
-                    ],
-                  ),
+                        )
+                      : (_tabSelectedIndex == 2 && editMode)
+                          ? FloatingActionButton(
+                              foregroundColor: Colors.white,
+                              backgroundColor: Colors.blueAccent,
+                              onPressed: () async {
+                                await osmKey.currentState.currentLocation();
+                              },
+                              child: Icon(Icons.my_location),
+                            )
+                          : SizedBox(),
                 ],
               ),
             ),
@@ -508,7 +501,8 @@ class _AddTierPageState extends State<AddTierPage>
                             ? (value) {
                                 setState(() {
                                   _selectedStatut = value;
-                                  isEntreprise = (Statics.statutItems.last == value)  ;
+                                  isEntreprise =
+                                      (Statics.statutItems.last == value);
                                 });
                               }
                             : null),
@@ -730,7 +724,8 @@ class _AddTierPageState extends State<AddTierPage>
               child: TextFormField(
                 enabled: editMode,
                 controller: _rcControl,
-                onTap: () => _rcControl.selection = TextSelection(baseOffset: 0, extentOffset: _rcControl.value.text.length),
+                onTap: () => _rcControl.selection = TextSelection(
+                    baseOffset: 0, extentOffset: _rcControl.value.text.length),
                 keyboardType: TextInputType.text,
                 // validator: (value) {
                 //   if (value.isEmpty) {
@@ -739,8 +734,9 @@ class _AddTierPageState extends State<AddTierPage>
                 //   return null;
                 // },
                 decoration: InputDecoration(
-                  labelText:  S.current.n_rc,
-                  labelStyle: GoogleFonts.lato(textStyle: TextStyle(color: Theme.of(context).hintColor)),
+                  labelText: S.current.n_rc,
+                  labelStyle: GoogleFonts.lato(
+                      textStyle: TextStyle(color: Theme.of(context).hintColor)),
                   prefixIcon: Icon(
                     MdiIcons.cardAccountDetails,
                     color: Colors.blue,
@@ -753,7 +749,7 @@ class _AddTierPageState extends State<AddTierPage>
                     borderRadius: BorderRadius.circular(20),
                     borderSide: BorderSide(color: Colors.blue),
                   ),
-                  errorBorder:  OutlineInputBorder(
+                  errorBorder: OutlineInputBorder(
                     gapPadding: 3.3,
                     borderRadius: BorderRadius.circular(20),
                     borderSide: BorderSide(color: Colors.red),
@@ -766,7 +762,8 @@ class _AddTierPageState extends State<AddTierPage>
               child: TextFormField(
                 enabled: editMode,
                 controller: _nifControl,
-                onTap: () => _nifControl.selection = TextSelection(baseOffset: 0, extentOffset: _nifControl.value.text.length),
+                onTap: () => _nifControl.selection = TextSelection(
+                    baseOffset: 0, extentOffset: _nifControl.value.text.length),
                 keyboardType: TextInputType.text,
                 // validator: (value) {
                 //   if (value.isEmpty) {
@@ -775,8 +772,9 @@ class _AddTierPageState extends State<AddTierPage>
                 //   return null;
                 // },
                 decoration: InputDecoration(
-                  labelText:  S.current.nif,
-                  labelStyle: GoogleFonts.lato(textStyle: TextStyle(color: Theme.of(context).hintColor)),
+                  labelText: S.current.nif,
+                  labelStyle: GoogleFonts.lato(
+                      textStyle: TextStyle(color: Theme.of(context).hintColor)),
                   prefixIcon: Icon(
                     MdiIcons.cardAccountDetails,
                     color: Colors.blue,
@@ -789,7 +787,7 @@ class _AddTierPageState extends State<AddTierPage>
                     borderRadius: BorderRadius.circular(20),
                     borderSide: BorderSide(color: Colors.blue),
                   ),
-                  errorBorder:  OutlineInputBorder(
+                  errorBorder: OutlineInputBorder(
                     gapPadding: 3.3,
                     borderRadius: BorderRadius.circular(20),
                     borderSide: BorderSide(color: Colors.red),
@@ -798,11 +796,12 @@ class _AddTierPageState extends State<AddTierPage>
               ),
             ),
             Visibility(
-              visible: (isEntreprise && _myParams.pays == "Algeria") ,
+              visible: (isEntreprise && _myParams.pays == "Algeria"),
               child: TextFormField(
                 enabled: editMode,
                 controller: _aiControl,
-                onTap: () => _aiControl.selection = TextSelection(baseOffset: 0, extentOffset: _aiControl.value.text.length),
+                onTap: () => _aiControl.selection = TextSelection(
+                    baseOffset: 0, extentOffset: _aiControl.value.text.length),
                 keyboardType: TextInputType.text,
                 // validator: (value) {
                 //   if (value.isEmpty) {
@@ -811,8 +810,9 @@ class _AddTierPageState extends State<AddTierPage>
                 //   return null;
                 // },
                 decoration: InputDecoration(
-                  labelText:  S.current.art_imp,
-                  labelStyle: GoogleFonts.lato(textStyle: TextStyle(color: Theme.of(context).hintColor)),
+                  labelText: S.current.art_imp,
+                  labelStyle: GoogleFonts.lato(
+                      textStyle: TextStyle(color: Theme.of(context).hintColor)),
                   prefixIcon: Icon(
                     MdiIcons.cardAccountDetails,
                     color: Colors.blue,
@@ -825,7 +825,7 @@ class _AddTierPageState extends State<AddTierPage>
                     borderRadius: BorderRadius.circular(20),
                     borderSide: BorderSide(color: Colors.blue),
                   ),
-                  errorBorder:  OutlineInputBorder(
+                  errorBorder: OutlineInputBorder(
                     gapPadding: 3.3,
                     borderRadius: BorderRadius.circular(20),
                     borderSide: BorderSide(color: Colors.red),
@@ -1047,7 +1047,7 @@ class _AddTierPageState extends State<AddTierPage>
                               _controlBloquer = value;
                             });
                           }
-                        : (bool value){},
+                        : (bool value) {},
                   )),
             ),
           ],
@@ -1259,42 +1259,30 @@ class _AddTierPageState extends State<AddTierPage>
 
   Widget mapTab() {
     return OSMFlutter(
-        key: osmKey,
-        currentLocation: false,
-        onGeoPointClicked: (geoPoint) {
-          _scaffoldKey.currentState.showSnackBar(
-            SnackBar(
-              content: Text(
-                "lat:${geoPoint.latitude},lon${geoPoint.longitude}",
-              ),
-              action: SnackBarAction(
-                onPressed: () =>
-                    _scaffoldKey.currentState.hideCurrentSnackBar(),
-                label: S.current.masquer,
-              ),
-            ),
-          );
-        },
-        road: Road(
-          startIcon: MarkerIcon(
-            icon: Icon(
-              Icons.person,
-              size: 80,
-              color: Colors.blue,
-            ),
-          ),
-          roadColor: Colors.lightGreenAccent,
-        ),
-        markerIcon: MarkerIcon(
+      key: osmKey,
+      trackMyPosition: false,
+      useSecureURL: false,
+      currentLocation: false,
+      onGeoPointClicked: (value){},
+      initPosition: GeoPoint(latitude: _latitude, longitude: _longitude),
+      road: Road(
+        startIcon: MarkerIcon(
           icon: Icon(
-            Icons.location_pin,
-            color: Colors.red[700],
-            size: 200,
+            Icons.person,
+            size: 80,
+            color: Colors.blue,
           ),
         ),
-        initPosition: GeoPoint(latitude: _latitude, longitude: _longitude),
-        showZoomController: true,
-        useSecureURL: false);
+        roadColor: Colors.lightGreenAccent,
+      ),
+      markerIcon: MarkerIcon(
+        icon: Icon(
+          Icons.location_pin,
+          color: Colors.red[700],
+          size: 120,
+        ),
+      ),
+    );
   }
 
   Widget dropdowns() {
@@ -1346,82 +1334,79 @@ class _AddTierPageState extends State<AddTierPage>
     return StatefulBuilder(builder: (context, StateSetter setState) {
       return Builder(
           builder: (context) => SingleChildScrollView(
-            padding: EdgeInsets.all(10),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                Text(
-                  "${S.current.ajouter} ${S.current.famile}",
-                  style: GoogleFonts.lato(
-                      textStyle: TextStyle(
+                padding: EdgeInsets.all(10),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    Text(
+                      "${S.current.ajouter} ${S.current.famile}",
+                      style: GoogleFonts.lato(
+                          textStyle: TextStyle(
                         fontSize: 18,
                         fontWeight: FontWeight.bold,
                       )),
-                ),
-                Padding(
-                  padding:
-                  EdgeInsetsDirectional.fromSTEB(5, 20, 5, 20),
-                  child: TextField(
-                    controller: _libelleFamilleControl,
-                    keyboardType: TextInputType.text,
-                    decoration: InputDecoration(
-                      prefixIcon: Icon(
-                        Icons.view_agenda,
-                        color: Colors.blue,
-                      ),
-                      focusedBorder: OutlineInputBorder(
-                          borderSide:
-                          BorderSide(color: Colors.blue),
-                          borderRadius: BorderRadius.circular(20)),
-                      contentPadding: EdgeInsets.only(left: 10),
-                      labelText: S.current.famile,
-                      labelStyle: GoogleFonts.lato(
-                        textStyle:
-                        TextStyle(color: Theme.of(context).hintColor),
-                      ),
-                      enabledBorder: OutlineInputBorder(
-                        gapPadding: 3.3,
-                        borderRadius: BorderRadius.circular(20),
-                        borderSide:
-                        BorderSide(color: Colors.blue),
+                    ),
+                    Padding(
+                      padding: EdgeInsetsDirectional.fromSTEB(5, 20, 5, 20),
+                      child: TextField(
+                        controller: _libelleFamilleControl,
+                        keyboardType: TextInputType.text,
+                        decoration: InputDecoration(
+                          prefixIcon: Icon(
+                            Icons.view_agenda,
+                            color: Colors.blue,
+                          ),
+                          focusedBorder: OutlineInputBorder(
+                              borderSide: BorderSide(color: Colors.blue),
+                              borderRadius: BorderRadius.circular(20)),
+                          contentPadding: EdgeInsets.only(left: 10),
+                          labelText: S.current.famile,
+                          labelStyle: GoogleFonts.lato(
+                            textStyle:
+                                TextStyle(color: Theme.of(context).hintColor),
+                          ),
+                          enabledBorder: OutlineInputBorder(
+                            gapPadding: 3.3,
+                            borderRadius: BorderRadius.circular(20),
+                            borderSide: BorderSide(color: Colors.blue),
+                          ),
+                        ),
                       ),
                     ),
-                  ),
-                ),
-                SizedBox(
-                  width: 150.0,
-                  child: Padding(
-                    padding:
-                    EdgeInsetsDirectional.only(start: 0, end: 0),
-                    child: RaisedButton(
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(18.0),
-                      ),
-                      onPressed: () async {
-                        setState(() {
-                          _famille.libelle =
-                              _libelleFamilleControl.text.trim();
-                          _libelleFamilleControl.text = "";
-                        });
-                        await addFamilleIfNotExist(_famille);
-                        Navigator.pop(context);
-                      },
-                      child: Text(
-                        "+ ${S.current.ajouter}",
-                        style: GoogleFonts.lato(
-                            textStyle: TextStyle(
+                    SizedBox(
+                      width: 150.0,
+                      child: Padding(
+                        padding: EdgeInsetsDirectional.only(start: 0, end: 0),
+                        child: RaisedButton(
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(18.0),
+                          ),
+                          onPressed: () async {
+                            setState(() {
+                              _famille.libelle =
+                                  _libelleFamilleControl.text.trim();
+                              _libelleFamilleControl.text = "";
+                            });
+                            await addFamilleIfNotExist(_famille);
+                            Navigator.pop(context);
+                          },
+                          child: Text(
+                            "+ ${S.current.ajouter}",
+                            style: GoogleFonts.lato(
+                                textStyle: TextStyle(
                               color: Colors.white,
-                              fontWeight: FontWeight.bold, fontSize: 15 ,
+                              fontWeight: FontWeight.bold,
+                              fontSize: 15,
                             )),
+                          ),
+                          color: Colors.green,
+                        ),
                       ),
-                      color: Colors.green,
-                    ),
-                  ),
-                )
-              ],
-            ),
-          ));
+                    )
+                  ],
+                ),
+              ));
     });
   }
 
@@ -1499,7 +1484,8 @@ class _AddTierPageState extends State<AddTierPage>
     item.longitude = _longitude;
     item.ville = _villeControl.text.trim();
     item.telephone = _telephoneControl.text.trim();
-    item.mobile = (_mobileControl.text.trim() != '') ? _mobileControl.text.trim() : '';
+    item.mobile =
+        (_mobileControl.text.trim() != '') ? _mobileControl.text.trim() : '';
     item.fax = _faxControl.text.trim();
     item.email = _emailControl.text.trim();
     item.rc = _rcControl.text.trim();
@@ -1515,8 +1501,9 @@ class _AddTierPageState extends State<AddTierPage>
     item.regler = (_reglerControl.text.trim() != "")
         ? double.tryParse(_reglerControl.text.trim())
         : 0.0;
-    item.credit =
-        (_creditControl.text.trim() != '') ? double.parse(_creditControl.text.trim()) : 0.0;
+    item.credit = (_creditControl.text.trim() != '')
+        ? double.parse(_creditControl.text.trim())
+        : 0.0;
 
     if (_itemImage != null) {
       item.imageUint8List = await Helpers.getUint8ListFromFile(_itemImage);

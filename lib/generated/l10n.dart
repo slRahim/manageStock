@@ -5644,6 +5644,16 @@ class S {
       args: [],
     );
   }
+
+  /// `Click on map to pick position`
+  String get msg_map_add_position {
+    return Intl.message(
+      'Click on map to pick position',
+      name: 'msg_map_add_position',
+      desc: '',
+      args: [],
+    );
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<S> {

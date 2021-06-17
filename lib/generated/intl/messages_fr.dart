@@ -386,6 +386,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "msg_login_pin" : MessageLookupByLibrary.simpleMessage("Entre avec pin"),
     "msg_long_press_select" : MessageLookupByLibrary.simpleMessage("pour séléctionner l\'élément"),
     "msg_long_presse" : MessageLookupByLibrary.simpleMessage("sur l\'élément du tableau pour modifier, supprimer, ou ajouter un nouveau"),
+    "msg_map_add_position" : MessageLookupByLibrary.simpleMessage("Cliquez sur la carte pour choisir la position"),
     "msg_no_dispo" : MessageLookupByLibrary.simpleMessage("Cette option n\'est pas disponible"),
     "msg_no_edit_transformer" : MessageLookupByLibrary.simpleMessage("La pièce transformée ne peut pas étre modifiée"),
     "msg_no_pass" : MessageLookupByLibrary.simpleMessage("Mot de passe non utilisé"),

@@ -386,6 +386,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "msg_login_pin" : MessageLookupByLibrary.simpleMessage("Enter PinCode"),
     "msg_long_press_select" : MessageLookupByLibrary.simpleMessage("to deselect the element"),
     "msg_long_presse" : MessageLookupByLibrary.simpleMessage("on the array element to modify, delete, or add a new one"),
+    "msg_map_add_position" : MessageLookupByLibrary.simpleMessage("Click on map to pick position"),
     "msg_no_dispo" : MessageLookupByLibrary.simpleMessage("this option is not avalaible"),
     "msg_no_edit_transformer" : MessageLookupByLibrary.simpleMessage("You can\'t edit transformed invoice"),
     "msg_no_pass" : MessageLookupByLibrary.simpleMessage("You didn\'t set password yet"),

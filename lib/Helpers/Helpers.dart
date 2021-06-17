@@ -114,10 +114,11 @@ class Helpers {
     final filePath = file.absolute.path;
     final lastIndex = filePath.lastIndexOf(new RegExp(r'.jp'));
     final splitted = filePath.substring(0, (lastIndex));
-    final outPath = "${splitted}_out${filePath.substring(lastIndex)}";
+    final outPath = "${splitted}_out.png";
     final compressedImage = await FlutterImageCompress.compressAndGetFile(
         filePath, outPath,
-        minWidth: 600, minHeight: 600, quality: 95);
+        minWidth: 640, minHeight: 320,
+        format: CompressFormat.png);
 
     return compressedImage.readAsBytesSync();
   }

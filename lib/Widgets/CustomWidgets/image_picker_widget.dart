@@ -54,7 +54,7 @@ class ImagePickerWidgetState extends State<ImagePickerWidget> {
                   ? Center(child: Text(S.current.ajout_image , style: GoogleFonts.lato(textStyle : TextStyle(color : Colors.black)),))
                   : new CircleAvatar(
                       backgroundColor: Colors.transparent,
-                      backgroundImage: new FileImage(_imageFile),
+                      backgroundImage: new FileImage(_imageFile ),
                       radius: 200.0,
                     ),
             ),
