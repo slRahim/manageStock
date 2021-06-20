@@ -324,7 +324,10 @@ class Helpers {
   }
 
   static double calcTimber(ttc, myparams) {
-    return (ttc >= 1000000) ? 2500 : ttc * 0.01;
+    if(myparams.timbre){
+      return (ttc >= 1000000) ? 2500 : ttc * 0.01;
+    }
+    return 0.0 ;
   }
 
   static DateTime getDateExpiration(MyParams myParam) {

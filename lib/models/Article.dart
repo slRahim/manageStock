@@ -90,6 +90,9 @@ class Article{
     this._codeBar = obj["CodeBar"];
     this._idFamille = obj["Id_Famille"];
     this._idMarque = obj["Id_Marque"];
+    this._prixVente1 = obj["PrixVente1"];
+    this._prixVente2 = obj["PrixVente2"];
+    this._prixVente3 = obj["PrixVente3"];
     this.stockable = obj["Stockable"];
   }
 

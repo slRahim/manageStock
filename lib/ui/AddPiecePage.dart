@@ -74,7 +74,6 @@ class _AddPiecePageState extends State<AddPiecePage>
   bool editMode = true;
   bool modification = false;
   bool _islisting = false;
-
   bool finishedLoading = false;
 
   String appBarTitle = S.current.devis;
@@ -1577,22 +1576,20 @@ class _AddPiecePageState extends State<AddPiecePage>
   }
 
   //calcule le montant total
-  // le total_ttc = net_a_payer le timbre = est calcule par une fct
   void calculPiece() {
     double sum = 0;
     double totalTva = 0;
     setState(() {
       _selectedItems.forEach((item) {
         sum += (item.selectedQuantite * item.selectedPrice);
-        totalTva += item.selectedQuantite * item.tva;
+        totalTva += item.selectedQuantite * ((item.tva * (item.selectedPrice-((item.selectedPrice*_pourcentremise)/100)))/100);
       });
       _total_ht = sum;
       _total_tva = (_myParams.tva) ? totalTva : 0.0;
       _net_ht = _total_ht - ((_total_ht * _pourcentremise) / 100);
       _total_ttc = _net_ht + _total_tva;
       _timbre = Helpers.calcTimber(_total_ttc, _myParams);
-      _net_a_payer =
-          ((_myParams.timbre) ? _total_ttc + _timbre : _total_ttc + 0.0);
+      _net_a_payer = _total_ttc + _timbre ;
 
       if (_piece.id != null) {
         if (_net_a_payer <= _piece.net_a_payer) {
@@ -2992,76 +2989,83 @@ class _AddPiecePageState extends State<AddPiecePage>
             (directionRtl) ? pw.TextDirection.rtl : pw.TextDirection.ltr,
         build: (context) => [
           pw.Row(
-              mainAxisAlignment: pw.MainAxisAlignment.start,
+              mainAxisAlignment: pw.MainAxisAlignment.spaceBetween,
               children: [
+                pw.Container(
+                  width: 200,
+                  child:  pw.Column(
+                      crossAxisAlignment: pw.CrossAxisAlignment.start,
+                      children: [
+                        (_profile.raisonSociale != null)
+                            ? pw.Text("${_profile.raisonSociale} ",
+                            style: pw.TextStyle(
+                                font: ttf, fontWeight: pw.FontWeight.bold , fontSize: 20))
+                            : pw.SizedBox(),
+                        (_profile.activite != "")
+                            ? pw.Text("${_profile.activite} ",
+                            style: pw.TextStyle(
+                                font: ttf, fontWeight: pw.FontWeight.bold))
+                            : pw.SizedBox(),
+                        (_profile.adresse != "")
+                            ? pw.Text(
+                            "${_profile.adresse} ${_profile.departement} ${_profile.ville} ${_profile.pays}",
+                            style: pw.TextStyle(
+                                font: ttf, fontWeight: pw.FontWeight.bold))
+                            : pw.SizedBox(),
+                        (_profile.telephone != "")
+                            ? pw.Text(
+                            "${S.current.telephone}\t: ${_profile.telephone}",
+                            style: pw.TextStyle(
+                                font: ttf, fontWeight: pw.FontWeight.bold))
+                            : pw.SizedBox(),
+                        (_profile.fax != "")
+                            ? pw.Text("${S.current.fax}\t: ${_profile.fax}",
+                            style: pw.TextStyle(
+                                font: ttf, fontWeight: pw.FontWeight.bold))
+                            : pw.SizedBox(),
+                        (_profile.mobile != "")
+                            ? pw.Text("${S.current.mobile}\t: ${_profile.mobile}",
+                            style: pw.TextStyle(
+                                font: ttf, fontWeight: pw.FontWeight.bold))
+                            : pw.SizedBox(),
+                        (_profile.email != "")
+                            ? pw.Text("${S.current.mail}\t: ${_profile.email}",
+                            style: pw.TextStyle(
+                                font: ttf, fontWeight: pw.FontWeight.bold))
+                            : pw.SizedBox(),
+                        (_profile.rc != "")
+                            ? pw.Text("${S.current.rc}\t: ${_profile.rc}",
+                            style: pw.TextStyle(
+                                font: ttf, fontWeight: pw.FontWeight.bold))
+                            : pw.SizedBox(),
+                        (_profile.nif != "")
+                            ? pw.Text("${S.current.nif}\t: ${_profile.nif}",
+                            style: pw.TextStyle(
+                                font: ttf, fontWeight: pw.FontWeight.bold))
+                            : pw.SizedBox(),
+                        (_profile.ai != "")
+                            ? pw.Text("${S.current.art_imp}\t: ${_profile.ai}",
+                            style: pw.TextStyle(
+                                font: ttf, fontWeight: pw.FontWeight.bold))
+                            : pw.SizedBox(),
+                        (_profile.capital > 0)
+                            ? pw.Text(
+                            "${S.current.capitale_sociale}\t: ${Helpers.numberFormat(_profile.capital)} ${Helpers.getDeviseTranslate(_myParams.devise)}",
+                            style: pw.TextStyle(
+                                font: ttf, fontWeight: pw.FontWeight.bold))
+                            : pw.SizedBox(),
+                      ]),
+                ),
+                pw.SizedBox(width: 10),
                 (_profile.imageUint8List != "")
-                    ? pw.Image(pw.MemoryImage(_profile.imageUint8List ,),
-                  height: 100, width: 100 ,
+                    ?pw.Container(
+                   width: 200,
+                  height: 200,
+                  child: pw.Image(pw.MemoryImage(_profile.imageUint8List ,),
+                    height: 100, width: 100 ,
+                  )
                 )
                     : pw.SizedBox(),
-                pw.SizedBox(width: 5),
-                pw.Column(
-                    crossAxisAlignment: pw.CrossAxisAlignment.start,
-                    children: [
-                      (_profile.raisonSociale != null)
-                          ? pw.Text("${_profile.raisonSociale} ",
-                              style: pw.TextStyle(
-                                  font: ttf, fontWeight: pw.FontWeight.bold , fontSize: 20))
-                          : pw.SizedBox(),
-                      (_profile.activite != "")
-                          ? pw.Text("${_profile.activite} ",
-                              style: pw.TextStyle(
-                                  font: ttf, fontWeight: pw.FontWeight.bold))
-                          : pw.SizedBox(),
-                      (_profile.adresse != "")
-                          ? pw.Text(
-                              "${_profile.adresse} ${_profile.departement} ${_profile.ville} ${_profile.pays}",
-                              style: pw.TextStyle(
-                                  font: ttf, fontWeight: pw.FontWeight.bold))
-                          : pw.SizedBox(),
-                      (_profile.telephone != "")
-                          ? pw.Text(
-                              "${S.current.telephone}\t: ${_profile.telephone}",
-                              style: pw.TextStyle(
-                                  font: ttf, fontWeight: pw.FontWeight.bold))
-                          : pw.SizedBox(),
-                      (_profile.fax != "")
-                          ? pw.Text("${S.current.fax}\t: ${_profile.fax}",
-                              style: pw.TextStyle(
-                                  font: ttf, fontWeight: pw.FontWeight.bold))
-                          : pw.SizedBox(),
-                      (_profile.mobile != "")
-                          ? pw.Text("${S.current.mobile}\t: ${_profile.mobile}",
-                              style: pw.TextStyle(
-                                  font: ttf, fontWeight: pw.FontWeight.bold))
-                          : pw.SizedBox(),
-                      (_profile.email != "")
-                          ? pw.Text("${S.current.mail}\t: ${_profile.email}",
-                              style: pw.TextStyle(
-                                  font: ttf, fontWeight: pw.FontWeight.bold))
-                          : pw.SizedBox(),
-                      (_profile.rc != "")
-                          ? pw.Text("${S.current.rc}\t: ${_profile.rc}",
-                              style: pw.TextStyle(
-                                  font: ttf, fontWeight: pw.FontWeight.bold))
-                          : pw.SizedBox(),
-                      (_profile.nif != "")
-                          ? pw.Text("${S.current.nif}\t: ${_profile.nif}",
-                              style: pw.TextStyle(
-                                  font: ttf, fontWeight: pw.FontWeight.bold))
-                          : pw.SizedBox(),
-                      (_profile.ai != "")
-                          ? pw.Text("${S.current.art_imp}\t: ${_profile.ai}",
-                          style: pw.TextStyle(
-                              font: ttf, fontWeight: pw.FontWeight.bold))
-                          : pw.SizedBox(),
-                      (_profile.capital != "")
-                          ? pw.Text(
-                              "${S.current.capitale_sociale}\t: ${Helpers.numberFormat(_profile.capital)} ${Helpers.getDeviseTranslate(_myParams.devise)}",
-                              style: pw.TextStyle(
-                                  font: ttf, fontWeight: pw.FontWeight.bold))
-                          : pw.SizedBox(),
-                    ]),
               ]),
           pw.SizedBox(height: 10),
           pw.Row(children: [
@@ -3136,7 +3140,7 @@ class _AddPiecePageState extends State<AddPiecePage>
                     border: pw.Border(bottom: pw.BorderSide(width: 2))),
                 children: [
                   pw.Container(
-                    padding: pw.EdgeInsets.only(left: 5, right: 5),
+                    padding: pw.EdgeInsets.only(left: 5, right: 5 , bottom: 2),
                     child: pw.Text("${S.current.referance}",
                         style: pw.TextStyle(
                             fontWeight: pw.FontWeight.bold,
@@ -3144,7 +3148,7 @@ class _AddPiecePageState extends State<AddPiecePage>
                             fontSize: 10)),
                   ),
                   pw.Container(
-                    padding: pw.EdgeInsets.only(left: 5, right: 5),
+                    padding: pw.EdgeInsets.only(left: 5, right: 5, bottom: 2),
                     child: pw.Text("${S.current.designation}",
                         style: pw.TextStyle(
                             fontWeight: pw.FontWeight.bold,
@@ -3152,7 +3156,7 @@ class _AddPiecePageState extends State<AddPiecePage>
                             fontSize: 10)),
                   ),
                   pw.Container(
-                    padding: pw.EdgeInsets.only(left: 5, right: 5),
+                    padding: pw.EdgeInsets.only(left: 5, right: 5, bottom: 2),
                     child: pw.Text("${S.current.qte}",
                         style: pw.TextStyle(
                             fontWeight: pw.FontWeight.bold,
@@ -3160,7 +3164,7 @@ class _AddPiecePageState extends State<AddPiecePage>
                             fontSize: 10)),
                   ),
                   pw.Container(
-                    padding: pw.EdgeInsets.only(left: 5, right: 5),
+                    padding: pw.EdgeInsets.only(left: 5, right: 5, bottom: 2),
                     child: pw.Text("${S.current.prix}",
                         style: pw.TextStyle(
                             fontWeight: pw.FontWeight.bold,
@@ -3168,13 +3172,14 @@ class _AddPiecePageState extends State<AddPiecePage>
                             fontSize: 10)),
                   ),
                   pw.Container(
-                      padding: pw.EdgeInsets.only(left: 5, right: 5),
+                      padding: pw.EdgeInsets.only(left: 5, right: 5, bottom: 2),
                       child: pw.Text("${S.current.montant}",
                           style: pw.TextStyle(
                               fontWeight: pw.FontWeight.bold,
                               font: ttf,
                               fontSize: 10))),
-                ]),
+                ]
+            ),
             for (var e in _selectedItems)
               pw.TableRow(
                   decoration: pw.BoxDecoration(
@@ -3211,7 +3216,7 @@ class _AddPiecePageState extends State<AddPiecePage>
                     ),
                   ]),
           ]),
-          pw.SizedBox(height: 10),
+          pw.SizedBox(height: 5),
           pw.Divider(height: 2),
           pw.SizedBox(height: 10),
           pw.Row(children: [
