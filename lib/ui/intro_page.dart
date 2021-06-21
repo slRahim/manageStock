@@ -1,5 +1,8 @@
 import 'dart:convert';
+import 'dart:io';
 import 'dart:typed_data';
+
+import 'package:esc_pos_utils/esc_pos_utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_phoenix/flutter_phoenix.dart';
@@ -11,18 +14,16 @@ import 'package:gestmob/Helpers/curency/countries.dart';
 import 'package:gestmob/Helpers/curency/country.dart';
 import 'package:gestmob/Helpers/curency/currency_picker_dialog.dart';
 import 'package:gestmob/Helpers/curency/utils/utils.dart';
+import 'package:gestmob/Widgets/utils.dart' as utils;
+import 'package:gestmob/generated/l10n.dart';
 import 'package:gestmob/models/ArticleTva.dart';
 import 'package:gestmob/models/MyParams.dart';
 import 'package:gestmob/models/Profile.dart';
-import 'package:introduction_screen/introduction_screen.dart';
-import 'package:gestmob/Widgets/utils.dart' as utils;
-import 'package:gestmob/generated/l10n.dart';
-import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
-import 'package:esc_pos_utils/esc_pos_utils.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-import 'dart:io';
 import 'package:gestmob/services/push_notifications.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:introduction_screen/introduction_screen.dart';
+import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class IntroPage extends StatefulWidget {
   @override
@@ -33,9 +34,11 @@ class _IntroPageState extends State<IntroPage> {
   String _selectedLanguage;
   List<DropdownMenuItem<String>> _languages;
 
-  List<CountryModel> _countries =[CountryModel.init(name: "${S.current.selec_pays}")];
-  String  _selectedCountry = S.current.selec_pays ;
-  String _countryname ;
+  List<CountryModel> _countries = [
+    CountryModel.init(name: "${S.current.selec_pays}")
+  ];
+  String _selectedCountry = S.current.selec_pays;
+  String _countryname;
   String _currencycode;
 
   List<String> _cities = ["${S.current.choix_city}"];
@@ -71,56 +74,55 @@ class _IntroPageState extends State<IntroPage> {
 
   Future futureInit() async {
     _languages = utils.buildDropLanguageDownMenuItems(Statics.languages);
-    switch(defaultLocale.substring(0,(2))){
+    switch (defaultLocale.substring(0, (2))) {
       case "en":
         _selectedLanguage = Statics.languages[0];
-        S.load(Locale("en")).then((value){
+        S.load(Locale("en")).then((value) {
           _countries[0].name = "${S.current.selec_pays}";
-          _selectedCountry = "${S.current.selec_pays}" ;
+          _selectedCountry = "${S.current.selec_pays}";
           _cities[0] = "${S.current.choix_city}";
           _selectedCity = S.current.choix_city;
           _states[0] = "${S.current.choix_province}";
-          _selectedState =S.current.choix_province;
+          _selectedState = S.current.choix_province;
         });
         break;
       case "fr":
         _selectedLanguage = Statics.languages[1];
-        S.load(Locale("fr")).then((value){
+        S.load(Locale("fr")).then((value) {
           _countries[0].name = "${S.current.selec_pays}";
-          _selectedCountry = S.current.selec_pays ;
+          _selectedCountry = S.current.selec_pays;
           _cities[0] = "${S.current.choix_city}";
           _selectedCity = S.current.choix_city;
           _states[0] = "${S.current.choix_province}";
-          _selectedState =S.current.choix_province;
+          _selectedState = S.current.choix_province;
         });
 
         break;
       case "ar":
-        S.load(Locale("ar")).then((value){
+        S.load(Locale("ar")).then((value) {
           _selectedLanguage = Statics.languages[2];
           _countries[0].name = "${S.current.selec_pays}";
-          _selectedCountry = S.current.selec_pays ;
+          _selectedCountry = S.current.selec_pays;
           _cities[0] = "${S.current.choix_city}";
           _selectedCity = S.current.choix_city;
           _states[0] = "${S.current.choix_province}";
-          _selectedState =S.current.choix_province;
+          _selectedState = S.current.choix_province;
         });
 
         break;
-      default :
+      default:
         _selectedLanguage = Statics.languages[0];
         S.load(Locale("en"));
         break;
     }
     getCounty();
-    _countryname = "United States of America" ;
+    _countryname = "United States of America";
     _currencycode = "USD";
     _prefs = await SharedPreferences.getInstance();
   }
 
   Future getResponse() async {
-    var res = await rootBundle.loadString(
-        'assets/data/country.json');
+    var res = await rootBundle.loadString('assets/data/country.json');
     return jsonDecode(res);
   }
 
@@ -130,12 +132,12 @@ class _IntroPageState extends State<IntroPage> {
       var model = CountryModel.fromJson(data);
       if (!mounted) return;
 
-      switch(_selectedLanguage){
-        case "Français (FR)" :
-          model.name = model.translations.fr ;
+      switch (_selectedLanguage) {
+        case "Français (FR)":
+          model.name = model.translations.fr;
           break;
-        case "عربي (AR)" :
-          model.name = model.translations.fa ;
+        case "عربي (AR)":
+          model.name = model.translations.fa;
           break;
       }
       setState(() {
@@ -152,7 +154,7 @@ class _IntroPageState extends State<IntroPage> {
         .map((item) => item.states)
         .toList();
 
-    var states = takeState as List;
+    var states = takeState;
     states.forEach((f) {
       if (!mounted) return;
       setState(() {
@@ -172,7 +174,7 @@ class _IntroPageState extends State<IntroPage> {
         .map((item) => item.states)
         .toList();
 
-    var states = takestate as List;
+    var states = takestate;
     states.forEach((f) {
       var stateName = f.where((item) => item.name == _selectedState);
       var cities = stateName.map((item) => item.cities).toList();
@@ -189,16 +191,17 @@ class _IntroPageState extends State<IntroPage> {
     return _cities;
   }
 
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: IntroductionScreen(
         pages: _getPageViews(context),
         next: const Icon(Icons.navigate_next),
-        done: Text(S.current.start , style: GoogleFonts.lato(textStyle: TextStyle(fontWeight: FontWeight.w600))),
+        done: Text(S.current.start,
+            style: GoogleFonts.lato(
+                textStyle: TextStyle(fontWeight: FontWeight.w600))),
         onDone: () async {
-          if(_formKey.currentState.validate()){
+          if (_formKey.currentState.validate()) {
             await saveConfig().then((value) => Phoenix.rebirth(context));
           } else {
             Helpers.showFlushBar(context, "${S.current.msg_champs_obg}");
@@ -228,14 +231,16 @@ class _IntroPageState extends State<IntroPage> {
                 height: 30,
               ),
               Text(
-                S.current.intro_select_lang ,
-                style: GoogleFonts.lato(textStyle: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
+                S.current.intro_select_lang,
+                style: GoogleFonts.lato(
+                    textStyle:
+                        TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
               )
             ],
           ),
         ),
         bodyWidget: Container(
-          margin: EdgeInsetsDirectional.only(start: 25 , end: 25),
+          margin: EdgeInsetsDirectional.only(start: 25, end: 25),
           padding: const EdgeInsets.all(8),
           decoration: BoxDecoration(
             border: Border.all(
@@ -253,7 +258,10 @@ class _IntroPageState extends State<IntroPage> {
                 child: Center(
                   child: DropdownButtonHideUnderline(
                     child: DropdownButton<String>(
-                        disabledHint: Text(S.current.param_lang_title , style: GoogleFonts.lato(),),
+                        disabledHint: Text(
+                          S.current.param_lang_title,
+                          style: GoogleFonts.lato(),
+                        ),
                         value: _selectedLanguage,
                         items: _languages,
                         onChanged: (value) {
@@ -261,9 +269,10 @@ class _IntroPageState extends State<IntroPage> {
                             _selectedLanguage = value;
                             switch (_selectedLanguage) {
                               case ("English (ENG)"):
-                                S.load(Locale("en")).then((value){
+                                S.load(Locale("en")).then((value) {
                                   _countries.clear();
-                                  _countries.add(CountryModel.init(name:"${S.current.selec_pays}"));
+                                  _countries.add(CountryModel.init(
+                                      name: "${S.current.selec_pays}"));
                                   _selectedCountry = S.current.selec_pays;
                                   getCounty();
 
@@ -273,14 +282,15 @@ class _IntroPageState extends State<IntroPage> {
 
                                   _states.clear();
                                   _states.add("${S.current.choix_province}");
-                                  _selectedState =S.current.choix_province;
+                                  _selectedState = S.current.choix_province;
                                 });
                                 break;
                               case ("Français (FR)"):
-                                S.load(Locale("fr")).then((value){
+                                S.load(Locale("fr")).then((value) {
                                   _countries.clear();
-                                  _countries.add(CountryModel.init(name:"${S.current.selec_pays}"));
-                                  _selectedCountry = S.current.selec_pays ;
+                                  _countries.add(CountryModel.init(
+                                      name: "${S.current.selec_pays}"));
+                                  _selectedCountry = S.current.selec_pays;
                                   getCounty();
 
                                   _cities.clear();
@@ -289,15 +299,16 @@ class _IntroPageState extends State<IntroPage> {
 
                                   _states.clear();
                                   _states.add("${S.current.choix_province}");
-                                  _selectedState =S.current.choix_province;
+                                  _selectedState = S.current.choix_province;
                                 });
                                 break;
 
                               case ("عربي (AR)"):
-                                S.load(Locale("ar")).then((value){
+                                S.load(Locale("ar")).then((value) {
                                   _countries.clear();
-                                  _countries.add(CountryModel.init(name:"${S.current.selec_pays}"));
-                                  _selectedCountry = S.current.selec_pays ;
+                                  _countries.add(CountryModel.init(
+                                      name: "${S.current.selec_pays}"));
+                                  _selectedCountry = S.current.selec_pays;
                                   getCounty();
 
                                   _cities.clear();
@@ -306,11 +317,10 @@ class _IntroPageState extends State<IntroPage> {
 
                                   _states.clear();
                                   _states.add("${S.current.choix_province}");
-                                  _selectedState =S.current.choix_province;
+                                  _selectedState = S.current.choix_province;
                                 });
                                 break;
                             }
-
                           });
                         }),
                   ),
@@ -337,7 +347,9 @@ class _IntroPageState extends State<IntroPage> {
               ),
               Text(
                 S.current.intro_select_region,
-                style: GoogleFonts.lato(textStyle: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
+                style: GoogleFonts.lato(
+                    textStyle:
+                        TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
               )
             ],
           ),
@@ -345,62 +357,9 @@ class _IntroPageState extends State<IntroPage> {
         bodyWidget: Column(
           children: [
             Container(
-              margin: EdgeInsetsDirectional.only(start: 25 , end: 25),
+              margin: EdgeInsetsDirectional.only(start: 25, end: 25),
               width: 300,
               padding: const EdgeInsets.all(8),
-              decoration: BoxDecoration(
-                border: Border.all(
-                  color: Colors.blueAccent,
-                ),
-                borderRadius: BorderRadius.circular(20.0),
-              ),
-              child:  Row(
-                  children: [
-                    Icon(
-                      Icons.pin_drop,
-                      color: Theme.of(context).accentColor,
-                    ),
-                    SizedBox(width: 5,),
-                    Container(
-                      width: 200,
-                      child: SingleChildScrollView(
-                        scrollDirection: Axis.horizontal,
-                        child:  DropdownButtonHideUnderline(
-                            child: DropdownButton<String>(
-                              value: _selectedCountry,
-                              items: _countries.map((item) {
-                                return DropdownMenuItem<String>(
-                                  value: item.name,
-                                  child: Text("${item.name}",style: GoogleFonts.lato(),),
-                                );
-                              }).toList(),
-                              onChanged: (value) {
-                                if (!mounted) return;
-                                setState(() {
-                                  _selectedCountry = value;
-                                  _selectedState = S.current.choix_province;
-                                  _states = ["${S.current.choix_province}"];
-                                  _cities = ["${S.current.choix_city}"];
-                                  _selectedCity = S.current.choix_city;
-                                  getStates();
-                                  String iso3Code = _countries.where((item) => item.name == _selectedCountry).toList().first.iso3;
-                                  var country = countryList.where((element) => element.iso3Code == iso3Code).toList();
-                                  _countryname = country.first.name ;
-                                  _currencycode = country.first.currencyCode ;
-                                });
-                              },
-                            ),
-                          ),
-                        ),
-                    ),
-                  ],
-                ),
-            ),
-            SizedBox(height: 10,),
-            Container(
-              margin: EdgeInsetsDirectional.only(start: 25 , end: 25),
-              padding: const EdgeInsets.all(8),
-              width: 300,
               decoration: BoxDecoration(
                 border: Border.all(
                   color: Colors.blueAccent,
@@ -408,45 +367,65 @@ class _IntroPageState extends State<IntroPage> {
                 borderRadius: BorderRadius.circular(20.0),
               ),
               child: Row(
-                  children: [
-                    Icon(
-                      Icons.pin_drop,
-                      color: Theme.of(context).accentColor,
-                    ),
-                     SizedBox(width: 5,),
-                     Container(
-                        width: 200,
-                        child: SingleChildScrollView(
-                          scrollDirection: Axis.horizontal,
-                          child: DropdownButtonHideUnderline(
-                              child: DropdownButton<String>(
-                                items: _states.map((String dropDownStringItem) {
-                                  return DropdownMenuItem<String>(
-                                    value: dropDownStringItem,
-                                    child: Text(dropDownStringItem,style: GoogleFonts.lato(),),
-                                  );
-                                }).toList(),
-                                onChanged: (value){
-                                  if (!mounted) return;
-                                  setState(() {
-                                    _selectedState = value;
-                                    _cities = ["${S.current.choix_city}"];
-                                    _selectedCity = "${S.current.choix_city}" ;
-                                    getCity();
-                                  });
-                                },
-                                value: _selectedState,
+                children: [
+                  Icon(
+                    Icons.pin_drop,
+                    color: Theme.of(context).accentColor,
+                  ),
+                  SizedBox(
+                    width: 5,
+                  ),
+                  Container(
+                    width: 200,
+                    child: SingleChildScrollView(
+                      scrollDirection: Axis.horizontal,
+                      child: DropdownButtonHideUnderline(
+                        child: DropdownButton<String>(
+                          value: _selectedCountry,
+                          items: _countries.map((item) {
+                            return DropdownMenuItem<String>(
+                              value: item.name,
+                              child: Text(
+                                "${item.name}",
+                                style: GoogleFonts.lato(),
                               ),
-                            ),
-                          ),
+                            );
+                          }).toList(),
+                          onChanged: (value) {
+                            if (!mounted) return;
+                            setState(() {
+                              _selectedCountry = value;
+                              _selectedState = S.current.choix_province;
+                              _states = ["${S.current.choix_province}"];
+                              _cities = ["${S.current.choix_city}"];
+                              _selectedCity = S.current.choix_city;
+                              getStates();
+                              String iso3Code = _countries
+                                  .where(
+                                      (item) => item.name == _selectedCountry)
+                                  .toList()
+                                  .first
+                                  .iso3;
+                              var country = countryList
+                                  .where(
+                                      (element) => element.iso3Code == iso3Code)
+                                  .toList();
+                              _countryname = country.first.name;
+                              _currencycode = country.first.currencyCode;
+                            });
+                          },
+                        ),
                       ),
-
-                  ],
-                ),
+                    ),
+                  ),
+                ],
+              ),
             ),
-            SizedBox(height: 10,),
+            SizedBox(
+              height: 10,
+            ),
             Container(
-              margin: EdgeInsetsDirectional.only(start: 25 , end: 25),
+              margin: EdgeInsetsDirectional.only(start: 25, end: 25),
               padding: const EdgeInsets.all(8),
               width: 300,
               decoration: BoxDecoration(
@@ -461,33 +440,94 @@ class _IntroPageState extends State<IntroPage> {
                     Icons.pin_drop,
                     color: Theme.of(context).accentColor,
                   ),
-                  SizedBox(width: 5,),
+                  SizedBox(
+                    width: 5,
+                  ),
+                  Container(
+                    width: 200,
+                    child: SingleChildScrollView(
+                      scrollDirection: Axis.horizontal,
+                      child: DropdownButtonHideUnderline(
+                        child: DropdownButton<String>(
+                          items: _states.map((String dropDownStringItem) {
+                            return DropdownMenuItem<String>(
+                              value: dropDownStringItem,
+                              child: Text(
+                                dropDownStringItem,
+                                style: GoogleFonts.lato(),
+                              ),
+                            );
+                          }).toList(),
+                          onChanged: (value) {
+                            if (!mounted) return;
+                            setState(() {
+                              _selectedState = value;
+                              _cities = ["${S.current.choix_city}"];
+                              _selectedCity = "${S.current.choix_city}";
+                              getCity();
+                            });
+                          },
+                          value: _selectedState,
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            SizedBox(
+              height: 10,
+            ),
+            Container(
+              margin: EdgeInsetsDirectional.only(start: 25, end: 25),
+              padding: const EdgeInsets.all(8),
+              width: 300,
+              decoration: BoxDecoration(
+                border: Border.all(
+                  color: Colors.blueAccent,
+                ),
+                borderRadius: BorderRadius.circular(20.0),
+              ),
+              child: Row(
+                children: [
+                  Icon(
+                    Icons.pin_drop,
+                    color: Theme.of(context).accentColor,
+                  ),
+                  SizedBox(
+                    width: 5,
+                  ),
                   Container(
                     width: 200,
                     child: SingleChildScrollView(
                       child: DropdownButtonHideUnderline(
-                          child: DropdownButton<String>(
-                            items: _cities.map((String dropDownStringItem) {
-                              return DropdownMenuItem<String>(
-                                value: dropDownStringItem,
-                                child: Text(dropDownStringItem , style: GoogleFonts.lato(),),
-                              );
-                            }).toList(),
-                            onChanged: (value) {
-                              if (!mounted) return;
-                              setState(() {
-                                _selectedCity = value;
-                              });
-                            },
-                            value: _selectedCity,
-                          ),
+                        child: DropdownButton<String>(
+                          items: _cities.map((String dropDownStringItem) {
+                            return DropdownMenuItem<String>(
+                              value: dropDownStringItem,
+                              child: Text(
+                                dropDownStringItem,
+                                style: GoogleFonts.lato(),
+                              ),
+                            );
+                          }).toList(),
+                          onChanged: (value) {
+                            if (!mounted) return;
+                            setState(() {
+                              _selectedCity = value;
+                            });
+                          },
+                          value: _selectedCity,
                         ),
                       ),
                     ),
+                  ),
                 ],
               ),
             ),
-            SizedBox(height: 10,),
+            SizedBox(
+              height: 10,
+            ),
             InkWell(
               onTap: () async {
                 await showDialog(
@@ -499,7 +539,7 @@ class _IntroPageState extends State<IntroPage> {
                           borderSide: BorderSide(color: Colors.blue),
                           borderRadius: BorderRadius.circular(20)),
                       contentPadding:
-                      EdgeInsets.only(left: 20, top: 20, bottom: 20),
+                          EdgeInsets.only(left: 20, top: 20, bottom: 20),
                       labelText: S.current.devise,
                       labelStyle: GoogleFonts.lato(),
                       alignLabelWithHint: true,
@@ -515,7 +555,7 @@ class _IntroPageState extends State<IntroPage> {
                     itemBuilder: _countryDialog,
                     onValuePicked: (Country country) {
                       setState(() {
-                        _countryname = country.name ;
+                        _countryname = country.name;
                         _currencycode = country.currencyCode;
                       });
                     },
@@ -525,7 +565,7 @@ class _IntroPageState extends State<IntroPage> {
               child: Container(
                 padding: const EdgeInsetsDirectional.only(
                     start: 8, end: 8, top: 20.5, bottom: 20.5),
-                margin: EdgeInsetsDirectional.only(start: 25 , end: 25),
+                margin: EdgeInsetsDirectional.only(start: 25, end: 25),
                 width: 300,
                 decoration: BoxDecoration(
                   border: Border.all(
@@ -539,12 +579,15 @@ class _IntroPageState extends State<IntroPage> {
                       Icons.monetization_on,
                       color: Theme.of(context).accentColor,
                     ),
-                    SizedBox(width: 5,),
+                    SizedBox(
+                      width: 5,
+                    ),
                     Expanded(
                       child: SingleChildScrollView(
                         child: Text(
                           "$_currencycode ($_countryname)",
-                          style: GoogleFonts.lato(textStyle: TextStyle(fontSize: 18)),
+                          style: GoogleFonts.lato(
+                              textStyle: TextStyle(fontSize: 18)),
                         ),
                       ),
                     )
@@ -567,7 +610,9 @@ class _IntroPageState extends State<IntroPage> {
                 ),
                 Text(
                   S.current.intro_infor,
-                  style: GoogleFonts.lato(textStyle: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
+                  style: GoogleFonts.lato(
+                      textStyle:
+                          TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
                 )
               ],
             ),
@@ -577,7 +622,7 @@ class _IntroPageState extends State<IntroPage> {
             child: Column(
               children: [
                 Container(
-                  margin: EdgeInsetsDirectional.only(start:25 ,end: 25),
+                  margin: EdgeInsetsDirectional.only(start: 25, end: 25),
                   child: TextFormField(
                     controller: _raisonSocialeControl,
                     keyboardType: TextInputType.text,
@@ -609,7 +654,7 @@ class _IntroPageState extends State<IntroPage> {
                   height: 10,
                 ),
                 Container(
-                  margin: EdgeInsetsDirectional.only(start: 25 ,end: 25),
+                  margin: EdgeInsetsDirectional.only(start: 25, end: 25),
                   child: TextFormField(
                     controller: _activiteControl,
                     keyboardType: TextInputType.text,
@@ -635,7 +680,7 @@ class _IntroPageState extends State<IntroPage> {
                   height: 10,
                 ),
                 Container(
-                  margin: EdgeInsetsDirectional.only(start: 25 ,end: 25),
+                  margin: EdgeInsetsDirectional.only(start: 25, end: 25),
                   child: TextFormField(
                     controller: _telephoneControl,
                     keyboardType: TextInputType.phone,
@@ -661,7 +706,7 @@ class _IntroPageState extends State<IntroPage> {
                   height: 10,
                 ),
                 Container(
-                  margin: EdgeInsetsDirectional.only(start: 25 ,end: 25),
+                  margin: EdgeInsetsDirectional.only(start: 25, end: 25),
                   child: TextFormField(
                     controller: _adresseControl,
                     keyboardType: TextInputType.text,
@@ -687,7 +732,7 @@ class _IntroPageState extends State<IntroPage> {
                   height: 10,
                 ),
                 Container(
-                  margin: EdgeInsetsDirectional.only(start: 25 ,end: 25),
+                  margin: EdgeInsetsDirectional.only(start: 25, end: 25),
                   child: TextFormField(
                     controller: _rcControl,
                     keyboardType: TextInputType.text,
@@ -713,7 +758,7 @@ class _IntroPageState extends State<IntroPage> {
                   height: 10,
                 ),
                 Container(
-                  margin: EdgeInsetsDirectional.only(start: 25 ,end: 25),
+                  margin: EdgeInsetsDirectional.only(start: 25, end: 25),
                   child: TextFormField(
                     controller: _nifControl,
                     keyboardType: TextInputType.text,
@@ -746,22 +791,29 @@ class _IntroPageState extends State<IntroPage> {
       children: <Widget>[
         CurrencyPickerUtils.getDefaultFlagImage(country),
         SizedBox(width: 8.0),
-        Text("(${country.currencyCode})", style: GoogleFonts.lato(),),
+        Text(
+          "(${country.currencyCode})",
+          style: GoogleFonts.lato(),
+        ),
         SizedBox(width: 8.0),
-        Flexible(child: Text(country.name, style: GoogleFonts.lato(),))
+        Flexible(
+            child: Text(
+          country.name,
+          style: GoogleFonts.lato(),
+        ))
       ],
     );
   }
-
 
 //  *******************************************************************************************************************************************************************************
 //****************************************************************************save config*******************************************************************************************
 
   Future saveConfig() async {
     Uint8List image01 = await Helpers.getDefaultImageUint8List(from: "profile");
-    var country = (_countries.first.name == _selectedCountry)? '' : _selectedCountry ;
-    var province = (_states.indexOf(_selectedState) == 0)? '' : _selectedState ;
-    var city = (_cities.indexOf(_selectedCity) == 0)? '' : _selectedCity ;
+    var country =
+        (_countries.first.name == _selectedCountry) ? '' : _selectedCountry;
+    var province = (_states.indexOf(_selectedState) == 0) ? '' : _selectedState;
+    var city = (_cities.indexOf(_selectedCity) == 0) ? '' : _selectedCity;
 
     _myParams = new MyParams(
         1,
@@ -780,7 +832,6 @@ class _IntroPageState extends State<IntroPage> {
         "demo",
         DateTime.now(),
         'mensuel');
-
 
     _profile = new Profile(
         1,
@@ -830,17 +881,16 @@ class _IntroPageState extends State<IntroPage> {
     await _queryCtr.updateItemInDb(DbTablesNames.myparams, _myParams);
     await _queryCtr.updateItemInDb(DbTablesNames.profile, _profile);
     await configTva();
-
   }
 
-  Future configTva() async{
-    List<ArticleTva> list = new List<ArticleTva> ();
-    switch(_countryname){
+  Future configTva() async {
+    List<ArticleTva> list = new List<ArticleTva>();
+    switch (_countryname) {
       case 'Algeria':
         list.add(ArticleTva(0.0));
         list.add(ArticleTva(9.0));
         list.add(ArticleTva(19.0));
-        break ;
+        break;
       case 'France':
         list.add(ArticleTva(0.0));
         list.add(ArticleTva(2.1));
@@ -872,11 +922,8 @@ class _IntroPageState extends State<IntroPage> {
         break;
     }
 
-    list.forEach((element) async{
+    list.forEach((element) async {
       await _queryCtr.addItemToTable(DbTablesNames.articlesTva, element);
     });
-
   }
-
-
 }

@@ -1,34 +1,28 @@
 import 'dart:convert';
 import 'dart:io';
 import 'dart:typed_data';
-import 'package:flutter/services.dart';
-import 'package:data_connection_checker/data_connection_checker.dart';
+
 import 'package:flushbar/flushbar.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_image_compress/flutter_image_compress.dart';
 import 'package:flutter_phoenix/flutter_phoenix.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:gestmob/Helpers/curency/countries.dart';
 import 'package:gestmob/Helpers/curency/country.dart';
-import 'package:gestmob/Helpers/route_generator.dart';
 import 'package:gestmob/cubit/home_cubit.dart';
 import 'package:gestmob/generated/l10n.dart';
-import 'package:gestmob/models/Article.dart';
 import 'package:gestmob/models/FormatPiece.dart';
 import 'package:gestmob/models/HomeItem.dart';
-import 'package:gestmob/models/Piece.dart';
-import 'package:gestmob/ui/home.dart';
+import 'package:gestmob/models/MyParams.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
 import 'package:map_launcher/map_launcher.dart';
 import 'package:path_provider/path_provider.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
+
 import 'Statics.dart';
-import 'package:intl/intl.dart' as intl;
-import 'package:archive/archive.dart';
-import 'package:gestmob/models/MyParams.dart';
-import 'package:google_fonts/google_fonts.dart';
 
 class Helpers {
   static Widget buildLoading() {
@@ -117,8 +111,7 @@ class Helpers {
     final outPath = "${splitted}_out.png";
     final compressedImage = await FlutterImageCompress.compressAndGetFile(
         filePath, outPath,
-        minWidth: 640, minHeight: 320,
-        format: CompressFormat.png);
+        minWidth: 640, minHeight: 320, format: CompressFormat.png);
 
     return compressedImage.readAsBytesSync();
   }
@@ -162,7 +155,10 @@ class Helpers {
     // showToast(message);
     Flushbar(
       isDismissible: false,
-      messageText: Text(message , style: GoogleFonts.lato(textStyle: TextStyle(color: Colors.white)),),
+      messageText: Text(
+        message,
+        style: GoogleFonts.lato(textStyle: TextStyle(color: Colors.white)),
+      ),
       icon: Icon(
         Icons.info_outline,
         size: 28.0,
@@ -216,8 +212,8 @@ class Helpers {
   static String dateToText(DateTime dateTime) {
     var month = dateTime.month.toString().padLeft(2, '0');
     var day = dateTime.day.toString().padLeft(2, '0');
-    var hour = dateTime.hour.toString().padLeft(2, '0') ;
-    var minute = dateTime.minute.toString().padLeft(2, '0') ;
+    var hour = dateTime.hour.toString().padLeft(2, '0');
+    var minute = dateTime.minute.toString().padLeft(2, '0');
 
     var dateText = '${dateTime.year}-$month-$day $hour:$minute';
     return dateText;
@@ -237,14 +233,14 @@ class Helpers {
 
       case NumPieceFormat.format2:
         var now = new DateTime.now();
-        String year = formatPiece.year ;
+        String year = formatPiece.year;
         String month = now.month.toString();
         int index = formatPiece.currentindex + 1;
         return "$index/$month/$year";
         break;
 
       default:
-        String year =formatPiece.year;
+        String year = formatPiece.year;
         int index = formatPiece.currentindex + 1;
         return "$index/$year";
         break;
@@ -324,10 +320,10 @@ class Helpers {
   }
 
   static double calcTimber(ttc, myparams) {
-    if(myparams.timbre){
+    if (myparams.timbre) {
       return (ttc >= 1000000) ? 2500 : ttc * 0.01;
     }
-    return 0.0 ;
+    return 0.0;
   }
 
   static DateTime getDateExpiration(MyParams myParam) {
@@ -423,12 +419,14 @@ class Helpers {
             tradBillions = _convertLessThanOneThousand(billions) + " milliard";
             break;
           default:
-            if(millions > 0 || thousands > 0 || handreds > 0){
-              tradBillions = _convertLessThanOneThousand(billions) + " milliard";
-            }else{
-              tradBillions = _convertLessThanOneThousand(billions) + " milliards";
+            if (millions > 0 || thousands > 0 || handreds > 0) {
+              tradBillions =
+                  _convertLessThanOneThousand(billions) + " milliard";
+            } else {
+              tradBillions =
+                  _convertLessThanOneThousand(billions) + " milliards";
             }
-            break ;
+            break;
         }
         String result = tradBillions;
 
@@ -442,12 +440,12 @@ class Helpers {
             tradMillions = _convertLessThanOneThousand(millions) + " million";
             break;
           default:
-            if(thousands > 0 || handreds > 0){
+            if (thousands > 0 || handreds > 0) {
               tradMillions = _convertLessThanOneThousand(millions) + " million";
-            }else{
-              tradMillions = _convertLessThanOneThousand(millions) + " millions";
+            } else {
+              tradMillions =
+                  _convertLessThanOneThousand(millions) + " millions";
             }
-
         }
         result = result + tradMillions;
 
@@ -460,10 +458,11 @@ class Helpers {
             tradThousands = "mille";
             break;
           default:
-            if(handreds > 0){
+            if (handreds > 0) {
               tradThousands = _convertLessThanOneThousand(thousands) + " mille";
-            }else{
-              tradThousands = _convertLessThanOneThousand(thousands) + " milles";
+            } else {
+              tradThousands =
+                  _convertLessThanOneThousand(thousands) + " milles";
             }
         }
         result = result + tradThousands;
@@ -800,13 +799,13 @@ class Helpers {
         }
         if (number == 0) return soFar;
         if (number == 1) {
-          if(soFar.trim().length == 0){
-            return " مائة " ;
+          if (soFar.trim().length == 0) {
+            return " مائة ";
           }
           return " مائة " + ' و ' + soFar;
         } else if (number == 2) {
-          if(soFar.trim().length == 0){
-            return " مائتان " ;
+          if (soFar.trim().length == 0) {
+            return " مائتان ";
           }
           return " مائتان " + ' و ' + soFar;
         } else if (number < 11) {
@@ -874,10 +873,12 @@ class Helpers {
         break;
     }
   }
-  
-  static String currencyName(String currencyCode){
-    Country res = countryList.where((element) => element.currencyCode == currencyCode).first ;
 
-    return res.currencyName ;
+  static String currencyName(String currencyCode) {
+    Country res = countryList
+        .where((element) => element.currencyCode == currencyCode)
+        .first;
+
+    return res.currencyName;
   }
 }

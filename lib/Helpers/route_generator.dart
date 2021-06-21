@@ -5,20 +5,20 @@ import 'package:gestmob/models/Article.dart';
 import 'package:gestmob/models/Piece.dart';
 import 'package:gestmob/models/Tiers.dart';
 import 'package:gestmob/models/Tresorie.dart';
+import 'package:gestmob/ui/AddArticlePage.dart';
 import 'package:gestmob/ui/AddPiecePage.dart';
 import 'package:gestmob/ui/AddTierPage.dart';
 import 'package:gestmob/ui/AddTresoriePage.dart';
-import 'package:gestmob/ui/ProfilePage.dart';
 import 'package:gestmob/ui/LoginPage.dart';
+import 'package:gestmob/ui/ProfilePage.dart';
 import 'package:gestmob/ui/SettingsPage.dart';
-import 'package:gestmob/ui/AddArticlePage.dart';
 import 'package:gestmob/ui/all_piece_listing.dart';
 import 'package:gestmob/ui/backup_restore_listing.dart';
 import 'package:gestmob/ui/home.dart';
 import 'package:gestmob/ui/intro_page.dart';
 import 'package:gestmob/ui/purchase_page.dart';
 import 'package:gestmob/ui/support_page.dart';
-import 'QueryCtr.dart';
+
 import 'Statics.dart';
 
 class RouteGenerator {
@@ -45,68 +45,92 @@ class RouteGenerator {
         return MaterialPageRoute(
           builder: (_) => ProfilePage(),
         );
-       break;
+        break;
       case RoutesKeys.addArticle:
-        if (args is Article){
+        if (args is Article) {
           return PageRouteBuilder(
             transitionDuration: Duration(milliseconds: 200),
-            transitionsBuilder: (context,Animation<double> animation,Animation<double>  secondeAnimation , Widget child){
-              animation = CurvedAnimation(parent: animation ,curve: Curves.bounceInOut);
+            transitionsBuilder: (context, Animation<double> animation,
+                Animation<double> secondeAnimation, Widget child) {
+              animation =
+                  CurvedAnimation(parent: animation, curve: Curves.bounceInOut);
               return ScaleTransition(
                 alignment: Alignment.center,
                 scale: animation,
                 child: child,
               );
             },
-            pageBuilder: (context,Animation<double> animation,Animation<double>  secondeAnimation) =>AddArticlePage(arguments: args,),
+            pageBuilder: (context, Animation<double> animation,
+                    Animation<double> secondeAnimation) =>
+                AddArticlePage(
+              arguments: args,
+            ),
           );
         }
-       break;
+        break;
       case RoutesKeys.addTier:
-        if (args is Tiers){
+        if (args is Tiers) {
           return PageRouteBuilder(
             transitionDuration: Duration(milliseconds: 200),
-            transitionsBuilder: (context,Animation<double> animation,Animation<double>  secondeAnimation , Widget child){
-              animation = CurvedAnimation(parent: animation ,curve: Curves.bounceInOut);
+            transitionsBuilder: (context, Animation<double> animation,
+                Animation<double> secondeAnimation, Widget child) {
+              animation =
+                  CurvedAnimation(parent: animation, curve: Curves.bounceInOut);
               return ScaleTransition(
                 alignment: Alignment.center,
                 scale: animation,
                 child: child,
               );
             },
-            pageBuilder: (context,Animation<double> animation,Animation<double>  secondeAnimation) => AddTierPage(arguments: args,),
+            pageBuilder: (context, Animation<double> animation,
+                    Animation<double> secondeAnimation) =>
+                AddTierPage(
+              arguments: args,
+            ),
           );
         }
-       break;
+        break;
       case RoutesKeys.addPiece:
-        if (args is Piece){
+        if (args is Piece) {
           return PageRouteBuilder(
             transitionDuration: Duration(milliseconds: 200),
-            transitionsBuilder: (context,Animation<double> animation,Animation<double>  secondeAnimation , Widget child){
-              animation = CurvedAnimation(parent: animation ,curve: Curves.bounceInOut);
+            transitionsBuilder: (context, Animation<double> animation,
+                Animation<double> secondeAnimation, Widget child) {
+              animation =
+                  CurvedAnimation(parent: animation, curve: Curves.bounceInOut);
               return ScaleTransition(
                 alignment: Alignment.center,
                 scale: animation,
                 child: child,
               );
             },
-            pageBuilder: (context,Animation<double> animation,Animation<double>  secondeAnimation) => AddPiecePage(arguments: args,),
+            pageBuilder: (context, Animation<double> animation,
+                    Animation<double> secondeAnimation) =>
+                AddPiecePage(
+              arguments: args,
+            ),
           );
         }
-       break;
+        break;
       case RoutesKeys.addTresorie:
-        if (args is Tresorie){
+        if (args is Tresorie) {
           return PageRouteBuilder(
             transitionDuration: Duration(milliseconds: 200),
-            transitionsBuilder: (context,Animation<double> animation,Animation<double>  secondeAnimation , Widget child){
-              animation = CurvedAnimation(parent: animation ,curve: Curves.bounceInOut);
+            transitionsBuilder: (context, Animation<double> animation,
+                Animation<double> secondeAnimation, Widget child) {
+              animation =
+                  CurvedAnimation(parent: animation, curve: Curves.bounceInOut);
               return ScaleTransition(
                 alignment: Alignment.center,
                 scale: animation,
                 child: child,
               );
             },
-            pageBuilder: (context,Animation<double> animation,Animation<double>  secondeAnimation) => AddTresoriePage(arguments: args,),
+            pageBuilder: (context, Animation<double> animation,
+                    Animation<double> secondeAnimation) =>
+                AddTresoriePage(
+              arguments: args,
+            ),
           );
         }
         break;

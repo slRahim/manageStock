@@ -1,22 +1,21 @@
 import 'dart:ui';
+
+import 'package:awesome_dialog/awesome_dialog.dart';
+import 'package:feature_discovery/feature_discovery.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
-import 'package:flutter_icons/flutter_icons.dart';
+import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:gestmob/Helpers/Helpers.dart';
+import 'package:gestmob/Helpers/QueryCtr.dart';
 import 'package:gestmob/Helpers/Statics.dart';
 import 'package:gestmob/generated/l10n.dart';
 import 'package:gestmob/models/Article.dart';
+import 'package:gestmob/services/push_notifications.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:sliding_card/sliding_card.dart';
-import 'package:gestmob/Helpers/QueryCtr.dart';
+
 import 'CustomWidgets/list_tile_card.dart';
-import 'package:gestmob/services/push_notifications.dart';
-import 'package:feature_discovery/feature_discovery.dart';
-import 'package:flutter/scheduler.dart';
-import 'package:flutter_slidable/flutter_slidable.dart';
-import 'package:url_launcher/url_launcher.dart';
-import 'package:awesome_dialog/awesome_dialog.dart';
-import 'package:google_fonts/google_fonts.dart';
 
 // element à afficher lors de listing des articles
 class ArticleListItem extends StatefulWidget {
@@ -49,7 +48,6 @@ class _ArticleListItemState extends State<ArticleListItem> {
   TextEditingController _quntiteControler = new TextEditingController();
   TextEditingController _priceControler = new TextEditingController();
   String _validateQteError;
-  String _validatePriceError;
   SlidingCardController controller;
 
   String _devise;
@@ -150,43 +148,43 @@ class _ArticleListItemState extends State<ArticleListItem> {
                           builder: (BuildContext context) {
                             return addQtedialogue();
                           }).then((val) {
-                            if(widget.article.stockable){
-                              if (widget.pieceOrigin == 'BL' ||
-                                  widget.pieceOrigin == 'FC') {
-                                if ((widget.article.quantite -
+                        if (widget.article.stockable) {
+                          if (widget.pieceOrigin == 'BL' ||
+                              widget.pieceOrigin == 'FC') {
+                            if ((widget.article.quantite -
                                     widget.article.cmdClient) <
-                                    widget.article.selectedQuantite) {
-                                  AwesomeDialog(
-                                      context: context,
-                                      dialogType: DialogType.WARNING,
-                                      dismissOnBackKeyPress: false,
-                                      dismissOnTouchOutside: false,
-                                      animType: AnimType.BOTTOMSLIDE,
-                                      title: "",
-                                      desc: S.current.msg_qte_select_sup,
-                                      btnCancelText: S.current.confirme,
-                                      btnCancelOnPress: () {},
-                                      btnOkText: S.current.annuler,
-                                      btnOkOnPress: () {
-                                        setState(() {
-                                          widget.article.selectedQuantite = 1;
-                                        });
-                                      })
-                                    ..show();
-                                  // Helpers.showToast(S.current.msg_qte_select_sup);
-                                }
-                              }
+                                widget.article.selectedQuantite) {
+                              AwesomeDialog(
+                                  context: context,
+                                  dialogType: DialogType.WARNING,
+                                  dismissOnBackKeyPress: false,
+                                  dismissOnTouchOutside: false,
+                                  animType: AnimType.BOTTOMSLIDE,
+                                  title: "",
+                                  desc: S.current.msg_qte_select_sup,
+                                  btnCancelText: S.current.confirme,
+                                  btnCancelOnPress: () {},
+                                  btnOkText: S.current.annuler,
+                                  btnOkOnPress: () {
+                                    setState(() {
+                                      widget.article.selectedQuantite = 1;
+                                    });
+                                  })
+                                ..show();
+                              // Helpers.showToast(S.current.msg_qte_select_sup);
                             }
+                          }
+                        }
 
                         setState(() {});
                       });
                     } else {
                       selectThisItem();
-                      if(widget.article.stockable){
+                      if (widget.article.stockable) {
                         if (widget.pieceOrigin == 'BL' ||
                             widget.pieceOrigin == 'FC') {
                           if ((widget.article.quantite -
-                              widget.article.cmdClient) <
+                                  widget.article.cmdClient) <
                               widget.article.selectedQuantite) {
                             // AwesomeDialog(
                             //     context: context,
@@ -360,22 +358,26 @@ class _ArticleListItemState extends State<ArticleListItem> {
                           SizedBox(
                             width: 3,
                           ),
-                          (widget.article.stockable)?Text(
-                            "${(widget.article.quantite - widget.article.cmdClient).toString()}",
-                            style: GoogleFonts.lato(
-                                textStyle: TextStyle(
-                                    color: widget.article.quantite <=
-                                            widget.article.quantiteMinimum
-                                        ? Colors.redAccent
-                                        : Theme.of(context).primaryColorDark,
-                                    fontSize: 16.0)),
-                          ):Text(
-                            S.current.service,
-                            style: GoogleFonts.lato(
-                                textStyle: TextStyle(
-                                    color: Theme.of(context).primaryColorDark,
-                                    fontSize: 12.0)),
-                          ),
+                          (widget.article.stockable)
+                              ? Text(
+                                  "${(widget.article.quantite - widget.article.cmdClient).toString()}",
+                                  style: GoogleFonts.lato(
+                                      textStyle: TextStyle(
+                                          color: widget.article.quantite <=
+                                                  widget.article.quantiteMinimum
+                                              ? Colors.redAccent
+                                              : Theme.of(context)
+                                                  .primaryColorDark,
+                                          fontSize: 16.0)),
+                                )
+                              : Text(
+                                  S.current.service,
+                                  style: GoogleFonts.lato(
+                                      textStyle: TextStyle(
+                                          color: Theme.of(context)
+                                              .primaryColorDark,
+                                          fontSize: 12.0)),
+                                ),
                         ],
                       ),
                       trailingChildrenOnArticleFragment(),
@@ -579,7 +581,6 @@ class _ArticleListItemState extends State<ArticleListItem> {
                                         _priceControler.value.text.length),
                               },
                               decoration: InputDecoration(
-                                errorText: _validatePriceError ?? null,
                                 prefixIcon: Icon(
                                   Icons.attach_money,
                                   color: Colors.orange[900],
@@ -643,14 +644,7 @@ class _ArticleListItemState extends State<ArticleListItem> {
                                     } else {
                                       _validateQteError = S.current.msg_qte_err;
                                     }
-                                    if (_price > 0) {
-                                      _validatePriceError = null;
-                                    } else {
-                                      _validatePriceError =
-                                          S.current.msg_prix_err;
-                                    }
-                                    if (_validateQteError == null &&
-                                        _validatePriceError == null) {
+                                    if (_validateQteError == null) {
                                       widget.article.selectedQuantite = _qte;
                                       widget.article.selectedPrice = _price;
                                       widget.onItemSelected(null);

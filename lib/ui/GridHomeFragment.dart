@@ -1,33 +1,20 @@
-import 'dart:convert';
 import 'package:draggable_container/draggable_container.dart';
+import 'package:feature_discovery/feature_discovery.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:future_progress_dialog/future_progress_dialog.dart';
+import 'package:flutter/scheduler.dart';
 import 'package:gestmob/Helpers/Helpers.dart';
 import 'package:gestmob/Helpers/QueryCtr.dart';
 import 'package:gestmob/Helpers/Statics.dart';
 import 'package:gestmob/Widgets/HomeItemsWidgets.dart';
-import 'package:gestmob/Widgets/HomeItemsWidgets.dart';
-import 'package:gestmob/Widgets/HomeItemsWidgets.dart';
-import 'package:gestmob/Widgets/navDrawer.dart';
 import 'package:gestmob/generated/l10n.dart';
-import 'package:gestmob/models/MyParams.dart';
-import 'package:gestmob/services/local_notification.dart';
-import 'package:google_fonts/google_fonts.dart';
-import 'package:gestmob/cubit/home_cubit.dart';
 import 'package:gestmob/models/HomeItem.dart';
-import 'package:line_icons/line_icon.dart';
+import 'package:gestmob/services/push_notifications.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:line_icons/line_icons.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
-import 'package:reorderables/reorderables.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'AddArticlePage.dart';
-import 'package:gestmob/services/push_notifications.dart';
-import 'package:feature_discovery/feature_discovery.dart';
-import 'package:flutter/scheduler.dart';
 import 'package:url_launcher/url_launcher.dart';
-import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 
 class GridHomeWidget extends StatefulWidget {
   static bool Global_Draggable_Mode = false;
@@ -118,7 +105,11 @@ class _GridHomeWidgetState extends State<GridHomeWidget> {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
-              Icon(LineIcons.plus, size: 45 , color: Colors.white,),
+              Icon(
+                LineIcons.plus,
+                size: 45,
+                color: Colors.white,
+              ),
               SizedBox(
                 width: 10.0,
                 height: 10.0,
@@ -130,8 +121,7 @@ class _GridHomeWidgetState extends State<GridHomeWidget> {
                     textStyle: TextStyle(
                         color: Colors.white,
                         fontSize: 16,
-                        fontWeight: FontWeight.bold)
-                ),
+                        fontWeight: FontWeight.bold)),
               ),
             ],
           ),
@@ -170,7 +160,7 @@ class _GridHomeWidgetState extends State<GridHomeWidget> {
       drawerItemPurchase.title = S.current.abonnement;
       drawerItemVente.title = S.current.vente;
       drawerItemAchat.title = S.current.achat;
-      drawerItemFamilleMarque.title = S.current.famille_marque ;
+      drawerItemFamilleMarque.title = S.current.famille_marque;
 
       _appBarTitle = S.current.app_name;
 
@@ -418,7 +408,9 @@ class _GridHomeWidgetState extends State<GridHomeWidget> {
                         autoReorder: true,
                         // the decoration when dragging item
                         dragDecoration: BoxDecoration(boxShadow: [
-                          BoxShadow(color: Colors.blue.withOpacity(0.3), blurRadius: 10)
+                          BoxShadow(
+                              color: Colors.blue.withOpacity(0.3),
+                              blurRadius: 10)
                         ]),
                         // slot margin
                         slotMargin: EdgeInsets.only(

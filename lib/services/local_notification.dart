@@ -1,13 +1,7 @@
-import 'dart:ffi';
+import 'dart:io' show File, Platform;
 
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
-import 'package:gestmob/Helpers/QueryCtr.dart';
-import 'package:gestmob/models/MyParams.dart';
-import 'package:path_provider/path_provider.dart';
-import 'dart:io' show File, Platform;
-import 'package:http/http.dart' as http;
-
 import 'package:rxdart/subjects.dart';
 
 class NotificationPlugin {
@@ -165,7 +159,6 @@ class NotificationPlugin {
   Future<void> cancelAllNotification() async {
     await flutterLocalNotificationsPlugin.cancelAll();
   }
-
 }
 
 //***************************************************************************************************************************************************************************

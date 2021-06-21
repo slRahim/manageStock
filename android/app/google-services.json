@@ -23,6 +23,14 @@
           }
         },
         {
+          "client_id": "29868595195-4t6kssre075ttrdr94evk1ek8b3es4bn.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.cirtait.mobile.gestmob",
+            "certificate_hash": "f5d64c6ef00f8d20fa78136be36c1d670d4cc11e"
+          }
+        },
+        {
           "client_id": "29868595195-fo6bnoi82rn2lji1b1nv46tvb8br6gpc.apps.googleusercontent.com",
           "client_type": 3
         }

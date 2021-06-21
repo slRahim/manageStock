@@ -1,16 +1,4 @@
-
-
-import 'dart:convert';
-import 'dart:io';
-
-import 'dart:typed_data';
-
-import 'package:flutter/cupertino.dart';
-import 'package:gestmob/Helpers/Helpers.dart';
-import 'package:gestmob/Widgets/article_list_item.dart';
-import 'package:gestmob/models/Article.dart';
-
-class Piece{
+class Piece {
   int _id;
   int _tier_id;
   int _mov;
@@ -22,17 +10,17 @@ class Piece{
 
   int _tarification;
   int _transformer;
-  int _etat ;
-  double _total_ht=0;
+  int _etat;
+  double _total_ht = 0;
   double _total_tva = 0;
   double _net_ht = 0;
   double _total_ttc = 0;
   double _timbre;
   double _net_a_payer = 0;
-  double _regler=0;
-  double _reste=0;
-  double _marge=0 ;
-  double _remise =0;
+  double _regler = 0;
+  double _reste = 0;
+  double _marge = 0;
+  double _remise = 0;
 
   Piece.init();
   Piece.typePiece(this._piece);
@@ -70,17 +58,17 @@ class Piece{
     map["Tier_id"] = this._tier_id;
     map["Tarification"] = this._tarification;
     map["Transformer"] = this._transformer;
-    map["Etat"] = this._etat ;
+    map["Etat"] = this._etat;
     map["Total_ht"] = this._total_ht;
-    map["Net_ht"] = this._net_ht ;
+    map["Net_ht"] = this._net_ht;
     map["Total_tva"] = this._total_tva;
     map["Total_ttc"] = this._total_ttc;
     map["Timbre"] = this._timbre;
     map["Net_a_payer"] = this._net_a_payer;
     map["Regler"] = this._regler;
     map["Reste"] = this._reste;
-    map["Marge"] = this._marge ;
-    map["Remise"] = this._remise ;
+    map["Marge"] = this._marge;
+    map["Remise"] = this._remise;
     return map;
   }
 
@@ -95,7 +83,7 @@ class Piece{
       this._transformer,
       this._etat,
       this._total_ht,
-      this._net_ht ,
+      this._net_ht,
       this._total_tva,
       this._total_ttc,
       this._timbre,
@@ -103,8 +91,7 @@ class Piece{
       this._regler,
       this._reste,
       this._marge,
-      this._remise
-      );
+      this._remise);
 
   int get id => _id;
 
@@ -220,13 +207,11 @@ class Piece{
     _marge = value;
   }
 
-
   double get remise => _remise;
 
   set remise(double value) {
     _remise = value;
   }
-
 
   String get mobileTier => _mobileTier;
 
@@ -246,5 +231,4 @@ class Piece{
 
   @override
   int get hashCode => _id.hashCode;
-
 }

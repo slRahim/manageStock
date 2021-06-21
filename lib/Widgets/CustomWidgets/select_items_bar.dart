@@ -1,23 +1,24 @@
 import 'dart:ui';
 
-import 'package:barcode_scan/barcode_scan.dart';
 import 'package:flutter/material.dart';
-import 'package:gestmob/Helpers/Helpers.dart';
-import 'package:gestmob/generated/l10n.dart';
-import 'package:gestmob/search/search_input_sliver.dart';
-import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 // app bar lors de selection de plusieurs items
-class SelectItemsBar extends StatefulWidget with PreferredSizeWidget{
+class SelectItemsBar extends StatefulWidget with PreferredSizeWidget {
   final int itemsCount;
   final VoidCallback onConfirm;
   final VoidCallback onCancel;
   final Function(String search) onSearchChanged;
   final TextEditingController searchController;
 
-  const SelectItemsBar({Key key, this.itemsCount, this.onConfirm, this.onCancel,this.onSearchChanged, this.searchController}) : super(key: key);
-
+  const SelectItemsBar(
+      {Key key,
+      this.itemsCount,
+      this.onConfirm,
+      this.onCancel,
+      this.onSearchChanged,
+      this.searchController})
+      : super(key: key);
 
   @override
   State<StatefulWidget> createState() {
@@ -26,33 +27,33 @@ class SelectItemsBar extends StatefulWidget with PreferredSizeWidget{
 
   @override
   Size get preferredSize => Size.fromHeight(kToolbarHeight);
-
 }
 
-class SelectItemsBarState extends State<SelectItemsBar>{
+class SelectItemsBarState extends State<SelectItemsBar> {
   bool isSearching = false;
 
   @override
   Widget build(BuildContext context) {
-    if(widget.itemsCount <= 0){
+    if (widget.itemsCount <= 0) {
       widget.onCancel();
     }
     return AppBar(
-      leading:IconButton(
-        icon: Icon(Icons.cancel,color: Colors.white, size: 25), // change this size and style
+      leading: IconButton(
+        icon: Icon(Icons.cancel,
+            color: Colors.white, size: 25), // change this size and style
         onPressed: () => widget.onCancel(),
       ),
       automaticallyImplyLeading: false,
       titleSpacing: 0,
-      title: Text(widget.itemsCount.toString(), style: GoogleFonts.lato(textStyle: TextStyle(color: Colors.white , fontWeight: FontWeight.bold))),
+      title: Text(widget.itemsCount.toString(),
+          style: GoogleFonts.lato(
+              textStyle:
+                  TextStyle(color: Colors.white, fontWeight: FontWeight.bold))),
       backgroundColor: Colors.black,
       centerTitle: true,
       actions: [
         IconButton(
-          icon: Icon(
-            Icons.done_outline,
-            color: Colors.white
-          ),
+          icon: Icon(Icons.done_outline, color: Colors.white),
           onPressed: () {
             widget.onConfirm();
           },
@@ -60,5 +61,4 @@ class SelectItemsBarState extends State<SelectItemsBar>{
       ],
     );
   }
-
 }

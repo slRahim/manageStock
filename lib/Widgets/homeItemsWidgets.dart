@@ -2,11 +2,7 @@ import 'package:draggable_container/draggable_container.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/widgets.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gestmob/Helpers/Helpers.dart';
-import 'package:gestmob/Helpers/Statics.dart';
-import 'package:gestmob/cubit/home_cubit.dart';
-import 'package:gestmob/models/Article.dart';
 import 'package:gestmob/models/HomeItem.dart';
 import 'package:google_fonts/google_fonts.dart';
 
@@ -18,7 +14,8 @@ class HomeDraggableItem extends DraggableItem {
   Widget child, deleteButton;
   final Function onTap;
 
-  HomeDraggableItem({this.key = 'key', this.index, this.onTap, this.context, this.data}) {
+  HomeDraggableItem(
+      {this.key = 'key', this.index, this.onTap, this.context, this.data}) {
     String title = data == null ? "Add Button" : data.title;
     String id = data == null ? "addButtonHomeItemId" : data.id;
 
@@ -28,11 +25,11 @@ class HomeDraggableItem extends DraggableItem {
           onTap();
         } else if (context != null) {
           print(title);
-          Helpers.handleIdClick(context, data.id );
+          Helpers.handleIdClick(context, data.id);
         }
       },
       child: Container(
-        padding: EdgeInsetsDirectional.only(start: 5 , end :5),
+        padding: EdgeInsetsDirectional.only(start: 5, end: 5),
         decoration: BoxDecoration(
           color: colorSet(id),
           borderRadius: BorderRadius.circular(5),
@@ -59,15 +56,12 @@ class HomeDraggableItem extends DraggableItem {
                   textStyle: TextStyle(
                       color: Colors.white,
                       fontSize: 15,
-                      fontWeight: FontWeight.bold)
-              ),
+                      fontWeight: FontWeight.bold)),
             ),
           ],
         ),
       ),
     );
-
-
   }
 
   @override
@@ -77,4 +71,3 @@ class HomeDraggableItem extends DraggableItem {
     return {key: index};
   }
 }
-

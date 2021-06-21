@@ -1,29 +1,24 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
-import 'package:flutter_icons/flutter_icons.dart';
-import 'package:gestmob/Helpers/Helpers.dart';
-import 'package:gestmob/Helpers/QueryCtr.dart';
 import 'package:gestmob/Helpers/Statics.dart';
 import 'package:gestmob/Widgets/article_list_item.dart';
+import 'package:gestmob/Widgets/categorie_list_item.dart';
 import 'package:gestmob/Widgets/piece_list_item.dart';
 import 'package:gestmob/Widgets/tier_list_item.dart';
 import 'package:gestmob/Widgets/tresorie_list_item.dart';
+import 'package:gestmob/generated/l10n.dart';
 import 'package:gestmob/models/Article.dart';
 import 'package:gestmob/models/ArticleFamille.dart';
 import 'package:gestmob/models/ArticleMarque.dart';
 import 'package:gestmob/models/ArticleTva.dart';
 import 'package:gestmob/models/ChargeTresorie.dart';
-import 'package:gestmob/models/Journaux.dart';
 import 'package:gestmob/models/Piece.dart';
 import 'package:gestmob/models/Tiers.dart';
 import 'package:gestmob/models/TiersFamille.dart';
 import 'package:gestmob/models/Tresorie.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
-import 'package:gestmob/Widgets/categorie_list_item.dart';
-import 'search_input_sliver.dart';
+
 import 'sliver_list_data_source.dart';
-import 'package:gestmob/generated/l10n.dart';
 
 class ItemsSliverList extends StatefulWidget {
   final SliverListDataSource dataSource;
@@ -124,7 +119,10 @@ class _ItemsSliverListState extends State<ItemsSliverList> {
         item is TiersFamille ||
         item is ChargeTresorie ||
         item is ArticleTva) {
-      return CategoryListItem(item: item , dataSource: widget.dataSource,);
+      return CategoryListItem(
+        item: item,
+        dataSource: widget.dataSource,
+      );
     } else {
       return null;
     }

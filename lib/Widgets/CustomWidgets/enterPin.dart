@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:gestmob/Helpers/Helpers.dart';
-import 'package:gestmob/Helpers/TouchIdUtil.dart';
 import 'package:gestmob/generated/l10n.dart';
-import 'package:vibration/vibration.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:vibration/vibration.dart';
 
 // special pour l'ajout et modification de pin d'auth ds le screen profile
 class EnterPin extends StatefulWidget {
@@ -16,7 +15,6 @@ class EnterPin extends StatefulWidget {
 }
 
 class _EnterPinState extends State<EnterPin> {
-
   @override
   void initState() {
     super.initState();
@@ -27,21 +25,21 @@ class _EnterPinState extends State<EnterPin> {
     return Container(
       decoration: BoxDecoration(
           gradient: LinearGradient(
-            // colors: [Color(0xFF088787), Color(0xFF1FC877)],
+              // colors: [Color(0xFF088787), Color(0xFF1FC877)],
               colors: [Colors.blue[400], Colors.blue[600]],
               begin: FractionalOffset.topLeft,
               end: FractionalOffset.bottomRight,
               stops: [0.0, 1.0],
-              tileMode: TileMode.clamp)
-      ),
-      child: widget.onCodePinChanged == null? buildNotEditMode()
+              tileMode: TileMode.clamp)),
+      child: widget.onCodePinChanged == null
+          ? buildNotEditMode()
           : Column(
-        children: <Widget>[
-          Expanded(
-            child: OtpSceern(widget.onCodePinChanged),
-          ),
-        ],
-      ),
+              children: <Widget>[
+                Expanded(
+                  child: OtpSceern(widget.onCodePinChanged),
+                ),
+              ],
+            ),
     );
   }
 
@@ -59,30 +57,29 @@ class _EnterPinState extends State<EnterPin> {
             ),
             SizedBox(height: 20),
             Text(
-              widget.codePin.isEmpty
-                  ?  S.current.msg_no_pass
-                  :  S.current.msg_pass + widget.codePin.substring(3, 4),
-              style: GoogleFonts.lato(
-                textStyle: TextStyle(
-                  color: Colors.white70,
-                  fontSize: 21.0,
-                  fontWeight: FontWeight.bold,
-                ),
-              )
-            ),
+                widget.codePin.isEmpty
+                    ? S.current.msg_no_pass
+                    : S.current.msg_pass + widget.codePin.substring(3, 4),
+                style: GoogleFonts.lato(
+                  textStyle: TextStyle(
+                    color: Colors.white70,
+                    fontSize: 21.0,
+                    fontWeight: FontWeight.bold,
+                  ),
+                )),
             SizedBox(
               height: 10,
             ),
-            Text(widget.codePin.isEmpty
-                ?  S.current.msg_edit_pass
-                :  S.current.msg_edit_pass1,
-              style:GoogleFonts.lato(
-                textStyle:  TextStyle(
-                  color: Colors.white70,
-                  fontSize: 12.0,
-                ),
-              )
-            ),
+            Text(
+                widget.codePin.isEmpty
+                    ? S.current.msg_edit_pass
+                    : S.current.msg_edit_pass1,
+                style: GoogleFonts.lato(
+                  textStyle: TextStyle(
+                    color: Colors.white70,
+                    fontSize: 12.0,
+                  ),
+                )),
           ],
         ),
       ),
@@ -283,9 +280,9 @@ class _OtpSceernState extends State<OtpSceern> {
         String message;
         if (fisrt == strPin) {
           widget.onCodePinChanged(strPin);
-          message =  S.current.msg_save_pass;
+          message = S.current.msg_save_pass;
         } else {
-          message =  S.current.msg_pass_incorrecte;
+          message = S.current.msg_pass_incorrecte;
           Vibration.vibrate(duration: 200);
         }
         Helpers.showToast(message);
@@ -359,36 +356,27 @@ class _OtpSceernState extends State<OtpSceern> {
   Widget buildSecuritytext() {
     return Column(
       children: <Widget>[
-        Text(
-          fisrt == ""
-              ?  S.current.msg_choix_pin
-              :  S.current.msg_confirm_pin,
-          style: GoogleFonts.lato(
-            textStyle: TextStyle(
-              color: Colors.white70,
-              fontSize: 21.0,
-              fontWeight: FontWeight.bold,
-            ),
-          )
-        ),
+        Text(fisrt == "" ? S.current.msg_choix_pin : S.current.msg_confirm_pin,
+            style: GoogleFonts.lato(
+              textStyle: TextStyle(
+                color: Colors.white70,
+                fontSize: 21.0,
+                fontWeight: FontWeight.bold,
+              ),
+            )),
         SizedBox(
           height: 10,
         ),
-        Text(
-          fisrt == ""
-              ? S.current.msg_entre_pin
-              : S.current.msg_confirm_pin1,
-          style:GoogleFonts.lato(
-            textStyle:TextStyle(
-              color: Colors.white70,
-              fontSize: 12.0,
-            ),
-          )
-        ),
+        Text(fisrt == "" ? S.current.msg_entre_pin : S.current.msg_confirm_pin1,
+            style: GoogleFonts.lato(
+              textStyle: TextStyle(
+                color: Colors.white70,
+                fontSize: 12.0,
+              ),
+            )),
       ],
     );
   }
-
 }
 
 class PinNumber extends StatelessWidget {
@@ -413,9 +401,10 @@ class PinNumber extends StatelessWidget {
           fillColor: Colors.transparent,
         ),
         style: GoogleFonts.lato(
-          textStyle: TextStyle(
-              fontWeight: FontWeight.bold, fontSize: 21.0, color: Colors.white)
-        ),
+            textStyle: TextStyle(
+                fontWeight: FontWeight.bold,
+                fontSize: 21.0,
+                color: Colors.white)),
       ),
     );
   }
@@ -433,7 +422,7 @@ class KeyboardNumber extends StatelessWidget {
       width: 60.0,
       height: 60.0,
       decoration:
-      BoxDecoration(shape: BoxShape.circle, color: Colors.transparent),
+          BoxDecoration(shape: BoxShape.circle, color: Colors.transparent),
       alignment: Alignment.center,
       child: MaterialButton(
         onPressed: onPressed,
@@ -441,17 +430,15 @@ class KeyboardNumber extends StatelessWidget {
             borderRadius: BorderRadius.circular(60),
             side: BorderSide(color: Colors.white30)),
         height: 60.0,
-        child: Text(
-          "$n",
-          textAlign: TextAlign.center,
-          style: GoogleFonts.lato(
-            textStyle: TextStyle(
-              fontSize: 24 * MediaQuery.of(context).textScaleFactor,
-              color: Colors.white70,
-              fontWeight: FontWeight.bold,
-            ),
-          )
-        ),
+        child: Text("$n",
+            textAlign: TextAlign.center,
+            style: GoogleFonts.lato(
+              textStyle: TextStyle(
+                fontSize: 24 * MediaQuery.of(context).textScaleFactor,
+                color: Colors.white70,
+                fontWeight: FontWeight.bold,
+              ),
+            )),
       ),
     );
   }

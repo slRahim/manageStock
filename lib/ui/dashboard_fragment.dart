@@ -3,15 +3,13 @@ import 'package:gestmob/Helpers/Helpers.dart';
 import 'package:gestmob/Helpers/QueryCtr.dart';
 import 'package:gestmob/Widgets/CustomWidgets/bottom_tab_bar.dart';
 import 'package:gestmob/Widgets/CustomWidgets/search_bar.dart';
-import 'package:fl_chart/fl_chart.dart';
-import 'package:flutter/material.dart';
 import 'package:gestmob/Widgets/bar_chart.dart';
 import 'package:gestmob/Widgets/pie_chart.dart';
 import 'package:gestmob/generated/l10n.dart';
 import 'package:gestmob/models/CompteTresorie.dart';
 import 'package:gestmob/models/Tiers.dart';
-import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 
 class Dashboard extends StatefulWidget {
   @override
@@ -83,7 +81,10 @@ class _DashboardState extends State<Dashboard> {
                   children: [
                     Icon(MdiIcons.scaleBalance),
                     SizedBox(height: 1),
-                    Text(S.current.generale, style: GoogleFonts.lato(),),
+                    Text(
+                      S.current.generale,
+                      style: GoogleFonts.lato(),
+                    ),
                   ],
                 )),
                 Tab(
@@ -91,7 +92,10 @@ class _DashboardState extends State<Dashboard> {
                   children: [
                     Icon(MdiIcons.basketUnfill),
                     SizedBox(height: 1),
-                    Text(S.current.vente, style: GoogleFonts.lato(),),
+                    Text(
+                      S.current.vente,
+                      style: GoogleFonts.lato(),
+                    ),
                   ],
                 )),
                 Tab(
@@ -99,7 +103,10 @@ class _DashboardState extends State<Dashboard> {
                   children: [
                     Icon(MdiIcons.basketFill),
                     SizedBox(height: 1),
-                    Text(S.current.achat, style: GoogleFonts.lato(),),
+                    Text(
+                      S.current.achat,
+                      style: GoogleFonts.lato(),
+                    ),
                   ],
                 )),
               ],
@@ -139,8 +146,8 @@ class _DashboardState extends State<Dashboard> {
             child: Text(
               "${S.current.dash_charge_title}",
               style: GoogleFonts.lato(
-                textStyle: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)
-              ),
+                  textStyle:
+                      TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
             )),
         Container(
           height: 400,
@@ -156,8 +163,8 @@ class _DashboardState extends State<Dashboard> {
             child: Text(
               "${S.current.dash_compte_title}",
               style: GoogleFonts.lato(
-                textStyle: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)
-              ),
+                  textStyle:
+                      TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
             )),
         Container(
           height: 400,
@@ -180,33 +187,33 @@ class _DashboardState extends State<Dashboard> {
             child: Text(
               "${S.current.dash_vente_art_title}",
               style: GoogleFonts.lato(
-                textStyle: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)
-              ),
+                  textStyle:
+                      TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
             )),
         Container(
           height: 400,
           child: ChartPie(
             backgroundColor: Theme.of(context).disabledColor,
             textColor: Theme.of(context).primaryColorDark,
-              data: _caArticle,
-              typeData: "article",
+            data: _caArticle,
+            typeData: "article",
           ),
         ),
         Container(
             padding: EdgeInsets.all(10),
             child: Text(
               "${S.current.dash_vente_cl_title}",
-              style:  GoogleFonts.lato(
-                  textStyle: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)
-              ),
+              style: GoogleFonts.lato(
+                  textStyle:
+                      TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
             )),
         Container(
           height: 400,
           child: ChartPie(
             backgroundColor: Theme.of(context).disabledColor,
             textColor: Theme.of(context).primaryColorDark,
-              data: _caClient,
-              typeData: "tiers",
+            data: _caClient,
+            typeData: "tiers",
           ),
         ),
         Container(
@@ -214,8 +221,8 @@ class _DashboardState extends State<Dashboard> {
             child: Text(
               "${S.current.dash_vente_fam_title}",
               style: GoogleFonts.lato(
-                  textStyle: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)
-              ),
+                  textStyle:
+                      TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
             )),
         Container(
           height: 400,
@@ -239,8 +246,8 @@ class _DashboardState extends State<Dashboard> {
             child: Text(
               "${S.current.dash_achat_art_title}",
               style: GoogleFonts.lato(
-                  textStyle: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)
-              ),
+                  textStyle:
+                      TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
             )),
         Container(
           height: 400,
@@ -255,9 +262,9 @@ class _DashboardState extends State<Dashboard> {
             padding: EdgeInsets.all(10),
             child: Text(
               "${S.current.dash_achat_four_title}",
-              style:GoogleFonts.lato(
-                  textStyle: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)
-              ),
+              style: GoogleFonts.lato(
+                  textStyle:
+                      TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
             )),
         Container(
           height: 400,

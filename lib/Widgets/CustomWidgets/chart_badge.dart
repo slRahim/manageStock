@@ -2,7 +2,6 @@ import 'dart:typed_data';
 
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 
 class Badge extends StatelessWidget {
   final Uint8List svgAsset;
@@ -10,11 +9,11 @@ class Badge extends StatelessWidget {
   final Color borderColor;
 
   const Badge(
-      this.svgAsset, {
-        Key key,
-        @required this.size,
-        @required this.borderColor,
-      }) : super(key: key);
+    this.svgAsset, {
+    Key key,
+    @required this.size,
+    @required this.borderColor,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -40,7 +39,7 @@ class Badge extends StatelessWidget {
       padding: EdgeInsets.all(size * .15),
       child: CircleAvatar(
         backgroundColor: Colors.white,
-        backgroundImage:  MemoryImage(svgAsset),
+        backgroundImage: MemoryImage(svgAsset),
       ),
     );
   }

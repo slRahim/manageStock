@@ -1,24 +1,20 @@
 import 'dart:io';
 
 import 'package:awesome_dialog/awesome_dialog.dart';
-import 'package:flushbar/flushbar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:gestmob/Helpers/Helpers.dart';
-import 'package:gestmob/Helpers/QueryCtr.dart';
 import 'package:gestmob/Helpers/Statics.dart';
 import 'package:gestmob/Widgets/navDrawer.dart';
 import 'package:gestmob/cubit/home_cubit.dart';
 import 'package:gestmob/generated/l10n.dart';
 import 'package:gestmob/models/HomeItem.dart';
-import 'package:gestmob/services/local_notification.dart';
-import 'package:gestmob/ui/AddArticlePage.dart';
-import 'package:gestmob/services/push_notifications.dart';
-import 'GridHomeFragment.dart';
 import 'package:gestmob/models/MyParams.dart';
-import 'package:gestmob/Helpers/QueryCtr.dart';
 import 'package:gestmob/models/Profile.dart';
+import 'package:gestmob/services/local_notification.dart';
+import 'package:gestmob/services/push_notifications.dart';
+
+import 'GridHomeFragment.dart';
 
 class home extends StatefulWidget {
   @override
@@ -26,13 +22,13 @@ class home extends StatefulWidget {
 }
 
 GlobalKey<ScaffoldState> _globalKey = GlobalKey();
-HomeState _currentHomeState = null;
+HomeState _currentHomeState;
 DateTime currentBackPressTime;
 
 class _homeState extends State<home> {
   MyParams _myParams;
-  DateTime now ;
-  Profile _profile ;
+  DateTime now;
+  Profile _profile;
 
   @override
   void initState() {
@@ -43,7 +39,7 @@ class _homeState extends State<home> {
   void didChangeDependencies() {
     PushNotificationsManagerState data = PushNotificationsManager.of(context);
     _myParams = data.myParams;
-    _profile = data.profile ;
+    _profile = data.profile;
   }
 
   onNotificationClick(String payload) {
@@ -51,27 +47,29 @@ class _homeState extends State<home> {
     Navigator.pushNamed(context, RoutesKeys.allPieces);
   }
 
-
   @override
   Widget build(BuildContext context) {
     return WillPopScope(
-        onWillPop: _onWillPop,
-        child: Scaffold(
-          key: _globalKey,
-          drawer: NavDrawer(myparams: _myParams,profile: _profile,),
-          body: BlocConsumer<HomeCubit, HomeState>(
-            listener: (context, state) {
-              if (state is HomeError) {
-                Scaffold.of(context).showSnackBar(SnackBar(
-                  content: Text(state.message),
-                ));
-              }
-            },
-            builder: (context, state) {
-              return handleHomeState(context, state);
-            },
-          ),
+      onWillPop: _onWillPop,
+      child: Scaffold(
+        key: _globalKey,
+        drawer: NavDrawer(
+          myparams: _myParams,
+          profile: _profile,
         ),
+        body: BlocConsumer<HomeCubit, HomeState>(
+          listener: (context, state) {
+            if (state is HomeError) {
+              Scaffold.of(context).showSnackBar(SnackBar(
+                content: Text(state.message),
+              ));
+            }
+          },
+          builder: (context, state) {
+            return handleHomeState(context, state);
+          },
+        ),
+      ),
     );
   }
 

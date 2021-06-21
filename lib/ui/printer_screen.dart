@@ -1,18 +1,13 @@
-import 'dart:typed_data';
-import 'package:connectivity/connectivity.dart';
-import 'package:flutter/material.dart' hide Image;
+import 'dart:io' show Platform;
+
 import 'package:esc_pos_bluetooth/esc_pos_bluetooth.dart';
 import 'package:esc_pos_utils/esc_pos_utils.dart';
-import 'package:flutter/services.dart';
+import 'package:flutter/material.dart' hide Image;
 import 'package:flutter_bluetooth_basic/flutter_bluetooth_basic.dart';
 import 'package:gestmob/Helpers/QueryCtr.dart';
 import 'package:gestmob/Helpers/Statics.dart';
 import 'package:gestmob/generated/l10n.dart';
 import 'package:gestmob/models/DefaultPrinter.dart';
-import 'dart:io' show Platform;
-import 'package:image/image.dart';
-import 'package:ping_discover_network/ping_discover_network.dart';
-import 'package:wifi/wifi.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class Print extends StatefulWidget {
@@ -35,7 +30,6 @@ class _PrintState extends State<Print> {
 
   ScrollController _controller = new ScrollController();
   ScrollController _controller1 = new ScrollController();
-
 
   @override
   void initState() {
@@ -63,8 +57,6 @@ class _PrintState extends State<Print> {
       if (_devices.isEmpty) setState(() => _devicesMsg = S.current.no_device);
     });
   }
-
-
 
   @override
   void dispose() {
@@ -104,7 +96,10 @@ class _PrintState extends State<Print> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(S.current.printer_titre, style: GoogleFonts.lato(fontWeight: FontWeight.bold),),
+        title: Text(
+          S.current.printer_titre,
+          style: GoogleFonts.lato(fontWeight: FontWeight.bold),
+        ),
         centerTitle: true,
         backgroundColor: Colors.green,
       ),
@@ -115,27 +110,40 @@ class _PrintState extends State<Print> {
             padding: EdgeInsets.all(5),
             child: Text(
               "${S.current.blue_device}",
-              style: GoogleFonts.lato(textStyle: TextStyle(
+              style: GoogleFonts.lato(
+                  textStyle: TextStyle(
                 fontWeight: FontWeight.bold,
                 fontSize: 16,
               )),
             ),
           ),
           Container(
-              margin: EdgeInsets.only(top: 5 , bottom: 5),
+              margin: EdgeInsets.only(top: 5, bottom: 5),
               padding: EdgeInsets.all(5),
               height: 600,
               child: (_devices.isEmpty)
                   ? Center(
                       child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          (_devicesMsg != null )?Icon(Icons.warning , color: Colors.yellow[700], size: 60,):SizedBox(),
-                          SizedBox(height: 5,),
-                          Text(_devicesMsg ?? '' , style: GoogleFonts.lato(textStyle: TextStyle(fontWeight: FontWeight.bold)),),
-                        ],
-                      )
-                  )
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        (_devicesMsg != null)
+                            ? Icon(
+                                Icons.warning,
+                                color: Colors.yellow[700],
+                                size: 60,
+                              )
+                            : SizedBox(),
+                        SizedBox(
+                          height: 5,
+                        ),
+                        Text(
+                          _devicesMsg ?? '',
+                          style: GoogleFonts.lato(
+                              textStyle:
+                                  TextStyle(fontWeight: FontWeight.bold)),
+                        ),
+                      ],
+                    ))
                   : Scrollbar(
                       isAlwaysShown: true,
                       controller: _controller,
@@ -145,8 +153,14 @@ class _PrintState extends State<Print> {
                         itemBuilder: (c, i) {
                           return ListTile(
                             leading: Icon(Icons.print),
-                            title: Text(_devices[i].name , style: GoogleFonts.lato(),),
-                            subtitle: Text(_devices[i].address, style: GoogleFonts.lato(),),
+                            title: Text(
+                              _devices[i].name,
+                              style: GoogleFonts.lato(),
+                            ),
+                            subtitle: Text(
+                              _devices[i].address,
+                              style: GoogleFonts.lato(),
+                            ),
                             onTap: () async {
                               await printTicket(context, _devices[i]);
                               Navigator.pop(context);

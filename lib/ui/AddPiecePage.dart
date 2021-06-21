@@ -1,27 +1,26 @@
-import 'dart:io';
 import 'dart:typed_data';
 import 'dart:ui';
+
 import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:charset_converter/charset_converter.dart';
 import 'package:esc_pos_bluetooth/esc_pos_bluetooth.dart';
+import 'package:esc_pos_utils/esc_pos_utils.dart';
 import 'package:expandable_bottom_bar/expandable_bottom_bar.dart';
+import 'package:feature_discovery/feature_discovery.dart';
 import 'package:floating_action_row/floating_action_row.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bluetooth_basic/flutter_bluetooth_basic.dart';
-import 'package:flutter_icons/flutter_icons.dart';
-import 'package:flutter_osm_plugin/flutter_osm_plugin.dart';
 import 'package:gestmob/Helpers/Helpers.dart';
 import 'package:gestmob/Helpers/QueryCtr.dart';
 import 'package:gestmob/Helpers/Statics.dart';
+import "package:gestmob/Helpers/string_cap_extension.dart";
 import 'package:gestmob/Widgets/CustomWidgets/add_save_bar.dart';
-import 'package:gestmob/Widgets/CustomWidgets/bottom_tab_bar.dart';
-import 'package:gestmob/Widgets/CustomWidgets/image_picker_widget.dart';
 import 'package:gestmob/Widgets/CustomWidgets/list_dropdown.dart';
 import 'package:gestmob/Widgets/CustomWidgets/selectable_list_item.dart';
-import 'package:gestmob/Widgets/article_list_item.dart';
 import 'package:gestmob/Widgets/total_devis.dart';
+import 'package:gestmob/Widgets/utils.dart' as utils;
 import 'package:gestmob/generated/l10n.dart';
 import 'package:gestmob/models/Article.dart';
 import 'package:gestmob/models/DefaultPrinter.dart';
@@ -32,29 +31,21 @@ import 'package:gestmob/models/Piece.dart';
 import 'package:gestmob/models/Profile.dart';
 import 'package:gestmob/models/ReglementTresorie.dart';
 import 'package:gestmob/models/Tiers.dart';
-import 'package:gestmob/models/TiersFamille.dart';
 import 'package:gestmob/models/Transformer.dart';
 import 'package:gestmob/models/Tresorie.dart';
-import 'package:gestmob/search/items_sliver_list.dart';
 import 'package:gestmob/search/sliver_list_data_source.dart';
 import 'package:gestmob/ui/ClientFourFragment.dart';
 import 'package:gestmob/ui/JournalFragment.dart';
 import 'package:gestmob/ui/preview_piece.dart';
 import 'package:gestmob/ui/printer_screen.dart';
-import 'package:image_picker/image_picker.dart';
-import 'package:gestmob/Widgets/utils.dart' as utils;
-import 'package:map_launcher/map_launcher.dart';
+import 'package:google_fonts/google_fonts.dart';
+import 'package:intl/intl.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
-import 'package:esc_pos_utils/esc_pos_utils.dart';
-import 'package:path_provider/path_provider.dart';
-import 'ArticlesFragment.dart';
 import 'package:pdf/pdf.dart';
 import 'package:pdf/widgets.dart' as pw;
 import 'package:printing/printing.dart';
-import 'package:feature_discovery/feature_discovery.dart';
-import 'package:google_fonts/google_fonts.dart';
-import "package:gestmob/Helpers/string_cap_extension.dart";
-import 'package:intl/intl.dart';
+
+import 'ArticlesFragment.dart';
 
 class AddPiecePage extends StatefulWidget {
   var arguments;
@@ -78,7 +69,7 @@ class _AddPiecePageState extends State<AddPiecePage>
 
   String appBarTitle = S.current.devis;
 
-  List<Article> _originalItems = new List<Article> () ;
+  List<Article> _originalItems = new List<Article>();
   List<Article> _selectedItems = new List<Article>();
   List<Article> _desSelectedItems = new List<Article>();
   Tiers _selectedClient;
@@ -217,7 +208,7 @@ class _AddPiecePageState extends State<AddPiecePage>
       _selectedClient = await _queryCtr.getTierById(_piece.tier_id);
       _clientControl.text = _selectedClient.raisonSociale;
       _selectedTarification = _selectedClient.tarification;
-      _originalItems = await _queryCtr.getJournalPiece(item, local: false) ;
+      _originalItems = await _queryCtr.getJournalPiece(item, local: false);
       _selectedItems = List.from(_originalItems);
       _verssementControler.text = "0.0";
       _resteControler.text = _piece.reste.toStringAsFixed(2);
@@ -231,19 +222,20 @@ class _AddPiecePageState extends State<AddPiecePage>
       _total_tva = _piece.total_tva;
       _total_ttc = _piece.total_ttc;
       _timbre = _piece.timbre;
-      _net_a_payer = (_piece.net_a_payer < 0) ? _piece.net_a_payer * -1 : _piece.net_a_payer;
-      if(_piece.regler < 0){
-        _piece.regler = _piece.regler * -1 ;
+      _net_a_payer = (_piece.net_a_payer < 0)
+          ? _piece.net_a_payer * -1
+          : _piece.net_a_payer;
+      if (_piece.regler < 0) {
+        _piece.regler = _piece.regler * -1;
       }
-      if(_piece.reste < 0){
-        _piece.reste = _piece.reste * -1 ;
+      if (_piece.reste < 0) {
+        _piece.reste = _piece.reste * -1;
       }
       _remisepiece = (_piece.remise * _total_ht) / 100;
       _pourcentremise = _piece.remise;
 
       _remisepieceControler.text = _remisepiece.toStringAsFixed(2);
       _pourcentremiseControler.text = _pourcentremise.toStringAsFixed(2);
-
     } else {
       _piece.piece = widget.arguments.piece;
 
@@ -357,30 +349,29 @@ class _AddPiecePageState extends State<AddPiecePage>
             },
             onEditPressed: (_piece.etat == 0)
                 ? () {
-                    if(_myParams.versionType == "demo"){
+                    if (_myParams.versionType == "demo") {
                       setState(() {
                         editMode = true;
                       });
-                    }else{
-                      if(DateTime.now().isBefore(Helpers.getDateExpiration(_myParams))){
+                    } else {
+                      if (DateTime.now()
+                          .isBefore(Helpers.getDateExpiration(_myParams))) {
                         setState(() {
                           editMode = true;
                         });
-
-                      }else{
+                      } else {
                         Navigator.pushNamed(context, RoutesKeys.appPurchase);
                         var message = S.current.msg_premium_exp;
                         Helpers.showFlushBar(context, message);
                       }
                     }
-
                   }
                 : () {
                     Helpers.showFlushBar(
                         context, S.current.msg_no_edit_transformer);
                   },
             onSavePressed: () async {
-              if (_formKey.currentState.validate()){
+              if (_formKey.currentState.validate()) {
                 if (_selectedItems.length > 0) {
                   AwesomeDialog(
                     context: context,
@@ -398,11 +389,9 @@ class _AddPiecePageState extends State<AddPiecePage>
                 } else {
                   Helpers.showFlushBar(context, S.current.msg_select_art);
                 }
-              }else{
-                Helpers.showFlushBar(
-                    context, "${S.current.msg_champs_obg}");
+              } else {
+                Helpers.showFlushBar(context, "${S.current.msg_champs_obg}");
               }
-
             },
             onTrensferPressed: (_piece.etat == 0 &&
                     _piece.piece != PieceType.retourClient &&
@@ -463,10 +452,16 @@ class _AddPiecePageState extends State<AddPiecePage>
                     ),
                     backgroundColor: Colors.blue,
                     contentLocation: ContentLocation.above,
-                    title: Text('${S.current.ajout_remise}', style: GoogleFonts.lato(fontWeight: FontWeight.bold),),
+                    title: Text(
+                      '${S.current.ajout_remise}',
+                      style: GoogleFonts.lato(fontWeight: FontWeight.bold),
+                    ),
                     description: Container(
                       width: 150,
-                      child: Text('${S.current.msg_ajout_remise}', style: GoogleFonts.lato(),),
+                      child: Text(
+                        '${S.current.msg_ajout_remise}',
+                        style: GoogleFonts.lato(),
+                      ),
                     ),
                     onBackgroundTap: () async {
                       await FeatureDiscovery.completeCurrentStep(context);
@@ -485,15 +480,19 @@ class _AddPiecePageState extends State<AddPiecePage>
                                 btnCancelText: S.current.annuler,
                                 btnCancelOnPress: () {
                                   setState(() {
-                                    _pourcentremiseControler.text = _pourcentremise.toString();
-                                    _remisepieceControler.text = _remisepiece.toString();
+                                    _pourcentremiseControler.text =
+                                        _pourcentremise.toString();
+                                    _remisepieceControler.text =
+                                        _remisepiece.toString();
                                   });
                                 },
                                 btnOkText: S.current.confirme,
                                 btnOkOnPress: () {
                                   setState(() {
-                                    _pourcentremise = double.parse(_pourcentremiseControler.text.trim());
-                                    _remisepiece = double.parse(_remisepieceControler.text.trim());
+                                    _pourcentremise = double.parse(
+                                        _pourcentremiseControler.text.trim());
+                                    _remisepiece = double.parse(
+                                        _remisepieceControler.text.trim());
                                   });
                                   calculPiece();
                                 })
@@ -527,10 +526,9 @@ class _AddPiecePageState extends State<AddPiecePage>
                                 Text(
                                   "$_devise",
                                   style: GoogleFonts.lato(
-                                    textStyle:TextStyle(
-                                        fontSize: 12,
-                                        fontWeight: FontWeight.bold)
-                                  ),
+                                      textStyle: TextStyle(
+                                          fontSize: 12,
+                                          fontWeight: FontWeight.bold)),
                                 ),
                               ],
                             ),
@@ -541,9 +539,9 @@ class _AddPiecePageState extends State<AddPiecePage>
                               Helpers.numberFormat(_net_a_payer).toString(),
                               textAlign: TextAlign.center,
                               style: GoogleFonts.lato(
-                                textStyle: TextStyle(
-                                    fontWeight: FontWeight.bold, fontSize: 14)
-                              ),
+                                  textStyle: TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 14)),
                             ),
                           ],
                         ),
@@ -564,10 +562,16 @@ class _AddPiecePageState extends State<AddPiecePage>
                     ),
                     backgroundColor: Colors.green,
                     contentLocation: ContentLocation.above,
-                    title: Text('${S.current.ajout_verssement}', style: GoogleFonts.lato(fontWeight: FontWeight.bold),),
+                    title: Text(
+                      '${S.current.ajout_verssement}',
+                      style: GoogleFonts.lato(fontWeight: FontWeight.bold),
+                    ),
                     description: Container(
                       width: 150,
-                      child: Text('${S.current.msg_ajout_verssement}' , style: GoogleFonts.lato(),),
+                      child: Text(
+                        '${S.current.msg_ajout_verssement}',
+                        style: GoogleFonts.lato(),
+                      ),
                     ),
                     onBackgroundTap: () async {
                       await FeatureDiscovery.completeCurrentStep(context);
@@ -596,8 +600,8 @@ class _AddPiecePageState extends State<AddPiecePage>
                                     btnOkText: S.current.confirme,
                                     btnOkOnPress: () {
                                       setState(() {
-                                        _restepiece =
-                                            double.parse(_resteControler.text.trim());
+                                        _restepiece = double.parse(
+                                            _resteControler.text.trim());
                                         _verssementpiece = double.parse(
                                             _verssementControler.text.trim());
                                       });
@@ -636,17 +640,16 @@ class _AddPiecePageState extends State<AddPiecePage>
                                     size: 20,
                                     color: (_piece.piece != PieceType.devis &&
                                             _piece.piece !=
-                                                PieceType.bonCommande  &&
+                                                PieceType.bonCommande &&
                                             editMode)
                                         ? Colors.blue
                                         : Theme.of(context).primaryColorDark),
                                 Text(
                                   "${_devise}",
                                   style: GoogleFonts.lato(
-                                    textStyle: TextStyle(
-                                        fontSize: 12,
-                                        fontWeight: FontWeight.bold)
-                                  ),
+                                      textStyle: TextStyle(
+                                          fontSize: 12,
+                                          fontWeight: FontWeight.bold)),
                                 ),
                               ],
                             ),
@@ -659,10 +662,9 @@ class _AddPiecePageState extends State<AddPiecePage>
                                   .toString(),
                               textAlign: TextAlign.center,
                               style: GoogleFonts.lato(
-                                textStyle: TextStyle(
-                                  fontWeight: FontWeight.bold,
-                                )
-                              ),
+                                  textStyle: TextStyle(
+                                fontWeight: FontWeight.bold,
+                              )),
                             ),
                           ],
                         ),
@@ -687,10 +689,14 @@ class _AddPiecePageState extends State<AddPiecePage>
               ),
               backgroundColor: Colors.blue,
               contentLocation: ContentLocation.above,
-              title: Text('${S.current.swipe_top}' , style:GoogleFonts.lato(fontWeight: FontWeight.bold)),
+              title: Text('${S.current.swipe_top}',
+                  style: GoogleFonts.lato(fontWeight: FontWeight.bold)),
               description: Container(
                 width: 150,
-                child: Text('${S.current.msg_swipe_top}' , style: GoogleFonts.lato(),),
+                child: Text(
+                  '${S.current.msg_swipe_top}',
+                  style: GoogleFonts.lato(),
+                ),
               ),
               onBackgroundTap: () async {
                 await FeatureDiscovery.completeCurrentStep(context);
@@ -731,7 +737,7 @@ class _AddPiecePageState extends State<AddPiecePage>
                               });
                             }
                           : () async {
-                              if(_myParams.versionType == "demo"){
+                              if (_myParams.versionType == "demo") {
                                 AwesomeDialog(
                                   context: context,
                                   dialogType: DialogType.QUESTION,
@@ -744,8 +750,9 @@ class _AddPiecePageState extends State<AddPiecePage>
                                   ),
                                   showCloseIcon: true,
                                 )..show();
-                              }else{
-                                if(DateTime.now().isBefore(Helpers.getDateExpiration(_myParams))){
+                              } else {
+                                if (DateTime.now().isBefore(
+                                    Helpers.getDateExpiration(_myParams))) {
                                   AwesomeDialog(
                                     context: context,
                                     dialogType: DialogType.QUESTION,
@@ -758,14 +765,13 @@ class _AddPiecePageState extends State<AddPiecePage>
                                     ),
                                     showCloseIcon: true,
                                   )..show();
-
-                                }else{
-                                  Navigator.pushNamed(context, RoutesKeys.appPurchase);
+                                } else {
+                                  Navigator.pushNamed(
+                                      context, RoutesKeys.appPurchase);
                                   var message = S.current.msg_premium_exp;
                                   Helpers.showFlushBar(context, message);
                                 }
                               }
-
                             }),
                   (editMode &&
                           (_piece.piece == PieceType.avoirClient ||
@@ -828,7 +834,8 @@ class _AddPiecePageState extends State<AddPiecePage>
                               ),
                               Text(
                                   "${S.current.msg_piece_transformer_to} ${getPiecetype(_pieceTo)} ${_pieceTo.num_piece}",
-                                  style: GoogleFonts.lato(textStyle: TextStyle(fontSize: 13)))
+                                  style: GoogleFonts.lato(
+                                      textStyle: TextStyle(fontSize: 13)))
                             ],
                           ),
                         )
@@ -850,7 +857,8 @@ class _AddPiecePageState extends State<AddPiecePage>
                               ),
                               Text(
                                   "${S.current.msg_piece_transformer_from} ${getPiecetype(_pieceFrom)} ${_pieceFrom.num_piece}",
-                                  style: GoogleFonts.lato(textStyle: TextStyle(fontSize: 13)))
+                                  style: GoogleFonts.lato(
+                                      textStyle: TextStyle(fontSize: 13)))
                             ],
                           ),
                         )
@@ -884,11 +892,14 @@ class _AddPiecePageState extends State<AddPiecePage>
                                       BorderSide(color: Colors.orange[900]),
                                   borderRadius: BorderRadius.circular(20)),
                               labelText: "${S.current.n}",
-                              labelStyle: GoogleFonts.lato(textStyle: TextStyle(color: Colors.orange[900])),
+                              labelStyle: GoogleFonts.lato(
+                                  textStyle:
+                                      TextStyle(color: Colors.orange[900])),
                               enabledBorder: OutlineInputBorder(
                                 gapPadding: 3.3,
                                 borderRadius: BorderRadius.circular(20),
-                                borderSide: BorderSide(color: Colors.orange[900]),
+                                borderSide:
+                                    BorderSide(color: Colors.orange[900]),
                               ),
                             ),
                           ),
@@ -912,7 +923,8 @@ class _AddPiecePageState extends State<AddPiecePage>
                                     borderSide: BorderSide(color: Colors.blue),
                                     borderRadius: BorderRadius.circular(20)),
                                 labelText: S.current.date,
-                                labelStyle: GoogleFonts.lato(textStyle: TextStyle(color: Colors.blue)),
+                                labelStyle: GoogleFonts.lato(
+                                    textStyle: TextStyle(color: Colors.blue)),
                                 enabledBorder: OutlineInputBorder(
                                   gapPadding: 3.3,
                                   borderRadius: BorderRadius.circular(20),
@@ -971,16 +983,17 @@ class _AddPiecePageState extends State<AddPiecePage>
                               focusedBorder: OutlineInputBorder(
                                   borderSide: BorderSide(color: Colors.blue),
                                   borderRadius: BorderRadius.circular(20)),
-                              labelText:(_piece.piece == PieceType.devis ||
-                                  _piece.piece == PieceType.retourClient ||
-                                  _piece.piece == PieceType.avoirClient ||
-                                  _piece.piece == PieceType.commandeClient ||
-                                  _piece.piece == PieceType.bonLivraison ||
-                                  _piece.piece == PieceType.factureClient)
-
+                              labelText: (_piece.piece == PieceType.devis ||
+                                      _piece.piece == PieceType.retourClient ||
+                                      _piece.piece == PieceType.avoirClient ||
+                                      _piece.piece ==
+                                          PieceType.commandeClient ||
+                                      _piece.piece == PieceType.bonLivraison ||
+                                      _piece.piece == PieceType.factureClient)
                                   ? S.current.client_titre
                                   : S.current.fournisseur_titre,
-                              labelStyle: GoogleFonts.lato(textStyle: TextStyle(color: Colors.blue)),
+                              labelStyle: GoogleFonts.lato(
+                                  textStyle: TextStyle(color: Colors.blue)),
                               enabledBorder: OutlineInputBorder(
                                 gapPadding: 3.3,
                                 borderRadius: BorderRadius.circular(20),
@@ -1019,10 +1032,15 @@ class _AddPiecePageState extends State<AddPiecePage>
                                   ),
                                   backgroundColor: Colors.blue,
                                   contentLocation: ContentLocation.above,
-                                  title: Text('${S.current.swipe}' , style:GoogleFonts.lato(fontWeight: FontWeight.bold)),
+                                  title: Text('${S.current.swipe}',
+                                      style: GoogleFonts.lato(
+                                          fontWeight: FontWeight.bold)),
                                   description: Container(
                                     width: 100,
-                                    child: Text('${S.current.msg_swipe_start}' , style: GoogleFonts.lato(),),
+                                    child: Text(
+                                      '${S.current.msg_swipe_start}',
+                                      style: GoogleFonts.lato(),
+                                    ),
                                   ),
                                   onBackgroundTap: () async {
                                     await FeatureDiscovery.completeCurrentStep(
@@ -1035,10 +1053,13 @@ class _AddPiecePageState extends State<AddPiecePage>
                                     onItemSelected: (selectedItem) => ({
                                       removeItemfromPiece(selectedItem),
                                       calculPiece(),
-                                      setState((){
-                                        if(_pourcentremise > 0){
-                                          _remisepiece = (_total_ht * _pourcentremise) / 100 ;
-                                          _remisepieceControler.text = _restepiece.toStringAsFixed(2);
+                                      setState(() {
+                                        if (_pourcentremise > 0) {
+                                          _remisepiece =
+                                              (_total_ht * _pourcentremise) /
+                                                  100;
+                                          _remisepieceControler.text =
+                                              _restepiece.toStringAsFixed(2);
                                         }
                                       })
                                     }),
@@ -1194,17 +1215,16 @@ class _AddPiecePageState extends State<AddPiecePage>
                 child: Padding(
               padding: const EdgeInsets.only(bottom: 20),
               child: Text(
-                (_piece.piece == 'RC' ||_piece.piece == 'AC')
+                (_piece.piece == 'RC' || _piece.piece == 'AC')
                     ? "${S.current.rembourcement_client}"
-                    :(_piece.piece == 'RF' ||_piece.piece == 'AF')
-                    ? "${S.current.rembourcement_four}"
-                    :"${S.current.modification_titre} ${S.current.verssement}",
+                    : (_piece.piece == 'RF' || _piece.piece == 'AF')
+                        ? "${S.current.rembourcement_four}"
+                        : "${S.current.modification_titre} ${S.current.verssement}",
                 style: GoogleFonts.lato(
-                  textStyle: TextStyle(
-                    fontSize: 18,
-                    fontWeight: FontWeight.bold,
-                  )
-                ),
+                    textStyle: TextStyle(
+                  fontSize: 18,
+                  fontWeight: FontWeight.bold,
+                )),
               ),
             )),
             Padding(
@@ -1220,12 +1240,12 @@ class _AddPiecePageState extends State<AddPiecePage>
                 onChanged: (value) {
                   if (_piece.id != null) {
                     if (_verssementpiece == 0) {
-                      double _reste =
-                          _net_a_payer - (_piece.regler + double.parse(value.trim()));
+                      double _reste = _net_a_payer -
+                          (_piece.regler + double.parse(value.trim()));
                       _resteControler.text = _reste.toStringAsFixed(2);
                     } else {
-                      double _reste =
-                          _net_a_payer - (_piece.regler + double.parse(value.trim()));
+                      double _reste = _net_a_payer -
+                          (_piece.regler + double.parse(value.trim()));
                       _resteControler.text = _reste.toStringAsFixed(2);
                     }
                   } else {
@@ -1245,8 +1265,7 @@ class _AddPiecePageState extends State<AddPiecePage>
                   contentPadding: EdgeInsets.only(left: 10),
                   labelText: "${S.current.total} ${S.current.verssement}",
                   labelStyle: GoogleFonts.lato(
-                    textStyle: TextStyle(color: Colors.green)
-                  ),
+                      textStyle: TextStyle(color: Colors.green)),
                   enabledBorder: OutlineInputBorder(
                     gapPadding: 3.3,
                     borderRadius: BorderRadius.circular(20),
@@ -1280,8 +1299,7 @@ class _AddPiecePageState extends State<AddPiecePage>
                           contentPadding: EdgeInsetsDirectional.only(start: 10),
                           labelText: S.current.reste,
                           labelStyle: GoogleFonts.lato(
-                            textStyle: TextStyle(color: Colors.orange[900])
-                          ),
+                              textStyle: TextStyle(color: Colors.orange[900])),
                           enabled: false,
                         ),
                       ),
@@ -1311,11 +1329,10 @@ class _AddPiecePageState extends State<AddPiecePage>
               child: Text(
                 "${S.current.modification_titre} ${S.current.remise}",
                 style: GoogleFonts.lato(
-                  textStyle: TextStyle(
-                    fontSize: 18,
-                    fontWeight: FontWeight.bold,
-                  )
-                ),
+                    textStyle: TextStyle(
+                  fontSize: 18,
+                  fontWeight: FontWeight.bold,
+                )),
               ),
             )),
             Padding(
@@ -1329,11 +1346,11 @@ class _AddPiecePageState extends State<AddPiecePage>
                       extentOffset: _remisepieceControler.value.text.length),
                 },
                 onChanged: (value) {
-                  if(value.trim() != ''){
+                  if (value.trim() != '') {
                     double res = (double.parse(value.trim()) * 100) / _total_ht;
                     _pourcentremiseControler.text = res.toString();
-                  }else{
-                    _pourcentremiseControler.text = '0.0' ;
+                  } else {
+                    _pourcentremiseControler.text = '0.0';
                   }
                 },
                 decoration: InputDecoration(
@@ -1348,8 +1365,7 @@ class _AddPiecePageState extends State<AddPiecePage>
                   contentPadding: EdgeInsets.only(left: 10),
                   labelText: "${S.current.montant}",
                   labelStyle: GoogleFonts.lato(
-                    textStyle: TextStyle(color: Colors.green[400])
-                  ),
+                      textStyle: TextStyle(color: Colors.green[400])),
                   enabledBorder: OutlineInputBorder(
                     gapPadding: 3.3,
                     borderRadius: BorderRadius.circular(20),
@@ -1379,11 +1395,12 @@ class _AddPiecePageState extends State<AddPiecePage>
                                   _pourcentremiseControler.value.text.length),
                         },
                         onChanged: (value) {
-                          if(value.trim() != ''){
-                            double res = (_total_ht * double.parse(value.trim())) / 100;
+                          if (value.trim() != '') {
+                            double res =
+                                (_total_ht * double.parse(value.trim())) / 100;
                             _remisepieceControler.text = res.toStringAsFixed(2);
-                          }else{
-                            _remisepieceControler.text = '0.0' ;
+                          } else {
+                            _remisepieceControler.text = '0.0';
                           }
                         },
                         decoration: InputDecoration(
@@ -1400,8 +1417,7 @@ class _AddPiecePageState extends State<AddPiecePage>
                           contentPadding: EdgeInsetsDirectional.only(start: 10),
                           labelText: S.current.pourcentage,
                           labelStyle: GoogleFonts.lato(
-                            textStyle: TextStyle(color: Colors.orange[900])
-                          ),
+                              textStyle: TextStyle(color: Colors.orange[900])),
                         ),
                       ),
                     ),
@@ -1428,12 +1444,11 @@ class _AddPiecePageState extends State<AddPiecePage>
                       padding: const EdgeInsets.only(bottom: 20),
                       child: Text(
                         "${S.current.choisir_action}: ",
-                        style:GoogleFonts.lato(
-                          textStyle:  TextStyle(
-                            fontSize: 22,
-                            fontWeight: FontWeight.bold,
-                          )
-                        ),
+                        style: GoogleFonts.lato(
+                            textStyle: TextStyle(
+                          fontSize: 22,
+                          fontWeight: FontWeight.bold,
+                        )),
                       ),
                     )),
                     SizedBox(
@@ -1458,8 +1473,10 @@ class _AddPiecePageState extends State<AddPiecePage>
                           child: Text(
                             S.current.format_80,
                             style: GoogleFonts.lato(
-                              textStyle: TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.w500)
-                            ),
+                                textStyle: TextStyle(
+                                    color: Colors.white,
+                                    fontSize: 16,
+                                    fontWeight: FontWeight.w500)),
                           ),
                           color: Colors.blueAccent,
                         ),
@@ -1490,8 +1507,10 @@ class _AddPiecePageState extends State<AddPiecePage>
                           child: Text(
                             S.current.format_58,
                             style: GoogleFonts.lato(
-                              textStyle: TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.w500)
-                            ),
+                                textStyle: TextStyle(
+                                    color: Colors.white,
+                                    fontSize: 16,
+                                    fontWeight: FontWeight.w500)),
                           ),
                           color: Colors.green,
                         ),
@@ -1525,8 +1544,10 @@ class _AddPiecePageState extends State<AddPiecePage>
                           child: Text(
                             S.current.lan_print,
                             style: GoogleFonts.lato(
-                              textStyle: TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.w500)
-                            ),
+                                textStyle: TextStyle(
+                                    color: Colors.white,
+                                    fontSize: 16,
+                                    fontWeight: FontWeight.w500)),
                           ),
                           color: Colors.deepOrange,
                         ),
@@ -1552,8 +1573,10 @@ class _AddPiecePageState extends State<AddPiecePage>
                           child: Text(
                             S.current.export_pdf,
                             style: GoogleFonts.lato(
-                              textStyle: TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.w500)
-                            ),
+                                textStyle: TextStyle(
+                                    color: Colors.white,
+                                    fontSize: 16,
+                                    fontWeight: FontWeight.w500)),
                           ),
                           color: Colors.red,
                         ),
@@ -1582,14 +1605,18 @@ class _AddPiecePageState extends State<AddPiecePage>
     setState(() {
       _selectedItems.forEach((item) {
         sum += (item.selectedQuantite * item.selectedPrice);
-        totalTva += item.selectedQuantite * ((item.tva * (item.selectedPrice-((item.selectedPrice*_pourcentremise)/100)))/100);
+        totalTva += item.selectedQuantite *
+            ((item.tva *
+                    (item.selectedPrice -
+                        ((item.selectedPrice * _pourcentremise) / 100))) /
+                100);
       });
       _total_ht = sum;
       _total_tva = (_myParams.tva) ? totalTva : 0.0;
       _net_ht = _total_ht - ((_total_ht * _pourcentremise) / 100);
       _total_ttc = _net_ht + _total_tva;
       _timbre = Helpers.calcTimber(_total_ttc, _myParams);
-      _net_a_payer = _total_ttc + _timbre ;
+      _net_a_payer = _total_ttc + _timbre;
 
       if (_piece.id != null) {
         if (_net_a_payer <= _piece.net_a_payer) {
@@ -1616,7 +1643,7 @@ class _AddPiecePageState extends State<AddPiecePage>
         // }
         _verssementpiece = 0.0;
         _verssementControler.text = _verssementpiece.toStringAsFixed(2);
-        _restepiece = _net_a_payer - _verssementpiece ;
+        _restepiece = _net_a_payer - _verssementpiece;
       }
     });
   }
@@ -1666,11 +1693,10 @@ class _AddPiecePageState extends State<AddPiecePage>
                       child: Text(
                         "${S.current.choisir_action}: ",
                         style: GoogleFonts.lato(
-                          textStyle: TextStyle(
-                            fontSize: 22,
-                            fontWeight: FontWeight.bold,
-                          )
-                        ),
+                            textStyle: TextStyle(
+                          fontSize: 22,
+                          fontWeight: FontWeight.bold,
+                        )),
                       ),
                     )),
                     SizedBox(
@@ -1689,8 +1715,10 @@ class _AddPiecePageState extends State<AddPiecePage>
                           child: Text(
                             S.current.imp_rapide_btn,
                             style: GoogleFonts.lato(
-                              textStyle: TextStyle(color: Colors.white, fontSize: 16,fontWeight: FontWeight.w500)
-                            ),
+                                textStyle: TextStyle(
+                                    color: Colors.white,
+                                    fontSize: 16,
+                                    fontWeight: FontWeight.w500)),
                           ),
                           color: Colors.blueAccent,
                         ),
@@ -1724,8 +1752,10 @@ class _AddPiecePageState extends State<AddPiecePage>
                           child: Text(
                             S.current.save_imp_btn,
                             style: GoogleFonts.lato(
-                                textStyle: TextStyle(color: Colors.white, fontSize: 16,fontWeight: FontWeight.w500)
-                            ),
+                                textStyle: TextStyle(
+                                    color: Colors.white,
+                                    fontSize: 16,
+                                    fontWeight: FontWeight.w500)),
                           ),
                           color: Colors.green,
                         ),
@@ -1746,8 +1776,10 @@ class _AddPiecePageState extends State<AddPiecePage>
                           child: Text(
                             S.current.save_btn,
                             style: GoogleFonts.lato(
-                                textStyle: TextStyle(color: Colors.white, fontSize: 16,fontWeight: FontWeight.w500)
-                            ),
+                                textStyle: TextStyle(
+                                    color: Colors.white,
+                                    fontSize: 16,
+                                    fontWeight: FontWeight.w500)),
                           ),
                           color: Colors.deepOrange,
                         ),
@@ -1769,8 +1801,10 @@ class _AddPiecePageState extends State<AddPiecePage>
                             child: Text(
                               S.current.broullion_btn,
                               style: GoogleFonts.lato(
-                                  textStyle: TextStyle(color: Colors.white, fontSize: 16,fontWeight: FontWeight.w500)
-                              ),
+                                  textStyle: TextStyle(
+                                      color: Colors.white,
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.w500)),
                             ),
                             color: Colors.red,
                           ),
@@ -1804,7 +1838,7 @@ class _AddPiecePageState extends State<AddPiecePage>
     int id = await addItemToDb(isFromTransfer: isFromTransfer);
     if (id > -1) {
       _selectedClient = await _queryCtr.getTierById(_selectedClient.id);
-      setState((){
+      setState(() {
         modification = true;
         editMode = false;
         _verssementpiece = 0.0;
@@ -1856,9 +1890,9 @@ class _AddPiecePageState extends State<AddPiecePage>
           id = await _queryCtr.updateItemInDb(DbTablesNames.pieces, item);
           _selectedItems.forEach((article) async {
             Journaux journaux = Journaux.fromPiece(item, article);
-            if(_originalItems.contains(article)){
+            if (_originalItems.contains(article)) {
               await _queryCtr.updateJournaux(DbTablesNames.journaux, journaux);
-            }else{
+            } else {
               await _queryCtr.addItemToTable(DbTablesNames.journaux, journaux);
             }
           });
@@ -1875,7 +1909,7 @@ class _AddPiecePageState extends State<AddPiecePage>
                 "Mov", _piece.mov, "Piece_id", _piece.id);
           }
 
-          if (_piece.piece != PieceType.devis ) {
+          if (_piece.piece != PieceType.devis) {
             await addTresorie(_piece, transferer: false);
           }
 
@@ -1966,10 +2000,9 @@ class _AddPiecePageState extends State<AddPiecePage>
         _piece.piece == PieceType.avoirClient ||
         _piece.piece == PieceType.retourFournisseur ||
         _piece.piece == PieceType.avoirFournisseur) {
-
       _piece.net_a_payer = _piece.net_a_payer * -1;
-      _piece.regler =  _piece.regler * -1 ;
-      _piece.reste = _piece.reste * -1 ;
+      _piece.regler = _piece.regler * -1;
+      _piece.reste = _piece.reste * -1;
     }
 
     if (!modification) {
@@ -2004,8 +2037,7 @@ class _AddPiecePageState extends State<AddPiecePage>
     //special pour l'etat de la tresorie
     tresorie.mov = item.mov;
 
-    tresorie.objet =
-        "${S.current.reglement_piece}";
+    tresorie.objet = "${S.current.reglement_piece}";
     tresorie.modalite = S.current.espece;
     tresorie.tierId = item.tier_id;
     tresorie.tierRS = item.raisonSociale;
@@ -2023,13 +2055,13 @@ class _AddPiecePageState extends State<AddPiecePage>
         if (item.piece == PieceType.retourClient ||
             item.piece == PieceType.avoirClient) {
           tresorie.categorie = 6;
-          tresorie.objet = "${S.current.rembourcement_client}" ;
+          tresorie.objet = "${S.current.rembourcement_client}";
           tresorie.montant = tresorie.montant * -1;
         } else {
           if (item.piece == PieceType.retourFournisseur ||
               item.piece == PieceType.avoirFournisseur) {
             tresorie.categorie = 7;
-            tresorie.objet = "${S.current.rembourcement_four}" ;
+            tresorie.objet = "${S.current.rembourcement_four}";
             tresorie.montant = tresorie.montant * -1;
           }
         }
@@ -2040,17 +2072,16 @@ class _AddPiecePageState extends State<AddPiecePage>
 
     await _queryCtr.addItemToTable(DbTablesNames.tresorie, tresorie);
 
-    if(tresorie.categorie == 2 ||  tresorie.categorie == 3){
+    if (tresorie.categorie == 2 || tresorie.categorie == 3) {
       ReglementTresorie reglementTresorie = new ReglementTresorie.init();
       reglementTresorie.tresorie_id =
-      await _queryCtr.getLastId(DbTablesNames.tresorie);
+          await _queryCtr.getLastId(DbTablesNames.tresorie);
       reglementTresorie.piece_id =
-      await _queryCtr.getLastId(DbTablesNames.pieces);
+          await _queryCtr.getLastId(DbTablesNames.pieces);
       reglementTresorie.regler = tresorie.montant;
       await _queryCtr.addItemToTable(
           DbTablesNames.reglementTresorie, reglementTresorie);
     }
-
   }
 
   //******************************************************************************************************************************************
@@ -2069,11 +2100,10 @@ class _AddPiecePageState extends State<AddPiecePage>
                       child: Text(
                         "${S.current.transformer_title}: ",
                         style: GoogleFonts.lato(
-                          textStyle: TextStyle(
-                            fontSize: 22,
-                            fontWeight: FontWeight.bold,
-                          )
-                        ),
+                            textStyle: TextStyle(
+                          fontSize: 22,
+                          fontWeight: FontWeight.bold,
+                        )),
                       ),
                     )),
                     Visibility(
@@ -2093,9 +2123,11 @@ class _AddPiecePageState extends State<AddPiecePage>
                             },
                             child: Text(
                               S.current.to_commande,
-                              style:GoogleFonts.lato(
-                                textStyle: TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.w500)
-                              ),
+                              style: GoogleFonts.lato(
+                                  textStyle: TextStyle(
+                                      color: Colors.white,
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.w500)),
                             ),
                             color: Colors.purple,
                           ),
@@ -2122,14 +2154,18 @@ class _AddPiecePageState extends State<AddPiecePage>
                                 ? Text(
                                     S.current.bon_reception,
                                     style: GoogleFonts.lato(
-                                        textStyle: TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.w500)
-                                    ),
+                                        textStyle: TextStyle(
+                                            color: Colors.white,
+                                            fontSize: 16,
+                                            fontWeight: FontWeight.w500)),
                                   )
                                 : Text(
                                     S.current.bon_livraison,
                                     style: GoogleFonts.lato(
-                                        textStyle: TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.w500)
-                                    ),
+                                        textStyle: TextStyle(
+                                            color: Colors.white,
+                                            fontSize: 16,
+                                            fontWeight: FontWeight.w500)),
                                   ),
                             color: Colors.blue,
                           ),
@@ -2158,14 +2194,18 @@ class _AddPiecePageState extends State<AddPiecePage>
                                 ? Text(
                                     S.current.facture_vente,
                                     style: GoogleFonts.lato(
-                                        textStyle: TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.w500)
-                                    ),
+                                        textStyle: TextStyle(
+                                            color: Colors.white,
+                                            fontSize: 16,
+                                            fontWeight: FontWeight.w500)),
                                   )
                                 : Text(
                                     S.current.facture_achat,
                                     style: GoogleFonts.lato(
-                                        textStyle: TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.w500)
-                                    ),
+                                        textStyle: TextStyle(
+                                            color: Colors.white,
+                                            fontSize: 16,
+                                            fontWeight: FontWeight.w500)),
                                   ),
                             color: Colors.green,
                           ),
@@ -2194,8 +2234,10 @@ class _AddPiecePageState extends State<AddPiecePage>
                             child: Text(
                               _textBtnTransfereRetour(),
                               style: GoogleFonts.lato(
-                                  textStyle: TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.w500)
-                              ),
+                                  textStyle: TextStyle(
+                                      color: Colors.white,
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.w500)),
                             ),
                           ),
                         ),
@@ -2260,7 +2302,7 @@ class _AddPiecePageState extends State<AddPiecePage>
           _newPiece.piece == PieceType.avoirFournisseur) {
         _newPiece.net_a_payer = _newPiece.net_a_payer * -1;
         _newPiece.regler = 0;
-        _newPiece.reste = _piece.reste * -1 ;
+        _newPiece.reste = _piece.reste * -1;
       }
 
       id = await _queryCtr.addItemToTable(DbTablesNames.pieces, _newPiece);
@@ -2398,7 +2440,10 @@ class _AddPiecePageState extends State<AddPiecePage>
           showDialog(
             context: context,
             builder: (_) => AlertDialog(
-              content: Text(result.msg , style: GoogleFonts.lato(),),
+              content: Text(
+                result.msg,
+                style: GoogleFonts.lato(),
+              ),
             ),
           );
           dispose();
@@ -2406,7 +2451,7 @@ class _AddPiecePageState extends State<AddPiecePage>
           showDialog(
             context: context,
             builder: (_) => AlertDialog(
-              content: Text(error.toString(),style: GoogleFonts.lato()),
+              content: Text(error.toString(), style: GoogleFonts.lato()),
             ),
           );
         });
@@ -2474,10 +2519,10 @@ class _AddPiecePageState extends State<AddPiecePage>
                     ? PosAlign.center
                     : PosAlign.left));
       }
-      if(_profile.rc != ""){
+      if (_profile.rc != "") {
         input = "${_profile.rc}";
-        encArabic = await CharsetConverter.encode("ISO-8859-6",
-            "${input.split('').reversed.join()}");
+        encArabic = await CharsetConverter.encode(
+            "ISO-8859-6", "${input.split('').reversed.join()}");
         ticket.textEncoded(encArabic,
             styles: PosStyles(
                 codeTable: PosCodeTable.arabic,
@@ -2485,10 +2530,10 @@ class _AddPiecePageState extends State<AddPiecePage>
                     ? PosAlign.center
                     : PosAlign.left));
       }
-      if(_profile.nif != ""){
+      if (_profile.nif != "") {
         input = "${_profile.nif}";
-        encArabic = await CharsetConverter.encode("ISO-8859-6",
-            "${input.split('').reversed.join()}");
+        encArabic = await CharsetConverter.encode(
+            "ISO-8859-6", "${input.split('').reversed.join()}");
         ticket.textEncoded(encArabic,
             styles: PosStyles(
                 codeTable: PosCodeTable.arabic,
@@ -2496,10 +2541,10 @@ class _AddPiecePageState extends State<AddPiecePage>
                     ? PosAlign.center
                     : PosAlign.left));
       }
-      if(_profile.ai != ""){
+      if (_profile.ai != "") {
         input = "${_profile.ai}";
-        encArabic = await CharsetConverter.encode("ISO-8859-6",
-            "${input.split('').reversed.join()}");
+        encArabic = await CharsetConverter.encode(
+            "ISO-8859-6", "${input.split('').reversed.join()}");
         ticket.textEncoded(encArabic,
             styles: PosStyles(
                 codeTable: PosCodeTable.arabic,
@@ -2539,13 +2584,14 @@ class _AddPiecePageState extends State<AddPiecePage>
                   ? PosAlign.center
                   : PosAlign.left));
 
-      if(_selectedClient.rc != "" && (_piece.piece == PieceType.factureClient ||
-          _piece.piece == PieceType.factureFournisseur ||
-          _piece.piece == PieceType.avoirClient ||
-          _piece.piece == PieceType.avoirFournisseur)){
+      if (_selectedClient.rc != "" &&
+          (_piece.piece == PieceType.factureClient ||
+              _piece.piece == PieceType.factureFournisseur ||
+              _piece.piece == PieceType.avoirClient ||
+              _piece.piece == PieceType.avoirFournisseur)) {
         input = "${_selectedClient.rc}";
-        encArabic = await CharsetConverter.encode("ISO-8859-6",
-            "${input.split('').reversed.join()}");
+        encArabic = await CharsetConverter.encode(
+            "ISO-8859-6", "${input.split('').reversed.join()}");
         ticket.textEncoded(encArabic,
             styles: PosStyles(
                 codeTable: PosCodeTable.arabic,
@@ -2553,13 +2599,14 @@ class _AddPiecePageState extends State<AddPiecePage>
                     ? PosAlign.center
                     : PosAlign.left));
       }
-      if(_selectedClient.nif != "" && (_piece.piece == PieceType.factureClient ||
-          _piece.piece == PieceType.factureFournisseur ||
-          _piece.piece == PieceType.avoirClient ||
-          _piece.piece == PieceType.avoirFournisseur)){
+      if (_selectedClient.nif != "" &&
+          (_piece.piece == PieceType.factureClient ||
+              _piece.piece == PieceType.factureFournisseur ||
+              _piece.piece == PieceType.avoirClient ||
+              _piece.piece == PieceType.avoirFournisseur)) {
         input = "${_selectedClient.rc}";
-        encArabic = await CharsetConverter.encode("ISO-8859-6",
-            "${input.split('').reversed.join()}");
+        encArabic = await CharsetConverter.encode(
+            "ISO-8859-6", "${input.split('').reversed.join()}");
         ticket.textEncoded(encArabic,
             styles: PosStyles(
                 codeTable: PosCodeTable.arabic,
@@ -2567,13 +2614,14 @@ class _AddPiecePageState extends State<AddPiecePage>
                     ? PosAlign.center
                     : PosAlign.left));
       }
-      if(_selectedClient.ai != "" && (_piece.piece == PieceType.factureClient ||
-          _piece.piece == PieceType.factureFournisseur ||
-          _piece.piece == PieceType.avoirClient ||
-          _piece.piece == PieceType.avoirFournisseur)){
+      if (_selectedClient.ai != "" &&
+          (_piece.piece == PieceType.factureClient ||
+              _piece.piece == PieceType.factureFournisseur ||
+              _piece.piece == PieceType.avoirClient ||
+              _piece.piece == PieceType.avoirFournisseur)) {
         input = "${_selectedClient.rc}";
-        encArabic = await CharsetConverter.encode("ISO-8859-6",
-            "${input.split('').reversed.join()}");
+        encArabic = await CharsetConverter.encode(
+            "ISO-8859-6", "${input.split('').reversed.join()}");
         ticket.textEncoded(encArabic,
             styles: PosStyles(
                 codeTable: PosCodeTable.arabic,
@@ -2711,11 +2759,11 @@ class _AddPiecePageState extends State<AddPiecePage>
 
       ticket.hr(ch: '=');
       input = "${S.current.net_payer}";
-      encArabic =(_piece.net_a_payer >= 0)
-          ?  await CharsetConverter.encode("ISO-8859-6",
-          "$_devise ${Helpers.numberFormat(_piece.net_a_payer).toString()}: ${input.split('').reversed.join()}")
-      :await CharsetConverter.encode("ISO-8859-6",
-          "$_devise ${Helpers.numberFormat((_piece.net_a_payer * -1)).toString()}: ${input.split('').reversed.join()}");
+      encArabic = (_piece.net_a_payer >= 0)
+          ? await CharsetConverter.encode("ISO-8859-6",
+              "$_devise ${Helpers.numberFormat(_piece.net_a_payer).toString()}: ${input.split('').reversed.join()}")
+          : await CharsetConverter.encode("ISO-8859-6",
+              "$_devise ${Helpers.numberFormat((_piece.net_a_payer * -1)).toString()}: ${input.split('').reversed.join()}");
       ticket.textEncoded(encArabic,
           styles: PosStyles(
             codeTable: PosCodeTable.arabic,
@@ -2729,19 +2777,19 @@ class _AddPiecePageState extends State<AddPiecePage>
       ticket.hr(ch: '=');
       ticket.row([
         PosColumn(
-            textEncoded:(_piece.regler >= 0)
+            textEncoded: (_piece.regler >= 0)
                 ? await CharsetConverter.encode("ISO-8859-6",
-                "${Helpers.numberFormat(_piece.regler).toString()}: ${S.current.regler.split('').reversed.join()}")
-            :  await CharsetConverter.encode("ISO-8859-6",
-                "${Helpers.numberFormat((_piece.regler * -1)).toString()}: ${S.current.regler.split('').reversed.join()}"),
+                    "${Helpers.numberFormat(_piece.regler).toString()}: ${S.current.regler.split('').reversed.join()}")
+                : await CharsetConverter.encode("ISO-8859-6",
+                    "${Helpers.numberFormat((_piece.regler * -1)).toString()}: ${S.current.regler.split('').reversed.join()}"),
             width: 6),
         (_piece.reste != 0)
             ? PosColumn(
-                textEncoded:(_piece.reste >= 0)
+                textEncoded: (_piece.reste >= 0)
                     ? await CharsetConverter.encode("ISO-8859-6",
-                    "${Helpers.numberFormat(_piece.reste).toString()}: ${S.current.reste.split('').reversed.join()}")
-                    :await CharsetConverter.encode("ISO-8859-6",
-                    "${Helpers.numberFormat(_piece.reste * -1).toString()}: ${S.current.reste.split('').reversed.join()}") ,
+                        "${Helpers.numberFormat(_piece.reste).toString()}: ${S.current.reste.split('').reversed.join()}")
+                    : await CharsetConverter.encode("ISO-8859-6",
+                        "${Helpers.numberFormat(_piece.reste * -1).toString()}: ${S.current.reste.split('').reversed.join()}"),
                 width: 6)
             : PosColumn(width: 6),
       ]);
@@ -2806,30 +2854,33 @@ class _AddPiecePageState extends State<AddPiecePage>
                   ? PosAlign.center
                   : PosAlign.left));
 
-      if(_selectedClient.rc != "" && (_piece.piece == PieceType.factureClient ||
-          _piece.piece == PieceType.factureFournisseur ||
-          _piece.piece == PieceType.avoirClient ||
-          _piece.piece == PieceType.avoirFournisseur)){
+      if (_selectedClient.rc != "" &&
+          (_piece.piece == PieceType.factureClient ||
+              _piece.piece == PieceType.factureFournisseur ||
+              _piece.piece == PieceType.avoirClient ||
+              _piece.piece == PieceType.avoirFournisseur)) {
         ticket.text("${S.current.rc} : ${_selectedClient.rc}",
             styles: PosStyles(
                 align: (formatPrint == PaperSize.mm80)
                     ? PosAlign.center
                     : PosAlign.left));
       }
-      if(_selectedClient.nif != "" && (_piece.piece == PieceType.factureClient ||
-          _piece.piece == PieceType.factureFournisseur ||
-          _piece.piece == PieceType.avoirClient ||
-          _piece.piece == PieceType.avoirFournisseur)){
+      if (_selectedClient.nif != "" &&
+          (_piece.piece == PieceType.factureClient ||
+              _piece.piece == PieceType.factureFournisseur ||
+              _piece.piece == PieceType.avoirClient ||
+              _piece.piece == PieceType.avoirFournisseur)) {
         ticket.text("${S.current.nif} : ${_selectedClient.nif}",
             styles: PosStyles(
                 align: (formatPrint == PaperSize.mm80)
                     ? PosAlign.center
                     : PosAlign.left));
       }
-      if(_selectedClient.ai != "" && (_piece.piece == PieceType.factureClient ||
-          _piece.piece == PieceType.factureFournisseur ||
-          _piece.piece == PieceType.avoirClient ||
-          _piece.piece == PieceType.avoirFournisseur)){
+      if (_selectedClient.ai != "" &&
+          (_piece.piece == PieceType.factureClient ||
+              _piece.piece == PieceType.factureFournisseur ||
+              _piece.piece == PieceType.avoirClient ||
+              _piece.piece == PieceType.avoirFournisseur)) {
         ticket.text("${S.current.art_imp} : ${_selectedClient.ai}",
             styles: PosStyles(
                 align: (formatPrint == PaperSize.mm80)
@@ -2935,9 +2986,9 @@ class _AddPiecePageState extends State<AddPiecePage>
       ticket.hr(ch: '=');
       encode = (_piece.net_a_payer >= 0)
           ? await CharsetConverter.encode("ISO-8859-6",
-          "${S.current.net_payer} : ${Helpers.numberFormat(_piece.net_a_payer).toString()} ${_devise}")
-          :await CharsetConverter.encode("ISO-8859-6",
-          "${S.current.net_payer} : ${Helpers.numberFormat(_piece.net_a_payer * -1).toString()} ${_devise}");
+              "${S.current.net_payer} : ${Helpers.numberFormat(_piece.net_a_payer).toString()} ${_devise}")
+          : await CharsetConverter.encode("ISO-8859-6",
+              "${S.current.net_payer} : ${Helpers.numberFormat(_piece.net_a_payer * -1).toString()} ${_devise}");
       ticket.textEncoded(encode,
           styles: PosStyles(
             align: (formatPrint == PaperSize.mm80)
@@ -2950,19 +3001,19 @@ class _AddPiecePageState extends State<AddPiecePage>
 
       ticket.row([
         PosColumn(
-            textEncoded:(_piece.regler >= 0)
+            textEncoded: (_piece.regler >= 0)
                 ? await CharsetConverter.encode("ISO-8859-6",
-                "${S.current.regler} : ${Helpers.numberFormat(_piece.regler).toString()}")
-            : await CharsetConverter.encode("ISO-8859-6",
-                "${S.current.regler} : ${Helpers.numberFormat(_piece.regler * -1).toString()}"),
+                    "${S.current.regler} : ${Helpers.numberFormat(_piece.regler).toString()}")
+                : await CharsetConverter.encode("ISO-8859-6",
+                    "${S.current.regler} : ${Helpers.numberFormat(_piece.regler * -1).toString()}"),
             width: 6),
         (_piece.reste != 0)
             ? PosColumn(
-                textEncoded:(_piece.reste > 0)
+                textEncoded: (_piece.reste > 0)
                     ? await CharsetConverter.encode("ISO-8859-6",
-                    "${S.current.reste} : ${Helpers.numberFormat(_piece.reste).toString()}")
-            :  await CharsetConverter.encode("ISO-8859-6",
-                    "${S.current.reste} : ${Helpers.numberFormat(_piece.reste * -1).toString()}"),
+                        "${S.current.reste} : ${Helpers.numberFormat(_piece.reste).toString()}")
+                    : await CharsetConverter.encode("ISO-8859-6",
+                        "${S.current.reste} : ${Helpers.numberFormat(_piece.reste * -1).toString()}"),
                 width: 6)
             : PosColumn(width: 6),
       ]);
@@ -2993,78 +3044,84 @@ class _AddPiecePageState extends State<AddPiecePage>
               children: [
                 pw.Container(
                   width: 200,
-                  child:  pw.Column(
+                  child: pw.Column(
                       crossAxisAlignment: pw.CrossAxisAlignment.start,
                       children: [
                         (_profile.raisonSociale != null)
                             ? pw.Text("${_profile.raisonSociale} ",
-                            style: pw.TextStyle(
-                                font: ttf, fontWeight: pw.FontWeight.bold , fontSize: 20))
+                                style: pw.TextStyle(
+                                    font: ttf,
+                                    fontWeight: pw.FontWeight.bold,
+                                    fontSize: 20))
                             : pw.SizedBox(),
                         (_profile.activite != "")
                             ? pw.Text("${_profile.activite} ",
-                            style: pw.TextStyle(
-                                font: ttf, fontWeight: pw.FontWeight.bold))
+                                style: pw.TextStyle(
+                                    font: ttf, fontWeight: pw.FontWeight.bold))
                             : pw.SizedBox(),
                         (_profile.adresse != "")
                             ? pw.Text(
-                            "${_profile.adresse} ${_profile.departement} ${_profile.ville} ${_profile.pays}",
-                            style: pw.TextStyle(
-                                font: ttf, fontWeight: pw.FontWeight.bold))
+                                "${_profile.adresse} ${_profile.departement} ${_profile.ville} ${_profile.pays}",
+                                style: pw.TextStyle(
+                                    font: ttf, fontWeight: pw.FontWeight.bold))
                             : pw.SizedBox(),
                         (_profile.telephone != "")
                             ? pw.Text(
-                            "${S.current.telephone}\t: ${_profile.telephone}",
-                            style: pw.TextStyle(
-                                font: ttf, fontWeight: pw.FontWeight.bold))
+                                "${S.current.telephone}\t: ${_profile.telephone}",
+                                style: pw.TextStyle(
+                                    font: ttf, fontWeight: pw.FontWeight.bold))
                             : pw.SizedBox(),
                         (_profile.fax != "")
                             ? pw.Text("${S.current.fax}\t: ${_profile.fax}",
-                            style: pw.TextStyle(
-                                font: ttf, fontWeight: pw.FontWeight.bold))
+                                style: pw.TextStyle(
+                                    font: ttf, fontWeight: pw.FontWeight.bold))
                             : pw.SizedBox(),
                         (_profile.mobile != "")
-                            ? pw.Text("${S.current.mobile}\t: ${_profile.mobile}",
-                            style: pw.TextStyle(
-                                font: ttf, fontWeight: pw.FontWeight.bold))
+                            ? pw.Text(
+                                "${S.current.mobile}\t: ${_profile.mobile}",
+                                style: pw.TextStyle(
+                                    font: ttf, fontWeight: pw.FontWeight.bold))
                             : pw.SizedBox(),
                         (_profile.email != "")
                             ? pw.Text("${S.current.mail}\t: ${_profile.email}",
-                            style: pw.TextStyle(
-                                font: ttf, fontWeight: pw.FontWeight.bold))
+                                style: pw.TextStyle(
+                                    font: ttf, fontWeight: pw.FontWeight.bold))
                             : pw.SizedBox(),
                         (_profile.rc != "")
                             ? pw.Text("${S.current.rc}\t: ${_profile.rc}",
-                            style: pw.TextStyle(
-                                font: ttf, fontWeight: pw.FontWeight.bold))
+                                style: pw.TextStyle(
+                                    font: ttf, fontWeight: pw.FontWeight.bold))
                             : pw.SizedBox(),
                         (_profile.nif != "")
                             ? pw.Text("${S.current.nif}\t: ${_profile.nif}",
-                            style: pw.TextStyle(
-                                font: ttf, fontWeight: pw.FontWeight.bold))
+                                style: pw.TextStyle(
+                                    font: ttf, fontWeight: pw.FontWeight.bold))
                             : pw.SizedBox(),
                         (_profile.ai != "")
                             ? pw.Text("${S.current.art_imp}\t: ${_profile.ai}",
-                            style: pw.TextStyle(
-                                font: ttf, fontWeight: pw.FontWeight.bold))
+                                style: pw.TextStyle(
+                                    font: ttf, fontWeight: pw.FontWeight.bold))
                             : pw.SizedBox(),
                         (_profile.capital > 0)
                             ? pw.Text(
-                            "${S.current.capitale_sociale}\t: ${Helpers.numberFormat(_profile.capital)} ${Helpers.getDeviseTranslate(_myParams.devise)}",
-                            style: pw.TextStyle(
-                                font: ttf, fontWeight: pw.FontWeight.bold))
+                                "${S.current.capitale_sociale}\t: ${Helpers.numberFormat(_profile.capital)} ${Helpers.getDeviseTranslate(_myParams.devise)}",
+                                style: pw.TextStyle(
+                                    font: ttf, fontWeight: pw.FontWeight.bold))
                             : pw.SizedBox(),
                       ]),
                 ),
                 pw.SizedBox(width: 10),
                 (_profile.imageUint8List != "")
-                    ?pw.Container(
-                   width: 200,
-                  height: 200,
-                  child: pw.Image(pw.MemoryImage(_profile.imageUint8List ,),
-                    height: 100, width: 100 ,
-                  )
-                )
+                    ? pw.Container(
+                        width: 200,
+                        height: 200,
+                        child: pw.Image(
+                          pw.MemoryImage(
+                            _profile.imageUint8List,
+                          ),
+                          height: 100,
+                          width: 100,
+                        ))
                     : pw.SizedBox(),
               ]),
           pw.SizedBox(height: 10),
@@ -3075,59 +3132,70 @@ class _AddPiecePageState extends State<AddPiecePage>
                     crossAxisAlignment: pw.CrossAxisAlignment.start,
                     children: [
                       pw.Text(
-                          "${S.current.client_titre}\t ${_selectedClient.raisonSociale} ",
+                          (_piece.piece == PieceType.devis ||
+                                  _piece.piece == PieceType.bonLivraison ||
+                                  _piece.piece == PieceType.factureClient ||
+                                  _piece.piece == PieceType.commandeClient ||
+                                  _piece.piece == PieceType.retourClient ||
+                                  _piece.piece == PieceType.avoirClient)
+                              ? "${S.current.client_titre}\t ${_selectedClient.raisonSociale} "
+                              : "${S.current.fournisseur_titre}\t ${_selectedClient.raisonSociale} ",
                           style: pw.TextStyle(font: ttf)),
                       pw.Divider(height: 2),
-
                       (_selectedClient.adresse != "")
                           ? pw.Text(
-                          "${S.current.adresse}\t  ${_selectedClient.adresse} ",
-                          style: pw.TextStyle(font: ttf))
-                      :pw.SizedBox(),
-
+                              "${S.current.adresse}\t  ${_selectedClient.adresse} ",
+                              style: pw.TextStyle(font: ttf))
+                          : pw.SizedBox(),
                       (_selectedClient.ville != "")
-                          ? pw.Text("${S.current.ville}\t  ${_selectedClient.ville}",
-                          style: pw.TextStyle(font: ttf))
-                      : pw.SizedBox(),
-
+                          ? pw.Text(
+                              "${S.current.ville}\t  ${_selectedClient.ville}",
+                              style: pw.TextStyle(font: ttf))
+                          : pw.SizedBox(),
                       ((_piece.piece == PieceType.factureClient ||
-                          _piece.piece == PieceType.factureFournisseur ||
-                          _piece.piece == PieceType.avoirClient ||
-                          _piece.piece == PieceType.avoirFournisseur) &&
-                              (_selectedClient.rc != "") )
+                                  _piece.piece ==
+                                      PieceType.factureFournisseur ||
+                                  _piece.piece == PieceType.avoirClient ||
+                                  _piece.piece == PieceType.avoirFournisseur) &&
+                              (_selectedClient.rc != ""))
                           ? pw.Text("${S.current.rc}\t  ${_selectedClient.rc}",
-                          style: pw.TextStyle(font: ttf))
+                              style: pw.TextStyle(font: ttf))
                           : pw.SizedBox(),
-
                       ((_piece.piece == PieceType.factureClient ||
-                          _piece.piece == PieceType.factureFournisseur ||
-                          _piece.piece == PieceType.avoirClient ||
-                          _piece.piece == PieceType.avoirFournisseur) &&
-                          (_selectedClient.nif != "") )
-                          ? pw.Text("${S.current.nif}\t  ${_selectedClient.nif}",
-                          style: pw.TextStyle(font: ttf))
+                                  _piece.piece ==
+                                      PieceType.factureFournisseur ||
+                                  _piece.piece == PieceType.avoirClient ||
+                                  _piece.piece == PieceType.avoirFournisseur) &&
+                              (_selectedClient.nif != ""))
+                          ? pw.Text(
+                              "${S.current.nif}\t  ${_selectedClient.nif}",
+                              style: pw.TextStyle(font: ttf))
                           : pw.SizedBox(),
-
                       ((_piece.piece == PieceType.factureClient ||
-                          _piece.piece == PieceType.factureFournisseur ||
-                          _piece.piece == PieceType.avoirClient ||
-                          _piece.piece == PieceType.avoirFournisseur) &&
-                          (_selectedClient.ai != "") )
-                          ? pw.Text("${S.current.art_imp}\t  ${_selectedClient.ai}",
-                          style: pw.TextStyle(font: ttf))
+                                  _piece.piece ==
+                                      PieceType.factureFournisseur ||
+                                  _piece.piece == PieceType.avoirClient ||
+                                  _piece.piece == PieceType.avoirFournisseur) &&
+                              (_selectedClient.ai != ""))
+                          ? pw.Text(
+                              "${S.current.art_imp}\t  ${_selectedClient.ai}",
+                              style: pw.TextStyle(font: ttf))
                           : pw.SizedBox(),
                     ])),
             pw.SizedBox(width: 3),
             pw.Expanded(
                 flex: 6,
-                child: pw.Column(
-                    children: [
+                child: pw.Column(children: [
                   pw.Text("${Helpers.getPieceTitle(_piece.piece)}",
                       style: pw.TextStyle(
-                          fontWeight: pw.FontWeight.bold, font: ttf, fontSize: 20)),
+                          fontWeight: pw.FontWeight.bold,
+                          font: ttf,
+                          fontSize: 20)),
                   pw.Text("${S.current.n}\t  ${_piece.num_piece}",
                       style: pw.TextStyle(
-                          fontWeight: pw.FontWeight.bold, font: ttf , fontSize: 16)),
+                          fontWeight: pw.FontWeight.bold,
+                          font: ttf,
+                          fontSize: 16)),
                   pw.Text(
                       "${S.current.date}\t  ${Helpers.dateToText(_piece.date)}",
                       style: pw.TextStyle(font: ttf)),
@@ -3140,7 +3208,7 @@ class _AddPiecePageState extends State<AddPiecePage>
                     border: pw.Border(bottom: pw.BorderSide(width: 2))),
                 children: [
                   pw.Container(
-                    padding: pw.EdgeInsets.only(left: 5, right: 5 , bottom: 2),
+                    padding: pw.EdgeInsets.only(left: 5, right: 5, bottom: 2),
                     child: pw.Text("${S.current.referance}",
                         style: pw.TextStyle(
                             fontWeight: pw.FontWeight.bold,
@@ -3178,8 +3246,7 @@ class _AddPiecePageState extends State<AddPiecePage>
                               fontWeight: pw.FontWeight.bold,
                               font: ttf,
                               fontSize: 10))),
-                ]
-            ),
+                ]),
             for (var e in _selectedItems)
               pw.TableRow(
                   decoration: pw.BoxDecoration(
@@ -3189,7 +3256,7 @@ class _AddPiecePageState extends State<AddPiecePage>
                   children: [
                     pw.Container(
                       padding: pw.EdgeInsets.only(left: 5, right: 5),
-                      child: pw.Text("${e.ref}",
+                      child: pw.Text((e.ref != '') ? "${e.ref}" : "##",
                           style: pw.TextStyle(font: ttf, fontSize: 9)),
                     ),
                     pw.Container(
@@ -3223,37 +3290,42 @@ class _AddPiecePageState extends State<AddPiecePage>
             pw.Expanded(
                 flex: 6,
                 child: pw.Column(
-                    crossAxisAlignment:(Intl.getCurrentLocale() == "ar")? pw.CrossAxisAlignment.end : pw.CrossAxisAlignment.start ,
-                children: [
-                  pw.Text(
-                    (_piece.regler >= 0)
-                      ? "${S.current.regler}\t ${Helpers.numberFormat(_piece.regler)} ${_devise}" : "${S.current.regler}\t ${Helpers.numberFormat(_piece.regler * -1)} ${_devise}" ,
-                      style: pw.TextStyle(font: ttf)),
-                  (_piece.reste != 0)
-                      ? pw.Text(
-                          (_piece.reste > 0)
-                          ? "${S.current.reste}\t ${Helpers.numberFormat(_piece.reste)} ${_devise}" : "${S.current.reste}\t ${Helpers.numberFormat(_piece.reste * -1)} ${_devise}"  ,
-                          style: pw.TextStyle(font: ttf))
-                      : pw.SizedBox(),
-                  (_myParams.creditTier)
-                      ? pw.Text(
-                          "${S.current.credit}\t ${Helpers.numberFormat(_selectedClient.credit)} ${_devise}",
-                          style: pw.TextStyle(font: ttf))
-                      : pw.SizedBox(),
-                  pw.Divider(height: 2),
-                  pw.Text(getPieceSuminLetters(),
-                      style: pw.TextStyle(
-                          font: ttf, fontWeight: pw.FontWeight.bold)),
-                ]
-                )
-            ),
+                    crossAxisAlignment: (Intl.getCurrentLocale() == "ar")
+                        ? pw.CrossAxisAlignment.end
+                        : pw.CrossAxisAlignment.start,
+                    children: [
+                      pw.Text(
+                          (_piece.regler >= 0)
+                              ? "${S.current.regler}\t ${Helpers.numberFormat(_piece.regler)} ${_devise}"
+                              : "${S.current.regler}\t ${Helpers.numberFormat(_piece.regler * -1)} ${_devise}",
+                          style: pw.TextStyle(font: ttf)),
+                      (_piece.reste != 0)
+                          ? pw.Text(
+                              (_piece.reste > 0)
+                                  ? "${S.current.reste}\t ${Helpers.numberFormat(_piece.reste)} ${_devise}"
+                                  : "${S.current.reste}\t ${Helpers.numberFormat(_piece.reste * -1)} ${_devise}",
+                              style: pw.TextStyle(font: ttf))
+                          : pw.SizedBox(),
+                      (_myParams.creditTier)
+                          ? pw.Text(
+                              "${S.current.credit}\t ${Helpers.numberFormat(_selectedClient.credit)} ${_devise}",
+                              style: pw.TextStyle(font: ttf))
+                          : pw.SizedBox(),
+                      pw.Divider(height: 2),
+                      pw.Text(getPieceSuminLetters(),
+                          style: pw.TextStyle(
+                              font: ttf, fontWeight: pw.FontWeight.bold)),
+                    ])),
             pw.SizedBox(width: 10),
             pw.Expanded(
                 flex: 6,
                 child: pw.Column(
-                    crossAxisAlignment:(Intl.getCurrentLocale() == "ar")? pw.CrossAxisAlignment.end : pw.CrossAxisAlignment.start ,
+                    crossAxisAlignment: (Intl.getCurrentLocale() == "ar")
+                        ? pw.CrossAxisAlignment.end
+                        : pw.CrossAxisAlignment.start,
                     children: [
-                      ((_piece.total_tva > 0 && _myParams.tva) || _piece.remise > 0)
+                      ((_piece.total_tva > 0 && _myParams.tva) ||
+                              _piece.remise > 0)
                           ? pw.Text(
                               "${S.current.total_ht}\t  ${Helpers.numberFormat(_piece.total_ht)}\t ${_devise}",
                               style: pw.TextStyle(font: ttf))
@@ -3286,7 +3358,8 @@ class _AddPiecePageState extends State<AddPiecePage>
                           : pw.SizedBox(),
                       pw.Text(
                           (_piece.net_a_payer >= 0)
-                          ? "${S.current.net_payer}\t  ${Helpers.numberFormat(_piece.net_a_payer)}\t  $_devise" : "${S.current.net_payer}\t  ${Helpers.numberFormat(_piece.net_a_payer * -1)}\t  ${_devise}",
+                              ? "${S.current.net_payer}\t  ${Helpers.numberFormat(_piece.net_a_payer)}\t  $_devise"
+                              : "${S.current.net_payer}\t  ${Helpers.numberFormat(_piece.net_a_payer * -1)}\t  ${_devise}",
                           style: pw.TextStyle(font: ttf)),
                       pw.Divider(height: 2),
                     ])),
@@ -3352,7 +3425,8 @@ class _AddPiecePageState extends State<AddPiecePage>
 
     int a = (_piece.net_a_payer % 1 * 100).roundToDouble().toInt();
     if (a > 0) {
-      res = res + "${Helpers.numberToWords(a.toString()).capitalizeFirstofEach} ${S.current.centime}";
+      res = res +
+          "${Helpers.numberToWords(a.toString()).capitalizeFirstofEach} ${S.current.centime}";
     }
 
     return res;

@@ -6,24 +6,15 @@ import 'package:circular_menu/circular_menu.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:gestmob/Helpers/Helpers.dart';
-import 'package:gestmob/Helpers/QueryCtr.dart';
 import 'package:gestmob/Helpers/Statics.dart';
 import 'package:gestmob/Widgets/CustomWidgets/search_bar.dart';
-import 'package:gestmob/Widgets/article_list_item.dart';
 import 'package:gestmob/generated/l10n.dart';
-import 'package:gestmob/models/Article.dart';
-import 'package:gestmob/models/ArticleFamille.dart';
-import 'package:gestmob/models/ArticleMarque.dart';
 import 'package:gestmob/models/Tiers.dart';
 import 'package:gestmob/models/TiersFamille.dart';
 import 'package:gestmob/search/items_sliver_list.dart';
-import 'package:gestmob/search/search_input_sliver.dart';
 import 'package:gestmob/search/sliver_list_data_source.dart';
-import 'package:image/image.dart';
-import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 import 'package:gestmob/Widgets/utils.dart' as utils;
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
-import 'AddArticlePage.dart';
 import 'package:gestmob/services/push_notifications.dart';
 import 'package:gestmob/models/MyParams.dart';
 import 'package:feature_discovery/feature_discovery.dart';
@@ -256,7 +247,11 @@ class _ClientFourFragmentState extends State<ClientFourFragment> {
                 title: S.current.supp,
                 body: addFilterdialogue(),
                 btnOkText: S.current.filtrer_btn,
-                closeIcon: Icon(Icons.close , color: Colors.red , size: 26,),
+                closeIcon: Icon(
+                  Icons.cancel_sharp,
+                  color: Colors.red,
+                  size: 26,
+                ),
                 showCloseIcon: true,
                 btnOkOnPress: () async{
                   setState(() {

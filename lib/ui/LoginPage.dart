@@ -1,16 +1,14 @@
 import 'dart:async';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:gestmob/Helpers/Helpers.dart';
 import 'package:gestmob/Helpers/QueryCtr.dart';
 import 'package:gestmob/Helpers/Statics.dart';
 import 'package:gestmob/Helpers/TouchIdUtil.dart';
 import 'package:gestmob/generated/l10n.dart';
-import 'package:gestmob/models/Profile.dart';
-import 'package:intl/intl.dart';
-import 'package:vibration/vibration.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:vibration/vibration.dart';
 
 class LoginApp extends StatefulWidget {
   @override
@@ -33,7 +31,8 @@ class _LoginAppState extends State<LoginApp> {
     Profiles.CurrentProfile = await queryCtr.getProfileById(1);
 
     if (Profiles.CurrentProfile.codepin == null ||
-        Profiles.CurrentProfile.codepin.isEmpty || !Profiles.CurrentProfile.codePinEnabled) {
+        Profiles.CurrentProfile.codepin.isEmpty ||
+        !Profiles.CurrentProfile.codePinEnabled) {
       navigationStateHomePage();
       return null;
     }
@@ -65,36 +64,32 @@ class _LoginAppState extends State<LoginApp> {
 
   @override
   Widget build(BuildContext context) {
-      return Scaffold(
+    return Scaffold(
         body: Container(
-          decoration: BoxDecoration(
-              gradient: LinearGradient(
-                  colors: [Colors.blue[400], Colors.blue[600]],
-                  begin: FractionalOffset.topLeft,
-                  end: FractionalOffset.bottomRight,
-                  stops: [0.0, 1.0],
-                  tileMode: TileMode.clamp)
-          ),
-          child: FutureBuilder<bool>(
-            future: _futureInitState,
-            builder: (context, snapshot) {
-              if (snapshot.hasData) {
-                return Column(children: <Widget>[
-                  Expanded(
-                    child: OtpSceern(startTime),
-                  ),
-                  fingerPrintIcon(snapshot),
-                  SizedBox(height: 10),
-                ]);
-              }
-              return Container();
-
-            },
-          ),
-        )
-      );
+      decoration: BoxDecoration(
+          gradient: LinearGradient(
+              colors: [Colors.blue[400], Colors.blue[600]],
+              begin: FractionalOffset.topLeft,
+              end: FractionalOffset.bottomRight,
+              stops: [0.0, 1.0],
+              tileMode: TileMode.clamp)),
+      child: FutureBuilder<bool>(
+        future: _futureInitState,
+        builder: (context, snapshot) {
+          if (snapshot.hasData) {
+            return Column(children: <Widget>[
+              Expanded(
+                child: OtpSceern(startTime),
+              ),
+              fingerPrintIcon(snapshot),
+              SizedBox(height: 10),
+            ]);
+          }
+          return Container();
+        },
+      ),
+    ));
   }
-
 
   Widget fingerPrintIcon(AsyncSnapshot<bool> snapshot) {
     if (snapshot.data) {
@@ -358,12 +353,11 @@ class _OtpSceernState extends State<OtpSceern> {
     return Text(
       S.current.msg_login_pin,
       style: GoogleFonts.lato(
-        textStyle: TextStyle(
-          color: Colors.white70,
-          fontSize: 21.0,
-          fontWeight: FontWeight.bold,
-        )
-      ),
+          textStyle: TextStyle(
+        color: Colors.white70,
+        fontSize: 21.0,
+        fontWeight: FontWeight.bold,
+      )),
     );
   }
 
@@ -413,9 +407,10 @@ class PinNumber extends StatelessWidget {
           fillColor: Colors.transparent,
         ),
         style: GoogleFonts.lato(
-          textStyle: TextStyle(
-              fontWeight: FontWeight.bold, fontSize: 21.0, color: Colors.white)
-        ),
+            textStyle: TextStyle(
+                fontWeight: FontWeight.bold,
+                fontSize: 21.0,
+                color: Colors.white)),
       ),
     );
   }
@@ -445,12 +440,11 @@ class keyboardNumber extends StatelessWidget {
           "$n",
           textAlign: TextAlign.center,
           style: GoogleFonts.lato(
-            textStyle: TextStyle(
-              fontSize: 24 * MediaQuery.of(context).textScaleFactor,
-              color: Colors.white70,
-              fontWeight: FontWeight.bold,
-            )
-          ),
+              textStyle: TextStyle(
+            fontSize: 24 * MediaQuery.of(context).textScaleFactor,
+            color: Colors.white70,
+            fontWeight: FontWeight.bold,
+          )),
         ),
       ),
     );

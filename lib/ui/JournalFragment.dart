@@ -1,35 +1,29 @@
 import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:barcode_scan/barcode_scan.dart';
-import 'package:flutter_speed_dial/flutter_speed_dial.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:gestmob/Helpers/Helpers.dart';
-import 'package:gestmob/Helpers/QueryCtr.dart';
 import 'package:gestmob/Helpers/Statics.dart';
 import 'package:gestmob/Widgets/CustomWidgets/search_bar.dart';
 import 'package:gestmob/Widgets/CustomWidgets/select_items_bar.dart';
-import 'package:gestmob/Widgets/article_list_item.dart';
+import 'package:gestmob/Widgets/utils.dart' as utils;
 import 'package:gestmob/generated/l10n.dart';
-import 'package:gestmob/models/Article.dart';
 import 'package:gestmob/models/ArticleFamille.dart';
 import 'package:gestmob/models/ArticleMarque.dart';
 import 'package:gestmob/models/Tiers.dart';
 import 'package:gestmob/search/items_sliver_list.dart';
-import 'package:gestmob/search/search_input_sliver.dart';
 import 'package:gestmob/search/sliver_list_data_source.dart';
-import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
-import 'package:gestmob/Widgets/utils.dart' as utils;
-import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
-import 'AddArticlePage.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 
 class JournalFragment extends StatefulWidget {
   final Function(List<dynamic>) onConfirmSelectedItems;
-  final Tiers tier ;
-  final String pieceType ;
+  final Tiers tier;
+  final String pieceType;
 
-
-  const JournalFragment({Key key, this.onConfirmSelectedItems , this.tier , this.pieceType}) : super(key: key);
+  const JournalFragment(
+      {Key key, this.onConfirmSelectedItems, this.tier, this.pieceType})
+      : super(key: key);
   @override
   _JournalFragmentState createState() => _JournalFragmentState();
 }
@@ -55,12 +49,12 @@ class _JournalFragmentState extends State<JournalFragment> {
   int _savedSelectedFamille = 0;
 
   TextEditingController _startDateControl = new TextEditingController();
-  DateTime _filterStartDate ;
-  DateTime _savedFilterStartDate ;
+  DateTime _filterStartDate;
+  DateTime _savedFilterStartDate;
 
   TextEditingController _endDateControl = new TextEditingController();
-  DateTime _filterEndDate ;
-  DateTime _savedFilterEndDate ;
+  DateTime _filterEndDate;
+  DateTime _savedFilterEndDate;
 
   SliverListDataSource _dataSource;
 
@@ -75,12 +69,11 @@ class _JournalFragmentState extends State<JournalFragment> {
 
   //***************************************************partie speciale pour le filtre de recherche***************************************
   Future<Widget> futureInitState() async {
-
     _marqueItems = await _dataSource.queryCtr.getAllArticleMarques();
-    _marqueItems[0].setLibelle( S.current.no_marque) ;
+    _marqueItems[0].setLibelle(S.current.no_marque);
 
     _familleItems = await _dataSource.queryCtr.getAllArticleFamilles();
-    _familleItems[0].setLibelle( S.current.no_famille) ;
+    _familleItems[0].setLibelle(S.current.no_famille);
 
     _marqueDropdownItems = utils.buildMarqueDropDownMenuItems(_marqueItems);
     _familleDropdownItems = utils.buildDropFamilleArticle(_familleItems);
@@ -88,8 +81,8 @@ class _JournalFragmentState extends State<JournalFragment> {
     _selectedMarque = _marqueItems[_savedSelectedMarque];
     _selectedFamille = _familleItems[_savedSelectedFamille];
 
-    _filterStartDate = _savedFilterEndDate ;
-    _filterEndDate = _savedFilterEndDate ;
+    _filterStartDate = _savedFilterEndDate;
+    _filterEndDate = _savedFilterEndDate;
 
     final tile = StatefulBuilder(builder: (context, StateSetter _setState) {
       return Builder(
@@ -98,11 +91,17 @@ class _JournalFragmentState extends State<JournalFragment> {
             startDate(_setState),
             endDate(_setState),
             ListTile(
-              title: new Text(S.current.marque , style: GoogleFonts.lato(),),
+              title: new Text(
+                S.current.marque,
+                style: GoogleFonts.lato(),
+              ),
               trailing: marquesDropDown(_setState),
             ),
             ListTile(
-              title: new Text(S.current.famile , style: GoogleFonts.lato(),),
+              title: new Text(
+                S.current.famile,
+                style: GoogleFonts.lato(),
+              ),
               trailing: famillesDropDown(_setState),
             ),
           ],
@@ -138,33 +137,30 @@ class _JournalFragmentState extends State<JournalFragment> {
                   width: 100.0,
                   child: Center(
                     child: CircularProgressIndicator(),
-                  )
-              ),
+                  )),
             );
           } else {
-            return snapshot.data ;
-
+            return snapshot.data;
           }
         });
   }
 
-  Widget startDate(StateSetter _setState){
+  Widget startDate(StateSetter _setState) {
     return InkWell(
       onTap: () async {
         DateTime order = await getDate(DateTime.now());
         if (order != null) {
-          DateTime time = new DateTime(
-              order.year, order.month, order.day);
+          DateTime time = new DateTime(order.year, order.month, order.day);
           _setState(() {
             _startDateControl.text = Helpers.dateToText(time);
-            _filterStartDate = order ;
+            _filterStartDate = order;
           });
         }
       },
-      onLongPress: (){
+      onLongPress: () {
         _setState(() {
           _startDateControl.text = "";
-          _filterStartDate = _emptyFilterMap["Start_date"] ;
+          _filterStartDate = _emptyFilterMap["Start_date"];
         });
       },
       child: TextField(
@@ -177,7 +173,8 @@ class _JournalFragmentState extends State<JournalFragment> {
               borderSide: BorderSide(color: Colors.blue),
               borderRadius: BorderRadius.circular(20)),
           labelText: S.current.start_date,
-          labelStyle: GoogleFonts.lato(textStyle: TextStyle(color: Colors.blue)),
+          labelStyle:
+              GoogleFonts.lato(textStyle: TextStyle(color: Colors.blue)),
           enabledBorder: OutlineInputBorder(
             gapPadding: 3.3,
             borderRadius: BorderRadius.circular(20),
@@ -188,23 +185,22 @@ class _JournalFragmentState extends State<JournalFragment> {
         controller: _startDateControl,
         keyboardType: TextInputType.text,
       ),
-    ) ;
+    );
   }
 
-  Widget endDate(StateSetter _setState){
+  Widget endDate(StateSetter _setState) {
     return InkWell(
       onTap: () async {
         DateTime order = await getDate(DateTime.now());
         if (order != null) {
-          DateTime time = new DateTime(
-              order.year, order.month, order.day);
+          DateTime time = new DateTime(order.year, order.month, order.day);
           _setState(() {
             _endDateControl.text = Helpers.dateToText(time);
-            _filterEndDate = order ;
+            _filterEndDate = order;
           });
         }
       },
-      onLongPress: (){
+      onLongPress: () {
         _setState(() {
           _endDateControl.text = "";
           _filterEndDate = _emptyFilterMap["End_date"];
@@ -220,7 +216,8 @@ class _JournalFragmentState extends State<JournalFragment> {
               borderSide: BorderSide(color: Colors.blue),
               borderRadius: BorderRadius.circular(20)),
           labelText: S.current.end_date,
-          labelStyle: GoogleFonts.lato(textStyle: TextStyle(color: Colors.blue)),
+          labelStyle:
+              GoogleFonts.lato(textStyle: TextStyle(color: Colors.blue)),
           enabledBorder: OutlineInputBorder(
             gapPadding: 3.3,
             borderRadius: BorderRadius.circular(20),
@@ -231,7 +228,7 @@ class _JournalFragmentState extends State<JournalFragment> {
         controller: _endDateControl,
         keyboardType: TextInputType.text,
       ),
-    ) ;
+    );
   }
 
   Widget marquesDropDown(StateSetter _setState) {
@@ -262,25 +259,24 @@ class _JournalFragmentState extends State<JournalFragment> {
 
   void fillFilter(Map<String, dynamic> filter) {
     filter["idTier"] = widget.tier;
-    switch(widget.pieceType){
-      case PieceType.retourClient :
+    switch (widget.pieceType) {
+      case PieceType.retourClient:
         filter["pieceType"] = PieceType.bonLivraison;
-        break ;
-      case PieceType.avoirClient :
-        filter["pieceType"] = PieceType.factureClient ;
-        break ;
+        break;
+      case PieceType.avoirClient:
+        filter["pieceType"] = PieceType.factureClient;
+        break;
       case PieceType.retourFournisseur:
-        filter["pieceType"] = PieceType.bonReception ;
-        break ;
+        filter["pieceType"] = PieceType.bonReception;
+        break;
       case PieceType.avoirFournisseur:
-        filter["pieceType"] = PieceType.factureFournisseur ;
-        break ;
+        filter["pieceType"] = PieceType.factureFournisseur;
+        break;
     }
     filter["Id_Marque"] = _savedSelectedMarque;
     filter["Id_Famille"] = _savedSelectedFamille;
-    filter["Start_date"] = _savedFilterStartDate ;
-    filter["End_date"] = _savedFilterEndDate ;
-
+    filter["Start_date"] = _savedFilterStartDate;
+    filter["End_date"] = _savedFilterEndDate;
   }
 
   //*********************************************************************************************************************************************************************************
@@ -305,7 +301,7 @@ class _JournalFragmentState extends State<JournalFragment> {
         appBar: getAppBar(setState),
         floatingActionButton: FloatingActionButton(
           onPressed: () {
-            scanBarCode() ;
+            scanBarCode();
           },
           child: Icon(MdiIcons.barcode),
           tooltip: S.current.scan_qr,
@@ -313,15 +309,16 @@ class _JournalFragmentState extends State<JournalFragment> {
         body: ItemsSliverList(
             dataSource: _dataSource,
             canRefresh: _selectedItems.length <= 0,
-            onItemSelected: widget.onConfirmSelectedItems != null ? (selectedItem) {
-              onItemSelected(setState, selectedItem);
-            } : null
-        ));
+            onItemSelected: widget.onConfirmSelectedItems != null
+                ? (selectedItem) {
+                    onItemSelected(setState, selectedItem);
+                  }
+                : null));
   }
 
-  onItemSelected(setState, selectedItem){
+  onItemSelected(setState, selectedItem) {
     setState(() {
-      if(selectedItem != null){
+      if (selectedItem != null) {
         if (_selectedItems.contains(selectedItem)) {
           _selectedItems.remove(selectedItem);
         } else {
@@ -331,15 +328,15 @@ class _JournalFragmentState extends State<JournalFragment> {
     });
   }
 
-  Widget getAppBar(setState){
-    if(_selectedItems.length > 0){
+  Widget getAppBar(setState) {
+    if (_selectedItems.length > 0) {
       return SelectItemsBar(
         itemsCount: _selectedItems.length,
         onConfirm: () => {
           widget.onConfirmSelectedItems(_selectedItems),
           Navigator.pop(context)
         },
-        onCancel:  () => {
+        onCancel: () => {
           setState(() {
             _selectedItems.forEach((item) {
               item.selectedQuantite = 0.0;
@@ -348,13 +345,14 @@ class _JournalFragmentState extends State<JournalFragment> {
           })
         },
       );
-    } else{
+    } else {
       return SearchBar(
         searchController: searchController,
         mainContext: widget.onConfirmSelectedItems != null ? null : context,
-        title:S.current.journaux,
+        title: S.current.journaux,
         isFilterOn: isFilterOn,
-        onSearchChanged: (String search) => _dataSource.updateSearchTerm(search.trim()),
+        onSearchChanged: (String search) =>
+            _dataSource.updateSearchTerm(search.trim()),
         onFilterPressed: () async {
           AwesomeDialog(
               context: context,
@@ -363,26 +361,31 @@ class _JournalFragmentState extends State<JournalFragment> {
               title: S.current.supp,
               body: addFilterdialogue(),
               btnOkText: S.current.filtrer_btn,
-              closeIcon: Icon(Icons.close , color: Colors.red , size: 26,),
+              closeIcon: Icon(
+                Icons.cancel_sharp,
+                color: Colors.red,
+                size: 26,
+              ),
               showCloseIcon: true,
-              btnOkOnPress: () async{
+              btnOkOnPress: () async {
                 setState(() {
                   _savedSelectedMarque = _marqueItems.indexOf(_selectedMarque);
-                  _savedSelectedFamille = _familleItems.indexOf(_selectedFamille);
-                  _savedFilterStartDate = _filterStartDate ;
-                  _savedFilterEndDate = _filterEndDate ;
+                  _savedSelectedFamille =
+                      _familleItems.indexOf(_selectedFamille);
+                  _savedFilterStartDate = _filterStartDate;
+                  _savedFilterEndDate = _filterEndDate;
 
                   fillFilter(_filterMap);
 
-                  if( _filterMap.toString() == _emptyFilterMap.toString()){
+                  if (_filterMap.toString() == _emptyFilterMap.toString()) {
                     isFilterOn = false;
-                  } else{
+                  } else {
                     isFilterOn = true;
                   }
                   _dataSource.updateFilters(_filterMap);
                 });
-              }
-          )..show();
+              })
+            ..show();
         },
       );
     }
@@ -399,14 +402,13 @@ class _JournalFragmentState extends State<JournalFragment> {
       );
 
       var result = await BarcodeScanner.scan(options: options);
-      if(result.rawContent.isNotEmpty){
+      if (result.rawContent.isNotEmpty) {
         setState(() {
           searchController.text = result.rawContent;
           _dataSource.updateSearchTerm(result.rawContent);
           FocusScope.of(context).requestFocus(null);
         });
       }
-
     } catch (e) {
       var result = ScanResult(
         type: ResultType.Error,
@@ -423,5 +425,4 @@ class _JournalFragmentState extends State<JournalFragment> {
       Helpers.showToast(result.rawContent);
     }
   }
-
 }

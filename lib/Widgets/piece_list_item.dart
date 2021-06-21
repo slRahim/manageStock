@@ -1,5 +1,7 @@
 import 'dart:ui';
+
 import 'package:awesome_dialog/awesome_dialog.dart';
+import 'package:feature_discovery/feature_discovery.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
@@ -7,23 +9,23 @@ import 'package:gestmob/Helpers/Helpers.dart';
 import 'package:gestmob/Helpers/QueryCtr.dart';
 import 'package:gestmob/Helpers/Statics.dart';
 import 'package:gestmob/generated/l10n.dart';
-import 'package:gestmob/models/Article.dart';
 import 'package:gestmob/models/Piece.dart';
-import 'package:intl/intl.dart';
-import 'package:intl/date_symbol_data_local.dart';
+import 'package:gestmob/services/push_notifications.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:sliding_card/sliding_card.dart';
 import 'package:url_launcher/url_launcher.dart';
+
 import 'CustomWidgets/list_tile_card.dart';
-import 'package:gestmob/services/push_notifications.dart';
-import 'package:feature_discovery/feature_discovery.dart';
-import 'package:flutter/scheduler.dart';
-import 'package:google_fonts/google_fonts.dart';
 
 // element à afficher lors de listing des factures
 class PieceListItem extends StatefulWidget {
   PieceListItem(
-      {@required this.piece, Key key, this.onItemSelected, this.dataSource , this.fromTresory})
+      {@required this.piece,
+      Key key,
+      this.onItemSelected,
+      this.dataSource,
+      this.fromTresory})
       : assert(piece != null),
         super(key: key);
 
@@ -84,19 +86,23 @@ class _PieceListItemState extends State<PieceListItem> {
           actionExtentRatio: 0.25,
           child: ListTileCard(
             from: widget.piece,
-            onLongPress: () => (widget.onItemSelected != null && widget.fromTresory == null)
-                ? widget.onItemSelected(widget.piece)
-                : null,
+            onLongPress: () =>
+                (widget.onItemSelected != null && widget.fromTresory == null)
+                    ? widget.onItemSelected(widget.piece)
+                    : null,
             onTap: () => {
-              if(widget.fromTresory == null){
-                if (widget.onItemSelected == null){
-                  Navigator.of(context)
-                      .pushNamed(RoutesKeys.addPiece, arguments: widget.piece)
-                      .then((value) => widget.dataSource.refresh())
-                }else{
-                  widget.onItemSelected(widget.piece)
+              if (widget.fromTresory == null)
+                {
+                  if (widget.onItemSelected == null)
+                    {
+                      Navigator.of(context)
+                          .pushNamed(RoutesKeys.addPiece,
+                              arguments: widget.piece)
+                          .then((value) => widget.dataSource.refresh())
+                    }
+                  else
+                    {widget.onItemSelected(widget.piece)}
                 }
-              }
             },
             slidingCardController: controller,
             onCardTapped: () {
@@ -188,10 +194,10 @@ class _PieceListItemState extends State<PieceListItem> {
                 text: TextSpan(children: [
                   TextSpan(
                       text: (widget.piece.piece != PieceType.avoirClient &&
-                          widget.piece.piece != PieceType.retourClient &&
-                          widget.piece.piece != PieceType.avoirFournisseur &&
-                          widget.piece.piece != PieceType.retourFournisseur
-                      )
+                              widget.piece.piece != PieceType.retourClient &&
+                              widget.piece.piece !=
+                                  PieceType.avoirFournisseur &&
+                              widget.piece.piece != PieceType.retourFournisseur)
                           ? "${S.current.regler} : "
                           : "${S.current.rembourcement} : ",
                       style: GoogleFonts.lato(
@@ -249,32 +255,37 @@ class _PieceListItemState extends State<PieceListItem> {
               ),
             ],
           ),
-          actions:(widget.fromTresory == null && widget.onItemSelected == null)? <Widget>[
-            IconSlideAction(
-                color: Colors.white10,
-                iconWidget: Icon(
-                  Icons.delete_forever,
-                  size: 50,
-                  color: Colors.red,
-                ),
-                onTap: () async {
-                  dellDialog(context);
-                }),
-          ]:[],
-          secondaryActions:(widget.fromTresory == null && widget.onItemSelected == null)? [
-            IconSlideAction(
-              color: Colors.white10,
-              iconWidget: Icon(
-                Icons.phone_enabled,
-                size: 50,
-                color: Colors.green,
-              ),
-              onTap: () async {
-                await _makePhoneCall("tel:${widget.piece.mobileTier}");
-              },
-              foregroundColor: Colors.green,
-            ),
-          ]:[],
+          actions: (widget.fromTresory == null && widget.onItemSelected == null)
+              ? <Widget>[
+                  IconSlideAction(
+                      color: Colors.white10,
+                      iconWidget: Icon(
+                        Icons.delete_forever,
+                        size: 50,
+                        color: Colors.red,
+                      ),
+                      onTap: () async {
+                        dellDialog(context);
+                      }),
+                ]
+              : [],
+          secondaryActions: (widget.fromTresory == null &&
+                  widget.onItemSelected == null)
+              ? [
+                  IconSlideAction(
+                    color: Colors.white10,
+                    iconWidget: Icon(
+                      Icons.phone_enabled,
+                      size: 50,
+                      color: Colors.green,
+                    ),
+                    onTap: () async {
+                      await _makePhoneCall("tel:${widget.piece.mobileTier}");
+                    },
+                    foregroundColor: Colors.green,
+                  ),
+                ]
+              : [],
         ),
       ),
     );
@@ -371,11 +382,11 @@ class _PieceListItemState extends State<PieceListItem> {
       title: S.current.supp,
       desc: '${S.current.msg_supp} ... ',
       closeIcon: Icon(
-        Icons.close,
+        Icons.cancel_sharp,
         color: Colors.red,
         size: 26,
       ),
-      showCloseIcon: true,
+      showCloseIcon: (widget.piece.piece != PieceType.devis),
       btnCancelText: (widget.piece.piece != PieceType.devis)
           ? S.current.sans_tresorie
           : S.current.non,

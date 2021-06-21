@@ -1,23 +1,16 @@
-import 'dart:io';
-import 'dart:typed_data';
 import 'dart:ui';
 
 import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:expandable_bottom_bar/expandable_bottom_bar.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_icons/flutter_icons.dart';
 import 'package:gestmob/Helpers/Helpers.dart';
 import 'package:gestmob/Helpers/QueryCtr.dart';
 import 'package:gestmob/Helpers/Statics.dart';
 import 'package:gestmob/Widgets/CustomWidgets/add_save_bar.dart';
-import 'package:gestmob/Widgets/CustomWidgets/bottom_tab_bar.dart';
 import 'package:gestmob/Widgets/CustomWidgets/list_dropdown.dart';
-import 'package:gestmob/Widgets/CustomWidgets/list_tile_card.dart';
-import 'package:gestmob/Widgets/article_list_item.dart';
 import 'package:gestmob/Widgets/piece_list_item.dart';
-import 'package:gestmob/Widgets/total_devis.dart';
+import 'package:gestmob/Widgets/utils.dart' as utils;
 import 'package:gestmob/generated/l10n.dart';
-import 'package:gestmob/models/Article.dart';
 import 'package:gestmob/models/ChargeTresorie.dart';
 import 'package:gestmob/models/CompteTresorie.dart';
 import 'package:gestmob/models/FormatPiece.dart';
@@ -26,17 +19,11 @@ import 'package:gestmob/models/ReglementTresorie.dart';
 import 'package:gestmob/models/Tiers.dart';
 import 'package:gestmob/models/Tresorie.dart';
 import 'package:gestmob/models/TresorieCategories.dart';
-import 'package:gestmob/search/items_sliver_list.dart';
-import 'package:gestmob/search/sliver_list_data_source.dart';
+import 'package:gestmob/services/push_notifications.dart';
 import 'package:gestmob/ui/ClientFourFragment.dart';
 import 'package:gestmob/ui/PiecesFragment.dart';
-import 'package:image_picker/image_picker.dart';
-import 'package:gestmob/Widgets/utils.dart' as utils;
-import 'package:map_launcher/map_launcher.dart';
-import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
-import 'ArticlesFragment.dart';
-import 'package:gestmob/services/push_notifications.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 
 class AddTresoriePage extends StatefulWidget {
   var arguments;
@@ -60,7 +47,6 @@ class _AddTresoriePageState extends State<AddTresoriePage>
   String appBarTitle = S.current.tresorie_titre;
   List<Piece> _selectedPieces = new List<Piece>();
   Tiers _selectedClient;
-
 
   TextEditingController _numeroControl = new TextEditingController();
   TextEditingController _dateControl = new TextEditingController();
@@ -92,7 +78,7 @@ class _AddTresoriePageState extends State<AddTresoriePage>
   BottomBarController bottomBarControler;
   final _formKey = GlobalKey<FormState>();
   final _formKey1 = GlobalKey<FormState>();
-  String _devise ;
+  String _devise;
 
   void initState() {
     super.initState();
@@ -109,7 +95,7 @@ class _AddTresoriePageState extends State<AddTresoriePage>
   void didChangeDependencies() {
     super.didChangeDependencies();
     PushNotificationsManagerState data = PushNotificationsManager.of(context);
-    _devise = Helpers.getDeviseTranslate(data.myParams.devise) ;
+    _devise = Helpers.getDeviseTranslate(data.myParams.devise);
   }
 
   @override
@@ -218,7 +204,6 @@ class _AddTresoriePageState extends State<AddTresoriePage>
     });
   }
 
-
   //****************************************************************************************************************************************************************
   //***********************************************************************build de l'affichage***************************************************************************
   @override
@@ -270,7 +255,8 @@ class _AddTresoriePageState extends State<AddTresoriePage>
               });
             },
             onSavePressed: () async {
-              if (_formKey.currentState.validate() && _formKey1.currentState.validate()){
+              if (_formKey.currentState.validate() &&
+                  _formKey1.currentState.validate()) {
                 int id = await addItemToDb();
                 if (id > -1) {
                   setState(() {
@@ -278,130 +264,148 @@ class _AddTresoriePageState extends State<AddTresoriePage>
                     editMode = false;
                   });
                 }
-              }else{
+              } else {
                 Helpers.showFlushBar(context, "${S.current.msg_champs_obg}");
               }
-
             },
           ),
           // extendBody: true,
-          bottomNavigationBar:((_selectedCategorie.id == 2 ||
-              _selectedCategorie.id == 3 ||
-              _selectedCategorie.id == 6 ||
-              _selectedCategorie.id == 7) && !modification)? BottomExpandableAppBar(
-            controller: bottomBarControler,
-            horizontalMargin: 10,
-            shape: AutomaticNotchedShape(
-                RoundedRectangleBorder(), StadiumBorder(side: BorderSide())),
-            expandedBackColor: Colors.blue,
-            expandedBody: Container(),
-            appBarHeight: 60,
-            bottomAppBarBody: Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Row(
-                mainAxisSize: MainAxisSize.max,
-                children: <Widget>[
-                  Expanded(
-                    flex: 4,
-                    child: (_selectedClient != null)
-                        ? Container(
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Row(
-                                mainAxisAlignment: MainAxisAlignment.spaceAround,
-                                children: [
-                                  Icon(
-                                    Icons.person_sharp,
-                                    color:
-                                    (editMode) ? Colors.blue : Theme.of(context).primaryColorDark,
-                                    size: 18,
+          bottomNavigationBar: ((_selectedCategorie.id == 2 ||
+                      _selectedCategorie.id == 3 ||
+                      _selectedCategorie.id == 6 ||
+                      _selectedCategorie.id == 7) &&
+                  !modification)
+              ? BottomExpandableAppBar(
+                  controller: bottomBarControler,
+                  horizontalMargin: 10,
+                  shape: AutomaticNotchedShape(RoundedRectangleBorder(),
+                      StadiumBorder(side: BorderSide())),
+                  expandedBackColor: Colors.blue,
+                  expandedBody: Container(),
+                  appBarHeight: 60,
+                  bottomAppBarBody: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Row(
+                      mainAxisSize: MainAxisSize.max,
+                      children: <Widget>[
+                        Expanded(
+                          flex: 4,
+                          child: (_selectedClient != null)
+                              ? Container(
+                                  child: Column(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceAround,
+                                        children: [
+                                          Icon(
+                                            Icons.person_sharp,
+                                            color: (editMode)
+                                                ? Colors.blue
+                                                : Theme.of(context)
+                                                    .primaryColorDark,
+                                            size: 18,
+                                          ),
+                                          Text(
+                                            "($_devise)",
+                                            style: GoogleFonts.lato(
+                                                textStyle: TextStyle(
+                                                    fontSize: 12,
+                                                    fontWeight:
+                                                        FontWeight.bold)),
+                                          ),
+                                        ],
+                                      ),
+                                      SizedBox(
+                                        height: 2,
+                                      ),
+                                      Text(
+                                        '${Helpers.numberFormat(_selectedClient.credit).toString()}',
+                                        textAlign: TextAlign.center,
+                                        style: GoogleFonts.lato(
+                                            textStyle: TextStyle(
+                                                fontWeight: FontWeight.bold,
+                                                fontSize: 14)),
+                                      ),
+                                    ],
                                   ),
-                                  Text(
-                                    "($_devise)",
-                                    style: GoogleFonts.lato(
-                                      textStyle: TextStyle(
-                                          fontSize: 12, fontWeight: FontWeight.bold)
-                                    ),
-                                  ),
-                                ],
-                              ),
-                              SizedBox(height: 2,),
-                              Text(
-                                  '${Helpers.numberFormat(_selectedClient.credit).toString()}',
-                                  textAlign: TextAlign.center,
-                                  style: GoogleFonts.lato(
-                                    textStyle: TextStyle(fontWeight: FontWeight.bold,fontSize: 14)
-                                  ),
-                                ),
-                            ],
-                          ),
-                        )
-                        : SizedBox(),
+                                )
+                              : SizedBox(),
+                        ),
+                        Spacer(
+                          flex: 1,
+                        ),
+                        Expanded(
+                          flex: 4,
+                          child: Container(
+                              child: (_selectedPieces.isNotEmpty)
+                                  ? Column(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      children: [
+                                        Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.spaceAround,
+                                          children: [
+                                            Icon(Icons.attach_money,
+                                                size: 20,
+                                                color: Theme.of(context)
+                                                    .primaryColorDark),
+                                            Text(
+                                              "($_devise)",
+                                              style: GoogleFonts.lato(
+                                                  textStyle: TextStyle(
+                                                      fontSize: 12,
+                                                      fontWeight:
+                                                          FontWeight.bold)),
+                                            ),
+                                          ],
+                                        ),
+                                        Text(
+                                          "${Helpers.numberFormat(_restepiece).toString()}",
+                                          textAlign: TextAlign.center,
+                                          style: GoogleFonts.lato(
+                                              textStyle: TextStyle(
+                                                  fontWeight: FontWeight.bold)),
+                                        ),
+                                      ],
+                                    )
+                                  : null),
+                        ),
+                      ],
+                    ),
                   ),
-                  Spacer(
-                    flex: 1,
-                  ),
-                  Expanded(
-                    flex: 4,
-                    child: Container(
-                        child: (_selectedPieces.isNotEmpty)? Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceAround,
-                              children: [
-                                Icon(Icons.attach_money,
-                                    size: 20,
-                                    color: Theme.of(context).primaryColorDark),
-                                Text(
-                                  "($_devise)",
-                                  style: GoogleFonts.lato(
-                                    textStyle: TextStyle(
-                                        fontSize: 12, fontWeight: FontWeight.bold)
-                                  ),
-                                ),
-                              ],
-                            ),
-                            Text(
-                              "${Helpers.numberFormat(_restepiece).toString()}",
-                              textAlign: TextAlign.center,
-                              style: GoogleFonts.lato(
-                                textStyle: TextStyle(fontWeight: FontWeight.bold)
-                              ),
-                            ),
-                          ],
-                        ):null),
-                  ),
-                ],
-              ),
-            ),
-          ):null,
+                )
+              : null,
           floatingActionButtonLocation:
               FloatingActionButtonLocation.centerDocked,
-          floatingActionButton:((_selectedCategorie.id == 2 ||
-              _selectedCategorie.id == 3 ||
-              _selectedCategorie.id == 6 ||
-              _selectedCategorie.id == 7) && !modification)? FloatingActionButton(
-            child: Icon(Icons.add),
-            elevation: 2,
-            backgroundColor: Colors.blue ,
-            foregroundColor: Colors.white,
-            onPressed: () async {
-              if (editMode && !modification) {
-                if (_selectedClient != null) {
-                  await showDialog(
-                      context: context,
-                      builder: (BuildContext context) {
-                        return choosePieceDialog();
-                      });
-                } else {
-                  var message = S.current.msg_select_tier;
-                  Helpers.showFlushBar(context, message);
-                }
-              }
-            },
-          ):null,
+          floatingActionButton: ((_selectedCategorie.id == 2 ||
+                      _selectedCategorie.id == 3 ||
+                      _selectedCategorie.id == 6 ||
+                      _selectedCategorie.id == 7) &&
+                  !modification)
+              ? FloatingActionButton(
+                  child: Icon(Icons.add),
+                  elevation: 2,
+                  backgroundColor: Colors.blue,
+                  foregroundColor: Colors.white,
+                  onPressed: () async {
+                    if (editMode && !modification) {
+                      if (_selectedClient != null) {
+                        await showDialog(
+                            context: context,
+                            builder: (BuildContext context) {
+                              return choosePieceDialog();
+                            });
+                      } else {
+                        var message = S.current.msg_select_tier;
+                        Helpers.showFlushBar(context, message);
+                      }
+                    }
+                  },
+                )
+              : null,
           body: Builder(
             builder: (context) => fichetab(),
           ));
@@ -412,117 +416,252 @@ class _AddTresoriePageState extends State<AddTresoriePage>
     return SingleChildScrollView(
         physics: ScrollPhysics(),
         padding: const EdgeInsets.fromLTRB(15, 25, 15, 40),
-        child: Column(
-            mainAxisSize: MainAxisSize.max,
+        child: Column(mainAxisSize: MainAxisSize.max, children: [
+          Wrap(
+            spacing: 13,
+            runSpacing: 13,
             children: [
-              Wrap(
+              Form(
+                key: _formKey1,
+                child: Row(
+                  children: [
+                    Flexible(
+                      flex: 4,
+                      child: TextFormField(
+                        enabled: editMode && !modification,
+                        controller: _numeroControl,
+                        keyboardType: TextInputType.text,
+                        validator: (value) {
+                          if (value.isEmpty) {
+                            return S.current.msg_champ_oblg;
+                          }
+                          return null;
+                        },
+                        decoration: InputDecoration(
+                          hintText: "#/YYYY",
+                          prefixIcon: Icon(
+                            MdiIcons.idCard,
+                            color: Colors.orange[900],
+                          ),
+                          focusedBorder: OutlineInputBorder(
+                              borderSide: BorderSide(color: Colors.orange[900]),
+                              borderRadius: BorderRadius.circular(20)),
+                          labelText: "${S.current.n}",
+                          labelStyle: GoogleFonts.lato(
+                              textStyle: TextStyle(color: Colors.orange[900])),
+                          enabledBorder: OutlineInputBorder(
+                            gapPadding: 3.3,
+                            borderRadius: BorderRadius.circular(20),
+                            borderSide: BorderSide(color: Colors.orange[900]),
+                          ),
+                        ),
+                      ),
+                    ),
+                    Padding(padding: EdgeInsets.fromLTRB(5, 5, 5, 5)),
+                    Flexible(
+                      flex: 6,
+                      child: GestureDetector(
+                        onTap: editMode && !modification
+                            ? () {
+                                callDatePicker();
+                              }
+                            : null,
+                        child: TextField(
+                          decoration: InputDecoration(
+                            prefixIcon: Icon(
+                              Icons.date_range,
+                              color: Colors.blue,
+                            ),
+                            focusedBorder: OutlineInputBorder(
+                                borderSide: BorderSide(color: Colors.blue),
+                                borderRadius: BorderRadius.circular(20)),
+                            labelText: S.current.date,
+                            labelStyle: GoogleFonts.lato(
+                                textStyle: TextStyle(color: Colors.blue)),
+                            enabledBorder: OutlineInputBorder(
+                              gapPadding: 3.3,
+                              borderRadius: BorderRadius.circular(20),
+                              borderSide: BorderSide(color: Colors.blue),
+                            ),
+                          ),
+                          enabled: false,
+                          controller: _dateControl,
+                          keyboardType: TextInputType.text,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              Visibility(
+                visible: editMode && !modification,
+                child: ListDropDown(
+                  editMode: editMode,
+                  value: _selectedCategorie,
+                  items: _categorieDropdownItems,
+                  libelle: _selectedCategorie.libelle,
+                  onChanged: (value) {
+                    setState(() {
+                      _selectedCategorie = value;
+                      _objetControl.text = _selectedCategorie.libelle;
+                      _selectedPieces.clear();
+                      _montantControl.text = "0.0";
+
+                      if (_selectedCategorie.id == 2 ||
+                          _selectedCategorie.id == 3 ||
+                          _selectedCategorie.id == 6 ||
+                          _selectedCategorie.id == 7) {
+                        _clientControl.text = "";
+                        _selectedClient = null;
+                        _showTierController = true;
+                      } else {
+                        _showTierController = false;
+                      }
+
+                      if (_selectedCategorie.id == 2 ||
+                          _selectedCategorie.id == 6) {
+                        _selectedTypeTiers = Statics.tiersItems[0];
+                      } else if (_selectedCategorie.id == 3 ||
+                          _selectedCategorie.id == 7) {
+                        _selectedTypeTiers = Statics.tiersItems[2];
+                      }
+                    });
+                  },
+                  onAddPressed: () async {
+                    AwesomeDialog(
+                      context: context,
+                      dialogType: DialogType.NO_HEADER,
+                      animType: AnimType.BOTTOMSLIDE,
+                      title: S.current.supp,
+                      body: addTresoreCategorie(),
+                    )..show().then((value) => setState(() {}));
+                  },
+                ),
+              ),
+            ],
+          ),
+          SizedBox(height: 5),
+          Visibility(
+            visible: (_selectedCategorie.id == 2 ||
+                _selectedCategorie.id == 3 ||
+                _selectedCategorie.id == 6 ||
+                _selectedCategorie.id == 7),
+            child: Center(
+                child: _selectedPieces.isNotEmpty
+                    ? Container(
+                        padding: EdgeInsets.all(15),
+                        child: Column(
+                          children: [
+                            SizedBox(height: 5),
+                            new ListView.builder(
+                                physics: NeverScrollableScrollPhysics(),
+                                shrinkWrap: true,
+                                itemCount: _selectedPieces.length,
+                                itemBuilder: (BuildContext ctxt, int index) {
+                                  return PieceListItem(
+                                    piece: _selectedPieces[index],
+                                    fromTresory: true,
+                                  );
+                                })
+                          ],
+                        ))
+                    : Card(
+                        color: Theme.of(context).backgroundColor,
+                        child: Container(
+                          margin: EdgeInsets.symmetric(
+                              vertical: 10, horizontal: 10),
+                          decoration: BoxDecoration(
+                              color: Theme.of(context).backgroundColor,
+                              borderRadius: BorderRadius.circular(5)),
+                          child: ListTile(
+                              title: Text(
+                                S.current.msg_credit_total,
+                                style: GoogleFonts.lato(
+                                    textStyle: TextStyle(
+                                        fontSize: 14,
+                                        fontWeight: FontWeight.bold,
+                                        color: Colors.green)),
+                              ),
+                              leading: CircleAvatar(
+                                backgroundColor: Colors.blue,
+                                radius: 25,
+                                child: CircleAvatar(
+                                  radius: 22,
+                                  backgroundColor: Colors.white,
+                                  child: Text(
+                                    "TR",
+                                    style: TextStyle(color: Colors.black),
+                                  ),
+                                ),
+                              )),
+                        ),
+                      )),
+          ),
+          SingleChildScrollView(
+            padding: const EdgeInsets.fromLTRB(15, 10, 15, 10),
+            child: Form(
+              key: _formKey,
+              child: Wrap(
                 spacing: 13,
                 runSpacing: 13,
                 children: [
-                  Form(
-                    key: _formKey1,
-                    child: Row(
-                      children: [
-                        Flexible(
-                          flex: 4,
-                          child: TextFormField(
-                            enabled: editMode && !modification,
-                            controller: _numeroControl,
-                            keyboardType: TextInputType.text,
-                            validator: (value) {
-                              if (value.isEmpty) {
-                                return S.current.msg_champ_oblg;
-                              }
-                              return null;
-                            },
-                            decoration: InputDecoration(
-                              hintText: "#/YYYY",
-                              prefixIcon: Icon(
-                                MdiIcons.idCard,
-                                color: Colors.orange[900],
-                              ),
-                              focusedBorder: OutlineInputBorder(
-                                  borderSide: BorderSide(color: Colors.orange[900]),
-                                  borderRadius: BorderRadius.circular(20)),
-                              labelText: "${S.current.n}",
-                              labelStyle: GoogleFonts.lato(textStyle: TextStyle(color: Colors.orange[900])),
-                              enabledBorder: OutlineInputBorder(
-                                gapPadding: 3.3,
-                                borderRadius: BorderRadius.circular(20),
-                                borderSide: BorderSide(color: Colors.orange[900]),
-                              ),
-                            ),
-
-                          ),
+                  Visibility(
+                    visible: _showTierController,
+                    child: TextFormField(
+                      readOnly: true,
+                      enabled: editMode,
+                      controller: _clientControl,
+                      keyboardType: TextInputType.text,
+                      validator: (value) {
+                        if (value.isEmpty &&
+                            (_selectedCategorie.id == 2 ||
+                                _selectedCategorie.id == 3 ||
+                                _selectedCategorie.id == 6 ||
+                                _selectedCategorie.id == 7)) {
+                          return S.current.msg_select_tier;
+                        }
+                        return null;
+                      },
+                      onTap: editMode && !modification
+                          ? () {
+                              chooseClientDialog();
+                            }
+                          : null,
+                      decoration: InputDecoration(
+                        labelText: S.current.select_tier,
+                        labelStyle: GoogleFonts.lato(
+                            textStyle:
+                                TextStyle(color: Theme.of(context).hintColor)),
+                        prefixIcon: Icon(
+                          Icons.people,
+                          color: Colors.blue,
                         ),
-                        Padding(padding: EdgeInsets.fromLTRB(5, 5, 5, 5)),
-                        Flexible(
-                          flex: 6,
-                          child: GestureDetector(
-                            onTap: editMode && !modification
-                                ? () {
-                                    callDatePicker();
-                                  }
-                                : null,
-                            child: TextField(
-                              decoration: InputDecoration(
-                                prefixIcon: Icon(
-                                  Icons.date_range,
-                                  color: Colors.blue,
-                                ),
-                                focusedBorder: OutlineInputBorder(
-                                    borderSide: BorderSide(color: Colors.blue),
-                                    borderRadius: BorderRadius.circular(20)),
-                                labelText: S.current.date,
-                                labelStyle: GoogleFonts.lato(textStyle: TextStyle(color: Colors.blue)),
-                                enabledBorder: OutlineInputBorder(
-                                  gapPadding: 3.3,
-                                  borderRadius: BorderRadius.circular(20),
-                                  borderSide: BorderSide(color: Colors.blue),
-                                ),
-                              ),
-                              enabled: false,
-                              controller: _dateControl,
-                              keyboardType: TextInputType.text,
-                            ),
-                          ),
+                        focusedBorder: OutlineInputBorder(
+                            borderSide: BorderSide(color: Colors.blue),
+                            borderRadius: BorderRadius.circular(20)),
+                        enabledBorder: OutlineInputBorder(
+                          gapPadding: 3.3,
+                          borderRadius: BorderRadius.circular(20),
+                          borderSide: BorderSide(color: Colors.blue),
                         ),
-                      ],
+                        errorBorder: OutlineInputBorder(
+                          gapPadding: 3.3,
+                          borderRadius: BorderRadius.circular(20),
+                          borderSide: BorderSide(color: Colors.red),
+                        ),
+                      ),
                     ),
                   ),
                   Visibility(
-                    visible: editMode && !modification,
+                    visible: (_selectedCategorie.id == 5),
                     child: ListDropDown(
                       editMode: editMode,
-                      value: _selectedCategorie,
-                      items: _categorieDropdownItems,
-                      libelle: _selectedCategorie.libelle,
+                      value: _selectedCharge,
+                      items: _chargeDropdownItems,
+                      libelle: _selectedCharge.libelle,
                       onChanged: (value) {
                         setState(() {
-                          _selectedCategorie = value;
-                          _objetControl.text = _selectedCategorie.libelle;
-                          _selectedPieces.clear();
-                          _montantControl.text = "0.0" ;
-
-                          if (_selectedCategorie.id == 2 ||
-                              _selectedCategorie.id == 3 ||
-                              _selectedCategorie.id == 6 ||
-                              _selectedCategorie.id == 7) {
-                            _clientControl.text = "";
-                            _selectedClient = null ;
-                            _showTierController = true;
-                          } else {
-                            _showTierController = false;
-                          }
-
-                          if (_selectedCategorie.id == 2 ||
-                              _selectedCategorie.id == 6) {
-                            _selectedTypeTiers = Statics.tiersItems[0];
-
-                          } else if(_selectedCategorie.id == 3 ||
-                              _selectedCategorie.id == 7){
-                            _selectedTypeTiers = Statics.tiersItems[2];
-                          }
+                          _selectedCharge = value;
                         });
                       },
                       onAddPressed: () async {
@@ -531,270 +670,147 @@ class _AddTresoriePageState extends State<AddTresoriePage>
                           dialogType: DialogType.NO_HEADER,
                           animType: AnimType.BOTTOMSLIDE,
                           title: S.current.supp,
-                          body: addTresoreCategorie(),
+                          body: addCharge(),
                         )..show().then((value) => setState(() {}));
                       },
                     ),
                   ),
+                  TextFormField(
+                    enabled: editMode,
+                    controller: _objetControl,
+                    onTap: () => _objetControl.selection = TextSelection(
+                        baseOffset: 0,
+                        extentOffset: _objetControl.value.text.length),
+                    keyboardType: TextInputType.text,
+                    validator: (value) {
+                      if (value.isEmpty) {
+                        return S.current.msg_champ_oblg;
+                      }
+                      return null;
+                    },
+                    decoration: InputDecoration(
+                      labelText: S.current.objet,
+                      labelStyle: GoogleFonts.lato(
+                          textStyle:
+                              TextStyle(color: Theme.of(context).hintColor)),
+                      prefixIcon: Icon(
+                        Icons.subject,
+                        color: Colors.blue,
+                      ),
+                      focusedBorder: OutlineInputBorder(
+                          borderSide: BorderSide(color: Colors.blue),
+                          borderRadius: BorderRadius.circular(20)),
+                      enabledBorder: OutlineInputBorder(
+                        gapPadding: 3.3,
+                        borderRadius: BorderRadius.circular(20),
+                        borderSide: BorderSide(color: Colors.blue),
+                      ),
+                      errorBorder: OutlineInputBorder(
+                        gapPadding: 3.3,
+                        borderRadius: BorderRadius.circular(20),
+                        borderSide: BorderSide(color: Colors.red),
+                      ),
+                    ),
+                  ),
+                  TextFormField(
+                    enabled: editMode,
+                    controller: _modaliteControl,
+                    onTap: () => _modaliteControl.selection = TextSelection(
+                        baseOffset: 0,
+                        extentOffset: _modaliteControl.value.text.length),
+                    keyboardType: TextInputType.text,
+                    validator: (value) {
+                      if (value.isEmpty) {
+                        return S.current.msg_champ_oblg;
+                      }
+                      return null;
+                    },
+                    decoration: InputDecoration(
+                      labelText: S.current.modalite,
+                      labelStyle: GoogleFonts.lato(
+                          textStyle:
+                              TextStyle(color: Theme.of(context).hintColor)),
+                      prefixIcon: Icon(
+                        MdiIcons.creditCardSettingsOutline,
+                        color: Colors.blue,
+                      ),
+                      focusedBorder: OutlineInputBorder(
+                          borderSide: BorderSide(color: Colors.blue),
+                          borderRadius: BorderRadius.circular(20)),
+                      enabledBorder: OutlineInputBorder(
+                        gapPadding: 3.3,
+                        borderRadius: BorderRadius.circular(20),
+                        borderSide: BorderSide(color: Colors.blue),
+                      ),
+                      errorBorder: OutlineInputBorder(
+                        gapPadding: 3.3,
+                        borderRadius: BorderRadius.circular(20),
+                        borderSide: BorderSide(color: Colors.red),
+                      ),
+                    ),
+                  ),
+                  ListDropDown(
+                    editMode: editMode,
+                    value: _selectedCompte,
+                    items: _compteDropdownItems,
+                    libelle: (_selectedCompte.nomCompte),
+                    onChanged: (value) {
+                      setState(() {
+                        _selectedCompte = value;
+                      });
+                    },
+                    onAddPressed: () async {
+                      AwesomeDialog(
+                        context: context,
+                        dialogType: DialogType.NO_HEADER,
+                        animType: AnimType.BOTTOMSLIDE,
+                        title: S.current.supp,
+                        body: addCompte(),
+                      )..show().then((value) => setState(() {}));
+                    },
+                  ),
+                  TextFormField(
+                    enabled: editMode,
+                    controller: _montantControl,
+                    onTap: () => _montantControl.selection = TextSelection(
+                        baseOffset: 0,
+                        extentOffset: _montantControl.value.text.length),
+                    keyboardType: TextInputType.number,
+                    validator: (value) {
+                      if (value.isEmpty) {
+                        return S.current.msg_champ_oblg;
+                      }
+                      return null;
+                    },
+                    decoration: InputDecoration(
+                      labelText: S.current.montant,
+                      labelStyle: GoogleFonts.lato(
+                          textStyle:
+                              TextStyle(color: Theme.of(context).hintColor)),
+                      prefixIcon: Icon(
+                        Icons.monetization_on,
+                        color: Colors.blue,
+                      ),
+                      focusedBorder: OutlineInputBorder(
+                          borderSide: BorderSide(color: Colors.blue),
+                          borderRadius: BorderRadius.circular(20)),
+                      enabledBorder: OutlineInputBorder(
+                        gapPadding: 3.3,
+                        borderRadius: BorderRadius.circular(20),
+                        borderSide: BorderSide(color: Colors.blue),
+                      ),
+                      errorBorder: OutlineInputBorder(
+                        gapPadding: 3.3,
+                        borderRadius: BorderRadius.circular(20),
+                        borderSide: BorderSide(color: Colors.red),
+                      ),
+                    ),
+                  ),
                 ],
               ),
-              SizedBox(height: 5),
-              Visibility(
-                visible: (_selectedCategorie.id == 2 ||
-                    _selectedCategorie.id == 3 ||
-                    _selectedCategorie.id == 6 ||
-                    _selectedCategorie.id == 7),
-                child: Center(
-                    child: _selectedPieces.isNotEmpty
-                        ? Container(
-                            padding: EdgeInsets.all(15),
-                            child: Column(
-                              children: [
-                                SizedBox(height: 5),
-                                new ListView.builder(
-                                    physics: NeverScrollableScrollPhysics(),
-                                    shrinkWrap: true,
-                                    itemCount: _selectedPieces.length,
-                                    itemBuilder: (BuildContext ctxt, int index) {
-                                      return PieceListItem(
-                                        piece: _selectedPieces[index],
-                                        fromTresory: true,
-                                      );
-                                    })
-                              ],
-                            ))
-                        : Card(
-                          color: Theme.of(context).backgroundColor,
-                          child: Container(
-                              margin:
-                                  EdgeInsets.symmetric(vertical: 10, horizontal: 10),
-                              decoration: BoxDecoration(
-                                  color: Theme.of(context).backgroundColor,
-                                  borderRadius: BorderRadius.circular(5)
-                              ),
-                              child: ListTile(
-                                title: Text(
-                                  S.current.msg_credit_total,
-                                  style: GoogleFonts.lato(
-                                      textStyle: TextStyle(
-                                    fontSize: 14,fontWeight: FontWeight.bold ,color: Colors.green
-                                  )),
-                                ),
-                                leading: CircleAvatar(
-                                  backgroundColor: Colors.blue,
-                                  radius: 25,
-                                  child: CircleAvatar(
-                                    radius: 22,
-                                    backgroundColor: Colors.white,
-                                    child: Text("TR",style: TextStyle(color: Colors.black),),
-                                  ),
-                                )
-                              ),
-                            ),
-                        )),
-              ),
-              SingleChildScrollView(
-                padding: const EdgeInsets.fromLTRB(15, 10, 15, 10),
-                child: Form(
-                  key : _formKey,
-                  child: Wrap(
-                    spacing: 13,
-                    runSpacing: 13,
-                    children: [
-                      Visibility(
-                        visible: _showTierController,
-                        child: TextFormField(
-                          readOnly: true,
-                          enabled: editMode,
-                          controller: _clientControl,
-                          keyboardType: TextInputType.text,
-                          validator: (value) {
-                            if (value.isEmpty && (_selectedCategorie.id == 2 ||
-                                _selectedCategorie.id == 3 ||
-                                _selectedCategorie.id == 6 ||
-                                _selectedCategorie.id == 7)) {
-
-                              return S.current.msg_select_tier;
-                            }
-                            return null;
-                          },
-                          onTap: editMode && !modification
-                              ? () {
-                            chooseClientDialog();
-                          }
-                              : null,
-                          decoration: InputDecoration(
-                            labelText: S.current.select_tier,
-                            labelStyle: GoogleFonts.lato(textStyle: TextStyle(color: Theme.of(context).hintColor)),
-                            prefixIcon: Icon(
-                              Icons.people,
-                              color: Colors.blue,
-                            ),
-                            focusedBorder: OutlineInputBorder(
-                                borderSide: BorderSide(color: Colors.blue),
-                                borderRadius: BorderRadius.circular(20)),
-                            enabledBorder: OutlineInputBorder(
-                              gapPadding: 3.3,
-                              borderRadius: BorderRadius.circular(20),
-                              borderSide: BorderSide(color: Colors.blue),
-                            ),
-                            errorBorder:  OutlineInputBorder(
-                              gapPadding: 3.3,
-                              borderRadius: BorderRadius.circular(20),
-                              borderSide: BorderSide(color: Colors.red),
-                            ),
-                          ),
-                        ),
-                      ),
-                      Visibility(
-                        visible: (_selectedCategorie.id == 5),
-                        child: ListDropDown(
-                          editMode: editMode,
-                          value: _selectedCharge,
-                          items: _chargeDropdownItems,
-                          libelle: _selectedCharge.libelle,
-                          onChanged: (value) {
-                            setState(() {
-                              _selectedCharge = value;
-                            });
-                          },
-                          onAddPressed: () async {
-                            AwesomeDialog(
-                              context: context,
-                              dialogType: DialogType.NO_HEADER,
-                              animType: AnimType.BOTTOMSLIDE,
-                              title: S.current.supp,
-                              body: addCharge(),
-                            )..show().then((value) => setState(() {}));
-                          },
-                        ),
-                      ),
-                      TextFormField(
-                        enabled: editMode,
-                        controller: _objetControl,
-                        onTap: () => _objetControl.selection = TextSelection(baseOffset: 0, extentOffset: _objetControl.value.text.length),
-                        keyboardType: TextInputType.text,
-                        validator: (value) {
-                          if (value.isEmpty) {
-                            return S.current.msg_champ_oblg;
-                          }
-                          return null;
-                        },
-                        decoration: InputDecoration(
-                          labelText: S.current.objet,
-                          labelStyle: GoogleFonts.lato(textStyle: TextStyle(color: Theme.of(context).hintColor)),
-                          prefixIcon: Icon(
-                            Icons.subject,
-                            color: Colors.blue,
-                          ),
-                          focusedBorder: OutlineInputBorder(
-                              borderSide: BorderSide(color: Colors.blue),
-                              borderRadius: BorderRadius.circular(20)),
-                          enabledBorder: OutlineInputBorder(
-                            gapPadding: 3.3,
-                            borderRadius: BorderRadius.circular(20),
-                            borderSide: BorderSide(color: Colors.blue),
-                          ),
-                          errorBorder:  OutlineInputBorder(
-                            gapPadding: 3.3,
-                            borderRadius: BorderRadius.circular(20),
-                            borderSide: BorderSide(color: Colors.red),
-                          ),
-                        ),
-                      ),
-                      TextFormField(
-                        enabled: editMode,
-                        controller: _modaliteControl,
-                        onTap: () => _modaliteControl.selection = TextSelection(baseOffset: 0, extentOffset: _modaliteControl.value.text.length),
-                        keyboardType: TextInputType.text,
-                        validator: (value) {
-                          if (value.isEmpty) {
-                            return S.current.msg_champ_oblg;
-                          }
-                          return null;
-                        },
-                        decoration: InputDecoration(
-                          labelText: S.current.modalite,
-                          labelStyle: GoogleFonts.lato(textStyle: TextStyle(color: Theme.of(context).hintColor)),
-                          prefixIcon: Icon(
-                            MdiIcons.creditCardSettingsOutline,
-                            color: Colors.blue,
-                          ),
-                          focusedBorder: OutlineInputBorder(
-                              borderSide: BorderSide(color: Colors.blue),
-                              borderRadius: BorderRadius.circular(20)),
-                          enabledBorder: OutlineInputBorder(
-                            gapPadding: 3.3,
-                            borderRadius: BorderRadius.circular(20),
-                            borderSide: BorderSide(color: Colors.blue),
-                          ),
-                          errorBorder:  OutlineInputBorder(
-                            gapPadding: 3.3,
-                            borderRadius: BorderRadius.circular(20),
-                            borderSide: BorderSide(color: Colors.red),
-                          ),
-                        ),
-                      ),
-                      ListDropDown(
-                        editMode: editMode,
-                        value: _selectedCompte,
-                        items: _compteDropdownItems,
-                        libelle: (_selectedCompte.nomCompte),
-                        onChanged: (value) {
-                          setState(() {
-                            _selectedCompte = value;
-                          });
-                        },
-                        onAddPressed: () async {
-                          AwesomeDialog(
-                            context: context,
-                            dialogType: DialogType.NO_HEADER,
-                            animType: AnimType.BOTTOMSLIDE,
-                            title: S.current.supp,
-                            body: addCompte(),
-                          )..show().then((value) => setState(() {}));
-                        },
-                      ),
-                      TextFormField(
-                        enabled: editMode,
-                        controller: _montantControl,
-                        onTap: () => _montantControl.selection = TextSelection(baseOffset: 0, extentOffset: _montantControl.value.text.length),
-                        keyboardType: TextInputType.number,
-                        validator: (value) {
-                          if (value.isEmpty) {
-                            return S.current.msg_champ_oblg;
-                          }
-                          return null;
-                        },
-                        decoration: InputDecoration(
-                          labelText: S.current.montant,
-                          labelStyle: GoogleFonts.lato(textStyle: TextStyle(color: Theme.of(context).hintColor)),
-                          prefixIcon: Icon(
-                            Icons.monetization_on,
-                            color: Colors.blue,
-                          ),
-                          focusedBorder: OutlineInputBorder(
-                              borderSide: BorderSide(color: Colors.blue),
-                              borderRadius: BorderRadius.circular(20)),
-                          enabledBorder: OutlineInputBorder(
-                            gapPadding: 3.3,
-                            borderRadius: BorderRadius.circular(20),
-                            borderSide: BorderSide(color: Colors.blue),
-                          ),
-                          errorBorder:  OutlineInputBorder(
-                            gapPadding: 3.3,
-                            borderRadius: BorderRadius.circular(20),
-                            borderSide: BorderSide(color: Colors.red),
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              )
-        ]
-        )
-    );
+            ),
+          )
+        ]));
   }
 
   //afficher le fragement des clients
@@ -810,7 +826,8 @@ class _AddTresoriePageState extends State<AddTresoriePage>
               _tresorie.tierId = _selectedClient.id;
               _tresorie.tierRS = _selectedClient.raisonSociale;
               _clientControl.text = _selectedClient.raisonSociale;
-              _montantControl.text = (_selectedClient.credit).toStringAsFixed(2);
+              _montantControl.text =
+                  (_selectedClient.credit).toStringAsFixed(2);
             });
           },
         );
@@ -859,10 +876,7 @@ class _AddTresoriePageState extends State<AddTresoriePage>
       firstDate: DateTime(2020),
       lastDate: DateTime(2050),
       builder: (BuildContext context, Widget child) {
-        return Theme(
-          data: ThemeData.light(),
-          child: child,
-        );
+        return child;
       },
     );
   }
@@ -874,92 +888,94 @@ class _AddTresoriePageState extends State<AddTresoriePage>
     TextEditingController _libelleCategorieControl =
         new TextEditingController();
     TresorieCategories _categorieTresorie = new TresorieCategories.init();
-    var _formKey = GlobalKey<FormState>() ;
+    var _formKey = GlobalKey<FormState>();
     return StatefulBuilder(builder: (context, StateSetter setState) {
       return Builder(
-          builder: (context) => SingleChildScrollView(
-            padding: EdgeInsets.all(10),
-            child: Form(
-              key: _formKey,
-              child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    Text(
-                      "${S.current.ajouter} ${S.current.categorie}",
-                      style:GoogleFonts.lato(
-                          textStyle: TextStyle(
-                            fontSize: 18,
-                            fontWeight: FontWeight.bold,
-                          )),
-                    ),
-                    Padding(
-                      padding: EdgeInsets.only(
-                          left: 5, right: 5, bottom: 20, top: 20),
-                      child: TextFormField(
-                        controller: _libelleCategorieControl,
-                        keyboardType: TextInputType.text,
-                        validator: (value) {
-                          if (value.isEmpty) {
-                            return S.current.msg_champ_oblg;
-                          }
-                          return null;
-                        },
-                        decoration: InputDecoration(
-                          prefixIcon: Icon(
-                            Icons.view_agenda,
-                            color: Colors.blue,
-                          ),
-                          focusedBorder: OutlineInputBorder(
-                              borderSide:
-                                  BorderSide(color: Colors.blue),
-                              borderRadius: BorderRadius.circular(20)),
-                          contentPadding: EdgeInsets.only(left: 10),
-                          labelText: S.current.categorie,
-                          labelStyle: GoogleFonts.lato(textStyle: TextStyle(color: Colors.blue)),
-                          enabledBorder: OutlineInputBorder(
-                            gapPadding: 3.3,
-                            borderRadius: BorderRadius.circular(20),
-                            borderSide:
-                                BorderSide(color: Colors.blue),
-                          ),
-                        ),
-                      ),
-                    ),
-                    SizedBox(
-                      width: 150.0,
-                      child: Padding(
-                        padding: EdgeInsets.only(right: 0, left: 0),
-                        child: RaisedButton(
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(18.0),
-                          ),
-                          onPressed: () async {
-                            if(_formKey.currentState.validate()){
-                              setState(() {
-                                _categorieTresorie.libelle =
-                                    _libelleCategorieControl.text.trim();
-                                _libelleCategorieControl.text = "";
-                              });
-                              await addTresoreCategorieIfNotExist(
-                                  _categorieTresorie);
-                              Navigator.pop(context);
-                            }
-                          },
-                          child: Text(
-                            "+ ${S.current.ajouter}",
-                            style: GoogleFonts.lato(
-                                textStyle: TextStyle(color: Colors.white , fontSize: 15 , fontWeight: FontWeight.bold)),
-                          ),
-                          color: Colors.green,
-                        ),
-                      ),
-                    )
-                  ],
+        builder: (context) => SingleChildScrollView(
+          padding: EdgeInsets.all(10),
+          child: Form(
+            key: _formKey,
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                Text(
+                  "${S.current.ajouter} ${S.current.categorie}",
+                  style: GoogleFonts.lato(
+                      textStyle: TextStyle(
+                    fontSize: 18,
+                    fontWeight: FontWeight.bold,
+                  )),
                 ),
+                Padding(
+                  padding:
+                      EdgeInsets.only(left: 5, right: 5, bottom: 20, top: 20),
+                  child: TextFormField(
+                    controller: _libelleCategorieControl,
+                    keyboardType: TextInputType.text,
+                    validator: (value) {
+                      if (value.isEmpty) {
+                        return S.current.msg_champ_oblg;
+                      }
+                      return null;
+                    },
+                    decoration: InputDecoration(
+                      prefixIcon: Icon(
+                        Icons.view_agenda,
+                        color: Colors.blue,
+                      ),
+                      focusedBorder: OutlineInputBorder(
+                          borderSide: BorderSide(color: Colors.blue),
+                          borderRadius: BorderRadius.circular(20)),
+                      contentPadding: EdgeInsets.only(left: 10),
+                      labelText: S.current.categorie,
+                      labelStyle: GoogleFonts.lato(
+                          textStyle: TextStyle(color: Colors.blue)),
+                      enabledBorder: OutlineInputBorder(
+                        gapPadding: 3.3,
+                        borderRadius: BorderRadius.circular(20),
+                        borderSide: BorderSide(color: Colors.blue),
+                      ),
+                    ),
+                  ),
+                ),
+                SizedBox(
+                  width: 150.0,
+                  child: Padding(
+                    padding: EdgeInsets.only(right: 0, left: 0),
+                    child: RaisedButton(
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(18.0),
+                      ),
+                      onPressed: () async {
+                        if (_formKey.currentState.validate()) {
+                          setState(() {
+                            _categorieTresorie.libelle =
+                                _libelleCategorieControl.text.trim();
+                            _libelleCategorieControl.text = "";
+                          });
+                          await addTresoreCategorieIfNotExist(
+                              _categorieTresorie);
+                          Navigator.pop(context);
+                        }
+                      },
+                      child: Text(
+                        "+ ${S.current.ajouter}",
+                        style: GoogleFonts.lato(
+                            textStyle: TextStyle(
+                                color: Colors.white,
+                                fontSize: 15,
+                                fontWeight: FontWeight.bold)),
+                      ),
+                      color: Colors.green,
+                    ),
+                  ),
+                )
+              ],
             ),
-            ),
-              );
+          ),
+        ),
+      );
     });
   }
 
@@ -986,191 +1002,204 @@ class _AddTresoriePageState extends State<AddTresoriePage>
     TextEditingController _soldeCompteControl = new TextEditingController();
     CompteTresorie _compteTresorie = new CompteTresorie.init();
     ScrollController _controller = new ScrollController();
-    var _formKey = GlobalKey<FormState>() ;
+    var _formKey = GlobalKey<FormState>();
     return StatefulBuilder(builder: (context, StateSetter setState) {
       return Builder(
           builder: (context) => SingleChildScrollView(
-            padding: EdgeInsets.all(10),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                Text(
-                  "${S.current.ajouter} ${S.current.compte}",
-                  textAlign: TextAlign.center,
-                  style: GoogleFonts.lato(
-                      textStyle: TextStyle(
+                padding: EdgeInsets.all(10),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    Text(
+                      "${S.current.ajouter} ${S.current.compte}",
+                      textAlign: TextAlign.center,
+                      style: GoogleFonts.lato(
+                          textStyle: TextStyle(
                         fontSize: 18,
                         fontWeight: FontWeight.bold,
                       )),
-                ),
-                Padding(
-                  padding: EdgeInsets.only(left: 5, right: 5, bottom: 20, top: 20),
-                  child: Form(
-                    key : _formKey,
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        TextFormField(
-                          controller: _numCompteControl,
-                          keyboardType: TextInputType.text,
-                          // validator: (value) {
-                          //   if (value.isEmpty) {
-                          //     return S.current.msg_champ_oblg;
-                          //   }
-                          //   return null;
-                          // },
-                          decoration: InputDecoration(
-                            prefixIcon: Icon(
-                              Icons.view_agenda,
-                              color: Colors.blue,
-                            ),
-                            focusedBorder: OutlineInputBorder(
-                                borderSide: BorderSide(color: Colors.blue),
-                                borderRadius: BorderRadius.circular(20)),
-                            contentPadding: EdgeInsets.only(left: 10),
-                            labelText: "N°:",
-                            labelStyle: GoogleFonts.lato(),
-                            enabledBorder: OutlineInputBorder(
-                              gapPadding: 3.3,
-                              borderRadius: BorderRadius.circular(20),
-                              borderSide: BorderSide(color: Colors.blue),
-                            ),
-                          ),
-                        ),
-                        SizedBox(height: 10,),
-                        TextFormField(
-                          controller: _libelleCompteControl,
-                          keyboardType: TextInputType.text,
-                          validator: (value) {
-                            if (value.isEmpty) {
-                              return S.current.msg_champ_oblg;
-                            }
-                            return null;
-                          },
-                          decoration: InputDecoration(
-                            prefixIcon: Icon(
-                              Icons.description,
-                              color: Colors.blue,
-                            ),
-                            focusedBorder: OutlineInputBorder(
-                                borderSide: BorderSide(color: Colors.blue),
-                                borderRadius: BorderRadius.circular(20)),
-                            contentPadding: EdgeInsets.only(left: 10),
-                            labelText: S.current.designation,
-                            labelStyle: GoogleFonts.lato(),
-                            enabledBorder: OutlineInputBorder(
-                              gapPadding: 3.3,
-                              borderRadius: BorderRadius.circular(20),
-                              borderSide: BorderSide(color: Colors.blue),
-                            ),
-                          ),
-                        ),
-                        SizedBox(height: 10,),
-                        TextFormField(
-                          controller: _codeCompteControl,
-                          keyboardType: TextInputType.text,
-                          // validator: (value) {
-                          //   if (value.isEmpty) {
-                          //     return S.current.msg_champ_oblg;
-                          //   }
-                          //   return null;
-                          // },
-                          decoration: InputDecoration(
-                            prefixIcon: Icon(
-                              Icons.vpn_key,
-                              color: Colors.blue,
-                            ),
-                            focusedBorder: OutlineInputBorder(
-                                borderSide: BorderSide(color: Colors.blue),
-                                borderRadius: BorderRadius.circular(20)),
-                            contentPadding: EdgeInsets.only(left: 10),
-                            labelText: S.current.code_pin,
-                            labelStyle: GoogleFonts.lato(),
-                            enabledBorder: OutlineInputBorder(
-                              gapPadding: 3.3,
-                              borderRadius: BorderRadius.circular(20),
-                              borderSide: BorderSide(color: Colors.blue),
-                            ),
-                          ),
-                        ),
-                        SizedBox(height: 10,),
-                        TextFormField(
-                          controller: _soldeCompteControl,
-                          keyboardType: TextInputType.number,
-                          validator: (value) {
-                            if (value.isEmpty) {
-                              return S.current.msg_champ_oblg;
-                            }
-                            return null;
-                          },
-                          decoration: InputDecoration(
-                            prefixIcon: Icon(
-                              Icons.monetization_on,
-                              color: Colors.blue,
-                            ),
-                            focusedBorder: OutlineInputBorder(
-                                borderSide: BorderSide(color: Colors.blue),
-                                borderRadius: BorderRadius.circular(20)),
-                            contentPadding: EdgeInsets.only(left: 10),
-                            labelText: S.current.solde_depart,
-                            labelStyle: GoogleFonts.lato(),
-                            enabledBorder: OutlineInputBorder(
-                              gapPadding: 3.3,
-                              borderRadius: BorderRadius.circular(20),
-                              borderSide: BorderSide(color: Colors.blue),
-                            ),
-                          ),
-                        ),
-                        SizedBox(height: 20,),
-                        SizedBox(
-                          width: 150.0,
-                          child: Padding(
-                            padding: EdgeInsets.only(right: 0, left: 0),
-                            child: RaisedButton(
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(18.0),
-                              ),
-                              onPressed: () async {
-                                if(_formKey.currentState.validate()){
-                                  setState(() {
-                                    _compteTresorie.numCompte =
-                                        _numCompteControl.text.trim();
-                                    _numCompteControl.text = "";
-                                    _compteTresorie.nomCompte =
-                                        _libelleCompteControl.text.trim();
-                                    _libelleCompteControl.text = "";
-                                    _compteTresorie.codeCompte =
-                                        _codeCompteControl.text.trim();
-                                    _codeCompteControl.text = "";
-                                    _compteTresorie.soldeDepart =
-                                        double.parse(_soldeCompteControl.text.trim());
-                                    _soldeCompteControl.text = "";
-                                    _compteTresorie.solde = 0.0;
-                                  });
-                                  await addCompteIfNotExist(_compteTresorie);
-                                  Navigator.pop(context);
-                                }
-
-                              },
-                              child: Text(
-                                "+ ${S.current.ajouter}",
-                                style: GoogleFonts.lato(
-                                    textStyle: TextStyle(color: Colors.white , fontSize: 15 , fontWeight: FontWeight.bold)),
-                              ),
-                              color: Colors.green,
-                            ),
-                          ),
-                        )
-                      ],
                     ),
-                  ),
+                    Padding(
+                      padding: EdgeInsets.only(
+                          left: 5, right: 5, bottom: 20, top: 20),
+                      child: Form(
+                        key: _formKey,
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            TextFormField(
+                              controller: _numCompteControl,
+                              keyboardType: TextInputType.text,
+                              // validator: (value) {
+                              //   if (value.isEmpty) {
+                              //     return S.current.msg_champ_oblg;
+                              //   }
+                              //   return null;
+                              // },
+                              decoration: InputDecoration(
+                                prefixIcon: Icon(
+                                  Icons.view_agenda,
+                                  color: Colors.blue,
+                                ),
+                                focusedBorder: OutlineInputBorder(
+                                    borderSide: BorderSide(color: Colors.blue),
+                                    borderRadius: BorderRadius.circular(20)),
+                                contentPadding: EdgeInsets.only(left: 10),
+                                labelText: "N°:",
+                                labelStyle: GoogleFonts.lato(),
+                                enabledBorder: OutlineInputBorder(
+                                  gapPadding: 3.3,
+                                  borderRadius: BorderRadius.circular(20),
+                                  borderSide: BorderSide(color: Colors.blue),
+                                ),
+                              ),
+                            ),
+                            SizedBox(
+                              height: 10,
+                            ),
+                            TextFormField(
+                              controller: _libelleCompteControl,
+                              keyboardType: TextInputType.text,
+                              validator: (value) {
+                                if (value.isEmpty) {
+                                  return S.current.msg_champ_oblg;
+                                }
+                                return null;
+                              },
+                              decoration: InputDecoration(
+                                prefixIcon: Icon(
+                                  Icons.description,
+                                  color: Colors.blue,
+                                ),
+                                focusedBorder: OutlineInputBorder(
+                                    borderSide: BorderSide(color: Colors.blue),
+                                    borderRadius: BorderRadius.circular(20)),
+                                contentPadding: EdgeInsets.only(left: 10),
+                                labelText: S.current.designation,
+                                labelStyle: GoogleFonts.lato(),
+                                enabledBorder: OutlineInputBorder(
+                                  gapPadding: 3.3,
+                                  borderRadius: BorderRadius.circular(20),
+                                  borderSide: BorderSide(color: Colors.blue),
+                                ),
+                              ),
+                            ),
+                            SizedBox(
+                              height: 10,
+                            ),
+                            TextFormField(
+                              controller: _codeCompteControl,
+                              keyboardType: TextInputType.text,
+                              // validator: (value) {
+                              //   if (value.isEmpty) {
+                              //     return S.current.msg_champ_oblg;
+                              //   }
+                              //   return null;
+                              // },
+                              decoration: InputDecoration(
+                                prefixIcon: Icon(
+                                  Icons.vpn_key,
+                                  color: Colors.blue,
+                                ),
+                                focusedBorder: OutlineInputBorder(
+                                    borderSide: BorderSide(color: Colors.blue),
+                                    borderRadius: BorderRadius.circular(20)),
+                                contentPadding: EdgeInsets.only(left: 10),
+                                labelText: S.current.code_pin,
+                                labelStyle: GoogleFonts.lato(),
+                                enabledBorder: OutlineInputBorder(
+                                  gapPadding: 3.3,
+                                  borderRadius: BorderRadius.circular(20),
+                                  borderSide: BorderSide(color: Colors.blue),
+                                ),
+                              ),
+                            ),
+                            SizedBox(
+                              height: 10,
+                            ),
+                            TextFormField(
+                              controller: _soldeCompteControl,
+                              keyboardType: TextInputType.number,
+                              validator: (value) {
+                                if (value.isEmpty) {
+                                  return S.current.msg_champ_oblg;
+                                }
+                                return null;
+                              },
+                              decoration: InputDecoration(
+                                prefixIcon: Icon(
+                                  Icons.monetization_on,
+                                  color: Colors.blue,
+                                ),
+                                focusedBorder: OutlineInputBorder(
+                                    borderSide: BorderSide(color: Colors.blue),
+                                    borderRadius: BorderRadius.circular(20)),
+                                contentPadding: EdgeInsets.only(left: 10),
+                                labelText: S.current.solde_depart,
+                                labelStyle: GoogleFonts.lato(),
+                                enabledBorder: OutlineInputBorder(
+                                  gapPadding: 3.3,
+                                  borderRadius: BorderRadius.circular(20),
+                                  borderSide: BorderSide(color: Colors.blue),
+                                ),
+                              ),
+                            ),
+                            SizedBox(
+                              height: 20,
+                            ),
+                            SizedBox(
+                              width: 150.0,
+                              child: Padding(
+                                padding: EdgeInsets.only(right: 0, left: 0),
+                                child: RaisedButton(
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(18.0),
+                                  ),
+                                  onPressed: () async {
+                                    if (_formKey.currentState.validate()) {
+                                      setState(() {
+                                        _compteTresorie.numCompte =
+                                            _numCompteControl.text.trim();
+                                        _numCompteControl.text = "";
+                                        _compteTresorie.nomCompte =
+                                            _libelleCompteControl.text.trim();
+                                        _libelleCompteControl.text = "";
+                                        _compteTresorie.codeCompte =
+                                            _codeCompteControl.text.trim();
+                                        _codeCompteControl.text = "";
+                                        _compteTresorie.soldeDepart =
+                                            double.parse(_soldeCompteControl
+                                                .text
+                                                .trim());
+                                        _soldeCompteControl.text = "";
+                                        _compteTresorie.solde = 0.0;
+                                      });
+                                      await addCompteIfNotExist(
+                                          _compteTresorie);
+                                      Navigator.pop(context);
+                                    }
+                                  },
+                                  child: Text(
+                                    "+ ${S.current.ajouter}",
+                                    style: GoogleFonts.lato(
+                                        textStyle: TextStyle(
+                                            color: Colors.white,
+                                            fontSize: 15,
+                                            fontWeight: FontWeight.bold)),
+                                  ),
+                                  color: Colors.green,
+                                ),
+                              ),
+                            )
+                          ],
+                        ),
+                      ),
+                    ),
+                  ],
                 ),
-
-              ],
-            ),
-          ));
+              ));
     });
   }
 
@@ -1207,12 +1236,12 @@ class _AddTresoriePageState extends State<AddTresoriePage>
                 Text(
                   "${S.current.ajouter} ${S.current.charge}",
                   style: GoogleFonts.lato(
-                      textStyle: TextStyle(
-                          fontSize: 18, fontWeight: FontWeight.bold)),
+                      textStyle:
+                          TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
                 ),
                 Padding(
-                  padding: EdgeInsets.only(
-                      left: 5, right: 5, bottom: 20, top: 20),
+                  padding:
+                      EdgeInsets.only(left: 5, right: 5, bottom: 20, top: 20),
                   child: TextFormField(
                     controller: _libelleChargeControl,
                     keyboardType: TextInputType.text,
@@ -1235,7 +1264,7 @@ class _AddTresoriePageState extends State<AddTresoriePage>
                       labelText: S.current.categorie,
                       labelStyle: GoogleFonts.lato(
                         textStyle:
-                        TextStyle(color: Theme.of(context).hintColor),
+                            TextStyle(color: Theme.of(context).hintColor),
                       ),
                       enabledBorder: OutlineInputBorder(
                         gapPadding: 3.3,
@@ -1269,7 +1298,8 @@ class _AddTresoriePageState extends State<AddTresoriePage>
                         style: GoogleFonts.lato(
                             textStyle: TextStyle(
                                 color: Colors.white,
-                                fontWeight: FontWeight.bold , fontSize: 15)),
+                                fontWeight: FontWeight.bold,
+                                fontSize: 15)),
                       ),
                       color: Colors.green,
                     ),
@@ -1308,7 +1338,7 @@ class _AddTresoriePageState extends State<AddTresoriePage>
       if (widget.arguments.id != null) {
         //update tresorie
         Tresorie tresorie = await makeItem();
-        if(tresorie != null){
+        if (tresorie != null) {
           id = await _queryCtr.updateItemInDb(DbTablesNames.tresorie, tresorie);
           if (tresorie.categorie == 2 || tresorie.categorie == 3) {
             bool _haspiece = true;
@@ -1316,7 +1346,7 @@ class _AddTresoriePageState extends State<AddTresoriePage>
             if (tresorie.pieceId == null) {
               _haspiece = false;
               _selectedPieces =
-              await _queryCtr.getAllPiecesByTierId(_selectedClient.id);
+                  await _queryCtr.getAllPiecesByTierId(_selectedClient.id);
             } else {
               var piece = await _queryCtr.getPieceById(_selectedClient.id);
               _selectedPieces = new List<Piece>();
@@ -1326,7 +1356,7 @@ class _AddTresoriePageState extends State<AddTresoriePage>
             while (_montant > 0) {
               // recuperer la some des verssement pour le solde
               verssementSolde =
-              await _queryCtr.getVerssementSolde(_selectedClient);
+                  await _queryCtr.getVerssementSolde(_selectedClient);
               if ((_selectedClient.solde_depart - verssementSolde) > 0 &&
                   _haspiece == false) {
                 ReglementTresorie item = new ReglementTresorie.init();
@@ -1337,9 +1367,10 @@ class _AddTresoriePageState extends State<AddTresoriePage>
                   item.regler = _montant;
                   _montant = 0;
                 } else {
-                  item.regler = (_selectedClient.solde_depart - verssementSolde);
-                  _montant =
-                      _montant - (_selectedClient.solde_depart - verssementSolde);
+                  item.regler =
+                      (_selectedClient.solde_depart - verssementSolde);
+                  _montant = _montant -
+                      (_selectedClient.solde_depart - verssementSolde);
                 }
                 await _queryCtr.addItemToTable(
                     DbTablesNames.reglementTresorie, item);
@@ -1382,16 +1413,15 @@ class _AddTresoriePageState extends State<AddTresoriePage>
           } else {
             message = S.current.msg_update_err;
           }
-        }else{
+        } else {
           var message = S.current.msg_num_existe;
           Helpers.showFlushBar(context, message);
           return Future.value(id);
         }
-
       } else {
         // add new tresorie
         Tresorie tresorie = await makeItem();
-        if(tresorie != null){
+        if (tresorie != null) {
           id = await _queryCtr.addItemToTable(DbTablesNames.tresorie, tresorie);
           if (id > -1) {
             tresorie.id = await _queryCtr.getLastId(DbTablesNames.tresorie);
@@ -1402,13 +1432,13 @@ class _AddTresoriePageState extends State<AddTresoriePage>
             if (tresorie.pieceId == null) {
               _haspiece = false;
               _selectedPieces =
-              await _queryCtr.getAllPiecesByTierId(_selectedClient.id);
+                  await _queryCtr.getAllPiecesByTierId(_selectedClient.id);
             }
             double _montant = tresorie.montant;
             while (_montant > 0) {
               // recuperer la some des verssement pour le solde
               verssementSolde =
-              await _queryCtr.getVerssementSolde(_selectedClient);
+                  await _queryCtr.getVerssementSolde(_selectedClient);
               if ((_selectedClient.solde_depart - verssementSolde) > 0 &&
                   !_haspiece) {
                 ReglementTresorie item = new ReglementTresorie.init();
@@ -1419,7 +1449,8 @@ class _AddTresoriePageState extends State<AddTresoriePage>
                   item.regler = _montant;
                   _montant = 0;
                 } else {
-                  item.regler = (_selectedClient.solde_depart - verssementSolde);
+                  item.regler =
+                      (_selectedClient.solde_depart - verssementSolde);
                   _montant = _montant - item.regler;
                 }
                 await _queryCtr.addItemToTable(
@@ -1462,12 +1493,11 @@ class _AddTresoriePageState extends State<AddTresoriePage>
           } else {
             message = S.current.msg_ajout_err;
           }
-        }else{
+        } else {
           var message = S.current.msg_num_existe;
           Helpers.showFlushBar(context, message);
           return Future.value(id);
         }
-
       }
       Helpers.showFlushBar(context, message);
       return Future.value(id);
@@ -1509,7 +1539,7 @@ class _AddTresoriePageState extends State<AddTresoriePage>
     var res = await _queryCtr.getTresorieByNum(_tresorie.numTresorie);
     if (res.length >= 1) {
       await getNumPiece();
-      return null ;
+      return null;
     }
 
     return _tresorie;

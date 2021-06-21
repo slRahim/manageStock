@@ -1,9 +1,11 @@
 import 'dart:io';
 import 'dart:typed_data';
 import 'dart:ui';
+
 import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:barcode_scan/barcode_scan.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:flutter_osm_plugin/flutter_osm_plugin.dart';
 import 'package:gestmob/Helpers/Helpers.dart';
 import 'package:gestmob/Helpers/QueryCtr.dart';
@@ -12,24 +14,20 @@ import 'package:gestmob/Widgets/CustomWidgets/add_save_bar.dart';
 import 'package:gestmob/Widgets/CustomWidgets/bottom_tab_bar.dart';
 import 'package:gestmob/Widgets/CustomWidgets/image_picker_widget.dart';
 import 'package:gestmob/Widgets/CustomWidgets/list_dropdown.dart';
+import 'package:gestmob/Widgets/utils.dart' as utils;
 import 'package:gestmob/generated/l10n.dart';
-import 'package:gestmob/models/Article.dart';
 import 'package:gestmob/models/MyParams.dart';
 import 'package:gestmob/models/Tiers.dart';
 import 'package:gestmob/models/TiersFamille.dart';
-import 'package:image_picker/image_picker.dart';
-import 'package:gestmob/Widgets/utils.dart' as utils;
+import 'package:google_fonts/google_fonts.dart';
 import 'package:map_launcher/map_launcher.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:path_provider/path_provider.dart';
-import 'package:qr_flutter/qr_flutter.dart';
-import 'package:flutter/rendering.dart';
-import 'package:share/share.dart';
 import 'package:pdf/pdf.dart';
 import 'package:pdf/widgets.dart' as pw;
 import 'package:printing/printing.dart';
-import 'package:gestmob/services/push_notifications.dart';
-import 'package:google_fonts/google_fonts.dart';
+import 'package:qr_flutter/qr_flutter.dart';
+import 'package:share/share.dart';
 
 class AddTierPage extends StatefulWidget {
   final QueryCtr _queryCtr = QueryCtr();
@@ -279,7 +277,8 @@ class _AddTierPageState extends State<AddTierPage>
                       foregroundColor: Colors.white,
                       onPressed: () async {
                         Helpers.showToast(S.current.msg_map_add_position);
-                        GeoPoint geoPoint = await osmKey.currentState.selectPosition();
+                        GeoPoint geoPoint =
+                            await osmKey.currentState.selectPosition();
                         if (geoPoint != null) {
                           osmKey.currentState.changeLocation(geoPoint);
                           setState(() {
@@ -288,7 +287,10 @@ class _AddTierPageState extends State<AddTierPage>
                           });
                         }
                       },
-                      child: Icon(Icons.add_location_alt , size: 28,),
+                      child: Icon(
+                        Icons.add_location_alt,
+                        size: 28,
+                      ),
                     ),
                   ),
                   SizedBox(
@@ -1263,7 +1265,7 @@ class _AddTierPageState extends State<AddTierPage>
       trackMyPosition: false,
       useSecureURL: false,
       currentLocation: false,
-      onGeoPointClicked: (value){},
+      onGeoPointClicked: (value) {},
       initPosition: GeoPoint(latitude: _latitude, longitude: _longitude),
       road: Road(
         startIcon: MarkerIcon(

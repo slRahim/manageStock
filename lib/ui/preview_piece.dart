@@ -1,28 +1,23 @@
 import 'dart:io';
 import 'dart:typed_data';
 import 'dart:ui';
+
 import 'package:advance_pdf_viewer/advance_pdf_viewer.dart';
-import 'package:awesome_dialog/awesome_dialog.dart';
+import 'package:charset_converter/charset_converter.dart';
+import 'package:esc_pos_utils/esc_pos_utils.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:gestmob/Helpers/Helpers.dart';
 import 'package:gestmob/Helpers/QueryCtr.dart';
 import 'package:gestmob/Helpers/Statics.dart';
 import 'package:gestmob/generated/l10n.dart';
 import 'package:gestmob/models/Article.dart';
-import 'package:gestmob/models/DefaultPrinter.dart';
 import 'package:gestmob/models/MyParams.dart';
 import 'package:gestmob/models/Piece.dart';
-import 'package:esc_pos_utils/esc_pos_utils.dart';
 import 'package:gestmob/models/Profile.dart';
 import 'package:gestmob/models/Tiers.dart';
-import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
-import 'package:path_provider/path_provider.dart';
-import 'package:pdf/pdf.dart';
-import 'package:pdf/widgets.dart' as pw;
-import 'package:printing/printing.dart';
-import 'package:charset_converter/charset_converter.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:path_provider/path_provider.dart';
+import 'package:printing/printing.dart';
 
 class PreviewPiece extends StatefulWidget {
   final Piece piece;
@@ -30,7 +25,7 @@ class PreviewPiece extends StatefulWidget {
   final List<Article> articles;
   final Tiers tier;
   final int format;
-  final pdfDoc ;
+  final pdfDoc;
 
   PreviewPiece(
       {Key key,
@@ -50,12 +45,12 @@ class _PreviewPieceState extends State<PreviewPiece> {
   bool _finishedLoading = false;
   PaperSize _default_format;
   QueryCtr _queryCtr = new QueryCtr();
-  MyParams _myParams ;
+  MyParams _myParams;
   PDFDocument _doc;
 
   bool directionRtl = false;
-  String _devise ;
-  Profile _profile ;
+  String _devise;
+  Profile _profile;
 
   @override
   void initState() {
@@ -69,32 +64,30 @@ class _PreviewPieceState extends State<PreviewPiece> {
   }
 
   futureInit() async {
-    _myParams = await _queryCtr.getAllParams() ;
-    if(widget.pdfDoc != null){
+    _myParams = await _queryCtr.getAllParams();
+    if (widget.pdfDoc != null) {
       final output = await getTemporaryDirectory();
       final file = File("${output.path}/my-document.pdf");
       await file.writeAsBytes(await widget.pdfDoc.save());
 
       _doc = await PDFDocument.fromFile(file);
-
-    }else{
-       _profile = await _queryCtr.getProfileById(1);
-       _devise = Helpers.getDeviseTranslate(_myParams.devise) ;
+    } else {
+      _profile = await _queryCtr.getProfileById(1);
+      _devise = Helpers.getDeviseTranslate(_myParams.devise);
     }
   }
 
-  Future updateFormatPrint() async{
-    switch(widget.format){
-      case 80 :
-        _myParams.defaultFormatPrint = PaperSize.mm80 ;
-        break ;
-      case 58 :
-        _myParams.defaultFormatPrint = PaperSize.mm58 ;
-        break ;
+  Future updateFormatPrint() async {
+    switch (widget.format) {
+      case 80:
+        _myParams.defaultFormatPrint = PaperSize.mm80;
+        break;
+      case 58:
+        _myParams.defaultFormatPrint = PaperSize.mm58;
+        break;
     }
     await _queryCtr.updateItemInDb(DbTablesNames.myparams, _myParams);
   }
-
 
   @override
   Widget build(BuildContext context) {
@@ -111,15 +104,18 @@ class _PreviewPieceState extends State<PreviewPiece> {
                 Navigator.pop(context);
               },
             ),
-            title: Text(S.current.preview_titre, style: GoogleFonts.lato(fontWeight: FontWeight.bold),),
+            title: Text(
+              S.current.preview_titre,
+              style: GoogleFonts.lato(fontWeight: FontWeight.bold),
+            ),
             centerTitle: true,
           ),
           body: (widget.format == 45 || widget.format == 0)
               ? PDFViewer(
-                document: _doc,
-                showIndicator: true,
-                lazyLoad: true,
-              )
+                  document: _doc,
+                  showIndicator: true,
+                  lazyLoad: true,
+                )
               : Center(
                   child: Container(
                     margin: EdgeInsets.symmetric(horizontal: 10, vertical: 5),
@@ -144,149 +140,223 @@ class _PreviewPieceState extends State<PreviewPiece> {
                             : CrossAxisAlignment.start,
                         children: [
                           Text(
-                            "${_profile.raisonSociale}" , style: TextStyle(color: Colors.black),),
-
+                            "${_profile.raisonSociale}",
+                            style: TextStyle(color: Colors.black),
+                          ),
                           (_profile.activite != '')
-                              ?Text(
-                            "${_profile.activite}", style: TextStyle(color: Colors.black),)
-                              :SizedBox(),
-
+                              ? Text(
+                                  "${_profile.activite}",
+                                  style: TextStyle(color: Colors.black),
+                                )
+                              : SizedBox(),
                           (_profile.adresse != '')
-                              ?Text(
-                            "${_profile.adresse}", style: TextStyle(color: Colors.black),)
-                              :SizedBox(),
-
+                              ? Text(
+                                  "${_profile.adresse}",
+                                  style: TextStyle(color: Colors.black),
+                                )
+                              : SizedBox(),
                           (_profile.ville != '')
-                              ?Text(
-                            "${_profile.ville}", style: TextStyle(color: Colors.black),)
-                              :SizedBox(),
-
+                              ? Text(
+                                  "${_profile.ville}",
+                                  style: TextStyle(color: Colors.black),
+                                )
+                              : SizedBox(),
                           (_profile.telephone != '')
-                              ?Text(
-                            "${_profile.telephone}", style: TextStyle(color: Colors.black),)
-                              :SizedBox(),
-
+                              ? Text(
+                                  "${_profile.telephone}",
+                                  style: TextStyle(color: Colors.black),
+                                )
+                              : SizedBox(),
                           (_profile.rc != '')
-                              ?Text(
-                            "${_profile.rc}", style: TextStyle(color: Colors.black),)
-                              :SizedBox(),
-
+                              ? Text(
+                                  "${_profile.rc}",
+                                  style: TextStyle(color: Colors.black),
+                                )
+                              : SizedBox(),
                           (_profile.nif != '')
-                              ?Text(
-                            "${_profile.nif}", style: TextStyle(color: Colors.black),)
-                              :SizedBox(),
-
+                              ? Text(
+                                  "${_profile.nif}",
+                                  style: TextStyle(color: Colors.black),
+                                )
+                              : SizedBox(),
                           (_profile.ai != '')
-                              ?Text(
-                            "${_profile.ai}", style: TextStyle(color: Colors.black),)
-                              :SizedBox(),
+                              ? Text(
+                                  "${_profile.ai}",
+                                  style: TextStyle(color: Colors.black),
+                                )
+                              : SizedBox(),
                           Text(
-                            "----------------------------------------------------------------------------------------", style: TextStyle(color: Colors.black),),
+                            "----------------------------------------------------------------------------------------",
+                            style: TextStyle(color: Colors.black),
+                          ),
                           Text(
-                              "${S.current.n} ${getPiecetype()} : ${widget.piece.num_piece}" , style: TextStyle(color: Colors.black),),
+                            "${S.current.n} ${getPiecetype()} : ${widget.piece.num_piece}",
+                            style: TextStyle(color: Colors.black),
+                          ),
                           Text(
-                              "${S.current.date} :${Helpers.dateToText(widget.piece.date)}", style: TextStyle(color: Colors.black),),
+                            "${S.current.date} :${Helpers.dateToText(widget.piece.date)}",
+                            style: TextStyle(color: Colors.black),
+                          ),
                           Text(
-                              "${S.current.rs} : ${widget.tier.raisonSociale}", style: TextStyle(color: Colors.black),),
-
+                            "${S.current.rs} : ${widget.tier.raisonSociale}",
+                            style: TextStyle(color: Colors.black),
+                          ),
                           (widget.tier.rc != '' &&
-                              (widget.piece.piece == PieceType.factureClient ||
-                                  widget.piece.piece == PieceType.factureFournisseur ||
-                                  widget.piece.piece == PieceType.avoirClient ||
-                                  widget.piece.piece == PieceType.avoirFournisseur)
-                          )
-                              ?Text(
-                            "${widget.tier.rc}", style: TextStyle(color: Colors.black),)
-                              :SizedBox(),
-
+                                  (widget.piece.piece ==
+                                          PieceType.factureClient ||
+                                      widget.piece.piece ==
+                                          PieceType.factureFournisseur ||
+                                      widget.piece.piece ==
+                                          PieceType.avoirClient ||
+                                      widget.piece.piece ==
+                                          PieceType.avoirFournisseur))
+                              ? Text(
+                                  "${widget.tier.rc}",
+                                  style: TextStyle(color: Colors.black),
+                                )
+                              : SizedBox(),
                           (widget.tier.nif != '' &&
-                              (widget.piece.piece == PieceType.factureClient ||
-                                  widget.piece.piece == PieceType.factureFournisseur ||
-                                  widget.piece.piece == PieceType.avoirClient ||
-                                  widget.piece.piece == PieceType.avoirFournisseur)
-                          )
-                              ?Text(
-                            "${widget.tier.nif}", style: TextStyle(color: Colors.black),)
-                              :SizedBox(),
-
+                                  (widget.piece.piece ==
+                                          PieceType.factureClient ||
+                                      widget.piece.piece ==
+                                          PieceType.factureFournisseur ||
+                                      widget.piece.piece ==
+                                          PieceType.avoirClient ||
+                                      widget.piece.piece ==
+                                          PieceType.avoirFournisseur))
+                              ? Text(
+                                  "${widget.tier.nif}",
+                                  style: TextStyle(color: Colors.black),
+                                )
+                              : SizedBox(),
                           (widget.tier.ai != '' &&
-                              (widget.piece.piece == PieceType.factureClient ||
-                                  widget.piece.piece == PieceType.factureFournisseur ||
-                                  widget.piece.piece == PieceType.avoirClient ||
-                                  widget.piece.piece == PieceType.avoirFournisseur)
-                          )
-                              ?Text(
-                            "${widget.tier.ai}", style: TextStyle(color: Colors.black),)
-                              :SizedBox(),
-
+                                  (widget.piece.piece ==
+                                          PieceType.factureClient ||
+                                      widget.piece.piece ==
+                                          PieceType.factureFournisseur ||
+                                      widget.piece.piece ==
+                                          PieceType.avoirClient ||
+                                      widget.piece.piece ==
+                                          PieceType.avoirFournisseur))
+                              ? Text(
+                                  "${widget.tier.ai}",
+                                  style: TextStyle(color: Colors.black),
+                                )
+                              : SizedBox(),
                           Text(
-                              "----------------------------------------------------------------------------------------", style: TextStyle(color: Colors.black),),
+                            "----------------------------------------------------------------------------------------",
+                            style: TextStyle(color: Colors.black),
+                          ),
                           Table(
                             columnWidths: {0: FractionColumnWidth(.4)},
                             children: [
                               TableRow(children: [
                                 Text(
                                   "${S.current.articles}",
-                                  style: TextStyle(fontWeight: FontWeight.bold ,color: Colors.black),
+                                  style: TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      color: Colors.black),
                                 ),
                                 Text(
                                   "${S.current.qte}",
-                                  style: TextStyle(fontWeight: FontWeight.bold , color: Colors.black),
+                                  style: TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      color: Colors.black),
                                 ),
                                 Text(
                                   "${S.current.prix}",
-                                  style: TextStyle(fontWeight: FontWeight.bold,color: Colors.black),
+                                  style: TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      color: Colors.black),
                                 ),
                                 Text(
                                   "${S.current.montant}",
-                                  style: TextStyle(fontWeight: FontWeight.bold,color: Colors.black),
+                                  style: TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      color: Colors.black),
                                 ),
                               ]),
-                              for(var e in widget.articles)
+                              for (var e in widget.articles)
                                 TableRow(children: [
-                                  (_myParams.printDisplay  != 0)
-                                      ? Text("${e.designation}", style: TextStyle(color: Colors.black),)
-                                      : Text("${e.ref}", style: TextStyle(color: Colors.black),),
-                                  Text("${Helpers.numberFormat(e.selectedQuantite)}", style: TextStyle(color: Colors.black),),
-                                  Text("${Helpers.numberFormat(e.selectedPrice)}", style: TextStyle(color: Colors.black),),
-                                  Text("${Helpers.numberFormat(e.selectedQuantite*e.selectedPrice)}", style: TextStyle(color: Colors.black),),
+                                  (_myParams.printDisplay != 0)
+                                      ? Text(
+                                          "${e.designation}",
+                                          style: TextStyle(color: Colors.black),
+                                        )
+                                      : Text(
+                                          "${e.ref}",
+                                          style: TextStyle(color: Colors.black),
+                                        ),
+                                  Text(
+                                    "${Helpers.numberFormat(e.selectedQuantite)}",
+                                    style: TextStyle(color: Colors.black),
+                                  ),
+                                  Text(
+                                    "${Helpers.numberFormat(e.selectedPrice)}",
+                                    style: TextStyle(color: Colors.black),
+                                  ),
+                                  Text(
+                                    "${Helpers.numberFormat(e.selectedQuantite * e.selectedPrice)}",
+                                    style: TextStyle(color: Colors.black),
+                                  ),
                                 ]),
                             ],
                           ),
                           Text(
-                              "---------------------------------------------------------------------------------------", style: TextStyle(color: Colors.black),),
-                          ((widget.piece.total_tva > 0 && _myParams.tva) || widget.piece.remise > 0)
+                            "---------------------------------------------------------------------------------------",
+                            style: TextStyle(color: Colors.black),
+                          ),
+                          ((widget.piece.total_tva > 0 && _myParams.tva) ||
+                                  widget.piece.remise > 0)
                               ? Text(
-                                  "\n ${S.current.total_ht}:${Helpers.numberFormat(widget.piece.total_ht)}", style: TextStyle(color: Colors.black),)
+                                  "\n ${S.current.total_ht}:${Helpers.numberFormat(widget.piece.total_ht)}",
+                                  style: TextStyle(color: Colors.black),
+                                )
                               : SizedBox(),
                           (widget.piece.remise > 0)
                               ? Text(
-                                  "${S.current.remise}:${Helpers.numberFormat((widget.piece.total_ht * widget.piece.remise) / 100)} (${Helpers.numberFormat(widget.piece.remise)}%)"
-                            , style: TextStyle(color: Colors.black),)
+                                  "${S.current.remise}:${Helpers.numberFormat((widget.piece.total_ht * widget.piece.remise) / 100)} (${Helpers.numberFormat(widget.piece.remise)}%)",
+                                  style: TextStyle(color: Colors.black),
+                                )
                               : SizedBox(),
                           (widget.piece.remise > 0)
                               ? Text(
-                                  "${S.current.net_ht}:${Helpers.numberFormat(widget.piece.net_ht)}", style: TextStyle(color: Colors.black),)
+                                  "${S.current.net_ht}:${Helpers.numberFormat(widget.piece.net_ht)}",
+                                  style: TextStyle(color: Colors.black),
+                                )
                               : SizedBox(),
                           (widget.piece.total_tva > 0)
                               ? Text(
-                                  "${S.current.total_tva} :${Helpers.numberFormat(widget.piece.total_tva)}", style: TextStyle(color: Colors.black),)
+                                  "${S.current.total_tva} :${Helpers.numberFormat(widget.piece.total_tva)}",
+                                  style: TextStyle(color: Colors.black),
+                                )
                               : SizedBox(),
                           (widget.piece.total_tva > 0)
                               ? Text(
-                                  "${S.current.total} :${Helpers.numberFormat(widget.piece.total_ttc)}", style: TextStyle(color: Colors.black),)
+                                  "${S.current.total} :${Helpers.numberFormat(widget.piece.total_ttc)}",
+                                  style: TextStyle(color: Colors.black),
+                                )
                               : SizedBox(),
                           (_myParams.timbre)
                               ? Text(
-                                  "${S.current.timbre} :${Helpers.numberFormat(widget.piece.timbre)}", style: TextStyle(color: Colors.black),)
+                                  "${S.current.timbre} :${Helpers.numberFormat(widget.piece.timbre)}",
+                                  style: TextStyle(color: Colors.black),
+                                )
                               : SizedBox(),
-                          Text("============================================", style: TextStyle(color: Colors.black),),
                           Text(
-                              (widget.piece.net_a_payer >= 0)
-                            ? "${S.current.net_payer} :${Helpers.numberFormat(widget.piece.net_a_payer)} $_devise" : "${S.current.net_payer} :${Helpers.numberFormat(widget.piece.net_a_payer * -1)} $_devise",
-                            style: TextStyle(fontSize: 20,color: Colors.black),
+                            "============================================",
+                            style: TextStyle(color: Colors.black),
                           ),
-                          Text("============================================", style: TextStyle(color: Colors.black),),
+                          Text(
+                            (widget.piece.net_a_payer >= 0)
+                                ? "${S.current.net_payer} :${Helpers.numberFormat(widget.piece.net_a_payer)} $_devise"
+                                : "${S.current.net_payer} :${Helpers.numberFormat(widget.piece.net_a_payer * -1)} $_devise",
+                            style: TextStyle(fontSize: 20, color: Colors.black),
+                          ),
+                          Text(
+                            "============================================",
+                            style: TextStyle(color: Colors.black),
+                          ),
                           SizedBox(
                             height: 17,
                           ),
@@ -294,15 +364,20 @@ class _PreviewPieceState extends State<PreviewPiece> {
                             children: [
                               Expanded(
                                 child: Text(
-                              (widget.piece.regler >= 0)
-                                    ? "${S.current.regler} :${Helpers.numberFormat(widget.piece.regler)}" :"${S.current.regler} :${Helpers.numberFormat(widget.piece.regler * -1)}" , style: TextStyle(color: Colors.black) ,
+                                  (widget.piece.regler >= 0)
+                                      ? "${S.current.regler} :${Helpers.numberFormat(widget.piece.regler)}"
+                                      : "${S.current.regler} :${Helpers.numberFormat(widget.piece.regler * -1)}",
+                                  style: TextStyle(color: Colors.black),
                                 ),
                               ),
                               Expanded(
                                 child: (widget.piece.reste != 0)
                                     ? Text(
-                                    (widget.piece.reste > 0)
-                                        ? "${S.current.reste} :${Helpers.numberFormat(widget.piece.reste)}" :"${S.current.reste} :${Helpers.numberFormat(widget.piece.reste * -1)}" , style: TextStyle(color: Colors.black),)
+                                        (widget.piece.reste > 0)
+                                            ? "${S.current.reste} :${Helpers.numberFormat(widget.piece.reste)}"
+                                            : "${S.current.reste} :${Helpers.numberFormat(widget.piece.reste * -1)}",
+                                        style: TextStyle(color: Colors.black),
+                                      )
                                     : SizedBox(),
                               )
                             ],
@@ -326,8 +401,8 @@ class _PreviewPieceState extends State<PreviewPiece> {
           floatingActionButton: (widget.format == 45)
               ? FloatingActionButton(
                   backgroundColor: Colors.blue,
-                  onPressed: (){
-                      _sharePdfFile(context);
+                  onPressed: () {
+                    _sharePdfFile(context);
                   },
                   child: Icon(
                     Icons.share,
@@ -335,36 +410,40 @@ class _PreviewPieceState extends State<PreviewPiece> {
                     size: 30,
                   ),
                 )
-              : (widget.format != 0)? FloatingActionButton(
-                  onPressed: () {
-                      _printTicket(context);
-                  },
-                  child: Icon(
-                    Icons.print_rounded,
-                    color: Theme.of(context).floatingActionButtonTheme.foregroundColor,
-                    size: 30,
-                  ),
-                ):null
-      );
+              : (widget.format != 0)
+                  ? FloatingActionButton(
+                      onPressed: () {
+                        _printTicket(context);
+                      },
+                      child: Icon(
+                        Icons.print_rounded,
+                        color: Theme.of(context)
+                            .floatingActionButtonTheme
+                            .foregroundColor,
+                        size: 30,
+                      ),
+                    )
+                  : null);
     }
   }
 
   _sharePdfFile(context) async {
-    if(_myParams.versionType != "demo"){
-      await Printing.sharePdf(bytes: await widget.pdfDoc.save(), filename: 'my-document.pdf');
-    }else{
+    if (_myParams.versionType != "demo") {
+      await Printing.sharePdf(
+          bytes: await widget.pdfDoc.save(), filename: 'my-document.pdf');
+    } else {
       var message = S.current.msg_demo_option;
       Helpers.showFlushBar(context, message);
     }
   }
 
-  _printTicket(context)async{
-    if(_myParams.versionType != "demo"){
+  _printTicket(context) async {
+    if (_myParams.versionType != "demo") {
       await updateFormatPrint();
       Ticket ticket = await _ticket(_default_format);
       Navigator.pop(context);
       widget.ticket(ticket);
-    }else{
+    } else {
       var message = S.current.msg_demo_option;
       Helpers.showFlushBar(context, message);
     }
@@ -375,18 +454,18 @@ class _PreviewPieceState extends State<PreviewPiece> {
 
     if (directionRtl) {
       var input = "${_profile.raisonSociale}";
-      Uint8List encArabic = await CharsetConverter.encode("ISO-8859-6",
-          "${input.split('').reversed.join()}");
+      Uint8List encArabic = await CharsetConverter.encode(
+          "ISO-8859-6", "${input.split('').reversed.join()}");
       ticket.textEncoded(encArabic,
           styles: PosStyles(
               codeTable: PosCodeTable.arabic,
               align: (_default_format == PaperSize.mm80)
                   ? PosAlign.center
                   : PosAlign.left));
-      if(_profile.activite != ""){
+      if (_profile.activite != "") {
         input = "${_profile.activite}";
-        encArabic = await CharsetConverter.encode("ISO-8859-6",
-            "${input.split('').reversed.join()}");
+        encArabic = await CharsetConverter.encode(
+            "ISO-8859-6", "${input.split('').reversed.join()}");
         ticket.textEncoded(encArabic,
             styles: PosStyles(
                 codeTable: PosCodeTable.arabic,
@@ -394,10 +473,10 @@ class _PreviewPieceState extends State<PreviewPiece> {
                     ? PosAlign.center
                     : PosAlign.left));
       }
-      if(_profile.adresse != ""){
+      if (_profile.adresse != "") {
         input = "${_profile.adresse}";
-        encArabic = await CharsetConverter.encode("ISO-8859-6",
-            "${input.split('').reversed.join()}");
+        encArabic = await CharsetConverter.encode(
+            "ISO-8859-6", "${input.split('').reversed.join()}");
         ticket.textEncoded(encArabic,
             styles: PosStyles(
                 codeTable: PosCodeTable.arabic,
@@ -405,10 +484,10 @@ class _PreviewPieceState extends State<PreviewPiece> {
                     ? PosAlign.center
                     : PosAlign.left));
       }
-      if(_profile.ville != ""){
+      if (_profile.ville != "") {
         input = "${_profile.ville}";
-        encArabic = await CharsetConverter.encode("ISO-8859-6",
-            "${input.split('').reversed.join()}");
+        encArabic = await CharsetConverter.encode(
+            "ISO-8859-6", "${input.split('').reversed.join()}");
         ticket.textEncoded(encArabic,
             styles: PosStyles(
                 codeTable: PosCodeTable.arabic,
@@ -416,10 +495,10 @@ class _PreviewPieceState extends State<PreviewPiece> {
                     ? PosAlign.center
                     : PosAlign.left));
       }
-      if(_profile.telephone != ""){
+      if (_profile.telephone != "") {
         input = "${_profile.telephone}";
-        encArabic = await CharsetConverter.encode("ISO-8859-6",
-            "${input.split('').reversed.join()}");
+        encArabic = await CharsetConverter.encode(
+            "ISO-8859-6", "${input.split('').reversed.join()}");
         ticket.textEncoded(encArabic,
             styles: PosStyles(
                 codeTable: PosCodeTable.arabic,
@@ -427,10 +506,10 @@ class _PreviewPieceState extends State<PreviewPiece> {
                     ? PosAlign.center
                     : PosAlign.left));
       }
-      if(_profile.rc != ""){
+      if (_profile.rc != "") {
         input = "${_profile.rc}";
-        encArabic = await CharsetConverter.encode("ISO-8859-6",
-            "${input.split('').reversed.join()}");
+        encArabic = await CharsetConverter.encode(
+            "ISO-8859-6", "${input.split('').reversed.join()}");
         ticket.textEncoded(encArabic,
             styles: PosStyles(
                 codeTable: PosCodeTable.arabic,
@@ -438,10 +517,10 @@ class _PreviewPieceState extends State<PreviewPiece> {
                     ? PosAlign.center
                     : PosAlign.left));
       }
-      if(_profile.nif != ""){
+      if (_profile.nif != "") {
         input = "${_profile.nif}";
-        encArabic = await CharsetConverter.encode("ISO-8859-6",
-            "${input.split('').reversed.join()}");
+        encArabic = await CharsetConverter.encode(
+            "ISO-8859-6", "${input.split('').reversed.join()}");
         ticket.textEncoded(encArabic,
             styles: PosStyles(
                 codeTable: PosCodeTable.arabic,
@@ -449,10 +528,10 @@ class _PreviewPieceState extends State<PreviewPiece> {
                     ? PosAlign.center
                     : PosAlign.left));
       }
-      if(_profile.ai != ""){
+      if (_profile.ai != "") {
         input = "${_profile.ai}";
-        encArabic = await CharsetConverter.encode("ISO-8859-6",
-            "${input.split('').reversed.join()}");
+        encArabic = await CharsetConverter.encode(
+            "ISO-8859-6", "${input.split('').reversed.join()}");
         ticket.textEncoded(encArabic,
             styles: PosStyles(
                 codeTable: PosCodeTable.arabic,
@@ -462,8 +541,8 @@ class _PreviewPieceState extends State<PreviewPiece> {
       }
       ticket.hr(ch: '=');
 
-       input = "${S.current.n} ${getPiecetype()}";
-       encArabic = await CharsetConverter.encode("ISO-8859-6",
+      input = "${S.current.n} ${getPiecetype()}";
+      encArabic = await CharsetConverter.encode("ISO-8859-6",
           "${widget.piece.num_piece}: ${input.split('').reversed.join()}");
       ticket.textEncoded(encArabic,
           styles: PosStyles(
@@ -492,14 +571,14 @@ class _PreviewPieceState extends State<PreviewPiece> {
                   ? PosAlign.center
                   : PosAlign.left));
 
-
-      if(widget.tier.rc != "" && (widget.piece.piece == PieceType.factureClient ||
-          widget.piece.piece == PieceType.factureFournisseur ||
-          widget.piece.piece == PieceType.avoirClient ||
-          widget.piece.piece == PieceType.avoirFournisseur)){
+      if (widget.tier.rc != "" &&
+          (widget.piece.piece == PieceType.factureClient ||
+              widget.piece.piece == PieceType.factureFournisseur ||
+              widget.piece.piece == PieceType.avoirClient ||
+              widget.piece.piece == PieceType.avoirFournisseur)) {
         input = "${widget.tier.rc}";
-        encArabic = await CharsetConverter.encode("ISO-8859-6",
-            "${input.split('').reversed.join()}");
+        encArabic = await CharsetConverter.encode(
+            "ISO-8859-6", "${input.split('').reversed.join()}");
         ticket.textEncoded(encArabic,
             styles: PosStyles(
                 codeTable: PosCodeTable.arabic,
@@ -507,13 +586,14 @@ class _PreviewPieceState extends State<PreviewPiece> {
                     ? PosAlign.center
                     : PosAlign.left));
       }
-      if(widget.tier.nif != "" && (widget.piece.piece == PieceType.factureClient ||
-          widget.piece.piece == PieceType.factureFournisseur ||
-          widget.piece.piece == PieceType.avoirClient ||
-          widget.piece.piece == PieceType.avoirFournisseur)){
+      if (widget.tier.nif != "" &&
+          (widget.piece.piece == PieceType.factureClient ||
+              widget.piece.piece == PieceType.factureFournisseur ||
+              widget.piece.piece == PieceType.avoirClient ||
+              widget.piece.piece == PieceType.avoirFournisseur)) {
         input = "${widget.tier.nif}";
-        encArabic = await CharsetConverter.encode("ISO-8859-6",
-            "${input.split('').reversed.join()}");
+        encArabic = await CharsetConverter.encode(
+            "ISO-8859-6", "${input.split('').reversed.join()}");
         ticket.textEncoded(encArabic,
             styles: PosStyles(
                 codeTable: PosCodeTable.arabic,
@@ -521,13 +601,14 @@ class _PreviewPieceState extends State<PreviewPiece> {
                     ? PosAlign.center
                     : PosAlign.left));
       }
-      if(widget.tier.ai != "" && (widget.piece.piece == PieceType.factureClient ||
-          widget.piece.piece == PieceType.factureFournisseur ||
-          widget.piece.piece == PieceType.avoirClient ||
-          widget.piece.piece == PieceType.avoirFournisseur)){
+      if (widget.tier.ai != "" &&
+          (widget.piece.piece == PieceType.factureClient ||
+              widget.piece.piece == PieceType.factureFournisseur ||
+              widget.piece.piece == PieceType.avoirClient ||
+              widget.piece.piece == PieceType.avoirFournisseur)) {
         input = "${widget.tier.ai}";
-        encArabic = await CharsetConverter.encode("ISO-8859-6",
-            "${input.split('').reversed.join()}");
+        encArabic = await CharsetConverter.encode(
+            "ISO-8859-6", "${input.split('').reversed.join()}");
         ticket.textEncoded(encArabic,
             styles: PosStyles(
                 codeTable: PosCodeTable.arabic,
@@ -584,9 +665,12 @@ class _PreviewPieceState extends State<PreviewPiece> {
                       "${element.designation.substring(0, ((element.designation.length < 8 ? element.designation.length : 8)))}"),
                   width: 6),
           PosColumn(
-              text: '${Helpers.numberFormat(element.selectedQuantite).toString()}', width: 2),
+              text:
+                  '${Helpers.numberFormat(element.selectedQuantite).toString()}',
+              width: 2),
           PosColumn(
-              text: '${Helpers.numberFormat(element.selectedPrice).toString()}', width: 2),
+              text: '${Helpers.numberFormat(element.selectedPrice).toString()}',
+              width: 2),
           PosColumn(
               text:
                   '${Helpers.numberFormat((element.selectedPrice * element.selectedQuantite)).toString()}',
@@ -594,7 +678,8 @@ class _PreviewPieceState extends State<PreviewPiece> {
         ]);
       }
       ticket.hr(ch: '-');
-      if ((widget.piece.total_tva > 0 && _myParams.tva) || widget.piece.remise > 0) {
+      if ((widget.piece.total_tva > 0 && _myParams.tva) ||
+          widget.piece.remise > 0) {
         input = "${S.current.total_ht}";
         encArabic = await CharsetConverter.encode("ISO-8859-6",
             "${Helpers.numberFormat(widget.piece.total_ht).toString()}: ${input.split('').reversed.join()}");
@@ -663,11 +748,11 @@ class _PreviewPieceState extends State<PreviewPiece> {
 
       ticket.hr(ch: '=');
       input = "${S.current.net_payer}";
-      encArabic =(widget.piece.net_a_payer >= 0)
+      encArabic = (widget.piece.net_a_payer >= 0)
           ? await CharsetConverter.encode("ISO-8859-6",
-          "$_devise ${Helpers.numberFormat(widget.piece.net_a_payer).toString()}: ${input.split('').reversed.join()}")
-      : await CharsetConverter.encode("ISO-8859-6",
-          "$_devise ${Helpers.numberFormat(widget.piece.net_a_payer * -1).toString()}: ${input.split('').reversed.join()}");
+              "$_devise ${Helpers.numberFormat(widget.piece.net_a_payer).toString()}: ${input.split('').reversed.join()}")
+          : await CharsetConverter.encode("ISO-8859-6",
+              "$_devise ${Helpers.numberFormat(widget.piece.net_a_payer * -1).toString()}: ${input.split('').reversed.join()}");
       ticket.textEncoded(encArabic,
           styles: PosStyles(
             codeTable: PosCodeTable.arabic,
@@ -681,19 +766,19 @@ class _PreviewPieceState extends State<PreviewPiece> {
 
       ticket.row([
         PosColumn(
-            textEncoded:(widget.piece.regler >= 0)
+            textEncoded: (widget.piece.regler >= 0)
                 ? await CharsetConverter.encode("ISO-8859-6",
-                "${Helpers.numberFormat(widget.piece.regler).toString()}: ${S.current.regler.split('').reversed.join()}")
-            :  await CharsetConverter.encode("ISO-8859-6",
-                "${Helpers.numberFormat(widget.piece.regler * -1).toString()}: ${S.current.regler.split('').reversed.join()}"),
+                    "${Helpers.numberFormat(widget.piece.regler).toString()}: ${S.current.regler.split('').reversed.join()}")
+                : await CharsetConverter.encode("ISO-8859-6",
+                    "${Helpers.numberFormat(widget.piece.regler * -1).toString()}: ${S.current.regler.split('').reversed.join()}"),
             width: 6),
         (widget.piece.reste != 0)
             ? PosColumn(
-                textEncoded:(widget.piece.reste > 0)
+                textEncoded: (widget.piece.reste > 0)
                     ? await CharsetConverter.encode("ISO-8859-6",
-                    "${Helpers.numberFormat(widget.piece.reste).toString()}: ${S.current.reste.split('').reversed.join()}")
-            : await CharsetConverter.encode("ISO-8859-6",
-                    "${Helpers.numberFormat(widget.piece.reste * -1).toString()}: ${S.current.reste.split('').reversed.join()}"),
+                        "${Helpers.numberFormat(widget.piece.reste).toString()}: ${S.current.reste.split('').reversed.join()}")
+                    : await CharsetConverter.encode("ISO-8859-6",
+                        "${Helpers.numberFormat(widget.piece.reste * -1).toString()}: ${S.current.reste.split('').reversed.join()}"),
                 width: 6)
             : PosColumn(width: 6),
       ]);
@@ -713,28 +798,28 @@ class _PreviewPieceState extends State<PreviewPiece> {
               align: (_default_format == PaperSize.mm80)
                   ? PosAlign.center
                   : PosAlign.left));
-      if(_profile.activite != ""){
+      if (_profile.activite != "") {
         ticket.text("${_profile.activite}",
             styles: PosStyles(
                 align: (_default_format == PaperSize.mm80)
                     ? PosAlign.center
                     : PosAlign.left));
       }
-      if(_profile.adresse != ""){
+      if (_profile.adresse != "") {
         ticket.text("${_profile.adresse}",
             styles: PosStyles(
                 align: (_default_format == PaperSize.mm80)
                     ? PosAlign.center
                     : PosAlign.left));
       }
-      if(_profile.ville != ""){
+      if (_profile.ville != "") {
         ticket.text("${_profile.ville}",
             styles: PosStyles(
                 align: (_default_format == PaperSize.mm80)
                     ? PosAlign.center
                     : PosAlign.left));
       }
-      if(_profile.telephone != ""){
+      if (_profile.telephone != "") {
         ticket.text("${_profile.telephone}",
             styles: PosStyles(
                 align: (_default_format == PaperSize.mm80)
@@ -759,31 +844,33 @@ class _PreviewPieceState extends State<PreviewPiece> {
               align: (_default_format == PaperSize.mm80)
                   ? PosAlign.center
                   : PosAlign.left));
-      if(widget.tier.rc != "" && (widget.piece.piece == PieceType.factureClient ||
-          widget.piece.piece == PieceType.factureFournisseur ||
-          widget.piece.piece == PieceType.avoirClient ||
-          widget.piece.piece == PieceType.avoirFournisseur)){
-
+      if (widget.tier.rc != "" &&
+          (widget.piece.piece == PieceType.factureClient ||
+              widget.piece.piece == PieceType.factureFournisseur ||
+              widget.piece.piece == PieceType.avoirClient ||
+              widget.piece.piece == PieceType.avoirFournisseur)) {
         ticket.text("${S.current.rc} : ${widget.tier.rc}",
             styles: PosStyles(
                 align: (_default_format == PaperSize.mm80)
                     ? PosAlign.center
                     : PosAlign.left));
       }
-      if(widget.tier.nif != "" && (widget.piece.piece == PieceType.factureClient ||
-          widget.piece.piece == PieceType.factureFournisseur ||
-          widget.piece.piece == PieceType.avoirClient ||
-          widget.piece.piece == PieceType.avoirFournisseur)){
+      if (widget.tier.nif != "" &&
+          (widget.piece.piece == PieceType.factureClient ||
+              widget.piece.piece == PieceType.factureFournisseur ||
+              widget.piece.piece == PieceType.avoirClient ||
+              widget.piece.piece == PieceType.avoirFournisseur)) {
         ticket.text("${S.current.nif} : ${widget.tier.nif}",
             styles: PosStyles(
                 align: (_default_format == PaperSize.mm80)
                     ? PosAlign.center
                     : PosAlign.left));
       }
-      if(widget.tier.ai != "" && (widget.piece.piece == PieceType.factureClient ||
-          widget.piece.piece == PieceType.factureFournisseur ||
-          widget.piece.piece == PieceType.avoirClient ||
-          widget.piece.piece == PieceType.avoirFournisseur)){
+      if (widget.tier.ai != "" &&
+          (widget.piece.piece == PieceType.factureClient ||
+              widget.piece.piece == PieceType.factureFournisseur ||
+              widget.piece.piece == PieceType.avoirClient ||
+              widget.piece.piece == PieceType.avoirFournisseur)) {
         ticket.text("${S.current.art_imp} : ${widget.tier.ai}",
             styles: PosStyles(
                 align: (_default_format == PaperSize.mm80)
@@ -805,9 +892,9 @@ class _PreviewPieceState extends State<PreviewPiece> {
             width: 2,
             styles: PosStyles(bold: true)),
       ]);
-      widget.articles.forEach((element) async{
+      widget.articles.forEach((element) async {
         ticket.row([
-          (_myParams.printDisplay  == 0)
+          (_myParams.printDisplay == 0)
               ? PosColumn(
                   text:
                       '${element.ref.substring(0, (element.ref.length < 8 ? element.ref.length : 8))}',
@@ -817,23 +904,26 @@ class _PreviewPieceState extends State<PreviewPiece> {
                       '${element.designation.substring(0, (element.designation.length < 8 ? element.designation.length : 8))}',
                   width: 6),
           PosColumn(
-              textEncoded:await CharsetConverter.encode("ISO-8859-6", '${Helpers.numberFormat(element.selectedQuantite).toString()}'), width: 2),
+              textEncoded: await CharsetConverter.encode("ISO-8859-6",
+                  '${Helpers.numberFormat(element.selectedQuantite).toString()}'),
+              width: 2),
           PosColumn(
-              textEncoded: await CharsetConverter.encode("ISO-8859-6",'${Helpers.numberFormat(element.selectedPrice).toString()}'),
-              width: 2
-          ),
+              textEncoded: await CharsetConverter.encode("ISO-8859-6",
+                  '${Helpers.numberFormat(element.selectedPrice).toString()}'),
+              width: 2),
           PosColumn(
-              textEncoded:
-                await CharsetConverter.encode("ISO-8859-6",'${Helpers.numberFormat((element.selectedPrice*element.selectedQuantite)).toString()}'),
+              textEncoded: await CharsetConverter.encode("ISO-8859-6",
+                  '${Helpers.numberFormat((element.selectedPrice * element.selectedQuantite)).toString()}'),
               width: 2),
         ]);
       });
       ticket.hr(ch: '-');
-      var encode ;
-      if ((widget.piece.total_tva > 0 && _myParams.tva) || widget.piece.remise > 0) {
-        encode = await CharsetConverter.encode("ISO-8859-6", "${S.current.total_ht} : ${Helpers.numberFormat(widget.piece.total_ht).toString()}");
-        ticket.textEncoded(
-            encode,
+      var encode;
+      if ((widget.piece.total_tva > 0 && _myParams.tva) ||
+          widget.piece.remise > 0) {
+        encode = await CharsetConverter.encode("ISO-8859-6",
+            "${S.current.total_ht} : ${Helpers.numberFormat(widget.piece.total_ht).toString()}");
+        ticket.textEncoded(encode,
             styles: PosStyles(
                 align: (_default_format == PaperSize.mm80)
                     ? PosAlign.center
@@ -842,33 +932,32 @@ class _PreviewPieceState extends State<PreviewPiece> {
       if (widget.piece.remise > 0) {
         encode = await CharsetConverter.encode("ISO-8859-6",
             "${S.current.remise} : ${Helpers.numberFormat(((widget.piece.total_ht * widget.piece.remise) / 100)).toString()} (${Helpers.numberFormat(widget.piece.remise).toString()} %)");
-        ticket.textEncoded(
-            encode,
+        ticket.textEncoded(encode,
             styles: PosStyles(
                 align: (_default_format == PaperSize.mm80)
                     ? PosAlign.center
                     : PosAlign.left));
 
-        encode = await CharsetConverter.encode("ISO-8859-6", "${S.current.net_ht} : ${Helpers.numberFormat(widget.piece.net_ht).toString()}");
-        ticket.textEncoded(
-            encode,
+        encode = await CharsetConverter.encode("ISO-8859-6",
+            "${S.current.net_ht} : ${Helpers.numberFormat(widget.piece.net_ht).toString()}");
+        ticket.textEncoded(encode,
             styles: PosStyles(
                 align: (_default_format == PaperSize.mm80)
                     ? PosAlign.center
                     : PosAlign.left));
       }
       if (widget.piece.total_tva > 0) {
-        encode = await CharsetConverter.encode("ISO-8859-6", "${S.current.total_tva} : ${Helpers.numberFormat(widget.piece.total_tva).toString()}");
-        ticket.textEncoded(
-            encode,
+        encode = await CharsetConverter.encode("ISO-8859-6",
+            "${S.current.total_tva} : ${Helpers.numberFormat(widget.piece.total_tva).toString()}");
+        ticket.textEncoded(encode,
             styles: PosStyles(
                 align: (_default_format == PaperSize.mm80)
                     ? PosAlign.center
                     : PosAlign.left));
 
-        encode = await CharsetConverter.encode("ISO-8859-6", "${S.current.total} : ${Helpers.numberFormat(widget.piece.total_ttc).toString()}");
-        ticket.textEncoded(
-            encode,
+        encode = await CharsetConverter.encode("ISO-8859-6",
+            "${S.current.total} : ${Helpers.numberFormat(widget.piece.total_ttc).toString()}");
+        ticket.textEncoded(encode,
             styles: PosStyles(
                 align: (_default_format == PaperSize.mm80)
                     ? PosAlign.center
@@ -878,8 +967,7 @@ class _PreviewPieceState extends State<PreviewPiece> {
       if (_myParams.timbre) {
         encode = await CharsetConverter.encode("ISO-8859-6",
             "${S.current.timbre} : ${(widget.piece.total_ttc < widget.piece.net_a_payer) ? Helpers.numberFormat(widget.piece.timbre).toString() : Helpers.numberFormat(0.0).toString()}");
-        ticket.textEncoded(
-            encode,
+        ticket.textEncoded(encode,
             styles: PosStyles(
                 align: (_default_format == PaperSize.mm80)
                     ? PosAlign.center
@@ -887,11 +975,12 @@ class _PreviewPieceState extends State<PreviewPiece> {
       }
 
       ticket.hr(ch: '=');
-      encode =(widget.piece.net_a_payer >= 0)
-          ? await CharsetConverter.encode("ISO-8859-6", "${S.current.net_payer} : ${Helpers.numberFormat(widget.piece.net_a_payer).toString()} $_devise")
-          :await CharsetConverter.encode("ISO-8859-6", "${S.current.net_payer} : ${Helpers.numberFormat(widget.piece.net_a_payer * -1).toString()} $_devise");
-      ticket.textEncoded(
-          encode,
+      encode = (widget.piece.net_a_payer >= 0)
+          ? await CharsetConverter.encode("ISO-8859-6",
+              "${S.current.net_payer} : ${Helpers.numberFormat(widget.piece.net_a_payer).toString()} $_devise")
+          : await CharsetConverter.encode("ISO-8859-6",
+              "${S.current.net_payer} : ${Helpers.numberFormat(widget.piece.net_a_payer * -1).toString()} $_devise");
+      ticket.textEncoded(encode,
           styles: PosStyles(
             align: (_default_format == PaperSize.mm80)
                 ? PosAlign.center
@@ -903,22 +992,26 @@ class _PreviewPieceState extends State<PreviewPiece> {
       ticket.row([
         PosColumn(
             textEncoded: (widget.piece.regler >= 0)
-               ? await CharsetConverter.encode("ISO-8859-6","${S.current.regler} : ${Helpers.numberFormat(widget.piece.regler).toString()}")
-            :await CharsetConverter.encode("ISO-8859-6","${S.current.regler} : ${Helpers.numberFormat(widget.piece.regler * -1).toString()}"),
+                ? await CharsetConverter.encode("ISO-8859-6",
+                    "${S.current.regler} : ${Helpers.numberFormat(widget.piece.regler).toString()}")
+                : await CharsetConverter.encode("ISO-8859-6",
+                    "${S.current.regler} : ${Helpers.numberFormat(widget.piece.regler * -1).toString()}"),
             width: 6),
         (widget.piece.reste != 0)
             ? PosColumn(
                 textEncoded: (widget.piece.reste > 0)
-                  ? await CharsetConverter.encode("ISO-8859-6", "${S.current.reste} : ${Helpers.numberFormat(widget.piece.reste).toString()}")
-            : await CharsetConverter.encode("ISO-8859-6", "${S.current.reste} : ${Helpers.numberFormat(widget.piece.reste * -1).toString()}"),
+                    ? await CharsetConverter.encode("ISO-8859-6",
+                        "${S.current.reste} : ${Helpers.numberFormat(widget.piece.reste).toString()}")
+                    : await CharsetConverter.encode("ISO-8859-6",
+                        "${S.current.reste} : ${Helpers.numberFormat(widget.piece.reste * -1).toString()}"),
                 width: 6)
             : PosColumn(width: 6),
       ]);
 
       if (_myParams.creditTier) {
-        encode = await CharsetConverter.encode("ISO-8859-6", "${S.current.credit} : ${Helpers.numberFormat(widget.tier.credit).toString()}");
-        ticket.textEncoded(
-            encode);
+        encode = await CharsetConverter.encode("ISO-8859-6",
+            "${S.current.credit} : ${Helpers.numberFormat(widget.tier.credit).toString()}");
+        ticket.textEncoded(encode);
       }
 
       ticket.feed(1);

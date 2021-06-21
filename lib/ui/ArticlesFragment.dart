@@ -1,43 +1,40 @@
 import 'dart:async';
 import 'dart:math';
+
 import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:barcode_scan/barcode_scan.dart';
 import 'package:circular_menu/circular_menu.dart';
+import 'package:feature_discovery/feature_discovery.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 import 'package:gestmob/Helpers/Helpers.dart';
-import 'package:gestmob/Helpers/QueryCtr.dart';
 import 'package:gestmob/Helpers/Statics.dart';
 import 'package:gestmob/Widgets/CustomWidgets/search_bar.dart';
 import 'package:gestmob/Widgets/CustomWidgets/select_items_bar.dart';
-import 'package:gestmob/Widgets/article_list_item.dart';
+import 'package:gestmob/Widgets/utils.dart' as utils;
 import 'package:gestmob/generated/l10n.dart';
 import 'package:gestmob/models/Article.dart';
 import 'package:gestmob/models/ArticleFamille.dart';
 import 'package:gestmob/models/ArticleMarque.dart';
-import 'package:gestmob/models/Tiers.dart';
-import 'package:gestmob/search/items_sliver_list.dart';
-import 'package:gestmob/search/search_input_sliver.dart';
-import 'package:gestmob/search/sliver_list_data_source.dart';
-import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
-import 'package:gestmob/Widgets/utils.dart' as utils;
-import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
-import 'AddArticlePage.dart';
-import 'package:gestmob/services/push_notifications.dart';
 import 'package:gestmob/models/MyParams.dart';
-import 'package:feature_discovery/feature_discovery.dart';
-import 'package:flutter/scheduler.dart';
+import 'package:gestmob/search/items_sliver_list.dart';
+import 'package:gestmob/search/sliver_list_data_source.dart';
+import 'package:gestmob/services/push_notifications.dart';
 import 'package:google_fonts/google_fonts.dart';
-
+import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 
 class ArticlesFragment extends StatefulWidget {
   final Function(List<dynamic>) onConfirmSelectedItems;
   final int tarification;
-  final String pieceOrigin ;
+  final String pieceOrigin;
 
   const ArticlesFragment(
-      {Key key, this.onConfirmSelectedItems, this.tarification , this.pieceOrigin})
+      {Key key,
+      this.onConfirmSelectedItems,
+      this.tarification,
+      this.pieceOrigin})
       : super(key: key);
 
   @override
@@ -62,7 +59,6 @@ class _ArticlesFragmentState extends State<ArticlesFragment> {
   ArticleFamille _selectedFamille;
   bool _filterOutStock = false;
 
-
   int _savedSelectedMarque = 0;
   int _savedSelectedFamille = 0;
   bool _savedFilterOutStock = false;
@@ -70,23 +66,27 @@ class _ArticlesFragmentState extends State<ArticlesFragment> {
   bool _filterNonStockable = false;
   bool _savedFilterNonStockable = false;
 
-  bool _filterArtilceBloquer = false ;
-  bool _savedFilterArticleBloquer = false ;
+  bool _filterArtilceBloquer = false;
+  bool _savedFilterArticleBloquer = false;
 
   SliverListDataSource _dataSource;
   MyParams _myParams;
-  String feature9 = 'feature9' ;
-  String feature10 = 'feature10' ;
-  String feature13 = 'feature13' ;
+  String feature9 = 'feature9';
+  String feature10 = 'feature10';
+  String feature13 = 'feature13';
 
   static const _stream = const EventChannel('pda.flutter.dev/scanEvent');
-  StreamSubscription subscription ;
+  StreamSubscription subscription;
 
   @override
   Future<void> initState() {
     super.initState();
     SchedulerBinding.instance.addPostFrameCallback((Duration duration) {
-      FeatureDiscovery.discoverFeatures(context, <String>{feature13 , feature9 ,feature10,});
+      FeatureDiscovery.discoverFeatures(context, <String>{
+        feature13,
+        feature9,
+        feature10,
+      });
     });
     fillFilter(_filterMap);
     fillFilter(_emptyFilterMap);
@@ -101,11 +101,10 @@ class _ArticlesFragmentState extends State<ArticlesFragment> {
     _myParams = data.myParams;
   }
 
-
   @override
   void dispose() {
-     subscription.cancel();
-     super.dispose();
+    subscription.cancel();
+    super.dispose();
   }
 
   //***************************************************partie speciale pour le filtre de recherche***************************************
@@ -113,8 +112,8 @@ class _ArticlesFragmentState extends State<ArticlesFragment> {
     filter["Id_Marque"] = _savedSelectedMarque;
     filter["Id_Famille"] = _savedSelectedFamille;
     filter["outStock"] = _savedFilterOutStock;
-    filter["articleBloquer"] = _savedFilterArticleBloquer ;
-    filter["nonStockable"] = _savedFilterNonStockable ;
+    filter["articleBloquer"] = _savedFilterArticleBloquer;
+    filter["nonStockable"] = _savedFilterNonStockable;
   }
 
   Future<Widget> futureInitState() async {
@@ -130,19 +129,25 @@ class _ArticlesFragmentState extends State<ArticlesFragment> {
     _selectedMarque = _marqueItems[_savedSelectedMarque];
     _selectedFamille = _familleItems[_savedSelectedFamille];
     _filterOutStock = _savedFilterOutStock;
-    _filterArtilceBloquer = _savedFilterArticleBloquer ;
-    _filterNonStockable = _savedFilterNonStockable ;
+    _filterArtilceBloquer = _savedFilterArticleBloquer;
+    _filterNonStockable = _savedFilterNonStockable;
 
     final tile = StatefulBuilder(builder: (context, StateSetter _setState) {
       return Builder(
         builder: (context) => Column(
           children: [
             new ListTile(
-              title: new Text(S.current.marque , style: GoogleFonts.lato(),),
+              title: new Text(
+                S.current.marque,
+                style: GoogleFonts.lato(),
+              ),
               trailing: marquesDropDown(_setState),
             ),
             new ListTile(
-              title: new Text(S.current.famile, style: GoogleFonts.lato(),),
+              title: new Text(
+                S.current.famile,
+                style: GoogleFonts.lato(),
+              ),
               trailing: famillesDropDown(_setState),
             ),
             stockCheckBox(_setState),
@@ -217,7 +222,10 @@ class _ArticlesFragmentState extends State<ArticlesFragment> {
 
   Widget stockCheckBox(StateSetter _setState) {
     return CheckboxListTile(
-      title: Text(S.current.non_stocke , style: GoogleFonts.lato(),),
+      title: Text(
+        S.current.non_stocke,
+        style: GoogleFonts.lato(),
+      ),
       value: _filterOutStock,
       onChanged: (bool value) {
         _setState(() {
@@ -228,11 +236,14 @@ class _ArticlesFragmentState extends State<ArticlesFragment> {
   }
 
   Widget articleBloquer(StateSetter _setState) {
-    if(widget.onConfirmSelectedItems == null){
+    if (widget.onConfirmSelectedItems == null) {
       return CheckboxListTile(
-        title: Text(S.current.aff_bloquer , style: GoogleFonts.lato(),),
+        title: Text(
+          S.current.aff_bloquer,
+          style: GoogleFonts.lato(),
+        ),
         value: _filterArtilceBloquer,
-        onChanged: (bool value){
+        onChanged: (bool value) {
           _setState(() {
             _filterArtilceBloquer = value;
           });
@@ -244,15 +255,17 @@ class _ArticlesFragmentState extends State<ArticlesFragment> {
 
   Widget showNonStockable(StateSetter _setState) {
     return CheckboxListTile(
-      title: Text(S.current.non_stockable , style: GoogleFonts.lato(),),
+      title: Text(
+        S.current.non_stockable,
+        style: GoogleFonts.lato(),
+      ),
       value: _filterNonStockable,
-      onChanged: (bool value){
+      onChanged: (bool value) {
         _setState(() {
           _filterNonStockable = value;
         });
       },
     );
-
   }
 
   //********************************************listing des pieces**********************************************************************
@@ -291,7 +304,7 @@ class _ArticlesFragmentState extends State<ArticlesFragment> {
               body: addFilterdialogue(),
               btnOkText: S.current.filtrer_btn,
               closeIcon: Icon(
-                Icons.close,
+                Icons.cancel_sharp,
                 color: Colors.red,
                 size: 26,
               ),
@@ -302,8 +315,8 @@ class _ArticlesFragmentState extends State<ArticlesFragment> {
                   _savedSelectedFamille =
                       _familleItems.indexOf(_selectedFamille);
                   _savedFilterOutStock = _filterOutStock;
-                  _savedFilterArticleBloquer = _filterArtilceBloquer ;
-                  _savedFilterNonStockable = _filterNonStockable ;
+                  _savedFilterArticleBloquer = _filterArtilceBloquer;
+                  _savedFilterNonStockable = _filterNonStockable;
 
                   fillFilter(_filterMap);
 
@@ -314,7 +327,6 @@ class _ArticlesFragmentState extends State<ArticlesFragment> {
                   }
                   _dataSource.updateFilters(_filterMap);
                 });
-
               })
             ..show();
         },
@@ -347,14 +359,14 @@ class _ArticlesFragmentState extends State<ArticlesFragment> {
             ],
             items: [
               CircularMenuItem(
-                  icon: (Icons.add),
-                  color: Colors.green,
-                  iconSize: 30.0,
-                  margin: 10.0,
-                  padding: 10.0,
-                  onTap: () {
-                    _addNewArticle(context) ;
-                  },
+                icon: (Icons.add),
+                color: Colors.green,
+                iconSize: 30.0,
+                margin: 10.0,
+                padding: 10.0,
+                onTap: () {
+                  _addNewArticle(context);
+                },
               ),
               CircularMenuItem(
                 icon: (MdiIcons.barcode),
@@ -366,8 +378,7 @@ class _ArticlesFragmentState extends State<ArticlesFragment> {
                   scanBarCode();
                 },
               )
-            ]
-        ),
+            ]),
         appBar: getAppBar(setState),
         body: ItemsSliverList(
             dataSource: _dataSource,
@@ -378,39 +389,35 @@ class _ArticlesFragmentState extends State<ArticlesFragment> {
                 ? (selectedItem) {
                     onItemSelected(setState, selectedItem);
                   }
-                : null)
-    );
+                : null));
   }
 
-  _addNewArticle(context){
-    if(_myParams.versionType == "demo"){
-      if(_dataSource.itemCount < 10){
+  _addNewArticle(context) {
+    if (_myParams.versionType == "demo") {
+      if (_dataSource.itemCount < 10) {
         Navigator.of(context)
-            .pushNamed(RoutesKeys.addArticle,
-            arguments: new Article.init())
+            .pushNamed(RoutesKeys.addArticle, arguments: new Article.init())
             .then((value) {
           _dataSource.refresh();
         });
-      }else{
+      } else {
         Navigator.pushNamed(context, RoutesKeys.appPurchase);
         var message = S.current.msg_demo_exp;
         Helpers.showFlushBar(context, message);
       }
-    }else{
-      if(DateTime.now().isBefore(Helpers.getDateExpiration(_myParams))){
+    } else {
+      if (DateTime.now().isBefore(Helpers.getDateExpiration(_myParams))) {
         Navigator.of(context)
-            .pushNamed(RoutesKeys.addArticle,
-            arguments: new Article.init())
+            .pushNamed(RoutesKeys.addArticle, arguments: new Article.init())
             .then((value) {
           _dataSource.refresh();
         });
-      }else{
+      } else {
         Navigator.pushNamed(context, RoutesKeys.appPurchase);
         var message = S.current.msg_premium_exp;
         Helpers.showFlushBar(context, message);
       }
     }
-
   }
 
   onItemSelected(setState, selectedItem) {
@@ -441,7 +448,6 @@ class _ArticlesFragmentState extends State<ArticlesFragment> {
           searchController.text = result.rawContent;
           _dataSource.updateSearchTerm(result.rawContent);
           FocusScope.of(context).requestFocus(null);
-
         });
       }
     } catch (e) {
@@ -461,7 +467,7 @@ class _ArticlesFragmentState extends State<ArticlesFragment> {
     }
   }
 
-  void _pdaScanner (data) {
+  void _pdaScanner(data) {
     setState(() {
       searchController.text = data;
       _dataSource.updateSearchTerm(data);

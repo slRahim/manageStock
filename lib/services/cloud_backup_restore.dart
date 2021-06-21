@@ -1,11 +1,11 @@
 import 'dart:io';
-import 'package:flutter/material.dart';
+
+import 'package:google_sign_in/google_sign_in.dart' show GoogleSignIn;
 import 'package:googleapis/drive/v3.dart' as ga;
 import 'package:http/http.dart' as http;
+import 'package:http/http.dart';
 import 'package:http/io_client.dart';
 import 'package:path/path.dart' as p;
-import 'package:http/http.dart';
-import 'package:google_sign_in/google_sign_in.dart' show GoogleSignIn;
 import 'package:path_provider/path_provider.dart' as pathprovider;
 
 class GoogleHttpClient extends IOClient {
@@ -27,7 +27,6 @@ class GoogleApi {
       'https://www.googleapis.com/auth/drive',
     ],
   );
-
 
   //Get Authenticated Http Client
   Future<http.Client> getHttpClient() async {
@@ -86,7 +85,6 @@ class GoogleApi {
     GoogleLogout();
     return (response.toJson());
   }
-
 
   //download file from drive
   DownloadGoogleDriveFile(String fName, String gdID) async {

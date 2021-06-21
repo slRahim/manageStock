@@ -1,33 +1,22 @@
 import 'package:awesome_dialog/awesome_dialog.dart';
+import 'package:feature_discovery/feature_discovery.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart';
 import 'package:flutter/widgets.dart';
 import 'package:gestmob/Helpers/Helpers.dart';
-import 'package:gestmob/Helpers/QueryCtr.dart';
 import 'package:gestmob/Helpers/Statics.dart';
 import 'package:gestmob/Widgets/CustomWidgets/search_bar.dart';
-import 'package:gestmob/Widgets/article_list_item.dart';
+import 'package:gestmob/Widgets/utils.dart' as utils;
 import 'package:gestmob/generated/l10n.dart';
-import 'package:gestmob/models/Article.dart';
-import 'package:gestmob/models/ArticleFamille.dart';
-import 'package:gestmob/models/ArticleMarque.dart';
-import 'package:gestmob/models/Piece.dart';
+import 'package:gestmob/models/MyParams.dart';
 import 'package:gestmob/models/Tresorie.dart';
 import 'package:gestmob/models/TresorieCategories.dart';
 import 'package:gestmob/search/items_sliver_list.dart';
-import 'package:gestmob/search/search_input_sliver.dart';
 import 'package:gestmob/search/sliver_list_data_source.dart';
-import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
-import 'package:gestmob/Widgets/utils.dart' as utils;
-import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:gestmob/services/push_notifications.dart';
-import 'package:gestmob/models/MyParams.dart';
-import 'AddArticlePage.dart';
-import 'package:feature_discovery/feature_discovery.dart';
-import 'package:flutter/scheduler.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class TresorieFragment extends StatefulWidget {
-
   @override
   _TresorieFragmentState createState() => _TresorieFragmentState();
 }
@@ -42,16 +31,16 @@ class _TresorieFragmentState extends State<TresorieFragment> {
   List<TresorieCategories> _categorieItems;
   List<DropdownMenuItem<TresorieCategories>> _categorieDropdownItems;
 
-  TresorieCategories  _selectedCategorie;
+  TresorieCategories _selectedCategorie;
   int _savedSelectedCategorie = 0;
 
   TextEditingController _startDateControl = new TextEditingController();
-  DateTime _filterStartDate ;
-  DateTime _savedFilterStartDate ;
+  DateTime _filterStartDate;
+  DateTime _savedFilterStartDate;
 
   TextEditingController _endDateControl = new TextEditingController();
-  DateTime _filterEndDate ;
-  DateTime _savedFilterEndDate ;
+  DateTime _filterEndDate;
+  DateTime _savedFilterEndDate;
 
   SliverListDataSource _dataSource;
   MyParams _myParams;
@@ -77,27 +66,28 @@ class _TresorieFragmentState extends State<TresorieFragment> {
   //*************************************************************************************************************************************
   //***************************************************partie speciale pour le filtre de recherche***************************************
   void fillFilter(Map<String, dynamic> filter) {
-    filter["Categorie"] = _savedSelectedCategorie+1 ;
-    filter["Start_date"] = _savedFilterStartDate ;
-    filter["End_date"] = _savedFilterEndDate ;
+    filter["Categorie"] = _savedSelectedCategorie + 1;
+    filter["Start_date"] = _savedFilterStartDate;
+    filter["End_date"] = _savedFilterEndDate;
   }
 
   Future<Widget> futureInitState() async {
     _categorieItems = await _dataSource.queryCtr.getAllTresorieCategorie();
 
-    _categorieItems[0].libelle = S.current.choisir ;
-    _categorieItems[1].libelle = S.current.reglemnt_client ;
-    _categorieItems[2].libelle = S.current.reglement_fournisseur ;
-    _categorieItems[3].libelle = S.current.encaissement ;
-    _categorieItems[4].libelle = S.current.charge ;
-    _categorieItems[5].libelle = S.current.rembourcement_client ;
-    _categorieItems[6].libelle = S.current.rembourcement_four ;
-    _categorieItems[7].libelle = S.current.decaissement ;
+    _categorieItems[0].libelle = S.current.choisir;
+    _categorieItems[1].libelle = S.current.reglemnt_client;
+    _categorieItems[2].libelle = S.current.reglement_fournisseur;
+    _categorieItems[3].libelle = S.current.encaissement;
+    _categorieItems[4].libelle = S.current.charge;
+    _categorieItems[5].libelle = S.current.rembourcement_client;
+    _categorieItems[6].libelle = S.current.rembourcement_four;
+    _categorieItems[7].libelle = S.current.decaissement;
 
-    _categorieDropdownItems= utils.buildDropTresorieCategoriesDownMenuItems(_categorieItems);
+    _categorieDropdownItems =
+        utils.buildDropTresorieCategoriesDownMenuItems(_categorieItems);
     _selectedCategorie = _categorieItems[_savedSelectedCategorie];
-    _filterStartDate = _savedFilterStartDate ;
-    _filterEndDate = _savedFilterEndDate ;
+    _filterStartDate = _savedFilterStartDate;
+    _filterEndDate = _savedFilterEndDate;
 
     final tile = StatefulBuilder(builder: (context, StateSetter _setState) {
       return Builder(
@@ -144,32 +134,30 @@ class _TresorieFragmentState extends State<TresorieFragment> {
                   width: 100.0,
                   child: Center(
                     child: CircularProgressIndicator(),
-                  )
-              ),
+                  )),
             );
           } else {
-            return snapshot.data ;
+            return snapshot.data;
           }
         });
   }
 
-  Widget startDate(StateSetter _setState){
+  Widget startDate(StateSetter _setState) {
     return InkWell(
       onTap: () async {
         DateTime order = await getDate(DateTime.now());
         if (order != null) {
-          DateTime time = new DateTime(
-              order.year, order.month, order.day);
+          DateTime time = new DateTime(order.year, order.month, order.day);
           _setState(() {
             _startDateControl.text = Helpers.dateToText(time);
-            _filterStartDate = order ;
+            _filterStartDate = order;
           });
         }
       },
-      onLongPress: (){
+      onLongPress: () {
         _setState(() {
           _startDateControl.text = "";
-          _filterStartDate = _emptyFilterMap["Start_date"] ;
+          _filterStartDate = _emptyFilterMap["Start_date"];
         });
       },
       child: TextField(
@@ -182,7 +170,8 @@ class _TresorieFragmentState extends State<TresorieFragment> {
               borderSide: BorderSide(color: Colors.blue),
               borderRadius: BorderRadius.circular(20)),
           labelText: S.current.start_date,
-          labelStyle: GoogleFonts.lato(textStyle: TextStyle(color: Colors.blue)),
+          labelStyle:
+              GoogleFonts.lato(textStyle: TextStyle(color: Colors.blue)),
           enabledBorder: OutlineInputBorder(
             gapPadding: 3.3,
             borderRadius: BorderRadius.circular(20),
@@ -193,23 +182,23 @@ class _TresorieFragmentState extends State<TresorieFragment> {
         controller: _startDateControl,
         keyboardType: TextInputType.text,
       ),
-    ) ;
+    );
   }
 
-  Widget endDate(StateSetter _setState){
+  Widget endDate(StateSetter _setState) {
     return InkWell(
       onTap: () async {
         DateTime order = await getDate(DateTime.now());
         if (order != null) {
-          DateTime time = new DateTime(
-              order.year, order.month, order.day , 23,59,0,0);
+          DateTime time =
+              new DateTime(order.year, order.month, order.day, 23, 59, 0, 0);
           _setState(() {
             _endDateControl.text = Helpers.dateToText(time);
-            _filterEndDate = order ;
+            _filterEndDate = order;
           });
         }
       },
-      onLongPress: (){
+      onLongPress: () {
         _setState(() {
           _endDateControl.text = "";
           _filterEndDate = _emptyFilterMap["End_date"];
@@ -225,7 +214,8 @@ class _TresorieFragmentState extends State<TresorieFragment> {
               borderSide: BorderSide(color: Colors.blue),
               borderRadius: BorderRadius.circular(20)),
           labelText: S.current.end_date,
-          labelStyle: GoogleFonts.lato(textStyle: TextStyle(color: Colors.blue)),
+          labelStyle:
+              GoogleFonts.lato(textStyle: TextStyle(color: Colors.blue)),
           enabledBorder: OutlineInputBorder(
             gapPadding: 3.3,
             borderRadius: BorderRadius.circular(20),
@@ -236,7 +226,7 @@ class _TresorieFragmentState extends State<TresorieFragment> {
         controller: _endDateControl,
         keyboardType: TextInputType.text,
       ),
-    ) ;
+    );
   }
 
   Widget categorieDropDown(StateSetter _setState) {
@@ -273,9 +263,10 @@ class _TresorieFragmentState extends State<TresorieFragment> {
   Widget build(BuildContext context) {
     return Scaffold(
         floatingActionButton: FloatingActionButton(
-          backgroundColor: Theme.of(context).floatingActionButtonTheme.backgroundColor,
+          backgroundColor:
+              Theme.of(context).floatingActionButtonTheme.backgroundColor,
           onPressed: () {
-              _addNewTresorie(context);
+            _addNewTresorie(context);
           },
           child: Icon(Icons.add),
         ),
@@ -284,7 +275,8 @@ class _TresorieFragmentState extends State<TresorieFragment> {
           mainContext: context,
           title: S.current.tresories,
           isFilterOn: isFilterOn,
-          onSearchChanged: (String search) => _dataSource.updateSearchTerm(search.trim()),
+          onSearchChanged: (String search) =>
+              _dataSource.updateSearchTerm(search.trim()),
           onFilterPressed: () async {
             AwesomeDialog(
                 context: context,
@@ -293,60 +285,61 @@ class _TresorieFragmentState extends State<TresorieFragment> {
                 title: S.current.supp,
                 body: addFilterdialogue(),
                 btnOkText: S.current.filtrer_btn,
-                closeIcon: Icon(Icons.close , color: Colors.red , size: 26,),
+                closeIcon: Icon(
+                  Icons.cancel_sharp,
+                  color: Colors.red,
+                  size: 26,
+                ),
                 showCloseIcon: true,
-                btnOkOnPress: () async{
+                btnOkOnPress: () async {
                   setState(() {
-                    _savedSelectedCategorie = _categorieItems.indexOf(_selectedCategorie) ;
-                    _savedFilterStartDate = _filterStartDate ;
-                    _savedFilterEndDate = _filterEndDate ;
+                    _savedSelectedCategorie =
+                        _categorieItems.indexOf(_selectedCategorie);
+                    _savedFilterStartDate = _filterStartDate;
+                    _savedFilterEndDate = _filterEndDate;
                     fillFilter(_filterMap);
 
-                    if( _filterMap.toString() == _emptyFilterMap.toString()){
+                    if (_filterMap.toString() == _emptyFilterMap.toString()) {
                       isFilterOn = false;
-                    } else{
+                    } else {
                       isFilterOn = true;
                     }
                     _dataSource.updateFilters(_filterMap);
                   });
-                }
-            )..show();
+                })
+              ..show();
           },
         ),
         body: ItemsSliverList(
-            dataSource: _dataSource,
-        )
-    );
+          dataSource: _dataSource,
+        ));
   }
 
-  _addNewTresorie (context){
-    if(_myParams.versionType == "demo"){
-      if(_dataSource.itemCount < 10){
-        Navigator.of(context).pushNamed(RoutesKeys.addTresorie, arguments: new Tresorie.init())
-            .then((value){
+  _addNewTresorie(context) {
+    if (_myParams.versionType == "demo") {
+      if (_dataSource.itemCount < 10) {
+        Navigator.of(context)
+            .pushNamed(RoutesKeys.addTresorie, arguments: new Tresorie.init())
+            .then((value) {
           _dataSource.refresh();
         });
-      }else{
+      } else {
         Navigator.pushNamed(context, RoutesKeys.appPurchase);
         var message = S.current.msg_demo_exp;
         Helpers.showFlushBar(context, message);
       }
-    }else{
-      if(DateTime.now().isBefore(Helpers.getDateExpiration(_myParams))){
-        Navigator.of(context).pushNamed(RoutesKeys.addTresorie, arguments: new Tresorie.init())
-            .then((value){
+    } else {
+      if (DateTime.now().isBefore(Helpers.getDateExpiration(_myParams))) {
+        Navigator.of(context)
+            .pushNamed(RoutesKeys.addTresorie, arguments: new Tresorie.init())
+            .then((value) {
           _dataSource.refresh();
         });
-      }else{
+      } else {
         Navigator.pushNamed(context, RoutesKeys.appPurchase);
         var message = S.current.msg_premium_exp;
         Helpers.showFlushBar(context, message);
       }
     }
-
   }
-
-
-
-
 }

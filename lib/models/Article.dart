@@ -1,13 +1,9 @@
-import 'dart:convert';
 import 'dart:io';
-
 import 'dart:typed_data';
 
-import 'package:flutter/cupertino.dart';
 import 'package:gestmob/Helpers/Helpers.dart';
-import 'package:gestmob/Widgets/article_list_item.dart';
 
-class Article{
+class Article {
   File _image;
 
   set imageUint8List(Uint8List value) {
@@ -20,32 +16,65 @@ class Article{
 
   String _designation, _ref, _description, _codeBar;
 
-  int _id, _idFamille,_idMarque;
+  int _id, _idFamille, _idMarque;
 
-  double _cmdClient , _colis ,  _prixVente1TTC, _prixVente1, _prixVente2TTC, _prixVente2,
-      _prixVente3TTC, _prixVente3,_qteInit, _qte, _qteMin, _qteColis,
-      _prixAchat, _pmpInit, _pmp, _tva;
+  double _cmdClient,
+      _colis,
+      _prixVente1TTC,
+      _prixVente1,
+      _prixVente2TTC,
+      _prixVente2,
+      _prixVente3TTC,
+      _prixVente3,
+      _qteInit,
+      _qte,
+      _qteMin,
+      _qteColis,
+      _prixAchat,
+      _pmpInit,
+      _pmp,
+      _tva;
 
   double _selectedQuantite = -1;
   double _selectedPrice = 0;
 
   bool _bloquer;
-  bool _stockable ;
+  bool _stockable;
 
   Article.init();
 
   //constructor with all params
   Article(
-      this._image, this._designation, this._ref, this._codeBar, this._description,
-      this._idFamille, this._idMarque, this._colis, this._prixVente1TTC,
-      this._prixVente1, this._prixVente2TTC, this._prixVente2, this._prixVente3TTC,
-      this._prixVente3, this._qteInit, this._qte, this._cmdClient ,
-      this._qteMin, this._qteColis, this._prixAchat, this._pmpInit,
-      this._pmp, this._tva, this._bloquer, this._stockable);
+      this._image,
+      this._designation,
+      this._ref,
+      this._codeBar,
+      this._description,
+      this._idFamille,
+      this._idMarque,
+      this._colis,
+      this._prixVente1TTC,
+      this._prixVente1,
+      this._prixVente2TTC,
+      this._prixVente2,
+      this._prixVente3TTC,
+      this._prixVente3,
+      this._qteInit,
+      this._qte,
+      this._cmdClient,
+      this._qteMin,
+      this._qteColis,
+      this._prixAchat,
+      this._pmpInit,
+      this._pmp,
+      this._tva,
+      this._bloquer,
+      this._stockable);
 
   // constructor to convert map to object
   Article.fromMap(dynamic obj) {
-    this._imageUint8List = Helpers.getUint8ListFromByteString(obj["BytesImageString"]);
+    this._imageUint8List =
+        Helpers.getUint8ListFromByteString(obj["BytesImageString"]);
 
     this._id = obj["id"];
     this._designation = obj["Designation"];
@@ -69,21 +98,22 @@ class Article{
     this._pmpInit = obj["PMP_init"];
     this._pmp = obj["PMP"];
     this._tva = obj["TVA"];
-    this._bloquer = obj["Bloquer"] == 1? true : false;
-    this._stockable = obj["Stockable"] == 1? true : false;
+    this._bloquer = obj["Bloquer"] == 1 ? true : false;
+    this._stockable = obj["Stockable"] == 1 ? true : false;
     this._description = obj["Description"];
   }
 
   //conver an object to map for persistance
   Article.fromMapJournaux(dynamic obj) {
-    this._imageUint8List = Helpers.getUint8ListFromByteString(obj["BytesImageString"]);
+    this._imageUint8List =
+        Helpers.getUint8ListFromByteString(obj["BytesImageString"]);
 
     this._id = obj["Article_id"];
     this._designation = obj["Designation"];
     this._ref = obj["Ref"].toString();
-    this._qte = obj["qte_article"] ;
+    this._qte = obj["qte_article"];
     this._cmdClient = obj["Cmd_client"];
-    this._selectedQuantite =(obj["Qte"] > 0)? obj["Qte"] : obj["Qte"] * -1;
+    this._selectedQuantite = (obj["Qte"] > 0) ? obj["Qte"] : obj["Qte"] * -1;
     this._selectedPrice = obj["Prix_ht"];
     this._tva = obj["Tva"];
     this._pmp = obj["Prix_revient"];
@@ -100,8 +130,9 @@ class Article{
   Map<String, dynamic> toMap() {
     var map = new Map<String, dynamic>();
 
-    if(_imageUint8List != null && _imageUint8List.isNotEmpty){
-      map["BytesImageString"] = Helpers.getEncodedByteStringFromUint8List(_imageUint8List);
+    if (_imageUint8List != null && _imageUint8List.isNotEmpty) {
+      map["BytesImageString"] =
+          Helpers.getEncodedByteStringFromUint8List(_imageUint8List);
     }
 
     map["Designation"] = this._designation;
@@ -120,13 +151,13 @@ class Article{
     map["Qte"] = this._qte;
     map["Qte_Min"] = this._qteMin;
     map["Qte_Colis"] = this._qteColis;
-    map["Cmd_client"] = this._cmdClient ;
+    map["Cmd_client"] = this._cmdClient;
     map["PrixAchat"] = this._prixAchat;
     map["PMP_init"] = this._pmpInit;
     map["PMP"] = this._pmp;
     map["TVA"] = this._tva;
     map["Bloquer"] = this._bloquer ? 1 : 0;
-    map["Stockable"] = this._stockable? 1 : 0;
+    map["Stockable"] = this._stockable ? 1 : 0;
     map["Description"] = this._description;
 
     return map;
@@ -189,7 +220,6 @@ class Article{
   File get image => _image;
   bool get bloquer => _bloquer;
 
-
   double get cmdClient => _cmdClient;
 
   set cmdClient(double value) {
@@ -198,14 +228,15 @@ class Article{
 
   //section for setters
   void setId(int id) {
-    this._id=id;
+    this._id = id;
   }
 
   void setdesignation(String des) {
-    this._designation=des;
+    this._designation = des;
   }
+
   void setref(String ref) {
-    this._ref=ref;
+    this._ref = ref;
   }
 
   void setCodeBar(String codeBar) {
@@ -213,27 +244,27 @@ class Article{
   }
 
   void setDescription(String description) {
-    this._description=description;
+    this._description = description;
   }
 
-  void setIdFamille(int id){
-    this._idFamille =id;
+  void setIdFamille(int id) {
+    this._idFamille = id;
   }
 
-  void setIdMarque(int id){
-    this._idMarque =id;
+  void setIdMarque(int id) {
+    this._idMarque = id;
   }
 
-  void setColis(double colis){
-    this._colis=colis;
+  void setColis(double colis) {
+    this._colis = colis;
   }
 
   void setbloquer(bool bloquer) {
-    this._bloquer=bloquer;
+    this._bloquer = bloquer;
   }
 
   void setStockable(bool stockable) {
-    this._stockable=stockable;
+    this._stockable = stockable;
   }
 
   void setImageUint8List(Uint8List imageUnit8List) {
@@ -241,54 +272,65 @@ class Article{
   }
 
   void setquantite(double qte) {
-    this._qte=qte;
+    this._qte = qte;
   }
+
   void setQteInit(double qte) {
-    this._qteInit=qte;
+    this._qteInit = qte;
   }
+
   void setQteMin(double qte) {
-    this._qteMin=qte;
+    this._qteMin = qte;
   }
+
   void setQteColis(double qte) {
-    this._qteColis=qte;
+    this._qteColis = qte;
   }
+
   void setprixVente1TTC(double ttc) {
-    this._prixVente1TTC=ttc;
+    this._prixVente1TTC = ttc;
   }
+
   void setprixVente1(double pv) {
-    this._prixVente1=pv;
+    this._prixVente1 = pv;
   }
+
   void setprixVente2TTC(double ttc) {
-    this._prixVente2TTC=ttc;
+    this._prixVente2TTC = ttc;
   }
+
   void setprixVente2(double pv) {
-    this._prixVente2=pv;
+    this._prixVente2 = pv;
   }
+
   void setprixVente3TTC(double ttc) {
-    this._prixVente3TTC=ttc;
+    this._prixVente3TTC = ttc;
   }
+
   void setprixVente3(double pv) {
-    this._prixVente3=pv;
+    this._prixVente3 = pv;
   }
-  
+
   void setprixAchat(double pa) {
-    this._prixAchat=pa;
+    this._prixAchat = pa;
   }
+
   void setTva(double tva) {
-    this._tva=tva;
+    this._tva = tva;
   }
+
   void setPmp(double pmp) {
-    this._pmp=pmp;
+    this._pmp = pmp;
   }
+
   void setPmpInit(double pmpinit) {
-    this._pmpInit=pmpinit;
+    this._pmpInit = pmpinit;
   }
 
-  void setpic(File img) async{
-    this._image=img;
-    this._imageUint8List= await Helpers.getUint8ListFromFile(img);
+  void setpic(File img) async {
+    this._image = img;
+    this._imageUint8List = await Helpers.getUint8ListFromFile(img);
   }
-
 
   //return article object in string format
   @override

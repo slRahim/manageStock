@@ -1,22 +1,21 @@
-import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
-import 'package:gestmob/models/ArticleTva.dart';
-import 'package:gestmob/generated/l10n.dart';
 import 'package:awesome_dialog/awesome_dialog.dart';
+import 'package:flutter/material.dart';
+import 'package:gestmob/Helpers/Helpers.dart';
+import 'package:gestmob/Helpers/QueryCtr.dart';
+import 'package:gestmob/Helpers/Statics.dart';
+import 'package:gestmob/generated/l10n.dart';
 import 'package:gestmob/models/ArticleFamille.dart';
 import 'package:gestmob/models/ArticleMarque.dart';
 import 'package:gestmob/models/ArticleTva.dart';
 import 'package:gestmob/models/ChargeTresorie.dart';
 import 'package:gestmob/models/TiersFamille.dart';
-import 'package:gestmob/Helpers/QueryCtr.dart';
-import 'package:gestmob/Helpers/Statics.dart';
-import 'package:gestmob/Helpers/Helpers.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 class CategoryListItem extends StatefulWidget {
   final dynamic item;
   final dataSource;
 
-  CategoryListItem({Key key, this.item , this.dataSource}) : super(key: key);
+  CategoryListItem({Key key, this.item, this.dataSource}) : super(key: key);
 
   @override
   _CategoryListItemState createState() => _CategoryListItemState();
@@ -49,7 +48,7 @@ class _CategoryListItemState extends State<CategoryListItem> {
                 leading: IconButton(
                   onPressed: () {
                     setState(() {
-                      _libelleControl.text =  widget.item.tva.toString();
+                      _libelleControl.text = widget.item.tva.toString();
                     });
                     AwesomeDialog(
                       context: context,
@@ -65,7 +64,7 @@ class _CategoryListItemState extends State<CategoryListItem> {
                   ),
                 ),
                 trailing: IconButton(
-                  onPressed: ()=>dellDialog(context),
+                  onPressed: () => dellDialog(context),
                   icon: Icon(
                     Icons.delete,
                     color: Colors.red,
@@ -94,7 +93,7 @@ class _CategoryListItemState extends State<CategoryListItem> {
               leading: IconButton(
                 onPressed: () {
                   setState(() {
-                    _libelleControl.text = widget.item.libelle ;
+                    _libelleControl.text = widget.item.libelle;
                   });
                   AwesomeDialog(
                     context: context,
@@ -146,7 +145,9 @@ class _CategoryListItemState extends State<CategoryListItem> {
                   key: _formKey,
                   child: TextFormField(
                     controller: _libelleControl,
-                    keyboardType:(widget.item is ArticleTva)? TextInputType.number :TextInputType.text,
+                    keyboardType: (widget.item is ArticleTva)
+                        ? TextInputType.number
+                        : TextInputType.text,
                     validator: (value) {
                       if (value.isEmpty) {
                         return S.current.msg_champ_oblg;
@@ -213,30 +214,29 @@ class _CategoryListItemState extends State<CategoryListItem> {
   Future<void> updateItem() async {
     var res = 0;
 
-    if(_libelleControl.text.trim() != ''){
+    if (_libelleControl.text.trim() != '') {
       if (widget.item is ArticleFamille) {
-        widget.item.libelle = _libelleControl.text.trim() ;
+        widget.item.libelle = _libelleControl.text.trim();
         res = await _queryCtr.updateItemInDb(
             DbTablesNames.articlesFamilles, widget.item);
       } else if (widget.item is ArticleMarque) {
-        widget.item.libelle = _libelleControl.text.trim() ;
+        widget.item.libelle = _libelleControl.text.trim();
         res = await _queryCtr.updateItemInDb(
             DbTablesNames.articlesMarques, widget.item);
       } else if (widget.item is TiersFamille) {
-        widget.item.libelle = _libelleControl.text.trim() ;
+        widget.item.libelle = _libelleControl.text.trim();
         res = await _queryCtr.updateItemInDb(
             DbTablesNames.tiersFamille, widget.item);
       } else if (widget.item is ChargeTresorie) {
-        widget.item.libelle = _libelleControl.text.trim() ;
+        widget.item.libelle = _libelleControl.text.trim();
         res = await _queryCtr.updateItemInDb(
             DbTablesNames.chargeTresorie, widget.item);
       } else if (widget.item is ArticleTva) {
-        widget.item.tva = double.parse(_libelleControl.text.trim()) ;
+        widget.item.tva = double.parse(_libelleControl.text.trim());
         print(widget.item.tva);
         res = await _queryCtr.updateItemInDb(
             DbTablesNames.articlesTva, widget.item);
       }
-
     }
 
     var message = "";
@@ -247,7 +247,6 @@ class _CategoryListItemState extends State<CategoryListItem> {
       message = S.current.msg_update_err;
     }
     Helpers.showToast(message);
-
   }
 
   Widget dellDialog(BuildContext context) {

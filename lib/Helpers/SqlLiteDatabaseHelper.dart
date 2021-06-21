@@ -1,46 +1,45 @@
 import 'dart:async';
-import 'dart:io' as io;
+import 'dart:convert' as convert;
 import 'dart:io';
 import 'dart:typed_data';
 
+import 'package:encrypt/encrypt.dart' as encrypt;
 import 'package:gestmob/Helpers/Statics.dart';
 import 'package:gestmob/models/Tiers.dart';
 import 'package:gestmob/services/cloud_backup_restore.dart';
 import 'package:path/path.dart';
-import 'package:gestmob/models/Article.dart';
-import 'package:sqflite/sqflite.dart';
 import 'package:path_provider/path_provider.dart';
+import 'package:sqflite/sqflite.dart';
+
 import 'Helpers.dart';
-import 'dart:convert' as convert;
-import 'package:encrypt/encrypt.dart' as encrypt ;
 
 class SqlLiteDatabaseHelper {
-
-  static final SqlLiteDatabaseHelper _instance = new SqlLiteDatabaseHelper.internal();
+  static final SqlLiteDatabaseHelper _instance =
+      new SqlLiteDatabaseHelper.internal();
   factory SqlLiteDatabaseHelper() => _instance;
   SqlLiteDatabaseHelper.internal();
 
   static const SECRET_KEY = "2020_PRIVATES_KEYS_ENCRYPTS_2020";
   static const DATABASE_VERSION = 1;
   static Database _db;
-  GoogleApi _googleApi =new GoogleApi() ;
+  GoogleApi _googleApi = new GoogleApi();
 
-  List<String> db_tables =[
+  List<String> db_tables = [
     DbTablesNames.profile,
-    DbTablesNames.articles ,
-    DbTablesNames.pieces ,
-    DbTablesNames.tiers ,
-    DbTablesNames.articlesFamilles ,
-    DbTablesNames.tiersFamille ,
-    DbTablesNames.articlesMarques ,
-    DbTablesNames.tresorie ,
+    DbTablesNames.articles,
+    DbTablesNames.pieces,
+    DbTablesNames.tiers,
+    DbTablesNames.articlesFamilles,
+    DbTablesNames.tiersFamille,
+    DbTablesNames.articlesMarques,
+    DbTablesNames.tresorie,
     DbTablesNames.categorieTresorie,
     DbTablesNames.reglementTresorie,
     DbTablesNames.formatPiece,
     DbTablesNames.journaux,
     DbTablesNames.transformer,
     DbTablesNames.defaultPrinter,
-    DbTablesNames.articlesTva ,
+    DbTablesNames.articlesTva,
     DbTablesNames.myparams,
     DbTablesNames.compteTresorie,
     DbTablesNames.chargeTresorie,
@@ -56,7 +55,8 @@ class SqlLiteDatabaseHelper {
 
   initDb() async {
     String dbPath = await _databasePath();
-    Database database = await openDatabase(dbPath, version: DATABASE_VERSION, onCreate: _onCreate , onUpgrade:_onUpgrade);
+    Database database = await openDatabase(dbPath,
+        version: DATABASE_VERSION, onCreate: _onCreate, onUpgrade: _onUpgrade);
     return database;
   }
 
@@ -71,29 +71,25 @@ class SqlLiteDatabaseHelper {
     await createTiersTable(db, version);
     await createPiecesTable(db, version);
     await createJournauxTable(db, version);
-    await createTresorieTable(db , version);
-    await createFormatPieceTable(db ,version);
-    await createMyParamTable(db , version);
-    await createTriggersJournaux(db , version);
-    await createTriggersPiece(db , version);
-    await createTriggersTresorie (db,version);
-    await createTriggersGeneral(db,version) ;
+    await createTresorieTable(db, version);
+    await createFormatPieceTable(db, version);
+    await createMyParamTable(db, version);
+    await createTriggersJournaux(db, version);
+    await createTriggersPiece(db, version);
+    await createTriggersTresorie(db, version);
+    await createTriggersGeneral(db, version);
     await setInitialData(db, version);
-
   }
 
-  FutureOr<void> _onUpgrade(Database db , int oldVersion, int newVersion ) async {
-    for (var migration = oldVersion; migration < newVersion; migration++)
-    {
-      this._onUpgrades["from_version_${migration}_to_version_${migration+1}"](db);
+  FutureOr<void> _onUpgrade(Database db, int oldVersion, int newVersion) async {
+    for (var migration = oldVersion; migration < newVersion; migration++) {
+      this._onUpgrades["from_version_${migration}_to_version_${migration + 1}"](
+          db);
     }
   }
 
-  Map<String,Function> _onUpgrades = {
-    'from_version_1_to_version_2':(Database db) async {
-
-    },
-
+  Map<String, Function> _onUpgrades = {
+    'from_version_1_to_version_2': (Database db) async {},
   };
 
   Future deleteDB() async {
@@ -103,43 +99,42 @@ class SqlLiteDatabaseHelper {
 
   Future clearAllTables(batch) async {
     try {
-      for (String table  in db_tables ) {
+      for (String table in db_tables) {
         await batch.delete(table);
       }
-    } catch(e){
-
-    }
+    } catch (e) {}
   }
 
   Future generateBackup({bool isEncrypted = true}) async {
     var dbs = await this.db;
-    List data =[];
-    List<Map<String,dynamic>> listMaps=[];
+    List data = [];
+    List<Map<String, dynamic>> listMaps = [];
 
     for (var i = 0; i < db_tables.length; i++) {
       listMaps = await dbs.query(db_tables[i]);
       data.add(listMaps);
     }
 
-    List backups=[db_tables,data];
-    String json =convert.jsonEncode(backups);
-    if(isEncrypted) {
+    List backups = [db_tables, data];
+    String json = convert.jsonEncode(backups);
+    if (isEncrypted) {
       final key = encrypt.Key.fromUtf8(SECRET_KEY);
       final iv = encrypt.IV.fromLength(16);
       final encrypter = encrypt.Encrypter(encrypt.AES(key));
       final encrypted = encrypter.encrypt(json, iv: iv);
-      json =  encrypted.base64;
+      json = encrypted.base64;
     }
     //file upload
     final directory = await getApplicationDocumentsDirectory();
-    File file = new File('${directory.path}/gestmob_Backup${DateTime.now().toString()}.bkp');
+    File file = new File(
+        '${directory.path}/gestmob_Backup${DateTime.now().toString()}.bkp');
     file.writeAsString(json);
     var res = await _googleApi.upload(file);
 
-    return res ;
+    return res;
   }
 
-  Future restoreBackup(File backupFile,{ bool isEncrypted = true})async{
+  Future restoreBackup(File backupFile, {bool isEncrypted = true}) async {
     var dbs = await this.db;
     Batch batch = dbs.batch();
     String backup = await backupFile.readAsString();
@@ -149,17 +144,17 @@ class SqlLiteDatabaseHelper {
     final key = encrypt.Key.fromUtf8(SECRET_KEY);
     final iv = encrypt.IV.fromLength(16);
     final encrypter = encrypt.Encrypter(encrypt.AES(key));
-    List json = convert.jsonDecode(isEncrypted ? encrypter.decrypt64(backup,iv:iv):backup);
+    List json = convert
+        .jsonDecode(isEncrypted ? encrypter.decrypt64(backup, iv: iv) : backup);
     for (var i = 0; i < json[0].length; i++) {
       for (var k = 0; k < json[1][i].length; k++) {
-        batch.insert(json[0][i],json[1][i][k]);
+        batch.insert(json[0][i], json[1][i][k]);
       }
     }
 
-    var res = await batch.commit(continueOnError:false,noResult:false);
-    return res ;
+    var res = await batch.commit(continueOnError: false, noResult: false);
+    return res;
   }
-
 
 //*********************************************************************************************************************************************
 //**********************************************creation des tables***************************************************************************
@@ -195,7 +190,6 @@ class SqlLiteDatabaseHelper {
         Codedouane VARCHAR (15), 
         Maposition VARCHAR (20)
         )""");
-
   }
 
   // table des artciles
@@ -249,7 +243,6 @@ class SqlLiteDatabaseHelper {
         Description TEXT, 
         Stockable integer
       )""");
-
   }
 
   //table des client et des fournisseur  ( Clientfour : 0=>cliant , 1=>client/fournisseur , 2=>fournisseur)
@@ -288,7 +281,6 @@ class SqlLiteDatabaseHelper {
         Credit Double, 
         Bloquer integer
         )""");
-
   }
 
   //table des factures
@@ -323,7 +315,6 @@ class SqlLiteDatabaseHelper {
         New_Piece_id integer REFERENCES Pieces (id) ON DELETE SET NULL ON UPDATE CASCADE,
         Type_piece VARCHAR(5)
         )""");
-
   }
 
   //table des articles ds une facture
@@ -346,7 +337,7 @@ class SqlLiteDatabaseHelper {
   }
 
   //table tresorie
-  Future<void> createTresorieTable (Database db , int version) async {
+  Future<void> createTresorieTable(Database db, int version) async {
     //table des categories des tresories
     await db.execute("""CREATE TABLE IF NOT EXISTS TresorieCategories (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -395,7 +386,7 @@ class SqlLiteDatabaseHelper {
   }
 
   // table des format et current index pour piece
-  Future<void> createFormatPieceTable(Database db , int version) async {
+  Future<void> createFormatPieceTable(Database db, int version) async {
     await db.execute("""CREATE TABLE IF NOT EXISTS FormatPiece (
         id INTEGER PRIMARY KEY AUTOINCREMENT, 
         Format VARCHAR (20), 
@@ -406,7 +397,7 @@ class SqlLiteDatabaseHelper {
   }
 
   //table speciale pour les paraméter de l'app
-  Future<void> createMyParamTable (Database db , int version ) async{
+  Future<void> createMyParamTable(Database db, int version) async {
     await db.execute("""CREATE TABLE IF NOT EXISTS MyParams (
         id INTEGER PRIMARY KEY AUTOINCREMENT, 
         Tarification integer DEFAULT 1, 
@@ -426,7 +417,6 @@ class SqlLiteDatabaseHelper {
         Code_abonnement varchar(255)
         )""");
 
-
     await db.execute('''CREATE TABLE IF NOT EXISTS DefaultPrinters (
         id INTEGER PRIMARY KEY AUTOINCREMENT, 
         Adress VARCHAR(25),
@@ -439,7 +429,7 @@ class SqlLiteDatabaseHelper {
 //  ********************************************************************************************************************************************
 //  ********************************************************************************************************************************************
 
-  createTriggersGeneral(Database db , int version)async {
+  createTriggersGeneral(Database db, int version) async {
     await db.execute('''
         CREATE TRIGGER update_index_onstart
         AFTER UPDATE ON FormatPiece
@@ -502,7 +492,7 @@ class SqlLiteDatabaseHelper {
   }
 
   //fonction speciale pour la creation des triggers de bd table article
-  createTriggersJournaux(Database db , int version) async {
+  createTriggersJournaux(Database db, int version) async {
     //*********************************************************************************************************************************************
     //************************************************* journal commande client********************************************************************
     await db.execute('''
@@ -677,7 +667,6 @@ class SqlLiteDatabaseHelper {
         END;
      ''');
 
-
     await db.execute('''
         CREATE TRIGGER IF NOT EXISTS update_articles_qte_onUpdate_fournisseur_mov1
         AFTER UPDATE ON Journaux
@@ -714,8 +703,8 @@ class SqlLiteDatabaseHelper {
         END;
      ''');
 
-  //  **********************************************************************************************************************************************
-  //  ************************************************ journal des retours client*************************************************************************
+    //  **********************************************************************************************************************************************
+    //  ************************************************ journal des retours client*************************************************************************
 
     await db.execute('''
         CREATE TRIGGER IF NOT EXISTS update_articles_qte_from_retour
@@ -735,7 +724,6 @@ class SqlLiteDatabaseHelper {
         END;
      ''');
 
-
     //update_articles_qte_update on update bon fournisseur
     await db.execute('''
         CREATE TRIGGER IF NOT EXISTS update_articles_qte_onUpdate_retour
@@ -754,7 +742,6 @@ class SqlLiteDatabaseHelper {
             where id = New.Piece_id ;
         END;
      ''');
-
 
     await db.execute('''
         CREATE TRIGGER IF NOT EXISTS update_articles_qte_onUpdate_retour_mov1
@@ -854,13 +841,12 @@ class SqlLiteDatabaseHelper {
             
         END;
      ''');
-
   }
 
   //fonction speciale pour la creation des triggers de bd table piece et format
   createTriggersPiece(Database db, int version) async {
     // update_current_index
-     await db.execute('''CREATE TRIGGER update_current_index 
+    await db.execute('''CREATE TRIGGER update_current_index 
         AFTER INSERT ON Pieces 
         FOR EACH ROW 
         When ( (Cast(Substr (NEW.Num_piece,0,INSTR(NEW.Num_piece , '/' )) as interger)) > (Select Current_index From FormatPiece where FormatPiece.Piece LIKE NEW.Piece) )
@@ -871,7 +857,7 @@ class SqlLiteDatabaseHelper {
         END;
       ''');
 
-     await db.execute('''CREATE TRIGGER update_current_index_after_update
+    await db.execute('''CREATE TRIGGER update_current_index_after_update
         AFTER Update ON Pieces 
         FOR EACH ROW 
         WHEN New.Num_piece <> Old.Num_piece 
@@ -883,9 +869,9 @@ class SqlLiteDatabaseHelper {
         END;
       ''');
 
-     //*******************************************************************************************************************************
-     //***************************************************add piece*******************************************************************
-     await db.execute('''
+    //*******************************************************************************************************************************
+    //***************************************************add piece*******************************************************************
+    await db.execute('''
         CREATE TRIGGER IF NOT EXISTS update_tiers_chiffre_affaires1
         AFTER INSERT ON Pieces
         FOR EACH ROW
@@ -905,9 +891,9 @@ class SqlLiteDatabaseHelper {
         END;
      ''');
 
-     //*****************************************************************************************************************************
-     //***************************************************edit piece****************************************************************
-     await db.execute('''
+    //*****************************************************************************************************************************
+    //***************************************************edit piece****************************************************************
+    await db.execute('''
         CREATE TRIGGER IF NOT EXISTS update_tresorie_on_update_piece
         AFTER UPDATE ON Pieces
         FOR EACH ROW
@@ -920,7 +906,7 @@ class SqlLiteDatabaseHelper {
         END;
      ''');
 
-     await db.execute('''
+    await db.execute('''
         CREATE TRIGGER IF NOT EXISTS update_tiers_chiffre_affaires2
         AFTER UPDATE ON Pieces
         FOR EACH ROW
@@ -950,7 +936,7 @@ class SqlLiteDatabaseHelper {
         END;
      ''');
 
-     await db.execute('''
+    await db.execute('''
         CREATE TRIGGER IF NOT EXISTS update_tiers_chiffre_affaires3
         AFTER UPDATE ON Pieces
         FOR EACH ROW
@@ -979,7 +965,7 @@ class SqlLiteDatabaseHelper {
         END;
      ''');
 
-     await db.execute('''
+    await db.execute('''
         CREATE TRIGGER IF NOT EXISTS update_tiers_chiffre_affaires4
         AFTER UPDATE ON Pieces
         FOR EACH ROW
@@ -1007,10 +993,10 @@ class SqlLiteDatabaseHelper {
         END;
      ''');
 
-     //*******************************************************************************************************************************
-     //***************************************************dell piece***********************************************************
+    //*******************************************************************************************************************************
+    //***************************************************dell piece***********************************************************
 
-     await db.execute('''
+    await db.execute('''
         CREATE TRIGGER IF NOT EXISTS delete_journaux
         BEFORE DELETE ON Pieces
         FOR EACH ROW
@@ -1021,7 +1007,7 @@ class SqlLiteDatabaseHelper {
         END;
      ''');
 
-     await db.execute('''
+    await db.execute('''
         CREATE TRIGGER IF NOT EXISTS reset_current_index
         BEFORE DELETE ON Pieces
         FOR EACH ROW
@@ -1033,7 +1019,7 @@ class SqlLiteDatabaseHelper {
         END;
      ''');
 
-     await db.execute('''
+    await db.execute('''
         CREATE TRIGGER IF NOT EXISTS delete_tresorie
         BEFORE DELETE ON Pieces
         FOR EACH ROW
@@ -1052,7 +1038,7 @@ class SqlLiteDatabaseHelper {
         END;
      ''');
 
-     await db.execute('''
+    await db.execute('''
         CREATE TRIGGER IF NOT EXISTS delete_piece_transformer
         BEFORE DELETE ON Pieces
         FOR EACH ROW
@@ -1062,8 +1048,6 @@ class SqlLiteDatabaseHelper {
            DELETE FROM Transformers WHERE New_Piece_id = OLD.id;
         END;
      ''');
-
-
   }
 
   // NB : pour l'etat de la tresorie on doit l'ajouter le mov à la condition de calcul (regler) de tier
@@ -1235,7 +1219,6 @@ class SqlLiteDatabaseHelper {
         END;
       ''');
 
-
     // ***************************************************************************************************************
     //**********************************************dell tresorie*******************************************************
     await db.execute('''
@@ -1349,7 +1332,6 @@ class SqlLiteDatabaseHelper {
                    
         END;
       ''');
-
   }
 
 //*****************************************************************************************************************************************
@@ -1360,62 +1342,83 @@ class SqlLiteDatabaseHelper {
 
     Uint8List image01 = await Helpers.getDefaultImageUint8List(from: "profile");
 
-    batch.rawInsert('INSERT INTO Profile(BytesImageString, Raison, CodePin, CodePinEnabled, Statut, Adresse, AdresseWeb, Ville, Departement, Pays, Cp, Telephone, Telephone2, Fax, Mobile, Mobile2,'
+    batch.rawInsert(
+        'INSERT INTO Profile(BytesImageString, Raison, CodePin, CodePinEnabled, Statut, Adresse, AdresseWeb, Ville, Departement, Pays, Cp, Telephone, Telephone2, Fax, Mobile, Mobile2,'
         'Mail, Site, Rc, Nif, Ai, Capital, Activite, Nis, Codedouane, Maposition) '
         'VALUES("${Helpers.getEncodedByteStringFromUint8List(image01)}", "Raison", "", 0, 1, "Adresse", "AdresseWeb", "Ville", "Departement", "Pays", "Cp", "Telephone", "Telephone2", "Fax", "Mobile", "Mobile2",'
         '"Mail", "Site", "Rc", "Nif", "Ai", "25", "Activite", "Nis", "Codedouane", "Maposition")');
 
-    batch.rawInsert('INSERT INTO ArticlesMarques(Libelle, BytesImageString) VALUES("No Marque", "")');
-    batch.rawInsert('INSERT INTO ArticlesFamilles(Libelle, BytesImageString) VALUES("No Famille", "")');
+    batch.rawInsert(
+        'INSERT INTO ArticlesMarques(Libelle, BytesImageString) VALUES("No Marque", "")');
+    batch.rawInsert(
+        'INSERT INTO ArticlesFamilles(Libelle, BytesImageString) VALUES("No Famille", "")');
     batch.rawInsert('INSERT INTO TiersFamilles(Libelle) VALUES("No Famille")');
 
-    batch.rawInsert('INSERT INTO TresorieCategories(Libelle) VALUES("No Categorie")');
-    batch.rawInsert('INSERT INTO TresorieCategories(Libelle) VALUES("Reglement Client")');
-    batch.rawInsert('INSERT INTO TresorieCategories(Libelle) VALUES("Reglement Fournisseur")');
-    batch.rawInsert('INSERT INTO TresorieCategories(Libelle) VALUES("Encaissement")');
+    batch.rawInsert(
+        'INSERT INTO TresorieCategories(Libelle) VALUES("No Categorie")');
+    batch.rawInsert(
+        'INSERT INTO TresorieCategories(Libelle) VALUES("Reglement Client")');
+    batch.rawInsert(
+        'INSERT INTO TresorieCategories(Libelle) VALUES("Reglement Fournisseur")');
+    batch.rawInsert(
+        'INSERT INTO TresorieCategories(Libelle) VALUES("Encaissement")');
     batch.rawInsert('INSERT INTO TresorieCategories(Libelle) VALUES("Charge")');
-    batch.rawInsert('INSERT INTO TresorieCategories(Libelle) VALUES("Remboursement Client")');
-    batch.rawInsert('INSERT INTO TresorieCategories(Libelle) VALUES("Remboursement Fournisseur")');
-    batch.rawInsert('INSERT INTO TresorieCategories(Libelle) VALUES("Decaissement")');
+    batch.rawInsert(
+        'INSERT INTO TresorieCategories(Libelle) VALUES("Remboursement Client")');
+    batch.rawInsert(
+        'INSERT INTO TresorieCategories(Libelle) VALUES("Remboursement Fournisseur")');
+    batch.rawInsert(
+        'INSERT INTO TresorieCategories(Libelle) VALUES("Decaissement")');
 
-    batch.rawInsert('INSERT INTO CompteTresorie(Num_compte,Nom_compte,Solde_depart,Solde) VALUES("00001","Caisse",0.0,0.0)');
+    batch.rawInsert(
+        'INSERT INTO CompteTresorie(Num_compte,Nom_compte,Solde_depart,Solde) VALUES("00001","Caisse",0.0,0.0)');
 
-    batch.rawInsert('INSERT INTO ChargeTresorie(Libelle) VALUES("No Categorie")');
-    batch.rawInsert('INSERT INTO ChargeTresorie(Libelle) VALUES("Electricité")');
+    batch.rawInsert(
+        'INSERT INTO ChargeTresorie(Libelle) VALUES("No Categorie")');
+    batch
+        .rawInsert('INSERT INTO ChargeTresorie(Libelle) VALUES("Electricité")');
     batch.rawInsert('INSERT INTO ChargeTresorie(Libelle) VALUES("Loyer")');
     batch.rawInsert('INSERT INTO ChargeTresorie(Libelle) VALUES("Salaire")');
 
-    batch.rawInsert('INSERT INTO FormatPiece(Format , Piece , Current_index,Year) VALUES("XXXX/YYYY"  , "FP" , 0 , ${DateTime.now().year.toString()})');
-    batch.rawInsert('INSERT INTO FormatPiece(Format , Piece , Current_index,Year) VALUES("XXXX/YYYY"  , "CC" , 0 , ${DateTime.now().year.toString()})');
-    batch.rawInsert('INSERT INTO FormatPiece(Format , Piece , Current_index,Year) VALUES("XXXX/YYYY"  , "BL" , 0 , ${DateTime.now().year.toString()})');
-    batch.rawInsert('INSERT INTO FormatPiece(Format , Piece , Current_index,Year) VALUES("XXXX/YYYY"  , "FC" , 0 , ${DateTime.now().year.toString()})');
-    batch.rawInsert('INSERT INTO FormatPiece(Format , Piece , Current_index,Year) VALUES("XXXX/YYYY"  , "RC" , 0 , ${DateTime.now().year.toString()})');
-    batch.rawInsert('INSERT INTO FormatPiece(Format , Piece , Current_index,Year) VALUES("XXXX/YYYY"  , "AF" , 0 , ${DateTime.now().year.toString()})');
-    batch.rawInsert('INSERT INTO FormatPiece(Format , Piece , Current_index,Year) VALUES("XXXX/YYYY"  , "BC" , 0 , ${DateTime.now().year.toString()})');
-    batch.rawInsert('INSERT INTO FormatPiece(Format , Piece , Current_index,Year) VALUES("XXXX/YYYY"  , "BR" , 0 , ${DateTime.now().year.toString()})');
-    batch.rawInsert('INSERT INTO FormatPiece(Format , Piece , Current_index,Year) VALUES("XXXX/YYYY"  , "FF" , 0 , ${DateTime.now().year.toString()})');
-    batch.rawInsert('INSERT INTO FormatPiece(Format , Piece , Current_index,Year) VALUES("XXXX/YYYY"  , "RF" , 0 , ${DateTime.now().year.toString()})');
-    batch.rawInsert('INSERT INTO FormatPiece(Format , Piece , Current_index,Year) VALUES("XXXX/YYYY"  , "AC" , 0 , ${DateTime.now().year.toString()})');
-    batch.rawInsert('INSERT INTO FormatPiece(Format , Piece , Current_index,Year) VALUES("XXXX/YYYY"  , "TR" , 0 , ${DateTime.now().year.toString()})');
+    batch.rawInsert(
+        'INSERT INTO FormatPiece(Format , Piece , Current_index,Year) VALUES("XXXX/YYYY"  , "FP" , 0 , ${DateTime.now().year.toString()})');
+    batch.rawInsert(
+        'INSERT INTO FormatPiece(Format , Piece , Current_index,Year) VALUES("XXXX/YYYY"  , "CC" , 0 , ${DateTime.now().year.toString()})');
+    batch.rawInsert(
+        'INSERT INTO FormatPiece(Format , Piece , Current_index,Year) VALUES("XXXX/YYYY"  , "BL" , 0 , ${DateTime.now().year.toString()})');
+    batch.rawInsert(
+        'INSERT INTO FormatPiece(Format , Piece , Current_index,Year) VALUES("XXXX/YYYY"  , "FC" , 0 , ${DateTime.now().year.toString()})');
+    batch.rawInsert(
+        'INSERT INTO FormatPiece(Format , Piece , Current_index,Year) VALUES("XXXX/YYYY"  , "RC" , 0 , ${DateTime.now().year.toString()})');
+    batch.rawInsert(
+        'INSERT INTO FormatPiece(Format , Piece , Current_index,Year) VALUES("XXXX/YYYY"  , "AF" , 0 , ${DateTime.now().year.toString()})');
+    batch.rawInsert(
+        'INSERT INTO FormatPiece(Format , Piece , Current_index,Year) VALUES("XXXX/YYYY"  , "BC" , 0 , ${DateTime.now().year.toString()})');
+    batch.rawInsert(
+        'INSERT INTO FormatPiece(Format , Piece , Current_index,Year) VALUES("XXXX/YYYY"  , "BR" , 0 , ${DateTime.now().year.toString()})');
+    batch.rawInsert(
+        'INSERT INTO FormatPiece(Format , Piece , Current_index,Year) VALUES("XXXX/YYYY"  , "FF" , 0 , ${DateTime.now().year.toString()})');
+    batch.rawInsert(
+        'INSERT INTO FormatPiece(Format , Piece , Current_index,Year) VALUES("XXXX/YYYY"  , "RF" , 0 , ${DateTime.now().year.toString()})');
+    batch.rawInsert(
+        'INSERT INTO FormatPiece(Format , Piece , Current_index,Year) VALUES("XXXX/YYYY"  , "AC" , 0 , ${DateTime.now().year.toString()})');
+    batch.rawInsert(
+        'INSERT INTO FormatPiece(Format , Piece , Current_index,Year) VALUES("XXXX/YYYY"  , "TR" , 0 , ${DateTime.now().year.toString()})');
 
-    batch.rawInsert("INSERT INTO MyParams VALUES(1,2,0,0,1,1,'80',1,'9:01',0,0,'United States of America','USD' , 'demo' , 0 , 'mensuel')");
+    batch.rawInsert(
+        "INSERT INTO MyParams VALUES(1,2,0,0,1,1,'80',1,'9:01',0,0,'United States of America','USD' , 'demo' , 0 , 'mensuel')");
 
     Uint8List image = await Helpers.getDefaultImageUint8List(from: "tier");
-    Tiers tier0 = new Tiers(image ,"Client 00", null, 0, 0, 1, "", "", "", "", "", "","" ,"","",0.0, 0, 0, false);
-    tier0.clientFour = 0 ;
+    Tiers tier0 = new Tiers(image, "Client 00", null, 0, 0, 1, "", "", "", "",
+        "", "", "", "", "", 0.0, 0, 0, false);
+    tier0.clientFour = 0;
     batch.insert(DbTablesNames.tiers, tier0.toMap());
 
-    Tiers tier2 = new Tiers(image,"Prov 00", null, 0, 0, 1, "", "", "", "", "", "", "","","",0.0, 0, 0, false);
-    tier2.clientFour = 2 ;
+    Tiers tier2 = new Tiers(image, "Prov 00", null, 0, 0, 1, "", "", "", "", "",
+        "", "", "", "", 0.0, 0, 0, false);
+    tier2.clientFour = 2;
     batch.insert(DbTablesNames.tiers, tier2.toMap());
 
     await batch.commit();
-
   }
-
-
-
-
-
-
 }

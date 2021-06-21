@@ -1,24 +1,22 @@
 import 'dart:ui';
-import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
+
 import 'package:awesome_dialog/awesome_dialog.dart';
+import 'package:feature_discovery/feature_discovery.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
-import 'package:flutter_icons/flutter_icons.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:gestmob/Helpers/Helpers.dart';
 import 'package:gestmob/Helpers/QueryCtr.dart';
 import 'package:gestmob/Helpers/Statics.dart';
 import 'package:gestmob/generated/l10n.dart';
-import 'package:gestmob/models/Article.dart';
 import 'package:gestmob/models/Tiers.dart';
+import 'package:gestmob/services/push_notifications.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:sliding_card/sliding_card.dart';
 import 'package:url_launcher/url_launcher.dart';
+
 import 'CustomWidgets/list_tile_card.dart';
-import 'package:gestmob/services/push_notifications.dart';
-import 'package:feature_discovery/feature_discovery.dart';
-import 'package:flutter/scheduler.dart';
-import 'package:google_fonts/google_fonts.dart';
 
 // element à afficher lors de listing des clients ou des fournisseurs
 class TierListItem extends StatefulWidget {

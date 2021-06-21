@@ -1,10 +1,8 @@
-
-import 'dart:convert';
 import 'dart:typed_data';
 
 import 'package:gestmob/Helpers/Helpers.dart';
 
-class Tiers{
+class Tiers {
   Tiers.init(this._clientFour);
   Tiers.empty();
 
@@ -21,9 +19,9 @@ class Tiers{
       this._mobile,
       this._fax,
       this._email,
-      this._rc ,
-      this._nif ,
-      this._ai ,
+      this._rc,
+      this._nif,
+      this._ai,
       this._solde_depart,
       this._chiffre_affaires,
       this._regler,
@@ -77,14 +75,15 @@ class Tiers{
 
   Tiers.fromMap(dynamic obj) {
     this._id = obj["id"];
-    this._imageUint8List = Helpers.getUint8ListFromByteString(obj["BytesImageString"].toString());
+    this._imageUint8List =
+        Helpers.getUint8ListFromByteString(obj["BytesImageString"].toString());
     this._clientFour = obj["Clientfour"];
     this._raisonSociale = obj["RaisonSociale"];
     this._latitude = obj["Latitude"];
     this._longitude = obj["Longitude"];
     this._id_famille = obj["Id_Famille"];
     this._statut = obj["Statut"];
-    this._qrCode =obj["QRcode"];
+    this._qrCode = obj["QRcode"];
     this._tarification = obj["Tarification"];
     this._adresse = obj["Adresse"];
     this._ville = obj["Ville"];
@@ -99,14 +98,15 @@ class Tiers{
     this._chiffre_affaires = obj["Chiffre_affaires"];
     this._regler = obj["Regler"];
     this._credit = obj["Credit"];
-    this._bloquer =( obj["Bloquer"] == 1)? true : false;
+    this._bloquer = (obj["Bloquer"] == 1) ? true : false;
   }
 
   Map<String, dynamic> toMap() {
     var map = new Map<String, dynamic>();
 
-    if(_imageUint8List != null && _imageUint8List.isNotEmpty){
-      map["BytesImageString"] = Helpers.getEncodedByteStringFromUint8List(_imageUint8List);
+    if (_imageUint8List != null && _imageUint8List.isNotEmpty) {
+      map["BytesImageString"] =
+          Helpers.getEncodedByteStringFromUint8List(_imageUint8List);
     }
 
     map["id"] = this._id;
@@ -116,7 +116,7 @@ class Tiers{
     map["Longitude"] = this._longitude;
     map["Id_Famille"] = this._id_famille;
     map["Statut"] = this._statut;
-    map["QRcode"]=this._qrCode;
+    map["QRcode"] = this._qrCode;
     map["Tarification"] = this._tarification;
     map["Adresse"] = this._adresse;
     map["Ville"] = this._ville;
@@ -131,7 +131,7 @@ class Tiers{
     map["Chiffre_affaires"] = this._chiffre_affaires;
     map["Regler"] = this._regler;
     map["Credit"] = this._solde_depart + this._chiffre_affaires - this._regler;
-    map["Bloquer"] = (this._bloquer ) ? 1 : 0;
+    map["Bloquer"] = (this._bloquer) ? 1 : 0;
 
     return map;
   }
@@ -244,7 +244,6 @@ class Tiers{
     _clientFour = value;
   }
 
-
   String get rc => _rc;
 
   set rc(String value) {
@@ -275,5 +274,4 @@ class Tiers{
 
   @override
   int get hashCode => _id.hashCode;
-
 }

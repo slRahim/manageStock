@@ -1,7 +1,6 @@
 import 'dart:io';
 import 'dart:typed_data';
 import 'package:flutter/material.dart';
-import 'package:flutter_osm_plugin/flutter_osm_plugin.dart';
 import 'package:gestmob/Helpers/Helpers.dart';
 import 'package:gestmob/Helpers/QueryCtr.dart';
 import 'package:gestmob/Helpers/Statics.dart';
@@ -9,20 +8,11 @@ import 'package:gestmob/Widgets/CustomWidgets/add_save_bar.dart';
 import 'package:gestmob/Widgets/CustomWidgets/bottom_tab_bar.dart';
 import 'package:gestmob/Widgets/CustomWidgets/enterPin.dart';
 import 'package:gestmob/Widgets/CustomWidgets/image_picker_widget.dart';
-import 'package:gestmob/Widgets/CustomWidgets/list_dropdown.dart';
 import 'package:gestmob/generated/l10n.dart';
-import 'package:gestmob/models/Article.dart';
-import 'package:gestmob/models/Piece.dart';
 import 'package:gestmob/models/Profile.dart';
-import 'package:gestmob/models/Tiers.dart';
-import 'package:gestmob/models/TiersFamille.dart';
-import 'package:gestmob/search/items_sliver_list.dart';
 import 'package:gestmob/search/sliver_list_data_source.dart';
 import 'package:gestmob/services/push_notifications.dart';
-import 'package:googleapis/people/v1.dart';
-import 'package:image_picker/image_picker.dart';
 import 'package:gestmob/Widgets/utils.dart' as utils;
-import 'package:map_launcher/map_launcher.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:gestmob/Helpers/country_utils.dart';
 import 'package:flutter/services.dart';
@@ -193,7 +183,7 @@ class _ProfilePageState extends State<ProfilePage> with TickerProviderStateMixin
         .map((item) => item.states)
         .toList();
 
-    var states = takeState as List;
+    var states = takeState ;
     states.forEach((f) {
       if (!mounted) return;
       setState(() {
@@ -213,7 +203,7 @@ class _ProfilePageState extends State<ProfilePage> with TickerProviderStateMixin
         .map((item) => item.states)
         .toList();
 
-    var states = takestate as List;
+    var states = takestate ;
     states.forEach((f) {
       var stateName = f.where((item) => item.name == _selectedState);
       var cities = stateName.map((item) => item.cities).toList();

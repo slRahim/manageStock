@@ -1,14 +1,11 @@
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
-import 'package:gestmob/Helpers/Helpers.dart';
 import 'package:gestmob/Helpers/QueryCtr.dart';
 import 'package:gestmob/Helpers/Statics.dart';
-import 'package:gestmob/models/HomeItem.dart';
 import 'package:gestmob/models/MyParams.dart';
 import 'package:gestmob/models/Profile.dart';
-import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
+
 import 'local_notification.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 class PushNotificationsManager extends StatefulWidget {
   Widget child;
@@ -27,17 +24,17 @@ class PushNotificationsManager extends StatefulWidget {
 class PushNotificationsManagerState extends State<PushNotificationsManager> {
   final FirebaseMessaging _firebaseMessaging = FirebaseMessaging();
   MyParams _myParams;
-  Profile _profile ;
+  Profile _profile;
   bool _pieceHasCredit;
   QueryCtr _queryCtr = new QueryCtr();
-  bool  _finishLoading = false ;
+  bool _finishLoading = false;
 
   @override
   void initState() {
     super.initState();
-    futurinit().then((value){
+    futurinit().then((value) {
       setState(() {
-        _finishLoading = true ;
+        _finishLoading = true;
       });
     });
   }
@@ -48,7 +45,7 @@ class PushNotificationsManagerState extends State<PushNotificationsManager> {
         .setListenerForLowerVersions(onNotificationInLowerVersions);
     await configureLocalNotification();
     await configureCloudMessaginCallbacks();
-    await updateCurrentIndexPiece () ;
+    await updateCurrentIndexPiece();
   }
 
   MyParams get myParams => _myParams;
@@ -68,26 +65,21 @@ class PushNotificationsManagerState extends State<PushNotificationsManager> {
 
   @override
   Widget build(BuildContext context) {
-    if(_finishLoading){
-      return MyInheritedWidget(
-          data: this,
-          child: widget.child
-      );
+    if (_finishLoading) {
+      return MyInheritedWidget(data: this, child: widget.child);
     }
     return Center(
         child: CircularProgressIndicator(
-            valueColor: new AlwaysStoppedAnimation<Color>(Colors.transparent)
-        )
-    );
+            valueColor: new AlwaysStoppedAnimation<Color>(Colors.transparent)));
   }
 
-  updateCurrentIndexPiece () async {
-     var res = await _queryCtr.getAllFormatPiece();
-     var formatPiece = res.first ;
-     if(formatPiece.year != DateTime.now().year.toString()){
-       formatPiece.year = DateTime.now().year.toString() ;
-       await _queryCtr.updateItemInDb(DbTablesNames.formatPiece, formatPiece);
-     }
+  updateCurrentIndexPiece() async {
+    var res = await _queryCtr.getAllFormatPiece();
+    var formatPiece = res.first;
+    if (formatPiece.year != DateTime.now().year.toString()) {
+      formatPiece.year = DateTime.now().year.toString();
+      await _queryCtr.updateItemInDb(DbTablesNames.formatPiece, formatPiece);
+    }
   }
 
   configureCloudMessaginCallbacks() async {
@@ -154,13 +146,13 @@ class MyInheritedWidget extends InheritedWidget {
   final ValueChanged<dynamic> onMyParamsChanged;
   final ValueChanged<dynamic> onProfileChanged;
 
-  MyInheritedWidget({
-    Key key,
-    @required Widget child,
-    @required this.data,
-    this.onMyParamsChanged,
-    this.onProfileChanged
-  }) : super(key: key, child: child);
+  MyInheritedWidget(
+      {Key key,
+      @required Widget child,
+      @required this.data,
+      this.onMyParamsChanged,
+      this.onProfileChanged})
+      : super(key: key, child: child);
 
   @override
   bool updateShouldNotify(InheritedWidget oldWidget) {
