@@ -200,6 +200,7 @@ class _AddTierPageState extends State<AddTierPage>
     _selectedFamille = _familleItems[item.id_famille];
     _selectedStatut = Statics.statutItems[item.statut];
     _selectedTarification = item.tarification;
+    isEntreprise = (Statics.statutItems.last == _selectedStatut);
     _controlBloquer = item.bloquer;
   }
 

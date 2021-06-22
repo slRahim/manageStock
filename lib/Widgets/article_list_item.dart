@@ -55,6 +55,7 @@ class _ArticleListItemState extends State<ArticleListItem> {
   bool _visible = true;
   QueryCtr _queryCtr = new QueryCtr();
   bool _confirmDell = false;
+  bool _tva = false ;
 
   String feature9 = 'feature9';
   String feature10 = 'feature10';
@@ -71,6 +72,7 @@ class _ArticleListItemState extends State<ArticleListItem> {
     super.didChangeDependencies();
     PushNotificationsManagerState data = PushNotificationsManager.of(context);
     _devise = Helpers.getDeviseTranslate(data.myParams.devise);
+    _tva = data.myParams.tva ;
   }
 
   @override
@@ -418,7 +420,7 @@ class _ArticleListItemState extends State<ArticleListItem> {
       switch (widget.tarification) {
         case 1:
           return Text(
-            "${Helpers.numberFormat(widget.article.prixVente1).toString()} $_devise",
+              (!_tva) ? "${Helpers.numberFormat(widget.article.prixVente1).toString()} $_devise" : "${Helpers.numberFormat(widget.article.prixVente1TTC).toString()} $_devise",
             style: GoogleFonts.lato(
                 textStyle:
                     TextStyle(fontSize: 16.0, fontWeight: FontWeight.bold)),
@@ -427,7 +429,7 @@ class _ArticleListItemState extends State<ArticleListItem> {
 
         case 2:
           return Text(
-            "${Helpers.numberFormat(widget.article.prixVente2).toString()} $_devise",
+              (!_tva) ?"${Helpers.numberFormat(widget.article.prixVente2).toString()} $_devise":"${Helpers.numberFormat(widget.article.prixVente2TTC).toString()} $_devise",
             style: GoogleFonts.lato(
                 textStyle:
                     TextStyle(fontSize: 16.0, fontWeight: FontWeight.bold)),
@@ -436,7 +438,7 @@ class _ArticleListItemState extends State<ArticleListItem> {
 
         case 3:
           return Text(
-            "${Helpers.numberFormat(widget.article.prixVente3).toString()} $_devise",
+              (!_tva)? "${Helpers.numberFormat(widget.article.prixVente3).toString()} $_devise" : "${Helpers.numberFormat(widget.article.prixVente3TTC).toString()} $_devise",
             style: GoogleFonts.lato(
                 textStyle:
                     TextStyle(fontSize: 16.0, fontWeight: FontWeight.bold)),
@@ -453,7 +455,7 @@ class _ArticleListItemState extends State<ArticleListItem> {
             );
           }
           return Text(
-            "${Helpers.numberFormat(widget.article.prixVente1).toString()} $_devise",
+              (!_tva)? "${Helpers.numberFormat(widget.article.prixVente1).toString()} $_devise" : "${Helpers.numberFormat(widget.article.prixVente1TTC).toString()} $_devise",
             style: GoogleFonts.lato(
                 textStyle:
                     TextStyle(fontSize: 16.0, fontWeight: FontWeight.bold)),

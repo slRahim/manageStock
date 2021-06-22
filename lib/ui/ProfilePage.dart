@@ -1,32 +1,33 @@
+import 'dart:convert';
 import 'dart:io';
 import 'dart:typed_data';
+
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:gestmob/Helpers/Helpers.dart';
 import 'package:gestmob/Helpers/QueryCtr.dart';
 import 'package:gestmob/Helpers/Statics.dart';
+import 'package:gestmob/Helpers/country_utils.dart';
 import 'package:gestmob/Widgets/CustomWidgets/add_save_bar.dart';
 import 'package:gestmob/Widgets/CustomWidgets/bottom_tab_bar.dart';
 import 'package:gestmob/Widgets/CustomWidgets/enterPin.dart';
 import 'package:gestmob/Widgets/CustomWidgets/image_picker_widget.dart';
+import 'package:gestmob/Widgets/utils.dart' as utils;
 import 'package:gestmob/generated/l10n.dart';
+import 'package:gestmob/models/MyParams.dart';
 import 'package:gestmob/models/Profile.dart';
 import 'package:gestmob/search/sliver_list_data_source.dart';
 import 'package:gestmob/services/push_notifications.dart';
-import 'package:gestmob/Widgets/utils.dart' as utils;
-import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
-import 'package:gestmob/Helpers/country_utils.dart';
-import 'package:flutter/services.dart';
-import 'dart:convert';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:gestmob/models/MyParams.dart';
+import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 
 class ProfilePage extends StatefulWidget {
   @override
   _ProfilePageState createState() => _ProfilePageState();
 }
 
-class _ProfilePageState extends State<ProfilePage> with TickerProviderStateMixin {
-
+class _ProfilePageState extends State<ProfilePage>
+    with TickerProviderStateMixin {
   var arguments;
 
   TabController _tabController;
@@ -40,7 +41,6 @@ class _ProfilePageState extends State<ProfilePage> with TickerProviderStateMixin
 
   List<DropdownMenuItem<String>> _statutDropdownItems;
   String _selectedStatut;
-
 
   TextEditingController _raisonSocialeControl = new TextEditingController();
   TextEditingController _activiteControl = new TextEditingController();
@@ -58,8 +58,10 @@ class _ProfilePageState extends State<ProfilePage> with TickerProviderStateMixin
   TextEditingController _nisControl = new TextEditingController();
   TextEditingController _capitalsocialControl = new TextEditingController();
 
-  List<CountryModel> _countries =[CountryModel.init(name: "${S.current.selec_pays}")];
-  String  _selectedCountry = S.current.selec_pays ;
+  List<CountryModel> _countries = [
+    CountryModel.init(name: "${S.current.selec_pays}")
+  ];
+  String _selectedCountry = S.current.selec_pays;
 
   List<String> _cities = ["${S.current.choix_city}"];
   String _selectedCity = S.current.choix_city;
@@ -72,6 +74,7 @@ class _ProfilePageState extends State<ProfilePage> with TickerProviderStateMixin
   SliverListDataSource _dataSource;
   QueryCtr _queryCtr;
   MyParams _myParams;
+  bool isEntreprise = true;
 
   final _formKey = GlobalKey<FormState>();
 
@@ -79,7 +82,8 @@ class _ProfilePageState extends State<ProfilePage> with TickerProviderStateMixin
     super.initState();
     _tabController = TabController(length: 3, vsync: this);
 
-    _dataSource = SliverListDataSource(ItemsListTypes.articlesList, new Map<String, dynamic>());
+    _dataSource = SliverListDataSource(
+        ItemsListTypes.articlesList, new Map<String, dynamic>());
     _queryCtr = _dataSource.queryCtr;
 
     futureInitState().then((val) {
@@ -93,6 +97,13 @@ class _ProfilePageState extends State<ProfilePage> with TickerProviderStateMixin
   void didChangeDependencies() {
     PushNotificationsManagerState data = PushNotificationsManager.of(context);
     _myParams = data.myParams;
+
+    Statics.statutItems[0] = S.current.statut_m;
+    Statics.statutItems[1] = S.current.statut_mlle;
+    Statics.statutItems[2] = S.current.statut_mme;
+    Statics.statutItems[3] = S.current.statut_dr;
+    Statics.statutItems[4] = S.current.statut_pr;
+    Statics.statutItems[5] = S.current.statut_eurl;
   }
 
   @override
@@ -108,16 +119,16 @@ class _ProfilePageState extends State<ProfilePage> with TickerProviderStateMixin
     _selectedStatut = Statics.statutItems[0];
     await getCounty();
     arguments = await _queryCtr.getProfileById(1);
-    if(arguments.pays != ''){
-      _selectedCountry = arguments.pays ;
-      getStates() ;
+    if (arguments.pays != '') {
+      _selectedCountry = arguments.pays;
+      getStates();
     }
-    if(arguments.departement != ''){
-      _selectedState = arguments.departement ;
-      getCity() ;
+    if (arguments.departement != '') {
+      _selectedState = arguments.departement;
+      getCity();
     }
-    if(arguments.ville != ''){
-      _selectedCity =arguments.ville ;
+    if (arguments.ville != '') {
+      _selectedCity = arguments.ville;
     }
 
     editMode = false;
@@ -130,11 +141,13 @@ class _ProfilePageState extends State<ProfilePage> with TickerProviderStateMixin
     _itemImage = await Helpers.getFileFromUint8List(item.imageUint8List);
     _raisonSocialeControl.text = item.raisonSociale;
     _selectedStatut = Statics.statutItems[item.statut];
+    isEntreprise = (Statics.statutItems.last == _selectedStatut);
     _activiteControl.text = item.activite;
     _adresseControl.text = item.adresse;
-    _selectedState = (item.departement != '')?item.departement : _selectedState ;
-    _selectedCity = (item.ville != '')? item.ville : _selectedCity;
-    _selectedCountry = (item.pays != '')? item.pays : _selectedCountry;
+    _selectedState =
+        (item.departement != '') ? item.departement : _selectedState;
+    _selectedCity = (item.ville != '') ? item.ville : _selectedCity;
+    _selectedCountry = (item.pays != '') ? item.pays : _selectedCountry;
     _telephoneControl.text = item.telephone;
     _telephone2Control.text = item.telephone2;
     _mobileControl.text = item.mobile;
@@ -147,12 +160,10 @@ class _ProfilePageState extends State<ProfilePage> with TickerProviderStateMixin
     _nifControl.text = item.nif;
     _nisControl.text = item.nis;
     _capitalsocialControl.text = item.capital.toStringAsFixed(2);
-
   }
 
   Future getResponse() async {
-    var res = await rootBundle.loadString(
-        'assets/data/country.json');
+    var res = await rootBundle.loadString('assets/data/country.json');
     return jsonDecode(res);
   }
 
@@ -161,12 +172,12 @@ class _ProfilePageState extends State<ProfilePage> with TickerProviderStateMixin
     countryres.forEach((data) {
       var model = CountryModel.fromJson(data);
       if (!mounted) return;
-      switch(Localizations.localeOf(context).languageCode){
-        case "fr" :
-          model.name = model.translations.fr ;
+      switch (Localizations.localeOf(context).languageCode) {
+        case "fr":
+          model.name = model.translations.fr;
           break;
-        case "ar" :
-          model.name = model.translations.fa ;
+        case "ar":
+          model.name = model.translations.fa;
           break;
       }
       setState(() {
@@ -183,7 +194,7 @@ class _ProfilePageState extends State<ProfilePage> with TickerProviderStateMixin
         .map((item) => item.states)
         .toList();
 
-    var states = takeState ;
+    var states = takeState;
     states.forEach((f) {
       if (!mounted) return;
       setState(() {
@@ -203,7 +214,7 @@ class _ProfilePageState extends State<ProfilePage> with TickerProviderStateMixin
         .map((item) => item.states)
         .toList();
 
-    var states = takestate ;
+    var states = takestate;
     states.forEach((f) {
       var stateName = f.where((item) => item.name == _selectedState);
       var cities = stateName.map((item) => item.cities).toList();
@@ -227,15 +238,15 @@ class _ProfilePageState extends State<ProfilePage> with TickerProviderStateMixin
   Widget build(BuildContext context) {
     if (modification) {
       if (editMode) {
-        appBarTitle =  S.current.modification_titre;
+        appBarTitle = S.current.modification_titre;
       } else {
-        appBarTitle =  S.current.profile_titre;
+        appBarTitle = S.current.profile_titre;
       }
     } else {
       if (editMode) {
-        appBarTitle =  S.current.profile_titre;
+        appBarTitle = S.current.profile_titre;
       } else {
-        appBarTitle =  S.current.profile_titre;
+        appBarTitle = S.current.profile_titre;
       }
     }
 
@@ -252,16 +263,21 @@ class _ProfilePageState extends State<ProfilePage> with TickerProviderStateMixin
                 modification: modification,
                 title: appBarTitle,
                 onCancelPressed: () => {
-                  if(modification){
-                    if(editMode){
-                      Navigator.of(context)
-                          .pushReplacementNamed(RoutesKeys.profilePage, arguments: arguments)
-                    } else{
-                      Navigator.pop(context)
+                  if (modification)
+                    {
+                      if (editMode)
+                        {
+                          Navigator.of(context).pushReplacementNamed(
+                              RoutesKeys.profilePage,
+                              arguments: arguments)
+                        }
+                      else
+                        {Navigator.pop(context)}
                     }
-                  } else{
-                    Navigator.pop(context),
-                  }
+                  else
+                    {
+                      Navigator.pop(context),
+                    }
                 },
                 onEditPressed: () {
                   setState(() {
@@ -269,8 +285,8 @@ class _ProfilePageState extends State<ProfilePage> with TickerProviderStateMixin
                   });
                 },
                 onSavePressed: () async {
-                  if(_formKey.currentState != null){
-                    if(_formKey.currentState.validate()){
+                  if (_formKey.currentState != null) {
+                    if (_formKey.currentState.validate()) {
                       int id = await addItemToDb();
                       if (id > -1) {
                         setState(() {
@@ -279,22 +295,52 @@ class _ProfilePageState extends State<ProfilePage> with TickerProviderStateMixin
                         });
                       }
                     } else {
-                      Helpers.showFlushBar(context, "${S.current.msg_champs_obg}");
+                      Helpers.showFlushBar(
+                          context, "${S.current.msg_champs_obg}");
                     }
-                  }else{
+                  } else {
                     setState(() {
-                      _tabController.index = 0 ;
+                      _tabController.index = 0;
                     });
                   }
-
                 },
               ),
               bottomNavigationBar: BottomTabBar(
                 controller: _tabController,
                 tabs: [
-                  Tab(child: Column( children: [ Icon(Icons.insert_drive_file),SizedBox(height: 1), Text( S.current.fiche,style: GoogleFonts.lato(),), ], )),
-                  Tab(child: Column( children: [ Icon(Icons.image), SizedBox(height: 1), Text( S.current.logo,style: GoogleFonts.lato(),), ], )),
-                  Tab(child: Column( children: [ Icon(Icons.fingerprint), SizedBox(height: 1), Text( S.current.securite,style: GoogleFonts.lato(),), ], )),
+                  Tab(
+                      child: Column(
+                    children: [
+                      Icon(Icons.insert_drive_file),
+                      SizedBox(height: 1),
+                      Text(
+                        S.current.fiche,
+                        style: GoogleFonts.lato(),
+                      ),
+                    ],
+                  )),
+                  Tab(
+                      child: Column(
+                    children: [
+                      Icon(Icons.image),
+                      SizedBox(height: 1),
+                      Text(
+                        S.current.logo,
+                        style: GoogleFonts.lato(),
+                      ),
+                    ],
+                  )),
+                  Tab(
+                      child: Column(
+                    children: [
+                      Icon(Icons.fingerprint),
+                      SizedBox(height: 1),
+                      Text(
+                        S.current.securite,
+                        style: GoogleFonts.lato(),
+                      ),
+                    ],
+                  )),
                 ],
               ),
               body: Builder(
@@ -334,8 +380,9 @@ class _ProfilePageState extends State<ProfilePage> with TickerProviderStateMixin
                       return null;
                     },
                     decoration: InputDecoration(
-                      labelText:  S.current.rs,
-                      labelStyle: GoogleFonts.lato(textStyle: TextStyle(color: Colors.green)),
+                      labelText: S.current.rs,
+                      labelStyle: GoogleFonts.lato(
+                          textStyle: TextStyle(color: Colors.green)),
                       prefixIcon: Icon(
                         MdiIcons.idCard,
                         color: Colors.green,
@@ -348,7 +395,7 @@ class _ProfilePageState extends State<ProfilePage> with TickerProviderStateMixin
                         borderRadius: BorderRadius.circular(20),
                         borderSide: BorderSide(color: Colors.green),
                       ),
-                      errorBorder:  OutlineInputBorder(
+                      errorBorder: OutlineInputBorder(
                         gapPadding: 3.3,
                         borderRadius: BorderRadius.circular(20),
                         borderSide: BorderSide(color: Colors.red),
@@ -359,10 +406,14 @@ class _ProfilePageState extends State<ProfilePage> with TickerProviderStateMixin
                 Padding(padding: EdgeInsets.fromLTRB(5, 5, 5, 5)),
                 Container(
                   padding: const EdgeInsets.all(3),
-                  decoration: editMode? new BoxDecoration(
-                    border: Border.all(color: Colors.blueAccent,),
-                    borderRadius: BorderRadius.circular(20.0),
-                  ) : null,
+                  decoration: editMode
+                      ? new BoxDecoration(
+                          border: Border.all(
+                            color: Colors.blueAccent,
+                          ),
+                          borderRadius: BorderRadius.circular(20.0),
+                        )
+                      : null,
                   child: DropdownButtonHideUnderline(
                     child: DropdownButton<String>(
                         disabledHint: Text(_selectedStatut),
@@ -370,11 +421,14 @@ class _ProfilePageState extends State<ProfilePage> with TickerProviderStateMixin
                         items: _statutDropdownItems,
                         onChanged: editMode
                             ? (value) {
-                          setState(() {
-                            _selectedStatut = value;
-                          });
-                        }
-                            : null),),
+                                setState(() {
+                                  _selectedStatut = value;
+                                  isEntreprise =
+                                      (Statics.statutItems.last == value);
+                                });
+                              }
+                            : null),
+                  ),
                 ),
               ],
             ),
@@ -390,8 +444,9 @@ class _ProfilePageState extends State<ProfilePage> with TickerProviderStateMixin
               //   return null;
               // },
               decoration: InputDecoration(
-                labelText:  S.current.activite,
-                labelStyle: GoogleFonts.lato(textStyle: TextStyle(color: Theme.of(context).hintColor)),
+                labelText: S.current.activite,
+                labelStyle: GoogleFonts.lato(
+                    textStyle: TextStyle(color: Theme.of(context).hintColor)),
                 prefixIcon: Icon(
                   MdiIcons.homeCityOutline,
                   color: Colors.blue,
@@ -404,7 +459,7 @@ class _ProfilePageState extends State<ProfilePage> with TickerProviderStateMixin
                   borderRadius: BorderRadius.circular(20),
                   borderSide: BorderSide(color: Colors.blue),
                 ),
-                errorBorder:  OutlineInputBorder(
+                errorBorder: OutlineInputBorder(
                   gapPadding: 3.3,
                   borderRadius: BorderRadius.circular(20),
                   borderSide: BorderSide(color: Colors.red),
@@ -423,8 +478,9 @@ class _ProfilePageState extends State<ProfilePage> with TickerProviderStateMixin
               //   return null;
               // },
               decoration: InputDecoration(
-                labelText:  S.current.adresse,
-                labelStyle: GoogleFonts.lato(textStyle: TextStyle(color: Theme.of(context).hintColor)),
+                labelText: S.current.adresse,
+                labelStyle: GoogleFonts.lato(
+                    textStyle: TextStyle(color: Theme.of(context).hintColor)),
                 prefixIcon: Icon(
                   Icons.home_outlined,
                   color: Colors.blue,
@@ -437,7 +493,7 @@ class _ProfilePageState extends State<ProfilePage> with TickerProviderStateMixin
                   borderRadius: BorderRadius.circular(20),
                   borderSide: BorderSide(color: Colors.blue),
                 ),
-                errorBorder:  OutlineInputBorder(
+                errorBorder: OutlineInputBorder(
                   gapPadding: 3.3,
                   borderRadius: BorderRadius.circular(20),
                   borderSide: BorderSide(color: Colors.red),
@@ -445,46 +501,55 @@ class _ProfilePageState extends State<ProfilePage> with TickerProviderStateMixin
               ),
             ),
             Container(
-              padding: const EdgeInsetsDirectional.only(start: 12 , end: 0 , top: 5 ,bottom: 5),
-              decoration:editMode ? BoxDecoration(
-                border: Border.all(
-                  color: Colors.blueAccent,
-                ),
-                borderRadius: BorderRadius.circular(20.0),
-              ):null,
-              child:  Row(
+              padding: const EdgeInsetsDirectional.only(
+                  start: 12, end: 0, top: 5, bottom: 5),
+              decoration: editMode
+                  ? BoxDecoration(
+                      border: Border.all(
+                        color: Colors.blueAccent,
+                      ),
+                      borderRadius: BorderRadius.circular(20.0),
+                    )
+                  : null,
+              child: Row(
                 children: [
                   Icon(
                     Icons.pin_drop,
                     color: Colors.blue,
                   ),
-                  SizedBox(width: 15,),
+                  SizedBox(
+                    width: 15,
+                  ),
                   Container(
                     width: 200,
                     child: SingleChildScrollView(
                       scrollDirection: Axis.horizontal,
-                      child:  DropdownButtonHideUnderline(
+                      child: DropdownButtonHideUnderline(
                         child: DropdownButton<String>(
                           disabledHint: Text(_selectedCountry),
                           value: _selectedCountry,
                           items: _countries.map((item) {
                             return DropdownMenuItem<String>(
                               value: item.name,
-                              child: Text(item.name, style: GoogleFonts.lato(),),
+                              child: Text(
+                                item.name,
+                                style: GoogleFonts.lato(),
+                              ),
                             );
                           }).toList(),
-                          onChanged: editMode ? (value) {
-                            if (!mounted) return;
-                            setState(() {
-                              _selectedCountry = value;
-                              _selectedState = S.current.choix_province;
-                              _states = ["${S.current.choix_province}"];
-                              _cities = ["${S.current.choix_city}"];
-                              _selectedCity = S.current.choix_city;
-                              getStates();
-                            });
-
-                          }:null,
+                          onChanged: editMode
+                              ? (value) {
+                                  if (!mounted) return;
+                                  setState(() {
+                                    _selectedCountry = value;
+                                    _selectedState = S.current.choix_province;
+                                    _states = ["${S.current.choix_province}"];
+                                    _cities = ["${S.current.choix_city}"];
+                                    _selectedCity = S.current.choix_city;
+                                    getStates();
+                                  });
+                                }
+                              : null,
                         ),
                       ),
                     ),
@@ -493,20 +558,25 @@ class _ProfilePageState extends State<ProfilePage> with TickerProviderStateMixin
               ),
             ),
             Container(
-              padding: const EdgeInsetsDirectional.only(start: 12 , end: 0 , top: 5 ,bottom: 5),
-              decoration:editMode ? BoxDecoration(
-                border: Border.all(
-                  color: Colors.blueAccent,
-                ),
-                borderRadius: BorderRadius.circular(20.0),
-              ):null,
-              child:  Row(
+              padding: const EdgeInsetsDirectional.only(
+                  start: 12, end: 0, top: 5, bottom: 5),
+              decoration: editMode
+                  ? BoxDecoration(
+                      border: Border.all(
+                        color: Colors.blueAccent,
+                      ),
+                      borderRadius: BorderRadius.circular(20.0),
+                    )
+                  : null,
+              child: Row(
                 children: [
                   Icon(
                     Icons.pin_drop,
                     color: Colors.blue,
                   ),
-                  SizedBox(width: 15,),
+                  SizedBox(
+                    width: 15,
+                  ),
                   Container(
                     width: 200,
                     child: SingleChildScrollView(
@@ -518,18 +588,23 @@ class _ProfilePageState extends State<ProfilePage> with TickerProviderStateMixin
                           items: _states.map((String dropDownStringItem) {
                             return DropdownMenuItem<String>(
                               value: dropDownStringItem,
-                              child: Text(dropDownStringItem, style: GoogleFonts.lato(),),
+                              child: Text(
+                                dropDownStringItem,
+                                style: GoogleFonts.lato(),
+                              ),
                             );
                           }).toList(),
-                          onChanged:editMode ? (value){
-                            if (!mounted) return;
-                            setState(() {
-                              _selectedState = value;
-                              _cities = ["${S.current.choix_city}"];
-                              _selectedCity = "${S.current.choix_city}" ;
-                              getCity();
-                            });
-                          }:null,
+                          onChanged: editMode
+                              ? (value) {
+                                  if (!mounted) return;
+                                  setState(() {
+                                    _selectedState = value;
+                                    _cities = ["${S.current.choix_city}"];
+                                    _selectedCity = "${S.current.choix_city}";
+                                    getCity();
+                                  });
+                                }
+                              : null,
                         ),
                       ),
                     ),
@@ -538,40 +613,50 @@ class _ProfilePageState extends State<ProfilePage> with TickerProviderStateMixin
               ),
             ),
             Container(
-              padding: const EdgeInsetsDirectional.only(start: 12 , end: 0 , top: 5 ,bottom: 5),
-              decoration:editMode ? BoxDecoration(
-                border: Border.all(
-                  color: Colors.blueAccent,
-                ),
-                borderRadius: BorderRadius.circular(20.0),
-              ):null,
-              child:  Row(
+              padding: const EdgeInsetsDirectional.only(
+                  start: 12, end: 0, top: 5, bottom: 5),
+              decoration: editMode
+                  ? BoxDecoration(
+                      border: Border.all(
+                        color: Colors.blueAccent,
+                      ),
+                      borderRadius: BorderRadius.circular(20.0),
+                    )
+                  : null,
+              child: Row(
                 children: [
                   Icon(
                     Icons.pin_drop,
                     color: Colors.blue,
                   ),
-                  SizedBox(width: 15,),
+                  SizedBox(
+                    width: 15,
+                  ),
                   Container(
                     width: 200,
                     child: SingleChildScrollView(
                       scrollDirection: Axis.horizontal,
-                      child:DropdownButtonHideUnderline(
+                      child: DropdownButtonHideUnderline(
                         child: DropdownButton<String>(
                           value: _selectedCity,
                           disabledHint: Text(_selectedCity),
                           items: _cities.map((String dropDownStringItem) {
                             return DropdownMenuItem<String>(
                               value: dropDownStringItem,
-                              child: Text(dropDownStringItem, style:GoogleFonts.lato() ,),
+                              child: Text(
+                                dropDownStringItem,
+                                style: GoogleFonts.lato(),
+                              ),
                             );
                           }).toList(),
-                          onChanged:editMode? (value) {
-                            if (!mounted) return;
-                            setState(() {
-                              _selectedCity = value;
-                            });
-                          }:null,
+                          onChanged: editMode
+                              ? (value) {
+                                  if (!mounted) return;
+                                  setState(() {
+                                    _selectedCity = value;
+                                  });
+                                }
+                              : null,
                         ),
                       ),
                     ),
@@ -582,7 +667,9 @@ class _ProfilePageState extends State<ProfilePage> with TickerProviderStateMixin
             TextFormField(
               enabled: editMode,
               controller: _telephoneControl,
-              onTap: () => _telephoneControl.selection = TextSelection(baseOffset: 0, extentOffset: _telephoneControl.value.text.length),
+              onTap: () => _telephoneControl.selection = TextSelection(
+                  baseOffset: 0,
+                  extentOffset: _telephoneControl.value.text.length),
               keyboardType: TextInputType.phone,
               // validator: (value) {
               //   if (value.isEmpty) {
@@ -591,8 +678,9 @@ class _ProfilePageState extends State<ProfilePage> with TickerProviderStateMixin
               //   return null;
               // },
               decoration: InputDecoration(
-                labelText:  S.current.telephone,
-                labelStyle: GoogleFonts.lato(textStyle: TextStyle(color: Theme.of(context).hintColor)),
+                labelText: S.current.telephone,
+                labelStyle: GoogleFonts.lato(
+                    textStyle: TextStyle(color: Theme.of(context).hintColor)),
                 prefixIcon: Icon(
                   Icons.phone,
                   color: Colors.blue,
@@ -605,7 +693,7 @@ class _ProfilePageState extends State<ProfilePage> with TickerProviderStateMixin
                   borderRadius: BorderRadius.circular(20),
                   borderSide: BorderSide(color: Colors.blue),
                 ),
-                errorBorder:  OutlineInputBorder(
+                errorBorder: OutlineInputBorder(
                   gapPadding: 3.3,
                   borderRadius: BorderRadius.circular(20),
                   borderSide: BorderSide(color: Colors.red),
@@ -615,7 +703,9 @@ class _ProfilePageState extends State<ProfilePage> with TickerProviderStateMixin
             TextFormField(
               enabled: editMode,
               controller: _telephone2Control,
-              onTap: () => _telephone2Control.selection = TextSelection(baseOffset: 0, extentOffset: _telephone2Control.value.text.length),
+              onTap: () => _telephone2Control.selection = TextSelection(
+                  baseOffset: 0,
+                  extentOffset: _telephone2Control.value.text.length),
               keyboardType: TextInputType.phone,
               // validator: (value) {
               //   if (value.isEmpty) {
@@ -624,8 +714,9 @@ class _ProfilePageState extends State<ProfilePage> with TickerProviderStateMixin
               //   return null;
               // },
               decoration: InputDecoration(
-                labelText:  S.current.telephone2,
-                labelStyle: GoogleFonts.lato(textStyle: TextStyle(color: Theme.of(context).hintColor)),
+                labelText: S.current.telephone2,
+                labelStyle: GoogleFonts.lato(
+                    textStyle: TextStyle(color: Theme.of(context).hintColor)),
                 prefixIcon: Icon(
                   Icons.phone,
                   color: Colors.blue,
@@ -638,7 +729,7 @@ class _ProfilePageState extends State<ProfilePage> with TickerProviderStateMixin
                   borderRadius: BorderRadius.circular(20),
                   borderSide: BorderSide(color: Colors.blue),
                 ),
-                errorBorder:  OutlineInputBorder(
+                errorBorder: OutlineInputBorder(
                   gapPadding: 3.3,
                   borderRadius: BorderRadius.circular(20),
                   borderSide: BorderSide(color: Colors.red),
@@ -648,7 +739,9 @@ class _ProfilePageState extends State<ProfilePage> with TickerProviderStateMixin
             TextFormField(
               enabled: editMode,
               controller: _mobileControl,
-              onTap: () => _mobileControl.selection = TextSelection(baseOffset: 0, extentOffset: _mobileControl.value.text.length),
+              onTap: () => _mobileControl.selection = TextSelection(
+                  baseOffset: 0,
+                  extentOffset: _mobileControl.value.text.length),
               keyboardType: TextInputType.phone,
               // validator: (value) {
               //   if (value.isEmpty) {
@@ -657,8 +750,9 @@ class _ProfilePageState extends State<ProfilePage> with TickerProviderStateMixin
               //   return null;
               // },
               decoration: InputDecoration(
-                labelText:  S.current.mobile,
-                labelStyle: GoogleFonts.lato(textStyle: TextStyle(color: Theme.of(context).hintColor)),
+                labelText: S.current.mobile,
+                labelStyle: GoogleFonts.lato(
+                    textStyle: TextStyle(color: Theme.of(context).hintColor)),
                 prefixIcon: Icon(
                   Icons.phone_android,
                   color: Colors.blue,
@@ -671,7 +765,7 @@ class _ProfilePageState extends State<ProfilePage> with TickerProviderStateMixin
                   borderRadius: BorderRadius.circular(20),
                   borderSide: BorderSide(color: Colors.blue),
                 ),
-                errorBorder:  OutlineInputBorder(
+                errorBorder: OutlineInputBorder(
                   gapPadding: 3.3,
                   borderRadius: BorderRadius.circular(20),
                   borderSide: BorderSide(color: Colors.red),
@@ -681,7 +775,9 @@ class _ProfilePageState extends State<ProfilePage> with TickerProviderStateMixin
             TextFormField(
               enabled: editMode,
               controller: _mobile2Control,
-              onTap: () => _mobile2Control.selection = TextSelection(baseOffset: 0, extentOffset: _mobile2Control.value.text.length),
+              onTap: () => _mobile2Control.selection = TextSelection(
+                  baseOffset: 0,
+                  extentOffset: _mobile2Control.value.text.length),
               keyboardType: TextInputType.phone,
               // validator: (value) {
               //   if (value.isEmpty) {
@@ -690,8 +786,9 @@ class _ProfilePageState extends State<ProfilePage> with TickerProviderStateMixin
               //   return null;
               // },
               decoration: InputDecoration(
-                labelText:  S.current.mobile2,
-                labelStyle: GoogleFonts.lato(textStyle: TextStyle(color: Theme.of(context).hintColor)),
+                labelText: S.current.mobile2,
+                labelStyle: GoogleFonts.lato(
+                    textStyle: TextStyle(color: Theme.of(context).hintColor)),
                 prefixIcon: Icon(
                   Icons.phone_android,
                   color: Colors.blue,
@@ -704,7 +801,7 @@ class _ProfilePageState extends State<ProfilePage> with TickerProviderStateMixin
                   borderRadius: BorderRadius.circular(20),
                   borderSide: BorderSide(color: Colors.blue),
                 ),
-                errorBorder:  OutlineInputBorder(
+                errorBorder: OutlineInputBorder(
                   gapPadding: 3.3,
                   borderRadius: BorderRadius.circular(20),
                   borderSide: BorderSide(color: Colors.red),
@@ -714,7 +811,8 @@ class _ProfilePageState extends State<ProfilePage> with TickerProviderStateMixin
             TextFormField(
               enabled: editMode,
               controller: _faxControl,
-              onTap: () => _faxControl.selection = TextSelection(baseOffset: 0, extentOffset: _faxControl.value.text.length),
+              onTap: () => _faxControl.selection = TextSelection(
+                  baseOffset: 0, extentOffset: _faxControl.value.text.length),
               keyboardType: TextInputType.phone,
               // validator: (value) {
               //   if (value.isEmpty) {
@@ -723,8 +821,9 @@ class _ProfilePageState extends State<ProfilePage> with TickerProviderStateMixin
               //   return null;
               // },
               decoration: InputDecoration(
-                labelText:  S.current.fax,
-                labelStyle: GoogleFonts.lato(textStyle: TextStyle(color: Theme.of(context).hintColor)),
+                labelText: S.current.fax,
+                labelStyle: GoogleFonts.lato(
+                    textStyle: TextStyle(color: Theme.of(context).hintColor)),
                 prefixIcon: Icon(
                   MdiIcons.fax,
                   color: Colors.blue,
@@ -737,7 +836,7 @@ class _ProfilePageState extends State<ProfilePage> with TickerProviderStateMixin
                   borderRadius: BorderRadius.circular(20),
                   borderSide: BorderSide(color: Colors.blue),
                 ),
-                errorBorder:  OutlineInputBorder(
+                errorBorder: OutlineInputBorder(
                   gapPadding: 3.3,
                   borderRadius: BorderRadius.circular(20),
                   borderSide: BorderSide(color: Colors.red),
@@ -756,8 +855,9 @@ class _ProfilePageState extends State<ProfilePage> with TickerProviderStateMixin
               //   return null;
               // },
               decoration: InputDecoration(
-                labelText:  S.current.mail,
-                labelStyle: GoogleFonts.lato(textStyle: TextStyle(color: Theme.of(context).hintColor)),
+                labelText: S.current.mail,
+                labelStyle: GoogleFonts.lato(
+                    textStyle: TextStyle(color: Theme.of(context).hintColor)),
                 prefixIcon: Icon(
                   Icons.email,
                   color: Colors.blue,
@@ -770,7 +870,7 @@ class _ProfilePageState extends State<ProfilePage> with TickerProviderStateMixin
                   borderRadius: BorderRadius.circular(20),
                   borderSide: BorderSide(color: Colors.blue[700]),
                 ),
-                errorBorder:  OutlineInputBorder(
+                errorBorder: OutlineInputBorder(
                   gapPadding: 3.3,
                   borderRadius: BorderRadius.circular(20),
                   borderSide: BorderSide(color: Colors.red),
@@ -789,8 +889,9 @@ class _ProfilePageState extends State<ProfilePage> with TickerProviderStateMixin
               //   return null;
               // },
               decoration: InputDecoration(
-                labelText:  S.current.adresse_web,
-                labelStyle: GoogleFonts.lato(textStyle: TextStyle(color: Theme.of(context).hintColor)),
+                labelText: S.current.adresse_web,
+                labelStyle: GoogleFonts.lato(
+                    textStyle: TextStyle(color: Theme.of(context).hintColor)),
                 prefixIcon: Icon(
                   MdiIcons.searchWeb,
                   color: Colors.blue,
@@ -803,40 +904,7 @@ class _ProfilePageState extends State<ProfilePage> with TickerProviderStateMixin
                   borderRadius: BorderRadius.circular(20),
                   borderSide: BorderSide(color: Colors.blue),
                 ),
-                errorBorder:  OutlineInputBorder(
-                  gapPadding: 3.3,
-                  borderRadius: BorderRadius.circular(20),
-                  borderSide: BorderSide(color: Colors.red),
-                ),
-              ),
-            ),
-            TextFormField(
-              enabled: editMode,
-              controller: _rcControl,
-              onTap: () => _rcControl.selection = TextSelection(baseOffset: 0, extentOffset: _rcControl.value.text.length),
-              keyboardType: TextInputType.text,
-              // validator: (value) {
-              //   if (value.isEmpty) {
-              //     return S.current.msg_champ_oblg;
-              //   }
-              //   return null;
-              // },
-              decoration: InputDecoration(
-                labelText:  S.current.n_rc,
-                labelStyle: GoogleFonts.lato(textStyle: TextStyle(color: Theme.of(context).hintColor)),
-                prefixIcon: Icon(
-                  MdiIcons.cardAccountDetails,
-                  color: Colors.blue,
-                ),
-                focusedBorder: OutlineInputBorder(
-                    borderSide: BorderSide(color: Colors.blue),
-                    borderRadius: BorderRadius.circular(20)),
-                enabledBorder: OutlineInputBorder(
-                  gapPadding: 3.3,
-                  borderRadius: BorderRadius.circular(20),
-                  borderSide: BorderSide(color: Colors.blue),
-                ),
-                errorBorder:  OutlineInputBorder(
+                errorBorder: OutlineInputBorder(
                   gapPadding: 3.3,
                   borderRadius: BorderRadius.circular(20),
                   borderSide: BorderSide(color: Colors.red),
@@ -844,11 +912,12 @@ class _ProfilePageState extends State<ProfilePage> with TickerProviderStateMixin
               ),
             ),
             Visibility(
-              visible: (_myParams.pays == "Algeria"),
+              visible: isEntreprise,
               child: TextFormField(
                 enabled: editMode,
-                controller: _aiControl,
-                onTap: () => _aiControl.selection = TextSelection(baseOffset: 0, extentOffset: _aiControl.value.text.length),
+                controller: _rcControl,
+                onTap: () => _rcControl.selection = TextSelection(
+                    baseOffset: 0, extentOffset: _rcControl.value.text.length),
                 keyboardType: TextInputType.text,
                 // validator: (value) {
                 //   if (value.isEmpty) {
@@ -857,8 +926,9 @@ class _ProfilePageState extends State<ProfilePage> with TickerProviderStateMixin
                 //   return null;
                 // },
                 decoration: InputDecoration(
-                  labelText:  S.current.art_imp,
-                  labelStyle: GoogleFonts.lato(textStyle: TextStyle(color: Theme.of(context).hintColor)),
+                  labelText: S.current.n_rc,
+                  labelStyle: GoogleFonts.lato(
+                      textStyle: TextStyle(color: Theme.of(context).hintColor)),
                   prefixIcon: Icon(
                     MdiIcons.cardAccountDetails,
                     color: Colors.blue,
@@ -871,7 +941,7 @@ class _ProfilePageState extends State<ProfilePage> with TickerProviderStateMixin
                     borderRadius: BorderRadius.circular(20),
                     borderSide: BorderSide(color: Colors.blue),
                   ),
-                  errorBorder:  OutlineInputBorder(
+                  errorBorder: OutlineInputBorder(
                     gapPadding: 3.3,
                     borderRadius: BorderRadius.circular(20),
                     borderSide: BorderSide(color: Colors.red),
@@ -879,102 +949,156 @@ class _ProfilePageState extends State<ProfilePage> with TickerProviderStateMixin
                 ),
               ),
             ),
-            TextFormField(
-              enabled: editMode,
-              controller: _nifControl,
-              onTap: () => _nifControl.selection = TextSelection(baseOffset: 0, extentOffset: _nifControl.value.text.length),
-              keyboardType: TextInputType.text,
-              // validator: (value) {
-              //   if (value.isEmpty) {
-              //     return S.current.msg_champ_oblg;
-              //   }
-              //   return null;
-              // },
-              decoration: InputDecoration(
-                labelText:  S.current.nif,
-                labelStyle: GoogleFonts.lato(textStyle: TextStyle(color: Theme.of(context).hintColor)),
-                prefixIcon: Icon(
-                  MdiIcons.cardAccountDetails,
-                  color: Colors.blue,
-                ),
-                focusedBorder: OutlineInputBorder(
+            Visibility(
+              visible: (isEntreprise && _myParams.pays == "Algeria"),
+              child: TextFormField(
+                enabled: editMode,
+                controller: _aiControl,
+                onTap: () => _aiControl.selection = TextSelection(
+                    baseOffset: 0, extentOffset: _aiControl.value.text.length),
+                keyboardType: TextInputType.text,
+                // validator: (value) {
+                //   if (value.isEmpty) {
+                //     return S.current.msg_champ_oblg;
+                //   }
+                //   return null;
+                // },
+                decoration: InputDecoration(
+                  labelText: S.current.art_imp,
+                  labelStyle: GoogleFonts.lato(
+                      textStyle: TextStyle(color: Theme.of(context).hintColor)),
+                  prefixIcon: Icon(
+                    MdiIcons.cardAccountDetails,
+                    color: Colors.blue,
+                  ),
+                  focusedBorder: OutlineInputBorder(
+                      borderSide: BorderSide(color: Colors.blue),
+                      borderRadius: BorderRadius.circular(20)),
+                  enabledBorder: OutlineInputBorder(
+                    gapPadding: 3.3,
+                    borderRadius: BorderRadius.circular(20),
                     borderSide: BorderSide(color: Colors.blue),
-                    borderRadius: BorderRadius.circular(20)),
-                enabledBorder: OutlineInputBorder(
-                  gapPadding: 3.3,
-                  borderRadius: BorderRadius.circular(20),
-                  borderSide: BorderSide(color: Colors.blue),
-                ),
-                errorBorder:  OutlineInputBorder(
-                  gapPadding: 3.3,
-                  borderRadius: BorderRadius.circular(20),
-                  borderSide: BorderSide(color: Colors.red),
+                  ),
+                  errorBorder: OutlineInputBorder(
+                    gapPadding: 3.3,
+                    borderRadius: BorderRadius.circular(20),
+                    borderSide: BorderSide(color: Colors.red),
+                  ),
                 ),
               ),
             ),
-            TextFormField(
-              enabled: editMode,
-              controller: _nisControl,
-              onTap: () => _nisControl.selection = TextSelection(baseOffset: 0, extentOffset: _nisControl.value.text.length),
-              keyboardType: TextInputType.text,
-              // validator: (value) {
-              //   if (value.isEmpty) {
-              //     return S.current.msg_champ_oblg;
-              //   }
-              //   return null;
-              // },
-              decoration: InputDecoration(
-                labelText:  S.current.nis,
-                labelStyle: GoogleFonts.lato(textStyle: TextStyle(color: Theme.of(context).hintColor)),
-                prefixIcon: Icon(
-                  MdiIcons.cardAccountDetails,
-                  color: Colors.blue,
-                ),
-                focusedBorder: OutlineInputBorder(
+            Visibility(
+              visible: isEntreprise,
+              child: TextFormField(
+                enabled: editMode,
+                controller: _nifControl,
+                onTap: () => _nifControl.selection = TextSelection(
+                    baseOffset: 0, extentOffset: _nifControl.value.text.length),
+                keyboardType: TextInputType.text,
+                // validator: (value) {
+                //   if (value.isEmpty) {
+                //     return S.current.msg_champ_oblg;
+                //   }
+                //   return null;
+                // },
+                decoration: InputDecoration(
+                  labelText: S.current.nif,
+                  labelStyle: GoogleFonts.lato(
+                      textStyle: TextStyle(color: Theme.of(context).hintColor)),
+                  prefixIcon: Icon(
+                    MdiIcons.cardAccountDetails,
+                    color: Colors.blue,
+                  ),
+                  focusedBorder: OutlineInputBorder(
+                      borderSide: BorderSide(color: Colors.blue),
+                      borderRadius: BorderRadius.circular(20)),
+                  enabledBorder: OutlineInputBorder(
+                    gapPadding: 3.3,
+                    borderRadius: BorderRadius.circular(20),
                     borderSide: BorderSide(color: Colors.blue),
-                    borderRadius: BorderRadius.circular(20)),
-                enabledBorder: OutlineInputBorder(
-                  gapPadding: 3.3,
-                  borderRadius: BorderRadius.circular(20),
-                  borderSide: BorderSide(color: Colors.blue),
-                ),
-                errorBorder:  OutlineInputBorder(
-                  gapPadding: 3.3,
-                  borderRadius: BorderRadius.circular(20),
-                  borderSide: BorderSide(color: Colors.red),
+                  ),
+                  errorBorder: OutlineInputBorder(
+                    gapPadding: 3.3,
+                    borderRadius: BorderRadius.circular(20),
+                    borderSide: BorderSide(color: Colors.red),
+                  ),
                 ),
               ),
             ),
-            TextFormField(
-              enabled: editMode,
-              controller: _capitalsocialControl,
-              onTap: () => _capitalsocialControl.selection = TextSelection(baseOffset: 0, extentOffset: _capitalsocialControl.value.text.length),
-              keyboardType: TextInputType.number,
-              // validator: (value) {
-              //   if (value.isEmpty) {
-              //     return S.current.msg_champ_oblg;
-              //   }
-              //   return null;
-              // },
-              decoration: InputDecoration(
-                labelText:  S.current.capitale_sociale,
-                labelStyle: GoogleFonts.lato(textStyle: TextStyle(color: Theme.of(context).hintColor)),
-                prefixIcon: Icon(
-                  Icons.monetization_on,
-                  color: Colors.blue,
-                ),
-                focusedBorder: OutlineInputBorder(
+            Visibility(
+              visible: isEntreprise,
+              child: TextFormField(
+                enabled: editMode,
+                controller: _nisControl,
+                onTap: () => _nisControl.selection = TextSelection(
+                    baseOffset: 0, extentOffset: _nisControl.value.text.length),
+                keyboardType: TextInputType.text,
+                // validator: (value) {
+                //   if (value.isEmpty) {
+                //     return S.current.msg_champ_oblg;
+                //   }
+                //   return null;
+                // },
+                decoration: InputDecoration(
+                  labelText: S.current.nis,
+                  labelStyle: GoogleFonts.lato(
+                      textStyle: TextStyle(color: Theme.of(context).hintColor)),
+                  prefixIcon: Icon(
+                    MdiIcons.cardAccountDetails,
+                    color: Colors.blue,
+                  ),
+                  focusedBorder: OutlineInputBorder(
+                      borderSide: BorderSide(color: Colors.blue),
+                      borderRadius: BorderRadius.circular(20)),
+                  enabledBorder: OutlineInputBorder(
+                    gapPadding: 3.3,
+                    borderRadius: BorderRadius.circular(20),
                     borderSide: BorderSide(color: Colors.blue),
-                    borderRadius: BorderRadius.circular(20)),
-                enabledBorder: OutlineInputBorder(
-                  gapPadding: 3.3,
-                  borderRadius: BorderRadius.circular(20),
-                  borderSide: BorderSide(color: Colors.blue),
+                  ),
+                  errorBorder: OutlineInputBorder(
+                    gapPadding: 3.3,
+                    borderRadius: BorderRadius.circular(20),
+                    borderSide: BorderSide(color: Colors.red),
+                  ),
                 ),
-                errorBorder:  OutlineInputBorder(
-                  gapPadding: 3.3,
-                  borderRadius: BorderRadius.circular(20),
-                  borderSide: BorderSide(color: Colors.red),
+              ),
+            ),
+            Visibility(
+              visible: isEntreprise,
+              child: TextFormField(
+                enabled: editMode,
+                controller: _capitalsocialControl,
+                onTap: () => _capitalsocialControl.selection = TextSelection(
+                    baseOffset: 0,
+                    extentOffset: _capitalsocialControl.value.text.length),
+                keyboardType: TextInputType.number,
+                // validator: (value) {
+                //   if (value.isEmpty) {
+                //     return S.current.msg_champ_oblg;
+                //   }
+                //   return null;
+                // },
+                decoration: InputDecoration(
+                  labelText: S.current.capitale_sociale,
+                  labelStyle: GoogleFonts.lato(
+                      textStyle: TextStyle(color: Theme.of(context).hintColor)),
+                  prefixIcon: Icon(
+                    Icons.monetization_on,
+                    color: Colors.blue,
+                  ),
+                  focusedBorder: OutlineInputBorder(
+                      borderSide: BorderSide(color: Colors.blue),
+                      borderRadius: BorderRadius.circular(20)),
+                  enabledBorder: OutlineInputBorder(
+                    gapPadding: 3.3,
+                    borderRadius: BorderRadius.circular(20),
+                    borderSide: BorderSide(color: Colors.blue),
+                  ),
+                  errorBorder: OutlineInputBorder(
+                    gapPadding: 3.3,
+                    borderRadius: BorderRadius.circular(20),
+                    borderSide: BorderSide(color: Colors.red),
+                  ),
                 ),
               ),
             ),
@@ -983,11 +1107,11 @@ class _ProfilePageState extends State<ProfilePage> with TickerProviderStateMixin
               padding: const EdgeInsets.all(5),
               decoration: editMode
                   ? new BoxDecoration(
-                border: Border.all(
-                  color: Colors.blueAccent,
-                ),
-                borderRadius: BorderRadius.circular(20.0),
-              )
+                      border: Border.all(
+                        color: Colors.blueAccent,
+                      ),
+                      borderRadius: BorderRadius.circular(20.0),
+                    )
                   : null,
               child: Row(
                 crossAxisAlignment: CrossAxisAlignment.center,
@@ -995,43 +1119,47 @@ class _ProfilePageState extends State<ProfilePage> with TickerProviderStateMixin
                 children: [
                   SizedBox(width: 6),
                   Icon(
-                    Icons.security, color: Colors.blue,),
+                    Icons.security,
+                    color: Colors.blue,
+                  ),
                   SizedBox(width: 13),
                   Expanded(
                     child: GestureDetector(
                       onTap: () {
                         arguments.codePinEnabled = !arguments.codePinEnabled;
                       },
-                      child: Text( S.current.code_pin,
-                        style:GoogleFonts.lato(
-                          textStyle: TextStyle(
-                              fontSize: 16,
-                              color:
-                              editMode ? Theme.of(context).primaryColorDark : Theme.of(context).tabBarTheme.unselectedLabelColor)
-                        )
-                      ),
+                      child: Text(S.current.code_pin,
+                          style: GoogleFonts.lato(
+                              textStyle: TextStyle(
+                                  fontSize: 16,
+                                  color: editMode
+                                      ? Theme.of(context).primaryColorDark
+                                      : Theme.of(context)
+                                          .tabBarTheme
+                                          .unselectedLabelColor))),
                     ),
                   ),
                   Switch(
                     value: arguments.codePinEnabled,
-                    onChanged: editMode?(bool isOn) {
-                      setState(() {
-                        arguments.codePinEnabled = isOn;
-                        if(isOn){
-                          setState(() {
-                            _tabController.index = 2;
-                          });
-                        }
-                      });
-                    }: null,
+                    onChanged: editMode
+                        ? (bool isOn) {
+                            setState(() {
+                              arguments.codePinEnabled = isOn;
+                              if (isOn) {
+                                setState(() {
+                                  _tabController.index = 2;
+                                });
+                              }
+                            });
+                          }
+                        : null,
                     activeColor: Colors.blue,
                     inactiveTrackColor: Colors.grey,
-                    inactiveThumbColor: editMode? Colors.blue:Colors.grey,
+                    inactiveThumbColor: editMode ? Colors.blue : Colors.grey,
                   )
                 ],
               ),
             )
-
           ],
         ),
       ),
@@ -1045,22 +1173,21 @@ class _ProfilePageState extends State<ProfilePage> with TickerProviderStateMixin
           editMode: editMode,
           onImageChange: (File imageFile) {
             setState(() {
-              _itemImage = imageFile ;
+              _itemImage = imageFile;
             });
-          }
-          ),
+          }),
     );
   }
 
   Widget securityTab() {
-    return EnterPin(editMode?onCodePinChanged:null, arguments.codepin);
+    return EnterPin(editMode ? onCodePinChanged : null, arguments.codepin);
   }
 
-  onCodePinChanged (String newCodePin){
+  onCodePinChanged(String newCodePin) {
     arguments.codepin = newCodePin;
     setState(() {
       _tabController.index = 0;
-      arguments.codePinEnabled = true ;
+      arguments.codePinEnabled = true;
     });
   }
 
@@ -1111,11 +1238,16 @@ class _ProfilePageState extends State<ProfilePage> with TickerProviderStateMixin
 
     item.raisonSociale = _raisonSocialeControl.text.trim();
     item.statut = Statics.statutItems.indexOf(_selectedStatut);
-    item.activite = (_activiteControl.text.trim() != '')? _activiteControl.text.trim() : '';
-    item.adresse = (_adresseControl.text.trim() != '')?_adresseControl.text.trim() : '';
-    item.departement = (_states.indexOf(_selectedState)==0)? '' : _selectedState ;
-    item.ville = (_cities.indexOf(_selectedCity) == 0) ? '' :_selectedCity ;
-    item.pays =( _countries.first.name == _selectedCountry) ? '' : _selectedCountry;
+    item.activite = (_activiteControl.text.trim() != '')
+        ? _activiteControl.text.trim()
+        : '';
+    item.adresse =
+        (_adresseControl.text.trim() != '') ? _adresseControl.text.trim() : '';
+    item.departement =
+        (_states.indexOf(_selectedState) == 0) ? '' : _selectedState;
+    item.ville = (_cities.indexOf(_selectedCity) == 0) ? '' : _selectedCity;
+    item.pays =
+        (_countries.first.name == _selectedCountry) ? '' : _selectedCountry;
     item.telephone = _telephoneControl.text.trim();
     item.telephone2 = _telephone2Control.text.trim();
     item.mobile = _mobileControl.text.trim();
@@ -1129,11 +1261,13 @@ class _ProfilePageState extends State<ProfilePage> with TickerProviderStateMixin
       Uint8List image = await Helpers.getDefaultImageUint8List(from: "profile");
       item.imageUint8List = image;
     }
-    item.rc = (_rcControl.text.trim() != '')?_rcControl.text.trim():'';
+    item.rc = (_rcControl.text.trim() != '') ? _rcControl.text.trim() : '';
     item.ai = _aiControl.text.trim();
     item.nif = _nifControl.text.trim();
     item.nis = _nisControl.text.trim();
-    item.capital =(_capitalsocialControl.text.trim() != "")? double.tryParse(_capitalsocialControl.text.trim()):0.0;
+    item.capital = (_capitalsocialControl.text.trim() != "")
+        ? double.tryParse(_capitalsocialControl.text.trim())
+        : 0.0;
 
     return item;
   }

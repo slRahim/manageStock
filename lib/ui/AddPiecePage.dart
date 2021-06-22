@@ -34,6 +34,7 @@ import 'package:gestmob/models/Tiers.dart';
 import 'package:gestmob/models/Transformer.dart';
 import 'package:gestmob/models/Tresorie.dart';
 import 'package:gestmob/search/sliver_list_data_source.dart';
+import 'package:gestmob/ui/ArticlesFragment.dart';
 import 'package:gestmob/ui/ClientFourFragment.dart';
 import 'package:gestmob/ui/JournalFragment.dart';
 import 'package:gestmob/ui/preview_piece.dart';
@@ -44,8 +45,6 @@ import 'package:material_design_icons_flutter/material_design_icons_flutter.dart
 import 'package:pdf/pdf.dart';
 import 'package:pdf/widgets.dart' as pw;
 import 'package:printing/printing.dart';
-
-import 'ArticlesFragment.dart';
 
 class AddPiecePage extends StatefulWidget {
   var arguments;
@@ -2519,7 +2518,7 @@ class _AddPiecePageState extends State<AddPiecePage>
                     ? PosAlign.center
                     : PosAlign.left));
       }
-      if (_profile.rc != "") {
+      if (_profile.rc != "" && (Statics.statutItems.last == Statics.statutItems[_profile.statut])) {
         input = "${_profile.rc}";
         encArabic = await CharsetConverter.encode(
             "ISO-8859-6", "${input.split('').reversed.join()}");
@@ -2530,7 +2529,7 @@ class _AddPiecePageState extends State<AddPiecePage>
                     ? PosAlign.center
                     : PosAlign.left));
       }
-      if (_profile.nif != "") {
+      if (_profile.nif != "" && (Statics.statutItems.last == Statics.statutItems[_profile.statut])) {
         input = "${_profile.nif}";
         encArabic = await CharsetConverter.encode(
             "ISO-8859-6", "${input.split('').reversed.join()}");
@@ -2541,7 +2540,7 @@ class _AddPiecePageState extends State<AddPiecePage>
                     ? PosAlign.center
                     : PosAlign.left));
       }
-      if (_profile.ai != "") {
+      if (_profile.ai != "" && (Statics.statutItems.last == Statics.statutItems[_profile.statut])) {
         input = "${_profile.ai}";
         encArabic = await CharsetConverter.encode(
             "ISO-8859-6", "${input.split('').reversed.join()}");
@@ -2584,11 +2583,12 @@ class _AddPiecePageState extends State<AddPiecePage>
                   ? PosAlign.center
                   : PosAlign.left));
 
-      if (_selectedClient.rc != "" &&
+      if (_selectedClient.rc != "" && (Statics.statutItems.last == Statics.statutItems[_selectedClient.statut]) &&
           (_piece.piece == PieceType.factureClient ||
               _piece.piece == PieceType.factureFournisseur ||
               _piece.piece == PieceType.avoirClient ||
-              _piece.piece == PieceType.avoirFournisseur)) {
+              _piece.piece == PieceType.avoirFournisseur)
+      ) {
         input = "${_selectedClient.rc}";
         encArabic = await CharsetConverter.encode(
             "ISO-8859-6", "${input.split('').reversed.join()}");
@@ -2599,12 +2599,12 @@ class _AddPiecePageState extends State<AddPiecePage>
                     ? PosAlign.center
                     : PosAlign.left));
       }
-      if (_selectedClient.nif != "" &&
+      if (_selectedClient.nif != "" && (Statics.statutItems.last == Statics.statutItems[_selectedClient.statut]) &&
           (_piece.piece == PieceType.factureClient ||
               _piece.piece == PieceType.factureFournisseur ||
               _piece.piece == PieceType.avoirClient ||
               _piece.piece == PieceType.avoirFournisseur)) {
-        input = "${_selectedClient.rc}";
+        input = "${_selectedClient.nif}";
         encArabic = await CharsetConverter.encode(
             "ISO-8859-6", "${input.split('').reversed.join()}");
         ticket.textEncoded(encArabic,
@@ -2614,12 +2614,12 @@ class _AddPiecePageState extends State<AddPiecePage>
                     ? PosAlign.center
                     : PosAlign.left));
       }
-      if (_selectedClient.ai != "" &&
+      if (_selectedClient.ai != "" && (Statics.statutItems.last == Statics.statutItems[_selectedClient.statut]) &&
           (_piece.piece == PieceType.factureClient ||
               _piece.piece == PieceType.factureFournisseur ||
               _piece.piece == PieceType.avoirClient ||
               _piece.piece == PieceType.avoirFournisseur)) {
-        input = "${_selectedClient.rc}";
+        input = "${_selectedClient.ai}";
         encArabic = await CharsetConverter.encode(
             "ISO-8859-6", "${input.split('').reversed.join()}");
         ticket.textEncoded(encArabic,
@@ -2837,6 +2837,27 @@ class _AddPiecePageState extends State<AddPiecePage>
                     ? PosAlign.center
                     : PosAlign.left));
       }
+      if (_profile.rc != "" && (Statics.statutItems.last == Statics.statutItems[_profile.statut])) {
+        ticket.text("${_profile.rc}",
+            styles: PosStyles(
+                align: (formatPrint == PaperSize.mm80)
+                    ? PosAlign.center
+                    : PosAlign.left));
+      }
+      if (_profile.nif != "" && (Statics.statutItems.last == Statics.statutItems[_profile.statut])) {
+        ticket.text("${_profile.nif}",
+            styles: PosStyles(
+                align: (formatPrint == PaperSize.mm80)
+                    ? PosAlign.center
+                    : PosAlign.left));
+      }
+      if (_profile.ai != "" && (Statics.statutItems.last == Statics.statutItems[_profile.statut])) {
+        ticket.text("${_profile.ai}",
+            styles: PosStyles(
+                align: (formatPrint == PaperSize.mm80)
+                    ? PosAlign.center
+                    : PosAlign.left));
+      }
       ticket.hr(ch: '=');
       ticket.text("${S.current.n} ${_piece.piece}: ${_piece.num_piece}",
           styles: PosStyles(
@@ -2854,7 +2875,7 @@ class _AddPiecePageState extends State<AddPiecePage>
                   ? PosAlign.center
                   : PosAlign.left));
 
-      if (_selectedClient.rc != "" &&
+      if (_selectedClient.rc != "" && (Statics.statutItems.last == Statics.statutItems[_selectedClient.statut]) &&
           (_piece.piece == PieceType.factureClient ||
               _piece.piece == PieceType.factureFournisseur ||
               _piece.piece == PieceType.avoirClient ||
@@ -2865,7 +2886,7 @@ class _AddPiecePageState extends State<AddPiecePage>
                     ? PosAlign.center
                     : PosAlign.left));
       }
-      if (_selectedClient.nif != "" &&
+      if (_selectedClient.nif != "" && (Statics.statutItems.last == Statics.statutItems[_selectedClient.statut]) &&
           (_piece.piece == PieceType.factureClient ||
               _piece.piece == PieceType.factureFournisseur ||
               _piece.piece == PieceType.avoirClient ||
@@ -2876,7 +2897,7 @@ class _AddPiecePageState extends State<AddPiecePage>
                     ? PosAlign.center
                     : PosAlign.left));
       }
-      if (_selectedClient.ai != "" &&
+      if (_selectedClient.ai != "" && (Statics.statutItems.last == Statics.statutItems[_selectedClient.statut]) &&
           (_piece.piece == PieceType.factureClient ||
               _piece.piece == PieceType.factureFournisseur ||
               _piece.piece == PieceType.avoirClient ||
@@ -3087,22 +3108,22 @@ class _AddPiecePageState extends State<AddPiecePage>
                                 style: pw.TextStyle(
                                     font: ttf, fontWeight: pw.FontWeight.bold))
                             : pw.SizedBox(),
-                        (_profile.rc != "")
+                        (_profile.rc != "" && (Statics.statutItems.last == Statics.statutItems[_profile.statut]))
                             ? pw.Text("${S.current.rc}\t: ${_profile.rc}",
                                 style: pw.TextStyle(
                                     font: ttf, fontWeight: pw.FontWeight.bold))
                             : pw.SizedBox(),
-                        (_profile.nif != "")
+                        (_profile.nif != "" && (Statics.statutItems.last == Statics.statutItems[_profile.statut]))
                             ? pw.Text("${S.current.nif}\t: ${_profile.nif}",
                                 style: pw.TextStyle(
                                     font: ttf, fontWeight: pw.FontWeight.bold))
                             : pw.SizedBox(),
-                        (_profile.ai != "")
+                        (_profile.ai != "" && (Statics.statutItems.last == Statics.statutItems[_profile.statut]))
                             ? pw.Text("${S.current.art_imp}\t: ${_profile.ai}",
                                 style: pw.TextStyle(
                                     font: ttf, fontWeight: pw.FontWeight.bold))
                             : pw.SizedBox(),
-                        (_profile.capital > 0)
+                        (_profile.capital > 0 && (Statics.statutItems.last == Statics.statutItems[_profile.statut]))
                             ? pw.Text(
                                 "${S.current.capitale_sociale}\t: ${Helpers.numberFormat(_profile.capital)} ${Helpers.getDeviseTranslate(_myParams.devise)}",
                                 style: pw.TextStyle(
@@ -3157,7 +3178,8 @@ class _AddPiecePageState extends State<AddPiecePage>
                                       PieceType.factureFournisseur ||
                                   _piece.piece == PieceType.avoirClient ||
                                   _piece.piece == PieceType.avoirFournisseur) &&
-                              (_selectedClient.rc != ""))
+                              (_selectedClient.rc != "") &&
+                          (Statics.statutItems.last == Statics.statutItems[_selectedClient.statut]))
                           ? pw.Text("${S.current.rc}\t  ${_selectedClient.rc}",
                               style: pw.TextStyle(font: ttf))
                           : pw.SizedBox(),
@@ -3166,7 +3188,8 @@ class _AddPiecePageState extends State<AddPiecePage>
                                       PieceType.factureFournisseur ||
                                   _piece.piece == PieceType.avoirClient ||
                                   _piece.piece == PieceType.avoirFournisseur) &&
-                              (_selectedClient.nif != ""))
+                              (_selectedClient.nif != "")&&
+                          (Statics.statutItems.last == Statics.statutItems[_selectedClient.statut]))
                           ? pw.Text(
                               "${S.current.nif}\t  ${_selectedClient.nif}",
                               style: pw.TextStyle(font: ttf))
@@ -3176,7 +3199,8 @@ class _AddPiecePageState extends State<AddPiecePage>
                                       PieceType.factureFournisseur ||
                                   _piece.piece == PieceType.avoirClient ||
                                   _piece.piece == PieceType.avoirFournisseur) &&
-                              (_selectedClient.ai != ""))
+                              (_selectedClient.ai != "") &&
+                          (Statics.statutItems.last == Statics.statutItems[_selectedClient.statut]))
                           ? pw.Text(
                               "${S.current.art_imp}\t  ${_selectedClient.ai}",
                               style: pw.TextStyle(font: ttf))

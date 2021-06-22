@@ -167,19 +167,19 @@ class _PreviewPieceState extends State<PreviewPiece> {
                                   style: TextStyle(color: Colors.black),
                                 )
                               : SizedBox(),
-                          (_profile.rc != '')
+                          (_profile.rc != '' && Statics.statutItems.last == _profile.statut)
                               ? Text(
                                   "${_profile.rc}",
                                   style: TextStyle(color: Colors.black),
                                 )
                               : SizedBox(),
-                          (_profile.nif != '')
+                          (_profile.nif != '' && Statics.statutItems.last == _profile.statut)
                               ? Text(
                                   "${_profile.nif}",
                                   style: TextStyle(color: Colors.black),
                                 )
                               : SizedBox(),
-                          (_profile.ai != '')
+                          (_profile.ai != '' && Statics.statutItems.last == _profile.statut)
                               ? Text(
                                   "${_profile.ai}",
                                   style: TextStyle(color: Colors.black),
@@ -201,7 +201,7 @@ class _PreviewPieceState extends State<PreviewPiece> {
                             "${S.current.rs} : ${widget.tier.raisonSociale}",
                             style: TextStyle(color: Colors.black),
                           ),
-                          (widget.tier.rc != '' &&
+                          (widget.tier.rc != '' && Statics.statutItems.last == widget.tier.statut &&
                                   (widget.piece.piece ==
                                           PieceType.factureClient ||
                                       widget.piece.piece ==
@@ -215,7 +215,7 @@ class _PreviewPieceState extends State<PreviewPiece> {
                                   style: TextStyle(color: Colors.black),
                                 )
                               : SizedBox(),
-                          (widget.tier.nif != '' &&
+                          (widget.tier.nif != '' && Statics.statutItems.last == widget.tier.statut &&
                                   (widget.piece.piece ==
                                           PieceType.factureClient ||
                                       widget.piece.piece ==
@@ -229,7 +229,7 @@ class _PreviewPieceState extends State<PreviewPiece> {
                                   style: TextStyle(color: Colors.black),
                                 )
                               : SizedBox(),
-                          (widget.tier.ai != '' &&
+                          (widget.tier.ai != '' && Statics.statutItems.last == widget.tier.statut &&
                                   (widget.piece.piece ==
                                           PieceType.factureClient ||
                                       widget.piece.piece ==
@@ -506,7 +506,7 @@ class _PreviewPieceState extends State<PreviewPiece> {
                     ? PosAlign.center
                     : PosAlign.left));
       }
-      if (_profile.rc != "") {
+      if (_profile.rc != "" && Statics.statutItems.last == _profile.statut) {
         input = "${_profile.rc}";
         encArabic = await CharsetConverter.encode(
             "ISO-8859-6", "${input.split('').reversed.join()}");
@@ -517,7 +517,7 @@ class _PreviewPieceState extends State<PreviewPiece> {
                     ? PosAlign.center
                     : PosAlign.left));
       }
-      if (_profile.nif != "") {
+      if (_profile.nif != "" && Statics.statutItems.last == _profile.statut) {
         input = "${_profile.nif}";
         encArabic = await CharsetConverter.encode(
             "ISO-8859-6", "${input.split('').reversed.join()}");
@@ -528,7 +528,7 @@ class _PreviewPieceState extends State<PreviewPiece> {
                     ? PosAlign.center
                     : PosAlign.left));
       }
-      if (_profile.ai != "") {
+      if (_profile.ai != "" && Statics.statutItems.last == _profile.statut) {
         input = "${_profile.ai}";
         encArabic = await CharsetConverter.encode(
             "ISO-8859-6", "${input.split('').reversed.join()}");
@@ -571,7 +571,7 @@ class _PreviewPieceState extends State<PreviewPiece> {
                   ? PosAlign.center
                   : PosAlign.left));
 
-      if (widget.tier.rc != "" &&
+      if (widget.tier.rc != "" && Statics.statutItems.last == widget.tier.statut &&
           (widget.piece.piece == PieceType.factureClient ||
               widget.piece.piece == PieceType.factureFournisseur ||
               widget.piece.piece == PieceType.avoirClient ||
@@ -586,7 +586,7 @@ class _PreviewPieceState extends State<PreviewPiece> {
                     ? PosAlign.center
                     : PosAlign.left));
       }
-      if (widget.tier.nif != "" &&
+      if (widget.tier.nif != "" && Statics.statutItems.last == widget.tier.statut &&
           (widget.piece.piece == PieceType.factureClient ||
               widget.piece.piece == PieceType.factureFournisseur ||
               widget.piece.piece == PieceType.avoirClient ||
@@ -601,7 +601,7 @@ class _PreviewPieceState extends State<PreviewPiece> {
                     ? PosAlign.center
                     : PosAlign.left));
       }
-      if (widget.tier.ai != "" &&
+      if (widget.tier.ai != "" && Statics.statutItems.last == widget.tier.statut &&
           (widget.piece.piece == PieceType.factureClient ||
               widget.piece.piece == PieceType.factureFournisseur ||
               widget.piece.piece == PieceType.avoirClient ||
@@ -826,6 +826,28 @@ class _PreviewPieceState extends State<PreviewPiece> {
                     ? PosAlign.center
                     : PosAlign.left));
       }
+      if (_profile.rc != "" && Statics.statutItems.last == _profile.statut) {
+        ticket.text("${_profile.rc}",
+            styles: PosStyles(
+                align: (_default_format == PaperSize.mm80)
+                    ? PosAlign.center
+                    : PosAlign.left));
+      }
+      if (_profile.nif != "" && Statics.statutItems.last == _profile.statut) {
+        ticket.text("${_profile.nif}",
+            styles: PosStyles(
+                align: (_default_format == PaperSize.mm80)
+                    ? PosAlign.center
+                    : PosAlign.left));
+      }
+      if (_profile.ai != "" && Statics.statutItems.last == _profile.statut) {
+        ticket.text("${_profile.ai}",
+            styles: PosStyles(
+                align: (_default_format == PaperSize.mm80)
+                    ? PosAlign.center
+                    : PosAlign.left));
+      }
+
       ticket.hr(ch: '=');
       ticket.text("${S.current.n} ${getPiecetype()}: ${widget.piece.num_piece}",
           styles: PosStyles(
@@ -844,7 +866,7 @@ class _PreviewPieceState extends State<PreviewPiece> {
               align: (_default_format == PaperSize.mm80)
                   ? PosAlign.center
                   : PosAlign.left));
-      if (widget.tier.rc != "" &&
+      if (widget.tier.rc != "" && Statics.statutItems.last == widget.tier.statut &&
           (widget.piece.piece == PieceType.factureClient ||
               widget.piece.piece == PieceType.factureFournisseur ||
               widget.piece.piece == PieceType.avoirClient ||
@@ -855,7 +877,7 @@ class _PreviewPieceState extends State<PreviewPiece> {
                     ? PosAlign.center
                     : PosAlign.left));
       }
-      if (widget.tier.nif != "" &&
+      if (widget.tier.nif != "" && Statics.statutItems.last == widget.tier.statut &&
           (widget.piece.piece == PieceType.factureClient ||
               widget.piece.piece == PieceType.factureFournisseur ||
               widget.piece.piece == PieceType.avoirClient ||
@@ -866,7 +888,7 @@ class _PreviewPieceState extends State<PreviewPiece> {
                     ? PosAlign.center
                     : PosAlign.left));
       }
-      if (widget.tier.ai != "" &&
+      if (widget.tier.ai != "" && Statics.statutItems.last == widget.tier.statut &&
           (widget.piece.piece == PieceType.factureClient ||
               widget.piece.piece == PieceType.factureFournisseur ||
               widget.piece.piece == PieceType.avoirClient ||

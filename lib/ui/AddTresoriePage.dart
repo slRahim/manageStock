@@ -415,7 +415,7 @@ class _AddTresoriePageState extends State<AddTresoriePage>
   Widget fichetab() {
     return SingleChildScrollView(
         physics: ScrollPhysics(),
-        padding: const EdgeInsets.fromLTRB(15, 25, 15, 40),
+        padding: const EdgeInsets.fromLTRB(20, 15, 20, 60),
         child: Column(mainAxisSize: MainAxisSize.max, children: [
           Wrap(
             spacing: 13,
@@ -597,8 +597,10 @@ class _AddTresoriePageState extends State<AddTresoriePage>
                         ),
                       )),
           ),
+          SizedBox(
+            height: 5,
+          ),
           SingleChildScrollView(
-            padding: const EdgeInsets.fromLTRB(15, 10, 15, 10),
             child: Form(
               key: _formKey,
               child: Wrap(
