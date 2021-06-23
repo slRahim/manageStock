@@ -1312,7 +1312,7 @@ class SqlLiteDatabaseHelper {
            
            UPDATE Journaux
               SET Mov = OLD.Old_Mov 
-           WHERE Piece_id = OLD.Old_Piece_id ;
+           WHERE Piece_id = OLD.Old_Piece_id AND Mov <> -2;
            
         END;
       ''');

@@ -1426,7 +1426,7 @@ class _AddTresoriePageState extends State<AddTresoriePage>
         if (tresorie != null) {
           id = await _queryCtr.addItemToTable(DbTablesNames.tresorie, tresorie);
           if (id > -1) {
-            tresorie.id = await _queryCtr.getLastId(DbTablesNames.tresorie);
+            tresorie.id = id;
           }
           if (tresorie.categorie == 2 || tresorie.categorie == 3) {
             bool _haspiece = true;

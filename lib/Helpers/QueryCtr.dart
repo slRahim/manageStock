@@ -265,7 +265,7 @@ class QueryCtr {
 
     res = await dbClient.query(DbTablesNames.pieces,
         where:
-            "Reste > 0 AND Mov = 1 AND Piece != 'FP' Piece != 'CC' AND Tier_id = ?",
+            "Reste > 0 AND Mov = 1 AND Piece != 'FP' AND Piece != 'CC' AND Piece != 'BC' AND Tier_id = ?",
         whereArgs: [tier_id]);
 
     List<Piece> list = new List<Piece>();
@@ -296,10 +296,12 @@ class QueryCtr {
     String query =
         'SELECT Pieces.*,Tiers.RaisonSociale FROM Pieces JOIN Tiers ON Pieces.Tier_id = Tiers.id AND Pieces.id = ${id}';
     var res = await dbClient.rawQuery(query);
-    print(res.length);
-    Piece piece = Piece.fromMap(res.first);
+    if(res.isNotEmpty){
+      Piece piece = Piece.fromMap(res.first);
+      return piece ;
+    }
 
-    return piece;
+    return  null;
   }
 
   Future<bool> pieceHasCredit() async {
@@ -388,10 +390,11 @@ class QueryCtr {
     List<Piece> pieces = new List<Piece>();
 
     var res = await dbClient.query(DbTablesNames.pieces,
-        where: "Tier_id = ?",
+        where: "Tier_id = ? AND Mov = 1 AND Etat = 0",
         whereArgs: [filters["idTier"].id],
         limit: limit,
         offset: offset);
+
     for (var i = 0, j = res.length; i < j; i++) {
       Piece piece = Piece.fromMap(res[i]);
       pieces.add(piece);
@@ -432,7 +435,7 @@ class QueryCtr {
       {String searchTerm, Map<String, dynamic> filters}) async {
     String query = 'SELECT * FROM Tresories';
 
-    query += " WHERE (Montant > 0 OR Montant < 0)";
+    query += " WHERE (Montant <> 0)";
 
     if (filters != null) {
       int categorie = filters["Categorie"] != null ? filters["Categorie"] : -1;

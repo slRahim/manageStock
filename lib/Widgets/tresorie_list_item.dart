@@ -100,7 +100,8 @@ class _TresorieListItemState extends State<TresorieListItem> {
               backgroundColor: getColor(),
               child: CircleAvatar(
                 child: (widget.tresorie.categorie == 2 ||
-                        widget.tresorie.categorie == 7)
+                        widget.tresorie.categorie == 7 ||
+                    widget.tresorie.categorie == 4)
                     ? Icon(
                         Icons.arrow_upward_outlined,
                         color: Colors.green,

@@ -1838,6 +1838,7 @@ class _AddPiecePageState extends State<AddPiecePage>
     if (id > -1) {
       _selectedClient = await _queryCtr.getTierById(_selectedClient.id);
       setState(() {
+        _originalItems = List.from(_selectedItems);
         modification = true;
         editMode = false;
         _verssementpiece = 0.0;
@@ -1916,6 +1917,7 @@ class _AddPiecePageState extends State<AddPiecePage>
             widget.arguments = item;
             widget.arguments.id = _piece.id;
             message = S.current.msg_update_item;
+
           } else {
             message = S.current.msg_update_err;
           }
@@ -1947,6 +1949,7 @@ class _AddPiecePageState extends State<AddPiecePage>
             widget.arguments = piece;
             widget.arguments.id = id;
             message = S.current.msg_ajout_item;
+
           } else {
             message = S.current.msg_ajout_err;
           }
@@ -2306,7 +2309,7 @@ class _AddPiecePageState extends State<AddPiecePage>
 
       id = await _queryCtr.addItemToTable(DbTablesNames.pieces, _newPiece);
       if (id > -1) {
-        _newPiece.id = await _queryCtr.getLastId(DbTablesNames.pieces);
+        _newPiece.id = id;
       }
       _selectedItems.forEach((article) async {
         Journaux journaux = Journaux.fromPiece(_newPiece, article);

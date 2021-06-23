@@ -14,6 +14,10 @@ import 'package:gestmob/services/push_notifications.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:settings_ui/settings_ui.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:flutter/src/services/asset_bundle.dart';
+import 'dart:convert';
+import 'package:gestmob/Helpers/country_utils.dart';
+import 'package:gestmob/models/Profile.dart';
 
 class SettingsPage extends StatefulWidget {
   @override
@@ -41,6 +45,7 @@ class _SettingsPageState extends State<SettingsPage> {
 
   QueryCtr _queryCtr = new QueryCtr();
   MyParams _myParams;
+  Profile _profile ;
 
   @override
   Future<void> initState() {
@@ -71,6 +76,7 @@ class _SettingsPageState extends State<SettingsPage> {
     Statics.printDisplayItems[1] = S.current.designation;
 
     _myParams = await _queryCtr.getAllParams();
+    _profile = await _queryCtr.getProfileById(1);
     _prefs = await SharedPreferences.getInstance();
     switch (_prefs.getString("myLocale")) {
       case ("en"):
@@ -1121,6 +1127,7 @@ class _SettingsPageState extends State<SettingsPage> {
     await _savelocale();
     await _saveStyle();
     id = await _queryCtr.updateItemInDb(DbTablesNames.myparams, _myParams);
+    updateProfileCountry();
     // await showNotification();
     var message = "";
     if (id > -1) {
@@ -1132,5 +1139,29 @@ class _SettingsPageState extends State<SettingsPage> {
 
     Navigator.pop(context);
     Helpers.showFlushBar(context, message);
+  }
+
+  Future updateProfileCountry() async {
+    var res = await rootBundle.loadString('assets/data/country.json');
+    var countryres = jsonDecode(res) as List;
+
+    countryres.forEach((data) async{
+      var model = CountryModel.fromJson(data);
+      if(model.name == _profile.pays || model.translations.fr == _profile.pays || model.translations.fa == _profile.pays){
+        switch (_language) {
+          case ("English (ENG)"):
+            _profile.pays = model.name ;
+            break;
+          case ("Français (FR)"):
+            _profile.pays = model.translations.fr ;
+            break;
+
+          case ("عربي (AR)"):
+            _profile.pays = model.translations.fa ;
+            break;
+        }
+        await _queryCtr.updateItemInDb(DbTablesNames.profile, _profile);
+      }
+    });
   }
 }
