@@ -274,6 +274,7 @@ class SqlLiteDatabaseHelper {
         Email VARCHAR (100), 
         Rc VARCHAR (25), 
         Nif VARCHAR (25), 
+        Nis VARCHAR (25), 
         Ai VARCHAR (25), 
         Solde_depart Double, 
         Chiffre_affaires Double, 
@@ -993,6 +994,22 @@ class SqlLiteDatabaseHelper {
         END;
      ''');
 
+    await db.execute('''
+        CREATE TRIGGER IF NOT EXISTS update_piece_transformer
+        AFTER UPDATE ON Pieces
+        FOR EACH ROW
+        When New.Etat = 1 
+        BEGIN
+            UPDATE Pieces
+              SET Regler = IFNULL((SELECT SUM(Regler)-OLD.Regler FROM ReglementTresorie WHERE Piece_id = OLD.id ),0)
+            WHERE id =  OLD.id ;
+
+             UPDATE Pieces
+               SET  Reste = Net_a_payer - Regler 
+             WHERE id = OLD.id;
+        END;
+     ''');
+
     //*******************************************************************************************************************************
     //***************************************************dell piece***********************************************************
 
@@ -1275,7 +1292,7 @@ class SqlLiteDatabaseHelper {
         FOR EACH ROW 
         BEGIN 
             UPDATE Pieces
-              SET Regler = IFNULL((SELECT SUM(Regler-OLD.Regler) FROM ReglementTresorie WHERE Piece_id = OLD.Piece_id ),0)
+              SET Regler = IFNULL((SELECT SUM(Regler)-OLD.Regler FROM ReglementTresorie WHERE Piece_id = OLD.Piece_id ),0)
             WHERE id =  OLD.Piece_id ;
 
              UPDATE Pieces
@@ -1298,6 +1315,7 @@ class SqlLiteDatabaseHelper {
            UPDATE ReglementTresorie 
               SET Piece_id = NEW.New_Piece_id 
            WHERE Piece_id = NEW.Old_Piece_id ;
+           
         END;
       ''');
 
@@ -1409,12 +1427,12 @@ class SqlLiteDatabaseHelper {
         "INSERT INTO MyParams VALUES(1,2,0,0,1,1,'80',1,'9:01',0,0,'United States of America','USD' , 'demo' , 0 , 'mensuel')");
 
     Uint8List image = await Helpers.getDefaultImageUint8List(from: "tier");
-    Tiers tier0 = new Tiers(image, "Client 00", null, 0, 0, 1, "", "", "", "",
+    Tiers tier0 = new Tiers(image, "Client 00", null, 0, 0, 1, "", "","", "", "",
         "", "", "", "", "", 0.0, 0, 0, false);
     tier0.clientFour = 0;
     batch.insert(DbTablesNames.tiers, tier0.toMap());
 
-    Tiers tier2 = new Tiers(image, "Prov 00", null, 0, 0, 1, "", "", "", "", "",
+    Tiers tier2 = new Tiers(image, "Prov 00", null, 0, 0, 1, "", "","", "", "", "",
         "", "", "", "", 0.0, 0, 0, false);
     tier2.clientFour = 2;
     batch.insert(DbTablesNames.tiers, tier2.toMap());

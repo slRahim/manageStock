@@ -21,6 +21,7 @@ class Tiers {
       this._email,
       this._rc,
       this._nif,
+      this._nis,
       this._ai,
       this._solde_depart,
       this._chiffre_affaires,
@@ -67,6 +68,7 @@ class Tiers {
   String _rc;
   String _nif;
   String _ai;
+  String _nis ;
   double _solde_depart;
   double _chiffre_affaires;
   double _regler;
@@ -93,6 +95,7 @@ class Tiers {
     this._email = obj["Email"];
     this._rc = obj["Rc"];
     this._nif = obj["Nif"];
+    this._nis = obj["Nis"];
     this._ai = obj["Ai"];
     this._solde_depart = obj["Solde_depart"];
     this._chiffre_affaires = obj["Chiffre_affaires"];
@@ -126,6 +129,7 @@ class Tiers {
     map["Email"] = this._email;
     map["Rc"] = this._rc;
     map["Nif"] = this._nif;
+    map["Nis"] = this._nis;
     map["Ai"] = this._ai;
     map["Solde_depart"] = this._solde_depart;
     map["Chiffre_affaires"] = this._chiffre_affaires;
@@ -254,6 +258,12 @@ class Tiers {
 
   set nif(String value) {
     _nif = value;
+  }
+
+  String get nis => _nis;
+
+  set nis(String value) {
+    _nis = value;
   }
 
   String get ai => _ai;

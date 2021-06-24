@@ -90,6 +90,7 @@ class _AddTierPageState extends State<AddTierPage>
   TextEditingController _rcControl = new TextEditingController();
   TextEditingController _aiControl = new TextEditingController();
   TextEditingController _nifControl = new TextEditingController();
+  TextEditingController _nisControl = new TextEditingController();
   TextEditingController _solde_departControl = new TextEditingController();
   TextEditingController _chiffre_affairesControl = new TextEditingController();
   TextEditingController _reglerControl = new TextEditingController();
@@ -104,7 +105,6 @@ class _AddTierPageState extends State<AddTierPage>
 
   MyParams _myParams;
 
-  bool isEntreprise = false;
 
   GlobalKey globalKey = new GlobalKey();
   final _formKey = GlobalKey<FormState>();
@@ -193,6 +193,7 @@ class _AddTierPageState extends State<AddTierPage>
     _rcControl.text = item.rc;
     _aiControl.text = item.ai;
     _nifControl.text = item.nif;
+    _nisControl.text = item.nis ;
     _solde_departControl.text = item.solde_depart.toStringAsFixed(2);
     _chiffre_affairesControl.text = item.chiffre_affaires.toStringAsFixed(2);
     _reglerControl.text = item.regler.toStringAsFixed(2);
@@ -200,7 +201,6 @@ class _AddTierPageState extends State<AddTierPage>
     _selectedFamille = _familleItems[item.id_famille];
     _selectedStatut = Statics.statutItems[item.statut];
     _selectedTarification = item.tarification;
-    isEntreprise = (Statics.statutItems.last == _selectedStatut);
     _controlBloquer = item.bloquer;
   }
 
@@ -504,8 +504,6 @@ class _AddTierPageState extends State<AddTierPage>
                             ? (value) {
                                 setState(() {
                                   _selectedStatut = value;
-                                  isEntreprise =
-                                      (Statics.statutItems.last == value);
                                 });
                               }
                             : null),
@@ -722,84 +720,113 @@ class _AddTierPageState extends State<AddTierPage>
                 ),
               ),
             ),
-            Visibility(
-              visible: isEntreprise,
-              child: TextFormField(
-                enabled: editMode,
-                controller: _rcControl,
-                onTap: () => _rcControl.selection = TextSelection(
-                    baseOffset: 0, extentOffset: _rcControl.value.text.length),
-                keyboardType: TextInputType.text,
-                // validator: (value) {
-                //   if (value.isEmpty) {
-                //     return S.current.msg_champ_oblg;
-                //   }
-                //   return null;
-                // },
-                decoration: InputDecoration(
-                  labelText: S.current.n_rc,
-                  labelStyle: GoogleFonts.lato(
-                      textStyle: TextStyle(color: Theme.of(context).hintColor)),
-                  prefixIcon: Icon(
-                    MdiIcons.cardAccountDetails,
-                    color: Colors.blue,
-                  ),
-                  focusedBorder: OutlineInputBorder(
-                      borderSide: BorderSide(color: Colors.blue),
-                      borderRadius: BorderRadius.circular(20)),
-                  enabledBorder: OutlineInputBorder(
-                    gapPadding: 3.3,
-                    borderRadius: BorderRadius.circular(20),
+            TextFormField(
+              enabled: editMode,
+              controller: _rcControl,
+              onTap: () => _rcControl.selection = TextSelection(
+                  baseOffset: 0, extentOffset: _rcControl.value.text.length),
+              keyboardType: TextInputType.text,
+              // validator: (value) {
+              //   if (value.isEmpty) {
+              //     return S.current.msg_champ_oblg;
+              //   }
+              //   return null;
+              // },
+              decoration: InputDecoration(
+                labelText: S.current.n_rc,
+                labelStyle: GoogleFonts.lato(
+                    textStyle: TextStyle(color: Theme.of(context).hintColor)),
+                prefixIcon: Icon(
+                  MdiIcons.cardAccountDetails,
+                  color: Colors.blue,
+                ),
+                focusedBorder: OutlineInputBorder(
                     borderSide: BorderSide(color: Colors.blue),
-                  ),
-                  errorBorder: OutlineInputBorder(
-                    gapPadding: 3.3,
-                    borderRadius: BorderRadius.circular(20),
-                    borderSide: BorderSide(color: Colors.red),
-                  ),
+                    borderRadius: BorderRadius.circular(20)),
+                enabledBorder: OutlineInputBorder(
+                  gapPadding: 3.3,
+                  borderRadius: BorderRadius.circular(20),
+                  borderSide: BorderSide(color: Colors.blue),
+                ),
+                errorBorder: OutlineInputBorder(
+                  gapPadding: 3.3,
+                  borderRadius: BorderRadius.circular(20),
+                  borderSide: BorderSide(color: Colors.red),
+                ),
+              ),
+            ),
+            TextFormField(
+              enabled: editMode,
+              controller: _nifControl,
+              onTap: () => _nifControl.selection = TextSelection(
+                  baseOffset: 0, extentOffset: _nifControl.value.text.length),
+              keyboardType: TextInputType.text,
+              // validator: (value) {
+              //   if (value.isEmpty) {
+              //     return S.current.msg_champ_oblg;
+              //   }
+              //   return null;
+              // },
+              decoration: InputDecoration(
+                labelText: S.current.nif,
+                labelStyle: GoogleFonts.lato(
+                    textStyle: TextStyle(color: Theme.of(context).hintColor)),
+                prefixIcon: Icon(
+                  MdiIcons.cardAccountDetails,
+                  color: Colors.blue,
+                ),
+                focusedBorder: OutlineInputBorder(
+                    borderSide: BorderSide(color: Colors.blue),
+                    borderRadius: BorderRadius.circular(20)),
+                enabledBorder: OutlineInputBorder(
+                  gapPadding: 3.3,
+                  borderRadius: BorderRadius.circular(20),
+                  borderSide: BorderSide(color: Colors.blue),
+                ),
+                errorBorder: OutlineInputBorder(
+                  gapPadding: 3.3,
+                  borderRadius: BorderRadius.circular(20),
+                  borderSide: BorderSide(color: Colors.red),
+                ),
+              ),
+            ),
+            TextFormField(
+              enabled: editMode,
+              controller: _nisControl,
+              onTap: () => _nisControl.selection = TextSelection(
+                  baseOffset: 0, extentOffset: _nisControl.value.text.length),
+              keyboardType: TextInputType.text,
+              // validator: (value) {
+              //   if (value.isEmpty) {
+              //     return S.current.msg_champ_oblg;
+              //   }
+              //   return null;
+              // },
+              decoration: InputDecoration(
+                labelText: S.current.nis,
+                labelStyle: GoogleFonts.lato(
+                    textStyle: TextStyle(color: Theme.of(context).hintColor)),
+                prefixIcon: Icon(
+                  MdiIcons.cardAccountDetails,
+                  color: Colors.blue,
+                ),
+                focusedBorder: OutlineInputBorder(
+                    borderSide: BorderSide(color: Colors.blue),
+                    borderRadius: BorderRadius.circular(20)),
+                enabledBorder: OutlineInputBorder(
+                  gapPadding: 3.3,
+                  borderRadius: BorderRadius.circular(20),
+                  borderSide: BorderSide(color: Colors.blue),
+                ),
+                errorBorder: OutlineInputBorder(
+                  gapPadding: 3.3,
+                  borderRadius: BorderRadius.circular(20),
+                  borderSide: BorderSide(color: Colors.red),
                 ),
               ),
             ),
             Visibility(
-              visible: isEntreprise,
-              child: TextFormField(
-                enabled: editMode,
-                controller: _nifControl,
-                onTap: () => _nifControl.selection = TextSelection(
-                    baseOffset: 0, extentOffset: _nifControl.value.text.length),
-                keyboardType: TextInputType.text,
-                // validator: (value) {
-                //   if (value.isEmpty) {
-                //     return S.current.msg_champ_oblg;
-                //   }
-                //   return null;
-                // },
-                decoration: InputDecoration(
-                  labelText: S.current.nif,
-                  labelStyle: GoogleFonts.lato(
-                      textStyle: TextStyle(color: Theme.of(context).hintColor)),
-                  prefixIcon: Icon(
-                    MdiIcons.cardAccountDetails,
-                    color: Colors.blue,
-                  ),
-                  focusedBorder: OutlineInputBorder(
-                      borderSide: BorderSide(color: Colors.blue),
-                      borderRadius: BorderRadius.circular(20)),
-                  enabledBorder: OutlineInputBorder(
-                    gapPadding: 3.3,
-                    borderRadius: BorderRadius.circular(20),
-                    borderSide: BorderSide(color: Colors.blue),
-                  ),
-                  errorBorder: OutlineInputBorder(
-                    gapPadding: 3.3,
-                    borderRadius: BorderRadius.circular(20),
-                    borderSide: BorderSide(color: Colors.red),
-                  ),
-                ),
-              ),
-            ),
-            Visibility(
-              visible: (isEntreprise && _myParams.pays == "Algeria"),
+              visible: (_myParams.pays == "Algeria"),
               child: TextFormField(
                 enabled: editMode,
                 controller: _aiControl,
@@ -1494,6 +1521,7 @@ class _AddTierPageState extends State<AddTierPage>
     item.rc = _rcControl.text.trim();
     item.ai = _aiControl.text.trim();
     item.nif = _nifControl.text.trim();
+    item.nis = _nisControl.text.trim();
 
     item.solde_depart = (_solde_departControl.text.trim() != "")
         ? double.tryParse(_solde_departControl.text.trim())

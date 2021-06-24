@@ -74,7 +74,6 @@ class _ProfilePageState extends State<ProfilePage>
   SliverListDataSource _dataSource;
   QueryCtr _queryCtr;
   MyParams _myParams;
-  bool isEntreprise = true;
 
   final _formKey = GlobalKey<FormState>();
 
@@ -141,7 +140,6 @@ class _ProfilePageState extends State<ProfilePage>
     _itemImage = await Helpers.getFileFromUint8List(item.imageUint8List);
     _raisonSocialeControl.text = item.raisonSociale;
     _selectedStatut = Statics.statutItems[item.statut];
-    isEntreprise = (Statics.statutItems.last == _selectedStatut);
     _activiteControl.text = item.activite;
     _adresseControl.text = item.adresse;
     _selectedState =
@@ -423,8 +421,6 @@ class _ProfilePageState extends State<ProfilePage>
                             ? (value) {
                                 setState(() {
                                   _selectedStatut = value;
-                                  isEntreprise =
-                                      (Statics.statutItems.last == value);
                                 });
                               }
                             : null),
@@ -911,46 +907,43 @@ class _ProfilePageState extends State<ProfilePage>
                 ),
               ),
             ),
-            Visibility(
-              visible: isEntreprise,
-              child: TextFormField(
-                enabled: editMode,
-                controller: _rcControl,
-                onTap: () => _rcControl.selection = TextSelection(
-                    baseOffset: 0, extentOffset: _rcControl.value.text.length),
-                keyboardType: TextInputType.text,
-                // validator: (value) {
-                //   if (value.isEmpty) {
-                //     return S.current.msg_champ_oblg;
-                //   }
-                //   return null;
-                // },
-                decoration: InputDecoration(
-                  labelText: S.current.n_rc,
-                  labelStyle: GoogleFonts.lato(
-                      textStyle: TextStyle(color: Theme.of(context).hintColor)),
-                  prefixIcon: Icon(
-                    MdiIcons.cardAccountDetails,
-                    color: Colors.blue,
-                  ),
-                  focusedBorder: OutlineInputBorder(
-                      borderSide: BorderSide(color: Colors.blue),
-                      borderRadius: BorderRadius.circular(20)),
-                  enabledBorder: OutlineInputBorder(
-                    gapPadding: 3.3,
-                    borderRadius: BorderRadius.circular(20),
+            TextFormField(
+              enabled: editMode,
+              controller: _rcControl,
+              onTap: () => _rcControl.selection = TextSelection(
+                  baseOffset: 0, extentOffset: _rcControl.value.text.length),
+              keyboardType: TextInputType.text,
+              // validator: (value) {
+              //   if (value.isEmpty) {
+              //     return S.current.msg_champ_oblg;
+              //   }
+              //   return null;
+              // },
+              decoration: InputDecoration(
+                labelText: S.current.n_rc,
+                labelStyle: GoogleFonts.lato(
+                    textStyle: TextStyle(color: Theme.of(context).hintColor)),
+                prefixIcon: Icon(
+                  MdiIcons.cardAccountDetails,
+                  color: Colors.blue,
+                ),
+                focusedBorder: OutlineInputBorder(
                     borderSide: BorderSide(color: Colors.blue),
-                  ),
-                  errorBorder: OutlineInputBorder(
-                    gapPadding: 3.3,
-                    borderRadius: BorderRadius.circular(20),
-                    borderSide: BorderSide(color: Colors.red),
-                  ),
+                    borderRadius: BorderRadius.circular(20)),
+                enabledBorder: OutlineInputBorder(
+                  gapPadding: 3.3,
+                  borderRadius: BorderRadius.circular(20),
+                  borderSide: BorderSide(color: Colors.blue),
+                ),
+                errorBorder: OutlineInputBorder(
+                  gapPadding: 3.3,
+                  borderRadius: BorderRadius.circular(20),
+                  borderSide: BorderSide(color: Colors.red),
                 ),
               ),
             ),
             Visibility(
-              visible: (isEntreprise && _myParams.pays == "Algeria"),
+              visible: (_myParams.pays == "Algeria"),
               child: TextFormField(
                 enabled: editMode,
                 controller: _aiControl,
@@ -987,118 +980,109 @@ class _ProfilePageState extends State<ProfilePage>
                 ),
               ),
             ),
-            Visibility(
-              visible: isEntreprise,
-              child: TextFormField(
-                enabled: editMode,
-                controller: _nifControl,
-                onTap: () => _nifControl.selection = TextSelection(
-                    baseOffset: 0, extentOffset: _nifControl.value.text.length),
-                keyboardType: TextInputType.text,
-                // validator: (value) {
-                //   if (value.isEmpty) {
-                //     return S.current.msg_champ_oblg;
-                //   }
-                //   return null;
-                // },
-                decoration: InputDecoration(
-                  labelText: S.current.nif,
-                  labelStyle: GoogleFonts.lato(
-                      textStyle: TextStyle(color: Theme.of(context).hintColor)),
-                  prefixIcon: Icon(
-                    MdiIcons.cardAccountDetails,
-                    color: Colors.blue,
-                  ),
-                  focusedBorder: OutlineInputBorder(
-                      borderSide: BorderSide(color: Colors.blue),
-                      borderRadius: BorderRadius.circular(20)),
-                  enabledBorder: OutlineInputBorder(
-                    gapPadding: 3.3,
-                    borderRadius: BorderRadius.circular(20),
+            TextFormField(
+              enabled: editMode,
+              controller: _nifControl,
+              onTap: () => _nifControl.selection = TextSelection(
+                  baseOffset: 0, extentOffset: _nifControl.value.text.length),
+              keyboardType: TextInputType.text,
+              // validator: (value) {
+              //   if (value.isEmpty) {
+              //     return S.current.msg_champ_oblg;
+              //   }
+              //   return null;
+              // },
+              decoration: InputDecoration(
+                labelText: S.current.nif,
+                labelStyle: GoogleFonts.lato(
+                    textStyle: TextStyle(color: Theme.of(context).hintColor)),
+                prefixIcon: Icon(
+                  MdiIcons.cardAccountDetails,
+                  color: Colors.blue,
+                ),
+                focusedBorder: OutlineInputBorder(
                     borderSide: BorderSide(color: Colors.blue),
-                  ),
-                  errorBorder: OutlineInputBorder(
-                    gapPadding: 3.3,
-                    borderRadius: BorderRadius.circular(20),
-                    borderSide: BorderSide(color: Colors.red),
-                  ),
+                    borderRadius: BorderRadius.circular(20)),
+                enabledBorder: OutlineInputBorder(
+                  gapPadding: 3.3,
+                  borderRadius: BorderRadius.circular(20),
+                  borderSide: BorderSide(color: Colors.blue),
+                ),
+                errorBorder: OutlineInputBorder(
+                  gapPadding: 3.3,
+                  borderRadius: BorderRadius.circular(20),
+                  borderSide: BorderSide(color: Colors.red),
                 ),
               ),
             ),
-            Visibility(
-              visible: isEntreprise,
-              child: TextFormField(
-                enabled: editMode,
-                controller: _nisControl,
-                onTap: () => _nisControl.selection = TextSelection(
-                    baseOffset: 0, extentOffset: _nisControl.value.text.length),
-                keyboardType: TextInputType.text,
-                // validator: (value) {
-                //   if (value.isEmpty) {
-                //     return S.current.msg_champ_oblg;
-                //   }
-                //   return null;
-                // },
-                decoration: InputDecoration(
-                  labelText: S.current.nis,
-                  labelStyle: GoogleFonts.lato(
-                      textStyle: TextStyle(color: Theme.of(context).hintColor)),
-                  prefixIcon: Icon(
-                    MdiIcons.cardAccountDetails,
-                    color: Colors.blue,
-                  ),
-                  focusedBorder: OutlineInputBorder(
-                      borderSide: BorderSide(color: Colors.blue),
-                      borderRadius: BorderRadius.circular(20)),
-                  enabledBorder: OutlineInputBorder(
-                    gapPadding: 3.3,
-                    borderRadius: BorderRadius.circular(20),
+            TextFormField(
+              enabled: editMode,
+              controller: _nisControl,
+              onTap: () => _nisControl.selection = TextSelection(
+                  baseOffset: 0, extentOffset: _nisControl.value.text.length),
+              keyboardType: TextInputType.text,
+              // validator: (value) {
+              //   if (value.isEmpty) {
+              //     return S.current.msg_champ_oblg;
+              //   }
+              //   return null;
+              // },
+              decoration: InputDecoration(
+                labelText: S.current.nis,
+                labelStyle: GoogleFonts.lato(
+                    textStyle: TextStyle(color: Theme.of(context).hintColor)),
+                prefixIcon: Icon(
+                  MdiIcons.cardAccountDetails,
+                  color: Colors.blue,
+                ),
+                focusedBorder: OutlineInputBorder(
                     borderSide: BorderSide(color: Colors.blue),
-                  ),
-                  errorBorder: OutlineInputBorder(
-                    gapPadding: 3.3,
-                    borderRadius: BorderRadius.circular(20),
-                    borderSide: BorderSide(color: Colors.red),
-                  ),
+                    borderRadius: BorderRadius.circular(20)),
+                enabledBorder: OutlineInputBorder(
+                  gapPadding: 3.3,
+                  borderRadius: BorderRadius.circular(20),
+                  borderSide: BorderSide(color: Colors.blue),
+                ),
+                errorBorder: OutlineInputBorder(
+                  gapPadding: 3.3,
+                  borderRadius: BorderRadius.circular(20),
+                  borderSide: BorderSide(color: Colors.red),
                 ),
               ),
             ),
-            Visibility(
-              visible: isEntreprise,
-              child: TextFormField(
-                enabled: editMode,
-                controller: _capitalsocialControl,
-                onTap: () => _capitalsocialControl.selection = TextSelection(
-                    baseOffset: 0,
-                    extentOffset: _capitalsocialControl.value.text.length),
-                keyboardType: TextInputType.number,
-                // validator: (value) {
-                //   if (value.isEmpty) {
-                //     return S.current.msg_champ_oblg;
-                //   }
-                //   return null;
-                // },
-                decoration: InputDecoration(
-                  labelText: S.current.capitale_sociale,
-                  labelStyle: GoogleFonts.lato(
-                      textStyle: TextStyle(color: Theme.of(context).hintColor)),
-                  prefixIcon: Icon(
-                    Icons.monetization_on,
-                    color: Colors.blue,
-                  ),
-                  focusedBorder: OutlineInputBorder(
-                      borderSide: BorderSide(color: Colors.blue),
-                      borderRadius: BorderRadius.circular(20)),
-                  enabledBorder: OutlineInputBorder(
-                    gapPadding: 3.3,
-                    borderRadius: BorderRadius.circular(20),
+            TextFormField(
+              enabled: editMode,
+              controller: _capitalsocialControl,
+              onTap: () => _capitalsocialControl.selection = TextSelection(
+                  baseOffset: 0,
+                  extentOffset: _capitalsocialControl.value.text.length),
+              keyboardType: TextInputType.number,
+              // validator: (value) {
+              //   if (value.isEmpty) {
+              //     return S.current.msg_champ_oblg;
+              //   }
+              //   return null;
+              // },
+              decoration: InputDecoration(
+                labelText: S.current.capitale_sociale,
+                labelStyle: GoogleFonts.lato(
+                    textStyle: TextStyle(color: Theme.of(context).hintColor)),
+                prefixIcon: Icon(
+                  Icons.monetization_on,
+                  color: Colors.blue,
+                ),
+                focusedBorder: OutlineInputBorder(
                     borderSide: BorderSide(color: Colors.blue),
-                  ),
-                  errorBorder: OutlineInputBorder(
-                    gapPadding: 3.3,
-                    borderRadius: BorderRadius.circular(20),
-                    borderSide: BorderSide(color: Colors.red),
-                  ),
+                    borderRadius: BorderRadius.circular(20)),
+                enabledBorder: OutlineInputBorder(
+                  gapPadding: 3.3,
+                  borderRadius: BorderRadius.circular(20),
+                  borderSide: BorderSide(color: Colors.blue),
+                ),
+                errorBorder: OutlineInputBorder(
+                  gapPadding: 3.3,
+                  borderRadius: BorderRadius.circular(20),
+                  borderSide: BorderSide(color: Colors.red),
                 ),
               ),
             ),

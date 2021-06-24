@@ -48,6 +48,7 @@ class _JournalFragmentState extends State<JournalFragment> {
   int _savedSelectedMarque = 0;
   int _savedSelectedFamille = 0;
 
+  DateTime _firstDate = DateTime(2020);
   TextEditingController _startDateControl = new TextEditingController();
   DateTime _filterStartDate;
   DateTime _savedFilterStartDate;
@@ -148,10 +149,11 @@ class _JournalFragmentState extends State<JournalFragment> {
   Widget startDate(StateSetter _setState) {
     return InkWell(
       onTap: () async {
-        DateTime order = await getDate(DateTime.now());
+        DateTime order = await getDate(DateTime.now(), DateTime(2020));
         if (order != null) {
           DateTime time = new DateTime(order.year, order.month, order.day);
           _setState(() {
+            _firstDate = time ;
             _startDateControl.text = Helpers.dateToText(time);
             _filterStartDate = order;
           });
@@ -159,6 +161,7 @@ class _JournalFragmentState extends State<JournalFragment> {
       },
       onLongPress: () {
         _setState(() {
+          _firstDate = DateTime(2020) ;
           _startDateControl.text = "";
           _filterStartDate = _emptyFilterMap["Start_date"];
         });
@@ -191,7 +194,7 @@ class _JournalFragmentState extends State<JournalFragment> {
   Widget endDate(StateSetter _setState) {
     return InkWell(
       onTap: () async {
-        DateTime order = await getDate(DateTime.now());
+        DateTime order = await getDate(DateTime.now(),_firstDate);
         if (order != null) {
           DateTime time = new DateTime(order.year, order.month, order.day);
           _setState(() {
@@ -282,12 +285,12 @@ class _JournalFragmentState extends State<JournalFragment> {
   //*********************************************************************************************************************************************************************************
   //********************************************************************** partie de la date ****************************************************************************************
 
-  Future<DateTime> getDate(DateTime dateTime) {
+  Future<DateTime> getDate(DateTime dateTime ,DateTime firsDate) {
     return showDatePicker(
       context: context,
       initialDate: dateTime,
-      firstDate: DateTime(2020),
-      lastDate: DateTime(2050),
+      firstDate: firsDate,
+      lastDate: DateTime(2100),
       builder: (BuildContext context, Widget child) {
         return child;
       },

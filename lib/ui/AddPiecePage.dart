@@ -1979,24 +1979,25 @@ class _AddPiecePageState extends State<AddPiecePage>
     _piece.raisonSociale = tiers.raisonSociale;
     _piece.tarification = _selectedTarification;
 
-    _piece.total_ht = _total_ht;
-    _piece.net_ht = _net_ht;
-    _piece.total_tva = _total_tva;
-    _piece.total_ttc = _total_ttc;
-    _piece.timbre = _timbre;
-    _piece.net_a_payer = _net_a_payer;
-    _piece.remise = _pourcentremise;
+    _piece.total_ht = double.parse((_total_ht).toStringAsFixed(2)) ;
+    _piece.remise =  double.parse((_pourcentremise).toStringAsFixed(2)) ;
+    _piece.net_ht =  double.parse((_net_ht).toStringAsFixed(2));
+    _piece.total_tva =  double.parse((_total_tva).toStringAsFixed(2));
+    _piece.total_ttc =  double.parse((_total_ttc).toStringAsFixed(2)) ;
+    _piece.timbre =(_timbre != null) ? double.parse((_timbre).toStringAsFixed(2)) : 0.0 ;
+    _piece.net_a_payer =  double.parse((_net_a_payer).toStringAsFixed(2)) ;
+
 
     if (_piece.transformer == null) {
       _piece.transformer = 0;
     }
 
     if (_piece.id == null) {
-      _piece.regler = _verssementpiece;
+      _piece.regler =  double.parse((_verssementpiece).toStringAsFixed(2)) ;
     } else {
-      _piece.regler = _piece.regler + _verssementpiece;
+      _piece.regler =  double.parse((_piece.regler + _verssementpiece).toStringAsFixed(2)) ;
     }
-    _piece.reste = _piece.net_a_payer - _piece.regler;
+    _piece.reste =  double.parse((_piece.net_a_payer - _piece.regler).toStringAsFixed(2)) ;
 
     if (_piece.piece == PieceType.retourClient ||
         _piece.piece == PieceType.avoirClient ||
@@ -2029,7 +2030,7 @@ class _AddPiecePageState extends State<AddPiecePage>
 
   Future<void> addTresorie(item, {transferer}) async {
     Tresorie tresorie = new Tresorie.init();
-    tresorie.montant = _verssementpiece;
+    tresorie.montant = double.parse((_verssementpiece).toStringAsFixed(2));
     tresorie.compte = 1;
     tresorie.charge = null;
     if (transferer) {
@@ -2080,7 +2081,7 @@ class _AddPiecePageState extends State<AddPiecePage>
           await _queryCtr.getLastId(DbTablesNames.tresorie);
       reglementTresorie.piece_id =
           await _queryCtr.getLastId(DbTablesNames.pieces);
-      reglementTresorie.regler = tresorie.montant;
+      reglementTresorie.regler = double.parse((tresorie.montant).toStringAsFixed(2))  ;
       await _queryCtr.addItemToTable(
           DbTablesNames.reglementTresorie, reglementTresorie);
     }
@@ -2275,28 +2276,28 @@ class _AddPiecePageState extends State<AddPiecePage>
     try {
       int id = -1;
       Piece _newPiece = new Piece.init();
-      _newPiece.tier_id = _piece.tier_id;
-      _newPiece.raisonSociale = _piece.raisonSociale;
-      _newPiece.piece = typePieceTransformer(_piece.piece, to);
-
-      _newPiece.mov = 1;
-      _newPiece.transformer = 1;
-      _newPiece.etat = 0;
-      _newPiece.tarification = _piece.tarification;
 
       var res = await _queryCtr.getFormatPiece(_newPiece.piece);
       _newPiece.num_piece = Helpers.generateNumPiece(res.first);
-
-      _newPiece.total_ttc = _piece.total_ttc;
-      _newPiece.total_tva = _piece.total_tva;
-      _newPiece.total_ht = _piece.total_ht;
-      _newPiece.net_ht = _piece.net_ht;
       _newPiece.date = _piece.date;
-      _newPiece.net_a_payer = _piece.net_a_payer;
-      _newPiece.reste = _piece.reste;
-      _newPiece.regler = _piece.regler;
+      _newPiece.mov = 1;
+      _newPiece.piece = typePieceTransformer(_piece.piece, to);
+      _newPiece.transformer = 1;
+      _newPiece.etat = 0;
+      _newPiece.tarification = _piece.tarification;
+      _newPiece.tier_id = _piece.tier_id;
+      _newPiece.raisonSociale = _piece.raisonSociale;
+
+      _newPiece.total_ht = double.parse((_piece.total_ht).toStringAsFixed(2));
       _newPiece.remise = _piece.remise;
-      _newPiece.marge = _piece.marge;
+      _newPiece.net_ht = double.parse((_piece.net_ht).toStringAsFixed(2));
+      _newPiece.total_tva = double.parse((_piece.total_tva).toStringAsFixed(2));
+      _newPiece.total_ttc = double.parse((_piece.total_ttc).toStringAsFixed(2)) ;
+      _newPiece.timbre = double.parse((_piece.timbre).toStringAsFixed(2)) ;
+      _newPiece.net_a_payer = double.parse((_piece.net_a_payer).toStringAsFixed(2));
+      _newPiece.regler = double.parse((_piece.regler).toStringAsFixed(2)) ;
+      _newPiece.reste = double.parse((_piece.reste).toStringAsFixed(2));
+      _newPiece.marge = double.parse((_piece.marge).toStringAsFixed(2)) ;
 
       if (_newPiece.piece == PieceType.retourClient ||
           _newPiece.piece == PieceType.avoirClient ||
@@ -2322,17 +2323,20 @@ class _AddPiecePageState extends State<AddPiecePage>
       // update tresorie with triggers
       Transformer transformer = new Transformer.init();
       transformer.oldMov = _oldMov;
-      transformer.newPieceId = _newPiece.id;
       transformer.oldPieceId = _piece.id;
+      transformer.newPieceId = _newPiece.id;
       transformer.type_piece = _newPiece.piece;
-      await _queryCtr.addItemToTable(DbTablesNames.transformer, transformer);
+      var resTrans = await _queryCtr.addItemToTable(DbTablesNames.transformer, transformer);
 
       // devis vers bl ou FC
       if (_oldMov == 0) {
         await addTresorie(_newPiece, transferer: true);
       }
 
-      var message = S.current.msg_piece_transfere;
+      var message = S.current.msg_transfere_err;
+      if(resTrans > 0){
+         message = S.current.msg_piece_transfere;
+      }
 
       setState(() {
         _piece.etat = 1;
@@ -2521,7 +2525,7 @@ class _AddPiecePageState extends State<AddPiecePage>
                     ? PosAlign.center
                     : PosAlign.left));
       }
-      if (_profile.rc != "" && (Statics.statutItems.last == Statics.statutItems[_profile.statut])) {
+      if (_profile.rc != "") {
         input = "${_profile.rc}";
         encArabic = await CharsetConverter.encode(
             "ISO-8859-6", "${input.split('').reversed.join()}");
@@ -2532,7 +2536,7 @@ class _AddPiecePageState extends State<AddPiecePage>
                     ? PosAlign.center
                     : PosAlign.left));
       }
-      if (_profile.nif != "" && (Statics.statutItems.last == Statics.statutItems[_profile.statut])) {
+      if (_profile.nif != "") {
         input = "${_profile.nif}";
         encArabic = await CharsetConverter.encode(
             "ISO-8859-6", "${input.split('').reversed.join()}");
@@ -2543,7 +2547,18 @@ class _AddPiecePageState extends State<AddPiecePage>
                     ? PosAlign.center
                     : PosAlign.left));
       }
-      if (_profile.ai != "" && (Statics.statutItems.last == Statics.statutItems[_profile.statut])) {
+      if (_profile.nis != "") {
+        input = "${_profile.nis}";
+        encArabic = await CharsetConverter.encode(
+            "ISO-8859-6", "${input.split('').reversed.join()}");
+        ticket.textEncoded(encArabic,
+            styles: PosStyles(
+                codeTable: PosCodeTable.arabic,
+                align: (formatPrint == PaperSize.mm80)
+                    ? PosAlign.center
+                    : PosAlign.left));
+      }
+      if (_profile.ai != "") {
         input = "${_profile.ai}";
         encArabic = await CharsetConverter.encode(
             "ISO-8859-6", "${input.split('').reversed.join()}");
@@ -2586,7 +2601,7 @@ class _AddPiecePageState extends State<AddPiecePage>
                   ? PosAlign.center
                   : PosAlign.left));
 
-      if (_selectedClient.rc != "" && (Statics.statutItems.last == Statics.statutItems[_selectedClient.statut]) &&
+      if (_selectedClient.rc != "" &&
           (_piece.piece == PieceType.factureClient ||
               _piece.piece == PieceType.factureFournisseur ||
               _piece.piece == PieceType.avoirClient ||
@@ -2602,7 +2617,7 @@ class _AddPiecePageState extends State<AddPiecePage>
                     ? PosAlign.center
                     : PosAlign.left));
       }
-      if (_selectedClient.nif != "" && (Statics.statutItems.last == Statics.statutItems[_selectedClient.statut]) &&
+      if (_selectedClient.nif != "" &&
           (_piece.piece == PieceType.factureClient ||
               _piece.piece == PieceType.factureFournisseur ||
               _piece.piece == PieceType.avoirClient ||
@@ -2617,7 +2632,22 @@ class _AddPiecePageState extends State<AddPiecePage>
                     ? PosAlign.center
                     : PosAlign.left));
       }
-      if (_selectedClient.ai != "" && (Statics.statutItems.last == Statics.statutItems[_selectedClient.statut]) &&
+      if (_selectedClient.nis != "" &&
+          (_piece.piece == PieceType.factureClient ||
+              _piece.piece == PieceType.factureFournisseur ||
+              _piece.piece == PieceType.avoirClient ||
+              _piece.piece == PieceType.avoirFournisseur)) {
+        input = "${_selectedClient.nis}";
+        encArabic = await CharsetConverter.encode(
+            "ISO-8859-6", "${input.split('').reversed.join()}");
+        ticket.textEncoded(encArabic,
+            styles: PosStyles(
+                codeTable: PosCodeTable.arabic,
+                align: (formatPrint == PaperSize.mm80)
+                    ? PosAlign.center
+                    : PosAlign.left));
+      }
+      if (_selectedClient.ai != "" &&
           (_piece.piece == PieceType.factureClient ||
               _piece.piece == PieceType.factureFournisseur ||
               _piece.piece == PieceType.avoirClient ||
@@ -2840,21 +2870,28 @@ class _AddPiecePageState extends State<AddPiecePage>
                     ? PosAlign.center
                     : PosAlign.left));
       }
-      if (_profile.rc != "" && (Statics.statutItems.last == Statics.statutItems[_profile.statut])) {
+      if (_profile.rc != "") {
         ticket.text("${_profile.rc}",
             styles: PosStyles(
                 align: (formatPrint == PaperSize.mm80)
                     ? PosAlign.center
                     : PosAlign.left));
       }
-      if (_profile.nif != "" && (Statics.statutItems.last == Statics.statutItems[_profile.statut])) {
+      if (_profile.nif != "") {
         ticket.text("${_profile.nif}",
             styles: PosStyles(
                 align: (formatPrint == PaperSize.mm80)
                     ? PosAlign.center
                     : PosAlign.left));
       }
-      if (_profile.ai != "" && (Statics.statutItems.last == Statics.statutItems[_profile.statut])) {
+      if (_profile.nis != "") {
+        ticket.text("${_profile.nis}",
+            styles: PosStyles(
+                align: (formatPrint == PaperSize.mm80)
+                    ? PosAlign.center
+                    : PosAlign.left));
+      }
+      if (_profile.ai != "") {
         ticket.text("${_profile.ai}",
             styles: PosStyles(
                 align: (formatPrint == PaperSize.mm80)
@@ -2878,7 +2915,7 @@ class _AddPiecePageState extends State<AddPiecePage>
                   ? PosAlign.center
                   : PosAlign.left));
 
-      if (_selectedClient.rc != "" && (Statics.statutItems.last == Statics.statutItems[_selectedClient.statut]) &&
+      if (_selectedClient.rc != "" &&
           (_piece.piece == PieceType.factureClient ||
               _piece.piece == PieceType.factureFournisseur ||
               _piece.piece == PieceType.avoirClient ||
@@ -2889,7 +2926,7 @@ class _AddPiecePageState extends State<AddPiecePage>
                     ? PosAlign.center
                     : PosAlign.left));
       }
-      if (_selectedClient.nif != "" && (Statics.statutItems.last == Statics.statutItems[_selectedClient.statut]) &&
+      if (_selectedClient.nif != "" &&
           (_piece.piece == PieceType.factureClient ||
               _piece.piece == PieceType.factureFournisseur ||
               _piece.piece == PieceType.avoirClient ||
@@ -2900,7 +2937,18 @@ class _AddPiecePageState extends State<AddPiecePage>
                     ? PosAlign.center
                     : PosAlign.left));
       }
-      if (_selectedClient.ai != "" && (Statics.statutItems.last == Statics.statutItems[_selectedClient.statut]) &&
+      if (_selectedClient.nis != "" &&
+          (_piece.piece == PieceType.factureClient ||
+              _piece.piece == PieceType.factureFournisseur ||
+              _piece.piece == PieceType.avoirClient ||
+              _piece.piece == PieceType.avoirFournisseur)) {
+        ticket.text("${S.current.nis} : ${_selectedClient.nis}",
+            styles: PosStyles(
+                align: (formatPrint == PaperSize.mm80)
+                    ? PosAlign.center
+                    : PosAlign.left));
+      }
+      if (_selectedClient.ai != "" &&
           (_piece.piece == PieceType.factureClient ||
               _piece.piece == PieceType.factureFournisseur ||
               _piece.piece == PieceType.avoirClient ||
@@ -3111,22 +3159,27 @@ class _AddPiecePageState extends State<AddPiecePage>
                                 style: pw.TextStyle(
                                     font: ttf, fontWeight: pw.FontWeight.bold))
                             : pw.SizedBox(),
-                        (_profile.rc != "" && (Statics.statutItems.last == Statics.statutItems[_profile.statut]))
+                        (_profile.rc != "" )
                             ? pw.Text("${S.current.rc}\t: ${_profile.rc}",
                                 style: pw.TextStyle(
                                     font: ttf, fontWeight: pw.FontWeight.bold))
                             : pw.SizedBox(),
-                        (_profile.nif != "" && (Statics.statutItems.last == Statics.statutItems[_profile.statut]))
+                        (_profile.nif != "")
                             ? pw.Text("${S.current.nif}\t: ${_profile.nif}",
                                 style: pw.TextStyle(
                                     font: ttf, fontWeight: pw.FontWeight.bold))
                             : pw.SizedBox(),
-                        (_profile.ai != "" && (Statics.statutItems.last == Statics.statutItems[_profile.statut]))
+                        (_profile.nis != "")
+                            ? pw.Text("${S.current.nis}\t: ${_profile.nis}",
+                            style: pw.TextStyle(
+                                font: ttf, fontWeight: pw.FontWeight.bold))
+                            : pw.SizedBox(),
+                        (_profile.ai != "" )
                             ? pw.Text("${S.current.art_imp}\t: ${_profile.ai}",
                                 style: pw.TextStyle(
                                     font: ttf, fontWeight: pw.FontWeight.bold))
                             : pw.SizedBox(),
-                        (_profile.capital > 0 && (Statics.statutItems.last == Statics.statutItems[_profile.statut]))
+                        (_profile.capital > 0)
                             ? pw.Text(
                                 "${S.current.capitale_sociale}\t: ${Helpers.numberFormat(_profile.capital)} ${Helpers.getDeviseTranslate(_myParams.devise)}",
                                 style: pw.TextStyle(
@@ -3181,29 +3234,39 @@ class _AddPiecePageState extends State<AddPiecePage>
                                       PieceType.factureFournisseur ||
                                   _piece.piece == PieceType.avoirClient ||
                                   _piece.piece == PieceType.avoirFournisseur) &&
-                              (_selectedClient.rc != "") &&
-                          (Statics.statutItems.last == Statics.statutItems[_selectedClient.statut]))
+                              (_selectedClient.rc != "") )
                           ? pw.Text("${S.current.rc}\t  ${_selectedClient.rc}",
                               style: pw.TextStyle(font: ttf))
                           : pw.SizedBox(),
+
                       ((_piece.piece == PieceType.factureClient ||
                                   _piece.piece ==
                                       PieceType.factureFournisseur ||
                                   _piece.piece == PieceType.avoirClient ||
                                   _piece.piece == PieceType.avoirFournisseur) &&
-                              (_selectedClient.nif != "")&&
-                          (Statics.statutItems.last == Statics.statutItems[_selectedClient.statut]))
+                              (_selectedClient.nif != ""))
                           ? pw.Text(
                               "${S.current.nif}\t  ${_selectedClient.nif}",
                               style: pw.TextStyle(font: ttf))
                           : pw.SizedBox(),
+
+                      ((_piece.piece == PieceType.factureClient ||
+                          _piece.piece ==
+                              PieceType.factureFournisseur ||
+                          _piece.piece == PieceType.avoirClient ||
+                          _piece.piece == PieceType.avoirFournisseur) &&
+                          (_selectedClient.nis != ""))
+                          ? pw.Text(
+                          "${S.current.nis}\t  ${_selectedClient.nis}",
+                          style: pw.TextStyle(font: ttf))
+                          : pw.SizedBox(),
+
                       ((_piece.piece == PieceType.factureClient ||
                                   _piece.piece ==
                                       PieceType.factureFournisseur ||
                                   _piece.piece == PieceType.avoirClient ||
                                   _piece.piece == PieceType.avoirFournisseur) &&
-                              (_selectedClient.ai != "") &&
-                          (Statics.statutItems.last == Statics.statutItems[_selectedClient.statut]))
+                              (_selectedClient.ai != "") )
                           ? pw.Text(
                               "${S.current.art_imp}\t  ${_selectedClient.ai}",
                               style: pw.TextStyle(font: ttf))

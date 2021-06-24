@@ -265,7 +265,7 @@ class QueryCtr {
 
     res = await dbClient.query(DbTablesNames.pieces,
         where:
-            "Reste > 0 AND Mov = 1 AND Piece != 'FP' AND Piece != 'CC' AND Piece != 'BC' AND Tier_id = ?",
+            "Reste > 0 AND Mov = 1 AND (Piece == 'BL' OR Piece == 'FC' OR Piece == 'BR' OR Piece == 'FF') AND Tier_id = ?",
         whereArgs: [tier_id]);
 
     List<Piece> list = new List<Piece>();
