@@ -108,7 +108,6 @@ class _AddTresoriePageState extends State<AddTresoriePage>
     _selectedTypeTiers = Statics.tiersItems[0];
 
     _categorieItems = await _queryCtr.getAllTresorieCategorie();
-
     _categorieItems[0].libelle = S.current.choisir;
     _categorieItems[1].libelle = S.current.reglemnt_client;
     _categorieItems[2].libelle = S.current.reglement_fournisseur;
@@ -117,7 +116,6 @@ class _AddTresoriePageState extends State<AddTresoriePage>
     _categorieItems[5].libelle = S.current.rembourcement_client;
     _categorieItems[6].libelle = S.current.rembourcement_four;
     _categorieItems[7].libelle = S.current.decaissement;
-
     _categorieDropdownItems =
         utils.buildDropTresorieCategoriesDownMenuItems(_categorieItems);
     _selectedCategorie = _categorieItems[0];
@@ -128,6 +126,7 @@ class _AddTresoriePageState extends State<AddTresoriePage>
     _selectedCompte = _compteItems[0];
 
     _chargeItems = await _queryCtr.getAllChargeTresorie();
+    _chargeItems[0].libelle = S.current.choisir ;
     _chargeDropdownItems =
         utils.buildDropChargeTresorieDownMenuItems(_chargeItems);
     _selectedCharge = _chargeItems[0];
@@ -1350,14 +1349,11 @@ class _AddTresoriePageState extends State<AddTresoriePage>
               _selectedPieces =
               await _queryCtr.getAllPiecesByTierId(_selectedClient.id);
 
-              double _montant = double.parse(
-                  (tresorie.montant).toStringAsFixed(2));
+              double _montant = double.parse((tresorie.montant).toStringAsFixed(2));
               while (_montant > 0) {
                 // recuperer la some des verssement pour le solde
-                verssementSolde =
-                await _queryCtr.getVerssementSolde(_selectedClient);
-                if ((_selectedClient.solde_depart - verssementSolde) > 0 &&
-                    _haspiece == false) {
+                verssementSolde = await _queryCtr.getVerssementSolde(_selectedClient);
+                if ((_selectedClient.solde_depart - verssementSolde) > 0 && _haspiece == false) {
                   ReglementTresorie item = new ReglementTresorie.init();
                   item.piece_id = 0;
                   item.tresorie_id = tresorie.id;
@@ -1373,8 +1369,8 @@ class _AddTresoriePageState extends State<AddTresoriePage>
                   }
                   await _queryCtr.addItemToTable(
                       DbTablesNames.reglementTresorie, item);
-                }
-                else {
+
+                } else {
                   // le solde de depart est reglé
                   _selectedPieces.forEach((piece) async {
                     ReglementTresorie item = new ReglementTresorie.init();
@@ -1390,8 +1386,7 @@ class _AddTresoriePageState extends State<AddTresoriePage>
                     } else {
                       return;
                     }
-                    await _queryCtr.addItemToTable(
-                        DbTablesNames.reglementTresorie, item);
+                    await _queryCtr.addItemToTable(DbTablesNames.reglementTresorie, item);
                   });
                 }
               }
@@ -1430,7 +1425,9 @@ class _AddTresoriePageState extends State<AddTresoriePage>
           Helpers.showFlushBar(context, message);
           return Future.value(id);
         }
-      } else {
+      }
+      //add new tresories
+      else {
         // add new tresorie
         Tresorie tresorie = await makeItem();
         if (tresorie != null) {
@@ -1449,8 +1446,7 @@ class _AddTresoriePageState extends State<AddTresoriePage>
             double _montant = double.parse((tresorie.montant).toStringAsFixed(2));
             while (_montant > 0) {
               // recuperer la some des verssement pour le solde
-              verssementSolde =
-                  await _queryCtr.getVerssementSolde(_selectedClient);
+              verssementSolde = await _queryCtr.getVerssementSolde(_selectedClient);
               if ((_selectedClient.solde_depart - verssementSolde) > 0 &&
                   !_haspiece) {
                 ReglementTresorie item = new ReglementTresorie.init();
@@ -1511,6 +1507,7 @@ class _AddTresoriePageState extends State<AddTresoriePage>
           return Future.value(id);
         }
       }
+
       Helpers.showFlushBar(context, message);
       return Future.value(id);
     } catch (error) {

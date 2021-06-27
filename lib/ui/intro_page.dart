@@ -24,6 +24,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:introduction_screen/introduction_screen.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:gestmob/models/Tiers.dart';
 
 class IntroPage extends StatefulWidget {
   @override
@@ -881,6 +882,7 @@ class _IntroPageState extends State<IntroPage> {
     await _queryCtr.updateItemInDb(DbTablesNames.myparams, _myParams);
     await _queryCtr.updateItemInDb(DbTablesNames.profile, _profile);
     await configTva();
+    await initData();
   }
 
   Future configTva() async {
@@ -926,4 +928,34 @@ class _IntroPageState extends State<IntroPage> {
       await _queryCtr.addItemToTable(DbTablesNames.articlesTva, element);
     });
   }
+
+  Future initData() async{
+    Uint8List image = await Helpers.getDefaultImageUint8List(from: "tier");
+    Tiers tier0 = new Tiers(image, "Client 00", null, 0, 0, 1, "", "","", "", "",
+        "", "", "", "", "", 0.0, 0, 0, false);
+    tier0.clientFour = 0;
+
+    Tiers tier2 = new Tiers(image, "Prov 00", null, 0, 0, 1, "", "","", "", "", "",
+        "", "", "", "", 0.0, 0, 0, false);
+    tier2.clientFour = 2;
+
+    switch (_selectedLanguage) {
+      case ("Français (FR)"):
+        tier0.raisonSociale = "Client 00";
+        tier2.raisonSociale = "Four 00";
+        break;
+
+      case ("عربي (AR)"):
+        tier0.raisonSociale = "الزبون 00";
+        tier2.raisonSociale = "المورد 00";
+        break;
+    }
+
+    await _queryCtr.addItemToTable(DbTablesNames.tiers, tier0);
+    await _queryCtr.addItemToTable(DbTablesNames.tiers, tier2);
+  }
+
+
 }
+
+

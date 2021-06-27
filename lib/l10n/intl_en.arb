@@ -134,7 +134,7 @@
   "msg_transfere_err": "Error when transforming piece",
   "msg_imp_err" : "No default printer",
 
-  "tresorie_titre": "Treasury (ies)",
+  "tresorie_titre": "Treasury",
   "msg_select_tier": "Please select a tier",
   "select_tier" : "Select Tier",
   "msg_credit_total": "Apply to total credit",

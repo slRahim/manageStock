@@ -1,1 +1,1 @@
-[1/1] Linking C shared library E:\AndroidStudio\FlutterProjects\gestmob\build\app\intermediates\cmake\release\obj\armeabi-v7a\libserial_port.so
+ninja: no work to do.

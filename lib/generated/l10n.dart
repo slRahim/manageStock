@@ -1315,10 +1315,10 @@ class S {
     );
   }
 
-  /// `Treasury (ies)`
+  /// `Treasury`
   String get tresorie_titre {
     return Intl.message(
-      'Treasury (ies)',
+      'Treasury',
       name: 'tresorie_titre',
       desc: '',
       args: [],

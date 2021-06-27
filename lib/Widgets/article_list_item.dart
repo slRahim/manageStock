@@ -408,6 +408,7 @@ class _ArticleListItemState extends State<ArticleListItem> {
   //afficher le prix de vente selon la tarification
   Widget trailingChildrenOnArticleFragment() {
     if (widget.pieceOrigin == 'BR' ||
+        widget.pieceOrigin == 'BC' ||
         widget.pieceOrigin == 'FF' ||
         widget.pieceOrigin == 'RF' ||
         widget.pieceOrigin == 'AF') {
@@ -699,7 +700,8 @@ class _ArticleListItemState extends State<ArticleListItem> {
 
   void selectThisItem() {
     widget.article.selectedQuantite = 1;
-    if (widget.pieceOrigin == 'BR' ||
+    if (widget.pieceOrigin == 'BC' ||
+        widget.pieceOrigin == 'BR' ||
         widget.pieceOrigin == 'FF' ||
         widget.pieceOrigin == 'RF' ||
         widget.pieceOrigin == 'AF') {

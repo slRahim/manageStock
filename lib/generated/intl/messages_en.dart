@@ -572,7 +572,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "transferer" : MessageLookupByLibrary.simpleMessage("Forwad to "),
     "transformer" : MessageLookupByLibrary.simpleMessage("Transform"),
     "transformer_title" : MessageLookupByLibrary.simpleMessage("Transformer item to"),
-    "tresorie_titre" : MessageLookupByLibrary.simpleMessage("Treasury (ies)"),
+    "tresorie_titre" : MessageLookupByLibrary.simpleMessage("Treasury"),
     "tresories" : MessageLookupByLibrary.simpleMessage("Treasuries"),
     "tva" : MessageLookupByLibrary.simpleMessage("TVA"),
     "tva_article" : MessageLookupByLibrary.simpleMessage("Tva Rate"),

@@ -236,23 +236,17 @@ class _AddArticlePageState extends State<AddArticlePage>
                 modification: modification,
                 title: appBarTitle,
                 onCancelPressed: () => {
-                  if (modification)
-                    {
-                      if (editMode)
-                        {
+                  if (modification){
+                      if (editMode){
                           Navigator.of(context).pushReplacementNamed(
                               RoutesKeys.addArticle,
                               arguments: widget.arguments)
-                        }
-                      else
-                        {
+                      } else {
                           Navigator.pop(context),
-                        }
-                    }
-                  else
-                    {
+                      }
+                    } else {
                       Navigator.pop(context),
-                    }
+                  }
                 },
                 onEditPressed: () {
                   setState(() {

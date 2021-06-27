@@ -330,21 +330,18 @@ class _AddPiecePageState extends State<AddPiecePage>
             modification: modification,
             title: appBarTitle,
             onCancelPressed: () => {
-              if (modification)
-                {
-                  if (editMode)
-                    {
+              if (modification){
+                  if (editMode){
                       Navigator.of(context).pushReplacementNamed(
                           RoutesKeys.addPiece,
                           arguments: widget.arguments)
                     }
-                  else
-                    {Navigator.pop(context)}
-                }
-              else
-                {
+                  else {
+                    Navigator.pop(context)
+                  }
+              } else {
                   Navigator.pop(context),
-                }
+              }
             },
             onEditPressed: (_piece.etat == 0)
                 ? () {
@@ -497,8 +494,7 @@ class _AddPiecePageState extends State<AddPiecePage>
                                 })
                               ..show();
                           } else {
-                            Helpers.showFlushBar(
-                                context, S.current.msg_select_art);
+                            Helpers.showToast(S.current.msg_select_art);
                           }
                         }
                       },
@@ -607,16 +603,13 @@ class _AddPiecePageState extends State<AddPiecePage>
                                     })
                                   ..show();
                               } else {
-                                Helpers.showFlushBar(
-                                    context, S.current.msg_versement_err);
+                                Helpers.showToast(S.current.msg_versement_err);
                               }
                             } else {
-                              Helpers.showFlushBar(
-                                  context, S.current.msg_select_art);
+                              Helpers.showToast(S.current.msg_select_art);
                             }
                           } else {
-                            Helpers.showFlushBar(
-                                context, S.current.msg_no_dispo);
+                            Helpers.showToast(S.current.msg_no_dispo);
                           }
                         }
                       },
@@ -960,7 +953,7 @@ class _AddPiecePageState extends State<AddPiecePage>
                                 _selectedTarification = value;
                               });
                               if (_selectedItems.isNotEmpty)
-                                dialogChangeTarif();
+                                dialogChangeTarif(fromClientDialog: false);
                             },
                           ),
                         ),
@@ -1153,7 +1146,6 @@ class _AddPiecePageState extends State<AddPiecePage>
                 _tarificationDropdownItems =
                     utils.buildDropTarificationTier(_tarificationItems);
               }
-              _selectedTarification = _selectedClient.tarification;
             });
           },
         );
@@ -1165,12 +1157,12 @@ class _AddPiecePageState extends State<AddPiecePage>
           _piece.piece == PieceType.commandeClient ||
           _piece.piece == PieceType.bonLivraison ||
           _piece.piece == PieceType.factureClient) {
-        if (_selectedItems.isNotEmpty) dialogChangeTarif();
+        if (_selectedItems.isNotEmpty) dialogChangeTarif(fromClientDialog: true);
       }
     });
   }
 
-  Widget dialogChangeTarif() {
+  Widget dialogChangeTarif({bool fromClientDialog}) {
     AwesomeDialog(
       context: context,
       dialogType: DialogType.WARNING,
@@ -1182,6 +1174,9 @@ class _AddPiecePageState extends State<AddPiecePage>
       btnOkText: S.current.oui,
       btnOkOnPress: () {
         setState(() {
+          if(fromClientDialog){
+            _selectedTarification = _selectedClient.tarification;
+          }
           _selectedItems.forEach((element) {
             switch (_selectedTarification) {
               case 1:
@@ -2277,11 +2272,11 @@ class _AddPiecePageState extends State<AddPiecePage>
       int id = -1;
       Piece _newPiece = new Piece.init();
 
+      _newPiece.piece = typePieceTransformer(_piece.piece, to);
       var res = await _queryCtr.getFormatPiece(_newPiece.piece);
       _newPiece.num_piece = Helpers.generateNumPiece(res.first);
       _newPiece.date = _piece.date;
       _newPiece.mov = 1;
-      _newPiece.piece = typePieceTransformer(_piece.piece, to);
       _newPiece.transformer = 1;
       _newPiece.etat = 0;
       _newPiece.tarification = _piece.tarification;
@@ -2328,7 +2323,7 @@ class _AddPiecePageState extends State<AddPiecePage>
       transformer.type_piece = _newPiece.piece;
       var resTrans = await _queryCtr.addItemToTable(DbTablesNames.transformer, transformer);
 
-      // devis vers bl ou FC
+      // FP ou BC vers bl/Fc ou BR/FF
       if (_oldMov == 0) {
         await addTresorie(_newPiece, transferer: true);
       }

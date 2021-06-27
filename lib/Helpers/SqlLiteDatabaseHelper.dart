@@ -879,7 +879,7 @@ class SqlLiteDatabaseHelper {
         WHEN NEW.Mov = 1 AND NEW.Piece <> "CC" 
         BEGIN
              UPDATE Tiers
-               SET Chiffre_affaires = IFNULL((Select Sum(Net_a_payer) From Pieces where Tier_id = New.Tier_id AND Mov = 1 AND Piece <> "CC"),0)
+               SET Chiffre_affaires = IFNULL((Select Sum(Net_a_payer) From Pieces where Tier_id = New.Tier_id AND Mov = 1 AND Piece <> "CC" AND Piece <> "FP" AND Piece <> "BC"),0)
              WHERE id = New.Tier_id; 
              
              UPDATE Tiers
@@ -914,7 +914,7 @@ class SqlLiteDatabaseHelper {
         WHEN NEW.Mov = 1 AND NEW.Piece <> "CC"
         BEGIN
              UPDATE Tiers
-               SET Chiffre_affaires = IFNULL((Select Sum(Net_a_payer) From Pieces where Tier_id = OLD.Tier_id AND Mov = 1 AND Piece <> "CC"),0)
+               SET Chiffre_affaires = IFNULL((Select Sum(Net_a_payer) From Pieces where Tier_id = OLD.Tier_id AND Mov = 1 AND Piece <> "CC" AND Piece <> "FP" AND Piece <> "BC"),0)
              WHERE id = OLD.Tier_id;
              UPDATE Tiers
                 SET Regler = IFNULL((SELECT SUM(Montant) FROM Tresories WHERE Tier_id = New.Tier_id AND Mov = 1),0)
@@ -924,7 +924,7 @@ class SqlLiteDatabaseHelper {
              WHERE id = OLD.Tier_id;
              
              UPDATE Tiers
-               SET Chiffre_affaires = IFNULL((Select Sum(Net_a_payer) From Pieces where Tier_id = NEW.Tier_id AND Mov = 1 AND Piece <> "CC"),0)
+               SET Chiffre_affaires = IFNULL((Select Sum(Net_a_payer) From Pieces where Tier_id = NEW.Tier_id AND Mov = 1 AND Piece <> "CC" AND Piece <> "FP" AND Piece <> "BC"),0)
              WHERE id = NEW.Tier_id;
              UPDATE Tiers
                 SET Regler = IFNULL((SELECT SUM(Montant) FROM Tresories WHERE Tier_id = New.Tier_id AND Mov = 1),0)
@@ -945,7 +945,7 @@ class SqlLiteDatabaseHelper {
             AND NEW.Piece <> "CC"
         BEGIN
              UPDATE Tiers
-               SET Chiffre_affaires = IFNULL((Select Sum(Net_a_payer) From Pieces where Tier_id = OLD.Tier_id AND Mov = 1 AND Piece <> "CC"),0)
+               SET Chiffre_affaires = IFNULL((Select Sum(Net_a_payer) From Pieces where Tier_id = OLD.Tier_id AND Mov = 1 AND Piece <> "CC" AND Piece <> "FP" AND Piece <> "BC"),0)
              WHERE id = OLD.Tier_id;
              UPDATE Tiers
                 SET Regler = IFNULL((SELECT SUM(Montant) FROM Tresories WHERE Tier_id = New.Tier_id AND Mov = 1),0)
@@ -955,7 +955,7 @@ class SqlLiteDatabaseHelper {
              WHERE id = OLD.Tier_id;
              
              UPDATE Tiers
-               SET Chiffre_affaires = IFNULL((Select Sum(Net_a_payer) From Pieces where Tier_id = NEW.Tier_id AND Mov = 1 AND Piece <> "CC"),0)
+               SET Chiffre_affaires = IFNULL((Select Sum(Net_a_payer) From Pieces where Tier_id = NEW.Tier_id AND Mov = 1 AND Piece <> "CC" AND Piece <> "FP" AND Piece <> "BC"),0)
              WHERE id = NEW.Tier_id;
              UPDATE Tiers
                 SET Regler = IFNULL((SELECT SUM(Montant) FROM Tresories WHERE Tier_id = New.Tier_id AND Mov = 1),0)
@@ -973,7 +973,7 @@ class SqlLiteDatabaseHelper {
         WHEN (OLD.Mov <> NEW.Mov)  AND (NEW.Mov = 1) AND NEW.Piece <> "CC"
         BEGIN
              UPDATE Tiers
-               SET Chiffre_affaires = IFNULL((Select Sum(Net_a_payer) From Pieces where Tier_id = OLD.Tier_id AND Mov = 1 AND Piece <> "CC"),0)
+               SET Chiffre_affaires = IFNULL((Select Sum(Net_a_payer) From Pieces where Tier_id = OLD.Tier_id AND Mov = 1 AND Piece <> "CC" AND Piece <> "FP" AND Piece <> "BC"),0)
              WHERE id = OLD.Tier_id;
              UPDATE Tiers
                 SET Regler = IFNULL((SELECT SUM(Montant) FROM Tresories WHERE Tier_id = New.Tier_id AND Mov = 1),0)
@@ -983,7 +983,7 @@ class SqlLiteDatabaseHelper {
              WHERE id = OLD.Tier_id;
              
              UPDATE Tiers
-               SET Chiffre_affaires = IFNULL((Select Sum(Net_a_payer) From Pieces where Tier_id = NEW.Tier_id AND Mov = 1 AND Piece <> "CC"),0)
+               SET Chiffre_affaires = IFNULL((Select Sum(Net_a_payer) From Pieces where Tier_id = NEW.Tier_id AND Mov = 1 AND Piece <> "CC" AND Piece <> "FP" AND Piece <> "BC"),0)
              WHERE id = NEW.Tier_id;
              UPDATE Tiers
                 SET Regler = IFNULL((SELECT SUM(Montant) FROM Tresories WHERE Tier_id = New.Tier_id AND Mov = 1),0)
@@ -1043,7 +1043,7 @@ class SqlLiteDatabaseHelper {
         WHEN (OLD.Mov = 1 AND OLD.Piece <> "CC")
         BEGIN
              UPDATE Tiers
-               SET Chiffre_affaires = IFNULL((Select (Sum(Net_a_payer)-Old.Net_a_payer) From Pieces where Tier_id = OLD.Tier_id AND Mov = 1 AND Piece <> "CC"),0)
+               SET Chiffre_affaires = IFNULL((Select (Sum(Net_a_payer)-Old.Net_a_payer) From Pieces where Tier_id = OLD.Tier_id AND Mov = 1 AND Piece <> "CC" AND Piece <> "FP" AND Piece <> "BC"),0)
              WHERE id = OLD.Tier_id;
              UPDATE Tiers
                 SET Regler = IFNULL((SELECT SUM(Montant) FROM Tresories WHERE Tier_id = OLD.Tier_id AND Mov = 1) , 0)
@@ -1061,7 +1061,7 @@ class SqlLiteDatabaseHelper {
         FOR EACH ROW
         WHEN (OLD.Mov = 1 AND OLD.Transformer = 1)
         BEGIN    
-                    
+                  
            DELETE FROM Transformers WHERE New_Piece_id = OLD.id;
         END;
      ''');
@@ -1123,7 +1123,7 @@ class SqlLiteDatabaseHelper {
         when (New.Categorie_id = 2 OR New.Categorie_id = 3 OR New.Categorie_id = 6 OR New.Categorie_id = 7)
         BEGIN             
              UPDATE Tiers
-               SET Chiffre_affaires = IFNULL((Select Sum(Net_a_payer) From Pieces where Tier_id = New.Tier_id AND Mov = 1 AND Piece <> "CC"),0)
+               SET Chiffre_affaires = IFNULL((Select Sum(Net_a_payer) From Pieces where Tier_id = New.Tier_id AND Mov = 1 AND Piece <> "CC" AND Piece <> "FP" AND Piece <> "BC"),0)
              WHERE id = New.Tier_id; 
            
             UPDATE Tiers
@@ -1182,7 +1182,7 @@ class SqlLiteDatabaseHelper {
              AND (OLD.Mov <> New.Mov) AND NEW.Mov = 1
         BEGIN        
              UPDATE Tiers
-               SET Chiffre_affaires = IFNULL((Select Sum(Net_a_payer) From Pieces where Tier_id = OLD.Tier_id AND Mov = 1 AND Piece <> "CC"),0)
+               SET Chiffre_affaires = IFNULL((Select Sum(Net_a_payer) From Pieces where Tier_id = OLD.Tier_id AND Mov = 1 AND Piece <> "CC" AND Piece <> "FP" AND Piece <> "BC"),0)
              WHERE id = OLD.Tier_id; 
             UPDATE Tiers
               SET Regler = IFNULL((SELECT SUM(Montant) FROM Tresories WHERE Tier_id = OLD.Tier_id AND Mov = 1),0)
@@ -1192,7 +1192,7 @@ class SqlLiteDatabaseHelper {
              WHERE id = OLD.Tier_id;
                  
             UPDATE Tiers
-               SET Chiffre_affaires = IFNULL((Select Sum(Net_a_payer) From Pieces where Tier_id = New.Tier_id AND Mov = 1 AND Piece <> "CC"),0)
+               SET Chiffre_affaires = IFNULL((Select Sum(Net_a_payer) From Pieces where Tier_id = New.Tier_id AND Mov = 1 AND Piece <> "CC" AND Piece <> "FP" AND Piece <> "BC"),0)
              WHERE id = New.Tier_id; 
             UPDATE Tiers
               SET Regler = IFNULL((SELECT SUM(Montant) FROM Tresories WHERE Tier_id = New.Tier_id AND Mov = 1),0)
@@ -1213,7 +1213,7 @@ class SqlLiteDatabaseHelper {
               AND OLD.Mov = NEW.Mov  AND (OLD.Piece_id = NEW.Piece_id OR OLD.Piece_id  IS NULL) 
         BEGIN         
             UPDATE Tiers
-               SET Chiffre_affaires = IFNULL((Select Sum(Net_a_payer) From Pieces where Tier_id = OLD.Tier_id AND Mov = 1 AND Piece <> "CC"),0)
+               SET Chiffre_affaires = IFNULL((Select Sum(Net_a_payer) From Pieces where Tier_id = OLD.Tier_id AND Mov = 1 AND Piece <> "CC" AND Piece <> "FP" AND Piece <> "BC"),0)
             WHERE id = OLD.Tier_id; 
             UPDATE Tiers
               SET Regler = IFNULL((SELECT SUM(Montant) FROM Tresories WHERE Tier_id = OLD.Tier_id AND Mov = 1),0)
@@ -1223,7 +1223,7 @@ class SqlLiteDatabaseHelper {
             WHERE id = OLD.Tier_id;
                  
             UPDATE Tiers
-               SET Chiffre_affaires = IFNULL((Select Sum(Net_a_payer) From Pieces where Tier_id = New.Tier_id AND Mov = 1 AND Piece <> "CC"),0)
+               SET Chiffre_affaires = IFNULL((Select Sum(Net_a_payer) From Pieces where Tier_id = New.Tier_id AND Mov = 1 AND Piece <> "CC" AND Piece <> "FP" AND Piece <> "BC"),0)
             WHERE id = New.Tier_id; 
             UPDATE Tiers
               SET Regler = IFNULL((SELECT SUM(Montant) FROM Tresories WHERE Tier_id = New.Tier_id AND Mov = 1),0)
@@ -1273,7 +1273,7 @@ class SqlLiteDatabaseHelper {
            DELETE FROM ReglementTresorie WHERE Tresorie_id = OLD.id ;
            
            UPDATE Tiers
-               SET Chiffre_affaires = IFNULL((Select Sum(Net_a_payer) From Pieces where Tier_id = OLD.Tier_id AND Mov = 1 AND Piece <> "CC"),0)
+               SET Chiffre_affaires = IFNULL((Select Sum(Net_a_payer) From Pieces where Tier_id = OLD.Tier_id AND Mov = 1 AND Piece <> "CC" AND Piece <> "FP" AND Piece <> "BC"),0)
            WHERE id = OLD.Tier_id; 
            
           UPDATE Tiers
@@ -1332,14 +1332,6 @@ class SqlLiteDatabaseHelper {
               SET Mov = OLD.Old_Mov 
            WHERE Piece_id = OLD.Old_Piece_id AND Mov <> -2;
            
-        END;
-      ''');
-
-    await db.execute('''CREATE TRIGGER update_reglemntTresorie_tresorie1 
-        BEFORE DELETE ON Transformers 
-        FOR EACH ROW 
-        WHEN (OLD.Type_piece <> 'AC' AND OLD.Type_piece <> 'RC' AND OLD.Type_piece <> 'AF' AND OLD.Type_piece <> 'RF')
-        BEGIN 
            UPDATE Tresories 
               SET Piece_id = OLD.Old_Piece_id 
            WHERE Piece_id = OLD.New_Piece_id ;
@@ -1347,9 +1339,39 @@ class SqlLiteDatabaseHelper {
            UPDATE ReglementTresorie 
               SET Piece_id = OLD.Old_Piece_id 
            WHERE Piece_id = OLD.New_Piece_id ;
-                   
+              
+           UPDATE Pieces 
+              SET Regler = IFNULL((SELECT SUM(Regler) FROM ReglementTresorie WHERE Piece_id = OLD.Old_Piece_id),0)
+           WHERE id = OLD.Old_Piece_id ;
+
+           UPDATE Pieces
+              SET  Reste = Net_a_payer - Regler 
+           WHERE id = OLD.Old_Piece_id ;
         END;
       ''');
+
+    // await db.execute('''CREATE TRIGGER update_reglemntTresorie_tresorie1
+    //     BEFORE DELETE ON Transformers
+    //     FOR EACH ROW
+    //     WHEN (OLD.Type_piece <> 'AC' AND OLD.Type_piece <> 'RC' AND OLD.Type_piece <> 'AF' AND OLD.Type_piece <> 'RF')
+    //     BEGIN
+    //        UPDATE Tresories
+    //           SET Piece_id = OLD.Old_Piece_id
+    //        WHERE Piece_id = OLD.New_Piece_id ;
+    //
+    //        UPDATE ReglementTresorie
+    //           SET Piece_id = OLD.Old_Piece_id
+    //        WHERE Piece_id = OLD.New_Piece_id ;
+    //
+    //        UPDATE Pieces
+    //           SET Regler = IFNULL((SELECT SUM(Regler) FROM ReglementTresorie WHERE Piece_id = OLD.Old_Piece_id),0)
+    //        WHERE id = OLD.Old_Piece_id ;
+    //
+    //        UPDATE Pieces
+    //           SET  Reste = Net_a_payer - Regler
+    //        WHERE id = OLD.Old_Piece_id ;
+    //     END;
+    //   ''');
   }
 
 //*****************************************************************************************************************************************
@@ -1425,17 +1447,6 @@ class SqlLiteDatabaseHelper {
 
     batch.rawInsert(
         "INSERT INTO MyParams VALUES(1,2,0,0,1,1,'80',1,'9:01',0,0,'United States of America','USD' , 'demo' , 0 , 'mensuel')");
-
-    Uint8List image = await Helpers.getDefaultImageUint8List(from: "tier");
-    Tiers tier0 = new Tiers(image, "Client 00", null, 0, 0, 1, "", "","", "", "",
-        "", "", "", "", "", 0.0, 0, 0, false);
-    tier0.clientFour = 0;
-    batch.insert(DbTablesNames.tiers, tier0.toMap());
-
-    Tiers tier2 = new Tiers(image, "Prov 00", null, 0, 0, 1, "", "","", "", "", "",
-        "", "", "", "", 0.0, 0, 0, false);
-    tier2.clientFour = 2;
-    batch.insert(DbTablesNames.tiers, tier2.toMap());
 
     await batch.commit();
   }

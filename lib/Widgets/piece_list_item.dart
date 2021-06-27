@@ -386,12 +386,12 @@ class _PieceListItemState extends State<PieceListItem> {
         color: Colors.red,
         size: 26,
       ),
-      showCloseIcon: (widget.piece.piece != PieceType.devis),
-      btnCancelText: (widget.piece.piece != PieceType.devis)
+      showCloseIcon: (widget.piece.piece != PieceType.devis && widget.piece.piece != PieceType.bonCommande),
+      btnCancelText: (widget.piece.piece != PieceType.devis && widget.piece.piece != PieceType.bonCommande)
           ? S.current.sans_tresorie
           : S.current.non,
       btnCancelOnPress: () async {
-        if (widget.piece.piece != PieceType.devis) {
+        if (widget.piece.piece != PieceType.devis && widget.piece.piece != PieceType.bonCommande) {
           int res = await _queryCtr.removeItemFromTable(
               DbTablesNames.pieces, widget.piece);
           var message = "";
@@ -409,11 +409,11 @@ class _PieceListItemState extends State<PieceListItem> {
           }
         }
       },
-      btnOkText: (widget.piece.piece != PieceType.devis)
+      btnOkText: (widget.piece.piece != PieceType.devis && widget.piece.piece != PieceType.bonCommande)
           ? S.current.avec_tresorie
           : S.current.oui,
       btnOkOnPress: () async {
-        if (widget.piece.piece != PieceType.devis) {
+        if (widget.piece.piece != PieceType.devis && widget.piece.piece != PieceType.bonCommande ) {
           int res = await _queryCtr.removeItemWithForeignKey(
               DbTablesNames.tresorie, widget.piece.id, "Piece_id");
           var message = "";

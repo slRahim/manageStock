@@ -510,7 +510,7 @@ class QueryCtr {
     double sum = 0;
     for (int i = 0; i < list.length; i++) {
       var res1 = await dbClient.rawQuery(
-          "Select Sum(Regler) From ReglementTresorie Where Tresorie_id = ${list[i].id}");
+          "Select Sum(Regler) From ReglementTresorie Where Tresorie_id = ${list[i].id} AND Piece_id = 0");
       sum = sum +
           ((res1.first["Sum(Regler)"] != null) ? res1.first["Sum(Regler)"] : 0);
     }
