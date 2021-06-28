@@ -760,15 +760,15 @@ class _AddTresoriePageState extends State<AddTresoriePage>
                         _selectedCompte = value;
                       });
                     },
-                    onAddPressed: () async {
-                      AwesomeDialog(
-                        context: context,
-                        dialogType: DialogType.NO_HEADER,
-                        animType: AnimType.BOTTOMSLIDE,
-                        title: S.current.supp,
-                        body: addCompte(),
-                      )..show().then((value) => setState(() {}));
-                    },
+                    // onAddPressed: () async {
+                    //   AwesomeDialog(
+                    //     context: context,
+                    //     dialogType: DialogType.NO_HEADER,
+                    //     animType: AnimType.BOTTOMSLIDE,
+                    //     title: S.current.supp,
+                    //     body: addCompte(),
+                    //   )..show().then((value) => setState(() {}));
+                    // },
                   ),
                   TextFormField(
                     enabled: editMode,

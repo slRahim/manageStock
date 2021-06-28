@@ -1411,14 +1411,7 @@ class SqlLiteDatabaseHelper {
         'INSERT INTO TresorieCategories(Libelle) VALUES("Decaissement")');
 
     batch.rawInsert(
-        'INSERT INTO CompteTresorie(Num_compte,Nom_compte,Solde_depart,Solde) VALUES("00001","Caisse",0.0,0.0)');
-
-    batch.rawInsert(
         'INSERT INTO ChargeTresorie(Libelle) VALUES("No Categorie")');
-    batch
-        .rawInsert('INSERT INTO ChargeTresorie(Libelle) VALUES("Electricité")');
-    batch.rawInsert('INSERT INTO ChargeTresorie(Libelle) VALUES("Loyer")');
-    batch.rawInsert('INSERT INTO ChargeTresorie(Libelle) VALUES("Salaire")');
 
     batch.rawInsert(
         'INSERT INTO FormatPiece(Format , Piece , Current_index,Year) VALUES("XXXX/YYYY"  , "FP" , 0 , ${DateTime.now().year.toString()})');

@@ -333,7 +333,7 @@ class QueryCtr {
     var dbClient = await _databaseHelper.db;
     String query =
         'SELECT Journaux.*, Articles.BytesImageString ,Articles.Designation , Articles.Ref ,Articles.CodeBar ,Articles.Id_Famille ,Articles.Id_Marque'
-                ',Articles.Qte as qte_article , Articles.Cmd_client , Articles.PrixVente1 , Articles.PrixVente2 , Articles.PrixVente3 FROM Journaux JOIN Articles ON Journaux.Article_id = Articles.id AND Journaux.Mov <> -2 AND Journaux.Piece_id=' +
+                ',Articles.Qte as qte_article , Articles.Cmd_client , Articles.PrixVente1 , Articles.PrixVente2 , Articles.PrixVente3 , Articles.Stockable FROM Journaux JOIN Articles ON Journaux.Article_id = Articles.id AND Journaux.Mov <> -2 AND Journaux.Piece_id=' +
             piece.id.toString();
 
     if (local && filters != null) {
@@ -378,6 +378,7 @@ class QueryCtr {
       }
       list.add(article);
     }
+
     return list;
   }
 
@@ -390,8 +391,8 @@ class QueryCtr {
     List<Piece> pieces = new List<Piece>();
 
     var res = await dbClient.query(DbTablesNames.pieces,
-        where: "Tier_id = ? AND Mov = 1 AND Etat = 0",
-        whereArgs: [filters["idTier"].id],
+        where: "Tier_id = ? AND Mov = 1 AND Etat = 0 AND Piece like ?",
+        whereArgs: [filters["idTier"].id , '${filters["pieceType"]}'],
         limit: limit,
         offset: offset);
 

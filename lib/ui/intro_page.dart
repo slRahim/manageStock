@@ -17,6 +17,8 @@ import 'package:gestmob/Helpers/curency/utils/utils.dart';
 import 'package:gestmob/Widgets/utils.dart' as utils;
 import 'package:gestmob/generated/l10n.dart';
 import 'package:gestmob/models/ArticleTva.dart';
+import 'package:gestmob/models/ChargeTresorie.dart';
+import 'package:gestmob/models/CompteTresorie.dart';
 import 'package:gestmob/models/MyParams.dart';
 import 'package:gestmob/models/Profile.dart';
 import 'package:gestmob/services/push_notifications.dart';
@@ -939,18 +941,41 @@ class _IntroPageState extends State<IntroPage> {
         "", "", "", "", 0.0, 0, 0, false);
     tier2.clientFour = 2;
 
+    List<ChargeTresorie> charges = new List<ChargeTresorie>();
+    List<CompteTresorie> comptes = new List<CompteTresorie> ();
+
     switch (_selectedLanguage) {
+      case("English (ENG)"):
+        charges.add(new ChargeTresorie(null,"Electricity"));
+        charges.add(new ChargeTresorie(null,"Rent"));
+        charges.add(new ChargeTresorie(null,"Salary"));
+        comptes.add(new CompteTresorie(null, "00001", "Till", "0000", 0.0, 0.0));
+        break;
       case ("Français (FR)"):
+        charges.add(new ChargeTresorie(null,"Electricité"));
+        charges.add(new ChargeTresorie(null,"Loyer"));
+        charges.add(new ChargeTresorie(null,"Salaire"));
+        comptes.add(new CompteTresorie(null, "00001", "Caisse", "0000", 0.0, 0.0));
         tier0.raisonSociale = "Client 00";
         tier2.raisonSociale = "Four 00";
         break;
 
       case ("عربي (AR)"):
+        charges.add(new ChargeTresorie(null,"الكهرباء"));
+        charges.add(new ChargeTresorie(null,"الإيجار"));
+        charges.add(new ChargeTresorie(null,"المرتب"));
+        comptes.add(new CompteTresorie(null, "00001", "الصندوق", "0000", 0.0, 0.0));
         tier0.raisonSociale = "الزبون 00";
         tier2.raisonSociale = "المورد 00";
         break;
     }
 
+    charges.forEach((element) async {
+      await _queryCtr.addItemToTable(DbTablesNames.chargeTresorie, element);
+    });
+    comptes.forEach((element) async{
+      await _queryCtr.addItemToTable(DbTablesNames.compteTresorie, element);
+    });
     await _queryCtr.addItemToTable(DbTablesNames.tiers, tier0);
     await _queryCtr.addItemToTable(DbTablesNames.tiers, tier2);
   }

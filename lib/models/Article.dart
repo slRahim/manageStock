@@ -123,7 +123,7 @@ class Article {
     this._prixVente1 = obj["PrixVente1"];
     this._prixVente2 = obj["PrixVente2"];
     this._prixVente3 = obj["PrixVente3"];
-    this.stockable = obj["Stockable"];
+    this.stockable = obj["Stockable"] == 1 ? true : false;
   }
 
   //convert an object to a map for persistance
