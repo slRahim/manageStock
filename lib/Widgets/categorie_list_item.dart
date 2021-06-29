@@ -9,6 +9,7 @@ import 'package:gestmob/models/ArticleMarque.dart';
 import 'package:gestmob/models/ArticleTva.dart';
 import 'package:gestmob/models/ChargeTresorie.dart';
 import 'package:gestmob/models/TiersFamille.dart';
+import 'package:gestmob/models/CompteTresorie.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class CategoryListItem extends StatefulWidget {
@@ -25,6 +26,9 @@ class _CategoryListItemState extends State<CategoryListItem> {
   final QueryCtr _queryCtr = new QueryCtr();
   bool _visible = true;
   TextEditingController _libelleControl = new TextEditingController();
+  TextEditingController _numCompteControl = new TextEditingController();
+  TextEditingController _codeCompteControl = new TextEditingController();
+  TextEditingController _soldeInitControl = new TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -70,6 +74,56 @@ class _CategoryListItemState extends State<CategoryListItem> {
                     color: Colors.red,
                   ),
                 )),
+          ),
+        ),
+      );
+    }
+    if (widget.item is CompteTresorie) {
+      return Visibility(
+        visible: _visible,
+        child: Card(
+          elevation: 1,
+          color: Theme.of(context).selectedRowColor,
+          child: Container(
+            decoration: BoxDecoration(
+                color: Theme.of(context).selectedRowColor,
+                borderRadius: BorderRadius.circular(5)),
+            padding: EdgeInsets.all(2),
+            child: ListTile(
+                title: Text(
+                  "${widget.item.nomCompte} (${widget.item.numCompte})",
+                  style: GoogleFonts.lato(
+                      fontSize: 16, fontWeight: FontWeight.bold),
+                ),
+                leading: IconButton(
+                  onPressed: () {
+                    setState(() {
+                      _libelleControl.text = widget.item.nomCompte;
+                      _codeCompteControl.text = widget.item.codeCompte ;
+                      _numCompteControl.text = widget.item.numCompte ;
+                      _soldeInitControl.text = widget.item.soldeDepart.toString() ;
+                    });
+                    AwesomeDialog(
+                      context: context,
+                      dialogType: DialogType.NO_HEADER,
+                      animType: AnimType.BOTTOMSLIDE,
+                      title: S.current.supp,
+                      body: editDialogue(),
+                    )..show();
+                  },
+                  icon: Icon(
+                    Icons.edit,
+                    color: Colors.blue,
+                  ),
+                ),
+                trailing:(widget.item.id != 1)? IconButton(
+                  onPressed: () => dellDialog(context),
+                  icon: Icon(
+                    Icons.delete,
+                    color: Colors.red,
+                  ),
+                ) : null
+            ),
           ),
         ),
       );
@@ -143,36 +197,139 @@ class _CategoryListItemState extends State<CategoryListItem> {
                     EdgeInsets.only(left: 5, right: 5, bottom: 20, top: 20),
                 child: Form(
                   key: _formKey,
-                  child: TextFormField(
-                    controller: _libelleControl,
-                    keyboardType: (widget.item is ArticleTva)
-                        ? TextInputType.number
-                        : TextInputType.text,
-                    validator: (value) {
-                      if (value.isEmpty) {
-                        return S.current.msg_champ_oblg;
-                      }
-                      return null;
-                    },
-                    decoration: InputDecoration(
-                      prefixIcon: Icon(
-                        Icons.view_agenda,
-                        color: Colors.blue,
+                  child: Column(
+                    children: [
+                      TextFormField(
+                        controller: _libelleControl,
+                        keyboardType: (widget.item is ArticleTva)
+                            ? TextInputType.number
+                            : TextInputType.text,
+                        validator: (value) {
+                          if (value.isEmpty) {
+                            return S.current.msg_champ_oblg;
+                          }
+                          return null;
+                        },
+                        decoration: InputDecoration(
+                          prefixIcon: Icon(
+                            Icons.view_agenda,
+                            color: Colors.blue,
+                          ),
+                          focusedBorder: OutlineInputBorder(
+                              borderSide: BorderSide(color: Colors.blue),
+                              borderRadius: BorderRadius.circular(20)),
+                          contentPadding: EdgeInsets.only(left: 10),
+                          labelStyle: GoogleFonts.lato(
+                            textStyle:
+                                TextStyle(color: Theme.of(context).hintColor),
+                          ),
+                          enabledBorder: OutlineInputBorder(
+                            gapPadding: 3.3,
+                            borderRadius: BorderRadius.circular(20),
+                            borderSide: BorderSide(color: Colors.blue),
+                          ),
+                        ),
                       ),
-                      focusedBorder: OutlineInputBorder(
-                          borderSide: BorderSide(color: Colors.blue),
-                          borderRadius: BorderRadius.circular(20)),
-                      contentPadding: EdgeInsets.only(left: 10),
-                      labelStyle: GoogleFonts.lato(
-                        textStyle:
-                            TextStyle(color: Theme.of(context).hintColor),
+                      SizedBox(height: 10,),
+                      Visibility(
+                        visible: widget.item is CompteTresorie,
+                        child: TextFormField(
+                          controller: _numCompteControl,
+                          keyboardType: TextInputType.text,
+                          // validator: (value) {
+                          //   if (value.isEmpty) {
+                          //     return S.current.msg_champ_oblg;
+                          //   }
+                          //   return null;
+                          // },
+                          decoration: InputDecoration(
+                            prefixIcon: Icon(
+                              Icons.view_agenda,
+                              color: Colors.blue,
+                            ),
+                            focusedBorder: OutlineInputBorder(
+                                borderSide: BorderSide(color: Colors.blue),
+                                borderRadius: BorderRadius.circular(20)),
+                            contentPadding: EdgeInsets.only(left: 10),
+                            labelStyle: GoogleFonts.lato(
+                              textStyle:
+                              TextStyle(color: Theme.of(context).hintColor),
+                            ),
+                            enabledBorder: OutlineInputBorder(
+                              gapPadding: 3.3,
+                              borderRadius: BorderRadius.circular(20),
+                              borderSide: BorderSide(color: Colors.blue),
+                            ),
+                          ),
+                        ),
                       ),
-                      enabledBorder: OutlineInputBorder(
-                        gapPadding: 3.3,
-                        borderRadius: BorderRadius.circular(20),
-                        borderSide: BorderSide(color: Colors.blue),
+                      SizedBox(height: 10,),
+                      Visibility(
+                        visible: widget.item is CompteTresorie,
+                        child: TextFormField(
+                          controller: _codeCompteControl,
+                          keyboardType: TextInputType.text,
+                          // validator: (value) {
+                          //   if (value.isEmpty) {
+                          //     return S.current.msg_champ_oblg;
+                          //   }
+                          //   return null;
+                          // },
+                          decoration: InputDecoration(
+                            prefixIcon: Icon(
+                              Icons.view_agenda,
+                              color: Colors.blue,
+                            ),
+                            focusedBorder: OutlineInputBorder(
+                                borderSide: BorderSide(color: Colors.blue),
+                                borderRadius: BorderRadius.circular(20)),
+                            contentPadding: EdgeInsets.only(left: 10),
+                            labelStyle: GoogleFonts.lato(
+                              textStyle:
+                              TextStyle(color: Theme.of(context).hintColor),
+                            ),
+                            enabledBorder: OutlineInputBorder(
+                              gapPadding: 3.3,
+                              borderRadius: BorderRadius.circular(20),
+                              borderSide: BorderSide(color: Colors.blue),
+                            ),
+                          ),
+                        ),
                       ),
-                    ),
+                      SizedBox(height: 10,),
+                      Visibility(
+                        visible: widget.item is CompteTresorie,
+                        child: TextFormField(
+                          controller: _soldeInitControl,
+                          keyboardType: TextInputType.number,
+                          validator: (value) {
+                            if (value.isEmpty) {
+                              return S.current.msg_champ_oblg;
+                            }
+                            return null;
+                          },
+                          decoration: InputDecoration(
+                            prefixIcon: Icon(
+                              Icons.view_agenda,
+                              color: Colors.blue,
+                            ),
+                            focusedBorder: OutlineInputBorder(
+                                borderSide: BorderSide(color: Colors.blue),
+                                borderRadius: BorderRadius.circular(20)),
+                            contentPadding: EdgeInsets.only(left: 10),
+                            labelStyle: GoogleFonts.lato(
+                              textStyle:
+                              TextStyle(color: Theme.of(context).hintColor),
+                            ),
+                            enabledBorder: OutlineInputBorder(
+                              gapPadding: 3.3,
+                              borderRadius: BorderRadius.circular(20),
+                              borderSide: BorderSide(color: Colors.blue),
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
                   ),
                 ),
               ),
@@ -233,9 +390,17 @@ class _CategoryListItemState extends State<CategoryListItem> {
             DbTablesNames.chargeTresorie, widget.item);
       } else if (widget.item is ArticleTva) {
         widget.item.tva = double.parse(_libelleControl.text.trim());
-        print(widget.item.tva);
         res = await _queryCtr.updateItemInDb(
             DbTablesNames.articlesTva, widget.item);
+
+      }else if (widget.item is CompteTresorie){
+        widget.item.nomCompte = _libelleControl.text.trim();
+        widget.item.numCompte = _numCompteControl.text.trim();
+        widget.item.codeCompte = _codeCompteControl.text.trim();
+        widget.item.soldeDepart = double.parse(_soldeInitControl.text.trim());
+
+        res = await _queryCtr.updateItemInDb(
+            DbTablesNames.compteTresorie, widget.item);
       }
     }
 
@@ -274,6 +439,9 @@ class _CategoryListItemState extends State<CategoryListItem> {
           res = await _queryCtr.removeItemFromTable(
               DbTablesNames.chargeTresorie, widget.item);
         } else if (widget.item is ArticleTva) {
+          res = await _queryCtr.removeItemFromTable(
+              DbTablesNames.articlesTva, widget.item);
+        }else if (widget.item is CompteTresorie){
           res = await _queryCtr.removeItemFromTable(
               DbTablesNames.articlesTva, widget.item);
         }

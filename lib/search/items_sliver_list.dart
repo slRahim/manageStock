@@ -16,6 +16,7 @@ import 'package:gestmob/models/Piece.dart';
 import 'package:gestmob/models/Tiers.dart';
 import 'package:gestmob/models/TiersFamille.dart';
 import 'package:gestmob/models/Tresorie.dart';
+import 'package:gestmob/models/CompteTresorie.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 
 import 'sliver_list_data_source.dart';
@@ -118,7 +119,8 @@ class _ItemsSliverListState extends State<ItemsSliverList> {
         item is ArticleMarque ||
         item is TiersFamille ||
         item is ChargeTresorie ||
-        item is ArticleTva) {
+        item is ArticleTva ||
+    item is CompteTresorie) {
       return CategoryListItem(
         item: item,
         dataSource: widget.dataSource,

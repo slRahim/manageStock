@@ -15,6 +15,7 @@ import 'package:gestmob/Helpers/QueryCtr.dart';
 import 'package:gestmob/models/TiersFamille.dart';
 import 'package:gestmob/models/ChargeTresorie.dart';
 import 'package:awesome_dialog/awesome_dialog.dart';
+import 'package:gestmob/models/CompteTresorie.dart';
 
 class FamilleMarqueFragment extends StatefulWidget {
   final QueryCtr _queryCtr = QueryCtr();
@@ -34,6 +35,7 @@ class _FamilleMarqueFragmentState extends State<FamilleMarqueFragment> {
   SliverListDataSource _dataSourceMarqueArticle;
   SliverListDataSource _dataSourceTvaArticle;
   SliverListDataSource _dataSourceFamilleTiers;
+  SliverListDataSource _dataSourceCompte;
   SliverListDataSource _dataSourceCharge;
 
   TextEditingController _libelleFamilleControl = new TextEditingController();
@@ -61,8 +63,10 @@ class _FamilleMarqueFragmentState extends State<FamilleMarqueFragment> {
         await SliverListDataSource(ItemsListTypes.tvaArticleList, null);
     _dataSourceFamilleTiers =
         await SliverListDataSource(ItemsListTypes.familleTiersList, null);
+    _dataSourceCompte = await SliverListDataSource(ItemsListTypes.caisseList, null);
     _dataSourceCharge =
         await SliverListDataSource(ItemsListTypes.chargeList, null);
+
   }
 
   @override
@@ -71,7 +75,7 @@ class _FamilleMarqueFragmentState extends State<FamilleMarqueFragment> {
       return Scaffold(body: Helpers.buildLoading());
     }
     return DefaultTabController(
-      length: 5,
+      length: 6,
       child: Scaffold(
         backgroundColor: Theme.of(context).backgroundColor,
         appBar: SearchBar(
@@ -94,6 +98,9 @@ class _FamilleMarqueFragmentState extends State<FamilleMarqueFragment> {
                 _dataSourceFamilleTiers.updateSearchTerm(search);
                 break;
               case 4:
+                _dataSourceCompte.updateSearchTerm(search);
+                break;
+              case 5:
                 _dataSourceCharge.updateSearchTerm(search);
                 break;
             }
@@ -120,6 +127,9 @@ class _FamilleMarqueFragmentState extends State<FamilleMarqueFragment> {
                   _tabTitle = S.current.famille_tiers;
                   break;
                 case 4:
+                  _tabTitle = S.current.caisse_titre;
+                  break;
+                case 5:
                   _tabTitle = S.current.cat_charge;
                   break;
               }
@@ -154,6 +164,13 @@ class _FamilleMarqueFragmentState extends State<FamilleMarqueFragment> {
                 Icon(Icons.people),
               ],
             )),
+            Tab(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Icon(MdiIcons.cashRegister),
+                  ],
+                )),
             Tab(
                 child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
@@ -208,6 +225,15 @@ class _FamilleMarqueFragmentState extends State<FamilleMarqueFragment> {
                   dialogType: DialogType.NO_HEADER,
                   animType: AnimType.BOTTOMSLIDE,
                   title: S.current.supp,
+                  body: addCompteDialog(),
+                )..show();
+                break;
+              case 5:
+                AwesomeDialog(
+                  context: context,
+                  dialogType: DialogType.NO_HEADER,
+                  animType: AnimType.BOTTOMSLIDE,
+                  title: S.current.supp,
                   body: addChargeDialog(),
                 )..show();
                 break;
@@ -226,7 +252,8 @@ class _FamilleMarqueFragmentState extends State<FamilleMarqueFragment> {
               ItemsSliverList(dataSource: _dataSourceMarqueArticle),
               ItemsSliverList(dataSource: _dataSourceTvaArticle),
               ItemsSliverList(dataSource: _dataSourceFamilleTiers),
-              ItemsSliverList(dataSource: _dataSourceCharge)
+              ItemsSliverList(dataSource: _dataSourceCompte),
+              ItemsSliverList(dataSource: _dataSourceCharge),
             ],
           ),
         ),
@@ -334,7 +361,7 @@ class _FamilleMarqueFragmentState extends State<FamilleMarqueFragment> {
     var allFamily = await widget._queryCtr.getAllArticleFamilles();
     int familleIndex = allFamily.indexOf(famille);
     if (familleIndex > -1) {
-      Helpers.showToast("Élément existe déja");
+      Helpers.showToast(S.current.msg_existe_deja);
     } else {
       int id = await widget._queryCtr
           .addItemToTable(DbTablesNames.articlesFamilles, famille);
@@ -448,7 +475,7 @@ class _FamilleMarqueFragmentState extends State<FamilleMarqueFragment> {
     var marques = await widget._queryCtr.getAllArticleMarques();
     int marqueIndex = marques.indexOf(marque);
     if (marqueIndex > -1) {
-      Helpers.showToast("Élément existe déja");
+      Helpers.showToast(S.current.msg_existe_deja);
     } else {
       int id = await widget._queryCtr
           .addItemToTable(DbTablesNames.articlesMarques, marque);
@@ -550,7 +577,7 @@ class _FamilleMarqueFragmentState extends State<FamilleMarqueFragment> {
     int tvaIndex = tvas.indexOf(tvaItem);
 
     if (tvaIndex > -1) {
-      Helpers.showToast("Élément existe déja");
+      Helpers.showToast(S.current.msg_existe_deja);
     } else {
       int id = await widget._queryCtr
           .addItemToTable(DbTablesNames.articlesTva, new ArticleTva(tvaDouble));
@@ -651,12 +678,236 @@ class _FamilleMarqueFragmentState extends State<FamilleMarqueFragment> {
     var familleTiers = await widget._queryCtr.getAllTierFamilles();
     int familleIndex = familleTiers.indexOf(famille);
     if (familleIndex > -1) {
-      Helpers.showToast("Élément existe déja");
+      Helpers.showToast(S.current.msg_existe_deja);
     } else {
       int id = await widget._queryCtr
           .addItemToTable(DbTablesNames.tiersFamille, famille);
       if (id > 0) {
         _dataSourceFamilleTiers.refresh();
+      }
+    }
+  }
+
+//  *********************************************************************************************************************************************************************
+//*****************************************************************************add/edit compte tresorerie*******************************************************************
+  Widget addCompteDialog() {
+    TextEditingController _libelleCompteControl = new TextEditingController();
+    TextEditingController _numCompteControl = new TextEditingController();
+    TextEditingController _codeCompteControl = new TextEditingController();
+    TextEditingController _soldeCompteControl = new TextEditingController();
+    CompteTresorie _compteTresorie = new CompteTresorie.init();
+    ScrollController _controller = new ScrollController();
+    var _formKey = GlobalKey<FormState>();
+    return StatefulBuilder(builder: (context, StateSetter setState) {
+      return Builder(
+          builder: (context) => SingleChildScrollView(
+            padding: EdgeInsets.all(10),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                Text(
+                  "${S.current.ajouter} ${S.current.compte}",
+                  textAlign: TextAlign.center,
+                  style: GoogleFonts.lato(
+                      textStyle: TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.bold,
+                      )),
+                ),
+                Padding(
+                  padding: EdgeInsets.only(
+                      left: 5, right: 5, bottom: 20, top: 20),
+                  child: Form(
+                    key: _formKey,
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        TextFormField(
+                          controller: _numCompteControl,
+                          keyboardType: TextInputType.text,
+                          // validator: (value) {
+                          //   if (value.isEmpty) {
+                          //     return S.current.msg_champ_oblg;
+                          //   }
+                          //   return null;
+                          // },
+                          decoration: InputDecoration(
+                            prefixIcon: Icon(
+                              Icons.view_agenda,
+                              color: Colors.blue,
+                            ),
+                            focusedBorder: OutlineInputBorder(
+                                borderSide: BorderSide(color: Colors.blue),
+                                borderRadius: BorderRadius.circular(20)),
+                            contentPadding: EdgeInsets.only(left: 10),
+                            labelText: "N°:",
+                            labelStyle: GoogleFonts.lato(),
+                            enabledBorder: OutlineInputBorder(
+                              gapPadding: 3.3,
+                              borderRadius: BorderRadius.circular(20),
+                              borderSide: BorderSide(color: Colors.blue),
+                            ),
+                          ),
+                        ),
+                        SizedBox(
+                          height: 10,
+                        ),
+                        TextFormField(
+                          controller: _libelleCompteControl,
+                          keyboardType: TextInputType.text,
+                          validator: (value) {
+                            if (value.isEmpty) {
+                              return S.current.msg_champ_oblg;
+                            }
+                            return null;
+                          },
+                          decoration: InputDecoration(
+                            prefixIcon: Icon(
+                              Icons.description,
+                              color: Colors.blue,
+                            ),
+                            focusedBorder: OutlineInputBorder(
+                                borderSide: BorderSide(color: Colors.blue),
+                                borderRadius: BorderRadius.circular(20)),
+                            contentPadding: EdgeInsets.only(left: 10),
+                            labelText: S.current.designation,
+                            labelStyle: GoogleFonts.lato(),
+                            enabledBorder: OutlineInputBorder(
+                              gapPadding: 3.3,
+                              borderRadius: BorderRadius.circular(20),
+                              borderSide: BorderSide(color: Colors.blue),
+                            ),
+                          ),
+                        ),
+                        SizedBox(
+                          height: 10,
+                        ),
+                        TextFormField(
+                          controller: _codeCompteControl,
+                          keyboardType: TextInputType.text,
+                          // validator: (value) {
+                          //   if (value.isEmpty) {
+                          //     return S.current.msg_champ_oblg;
+                          //   }
+                          //   return null;
+                          // },
+                          decoration: InputDecoration(
+                            prefixIcon: Icon(
+                              Icons.vpn_key,
+                              color: Colors.blue,
+                            ),
+                            focusedBorder: OutlineInputBorder(
+                                borderSide: BorderSide(color: Colors.blue),
+                                borderRadius: BorderRadius.circular(20)),
+                            contentPadding: EdgeInsets.only(left: 10),
+                            labelText: S.current.code_pin1,
+                            labelStyle: GoogleFonts.lato(),
+                            enabledBorder: OutlineInputBorder(
+                              gapPadding: 3.3,
+                              borderRadius: BorderRadius.circular(20),
+                              borderSide: BorderSide(color: Colors.blue),
+                            ),
+                          ),
+                        ),
+                        SizedBox(
+                          height: 10,
+                        ),
+                        TextFormField(
+                          controller: _soldeCompteControl,
+                          keyboardType: TextInputType.number,
+                          validator: (value) {
+                            if (value.isEmpty) {
+                              return S.current.msg_champ_oblg;
+                            }
+                            return null;
+                          },
+                          decoration: InputDecoration(
+                            prefixIcon: Icon(
+                              Icons.monetization_on,
+                              color: Colors.blue,
+                            ),
+                            focusedBorder: OutlineInputBorder(
+                                borderSide: BorderSide(color: Colors.blue),
+                                borderRadius: BorderRadius.circular(20)),
+                            contentPadding: EdgeInsets.only(left: 10),
+                            labelText: S.current.solde_depart,
+                            labelStyle: GoogleFonts.lato(),
+                            enabledBorder: OutlineInputBorder(
+                              gapPadding: 3.3,
+                              borderRadius: BorderRadius.circular(20),
+                              borderSide: BorderSide(color: Colors.blue),
+                            ),
+                          ),
+                        ),
+                        SizedBox(
+                          height: 20,
+                        ),
+                        SizedBox(
+                          width: 150.0,
+                          child: Padding(
+                            padding: EdgeInsets.only(right: 0, left: 0),
+                            child: RaisedButton(
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(18.0),
+                              ),
+                              onPressed: () async {
+                                if (_formKey.currentState.validate()) {
+                                  setState(() {
+                                    _compteTresorie.numCompte =
+                                        _numCompteControl.text.trim();
+                                    _numCompteControl.text = "";
+                                    _compteTresorie.nomCompte =
+                                        _libelleCompteControl.text.trim();
+                                    _libelleCompteControl.text = "";
+                                    _compteTresorie.codeCompte =
+                                        _codeCompteControl.text.trim();
+                                    _codeCompteControl.text = "";
+                                    _compteTresorie.soldeDepart =
+                                        double.parse(_soldeCompteControl
+                                            .text
+                                            .trim());
+                                    _soldeCompteControl.text = "";
+                                    _compteTresorie.solde = 0.0;
+                                  });
+                                  await addCompteIfNotExist(
+                                      _compteTresorie);
+                                  Navigator.pop(context);
+                                }
+                              },
+                              child: Text(
+                                "+ ${S.current.ajouter}",
+                                style: GoogleFonts.lato(
+                                    textStyle: TextStyle(
+                                        color: Colors.white,
+                                        fontSize: 15,
+                                        fontWeight: FontWeight.bold)),
+                              ),
+                              color: Colors.green,
+                            ),
+                          ),
+                        )
+                      ],
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ));
+    });
+  }
+
+  Future<void> addCompteIfNotExist(CompteTresorie item) async {
+    var comptes = await widget._queryCtr.getAllCompteTresorie();
+    int compteIndex = comptes.indexOf(item);
+    if (compteIndex > -1) {
+      Helpers.showToast(S.current.msg_existe_deja);
+    } else {
+      int id = await widget._queryCtr
+          .addItemToTable(DbTablesNames.compteTresorie, item);
+      if (id > 0) {
+        _dataSourceCompte.refresh();
       }
     }
   }
@@ -760,7 +1011,7 @@ class _FamilleMarqueFragmentState extends State<FamilleMarqueFragment> {
     var charges = await widget._queryCtr.getAllChargeTresorie();
     int chargeIndex = charges.indexOf(item);
     if (chargeIndex > -1) {
-      Helpers.showToast("Élément existe déja");
+      Helpers.showToast(S.current.msg_existe_deja);
     } else {
       int id = await widget._queryCtr
           .addItemToTable(DbTablesNames.chargeTresorie, item);

@@ -73,6 +73,9 @@ class SliverListDataSource extends PagedDataSource<int, Object> {
       case ItemsListTypes.chargeList:
         return _queryCtr.getChargeTresorie(offset, _pageSize, searchTerm: _searchTerm);
         break;
+      case ItemsListTypes.caisseList:
+        return _queryCtr.getCaisseList(offset, _pageSize, searchTerm: _searchTerm);
+        break;
       default:
         return null;
     }

@@ -5654,6 +5654,36 @@ class S {
       args: [],
     );
   }
+
+  /// `Pin code`
+  String get code_pin1 {
+    return Intl.message(
+      'Pin code',
+      name: 'code_pin1',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Item already exists`
+  String get msg_existe_deja {
+    return Intl.message(
+      'Item already exists',
+      name: 'msg_existe_deja',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Coffers`
+  String get caisse_titre {
+    return Intl.message(
+      'Coffers',
+      name: 'caisse_titre',
+      desc: '',
+      args: [],
+    );
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<S> {

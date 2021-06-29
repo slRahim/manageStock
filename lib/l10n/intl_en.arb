@@ -602,7 +602,11 @@
   "cat_charge" : "charges Categories",
 
   "msg_retour_no_save" : "Do you want to quit without validating the last changes",
-  "msg_map_add_position" : "Click on map to pick position"
+  "msg_map_add_position" : "Click on map to pick position",
+
+  "code_pin1" : "Pin code",
+  "msg_existe_deja" : "Item already exists",
+  "caisse_titre" : "Coffers"
 
 
 }

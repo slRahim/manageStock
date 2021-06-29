@@ -1904,7 +1904,7 @@ class _AddPiecePageState extends State<AddPiecePage>
                 "Mov", _piece.mov, "Piece_id", _piece.id);
           }
 
-          if (_piece.piece != PieceType.devis) {
+          if (_piece.piece != PieceType.devis && _piece.piece != PieceType.bonCommande) {
             await addTresorie(_piece, transferer: false);
           }
 
@@ -1936,7 +1936,7 @@ class _AddPiecePageState extends State<AddPiecePage>
             await _queryCtr.addItemToTable(DbTablesNames.journaux, journaux);
           });
 
-          if (_piece.piece != PieceType.devis) {
+          if (_piece.piece != PieceType.devis && _piece.piece != PieceType.bonCommande) {
             await addTresorie(_piece, transferer: false);
           }
 

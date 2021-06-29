@@ -380,9 +380,7 @@ class _AddTresoriePageState extends State<AddTresoriePage>
           floatingActionButtonLocation:
               FloatingActionButtonLocation.centerDocked,
           floatingActionButton: ((_selectedCategorie.id == 2 ||
-                      _selectedCategorie.id == 3 ||
-                      _selectedCategorie.id == 6 ||
-                      _selectedCategorie.id == 7) &&
+                      _selectedCategorie.id == 3 ) &&
                   !modification)
               ? FloatingActionButton(
                   child: Icon(Icons.add),
@@ -760,15 +758,15 @@ class _AddTresoriePageState extends State<AddTresoriePage>
                         _selectedCompte = value;
                       });
                     },
-                    // onAddPressed: () async {
-                    //   AwesomeDialog(
-                    //     context: context,
-                    //     dialogType: DialogType.NO_HEADER,
-                    //     animType: AnimType.BOTTOMSLIDE,
-                    //     title: S.current.supp,
-                    //     body: addCompte(),
-                    //   )..show().then((value) => setState(() {}));
-                    // },
+                    onAddPressed: () async {
+                      AwesomeDialog(
+                        context: context,
+                        dialogType: DialogType.NO_HEADER,
+                        animType: AnimType.BOTTOMSLIDE,
+                        title: S.current.supp,
+                        body: addCompte(),
+                      )..show().then((value) => setState(() {}));
+                    },
                   ),
                   TextFormField(
                     enabled: editMode,
@@ -1108,7 +1106,7 @@ class _AddTresoriePageState extends State<AddTresoriePage>
                                     borderSide: BorderSide(color: Colors.blue),
                                     borderRadius: BorderRadius.circular(20)),
                                 contentPadding: EdgeInsets.only(left: 10),
-                                labelText: S.current.code_pin,
+                                labelText: S.current.code_pin1,
                                 labelStyle: GoogleFonts.lato(),
                                 enabledBorder: OutlineInputBorder(
                                   gapPadding: 3.3,

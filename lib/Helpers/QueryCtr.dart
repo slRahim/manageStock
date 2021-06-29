@@ -837,6 +837,26 @@ class QueryCtr {
     return list;
   }
 
+  Future<List<CompteTresorie>> getCaisseList(int offset, int limit,
+      {String searchTerm}) async {
+    Database dbClient = await _databaseHelper.db;
+    String query = "SELECT * FROM " +
+        DbTablesNames.compteTresorie +
+        " Where Num_compte like '%${searchTerm ?? ''}%' OR Nom_compte like '%${searchTerm ?? ''}%'";
+    query += ' ORDER BY id DESC';
+    query += " LIMIT ${limit} OFFSET ${offset}";
+
+    var res = await dbClient.rawQuery(query);
+
+    List<CompteTresorie> list = new List<CompteTresorie>();
+    for (var i = 0, j = res.length; i < j; i++) {
+      CompteTresorie compte = CompteTresorie.fromMap(res[i]);
+        list.add(compte);
+    }
+
+    return list;
+  }
+
   //*****************************************************************************************************************************************************************
   //************************************************************************special statistique**********************************************************************
 

@@ -114,6 +114,7 @@ class ItemsListTypes {
   static const tvaArticleList = "tvaArticleList";
   static const familleTiersList = "familleTiersList";
   static const chargeList = "chargeList";
+  static const caisseList = "caisseList";
 }
 
 class DbTablesNames {

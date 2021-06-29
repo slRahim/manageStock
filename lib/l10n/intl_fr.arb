@@ -601,7 +601,11 @@
   "cat_charge" : "Catégories des charges",
 
   "msg_retour_no_save" : "Voulez-vous quitter sans valider les dernier changements",
-  "msg_map_add_position" : "Cliquez sur la carte pour choisir la position"
+  "msg_map_add_position" : "Cliquez sur la carte pour choisir la position",
+
+  "code_pin1" : "Code pin",
+  "msg_existe_deja" : "Élément existe déja",
+  "caisse_titre" : "Mes caisses"
 
 
 
