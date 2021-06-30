@@ -19,7 +19,7 @@ class SqlLiteDatabaseHelper {
   factory SqlLiteDatabaseHelper() => _instance;
   SqlLiteDatabaseHelper.internal();
 
-  static const SECRET_KEY = "2020_PRIVATES_KEYS_ENCRYPTS_2020";
+  static const SECRET_KEY = "2021_cirtait_2021";
   static const DATABASE_VERSION = 1;
   static Database _db;
   GoogleApi _googleApi = new GoogleApi();
@@ -548,7 +548,7 @@ class SqlLiteDatabaseHelper {
         CREATE TRIGGER IF NOT EXISTS update_articles_cmd_onUpdate_mov
         AFTER UPDATE ON Journaux
         FOR EACH ROW
-        WHEN (OLD.Mov <> NEW.Mov)  AND (NEW.Mov = 0 OR NEW.Mov = 2 OR NEW.Mov = -1 OR NEW.Mov = -2)
+        WHEN (OLD.Mov <> NEW.Mov)  AND (NEW.Mov = 0 OR NEW.Mov = 2 OR NEW.Mov = -1 OR NEW.Mov = -2)  AND Old.Mov = 1
               AND (NEW.Piece_type = 'CC')      
         BEGIN
             UPDATE Articles
@@ -615,7 +615,7 @@ class SqlLiteDatabaseHelper {
         CREATE TRIGGER IF NOT EXISTS update_articles_qte_onUpdate_client_mov
         AFTER UPDATE ON Journaux
         FOR EACH ROW
-        WHEN (OLD.Mov <> NEW.Mov)  AND (NEW.Mov = 0 OR NEW.Mov = 2 OR NEW.Mov = -1 OR NEW.Mov = -2)
+        WHEN (OLD.Mov <> NEW.Mov)  AND (NEW.Mov = 0 OR NEW.Mov = 2 OR NEW.Mov = -1 OR NEW.Mov = -2) AND Old.Mov = 1
               AND (NEW.Piece_type = 'BL' OR NEW.Piece_type = 'FC')      
         BEGIN
             UPDATE Articles
@@ -692,7 +692,7 @@ class SqlLiteDatabaseHelper {
         CREATE TRIGGER IF NOT EXISTS update_articles_qte_onUpdate_fournisseur_mov
         AFTER UPDATE ON Journaux
         FOR EACH ROW
-        WHEN  (OLD.Mov <> NEW.Mov) AND (NEW.Mov = 0 OR NEW.Mov = 2 OR NEW.Mov = -1 OR NEW.Mov = -2)
+        WHEN  (OLD.Mov <> NEW.Mov) AND (NEW.Mov = 0 OR NEW.Mov = 2 OR NEW.Mov = -1 OR NEW.Mov = -2)  AND Old.Mov = 1
               AND (NEW.Piece_type = 'BR' OR NEW.Piece_type = 'FF') 
         BEGIN
             UPDATE Articles
@@ -766,7 +766,7 @@ class SqlLiteDatabaseHelper {
         CREATE TRIGGER IF NOT EXISTS update_articles_qte_onUpdate_retour_mov
         AFTER UPDATE ON Journaux
         FOR EACH ROW
-        WHEN  (OLD.Mov <> NEW.Mov) AND (NEW.Mov = 0 OR NEW.Mov = 2 OR NEW.Mov = -1 OR NEW.Mov = -2)
+        WHEN  (OLD.Mov <> NEW.Mov) AND (NEW.Mov = 0 OR NEW.Mov = 2 OR NEW.Mov = -1 OR NEW.Mov = -2)  AND Old.Mov = 1
               AND (NEW.Piece_type = 'RC' OR NEW.Piece_type = 'AC') 
         BEGIN
             UPDATE Articles
@@ -830,7 +830,7 @@ class SqlLiteDatabaseHelper {
         CREATE TRIGGER IF NOT EXISTS update_articles_qte_onUpdate_retour_four_mov
         AFTER UPDATE ON Journaux
         FOR EACH ROW
-        WHEN (OLD.Mov <> NEW.Mov)  AND (NEW.Mov = 0 OR NEW.Mov = 2 OR NEW.Mov = -1 OR NEW.Mov = -2)
+        WHEN (OLD.Mov <> NEW.Mov)  AND (NEW.Mov = 0 OR NEW.Mov = 2 OR NEW.Mov = -1 OR NEW.Mov = -2)  AND Old.Mov = 1
               AND (NEW.Piece_type = 'RF' OR NEW.Piece_type = 'AF')      
         BEGIN
             UPDATE Articles
@@ -1271,7 +1271,15 @@ class SqlLiteDatabaseHelper {
         FOR EACH ROW 
         BEGIN 
            DELETE FROM ReglementTresorie WHERE Tresorie_id = OLD.id ;
-           
+       
+        END;
+      ''');
+
+    await db.execute('''CREATE TRIGGER dell_tresorie_mov1
+        BEFORE DELETE ON Tresories 
+        FOR EACH ROW 
+        When OLD.Mov = 1 
+        BEGIN 
            UPDATE Tiers
                SET Chiffre_affaires = IFNULL((Select Sum(Net_a_payer) From Pieces where Tier_id = OLD.Tier_id AND Mov = 1 AND Piece <> "CC" AND Piece <> "FP" AND Piece <> "BC"),0)
            WHERE id = OLD.Tier_id; 

@@ -436,7 +436,7 @@ class QueryCtr {
       {String searchTerm, Map<String, dynamic> filters}) async {
     String query = 'SELECT * FROM Tresories';
 
-    query += " WHERE (Montant <> 0)";
+    query += " WHERE (Montant <> 0) AND Mov = 1";
 
     if (filters != null) {
       int categorie = filters["Categorie"] != null ? filters["Categorie"] : -1;

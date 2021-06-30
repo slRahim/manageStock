@@ -386,12 +386,21 @@ class _PieceListItemState extends State<PieceListItem> {
         color: Colors.red,
         size: 26,
       ),
-      showCloseIcon: (widget.piece.piece != PieceType.devis && widget.piece.piece != PieceType.bonCommande),
-      btnCancelText: (widget.piece.piece != PieceType.devis && widget.piece.piece != PieceType.bonCommande)
+      showCloseIcon: (widget.piece.piece != PieceType.devis &&
+          widget.piece.piece != PieceType.bonCommande &&
+          widget.piece.etat != 1 &&
+          widget.piece.mov != 2),
+      btnCancelText: (widget.piece.piece != PieceType.devis &&
+          widget.piece.piece != PieceType.bonCommande &&
+          widget.piece.etat != 1 &&
+          widget.piece.mov != 2)
           ? S.current.sans_tresorie
           : S.current.non,
       btnCancelOnPress: () async {
-        if (widget.piece.piece != PieceType.devis && widget.piece.piece != PieceType.bonCommande) {
+        if (widget.piece.piece != PieceType.devis &&
+            widget.piece.piece != PieceType.bonCommande &&
+            widget.piece.etat != 1 &&
+            widget.piece.mov != 2 ) {
           int res = await _queryCtr.removeItemFromTable(
               DbTablesNames.pieces, widget.piece);
           var message = "";
@@ -409,11 +418,16 @@ class _PieceListItemState extends State<PieceListItem> {
           }
         }
       },
-      btnOkText: (widget.piece.piece != PieceType.devis && widget.piece.piece != PieceType.bonCommande)
+      btnOkText: (widget.piece.piece != PieceType.devis &&
+          widget.piece.piece != PieceType.bonCommande &&
+          widget.piece.etat != 1 &&
+          widget.piece.mov != 2)
           ? S.current.avec_tresorie
           : S.current.oui,
       btnOkOnPress: () async {
-        if (widget.piece.piece != PieceType.devis && widget.piece.piece != PieceType.bonCommande ) {
+        if (widget.piece.piece != PieceType.devis &&
+            widget.piece.piece != PieceType.bonCommande &&
+            widget.piece.etat != 1 ) {
           int res = await _queryCtr.removeItemWithForeignKey(
               DbTablesNames.tresorie, widget.piece.id, "Piece_id");
           var message = "";
