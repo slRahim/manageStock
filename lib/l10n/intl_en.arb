@@ -606,7 +606,8 @@
 
   "code_pin1" : "Pin code",
   "msg_existe_deja" : "Item already exists",
-  "caisse_titre" : "Coffers"
+  "caisse_titre" : "Coffers",
+  "telechargement" : "Downloading"
 
 
 }

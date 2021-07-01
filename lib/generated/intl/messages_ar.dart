@@ -560,6 +560,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "tarif_s" : MessageLookupByLibrary.simpleMessage("سعر"),
     "tarification" : MessageLookupByLibrary.simpleMessage("التسعيرة"),
     "taux_tva" : MessageLookupByLibrary.simpleMessage("معدل Tva"),
+    "telechargement" : MessageLookupByLibrary.simpleMessage("تحميل"),
     "telephone" : MessageLookupByLibrary.simpleMessage("الهاتف"),
     "telephone2" : MessageLookupByLibrary.simpleMessage("الهاتف 2"),
     "timbre" : MessageLookupByLibrary.simpleMessage("الطابع"),

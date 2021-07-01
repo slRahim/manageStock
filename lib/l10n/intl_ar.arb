@@ -606,6 +606,7 @@
 
   "code_pin1" : "الرقم السري",
   "msg_existe_deja" : "العنصر موجود بالفعل",
-  "caisse_titre" : "الحسابات"
+  "caisse_titre" : "الحسابات",
+  "telechargement" : "تحميل"
 
 }

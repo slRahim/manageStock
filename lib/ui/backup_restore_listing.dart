@@ -19,7 +19,7 @@ class _SelectfromdriveState extends State<Selectfromdrive> {
   ga.FileList files = new ga.FileList();
   QueryCtr _query = new QueryCtr();
 
-  refreshfileslist()async {
+  refreshfileslist() async {
     await googleapi.ListGoogleDriveFiles().then((alist) {
       setState(() {
         files = alist;
@@ -46,22 +46,27 @@ class _SelectfromdriveState extends State<Selectfromdrive> {
             actions: <Widget>[
               IconButton(
                   icon: Icon(Icons.account_circle),
-                  onPressed: ()async {
+                  onPressed: () async {
                     await googleapi.GoogleLogout();
                     setState(() {
                       files.files.clear();
                     });
                     refreshfileslist();
-                  }
-              )
+                  })
             ],
             leading: IconButton(
-                icon: Icon(Icons.arrow_back , color: Colors.white,),
+                icon: Icon(
+                  Icons.arrow_back,
+                  color: Colors.white,
+                ),
                 onPressed: () {
                   googleapi.GoogleLogout();
                   Navigator.pop(context);
                 }),
-            title: Text("${S.current.backups}", style: GoogleFonts.lato(fontWeight: FontWeight.bold),),
+            title: Text(
+              "${S.current.backups}",
+              style: GoogleFonts.lato(fontWeight: FontWeight.bold),
+            ),
             centerTitle: true,
             backgroundColor: Theme.of(context).appBarTheme.color,
           ),
@@ -78,9 +83,9 @@ class _SelectfromdriveState extends State<Selectfromdrive> {
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: <Widget>[
                       Expanded(
-                        child:  Container(
-                            padding:  EdgeInsets.all(5.0),
-                            child:FutureBuilder(
+                        child: Container(
+                            padding: EdgeInsets.all(5.0),
+                            child: FutureBuilder(
                                 future: refreshfileslist(),
                                 builder: (context, snapshot) {
                                   if (files.files == null) {
@@ -89,21 +94,19 @@ class _SelectfromdriveState extends State<Selectfromdrive> {
                                         width: 100.0,
                                         child: Center(
                                           child: CircularProgressIndicator(),
-                                        )
-                                    );
+                                        ));
                                   }
                                   return ListView.builder(
                                       padding: EdgeInsets.all(5),
                                       itemCount: files.files.length,
                                       itemBuilder: (context, i) {
-                                        if (files.files[i].name.startsWith('gestmob_'))
+                                        if (files.files[i].name
+                                            .startsWith('gestmob_'))
                                           return buildList(files.files[i]);
 
                                         return null;
-                                      }
-                                  );
-                                })
-                        ),
+                                      });
+                                })),
                       ),
                     ],
                   ),
@@ -123,19 +126,22 @@ class _SelectfromdriveState extends State<Selectfromdrive> {
       padding: EdgeInsets.all(5),
       decoration: BoxDecoration(
           color: Colors.blue[300],
-          borderRadius: BorderRadius.all(Radius.circular(15))
-      ),
+          borderRadius: BorderRadius.all(Radius.circular(15))),
       child: ListTile(
         leading: CircleAvatar(
           radius: 23,
           backgroundColor: Colors.yellow[700],
           child: CircleAvatar(
             radius: 20,
-            child: Icon(Icons.restore , color: Colors.white, size: 26,),
+            child: Icon(
+              Icons.restore,
+              color: Colors.white,
+              size: 26,
+            ),
             backgroundColor: Colors.green,
           ),
         ),
-        onTap: ()async{
+        onTap: () async {
           AwesomeDialog(
               context: context,
               dialogType: DialogType.INFO,
@@ -145,49 +151,76 @@ class _SelectfromdriveState extends State<Selectfromdrive> {
               btnCancelText: S.current.non,
               btnCancelOnPress: () {},
               btnOkText: S.current.oui,
-              btnOkOnPress: () async {
-                File backupFile = await googleapi.DownloadGoogleDriveFile(file.name, file.id);
-                await showDialog(
-                    context: context,
-                    barrierDismissible: false,
-                    builder: (context) => FutureProgressDialog(
-                      _query.restoreBackup(backupFile).then((value){
-                        if(value != null){
-                          Navigator.pop(context);
-                          Navigator.pop(context);
-                          Helpers.showFlushBar(context, "${S.current.msg_succes_restoration}");
-
-                        }else{
-                          Navigator.pop(context);
-                          Navigator.pop(context);
-                          Helpers.showFlushBar(context, "${S.current.msg_err_restoration}");
-                        }
-                      }),
-                      message:Text('${S.current.chargement}...'),
-                      progress: CircularProgressIndicator(),
-                      decoration: BoxDecoration(
-                        color: Theme.of(context).cardColor,
-                        shape: BoxShape.rectangle,
-                        borderRadius: BorderRadius.all(Radius.circular(10)),
-                      ),
-                    )
-                );
-              })
+              btnOkOnPress: () => restoreData(file))
             ..show();
         },
-        title: Text(
-            '${file.name.replaceAll('.bkp', '')}',
+        title: Text('${file.name.replaceAll('.bkp', '')}',
             style: GoogleFonts.lato(
-              textStyle: TextStyle(
-                color: Theme.of(context).primaryColorDark,
-                fontWeight: FontWeight.bold,
-                fontSize: 16,)
-            )),
+                textStyle: TextStyle(
+              color: Theme.of(context).primaryColorDark,
+              fontWeight: FontWeight.bold,
+              fontSize: 16,
+            ))),
         subtitle: Text(
-            ".bkp" , style: GoogleFonts.lato(textStyle: TextStyle(color: Theme.of(context).primaryColorDark,)),
+          ".bkp",
+          style: GoogleFonts.lato(
+              textStyle: TextStyle(
+            color: Theme.of(context).primaryColorDark,
+          )),
         ),
       ),
     );
+  }
+
+  restoreData(ga.File file) async {
+    File backup ;
+    await showDialog(
+        context: context,
+        barrierDismissible: false,
+        builder: (context) => FutureProgressDialog(
+          googleapi.DownloadGoogleDriveFile(file.name, file.id)
+              .then((value) async{
+            if (value != null) {
+              backup = value ;
+            } else {
+              Helpers.showFlushBar(
+                  context, "${S.current.msg_ereure}");
+            }
+          }),
+          message: Text('${S.current.telechargement}...'),
+          progress: CircularProgressIndicator(),
+          decoration: BoxDecoration(
+            color: Theme.of(context).cardColor,
+            shape: BoxShape.rectangle,
+            borderRadius: BorderRadius.all(Radius.circular(10)),
+          ),
+        ));
+
+    if(backup != null){
+      await showDialog(
+          context: context,
+          barrierDismissible: false,
+          builder: (context) => FutureProgressDialog(
+            _query.restoreBackup(backup).then((value) {
+              Navigator.pop(context);
+              if (value != null) {
+                Navigator.pop(context);
+                Helpers.showToast(
+                     "${S.current.msg_succes_restoration}");
+              } else {
+                Helpers.showToast(
+                    "${S.current.msg_err_restoration}");
+              }
+            }),
+            message: Text('${S.current.chargement}...'),
+            progress: CircularProgressIndicator(),
+            decoration: BoxDecoration(
+              color: Theme.of(context).cardColor,
+              shape: BoxShape.rectangle,
+              borderRadius: BorderRadius.all(Radius.circular(10)),
+            ),
+          ));
+    }
 
   }
 }

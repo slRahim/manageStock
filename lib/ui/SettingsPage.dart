@@ -552,8 +552,8 @@ class _SettingsPageState extends State<SettingsPage> {
                             barrierDismissible: false,
                             builder: (context) => FutureProgressDialog(
                                   _queryCtr.createBackup().then((value) {
-                                    Navigator.pop(context);
                                     if (value["name"] != null) {
+                                      Navigator.pop(context);
                                       Helpers.showToast(
                                           "${S.current.msg_back_suce}");
                                     } else {

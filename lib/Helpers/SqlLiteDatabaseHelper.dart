@@ -19,7 +19,7 @@ class SqlLiteDatabaseHelper {
   factory SqlLiteDatabaseHelper() => _instance;
   SqlLiteDatabaseHelper.internal();
 
-  static const SECRET_KEY = "2021_cirtait_2021";
+  static const SECRET_KEY = "2020_PRIVATES_KEYS_ENCRYPTS_2020";
   static const DATABASE_VERSION = 1;
   static Database _db;
   GoogleApi _googleApi = new GoogleApi();
@@ -490,6 +490,8 @@ class SqlLiteDatabaseHelper {
   
         END;
      ''');
+
+
   }
 
   //fonction speciale pour la creation des triggers de bd table article
