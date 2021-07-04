@@ -42,7 +42,7 @@ class _ClientFourFragmentState extends State<ClientFourFragment> {
   List<TiersFamille> _familleItems;
   List<DropdownMenuItem<Object>> _familleDropdownItems;
   var _selectedFamille;
-  int _savedSelectedFamille = 0;
+  int _savedSelectedFamille = 1;
 
   bool _filterInHasCredit = false;
   bool _savedFilterHasCredit = false;
@@ -79,7 +79,7 @@ class _ClientFourFragmentState extends State<ClientFourFragment> {
     _familleItems[0].libelle = S.current.no_famille ;
 
     _familleDropdownItems = utils.buildDropFamilleTier(_familleItems);
-    _selectedFamille = _familleItems[_savedSelectedFamille];
+    _selectedFamille = _familleItems.firstWhere((element) => element.id == _savedSelectedFamille);
 
     _filterInHasCredit = _savedFilterHasCredit;
     _filterTierBloquer = _savedFilterTierBloquer ;
@@ -255,7 +255,7 @@ class _ClientFourFragmentState extends State<ClientFourFragment> {
                 showCloseIcon: true,
                 btnOkOnPress: () async{
                   setState(() {
-                    _savedSelectedFamille = _familleItems.indexOf(_selectedFamille);
+                    _savedSelectedFamille = _selectedFamille.id;
                     _savedFilterHasCredit = _filterInHasCredit;
                     _savedFilterTierBloquer = _filterTierBloquer ;
 

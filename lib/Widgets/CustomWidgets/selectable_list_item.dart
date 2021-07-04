@@ -98,54 +98,54 @@ class _ArticleListItemSelectedState extends State<ArticleListItemSelected> {
             backgroundImage: MemoryImage(widget.article.imageUint8List),
           ),
         ),
-        title: Row(
-          children: [
-            Icon(
-              Icons.assignment,
-              size: 14,
-              color: Theme.of(context).primaryColorDark,
-            ),
-            SizedBox(
-              width: 2,
-            ),
-            (widget.article.designation != '')
-                ? SingleChildScrollView(
-                    scrollDirection: Axis.horizontal,
-                    child: Row(
-                      children: [
-                        Text(
-                          widget.article.designation,
-                          style: GoogleFonts.lato(),
-                        ),
-                      ],
-                    ))
-                : Text('__'),
-          ],
-        ),
-        subtitle: Row(
-          children: [
-            Icon(
-              MdiIcons.pound,
-              size: 14,
-              color: Theme.of(context).primaryColorDark,
-            ),
-            SizedBox(
-              width: 2,
-            ),
-            (widget.article.ref != '')
-                ? SingleChildScrollView(
-                    scrollDirection: Axis.horizontal,
-                    child: Row(
-                      children: [
-                        Text(
-                          widget.article.ref,
-                          style: GoogleFonts.lato(),
-                        ),
-                      ],
-                    ),
+        title: SingleChildScrollView(
+          scrollDirection: Axis.horizontal,
+          child: Row(
+            children: [
+              Icon(
+                Icons.assignment,
+                size: 14,
+                color: Theme.of(context).primaryColorDark,
+              ),
+              SizedBox(
+                width: 2,
+              ),
+              (widget.article.designation != '')
+                  ? Text(
+                    widget.article.designation,
+                    style: GoogleFonts.lato(),
                   )
-                : Text('__'),
-          ],
+                  : Text('__'),
+            ],
+          ),
+        ),
+        subtitle: SingleChildScrollView(
+          scrollDirection: Axis.horizontal,
+          child: Row(
+            children: [
+              Icon(
+                MdiIcons.pound,
+                size: 14,
+                color: Theme.of(context).primaryColorDark,
+              ),
+              SizedBox(
+                width: 2,
+              ),
+              (widget.article.ref != '')
+                  ? SingleChildScrollView(
+                      scrollDirection: Axis.horizontal,
+                      child: Row(
+                        children: [
+                          Text(
+                            widget.article.ref,
+                            style: GoogleFonts.lato(),
+                          ),
+                        ],
+                      ),
+                    )
+                  : Text('__'),
+            ],
+          ),
         ),
         trailingChildren: [
           Text(

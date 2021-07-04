@@ -131,9 +131,41 @@ class _ArticleListItemState extends State<ArticleListItem> {
               from: widget.article,
               onLongPress: () {
                 if (widget.onItemSelected != null &&
-                    widget.article.selectedQuantite > 0) {
-                  widget.article.selectedQuantite = -1;
-                  widget.onItemSelected(widget.article);
+                    widget.article.selectedQuantite >= 0) {
+                  showDialog(
+                      context: context,
+                      builder: (BuildContext context) {
+                        return addQtedialogue();
+                      }).then((val) {
+                    if (widget.article.stockable) {
+                      if (widget.pieceOrigin == 'BL' ||
+                          widget.pieceOrigin == 'FC') {
+                        if ((widget.article.quantite -
+                            widget.article.cmdClient) <
+                            widget.article.selectedQuantite) {
+                          AwesomeDialog(
+                              context: context,
+                              dialogType: DialogType.WARNING,
+                              dismissOnBackKeyPress: false,
+                              dismissOnTouchOutside: false,
+                              animType: AnimType.BOTTOMSLIDE,
+                              title: "",
+                              desc: S.current.msg_qte_select_sup,
+                              btnCancelText: S.current.confirme,
+                              btnCancelOnPress: () {},
+                              btnOkText: S.current.annuler,
+                              btnOkOnPress: () {
+                                setState(() {
+                                  widget.article.selectedQuantite = 1;
+                                });
+                              })
+                            ..show();
+                          // Helpers.showToast(S.current.msg_qte_select_sup);
+                        }
+                      }
+                    }
+                    setState(() {});
+                  });
                 }
               },
               onTap: () async {
@@ -144,42 +176,11 @@ class _ArticleListItemState extends State<ArticleListItem> {
                             arguments: widget.article)
                         .then((value) => widget.dataSource.refresh());
                   } else {
-                    if (widget.article.selectedQuantite >= 0) {
-                      showDialog(
-                          context: context,
-                          builder: (BuildContext context) {
-                            return addQtedialogue();
-                          }).then((val) {
-                        if (widget.article.stockable) {
-                          if (widget.pieceOrigin == 'BL' ||
-                              widget.pieceOrigin == 'FC') {
-                            if ((widget.article.quantite -
-                                    widget.article.cmdClient) <
-                                widget.article.selectedQuantite) {
-                              AwesomeDialog(
-                                  context: context,
-                                  dialogType: DialogType.WARNING,
-                                  dismissOnBackKeyPress: false,
-                                  dismissOnTouchOutside: false,
-                                  animType: AnimType.BOTTOMSLIDE,
-                                  title: "",
-                                  desc: S.current.msg_qte_select_sup,
-                                  btnCancelText: S.current.confirme,
-                                  btnCancelOnPress: () {},
-                                  btnOkText: S.current.annuler,
-                                  btnOkOnPress: () {
-                                    setState(() {
-                                      widget.article.selectedQuantite = 1;
-                                    });
-                                  })
-                                ..show();
-                              // Helpers.showToast(S.current.msg_qte_select_sup);
-                            }
-                          }
-                        }
+                    if (widget.article.selectedQuantite > 0) {
 
-                        setState(() {});
-                      });
+                      widget.article.selectedQuantite = -1;
+                      widget.onItemSelected(widget.article);
+
                     } else {
                       selectThisItem();
                       if (widget.article.stockable) {

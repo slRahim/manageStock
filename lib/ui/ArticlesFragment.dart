@@ -59,8 +59,8 @@ class _ArticlesFragmentState extends State<ArticlesFragment> {
   ArticleFamille _selectedFamille;
   bool _filterOutStock = false;
 
-  int _savedSelectedMarque = 0;
-  int _savedSelectedFamille = 0;
+  int _savedSelectedMarque = 1;
+  int _savedSelectedFamille = 1;
   bool _savedFilterOutStock = false;
 
   bool _filterNonStockable = false;
@@ -126,8 +126,8 @@ class _ArticlesFragmentState extends State<ArticlesFragment> {
     _marqueDropdownItems = utils.buildMarqueDropDownMenuItems(_marqueItems);
     _familleDropdownItems = utils.buildDropFamilleArticle(_familleItems);
 
-    _selectedMarque = _marqueItems[_savedSelectedMarque];
-    _selectedFamille = _familleItems[_savedSelectedFamille];
+    _selectedMarque = _marqueItems.firstWhere((element) => element.id == _savedSelectedMarque);
+    _selectedFamille = _familleItems.firstWhere((element) => element.id == _savedSelectedFamille);
     _filterOutStock = _savedFilterOutStock;
     _filterArtilceBloquer = _savedFilterArticleBloquer;
     _filterNonStockable = _savedFilterNonStockable;
@@ -275,6 +275,12 @@ class _ArticlesFragmentState extends State<ArticlesFragment> {
         itemsCount: _selectedItems.length,
         onConfirm: () => {
           widget.onConfirmSelectedItems(_selectedItems),
+          // setState(() {
+          //   _selectedItems.forEach((item) {
+          //     item.selectedQuantite = -1.0;
+          //   });
+          //   _selectedItems = new List<Object>();
+          // })
           Navigator.pop(context)
         },
         onCancel: () => {
@@ -311,9 +317,8 @@ class _ArticlesFragmentState extends State<ArticlesFragment> {
               showCloseIcon: true,
               btnOkOnPress: () async {
                 setState(() {
-                  _savedSelectedMarque = _marqueItems.indexOf(_selectedMarque);
-                  _savedSelectedFamille =
-                      _familleItems.indexOf(_selectedFamille);
+                  _savedSelectedMarque = _selectedMarque.id;
+                  _savedSelectedFamille = _selectedFamille.id;
                   _savedFilterOutStock = _filterOutStock;
                   _savedFilterArticleBloquer = _filterArtilceBloquer;
                   _savedFilterNonStockable = _filterNonStockable;

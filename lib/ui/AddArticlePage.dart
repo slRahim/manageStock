@@ -181,8 +181,8 @@ class _AddArticlePageState extends State<AddArticlePage>
     _price1Control.text = article.prixVente1.toStringAsFixed(2);
     _price2Control.text = article.prixVente2.toStringAsFixed(2);
     _price3Control.text = article.prixVente3.toStringAsFixed(2);
-    _selectedMarque = _marqueItems[article.idMarque];
-    _selectedFamille = _familleItems[article.idFamille];
+    _selectedMarque = _marqueItems.firstWhere((element) => element.id == article.idMarque);
+    _selectedFamille = _familleItems.firstWhere((element) => element.id == article.idFamille);
     _selectedTva = new ArticleTva(article.tva);
   }
 
@@ -1493,8 +1493,8 @@ class _AddArticlePageState extends State<AddArticlePage>
         ? article.setprixVente3(double.parse(_price3Control.text.trim()))
         : article.setprixVente3(0.0);
 
-    article.setIdFamille(_familleItems.indexOf(_selectedFamille));
-    article.setIdMarque(_marqueItems.indexOf(_selectedMarque));
+    article.setIdFamille(_selectedFamille.id);
+    article.setIdMarque(_selectedMarque.id);
     article.setTva(_selectedTva.tva);
 
     double ttc1 =

@@ -212,13 +212,14 @@ class _CategoryListItemState extends State<CategoryListItem> {
                         },
                         decoration: InputDecoration(
                           prefixIcon: Icon(
-                            Icons.view_agenda,
+                            Icons.text_snippet,
                             color: Colors.blue,
                           ),
                           focusedBorder: OutlineInputBorder(
                               borderSide: BorderSide(color: Colors.blue),
                               borderRadius: BorderRadius.circular(20)),
                           contentPadding: EdgeInsets.only(left: 10),
+                          labelText: S.current.designation,
                           labelStyle: GoogleFonts.lato(
                             textStyle:
                                 TextStyle(color: Theme.of(context).hintColor),
@@ -244,13 +245,14 @@ class _CategoryListItemState extends State<CategoryListItem> {
                           // },
                           decoration: InputDecoration(
                             prefixIcon: Icon(
-                              Icons.view_agenda,
+                              Icons.confirmation_number_outlined,
                               color: Colors.blue,
                             ),
                             focusedBorder: OutlineInputBorder(
                                 borderSide: BorderSide(color: Colors.blue),
                                 borderRadius: BorderRadius.circular(20)),
                             contentPadding: EdgeInsets.only(left: 10),
+                            labelText: S.current.n,
                             labelStyle: GoogleFonts.lato(
                               textStyle:
                               TextStyle(color: Theme.of(context).hintColor),
@@ -277,13 +279,14 @@ class _CategoryListItemState extends State<CategoryListItem> {
                           // },
                           decoration: InputDecoration(
                             prefixIcon: Icon(
-                              Icons.view_agenda,
+                              Icons.vpn_key,
                               color: Colors.blue,
                             ),
                             focusedBorder: OutlineInputBorder(
                                 borderSide: BorderSide(color: Colors.blue),
                                 borderRadius: BorderRadius.circular(20)),
                             contentPadding: EdgeInsets.only(left: 10),
+                            labelText: S.current.code_pin1,
                             labelStyle: GoogleFonts.lato(
                               textStyle:
                               TextStyle(color: Theme.of(context).hintColor),
@@ -302,21 +305,22 @@ class _CategoryListItemState extends State<CategoryListItem> {
                         child: TextFormField(
                           controller: _soldeInitControl,
                           keyboardType: TextInputType.number,
-                          validator: (value) {
-                            if (value.isEmpty) {
-                              return S.current.msg_champ_oblg;
-                            }
-                            return null;
-                          },
+                          // validator: (value) {
+                          //   if (value.isEmpty) {
+                          //     return S.current.msg_champ_oblg;
+                          //   }
+                          //   return null;
+                          // },
                           decoration: InputDecoration(
                             prefixIcon: Icon(
-                              Icons.view_agenda,
+                              Icons.monetization_on,
                               color: Colors.blue,
                             ),
                             focusedBorder: OutlineInputBorder(
                                 borderSide: BorderSide(color: Colors.blue),
                                 borderRadius: BorderRadius.circular(20)),
                             contentPadding: EdgeInsets.only(left: 10),
+                            labelText: S.current.solde_depart,
                             labelStyle: GoogleFonts.lato(
                               textStyle:
                               TextStyle(color: Theme.of(context).hintColor),
@@ -347,6 +351,9 @@ class _CategoryListItemState extends State<CategoryListItem> {
                         Navigator.pop(context);
                         setState(() {
                           _libelleControl.text = "";
+                          _numCompteControl.text = "" ;
+                          _codeCompteControl.text = "" ;
+                          _soldeInitControl.text = "";
                         });
                       }
                     },
@@ -397,7 +404,7 @@ class _CategoryListItemState extends State<CategoryListItem> {
         widget.item.nomCompte = _libelleControl.text.trim();
         widget.item.numCompte = _numCompteControl.text.trim();
         widget.item.codeCompte = _codeCompteControl.text.trim();
-        widget.item.soldeDepart = double.parse(_soldeInitControl.text.trim());
+        widget.item.soldeDepart =(_soldeInitControl.text.trim() != '')? double.parse(_soldeInitControl.text.trim()) : 0.0;
 
         res = await _queryCtr.updateItemInDb(
             DbTablesNames.compteTresorie, widget.item);
@@ -443,7 +450,7 @@ class _CategoryListItemState extends State<CategoryListItem> {
               DbTablesNames.articlesTva, widget.item);
         }else if (widget.item is CompteTresorie){
           res = await _queryCtr.removeItemFromTable(
-              DbTablesNames.articlesTva, widget.item);
+              DbTablesNames.compteTresorie, widget.item);
         }
 
         var message = "";

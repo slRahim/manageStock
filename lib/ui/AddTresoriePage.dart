@@ -1029,24 +1029,24 @@ class _AddTresoriePageState extends State<AddTresoriePage>
                           crossAxisAlignment: CrossAxisAlignment.center,
                           children: [
                             TextFormField(
-                              controller: _numCompteControl,
+                              controller: _libelleCompteControl,
                               keyboardType: TextInputType.text,
-                              // validator: (value) {
-                              //   if (value.isEmpty) {
-                              //     return S.current.msg_champ_oblg;
-                              //   }
-                              //   return null;
-                              // },
+                              validator: (value) {
+                                if (value.isEmpty) {
+                                  return S.current.msg_champ_oblg;
+                                }
+                                return null;
+                              },
                               decoration: InputDecoration(
                                 prefixIcon: Icon(
-                                  Icons.view_agenda,
+                                  Icons.text_snippet,
                                   color: Colors.blue,
                                 ),
                                 focusedBorder: OutlineInputBorder(
                                     borderSide: BorderSide(color: Colors.blue),
                                     borderRadius: BorderRadius.circular(20)),
                                 contentPadding: EdgeInsets.only(left: 10),
-                                labelText: "N°:",
+                                labelText: S.current.designation,
                                 labelStyle: GoogleFonts.lato(),
                                 enabledBorder: OutlineInputBorder(
                                   gapPadding: 3.3,
@@ -1059,24 +1059,24 @@ class _AddTresoriePageState extends State<AddTresoriePage>
                               height: 10,
                             ),
                             TextFormField(
-                              controller: _libelleCompteControl,
+                              controller: _numCompteControl,
                               keyboardType: TextInputType.text,
-                              validator: (value) {
-                                if (value.isEmpty) {
-                                  return S.current.msg_champ_oblg;
-                                }
-                                return null;
-                              },
+                              // validator: (value) {
+                              //   if (value.isEmpty) {
+                              //     return S.current.msg_champ_oblg;
+                              //   }
+                              //   return null;
+                              // },
                               decoration: InputDecoration(
                                 prefixIcon: Icon(
-                                  Icons.description,
+                                  Icons.confirmation_number_outlined,
                                   color: Colors.blue,
                                 ),
                                 focusedBorder: OutlineInputBorder(
                                     borderSide: BorderSide(color: Colors.blue),
                                     borderRadius: BorderRadius.circular(20)),
                                 contentPadding: EdgeInsets.only(left: 10),
-                                labelText: S.current.designation,
+                                labelText: S.current.n,
                                 labelStyle: GoogleFonts.lato(),
                                 enabledBorder: OutlineInputBorder(
                                   gapPadding: 3.3,
@@ -1168,10 +1168,10 @@ class _AddTresoriePageState extends State<AddTresoriePage>
                                         _compteTresorie.codeCompte =
                                             _codeCompteControl.text.trim();
                                         _codeCompteControl.text = "";
-                                        _compteTresorie.soldeDepart =
-                                            double.parse(_soldeCompteControl
+                                        _compteTresorie.soldeDepart = (_soldeCompteControl.text.trim() != '')
+                                            ?double.parse(_soldeCompteControl
                                                 .text
-                                                .trim());
+                                                .trim()) : 0.0;
                                         _soldeCompteControl.text = "";
                                         _compteTresorie.solde = 0.0;
                                       });

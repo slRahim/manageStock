@@ -431,7 +431,7 @@ class _AddPiecePageState extends State<AddPiecePage>
               total_ttc: _total_ttc,
               net_ht: _net_ht,
               net_payer: (_myParams.timbre) ? _total_ttc + _timbre : _total_ttc,
-              remise: _pourcentremise,
+              remise: double.parse(_pourcentremise.toStringAsFixed(2)),
               timbre: _timbre,
               myParams: _myParams,
             ),
@@ -476,19 +476,15 @@ class _AddPiecePageState extends State<AddPiecePage>
                                 btnCancelText: S.current.annuler,
                                 btnCancelOnPress: () {
                                   setState(() {
-                                    _pourcentremiseControler.text =
-                                        _pourcentremise.toString();
-                                    _remisepieceControler.text =
-                                        _remisepiece.toString();
+                                    _pourcentremiseControler.text = _pourcentremise.toStringAsFixed(2);
+                                    _remisepieceControler.text = _remisepiece.toStringAsFixed(2);
                                   });
                                 },
                                 btnOkText: S.current.confirme,
                                 btnOkOnPress: () {
                                   setState(() {
-                                    _pourcentremise = double.parse(
-                                        _pourcentremiseControler.text.trim());
-                                    _remisepiece = double.parse(
-                                        _remisepieceControler.text.trim());
+                                    _pourcentremise = double.parse(_pourcentremiseControler.text.trim());
+                                    _remisepiece = double.parse(_remisepieceControler.text.trim());
                                   });
                                   calculPiece();
                                 })
@@ -1051,7 +1047,7 @@ class _AddPiecePageState extends State<AddPiecePage>
                                               (_total_ht * _pourcentremise) /
                                                   100;
                                           _remisepieceControler.text =
-                                              _restepiece.toStringAsFixed(2);
+                                              _remisepiece.toStringAsFixed(2);
                                         }
                                       })
                                     }),
@@ -1975,7 +1971,7 @@ class _AddPiecePageState extends State<AddPiecePage>
     _piece.tarification = _selectedTarification;
 
     _piece.total_ht = double.parse((_total_ht).toStringAsFixed(2)) ;
-    _piece.remise =  double.parse((_pourcentremise).toStringAsFixed(2)) ;
+    _piece.remise =  _pourcentremise ;
     _piece.net_ht =  double.parse((_net_ht).toStringAsFixed(2));
     _piece.total_tva =  double.parse((_total_tva).toStringAsFixed(2));
     _piece.total_ttc =  double.parse((_total_ttc).toStringAsFixed(2)) ;
@@ -2804,14 +2800,16 @@ class _AddPiecePageState extends State<AddPiecePage>
 
       ticket.hr(ch: '=');
       ticket.row([
-        PosColumn(
+        (_piece.piece != PieceType.bonCommande &&
+            _piece.piece != PieceType.devis) ? PosColumn(
             textEncoded: (_piece.regler >= 0)
                 ? await CharsetConverter.encode("ISO-8859-6",
                     "${Helpers.numberFormat(_piece.regler).toString()}: ${S.current.regler.split('').reversed.join()}")
                 : await CharsetConverter.encode("ISO-8859-6",
                     "${Helpers.numberFormat((_piece.regler * -1)).toString()}: ${S.current.regler.split('').reversed.join()}"),
-            width: 6),
-        (_piece.reste != 0)
+            width: 6) : PosColumn(width: 6),
+        (_piece.reste != 0 && (_piece.piece != PieceType.bonCommande &&
+            _piece.piece != PieceType.devis))
             ? PosColumn(
                 textEncoded: (_piece.reste >= 0)
                     ? await CharsetConverter.encode("ISO-8859-6",
@@ -3067,14 +3065,17 @@ class _AddPiecePageState extends State<AddPiecePage>
       ticket.hr(ch: '=');
 
       ticket.row([
-        PosColumn(
+        (_piece.piece != PieceType.bonCommande &&
+            _piece.piece != PieceType.devis) ? PosColumn(
             textEncoded: (_piece.regler >= 0)
                 ? await CharsetConverter.encode("ISO-8859-6",
                     "${S.current.regler} : ${Helpers.numberFormat(_piece.regler).toString()}")
                 : await CharsetConverter.encode("ISO-8859-6",
                     "${S.current.regler} : ${Helpers.numberFormat(_piece.regler * -1).toString()}"),
-            width: 6),
-        (_piece.reste != 0)
+            width: 6) : PosColumn(width: 6),
+        (_piece.reste != 0 &&
+            (_piece.piece != PieceType.bonCommande &&
+            _piece.piece != PieceType.devis))
             ? PosColumn(
                 textEncoded: (_piece.reste > 0)
                     ? await CharsetConverter.encode("ISO-8859-6",
@@ -3379,12 +3380,16 @@ class _AddPiecePageState extends State<AddPiecePage>
                         ? pw.CrossAxisAlignment.end
                         : pw.CrossAxisAlignment.start,
                     children: [
-                      pw.Text(
+                      (_piece.piece != PieceType.bonCommande &&
+                          _piece.piece != PieceType.devis)
+                          ? pw.Text(
                           (_piece.regler >= 0)
                               ? "${S.current.regler}\t ${Helpers.numberFormat(_piece.regler)} ${_devise}"
                               : "${S.current.regler}\t ${Helpers.numberFormat(_piece.regler * -1)} ${_devise}",
-                          style: pw.TextStyle(font: ttf)),
-                      (_piece.reste != 0)
+                          style: pw.TextStyle(font: ttf)) : pw.SizedBox(),
+                      (_piece.reste != 0 &&
+                          (_piece.piece != PieceType.bonCommande &&
+                              _piece.piece != PieceType.devis))
                           ? pw.Text(
                               (_piece.reste > 0)
                                   ? "${S.current.reste}\t ${Helpers.numberFormat(_piece.reste)} ${_devise}"

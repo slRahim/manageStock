@@ -66,6 +66,7 @@ class SqlLiteDatabaseHelper {
   }
 
   void _onCreate(Database db, int version) async {
+
     await createProfileTable(db, version);
     await createArticlesTable(db, version);
     await createTiersTable(db, version);
@@ -74,10 +75,13 @@ class SqlLiteDatabaseHelper {
     await createTresorieTable(db, version);
     await createFormatPieceTable(db, version);
     await createMyParamTable(db, version);
+
+    await createTriggersGeneral(db, version);
+    await createTriggersForForeignKey(db , version);
     await createTriggersJournaux(db, version);
     await createTriggersPiece(db, version);
     await createTriggersTresorie(db, version);
-    await createTriggersGeneral(db, version);
+
     await setInitialData(db, version);
   }
 
@@ -490,7 +494,85 @@ class SqlLiteDatabaseHelper {
   
         END;
      ''');
+  }
 
+  createTriggersForForeignKey(Database db, int version) async {
+    await db.execute('''
+        CREATE TRIGGER update_id_ondeletemarque
+        Before Delete ON ArticlesMarques
+        FOR EACH ROW
+        BEGIN
+          Update Articles
+            Set id_Marque = 1 
+          Where id_Marque = old.id ;
+        END ;
+     ''');
+    await db.execute('''
+        CREATE TRIGGER update_id_ondeletefamille
+        Before Delete ON ArticlesFamilles
+        FOR EACH ROW
+        BEGIN
+          Update Articles
+            Set id_Famille = 1 
+          Where id_Famille = old.id ;
+        END ;
+     ''');
+    await db.execute('''
+        CREATE TRIGGER update_id_ondeletefamilletier
+        Before Delete ON ArticlesFamilles
+        FOR EACH ROW
+        BEGIN
+          Update Tiers
+            Set id_Famille = 1 
+          Where id_Famille = old.id ;
+        END ;
+     ''');
+    await db.execute('''
+        CREATE TRIGGER update_tva_onupdatetva
+        After Update ON ArticlesTva
+        FOR EACH ROW
+        BEGIN
+          Update Articles
+            Set TVA = NEW.Tva , 
+                PrixVente1TTC = PrixVente1 + (PrixVente1*(New.Tva/100)),
+                PrixVente2TTC = PrixVente2 + (PrixVente2*(New.Tva/100)),
+                PrixVente3TTC = PrixVente3 + (PrixVente3*(New.Tva/100))
+          Where TVA = old.Tva  ;
+        END ;
+     ''');
+    await db.execute('''
+        CREATE TRIGGER update_tva_ondeletetva
+        Before Delete ON ArticlesTva
+        FOR EACH ROW
+        BEGIN
+          Update Articles
+            Set TVA = 0.0 ,
+                PrixVente1TTC = PrixVente1 ,
+                PrixVente2TTC = PrixVente2 ,
+                PrixVente3TTC = PrixVente3 
+          Where TVA = old.Tva  ;
+        END ;
+     ''');
+    await db.execute('''
+        CREATE TRIGGER update_id_ondeletecharge
+        Before Delete ON ChargeTresorie
+        FOR EACH ROW
+        BEGIN
+          Update Tresories
+            Set Charge_id = 1 
+          Where Charge_id = old.id ;
+        END ;
+     ''');
+    await db.execute('''
+        CREATE TRIGGER update_id_ondeletecompte
+        Before Delete ON CompteTresorie
+        FOR EACH ROW
+        BEGIN
+          Update Tresories
+            Set Compte_id = 1 
+          Where Compte_id = old.id ;
+        END ;
+     ''');
 
   }
 
@@ -1272,28 +1354,20 @@ class SqlLiteDatabaseHelper {
         BEFORE DELETE ON Tresories 
         FOR EACH ROW 
         BEGIN 
-           DELETE FROM ReglementTresorie WHERE Tresorie_id = OLD.id ;
-       
-        END;
-      ''');
-
-    await db.execute('''CREATE TRIGGER dell_tresorie_mov1
-        BEFORE DELETE ON Tresories 
-        FOR EACH ROW 
-        When OLD.Mov = 1 
-        BEGIN 
-           UPDATE Tiers
-               SET Chiffre_affaires = IFNULL((Select Sum(Net_a_payer) From Pieces where Tier_id = OLD.Tier_id AND Mov = 1 AND Piece <> "CC" AND Piece <> "FP" AND Piece <> "BC"),0)
-           WHERE id = OLD.Tier_id; 
+          DELETE FROM ReglementTresorie WHERE Tresorie_id = OLD.id ;
+           
+          UPDATE Tiers
+             SET Chiffre_affaires = IFNULL((Select Sum(Net_a_payer) From Pieces where Tier_id = OLD.Tier_id AND Mov = 1 AND Piece <> "CC" AND Piece <> "FP" AND Piece <> "BC"),0)
+          WHERE id = OLD.Tier_id; 
            
           UPDATE Tiers
               SET Regler = IFNULL((SELECT SUM(Montant)-OLD.Montant FROM Tresories WHERE Tier_id = OLD.Tier_id AND Mov = 1),0)
-            WHERE id = OLD.Tier_id ; 
+          WHERE id = OLD.Tier_id ; 
     
            UPDATE Tiers
              SET  Credit = (Solde_depart + Chiffre_affaires) - Regler 
            WHERE id = OLD.Tier_id;
-           
+       
         END;
       ''');
 

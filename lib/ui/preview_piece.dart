@@ -385,15 +385,18 @@ class _PreviewPieceState extends State<PreviewPiece> {
                           Row(
                             children: [
                               Expanded(
-                                child: Text(
+                                child: (widget.piece.piece != PieceType.bonCommande &&
+                                       widget.piece.piece != PieceType.devis)
+                                    ? Text(
                                   (widget.piece.regler >= 0)
                                       ? "${S.current.regler} :${Helpers.numberFormat(widget.piece.regler)}"
                                       : "${S.current.regler} :${Helpers.numberFormat(widget.piece.regler * -1)}",
                                   style: TextStyle(color: Colors.black),
-                                ),
+                                ) : SizedBox(),
                               ),
                               Expanded(
-                                child: (widget.piece.reste != 0)
+                                child: (widget.piece.reste != 0 && (widget.piece.piece != PieceType.bonCommande &&
+                                    widget.piece.piece != PieceType.devis))
                                     ? Text(
                                         (widget.piece.reste > 0)
                                             ? "${S.current.reste} :${Helpers.numberFormat(widget.piece.reste)}"
@@ -813,14 +816,16 @@ class _PreviewPieceState extends State<PreviewPiece> {
       ticket.hr(ch: '=');
 
       ticket.row([
-        PosColumn(
+        (widget.piece.piece != PieceType.bonCommande &&
+            widget.piece.piece != PieceType.devis) ? PosColumn(
             textEncoded: (widget.piece.regler >= 0)
                 ? await CharsetConverter.encode("ISO-8859-6",
                     "${Helpers.numberFormat(widget.piece.regler).toString()}: ${S.current.regler.split('').reversed.join()}")
                 : await CharsetConverter.encode("ISO-8859-6",
                     "${Helpers.numberFormat(widget.piece.regler * -1).toString()}: ${S.current.regler.split('').reversed.join()}"),
-            width: 6),
-        (widget.piece.reste != 0)
+            width: 6) : PosColumn(width: 6),
+        (widget.piece.reste != 0 && (widget.piece.piece != PieceType.bonCommande &&
+            widget.piece.piece != PieceType.devis))
             ? PosColumn(
                 textEncoded: (widget.piece.reste > 0)
                     ? await CharsetConverter.encode("ISO-8859-6",
@@ -1078,14 +1083,16 @@ class _PreviewPieceState extends State<PreviewPiece> {
           ));
       ticket.hr(ch: '=');
       ticket.row([
-        PosColumn(
+        (widget.piece.piece != PieceType.bonCommande &&
+            widget.piece.piece != PieceType.devis) ? PosColumn(
             textEncoded: (widget.piece.regler >= 0)
                 ? await CharsetConverter.encode("ISO-8859-6",
                     "${S.current.regler} : ${Helpers.numberFormat(widget.piece.regler).toString()}")
                 : await CharsetConverter.encode("ISO-8859-6",
                     "${S.current.regler} : ${Helpers.numberFormat(widget.piece.regler * -1).toString()}"),
-            width: 6),
-        (widget.piece.reste != 0)
+            width: 6) : PosColumn(width: 6),
+        (widget.piece.reste != 0 && (widget.piece.piece != PieceType.bonCommande &&
+            widget.piece.piece != PieceType.devis))
             ? PosColumn(
                 textEncoded: (widget.piece.reste > 0)
                     ? await CharsetConverter.encode("ISO-8859-6",

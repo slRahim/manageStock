@@ -153,8 +153,7 @@ class _AddTierPageState extends State<AddTierPage>
     _familleDropdownItems = utils.buildDropFamilleTier(_familleItems);
     _statutDropdownItems = utils.buildDropStatutTier(Statics.statutItems);
     await buildTarification();
-    _tarificationDropdownItems =
-        utils.buildDropTarificationTier(_tarificationItems);
+    _tarificationDropdownItems = utils.buildDropTarificationTier(_tarificationItems);
 
     _selectedStatut = Statics.statutItems[0];
     _selectedTarification = _tarificationItems[0];
@@ -173,7 +172,7 @@ class _AddTierPageState extends State<AddTierPage>
     return Future<bool>.value(editMode);
   }
 
-  Future<void> setDataFromItem(item) async {
+  Future<void> setDataFromItem(Tiers item) async {
     _raisonSocialeControl.text = item.raisonSociale;
     _qrCodeControl.text = (item.qrCode == null) ? '' : item.qrCode;
     _adresseControl.text = item.adresse;
@@ -198,7 +197,7 @@ class _AddTierPageState extends State<AddTierPage>
     _chiffre_affairesControl.text = item.chiffre_affaires.toStringAsFixed(2);
     _reglerControl.text = item.regler.toStringAsFixed(2);
     _creditControl.text = item.credit.toStringAsFixed(2);
-    _selectedFamille = _familleItems[item.id_famille];
+    _selectedFamille = _familleItems.firstWhere((element) => element.id == item.id_famille);
     _selectedStatut = Statics.statutItems[item.statut];
     _selectedTarification = item.tarification;
     _controlBloquer = item.bloquer;
@@ -1542,7 +1541,7 @@ class _AddTierPageState extends State<AddTierPage>
       Uint8List image = await Helpers.getDefaultImageUint8List(from: "tier");
       item.imageUint8List = image;
     }
-    item.id_famille = _familleItems.indexOf(_selectedFamille);
+    item.id_famille = _selectedFamille.id;
     item.statut = Statics.statutItems.indexOf(_selectedStatut);
     item.tarification = _selectedTarification;
     item.bloquer = _controlBloquer;

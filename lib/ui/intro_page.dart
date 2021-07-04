@@ -933,11 +933,11 @@ class _IntroPageState extends State<IntroPage> {
 
   Future initData() async{
     Uint8List image = await Helpers.getDefaultImageUint8List(from: "tier");
-    Tiers tier0 = new Tiers(image, "Client 00", null, 0, 0, 1, "", "","", "", "",
+    Tiers tier0 = new Tiers(image, "Client 00", null, 1, 0, 1, "", "","", "", "",
         "", "", "", "", "", 0.0, 0, 0, false);
     tier0.clientFour = 0;
 
-    Tiers tier2 = new Tiers(image, "Prov 00", null, 0, 0, 1, "", "","", "", "", "",
+    Tiers tier2 = new Tiers(image, "Prov 00", null, 1, 0, 1, "", "","", "", "", "",
         "", "", "", "", 0.0, 0, 0, false);
     tier2.clientFour = 2;
 

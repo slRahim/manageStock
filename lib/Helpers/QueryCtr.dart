@@ -63,8 +63,8 @@ class QueryCtr {
       bool nonStockable =
           filters["nonStockable"] != null ? filters["nonStockable"] : false;
 
-      String marqueFilter = marque > 0 ? " AND Id_Marque = $marque" : "";
-      String familleFilter = famille > 0 ? " AND Id_Famille = $famille" : "";
+      String marqueFilter = marque > 1 ? " AND Id_Marque = $marque" : "";
+      String familleFilter = famille > 1 ? " AND Id_Famille = $famille" : "";
       String stockFilter = stock ? " AND (Qte < 1 OR Qte < Qte_Min)" : "";
       String articleBloquerFilter =
           bloquer ? " AND Bloquer > 0" : " AND Bloquer = 0";
@@ -120,7 +120,7 @@ class QueryCtr {
         clientFournFilter =
             " AND (Clientfour = $clientFourn OR Clientfour = 1)";
       }
-      String familleFilter = famille > 0 ? " AND Id_Famille = $famille" : "";
+      String familleFilter = famille > 1 ? " AND Id_Famille = $famille" : "";
 
       String hasCreditFilter = hasCredit ? " AND Credit > 0 " : "";
       String showBloquerFilter =
@@ -773,12 +773,12 @@ class QueryCtr {
   Future<List<ArticleTva>> getArticleTva(int offset, int limit,
       {String searchTerm}) async {
     Database dbClient = await _databaseHelper.db;
-    String query = "SELECT * FROM ${DbTablesNames.articlesTva}";
+    String query = "SELECT * FROM ${DbTablesNames.articlesTva} Where id > 1";
 
     if (searchTerm != null &&
         searchTerm != '' &&
         searchTerm.isNumericUsingRegularExpression) {
-      query += " Where Tva = ${double.parse(searchTerm)}";
+      query += " AND Tva = ${double.parse(searchTerm)}";
     }
     query += ' ORDER BY id DESC';
     query += " LIMIT $limit OFFSET $offset";

@@ -422,6 +422,8 @@ class _FamilleMarqueFragmentState extends State<FamilleMarqueFragment> {
                           borderSide: BorderSide(color: Colors.blue),
                           borderRadius: BorderRadius.circular(20)),
                       contentPadding: EdgeInsets.only(left: 10),
+                      hintText: S.current.marque,
+                      hintStyle: GoogleFonts.lato(),
                       labelText: S.current.marque,
                       labelStyle: GoogleFonts.lato(
                         textStyle:
@@ -725,36 +727,6 @@ class _FamilleMarqueFragmentState extends State<FamilleMarqueFragment> {
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
                         TextFormField(
-                          controller: _numCompteControl,
-                          keyboardType: TextInputType.text,
-                          // validator: (value) {
-                          //   if (value.isEmpty) {
-                          //     return S.current.msg_champ_oblg;
-                          //   }
-                          //   return null;
-                          // },
-                          decoration: InputDecoration(
-                            prefixIcon: Icon(
-                              Icons.view_agenda,
-                              color: Colors.blue,
-                            ),
-                            focusedBorder: OutlineInputBorder(
-                                borderSide: BorderSide(color: Colors.blue),
-                                borderRadius: BorderRadius.circular(20)),
-                            contentPadding: EdgeInsets.only(left: 10),
-                            labelText: "N°:",
-                            labelStyle: GoogleFonts.lato(),
-                            enabledBorder: OutlineInputBorder(
-                              gapPadding: 3.3,
-                              borderRadius: BorderRadius.circular(20),
-                              borderSide: BorderSide(color: Colors.blue),
-                            ),
-                          ),
-                        ),
-                        SizedBox(
-                          height: 10,
-                        ),
-                        TextFormField(
                           controller: _libelleCompteControl,
                           keyboardType: TextInputType.text,
                           validator: (value) {
@@ -773,6 +745,36 @@ class _FamilleMarqueFragmentState extends State<FamilleMarqueFragment> {
                                 borderRadius: BorderRadius.circular(20)),
                             contentPadding: EdgeInsets.only(left: 10),
                             labelText: S.current.designation,
+                            labelStyle: GoogleFonts.lato(),
+                            enabledBorder: OutlineInputBorder(
+                              gapPadding: 3.3,
+                              borderRadius: BorderRadius.circular(20),
+                              borderSide: BorderSide(color: Colors.blue),
+                            ),
+                          ),
+                        ),
+                        SizedBox(
+                          height: 10,
+                        ),
+                        TextFormField(
+                          controller: _numCompteControl,
+                          keyboardType: TextInputType.text,
+                          // validator: (value) {
+                          //   if (value.isEmpty) {
+                          //     return S.current.msg_champ_oblg;
+                          //   }
+                          //   return null;
+                          // },
+                          decoration: InputDecoration(
+                            prefixIcon: Icon(
+                              Icons.confirmation_number_outlined,
+                              color: Colors.blue,
+                            ),
+                            focusedBorder: OutlineInputBorder(
+                                borderSide: BorderSide(color: Colors.blue),
+                                borderRadius: BorderRadius.circular(20)),
+                            contentPadding: EdgeInsets.only(left: 10),
+                            labelText: S.current.n,
                             labelStyle: GoogleFonts.lato(),
                             enabledBorder: OutlineInputBorder(
                               gapPadding: 3.3,
@@ -817,12 +819,12 @@ class _FamilleMarqueFragmentState extends State<FamilleMarqueFragment> {
                         TextFormField(
                           controller: _soldeCompteControl,
                           keyboardType: TextInputType.number,
-                          validator: (value) {
-                            if (value.isEmpty) {
-                              return S.current.msg_champ_oblg;
-                            }
-                            return null;
-                          },
+                          // validator: (value) {
+                          //   if (value.isEmpty) {
+                          //     return S.current.msg_champ_oblg;
+                          //   }
+                          //   return null;
+                          // },
                           decoration: InputDecoration(
                             prefixIcon: Icon(
                               Icons.monetization_on,
@@ -864,10 +866,10 @@ class _FamilleMarqueFragmentState extends State<FamilleMarqueFragment> {
                                     _compteTresorie.codeCompte =
                                         _codeCompteControl.text.trim();
                                     _codeCompteControl.text = "";
-                                    _compteTresorie.soldeDepart =
-                                        double.parse(_soldeCompteControl
+                                    _compteTresorie.soldeDepart = (_soldeCompteControl.text.trim() != '')
+                                        ? double.parse(_soldeCompteControl
                                             .text
-                                            .trim());
+                                            .trim()) : 0.0 ;
                                     _soldeCompteControl.text = "";
                                     _compteTresorie.solde = 0.0;
                                   });

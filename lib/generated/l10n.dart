@@ -465,10 +465,10 @@ class S {
     );
   }
 
-  /// `NTVA/NIF`
+  /// `NVAT/NIF`
   String get nif {
     return Intl.message(
-      'NTVA/NIF',
+      'NVAT/NIF',
       name: 'nif',
       desc: '',
       args: [],
@@ -1135,10 +1135,10 @@ class S {
     );
   }
 
-  /// `Total TVA`
+  /// `Total VAT`
   String get total_tva {
     return Intl.message(
-      'Total TVA',
+      'Total VAT',
       name: 'total_tva',
       desc: '',
       args: [],
@@ -1475,10 +1475,10 @@ class S {
     );
   }
 
-  /// `Buying price`
+  /// `Buying price excl. tax`
   String get prix_achat {
     return Intl.message(
-      'Buying price',
+      'Buying price excl. tax',
       name: 'prix_achat',
       desc: '',
       args: [],
@@ -1565,30 +1565,30 @@ class S {
     );
   }
 
-  /// `Price 1`
+  /// `Price excl. tax 1`
   String get prix_v1 {
     return Intl.message(
-      'Price 1',
+      'Price excl. tax 1',
       name: 'prix_v1',
       desc: '',
       args: [],
     );
   }
 
-  /// `Price 2`
+  /// `Price excl. tax 2`
   String get prix_v2 {
     return Intl.message(
-      'Price 2',
+      'Price excl. tax 2',
       name: 'prix_v2',
       desc: '',
       args: [],
     );
   }
 
-  /// `Price 3`
+  /// `Price excl. tax 3`
   String get prix_v3 {
     return Intl.message(
-      'Price 3',
+      'Price excl. tax 3',
       name: 'prix_v3',
       desc: '',
       args: [],
@@ -1615,10 +1615,10 @@ class S {
     );
   }
 
-  /// `Tva rate`
+  /// `VAT rate`
   String get taux_tva {
     return Intl.message(
-      'Tva rate',
+      'VAT rate',
       name: 'taux_tva',
       desc: '',
       args: [],
@@ -1725,10 +1725,10 @@ class S {
     );
   }
 
-  /// `Price`
+  /// `Price excl. tax`
   String get prix {
     return Intl.message(
-      'Price',
+      'Price excl. tax',
       name: 'prix',
       desc: '',
       args: [],
@@ -2175,10 +2175,10 @@ class S {
     );
   }
 
-  /// `TVA`
+  /// `VAT`
   String get tva {
     return Intl.message(
-      'TVA',
+      'VAT',
       name: 'tva',
       desc: '',
       args: [],
@@ -2435,10 +2435,10 @@ class S {
     );
   }
 
-  /// `Enable Tva`
+  /// `Enable VAT`
   String get param_tva {
     return Intl.message(
-      'Enable Tva',
+      'Enable VAT',
       name: 'param_tva',
       desc: '',
       args: [],
@@ -5605,10 +5605,10 @@ class S {
     );
   }
 
-  /// `Tva Rate`
+  /// `VAT Rate`
   String get tva_article {
     return Intl.message(
-      'Tva Rate',
+      'VAT Rate',
       name: 'tva_article',
       desc: '',
       args: [],
@@ -5655,10 +5655,10 @@ class S {
     );
   }
 
-  /// `Pin code`
+  /// `Key`
   String get code_pin1 {
     return Intl.message(
-      'Pin code',
+      'Key',
       name: 'code_pin1',
       desc: '',
       args: [],

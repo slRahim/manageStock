@@ -151,7 +151,7 @@
   "designation": "Désignation",
   "referance" : "Référence",
   "msg_scan_barcode": "Cliquez deux foix pour scanner le code-barre",
-  "prix_achat": "Prix d'achat",
+  "prix_achat": "Prix d'achat HT",
   "stockable" : "Stockable",
   "pmp": "PMP",
   "init" : "initial",
@@ -160,9 +160,9 @@
   "stock_min": "Stock min",
   "qte_colis" : "Qte par colis",
   "colis": "Colis",
-  "prix_v1": "Prix de vente 1",
-  "prix_v2": "Prix de vente 2",
-  "prix_v3": "Prix de vente 3",
+  "prix_v1": "Prix de vente HT 1",
+  "prix_v2": "Prix de vente HT 2",
+  "prix_v3": "Prix de vente HT 3",
   "msg_description" : "Ajoutez une description d'article ajouté",
   "marque" : "Marque",
   "taux_tva": "Taux Tva",
@@ -177,7 +177,7 @@
   "par_desgn": "Par désignation",
   "preview_titre" : "Aperçu",
 
-  "prix" : "Prix",
+  "prix" : "Prix HT",
   "qte" : "QTE",
   "qte_cmd" : "Qte Cmd",
 
@@ -603,7 +603,7 @@
   "msg_retour_no_save" : "Voulez-vous quitter sans valider les dernier changements",
   "msg_map_add_position" : "Cliquez sur la carte pour choisir la position",
 
-  "code_pin1" : "Code pin",
+  "code_pin1" : "Clé",
   "msg_existe_deja" : "Élément existe déja",
   "caisse_titre" : "Mes caisses",
   "telechargement" : "Téléchargement"
