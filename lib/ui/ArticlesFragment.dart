@@ -273,15 +273,13 @@ class _ArticlesFragmentState extends State<ArticlesFragment> {
     if (_selectedItems.length > 0) {
       return SelectItemsBar(
         itemsCount: _selectedItems.length,
-        onConfirm: () => {
-          widget.onConfirmSelectedItems(_selectedItems),
-          // setState(() {
-          //   _selectedItems.forEach((item) {
-          //     item.selectedQuantite = -1.0;
-          //   });
-          //   _selectedItems = new List<Object>();
-          // })
-          Navigator.pop(context)
+        onConfirm: () {
+          widget.onConfirmSelectedItems(_selectedItems);
+          setState(() {
+            _dataSource.refresh();
+            _selectedItems = new List<Object>();
+          });
+          // Navigator.pop(context)
         },
         onCancel: () => {
           setState(() {

@@ -186,6 +186,8 @@ class _SelectfromdriveState extends State<Selectfromdrive> {
               Helpers.showFlushBar(
                   context, "${S.current.msg_ereure}");
             }
+          }).catchError((e)=>{
+            Helpers.showFlushBar(context, "${S.current.msg_ereure}")
           }),
           message: Text('${S.current.telechargement}...'),
           progress: CircularProgressIndicator(),
@@ -211,6 +213,9 @@ class _SelectfromdriveState extends State<Selectfromdrive> {
                 Helpers.showToast(
                     "${S.current.msg_err_restoration}");
               }
+            }).catchError((e)=>{
+              Navigator.pop(context),
+              Helpers.showToast("${S.current.msg_err_restoration}")
             }),
             message: Text('${S.current.chargement}...'),
             progress: CircularProgressIndicator(),

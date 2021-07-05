@@ -560,7 +560,10 @@ class _SettingsPageState extends State<SettingsPage> {
                                       Helpers.showToast(
                                           "${S.current.msg_back_err}");
                                     }
-                                  }).catchError((e) => Navigator.pop(context)),
+                                  }).catchError((e) =>{
+                                    Navigator.pop(context) ,
+                                    Helpers.showToast("${S.current.msg_back_err}")
+                                  }),
                                   message: Text('${S.current.chargement}...'),
                                   progress: CircularProgressIndicator(),
                                   decoration: BoxDecoration(

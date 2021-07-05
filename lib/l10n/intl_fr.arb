@@ -266,7 +266,7 @@
   "param_back_title" : "Sauvegarde / Restauration",
   "param_backup" : "Créer une sauvegarde",
   "msg_back_suce" : "Sauvegarde créée avec succès",
-  "msg_back_err" : "Erreur de création de sauvegarde",
+  "msg_back_err" : "Erreur à la création de sauvegarde",
   "param_resto_data" : "Restaurer les données",
   "ev_day" : "Chaque jour",
   "ev_sun" : "Chaque dimanche",

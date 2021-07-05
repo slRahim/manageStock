@@ -356,7 +356,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "msg_ajout_remise" : MessageLookupByLibrary.simpleMessage("Cliquez ici pour ajouter une remise sur le montant total"),
     "msg_ajout_verssement" : MessageLookupByLibrary.simpleMessage("Cliquez ici pour ajouter un montant"),
     "msg_article_utilise" : MessageLookupByLibrary.simpleMessage("Article associé à des pièces, vous ne pouvez pas le supprimer"),
-    "msg_back_err" : MessageLookupByLibrary.simpleMessage("Erreur de création de sauvegarde"),
+    "msg_back_err" : MessageLookupByLibrary.simpleMessage("Erreur à la création de sauvegarde"),
     "msg_back_suce" : MessageLookupByLibrary.simpleMessage("Sauvegarde créée avec succès"),
     "msg_cam_permission" : MessageLookupByLibrary.simpleMessage("Camera non autorisée !"),
     "msg_champ_oblg" : MessageLookupByLibrary.simpleMessage("Champ Obligatoire"),

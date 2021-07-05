@@ -65,7 +65,7 @@ class _TierListItemState extends State<TierListItem> {
     return Visibility(
       visible: _visible,
       child: DescribedFeatureOverlay(
-        featureId: feature7,
+        featureId: feature7 ,
         tapTarget: Icon(
           MdiIcons.arrowExpandRight,
           color: Colors.black,
@@ -88,13 +88,13 @@ class _TierListItemState extends State<TierListItem> {
           child: DescribedFeatureOverlay(
             featureId: (widget.onItemSelected != null) ? feature8 : '',
             tapTarget: Icon(
-              MdiIcons.gestureTapHold,
+              MdiIcons.gestureTap,
               color: Colors.black,
             ),
             backgroundColor: Colors.green,
             contentLocation: ContentLocation.below,
             title: Text(
-              S.current.long_presse,
+              S.current.tap_element,
               style: GoogleFonts.lato(fontWeight: FontWeight.bold),
             ),
             description: Container(
@@ -225,7 +225,7 @@ class _TierListItemState extends State<TierListItem> {
               ],
             ),
           ),
-          actions: <Widget>[
+          actions: (widget.onItemSelected == null) ? <Widget>[
             IconSlideAction(
                 color: Colors.white10,
                 iconWidget: Icon(
@@ -236,7 +236,7 @@ class _TierListItemState extends State<TierListItem> {
                 onTap: () async {
                   dellDialog(context);
                 }),
-          ],
+          ] : null ,
           secondaryActions: <Widget>[
             IconSlideAction(
               color: Colors.white10,

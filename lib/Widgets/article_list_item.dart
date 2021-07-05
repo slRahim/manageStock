@@ -83,13 +83,13 @@ class _ArticleListItemState extends State<ArticleListItem> {
       child: DescribedFeatureOverlay(
         featureId: (widget.onItemSelected != null) ? feature9 : '',
         tapTarget: Icon(
-          MdiIcons.gestureTapHold,
+          MdiIcons.gestureTap,
           color: Colors.black,
         ),
         backgroundColor: Colors.green,
         contentLocation: ContentLocation.below,
         title: Text(
-          S.current.long_presse,
+          S.current.tap_element,
           style: GoogleFonts.lato(fontWeight: FontWeight.bold),
         ),
         description: Container(
@@ -237,13 +237,13 @@ class _ArticleListItemState extends State<ArticleListItem> {
                     ? feature10
                     : '',
                 tapTarget: Icon(
-                  MdiIcons.gestureTap,
+                  MdiIcons.gestureTapHold,
                   color: Colors.black,
                 ),
                 backgroundColor: Colors.yellow[700],
                 contentLocation: ContentLocation.below,
                 title: Text(
-                  S.current.tap_element,
+                  S.current.long_presse,
                   style: GoogleFonts.lato(fontWeight: FontWeight.bold),
                 ),
                 description: Container(
