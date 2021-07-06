@@ -781,7 +781,7 @@ class SqlLiteDatabaseHelper {
               AND (NEW.Piece_type = 'BR' OR NEW.Piece_type = 'FF') 
         BEGIN
             UPDATE Articles
-               SET PMP = IFNULL(((Qte * PMP)-(OLD.Qte * OLD.Net_ht)) / (Qte - OLD.Qte),Prix_revient) , 
+               SET PMP = IFNULL(((Qte * PMP)-(OLD.Qte * OLD.Net_ht)) / (Qte - OLD.Qte),Old.Prix_revient) , 
                    Qte = Qte - OLD.Qte,
                    Colis = (Qte - OLD.Qte) / Qte_Colis
              WHERE id = New.Article_id;

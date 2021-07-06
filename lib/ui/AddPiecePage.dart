@@ -1421,7 +1421,7 @@ class _AddPiecePageState extends State<AddPiecePage>
     ]);
   }
 
-  //dialog de save
+  //dialog dimpression
   Widget printChoicesDialog() {
     return StatefulBuilder(builder: (context, StateSetter setState) {
       return Builder(

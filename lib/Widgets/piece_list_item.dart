@@ -234,7 +234,12 @@ class _PieceListItemState extends State<PieceListItem> {
                   ),
                 ]),
               ),
-              RichText(
+              (widget.piece.piece != PieceType.bonReception &&
+                  widget.piece.piece != PieceType.factureFournisseur &&
+                  widget.piece.piece != PieceType.bonCommande &&
+                  widget.piece.piece != PieceType.retourFournisseur &&
+                  widget.piece.piece != PieceType.avoirFournisseur
+              ) ? RichText(
                 text: TextSpan(children: [
                   TextSpan(
                       text: "${S.current.marge} : ",
@@ -252,7 +257,7 @@ class _PieceListItemState extends State<PieceListItem> {
                             fontSize: 14.0)),
                   ),
                 ]),
-              ),
+              ) : SizedBox(),
             ],
           ),
           actions: (widget.fromTresory == null && widget.onItemSelected == null)
