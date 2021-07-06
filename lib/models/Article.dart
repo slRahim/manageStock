@@ -222,6 +222,12 @@ class Article {
 
   double get cmdClient => _cmdClient;
 
+  get qteInit => _qteInit;
+
+  set qteInit(value) {
+    _qteInit = value;
+  }
+
   set cmdClient(double value) {
     _cmdClient = value;
   }

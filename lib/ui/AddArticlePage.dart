@@ -1408,8 +1408,9 @@ class _AddArticlePageState extends State<AddArticlePage>
     String message;
     try {
       if (widget.arguments.id != null) {
+        var item = await makeArticle() ;
         id = await widget._queryCtr
-            .updateItemInDb(DbTablesNames.articles, await makeArticle());
+            .updateItemInDb(DbTablesNames.articles, item);
         if (id > -1) {
           message = S.current.msg_update_item;
         } else {
@@ -1447,9 +1448,15 @@ class _AddArticlePageState extends State<AddArticlePage>
     (_prixAchatControl.text.trim() != "")
         ? article.setprixAchat(double.parse(_prixAchatControl.text.trim()))
         : article.setprixAchat(0.0);
-    (_stockInitialControl.text.trim() != "")
-        ? article.setQteInit(double.parse(_stockInitialControl.text.trim()))
-        : article.setQteInit(0.0);
+
+    if(!modification && editMode){
+      (_stockInitialControl.text.trim() != "")
+          ? article.setQteInit(double.parse(_stockInitialControl.text.trim()))
+          : article.setQteInit(0.0);
+    }else if (modification){
+      article.setQteInit(widget.arguments.qteInit) ;
+    }
+
     (_stockInitialControl.text.trim() != "")
         ? article.setquantite(double.parse(_stockInitialControl.text.trim()))
         : article.setquantite(0.0);
@@ -1463,10 +1470,12 @@ class _AddArticlePageState extends State<AddArticlePage>
     (_pmpControl.text.trim() != "")
         ? article.setPmp(double.parse(_pmpControl.text.trim()))
         : article.setPmp(0.0);
+
+    print(widget.arguments.pmpInit);
     if (!modification && editMode) {
-      (_pmpControl.text.trim() != "")
-          ? article.setPmpInit(double.parse(_pmpControl.text.trim()))
-          : article.setPmpInit(0.0);
+      article.setPmpInit(article.pmp);
+    }else if (modification){
+      article.setPmpInit(widget.arguments.pmpInit);
     }
 
     (_qteColisCotrol.text.trim() != "")

@@ -57,7 +57,7 @@ class _ListTileCardState extends State<ListTileCard> {
               ? (widget.from is Tiers)
                   ? 110
                   : 105
-              : 98,
+              : 105,
           hiddenCardHeight: (Helpers.isDirectionRTL(context)) ? 90 : 80,
           showColors: false,
           frontCardWidget: ListFrontCard(

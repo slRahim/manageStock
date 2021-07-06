@@ -63,7 +63,7 @@ class _SupportPageState extends State<SupportPage> {
                     ),
                     FlatButton(
                       onPressed: () async {
-                        var url = "https://google.com";
+                        var url = "https://cirtait.com";
                         if (await canLaunch(url)) {
                           await launch(
                             url,
