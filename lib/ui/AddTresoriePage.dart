@@ -52,8 +52,7 @@ class _AddTresoriePageState extends State<AddTresoriePage>
   TextEditingController _dateControl = new TextEditingController();
   TextEditingController _clientControl = new TextEditingController();
   TextEditingController _objetControl = new TextEditingController();
-  TextEditingController _modaliteControl =
-      new TextEditingController(text: S.current.espece);
+  TextEditingController _numchequeControl = new TextEditingController();
   TextEditingController _montantControl = new TextEditingController();
 
   double _restepiece = 0.0;
@@ -79,6 +78,9 @@ class _AddTresoriePageState extends State<AddTresoriePage>
   final _formKey = GlobalKey<FormState>();
   final _formKey1 = GlobalKey<FormState>();
   String _devise;
+
+  List<DropdownMenuItem<String>> _modaliteDropdownItems;
+  String _selectedmodalite;
 
   void initState() {
     super.initState();
@@ -108,7 +110,7 @@ class _AddTresoriePageState extends State<AddTresoriePage>
     _selectedTypeTiers = Statics.tiersItems[0];
 
     _categorieItems = await _queryCtr.getAllTresorieCategorie();
-    _categorieItems[0].libelle = S.current.choisir;
+    _categorieItems[0].libelle = '';
     _categorieItems[1].libelle = S.current.reglemnt_client;
     _categorieItems[2].libelle = S.current.reglement_fournisseur;
     _categorieItems[3].libelle = S.current.encaissement;
@@ -119,6 +121,9 @@ class _AddTresoriePageState extends State<AddTresoriePage>
     _categorieDropdownItems =
         utils.buildDropTresorieCategoriesDownMenuItems(_categorieItems);
     _selectedCategorie = _categorieItems[0];
+
+    _modaliteDropdownItems = utils.buildDropStatutTier(Statics.modaliteList);
+    _selectedmodalite = Statics.modaliteList[0] ;
 
     _compteItems = await _queryCtr.getAllCompteTresorie();
     _compteDropdownItems =
@@ -183,13 +188,15 @@ class _AddTresoriePageState extends State<AddTresoriePage>
         _showTierController = false;
       }
       _objetControl.text = _tresorie.objet;
-      _modaliteControl.text = _tresorie.modalite;
+      _selectedmodalite = Statics.modaliteList[_tresorie.modalite];
+      _numchequeControl.text = _tresorie.numCheque ;
       _montantControl.text = (_tresorie.montant < 0)
           ? ((_tresorie.montant * -1)).toStringAsFixed(2)
           : (_tresorie.montant).toStringAsFixed(2);
     } else {
       _selectedTypeTiers = Statics.tiersItems[0];
       _selectedCategorie = _categorieItems[1];
+      _selectedmodalite = Statics.modaliteList[0];
       _selectedCompte = _compteItems[0];
       _selectedCharge = _chargeItems[0];
       _objetControl.text = _selectedCategorie.libelle;
@@ -711,40 +718,77 @@ class _AddTresoriePageState extends State<AddTresoriePage>
                       ),
                     ),
                   ),
-                  TextFormField(
-                    enabled: editMode,
-                    controller: _modaliteControl,
-                    onTap: () => _modaliteControl.selection = TextSelection(
-                        baseOffset: 0,
-                        extentOffset: _modaliteControl.value.text.length),
-                    keyboardType: TextInputType.text,
-                    validator: (value) {
-                      if (value.isEmpty) {
-                        return S.current.msg_champ_oblg;
-                      }
-                      return null;
-                    },
-                    decoration: InputDecoration(
-                      labelText: S.current.modalite,
-                      labelStyle: GoogleFonts.lato(
-                          textStyle:
-                              TextStyle(color: Theme.of(context).hintColor)),
-                      prefixIcon: Icon(
-                        MdiIcons.creditCardSettingsOutline,
-                        color: Colors.blue,
+                  Container(
+                    padding: EdgeInsetsDirectional.fromSTEB(10, 3, 10, 3),
+                    decoration: editMode
+                        ? new BoxDecoration(
+                      border: Border.all(
+                        color: Colors.blueAccent,
                       ),
-                      focusedBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(20.0),
+                    )
+                        : null,
+                    child: Row(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      mainAxisSize: MainAxisSize.max,
+                      children: [
+                        Icon(MdiIcons.creditCardSettingsOutline, color: Colors.blue,),
+                        SizedBox(width: 13),
+                        Expanded(
+                          child: DropdownButtonHideUnderline(
+                            child: DropdownButton<String>(
+                                disabledHint: Text(_selectedmodalite),
+                                value: _selectedmodalite,
+                                items: _modaliteDropdownItems,
+                                onChanged: editMode
+                                    ? (value) {
+                                  setState(() {
+                                    _selectedmodalite = value;
+                                  });
+                                }
+                                    : null),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  Visibility(
+                    visible: (Statics.modaliteList.indexOf(_selectedmodalite) == 1),
+                    child: TextFormField(
+                      enabled: editMode,
+                      controller: _numchequeControl,
+                      onTap: () => _numchequeControl.selection = TextSelection(
+                          baseOffset: 0,
+                          extentOffset: _montantControl.value.text.length),
+                      keyboardType: TextInputType.text,
+                      // validator: (value) {
+                      //   if (value.isEmpty) {
+                      //     return S.current.msg_champ_oblg;
+                      //   }
+                      //   return null;
+                      // },
+                      decoration: InputDecoration(
+                        labelText: S.current.num_cheque,
+                        labelStyle: GoogleFonts.lato(
+                            textStyle:
+                            TextStyle(color: Theme.of(context).hintColor)),
+                        prefixIcon: Icon(
+                          MdiIcons.idCard,
+                          color: Colors.blue,
+                        ),
+                        focusedBorder: OutlineInputBorder(
+                            borderSide: BorderSide(color: Colors.blue),
+                            borderRadius: BorderRadius.circular(20)),
+                        enabledBorder: OutlineInputBorder(
+                          gapPadding: 3.3,
+                          borderRadius: BorderRadius.circular(20),
                           borderSide: BorderSide(color: Colors.blue),
-                          borderRadius: BorderRadius.circular(20)),
-                      enabledBorder: OutlineInputBorder(
-                        gapPadding: 3.3,
-                        borderRadius: BorderRadius.circular(20),
-                        borderSide: BorderSide(color: Colors.blue),
-                      ),
-                      errorBorder: OutlineInputBorder(
-                        gapPadding: 3.3,
-                        borderRadius: BorderRadius.circular(20),
-                        borderSide: BorderSide(color: Colors.red),
+                        ),
+                        errorBorder: OutlineInputBorder(
+                          gapPadding: 3.3,
+                          borderRadius: BorderRadius.circular(20),
+                          borderSide: BorderSide(color: Colors.red),
+                        ),
                       ),
                     ),
                   ),
@@ -753,6 +797,7 @@ class _AddTresoriePageState extends State<AddTresoriePage>
                     value: _selectedCompte,
                     items: _compteDropdownItems,
                     libelle: (_selectedCompte.nomCompte),
+                    leftIcon: MdiIcons.cashRegister,
                     onChanged: (value) {
                       setState(() {
                         _selectedCompte = value;
@@ -825,8 +870,6 @@ class _AddTresoriePageState extends State<AddTresoriePage>
               _tresorie.tierId = _selectedClient.id;
               _tresorie.tierRS = _selectedClient.raisonSociale;
               _clientControl.text = _selectedClient.raisonSociale;
-              _montantControl.text =
-                  (_selectedClient.credit).toStringAsFixed(2);
             });
           },
         );
@@ -844,7 +887,6 @@ class _AddTresoriePageState extends State<AddTresoriePage>
           _selectedPieces.clear();
           _selectedPieces.add(selectedItem);
           _restepiece = _selectedPieces.first.reste;
-          _montantControl.text = (_restepiece).toStringAsFixed(2);
           _objetControl.text = _objetControl.text +
               " ${selectedItem.piece} ${selectedItem.num_piece}";
         });
@@ -1532,7 +1574,8 @@ class _AddTresoriePageState extends State<AddTresoriePage>
       _tresorie.mov = 1;
     }
     _tresorie.objet = _objetControl.text.trim();
-    _tresorie.modalite = _modaliteControl.text.trim();
+    _tresorie.modalite = Statics.modaliteList.indexOf(_selectedmodalite);
+    _tresorie.numCheque =(Statics.modaliteList.indexOf(_selectedmodalite) == 1)? _numeroControl.text.trim() : '';
     _tresorie.montant = double.parse(_montantControl.text.trim());
     _tresorie.montant = double.parse((_tresorie.montant).toStringAsFixed(2));
     if (_selectedCategorie.id == 6 || _selectedCategorie.id == 7) {

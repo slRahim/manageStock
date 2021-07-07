@@ -1,29 +1,19 @@
 
 class Tresorie {
   int _id;
-
   int _tierId;
-
   int _pieceId;
-
   int _mov;
-
   int _categorie;
   int _compte;
-
   int _charge;
-
   String _numTresorie;
-
   String _tierRS;
-
-  String _modalite;
-
+  int _modalite;
   String _objet;
-
   double _montant;
-
   DateTime _date;
+  String _numCheque ;
 
   Tresorie.init();
 
@@ -40,7 +30,7 @@ class Tresorie {
       this._compte,
       this._charge,
       this._montant,
-      this._date);
+      this._date, this._numCheque);
 
   Tresorie.fromMap(dynamic obj) {
     this._id = obj["id"];
@@ -50,6 +40,7 @@ class Tresorie {
     this._mov = obj["Mov"];
     this._tierRS = obj["Tier_rs"];
     this._modalite = obj["Modalite"];
+    this._numCheque = obj["Num_cheque"];
     this._objet = obj["Objet"];
     this._categorie = obj["Categorie_id"];
     this._compte = obj["Compte_id"];
@@ -68,6 +59,7 @@ class Tresorie {
     map["Mov"] = this._mov;
     map["Modalite"] = this._modalite;
     map["Objet"] = this._objet;
+    map["Num_cheque"] = this._numCheque ;
     map["Categorie_id"] = this._categorie;
     map["Compte_id"] = this._compte;
     map["Charge_id"] = this._charge;
@@ -119,9 +111,15 @@ class Tresorie {
     _objet = value;
   }
 
-  get modalite => _modalite;
+  String get numCheque => _numCheque;
 
-  set modalite(value) {
+  set numCheque(String value) {
+    _numCheque = value;
+  }
+
+  int get modalite => _modalite;
+
+  set modalite(int value) {
     _modalite = value;
   }
 

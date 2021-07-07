@@ -337,7 +337,12 @@ class _JournalFragmentState extends State<JournalFragment> {
         itemsCount: _selectedItems.length,
         onConfirm: () => {
           widget.onConfirmSelectedItems(_selectedItems),
-          Navigator.pop(context)
+          setState(() {
+          _dataSource.refresh();
+          _selectedItems = new List<Object>();
+          }),
+          Helpers.showToast(S.current.msg_ajout_item),
+          // Navigator.pop(context)
         },
         onCancel: () => {
           setState(() {

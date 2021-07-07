@@ -374,7 +374,8 @@ class SqlLiteDatabaseHelper {
           Mov INTEGER ,
           Objet VARCHAR (255),
           Montant DOUBLE,
-          Modalite VARCHAR (255),
+          Modalite INTEGER,
+          Num_cheque VARCHAR (255),
           Categorie_id INTEGER REFERENCES TresorieCategories (id) ON DELETE SET NULL ON UPDATE CASCADE,
           Compte_id INTEGER REFERENCES CompteTresorie (id) ON DELETE SET NULL ON UPDATE CASCADE,
           Charge_id integer,
@@ -873,7 +874,7 @@ class SqlLiteDatabaseHelper {
         WHEN  NEW.Mov = 1 AND (NEW.Piece_type = 'RF' OR NEW.Piece_type = 'AF')
         BEGIN
             UPDATE Articles
-               SET PMP = ((Qte * PMP)-((NEW.Qte*-1) * NEW.Prix_revient))/(Qte - (NEW.Qte*-1)) ,
+               SET PMP = ((Qte * PMP)-((NEW.Qte*-1) * NEW.Net_ht))/(Qte - (NEW.Qte*-1)) ,
                    Qte = Qte - (NEW.Qte*-1),
                    Colis = (Qte - (NEW.Qte*-1)) / Qte_Colis
              WHERE id = New.Article_id;
@@ -888,7 +889,7 @@ class SqlLiteDatabaseHelper {
         WHEN NEW.Mov = 1 AND (NEW.Piece_type = 'RF' OR NEW.Piece_type = 'AF')
         BEGIN
             UPDATE Articles
-               SET PMP = ((Qte * PMP)-(((NEW.Qte*-1) - (OLD.Qte*-1)) * NEW.Prix_revient))/(Qte - ((NEW.Qte*-1) - (OLD.Qte*-1))) ,
+               SET PMP = ((Qte * PMP)-(((NEW.Qte*-1) - (OLD.Qte*-1)) * NEW.Net_ht))/(Qte - ((NEW.Qte*-1) - (OLD.Qte*-1))) ,
                    Qte = Qte - ((NEW.Qte*-1) - (OLD.Qte*-1)) ,
                    Colis = (Qte - ((NEW.Qte*-1) - (OLD.Qte*-1))) / Qte_Colis
              WHERE id = NEW.Article_id ;
@@ -903,7 +904,7 @@ class SqlLiteDatabaseHelper {
         WHEN (OLD.Mov <> NEW.Mov) AND NEW.Mov = 1 AND (NEW.Piece_type = 'RF' OR NEW.Piece_type = 'AF')
         BEGIN
             UPDATE Articles
-               SET PMP = ((Qte * PMP)-((NEW.Qte*-1) * NEW.Prix_revient))/(Qte - (NEW.Qte*-1)) ,
+               SET PMP = ((Qte * PMP)-((NEW.Qte*-1) * NEW.Net_ht))/(Qte - (NEW.Qte*-1)) ,
                    Qte = Qte - (NEW.Qte*-1) ,
                    Colis = (Qte - (NEW.Qte*-1)) / Qte_Colis
              WHERE id = NEW.Article_id ;
@@ -919,7 +920,7 @@ class SqlLiteDatabaseHelper {
               AND (NEW.Piece_type = 'RF' OR NEW.Piece_type = 'AF')      
         BEGIN
             UPDATE Articles
-               SET PMP = ((Qte * PMP)+((OLD.Qte*-1) * OLD.Prix_revient))/(Qte + (OLD.Qte*-1)) ,
+               SET PMP = ((Qte * PMP)+((OLD.Qte*-1) * OLD.Net_ht))/(Qte + (OLD.Qte*-1)) ,
                    Qte = Qte + (OLD.Qte*-1) ,
                    Colis = (Qte + (OLD.Qte*-1)) / Qte_Colis,
                    PrixAchat = OLD.Prix_ht
@@ -1175,6 +1176,27 @@ class SqlLiteDatabaseHelper {
             UPDATE FormatPiece
                SET Current_index =( Cast(Substr (NEW.Num_tresorie,0,INSTR(NEW.Num_tresorie , '/' )) as interger) )
             WHERE  FormatPiece.Piece LIKE "TR" ; 
+            
+        END;
+      ''');
+
+    //****************************************************************************************************************************
+    //***********************************************compte Tresorerie***********************************************************
+    await db.execute('''CREATE TRIGGER update_compte_solde_afterupdate
+        AFTER Update ON CompteTresorie 
+        FOR EACH ROW 
+        When Old.Solde_depart <> New.Solde_depart
+        BEGIN     
+            UPDATE CompteTresorie
+              SET  Solde = New.Solde_depart + IFNULL((Select Sum(Montant) From Tresories 
+                                            Where Compte_id = New.id AND 
+                                                  (Categorie_id = 2 OR Categorie_id = 4 OR Categorie_id = 6)
+                                             ),0)
+                                          + IFNULL((Select  -1 * Sum(Montant) From Tresories 
+                                            Where Compte_id = New.id AND 
+                                                  (Categorie_id = 3 OR Categorie_id = 5 OR Categorie_id = 7 OR Categorie_id = 8)
+                                            ),0)
+            WHERE id = New.id;  
             
         END;
       ''');

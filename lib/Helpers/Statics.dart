@@ -19,6 +19,15 @@ class Statics {
     S.current.fournisseur
   ];
 
+  static List <String> modaliteList = [
+     S.current.espece ,
+    S.current.cheque,
+    S.current.virement,
+    S.current.verssement,
+    S.current.carte_bancaire,
+    S.current.traite_bancaire
+  ];
+
   static List<int> echeances = [1, 3, 7, 15, 21, 30];
   static List<String> repeateNotifications = [
     S.current.ev_day,

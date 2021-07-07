@@ -1375,6 +1375,16 @@ class S {
     );
   }
 
+  /// `Check id`
+  String get num_cheque {
+    return Intl.message(
+      'Check id',
+      name: 'num_cheque',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `Amount`
   String get montant {
     return Intl.message(
@@ -1780,6 +1790,46 @@ class S {
     return Intl.message(
       'Species',
       name: 'espece',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Check`
+  String get cheque {
+    return Intl.message(
+      'Check',
+      name: 'cheque',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Transfer`
+  String get virement {
+    return Intl.message(
+      'Transfer',
+      name: 'virement',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Bank card`
+  String get carte_bancaire {
+    return Intl.message(
+      'Bank card',
+      name: 'carte_bancaire',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Bank draft`
+  String get traite_bancaire {
+    return Intl.message(
+      'Bank draft',
+      name: 'traite_bancaire',
       desc: '',
       args: [],
     );
@@ -3125,20 +3175,20 @@ class S {
     );
   }
 
-  /// `Edit on`
+  /// `Report Date`
   String get demonstration {
     return Intl.message(
-      'Edit on',
+      'Report Date',
       name: 'demonstration',
       desc: '',
       args: [],
     );
   }
 
-  /// `Report Date`
+  /// `Report period (from / to)`
   String get rapport_date {
     return Intl.message(
-      'Report Date',
+      'Report period (from / to)',
       name: 'rapport_date',
       desc: '',
       args: [],

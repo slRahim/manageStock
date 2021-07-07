@@ -193,7 +193,7 @@ class QueryCtr {
 
     String _pieceFilter = (_piece != null && _piece != "TR")
         ? " AND Piece like '$_piece'"
-        : " AND (Piece like 'BL' OR Piece like 'FC')";
+        : " AND (Piece like 'BL' OR Piece like 'FC' OR Piece like 'BR' OR Piece like 'FF')";
     String _movFilter = " AND Mov >= $_mov";
     String _startDateFilter = ' AND Date >= $_startDate';
     String _endDateFilter = ' AND Date <= $_endDate';
@@ -426,6 +426,7 @@ class QueryCtr {
 
   Future getJournalByArticle(Article item) async {
     Database dbClient = await _databaseHelper.db;
+    var res1 = await dbClient.delete(DbTablesNames.journaux , where: "Article_id = ? AND Mov = -2" ,whereArgs: [item.id]);
     var res = await dbClient.query(DbTablesNames.journaux,
         where: "Article_id = ?", whereArgs: [item.id]);
 
@@ -1061,7 +1062,8 @@ class QueryCtr {
         break;
       case 3:
         query = """
-         Select Journaux.Piece_type as piece_titre ,Pieces.Num_piece as n ,Pieces.Date as date ,
+         Select Journaux.Piece_type as piece_titre , Pieces.Num_piece as n ,
+                strftime('%d-%m-%Y', datetime(Pieces.Date/1000, 'unixepoch')) as date ,
                 Articles.Ref as  referance ,Articles.Designation as designation,Tiers.RaisonSociale as client ,
                 Journaux.Qte as qte ,Journaux.Net_ht as prix , (Journaux.Net_ht * Journaux.Qte) as montant
          From Journaux 
@@ -1087,9 +1089,9 @@ class QueryCtr {
     switch (rapport) {
       case 0:
         query = """
-         Select designation,referance, qte , marge, total
+         Select designation , referance, qte , marge, total
          From 
-           (Select Aricles.id, Articles.Designation as designation, Articles.Ref as referance, Sum(Journaux.Qte) as qte , 
+           (Select Articles.id, Articles.Designation as designation, Articles.Ref as referance, Sum(Journaux.Qte) as qte , 
                   Sum(Journaux.Marge*Journaux.Qte)/Sum(Journaux.Qte) as  marge,
                   (Sum(Journaux.Marge*Journaux.Qte)/Sum(Journaux.Qte)*Sum(Journaux.Qte)) as total
            From Journaux 
@@ -1116,7 +1118,8 @@ class QueryCtr {
         break;
       case 2:
         query = """
-         Select Journaux.Piece_type  as piece_titre,Pieces.Num_piece as n,Pieces.Date as date,
+         Select Journaux.Piece_type  as piece_titre,Pieces.Num_piece as n,
+                strftime('%d-%m-%Y', datetime(Pieces.Date/1000, 'unixepoch')) as date,
                 Articles.Ref as referance,
                 Articles.Designation as designation,Tiers.RaisonSociale as fournisseur ,
                 Journaux.Qte as qte,Journaux.Net_ht as prix, 
@@ -1132,7 +1135,8 @@ class QueryCtr {
         break;
       case 3:
         query = """
-         Select Journaux.Piece_type as piece_titre ,Pieces.Num_piece as n,Pieces.Date as date,
+         Select Journaux.Piece_type as piece_titre ,Pieces.Num_piece as n,
+                strftime('%d-%m-%Y', datetime(Pieces.Date/1000, 'unixepoch')) as date,
                 Articles.Ref as referance,Articles.Designation as designation,
                 Tiers.RaisonSociale as fournisseur ,
                 Journaux.Qte as qte,Journaux.Net_ht as prix, (Journaux.Net_ht * Journaux.Qte) as montant

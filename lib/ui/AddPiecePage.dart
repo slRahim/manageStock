@@ -1253,7 +1253,11 @@ class _AddPiecePageState extends State<AddPiecePage>
                       borderSide: BorderSide(color: Colors.greenAccent),
                       borderRadius: BorderRadius.circular(20)),
                   contentPadding: EdgeInsets.only(left: 10),
-                  labelText: "${S.current.total} ${S.current.verssement}",
+                  labelText:(_piece.piece == PieceType.retourClient ||
+                      _piece.piece == PieceType.avoirClient ||
+                      _piece.piece == PieceType.retourFournisseur ||
+                      _piece.piece == PieceType.avoirFournisseur )
+                      ? S.current.rembourcement :"${S.current.verssement}",
                   labelStyle: GoogleFonts.lato(
                       textStyle: TextStyle(color: Colors.green)),
                   enabledBorder: OutlineInputBorder(
@@ -2032,7 +2036,8 @@ class _AddPiecePageState extends State<AddPiecePage>
     tresorie.mov = item.mov;
 
     tresorie.objet = "${S.current.reglement_piece}";
-    tresorie.modalite = S.current.espece;
+    tresorie.modalite = 0;
+    tresorie.numCheque = '' ;
     tresorie.tierId = item.tier_id;
     tresorie.tierRS = item.raisonSociale;
     tresorie.pieceId = item.id;
@@ -2271,7 +2276,7 @@ class _AddPiecePageState extends State<AddPiecePage>
       _newPiece.piece = typePieceTransformer(_piece.piece, to);
       var res = await _queryCtr.getFormatPiece(_newPiece.piece);
       _newPiece.num_piece = Helpers.generateNumPiece(res.first);
-      _newPiece.date = _piece.date;
+      _newPiece.date = DateTime.now();
       _newPiece.mov = 1;
       _newPiece.transformer = 1;
       _newPiece.etat = 0;
@@ -2405,7 +2410,7 @@ class _AddPiecePageState extends State<AddPiecePage>
         }
         break;
       case PieceType.factureFournisseur:
-        return PieceType.avoirClient;
+        return PieceType.avoirFournisseur;
         break;
     }
   }

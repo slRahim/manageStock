@@ -51,7 +51,7 @@ class ListDropDownState extends State<ListDropDown> {
           SizedBox(width: 6),
           // Icon(Icons.help, color: Colors.grey,),
           widget.leftIcon != null
-              ? Icon(widget.leftIcon, size: 25)
+              ? Icon(widget.leftIcon, size: 23 , color: Colors.blue,)
               : SizedBox(height: 1),
           SizedBox(width: 13),
           ((widget.value is int) && widget.editMode)

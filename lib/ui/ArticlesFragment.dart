@@ -279,6 +279,7 @@ class _ArticlesFragmentState extends State<ArticlesFragment> {
             _dataSource.refresh();
             _selectedItems = new List<Object>();
           });
+          Helpers.showToast(S.current.msg_ajout_item);
           // Navigator.pop(context)
         },
         onCancel: () => {

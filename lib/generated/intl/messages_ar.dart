@@ -224,6 +224,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "ca_mois" : MessageLookupByLibrary.simpleMessage("ر.أعمال (الشهر)"),
     "caisse_titre" : MessageLookupByLibrary.simpleMessage("الحسابات"),
     "capitale_sociale" : MessageLookupByLibrary.simpleMessage("رأس المال"),
+    "carte_bancaire" : MessageLookupByLibrary.simpleMessage("بطاقة بنكية"),
     "cat_charge" : MessageLookupByLibrary.simpleMessage("فئات الأعباء"),
     "cat_rapport" : MessageLookupByLibrary.simpleMessage("فئة التقرير"),
     "categorie" : MessageLookupByLibrary.simpleMessage("الفئة"),
@@ -231,6 +232,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "centime" : MessageLookupByLibrary.simpleMessage("سنتيم"),
     "charge" : MessageLookupByLibrary.simpleMessage("مصاريف"),
     "chargement" : MessageLookupByLibrary.simpleMessage("تحميل"),
+    "cheque" : MessageLookupByLibrary.simpleMessage("شيك"),
     "chifre_affaire" : MessageLookupByLibrary.simpleMessage("رأس المال"),
     "chois_lang" : MessageLookupByLibrary.simpleMessage("إختيار اللغة"),
     "choisir" : MessageLookupByLibrary.simpleMessage("لا توجد فئة"),
@@ -450,6 +452,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "non" : MessageLookupByLibrary.simpleMessage("لا"),
     "non_stockable" : MessageLookupByLibrary.simpleMessage("غير قابل للتخزين"),
     "non_stocke" : MessageLookupByLibrary.simpleMessage("< ك م الدنيا"),
+    "num_cheque" : MessageLookupByLibrary.simpleMessage("رقم الصك"),
     "objet" : MessageLookupByLibrary.simpleMessage("الموضوع"),
     "oui" : MessageLookupByLibrary.simpleMessage("نعم"),
     "par_desgn" : MessageLookupByLibrary.simpleMessage("بإسم المنتج"),
@@ -495,7 +498,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "qte_reel" : MessageLookupByLibrary.simpleMessage("الكمية الحقيقية"),
     "quantit" : MessageLookupByLibrary.simpleMessage("الكمية"),
     "quitter" : MessageLookupByLibrary.simpleMessage("خروج"),
-    "rapport_date" : MessageLookupByLibrary.simpleMessage("تاريخ التقرير"),
+    "rapport_date" : MessageLookupByLibrary.simpleMessage("فترة التقرير (من / إلى)"),
     "rapports" : MessageLookupByLibrary.simpleMessage("تقارير"),
     "rc" : MessageLookupByLibrary.simpleMessage("وع ز"),
     "recap_achat_article" : MessageLookupByLibrary.simpleMessage("ملخص الشراء لكل منتج"),
@@ -573,6 +576,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "total_ht" : MessageLookupByLibrary.simpleMessage("HT مجموع"),
     "total_tva" : MessageLookupByLibrary.simpleMessage("مجموع TVA"),
     "tr" : MessageLookupByLibrary.simpleMessage("TR"),
+    "traite_bancaire" : MessageLookupByLibrary.simpleMessage("حوالة مصرفية"),
     "transferer" : MessageLookupByLibrary.simpleMessage("تحويل"),
     "transformer" : MessageLookupByLibrary.simpleMessage("التحويل"),
     "transformer_title" : MessageLookupByLibrary.simpleMessage("تحويل العنصر إلى"),
@@ -586,6 +590,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "vente" : MessageLookupByLibrary.simpleMessage("المبيعات"),
     "verssement" : MessageLookupByLibrary.simpleMessage("دفع"),
     "ville" : MessageLookupByLibrary.simpleMessage("المدينة"),
+    "virement" : MessageLookupByLibrary.simpleMessage("تحويل"),
     "zakat" : MessageLookupByLibrary.simpleMessage("الزكاة")
   };
 }

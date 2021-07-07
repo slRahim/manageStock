@@ -512,14 +512,16 @@ class _RapportState extends State<Rapport> {
             pw.SizedBox(width: 3),
             pw.Expanded(
                 flex: 6,
-                child: pw.Column(children: [
+                child:(Statics.rapportItems.indexOf(_selectedParent) != 2 &&
+                    Statics.rapportItems.indexOf(_selectedParent) != 3) ? pw.Column(children: [
                   pw.Text("${S.current.rapport_date}",
                       style: pw.TextStyle(
                           font: ttf, fontWeight: pw.FontWeight.bold)),
                   pw.Text("${_dateControl.text}",
                       style: pw.TextStyle(
                           fontWeight: pw.FontWeight.bold, font: ttf)),
-                ]))
+                ]) : pw.SizedBox()
+            )
           ]),
           pw.SizedBox(height: 20),
           pw.Table(children: [

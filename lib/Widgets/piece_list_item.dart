@@ -50,6 +50,16 @@ class _PieceListItemState extends State<PieceListItem> {
   void initState() {
     super.initState();
     controller = SlidingCardController();
+
+    if(widget.piece.piece == PieceType.retourClient ||
+        widget.piece.piece == PieceType.avoirClient ||
+        widget.piece.piece == PieceType.retourFournisseur ||
+        widget.piece.piece == PieceType.avoirFournisseur){
+
+      widget.piece.regler = widget.piece.regler *-1 ;
+      widget.piece.reste = widget.piece.reste *-1 ;
+      widget.piece.marge = widget.piece.marge *-1 ;
+    }
   }
 
   @override

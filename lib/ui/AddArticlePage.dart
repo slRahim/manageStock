@@ -1429,6 +1429,9 @@ class _AddArticlePageState extends State<AddArticlePage>
           message = S.current.msg_ajout_err;
         }
       }
+      if(!modification && editMode){
+        Navigator.pop(context);
+      }
       Helpers.showFlushBar(context, message);
       return Future.value(id);
     } catch (e) {

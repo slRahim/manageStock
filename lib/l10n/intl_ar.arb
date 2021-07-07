@@ -141,6 +141,7 @@
   "msg_credit_total": "تطبيق على إجمالي المستحقات",
   "objet": "الموضوع",
   "modalite": "الصيغة",
+  "num_cheque" : "رقم الصك",
   "montant": "المبلغ",
   "categorie" : "الفئة",
 
@@ -185,6 +186,10 @@
   "msg_err_transfer" : "تحويل مسودة غير ممكن",
   "msg_info_article" : "خطر! إمكانية اضافة عنصر لم يتم بيعه",
   "espece" : "نقدا",
+  "cheque" : "شيك",
+  "virement" : "تحويل",
+  "carte_bancaire" : "بطاقة بنكية",
+  "traite_bancaire" : "حوالة مصرفية",
   "reglement_piece" : "دفع لفاتورة",
   "decaissement" : "إخراج",
   "choisir" : "لا توجد فئة",
@@ -331,7 +336,7 @@
   "date_d_f" : "التاريخ (من / الى) :",
   "msg_rapport_vide" : "التقرير فارغ",
   "demonstration" : "حرر بتاريخ",
-  "rapport_date" : "تاريخ التقرير",
+  "rapport_date" : "فترة التقرير (من / إلى)",
 
   "creance_cl" : "دين الزبون",
   "creance_four" : "ديون المورد",
