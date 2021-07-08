@@ -78,6 +78,8 @@ class _ArticlesFragmentState extends State<ArticlesFragment> {
   static const _stream = const EventChannel('pda.flutter.dev/scanEvent');
   StreamSubscription subscription;
 
+  List<dynamic> articleAlreadySelected = new List<Object>() ;
+
   @override
   Future<void> initState() {
     super.initState();
@@ -277,6 +279,7 @@ class _ArticlesFragmentState extends State<ArticlesFragment> {
           widget.onConfirmSelectedItems(_selectedItems);
           setState(() {
             _dataSource.refresh();
+            articleAlreadySelected.addAll(_selectedItems);
             _selectedItems = new List<Object>();
           });
           Helpers.showToast(S.current.msg_ajout_item);
@@ -287,6 +290,7 @@ class _ArticlesFragmentState extends State<ArticlesFragment> {
             _selectedItems.forEach((item) {
               item.selectedQuantite = -1.0;
             });
+            articleAlreadySelected = new List<Object>();
             _selectedItems = new List<Object>();
           })
         },
@@ -389,6 +393,7 @@ class _ArticlesFragmentState extends State<ArticlesFragment> {
             canRefresh: _selectedItems.length <= 0,
             tarification: widget.tarification,
             pieceOrigin: widget.pieceOrigin,
+            articleOriginalList: articleAlreadySelected,
             onItemSelected: widget.onConfirmSelectedItems != null
                 ? (selectedItem) {
                     onItemSelected(setState, selectedItem);

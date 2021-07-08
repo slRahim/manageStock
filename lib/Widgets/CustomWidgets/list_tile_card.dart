@@ -22,6 +22,8 @@ class ListTileCard extends StatefulWidget {
   final SlidingCardController slidingCardController;
   final Function onCardTapped;
 
+  final bool alreadySelected ;
+
   const ListTileCard(
       {Key key,
       this.from,
@@ -33,7 +35,8 @@ class ListTileCard extends StatefulWidget {
       this.itemSelected,
       this.onLongPress,
       this.slidingCardController,
-      @required this.onCardTapped})
+      @required this.onCardTapped ,
+      this.alreadySelected})
       : super(key: key);
 
   @override
@@ -67,6 +70,7 @@ class _ListTileCardState extends State<ListTileCard> {
             from: widget.from,
             trailingChildren: widget.trailingChildren,
             itemSelected: widget.itemSelected,
+            alreadySelected: widget.alreadySelected,
             onShowInfoTapped: () {
               widget.slidingCardController.expandCard();
             },
@@ -111,6 +115,7 @@ class ListFrontCard extends StatefulWidget {
   final bool itemSelected;
   final Function onShowInfoTapped;
   final Function onHideInfoTapped;
+  final bool alreadySelected ;
 
   const ListFrontCard({
     Key key,
@@ -122,6 +127,7 @@ class ListFrontCard extends StatefulWidget {
     this.trailingChildren,
     this.onShowInfoTapped,
     this.onHideInfoTapped,
+    this.alreadySelected,
   }) : super(key: key);
 
   @override
@@ -137,7 +143,7 @@ class _ListFrontCardState extends State<ListFrontCard> {
       decoration: BoxDecoration(
           color: (widget.itemSelected != null && widget.itemSelected)
               ? Colors.blue[200]
-              : Theme.of(context).selectedRowColor,
+              :(widget.alreadySelected != null && widget.alreadySelected == true)? Colors.lightGreen[400] : Theme.of(context).selectedRowColor,
           borderRadius: BorderRadius.circular(5)),
       child: Column(
         children: <Widget>[
@@ -150,7 +156,7 @@ class _ListFrontCardState extends State<ListFrontCard> {
                         color:
                             (widget.itemSelected != null && widget.itemSelected)
                                 ? Colors.blue[200]
-                                : Theme.of(context).selectedRowColor,
+                                :(widget.alreadySelected != null && widget.alreadySelected == true)? Colors.lightGreen[400] :Theme.of(context).selectedRowColor,
                         borderRadius: BorderRadius.only(
                             topLeft: Radius.circular(5),
                             topRight: Radius.circular(5))),

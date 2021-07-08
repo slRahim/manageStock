@@ -122,6 +122,12 @@ class _AddTresoriePageState extends State<AddTresoriePage>
         utils.buildDropTresorieCategoriesDownMenuItems(_categorieItems);
     _selectedCategorie = _categorieItems[0];
 
+    Statics.modaliteList[0] = S.current.espece;
+    Statics.modaliteList[1] = S.current.cheque;
+    Statics.modaliteList[2] = S.current.virement;
+    Statics.modaliteList[3] = S.current.verssement;
+    Statics.modaliteList[4] = S.current.carte_bancaire;
+    Statics.modaliteList[5] = S.current.traite_bancaire;
     _modaliteDropdownItems = utils.buildDropStatutTier(Statics.modaliteList);
     _selectedmodalite = Statics.modaliteList[0] ;
 

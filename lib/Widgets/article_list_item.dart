@@ -26,7 +26,8 @@ class ArticleListItem extends StatefulWidget {
       this.tarification,
       this.fromListing = false,
       this.pieceOrigin,
-      this.dataSource})
+      this.dataSource ,
+      this.alreadySelected})
       : assert(article != null),
         super(key: key);
 
@@ -39,6 +40,8 @@ class ArticleListItem extends StatefulWidget {
   final String pieceOrigin;
 
   final dataSource;
+
+  final bool alreadySelected ;
 
   @override
   _ArticleListItemState createState() => _ArticleListItemState();
@@ -129,6 +132,7 @@ class _ArticleListItemState extends State<ArticleListItem> {
             },
             child: ListTileCard(
               from: widget.article,
+              alreadySelected: widget.alreadySelected,
               onLongPress: () {
                 if (widget.onItemSelected != null &&
                     widget.article.selectedQuantite >= 0) {

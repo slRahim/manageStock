@@ -28,6 +28,7 @@ class ItemsSliverList extends StatefulWidget {
   final int tarification;
 
   final String pieceOrigin;
+  final List<dynamic> articleOriginalList ;
 
   ItemsSliverList(
       {Key key,
@@ -35,7 +36,8 @@ class ItemsSliverList extends StatefulWidget {
       this.onItemSelected,
       this.canRefresh,
       this.tarification,
-      this.pieceOrigin})
+      this.pieceOrigin ,
+      this.articleOriginalList})
       : super(key: key);
 
   @override
@@ -95,6 +97,7 @@ class _ItemsSliverListState extends State<ItemsSliverList> {
         tarification: widget.tarification,
         pieceOrigin: widget.pieceOrigin,
         dataSource: widget.dataSource,
+        alreadySelected:(widget.articleOriginalList.isNotEmpty)? widget.articleOriginalList.where((element) => element.id == item.id ).isNotEmpty : null,
       );
     } else if (item is Tiers) {
       item.originClientOrFourn =
