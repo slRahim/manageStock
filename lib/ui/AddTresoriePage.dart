@@ -137,7 +137,7 @@ class _AddTresoriePageState extends State<AddTresoriePage>
     _selectedCompte = _compteItems[0];
 
     _chargeItems = await _queryCtr.getAllChargeTresorie();
-    _chargeItems[0].libelle = S.current.choisir ;
+    _chargeItems[0].libelle = S.current.choisir;
     _chargeDropdownItems =
         utils.buildDropChargeTresorieDownMenuItems(_chargeItems);
     _selectedCharge = _chargeItems[0];
@@ -513,6 +513,9 @@ class _AddTresoriePageState extends State<AddTresoriePage>
                   onChanged: (value) {
                     setState(() {
                       _selectedCategorie = value;
+                      if(_selectedCategorie.id ==  1 ){
+                        _selectedCategorie = _categorieItems.elementAt(1);
+                      }
                       _objetControl.text = _selectedCategorie.libelle;
                       _selectedPieces.clear();
                       _montantControl.text = "0.0";
@@ -536,15 +539,6 @@ class _AddTresoriePageState extends State<AddTresoriePage>
                         _selectedTypeTiers = Statics.tiersItems[2];
                       }
                     });
-                  },
-                  onAddPressed: () async {
-                    AwesomeDialog(
-                      context: context,
-                      dialogType: DialogType.NO_HEADER,
-                      animType: AnimType.BOTTOMSLIDE,
-                      title: S.current.supp,
-                      body: addTresoreCategorie(),
-                    )..show().then((value) => setState(() {}));
                   },
                 ),
               ),
@@ -876,6 +870,7 @@ class _AddTresoriePageState extends State<AddTresoriePage>
               _tresorie.tierId = _selectedClient.id;
               _tresorie.tierRS = _selectedClient.raisonSociale;
               _clientControl.text = _selectedClient.raisonSociale;
+              _selectedPieces.clear();
             });
           },
         );
@@ -930,117 +925,6 @@ class _AddTresoriePageState extends State<AddTresoriePage>
 
   //*************************************************************************************************************************************************************************
   //************************************************************************************************************************************
-
-  Widget addTresoreCategorie() {
-    TextEditingController _libelleCategorieControl =
-        new TextEditingController();
-    TresorieCategories _categorieTresorie = new TresorieCategories.init();
-    var _formKey = GlobalKey<FormState>();
-    return StatefulBuilder(builder: (context, StateSetter setState) {
-      return Builder(
-        builder: (context) => SingleChildScrollView(
-          padding: EdgeInsets.all(10),
-          child: Form(
-            key: _formKey,
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                Text(
-                  "${S.current.ajouter} ${S.current.categorie}",
-                  style: GoogleFonts.lato(
-                      textStyle: TextStyle(
-                    fontSize: 18,
-                    fontWeight: FontWeight.bold,
-                  )),
-                ),
-                Padding(
-                  padding:
-                      EdgeInsets.only(left: 5, right: 5, bottom: 20, top: 20),
-                  child: TextFormField(
-                    controller: _libelleCategorieControl,
-                    keyboardType: TextInputType.text,
-                    validator: (value) {
-                      if (value.isEmpty) {
-                        return S.current.msg_champ_oblg;
-                      }
-                      return null;
-                    },
-                    decoration: InputDecoration(
-                      prefixIcon: Icon(
-                        Icons.view_agenda,
-                        color: Colors.blue,
-                      ),
-                      focusedBorder: OutlineInputBorder(
-                          borderSide: BorderSide(color: Colors.blue),
-                          borderRadius: BorderRadius.circular(20)),
-                      contentPadding: EdgeInsets.only(left: 10),
-                      labelText: S.current.categorie,
-                      labelStyle: GoogleFonts.lato(
-                          textStyle: TextStyle(color: Colors.blue)),
-                      enabledBorder: OutlineInputBorder(
-                        gapPadding: 3.3,
-                        borderRadius: BorderRadius.circular(20),
-                        borderSide: BorderSide(color: Colors.blue),
-                      ),
-                    ),
-                  ),
-                ),
-                SizedBox(
-                  width: 150.0,
-                  child: Padding(
-                    padding: EdgeInsets.only(right: 0, left: 0),
-                    child: RaisedButton(
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(18.0),
-                      ),
-                      onPressed: () async {
-                        if (_formKey.currentState.validate()) {
-                          setState(() {
-                            _categorieTresorie.libelle =
-                                _libelleCategorieControl.text.trim();
-                            _libelleCategorieControl.text = "";
-                          });
-                          await addTresoreCategorieIfNotExist(
-                              _categorieTresorie);
-                          Navigator.pop(context);
-                        }
-                      },
-                      child: Text(
-                        "+ ${S.current.ajouter}",
-                        style: GoogleFonts.lato(
-                            textStyle: TextStyle(
-                                color: Colors.white,
-                                fontSize: 15,
-                                fontWeight: FontWeight.bold)),
-                      ),
-                      color: Colors.green,
-                    ),
-                  ),
-                )
-              ],
-            ),
-          ),
-        ),
-      );
-    });
-  }
-
-  Future<void> addTresoreCategorieIfNotExist(TresorieCategories item) async {
-    int categorieIndex = _categorieItems.indexOf(item);
-    if (categorieIndex > -1) {
-      _selectedCategorie = _categorieItems[categorieIndex];
-    } else {
-      int id =
-          await _queryCtr.addItemToTable(DbTablesNames.categorieTresorie, item);
-      item.id = id;
-
-      _categorieItems.add(item);
-      _categorieDropdownItems =
-          utils.buildDropTresorieCategoriesDownMenuItems(_categorieItems);
-      _selectedCategorie = _categorieItems[_categorieItems.length - 1];
-    }
-  }
 
   Widget addCompte() {
     TextEditingController _libelleCompteControl = new TextEditingController();
@@ -1581,7 +1465,7 @@ class _AddTresoriePageState extends State<AddTresoriePage>
     }
     _tresorie.objet = _objetControl.text.trim();
     _tresorie.modalite = Statics.modaliteList.indexOf(_selectedmodalite);
-    _tresorie.numCheque =(Statics.modaliteList.indexOf(_selectedmodalite) == 1)? _numeroControl.text.trim() : '';
+    _tresorie.numCheque =(Statics.modaliteList.indexOf(_selectedmodalite) == 1)? _numchequeControl.text.trim() : '';
     _tresorie.montant = double.parse(_montantControl.text.trim());
     _tresorie.montant = double.parse((_tresorie.montant).toStringAsFixed(2));
     if (_selectedCategorie.id == 6 || _selectedCategorie.id == 7) {
@@ -1596,14 +1480,14 @@ class _AddTresoriePageState extends State<AddTresoriePage>
 
     if(!modification){
       var res = await _queryCtr.getTresorieByNum(_tresorie.numTresorie);
-      if (res.length >= 1) {
+      if (res.isNotEmpty) {
         await getNumPiece();
         return null;
       }
     }else{
       if (_tresorie.numTresorie != _old_num_tresorie) {
         var res = await _queryCtr.getTresorieByNum(_tresorie.numTresorie);
-        if (res.length >= 1) {
+        if (res.isNotEmpty) {
           _tresorie.numTresorie= _old_num_tresorie;
           await getNumPiece();
           return null;

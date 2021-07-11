@@ -29,12 +29,14 @@ class ArticlesFragment extends StatefulWidget {
   final Function(List<dynamic>) onConfirmSelectedItems;
   final int tarification;
   final String pieceOrigin;
+  final List<dynamic> articleSelected ;
 
   const ArticlesFragment(
       {Key key,
       this.onConfirmSelectedItems,
       this.tarification,
-      this.pieceOrigin})
+      this.pieceOrigin ,
+      this.articleSelected})
       : super(key: key);
 
   @override
@@ -78,7 +80,7 @@ class _ArticlesFragmentState extends State<ArticlesFragment> {
   static const _stream = const EventChannel('pda.flutter.dev/scanEvent');
   StreamSubscription subscription;
 
-  List<dynamic> articleAlreadySelected = new List<Object>() ;
+  List<dynamic> articleAlreadySelected ;
 
   @override
   Future<void> initState() {
@@ -95,6 +97,12 @@ class _ArticlesFragmentState extends State<ArticlesFragment> {
     _dataSource = SliverListDataSource(ItemsListTypes.articlesList, _filterMap);
 
     subscription = _stream.receiveBroadcastStream().listen(_pdaScanner);
+    if(widget.articleSelected != null){
+      articleAlreadySelected = List.from(widget.articleSelected) ;
+    }else{
+      articleAlreadySelected = new List<dynamic> ();
+    }
+
   }
 
   @override
@@ -290,7 +298,6 @@ class _ArticlesFragmentState extends State<ArticlesFragment> {
             _selectedItems.forEach((item) {
               item.selectedQuantite = -1.0;
             });
-            articleAlreadySelected = new List<Object>();
             _selectedItems = new List<Object>();
           })
         },

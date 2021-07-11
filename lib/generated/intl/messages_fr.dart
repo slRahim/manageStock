@@ -483,6 +483,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "printer_titre" : MessageLookupByLibrary.simpleMessage("Imprimante (s)"),
     "prix" : MessageLookupByLibrary.simpleMessage("Prix HT"),
     "prix_achat" : MessageLookupByLibrary.simpleMessage("Prix d\'achat HT"),
+    "prix_moyen" : MessageLookupByLibrary.simpleMessage("Prix moyen"),
     "prix_v1" : MessageLookupByLibrary.simpleMessage("Prix de vente HT 1"),
     "prix_v2" : MessageLookupByLibrary.simpleMessage("Prix de vente HT 2"),
     "prix_v3" : MessageLookupByLibrary.simpleMessage("Prix de vente HT 3"),

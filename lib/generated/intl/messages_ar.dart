@@ -483,6 +483,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "printer_titre" : MessageLookupByLibrary.simpleMessage("طابعة"),
     "prix" : MessageLookupByLibrary.simpleMessage("الثمن ب ض"),
     "prix_achat" : MessageLookupByLibrary.simpleMessage("ثمن الشراء ب ض"),
+    "prix_moyen" : MessageLookupByLibrary.simpleMessage("متوسط سعر"),
     "prix_v1" : MessageLookupByLibrary.simpleMessage("سعر البيع ب ض 1"),
     "prix_v2" : MessageLookupByLibrary.simpleMessage("سعر البيع ب ض 2"),
     "prix_v3" : MessageLookupByLibrary.simpleMessage("سعر البيع ب ض 3"),

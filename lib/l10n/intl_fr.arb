@@ -611,7 +611,9 @@
   "code_pin1" : "Clé",
   "msg_existe_deja" : "Élément existe déja",
   "caisse_titre" : "Mes caisses",
-  "telechargement" : "Téléchargement"
+  "telechargement" : "Téléchargement",
+
+  "prix_moyen" : "Prix moyen"
 
 
 

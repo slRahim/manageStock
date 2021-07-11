@@ -1089,10 +1089,10 @@ class QueryCtr {
     switch (rapport) {
       case 0:
         query = """
-         Select designation , referance, qte , marge, total
+         Select designation , referance, qte , prix_moyen, total
          From 
            (Select Articles.id, Articles.Designation as designation, Articles.Ref as referance, Sum(Journaux.Qte) as qte , 
-                  Sum(Journaux.Marge*Journaux.Qte)/Sum(Journaux.Qte) as  marge,
+                  Sum(Journaux.Net_ht*Journaux.Qte)/Sum(Journaux.Qte) as  prix_moyen,
                   (Sum(Journaux.Marge*Journaux.Qte)/Sum(Journaux.Qte)*Sum(Journaux.Qte)) as total
            From Journaux 
            Join Articles ON Journaux.Article_id = Articles.id 
@@ -1107,7 +1107,7 @@ class QueryCtr {
          Select designation, referance, qte , prix, montant
          From 
            (Select Articles.id, Articles.Designation as designation, Articles.Ref as referance, Sum(Journaux.Qte) as qte , 
-                  Sum(Journaux.Net_ht*Journaux.Qte)/Sum(Journaux.Qte) as prix,
+                  Sum(Journaux.Net_ht*Journaux.Qte)/Sum(Journaux.Qte) as prix_moyen,
                   (Sum(Journaux.Net_ht*Journaux.Qte)/Sum(Journaux.Qte)*Sum(Journaux.Qte)) as montant
            From Journaux 
            Join Articles ON Journaux.Article_id = Articles.id 

@@ -5744,6 +5744,16 @@ class S {
       args: [],
     );
   }
+
+  /// `Average price`
+  String get prix_moyen {
+    return Intl.message(
+      'Average price',
+      name: 'prix_moyen',
+      desc: '',
+      args: [],
+    );
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<S> {

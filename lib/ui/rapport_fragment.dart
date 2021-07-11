@@ -517,7 +517,17 @@ class _RapportState extends State<Rapport> {
                   pw.Text("${S.current.rapport_date}",
                       style: pw.TextStyle(
                           font: ttf, fontWeight: pw.FontWeight.bold)),
-                  pw.Text("${_dateControl.text}",
+                  (Statics.rapportItems.indexOf(_selectedParent) == 4 &&
+                      Statics.rapportGeneralItems.indexOf(_selectedSubItem) == 1)
+                      ? pw.Text("01-01-${_yearControl.text} / 31-12-${_yearControl.text}",
+                      style: pw.TextStyle(
+                          fontWeight: pw.FontWeight.bold, font: ttf))
+                  :(Statics.rapportItems.indexOf(_selectedParent) == 4 &&
+                      Statics.rapportGeneralItems.indexOf(_selectedSubItem) == 2)
+                      ?pw.Text("${_resultList.first.values.first} / ${DateTime.now().year.toString()}",
+                      style: pw.TextStyle(
+                          fontWeight: pw.FontWeight.bold, font: ttf))
+                      :pw.Text("${_dateControl.text}",
                       style: pw.TextStyle(
                           fontWeight: pw.FontWeight.bold, font: ttf)),
                 ]) : pw.SizedBox()
@@ -684,6 +694,9 @@ class _RapportState extends State<Rapport> {
         break;
       case "credit":
         return S.current.credit;
+        break;
+      case "prix_moyen":
+        return S.current.prix_moyen;
         break;
     }
   }

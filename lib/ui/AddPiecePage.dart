@@ -45,6 +45,7 @@ import 'package:material_design_icons_flutter/material_design_icons_flutter.dart
 import 'package:pdf/pdf.dart';
 import 'package:pdf/widgets.dart' as pw;
 import 'package:printing/printing.dart';
+import 'package:collection/collection.dart';
 
 class AddPiecePage extends StatefulWidget {
   var arguments;
@@ -329,19 +330,61 @@ class _AddPiecePageState extends State<AddPiecePage>
             editMode: editMode,
             modification: modification,
             title: appBarTitle,
-            onCancelPressed: () => {
-              if (modification){
-                  if (editMode){
-                      Navigator.of(context).pushReplacementNamed(
-                          RoutesKeys.addPiece,
-                          arguments: widget.arguments)
+            onCancelPressed: ()  {
+              Function eqal =  ListEquality().equals;
+              if (modification)
+                {
+                  if (editMode)
+                    {
+                      if(eqal(_originalItems , _selectedItems)){
+                        Navigator.of(context).pushReplacementNamed(
+                            RoutesKeys.addPiece,
+                            arguments: widget.arguments);
+                      }else{
+                        AwesomeDialog(
+                            context: context,
+                            title: "",
+                            desc: "${S.current.msg_retour_no_save} ?",
+                            dialogType: DialogType.QUESTION,
+                            animType: AnimType.BOTTOMSLIDE,
+                            btnCancelText: S.current.non,
+                            btnCancelOnPress: () {},
+                            btnOkText: S.current.oui,
+                            btnOkOnPress: () async {
+                              Navigator.of(context).pushReplacementNamed(
+                                  RoutesKeys.addPiece,
+                                  arguments: widget.arguments);
+                            })
+                          ..show();
+                      }
+
                     }
-                  else {
-                    Navigator.pop(context)
-                  }
-              } else {
-                  Navigator.pop(context),
-              }
+                  else
+                    {Navigator.pop(context);}
+                }
+              else
+                {
+                  if (_selectedItems.isNotEmpty)
+                    {
+                      AwesomeDialog(
+                          context: context,
+                          title: "",
+                          desc: "${S.current.msg_retour_no_save} ?",
+                          dialogType: DialogType.QUESTION,
+                          animType: AnimType.BOTTOMSLIDE,
+                          btnCancelText: S.current.non,
+                          btnCancelOnPress: () {},
+                          btnOkText: S.current.oui,
+                          btnOkOnPress: () async {
+                            Navigator.pop(context);
+                          })
+                        ..show();
+                    }
+                  else
+                    {
+                      Navigator.pop(context);
+                    }
+                }
             },
             onEditPressed: (_piece.etat == 0)
                 ? () {
@@ -476,15 +519,19 @@ class _AddPiecePageState extends State<AddPiecePage>
                                 btnCancelText: S.current.annuler,
                                 btnCancelOnPress: () {
                                   setState(() {
-                                    _pourcentremiseControler.text = _pourcentremise.toStringAsFixed(2);
-                                    _remisepieceControler.text = _remisepiece.toStringAsFixed(2);
+                                    _pourcentremiseControler.text =
+                                        _pourcentremise.toStringAsFixed(2);
+                                    _remisepieceControler.text =
+                                        _remisepiece.toStringAsFixed(2);
                                   });
                                 },
                                 btnOkText: S.current.confirme,
                                 btnOkOnPress: () {
                                   setState(() {
-                                    _pourcentremise = double.parse(_pourcentremiseControler.text.trim());
-                                    _remisepiece = double.parse(_remisepieceControler.text.trim());
+                                    _pourcentremise = double.parse(
+                                        _pourcentremiseControler.text.trim());
+                                    _remisepiece = double.parse(
+                                        _remisepieceControler.text.trim());
                                   });
                                   calculPiece();
                                 })
@@ -1074,6 +1121,7 @@ class _AddPiecePageState extends State<AddPiecePage>
     return new ArticlesFragment(
       tarification: _selectedTarification,
       pieceOrigin: _piece.piece,
+      articleSelected: _selectedItems,
       onConfirmSelectedItems: (selectedItem) {
         selectedItem.forEach((item) {
           if (_selectedItems.contains(item)) {
@@ -1153,7 +1201,8 @@ class _AddPiecePageState extends State<AddPiecePage>
           _piece.piece == PieceType.commandeClient ||
           _piece.piece == PieceType.bonLivraison ||
           _piece.piece == PieceType.factureClient) {
-        if (_selectedItems.isNotEmpty) dialogChangeTarif(fromClientDialog: true);
+        if (_selectedItems.isNotEmpty)
+          dialogChangeTarif(fromClientDialog: true);
       }
     });
   }
@@ -1170,7 +1219,7 @@ class _AddPiecePageState extends State<AddPiecePage>
       btnOkText: S.current.oui,
       btnOkOnPress: () {
         setState(() {
-          if(fromClientDialog){
+          if (fromClientDialog) {
             _selectedTarification = _selectedClient.tarification;
           }
           _selectedItems.forEach((element) {
@@ -1253,11 +1302,12 @@ class _AddPiecePageState extends State<AddPiecePage>
                       borderSide: BorderSide(color: Colors.greenAccent),
                       borderRadius: BorderRadius.circular(20)),
                   contentPadding: EdgeInsets.only(left: 10),
-                  labelText:(_piece.piece == PieceType.retourClient ||
-                      _piece.piece == PieceType.avoirClient ||
-                      _piece.piece == PieceType.retourFournisseur ||
-                      _piece.piece == PieceType.avoirFournisseur )
-                      ? S.current.rembourcement :"${S.current.verssement}",
+                  labelText: (_piece.piece == PieceType.retourClient ||
+                          _piece.piece == PieceType.avoirClient ||
+                          _piece.piece == PieceType.retourFournisseur ||
+                          _piece.piece == PieceType.avoirFournisseur)
+                      ? S.current.rembourcement
+                      : "${S.current.verssement}",
                   labelStyle: GoogleFonts.lato(
                       textStyle: TextStyle(color: Colors.green)),
                   enabledBorder: OutlineInputBorder(
@@ -1904,7 +1954,8 @@ class _AddPiecePageState extends State<AddPiecePage>
                 "Mov", _piece.mov, "Piece_id", _piece.id);
           }
 
-          if (_piece.piece != PieceType.devis && _piece.piece != PieceType.bonCommande) {
+          if (_piece.piece != PieceType.devis &&
+              _piece.piece != PieceType.bonCommande) {
             await addTresorie(_piece, transferer: false);
           }
 
@@ -1912,7 +1963,6 @@ class _AddPiecePageState extends State<AddPiecePage>
             widget.arguments = item;
             widget.arguments.id = _piece.id;
             message = S.current.msg_update_item;
-
           } else {
             message = S.current.msg_update_err;
           }
@@ -1936,7 +1986,8 @@ class _AddPiecePageState extends State<AddPiecePage>
             await _queryCtr.addItemToTable(DbTablesNames.journaux, journaux);
           });
 
-          if (_piece.piece != PieceType.devis && _piece.piece != PieceType.bonCommande) {
+          if (_piece.piece != PieceType.devis &&
+              _piece.piece != PieceType.bonCommande) {
             await addTresorie(_piece, transferer: false);
           }
 
@@ -1944,7 +1995,6 @@ class _AddPiecePageState extends State<AddPiecePage>
             widget.arguments = piece;
             widget.arguments.id = id;
             message = S.current.msg_ajout_item;
-
           } else {
             message = S.current.msg_ajout_err;
           }
@@ -1974,25 +2024,27 @@ class _AddPiecePageState extends State<AddPiecePage>
     _piece.raisonSociale = tiers.raisonSociale;
     _piece.tarification = _selectedTarification;
 
-    _piece.total_ht = double.parse((_total_ht).toStringAsFixed(2)) ;
-    _piece.remise =  _pourcentremise ;
-    _piece.net_ht =  double.parse((_net_ht).toStringAsFixed(2));
-    _piece.total_tva =  double.parse((_total_tva).toStringAsFixed(2));
-    _piece.total_ttc =  double.parse((_total_ttc).toStringAsFixed(2)) ;
-    _piece.timbre =(_timbre != null) ? double.parse((_timbre).toStringAsFixed(2)) : 0.0 ;
-    _piece.net_a_payer =  double.parse((_net_a_payer).toStringAsFixed(2)) ;
-
+    _piece.total_ht = double.parse((_total_ht).toStringAsFixed(2));
+    _piece.remise = _pourcentremise;
+    _piece.net_ht = double.parse((_net_ht).toStringAsFixed(2));
+    _piece.total_tva = double.parse((_total_tva).toStringAsFixed(2));
+    _piece.total_ttc = double.parse((_total_ttc).toStringAsFixed(2));
+    _piece.timbre =
+        (_timbre != null) ? double.parse((_timbre).toStringAsFixed(2)) : 0.0;
+    _piece.net_a_payer = double.parse((_net_a_payer).toStringAsFixed(2));
 
     if (_piece.transformer == null) {
       _piece.transformer = 0;
     }
 
     if (_piece.id == null) {
-      _piece.regler =  double.parse((_verssementpiece).toStringAsFixed(2)) ;
+      _piece.regler = double.parse((_verssementpiece).toStringAsFixed(2));
     } else {
-      _piece.regler =  double.parse((_piece.regler + _verssementpiece).toStringAsFixed(2)) ;
+      _piece.regler =
+          double.parse((_piece.regler + _verssementpiece).toStringAsFixed(2));
     }
-    _piece.reste =  double.parse((_piece.net_a_payer - _piece.regler).toStringAsFixed(2)) ;
+    _piece.reste =
+        double.parse((_piece.net_a_payer - _piece.regler).toStringAsFixed(2));
 
     if (_piece.piece == PieceType.retourClient ||
         _piece.piece == PieceType.avoirClient ||
@@ -2037,7 +2089,7 @@ class _AddPiecePageState extends State<AddPiecePage>
 
     tresorie.objet = "${S.current.reglement_piece}";
     tresorie.modalite = 0;
-    tresorie.numCheque = '' ;
+    tresorie.numCheque = '';
     tresorie.tierId = item.tier_id;
     tresorie.tierRS = item.raisonSociale;
     tresorie.pieceId = item.id;
@@ -2077,7 +2129,8 @@ class _AddPiecePageState extends State<AddPiecePage>
           await _queryCtr.getLastId(DbTablesNames.tresorie);
       reglementTresorie.piece_id =
           await _queryCtr.getLastId(DbTablesNames.pieces);
-      reglementTresorie.regler = double.parse((tresorie.montant).toStringAsFixed(2))  ;
+      reglementTresorie.regler =
+          double.parse((tresorie.montant).toStringAsFixed(2));
       await _queryCtr.addItemToTable(
           DbTablesNames.reglementTresorie, reglementTresorie);
     }
@@ -2288,12 +2341,13 @@ class _AddPiecePageState extends State<AddPiecePage>
       _newPiece.remise = _piece.remise;
       _newPiece.net_ht = double.parse((_piece.net_ht).toStringAsFixed(2));
       _newPiece.total_tva = double.parse((_piece.total_tva).toStringAsFixed(2));
-      _newPiece.total_ttc = double.parse((_piece.total_ttc).toStringAsFixed(2)) ;
-      _newPiece.timbre = double.parse((_piece.timbre).toStringAsFixed(2)) ;
-      _newPiece.net_a_payer = double.parse((_piece.net_a_payer).toStringAsFixed(2));
-      _newPiece.regler = double.parse((_piece.regler).toStringAsFixed(2)) ;
+      _newPiece.total_ttc = double.parse((_piece.total_ttc).toStringAsFixed(2));
+      _newPiece.timbre = double.parse((_piece.timbre).toStringAsFixed(2));
+      _newPiece.net_a_payer =
+          double.parse((_piece.net_a_payer).toStringAsFixed(2));
+      _newPiece.regler = double.parse((_piece.regler).toStringAsFixed(2));
       _newPiece.reste = double.parse((_piece.reste).toStringAsFixed(2));
-      _newPiece.marge = double.parse((_piece.marge).toStringAsFixed(2)) ;
+      _newPiece.marge = double.parse((_piece.marge).toStringAsFixed(2));
 
       if (_newPiece.piece == PieceType.retourClient ||
           _newPiece.piece == PieceType.avoirClient ||
@@ -2322,7 +2376,8 @@ class _AddPiecePageState extends State<AddPiecePage>
       transformer.oldPieceId = _piece.id;
       transformer.newPieceId = _newPiece.id;
       transformer.type_piece = _newPiece.piece;
-      var resTrans = await _queryCtr.addItemToTable(DbTablesNames.transformer, transformer);
+      var resTrans = await _queryCtr.addItemToTable(
+          DbTablesNames.transformer, transformer);
 
       // FP ou BC vers bl/Fc ou BR/FF
       if (_oldMov == 0) {
@@ -2330,8 +2385,8 @@ class _AddPiecePageState extends State<AddPiecePage>
       }
 
       var message = S.current.msg_transfere_err;
-      if(resTrans > 0){
-         message = S.current.msg_piece_transfere;
+      if (resTrans > 0) {
+        message = S.current.msg_piece_transfere;
       }
 
       setState(() {
@@ -2601,8 +2656,7 @@ class _AddPiecePageState extends State<AddPiecePage>
           (_piece.piece == PieceType.factureClient ||
               _piece.piece == PieceType.factureFournisseur ||
               _piece.piece == PieceType.avoirClient ||
-              _piece.piece == PieceType.avoirFournisseur)
-      ) {
+              _piece.piece == PieceType.avoirFournisseur)) {
         input = "${_selectedClient.rc}";
         encArabic = await CharsetConverter.encode(
             "ISO-8859-6", "${input.split('').reversed.join()}");
@@ -2806,15 +2860,18 @@ class _AddPiecePageState extends State<AddPiecePage>
       ticket.hr(ch: '=');
       ticket.row([
         (_piece.piece != PieceType.bonCommande &&
-            _piece.piece != PieceType.devis) ? PosColumn(
-            textEncoded: (_piece.regler >= 0)
-                ? await CharsetConverter.encode("ISO-8859-6",
-                    "${Helpers.numberFormat(_piece.regler).toString()}: ${S.current.regler.split('').reversed.join()}")
-                : await CharsetConverter.encode("ISO-8859-6",
-                    "${Helpers.numberFormat((_piece.regler * -1)).toString()}: ${S.current.regler.split('').reversed.join()}"),
-            width: 6) : PosColumn(width: 6),
-        (_piece.reste != 0 && (_piece.piece != PieceType.bonCommande &&
-            _piece.piece != PieceType.devis))
+                _piece.piece != PieceType.devis)
+            ? PosColumn(
+                textEncoded: (_piece.regler >= 0)
+                    ? await CharsetConverter.encode("ISO-8859-6",
+                        "${Helpers.numberFormat(_piece.regler).toString()}: ${S.current.regler.split('').reversed.join()}")
+                    : await CharsetConverter.encode("ISO-8859-6",
+                        "${Helpers.numberFormat((_piece.regler * -1)).toString()}: ${S.current.regler.split('').reversed.join()}"),
+                width: 6)
+            : PosColumn(width: 6),
+        (_piece.reste != 0 &&
+                (_piece.piece != PieceType.bonCommande &&
+                    _piece.piece != PieceType.devis))
             ? PosColumn(
                 textEncoded: (_piece.reste >= 0)
                     ? await CharsetConverter.encode("ISO-8859-6",
@@ -3071,16 +3128,18 @@ class _AddPiecePageState extends State<AddPiecePage>
 
       ticket.row([
         (_piece.piece != PieceType.bonCommande &&
-            _piece.piece != PieceType.devis) ? PosColumn(
-            textEncoded: (_piece.regler >= 0)
-                ? await CharsetConverter.encode("ISO-8859-6",
-                    "${S.current.regler} : ${Helpers.numberFormat(_piece.regler).toString()}")
-                : await CharsetConverter.encode("ISO-8859-6",
-                    "${S.current.regler} : ${Helpers.numberFormat(_piece.regler * -1).toString()}"),
-            width: 6) : PosColumn(width: 6),
+                _piece.piece != PieceType.devis)
+            ? PosColumn(
+                textEncoded: (_piece.regler >= 0)
+                    ? await CharsetConverter.encode("ISO-8859-6",
+                        "${S.current.regler} : ${Helpers.numberFormat(_piece.regler).toString()}")
+                    : await CharsetConverter.encode("ISO-8859-6",
+                        "${S.current.regler} : ${Helpers.numberFormat(_piece.regler * -1).toString()}"),
+                width: 6)
+            : PosColumn(width: 6),
         (_piece.reste != 0 &&
-            (_piece.piece != PieceType.bonCommande &&
-            _piece.piece != PieceType.devis))
+                (_piece.piece != PieceType.bonCommande &&
+                    _piece.piece != PieceType.devis))
             ? PosColumn(
                 textEncoded: (_piece.reste > 0)
                     ? await CharsetConverter.encode("ISO-8859-6",
@@ -3160,7 +3219,7 @@ class _AddPiecePageState extends State<AddPiecePage>
                                 style: pw.TextStyle(
                                     font: ttf, fontWeight: pw.FontWeight.bold))
                             : pw.SizedBox(),
-                        (_profile.rc != "" )
+                        (_profile.rc != "")
                             ? pw.Text("${S.current.rc}\t: ${_profile.rc}",
                                 style: pw.TextStyle(
                                     font: ttf, fontWeight: pw.FontWeight.bold))
@@ -3172,10 +3231,10 @@ class _AddPiecePageState extends State<AddPiecePage>
                             : pw.SizedBox(),
                         (_profile.nis != "")
                             ? pw.Text("${S.current.nis}\t: ${_profile.nis}",
-                            style: pw.TextStyle(
-                                font: ttf, fontWeight: pw.FontWeight.bold))
+                                style: pw.TextStyle(
+                                    font: ttf, fontWeight: pw.FontWeight.bold))
                             : pw.SizedBox(),
-                        (_profile.ai != "" )
+                        (_profile.ai != "")
                             ? pw.Text("${S.current.art_imp}\t: ${_profile.ai}",
                                 style: pw.TextStyle(
                                     font: ttf, fontWeight: pw.FontWeight.bold))
@@ -3235,11 +3294,10 @@ class _AddPiecePageState extends State<AddPiecePage>
                                       PieceType.factureFournisseur ||
                                   _piece.piece == PieceType.avoirClient ||
                                   _piece.piece == PieceType.avoirFournisseur) &&
-                              (_selectedClient.rc != "") )
+                              (_selectedClient.rc != ""))
                           ? pw.Text("${S.current.rc}\t  ${_selectedClient.rc}",
                               style: pw.TextStyle(font: ttf))
                           : pw.SizedBox(),
-
                       ((_piece.piece == PieceType.factureClient ||
                                   _piece.piece ==
                                       PieceType.factureFournisseur ||
@@ -3250,24 +3308,22 @@ class _AddPiecePageState extends State<AddPiecePage>
                               "${S.current.nif}\t  ${_selectedClient.nif}",
                               style: pw.TextStyle(font: ttf))
                           : pw.SizedBox(),
-
-                      ((_piece.piece == PieceType.factureClient ||
-                          _piece.piece ==
-                              PieceType.factureFournisseur ||
-                          _piece.piece == PieceType.avoirClient ||
-                          _piece.piece == PieceType.avoirFournisseur) &&
-                          (_selectedClient.nis != ""))
-                          ? pw.Text(
-                          "${S.current.nis}\t  ${_selectedClient.nis}",
-                          style: pw.TextStyle(font: ttf))
-                          : pw.SizedBox(),
-
                       ((_piece.piece == PieceType.factureClient ||
                                   _piece.piece ==
                                       PieceType.factureFournisseur ||
                                   _piece.piece == PieceType.avoirClient ||
                                   _piece.piece == PieceType.avoirFournisseur) &&
-                              (_selectedClient.ai != "") )
+                              (_selectedClient.nis != ""))
+                          ? pw.Text(
+                              "${S.current.nis}\t  ${_selectedClient.nis}",
+                              style: pw.TextStyle(font: ttf))
+                          : pw.SizedBox(),
+                      ((_piece.piece == PieceType.factureClient ||
+                                  _piece.piece ==
+                                      PieceType.factureFournisseur ||
+                                  _piece.piece == PieceType.avoirClient ||
+                                  _piece.piece == PieceType.avoirFournisseur) &&
+                              (_selectedClient.ai != ""))
                           ? pw.Text(
                               "${S.current.art_imp}\t  ${_selectedClient.ai}",
                               style: pw.TextStyle(font: ttf))
@@ -3386,15 +3442,16 @@ class _AddPiecePageState extends State<AddPiecePage>
                         : pw.CrossAxisAlignment.start,
                     children: [
                       (_piece.piece != PieceType.bonCommande &&
-                          _piece.piece != PieceType.devis)
+                              _piece.piece != PieceType.devis)
                           ? pw.Text(
-                          (_piece.regler >= 0)
-                              ? "${S.current.regler}\t ${Helpers.numberFormat(_piece.regler)} ${_devise}"
-                              : "${S.current.regler}\t ${Helpers.numberFormat(_piece.regler * -1)} ${_devise}",
-                          style: pw.TextStyle(font: ttf)) : pw.SizedBox(),
+                              (_piece.regler >= 0)
+                                  ? "${S.current.regler}\t ${Helpers.numberFormat(_piece.regler)} ${_devise}"
+                                  : "${S.current.regler}\t ${Helpers.numberFormat(_piece.regler * -1)} ${_devise}",
+                              style: pw.TextStyle(font: ttf))
+                          : pw.SizedBox(),
                       (_piece.reste != 0 &&
-                          (_piece.piece != PieceType.bonCommande &&
-                              _piece.piece != PieceType.devis))
+                              (_piece.piece != PieceType.bonCommande &&
+                                  _piece.piece != PieceType.devis))
                           ? pw.Text(
                               (_piece.reste > 0)
                                   ? "${S.current.reste}\t ${Helpers.numberFormat(_piece.reste)} ${_devise}"

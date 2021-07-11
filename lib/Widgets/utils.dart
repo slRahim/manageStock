@@ -175,7 +175,7 @@ List<DropdownMenuItem<CompteTresorie>> buildDropCompteTresorieDownMenuItems(List
   for (CompteTresorie listItem in listItems) {
     items.add(
       DropdownMenuItem(
-        child: Text(listItem.nomCompte+"(${listItem.nomCompte})", style: GoogleFonts.lato(),),
+        child: Text(listItem.nomCompte+" (${listItem.numCompte})", style: GoogleFonts.lato(),),
         value: listItem,
       ),
     );

@@ -990,6 +990,7 @@ class SqlLiteDatabaseHelper {
                SET Tier_id = New.Tier_id ,
                    Tier_rs = (Select RaisonSociale From Tiers Where id = New.Tier_id)
              WHERE Piece_id = OLD.id ;
+           
         END;
      ''');
 
@@ -1018,7 +1019,6 @@ class SqlLiteDatabaseHelper {
              UPDATE Tiers
                SET  Credit = (Solde_depart + Chiffre_affaires) - Regler 
              WHERE id = NEW.Tier_id;
-             
              
         END;
      ''');
@@ -1107,6 +1107,10 @@ class SqlLiteDatabaseHelper {
            Update Journaux 
               Set Mov = -2
            WHERE Piece_id = Old.id;
+           
+           Update Tresories 
+             set Piece_id = null 
+           where Piece_id = Old.id ;
         END;
      ''');
 
@@ -1307,7 +1311,6 @@ class SqlLiteDatabaseHelper {
              UPDATE Tiers
                SET  Credit = (Solde_depart + Chiffre_affaires) - Regler 
              WHERE id = New.Tier_id;
-             
              
         END;
       ''');

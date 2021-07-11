@@ -612,7 +612,9 @@
   "code_pin1" : "Key",
   "msg_existe_deja" : "Item already exists",
   "caisse_titre" : "Coffers",
-  "telechargement" : "Downloading"
+  "telechargement" : "Downloading",
+
+  "prix_moyen" : "Average price"
 
 
 }
