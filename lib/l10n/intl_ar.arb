@@ -614,6 +614,7 @@
   "caisse_titre" : "الحسابات",
   "telechargement" : "تحميل",
 
-  "prix_moyen" : "متوسط سعر"
+  "prix_moyen" : "متوسط سعر",
+  "msg_prix_supp_zero" : "يجب أن يكون القيمة أكبر من الصفر"
 
 }

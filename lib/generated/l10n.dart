@@ -5754,6 +5754,16 @@ class S {
       args: [],
     );
   }
+
+  /// `The value must be greater than zero`
+  String get msg_prix_supp_zero {
+    return Intl.message(
+      'The value must be greater than zero',
+      name: 'msg_prix_supp_zero',
+      desc: '',
+      args: [],
+    );
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<S> {

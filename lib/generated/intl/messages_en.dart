@@ -408,6 +408,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "msg_piece_transformer_to" : MessageLookupByLibrary.simpleMessage("Item transform to"),
     "msg_premium_exp" : MessageLookupByLibrary.simpleMessage("Your premium subscription has expired, Please resubscribe to service"),
     "msg_prix_err" : MessageLookupByLibrary.simpleMessage("Price can\'t be less then 0"),
+    "msg_prix_supp_zero" : MessageLookupByLibrary.simpleMessage("The value must be greater than zero"),
     "msg_qte_err" : MessageLookupByLibrary.simpleMessage("Qantité can\'t be less then 0"),
     "msg_qte_select_sup" : MessageLookupByLibrary.simpleMessage("Please note that the selected quantity is greater than the available quantity"),
     "msg_qte_zero" : MessageLookupByLibrary.simpleMessage("Please note that the available quantity is equal to zero"),

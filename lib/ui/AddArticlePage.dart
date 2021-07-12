@@ -464,13 +464,12 @@ class _AddArticlePageState extends State<AddArticlePage>
                       });
                     },
                     keyboardType: TextInputType.number,
-                    // validator: (value) {
-                    //   if (value.isEmpty) {
-                    //     return S.current.msg_champ_oblg;
-                    //   }
-                    //   return null;
-                    // },
-
+                    validator: (value) {
+                      if (double.parse(value) < 0) {
+                        return S.current.msg_prix_supp_zero;
+                      }
+                      return null;
+                    },
                     decoration: InputDecoration(
                         labelText: S.current.prix_achat,
                         labelStyle: GoogleFonts.lato(
@@ -534,12 +533,12 @@ class _AddArticlePageState extends State<AddArticlePage>
               onTap: () => _pmpControl.selection = TextSelection(
                   baseOffset: 0, extentOffset: _pmpControl.value.text.length),
               keyboardType: TextInputType.number,
-              // validator: (value) {
-              //   if (value.isEmpty) {
-              //     return S.current.msg_champ_oblg;
-              //   }
-              //   return null;
-              // },
+              validator: (value) {
+                if (double.parse(value) < 0) {
+                  return S.current.msg_prix_supp_zero;
+                }
+                return null;
+              },
               decoration: InputDecoration(
                   labelText: (modification)
                       ? S.current.pmp
@@ -579,12 +578,12 @@ class _AddArticlePageState extends State<AddArticlePage>
                               extentOffset:
                                   _stockInitialControl.value.text.length),
                       keyboardType: TextInputType.number,
-                      // validator: (value) {
-                      //   if (value.isEmpty) {
-                      //     return S.current.msg_champ_oblg;
-                      //   }
-                      //   return null;
-                      // },
+                      validator: (value) {
+                        if (double.parse(value) < 0) {
+                          return S.current.msg_prix_supp_zero;
+                        }
+                        return null;
+                      },
                       decoration: InputDecoration(
                         labelText: modification
                             ? S.current.quantit
@@ -624,12 +623,12 @@ class _AddArticlePageState extends State<AddArticlePage>
                               extentOffset:
                                   _stockMinimumControl.value.text.length),
                       keyboardType: TextInputType.number,
-                      // validator: (value) {
-                      //   if (value.isEmpty) {
-                      //     return S.current.msg_champ_oblg;
-                      //   }
-                      //   return null;
-                      // },
+                      validator: (value) {
+                        if (double.parse(value) < 0) {
+                          return S.current.msg_prix_supp_zero;
+                        }
+                        return null;
+                      },
                       decoration: InputDecoration(
                         labelText: S.current.stock_min,
                         labelStyle: GoogleFonts.lato(
@@ -672,12 +671,12 @@ class _AddArticlePageState extends State<AddArticlePage>
                           baseOffset: 0,
                           extentOffset: _qteColisCotrol.value.text.length),
                       keyboardType: TextInputType.number,
-                      // validator: (value) {
-                      //   if (value.isEmpty) {
-                      //     return S.current.msg_champ_oblg;
-                      //   }
-                      //   return null;
-                      // },
+                      validator: (value) {
+                        if (double.parse(value) < 0) {
+                          return S.current.msg_prix_supp_zero;
+                        }
+                        return null;
+                      },
                       decoration: InputDecoration(
                         labelText: S.current.qte_colis,
                         labelStyle: GoogleFonts.lato(
@@ -718,12 +717,12 @@ class _AddArticlePageState extends State<AddArticlePage>
                       controller: _qteCmdCotrol,
                       // onTap: () => _qteCmdCotrol.selection = TextSelection(baseOffset: 0, extentOffset: _qteCmdCotrol.value.text.length),
                       keyboardType: TextInputType.number,
-                      // validator: (value) {
-                      //   if (value.isEmpty) {
-                      //     return S.current.msg_champ_oblg;
-                      //   }
-                      //   return null;
-                      // },
+                      validator: (value) {
+                        if (double.parse(value) < 0) {
+                          return S.current.msg_prix_supp_zero;
+                        }
+                        return null;
+                      },
                       decoration: InputDecoration(
                         prefixIcon: Icon(
                           Icons.apps_outlined,
@@ -762,12 +761,12 @@ class _AddArticlePageState extends State<AddArticlePage>
                     baseOffset: 0,
                     extentOffset: _colisControl.value.text.length),
                 keyboardType: TextInputType.number,
-                // validator: (value) {
-                //   if (value.isEmpty) {
-                //     return S.current.msg_champ_oblg;
-                //   }
-                //   return null;
-                // },
+                validator: (value) {
+                  if (double.parse(value) < 0) {
+                    return S.current.msg_prix_supp_zero;
+                  }
+                  return null;
+                },
                 decoration: InputDecoration(
                   prefixIcon: Icon(
                     Icons.archive,
@@ -800,12 +799,12 @@ class _AddArticlePageState extends State<AddArticlePage>
                   baseOffset: 0,
                   extentOffset: _price1Control.value.text.length),
               keyboardType: TextInputType.number,
-              // validator: (value) {
-              //   if (value.isEmpty) {
-              //     return S.current.msg_champ_oblg;
-              //   }
-              //   return null;
-              // },
+              validator: (value) {
+                if (double.parse(value) < 0) {
+                  return S.current.msg_prix_supp_zero;
+                }
+                return null;
+              },
               decoration: InputDecoration(
                 labelText: S.current.prix_v1,
                 labelStyle: GoogleFonts.lato(
@@ -839,12 +838,12 @@ class _AddArticlePageState extends State<AddArticlePage>
                     baseOffset: 0,
                     extentOffset: _price2Control.value.text.length),
                 keyboardType: TextInputType.number,
-                // validator: (value) {
-                //   if (value.isEmpty && _price2) {
-                //     return S.current.msg_champ_oblg;
-                //   }
-                //   return null;
-                // },
+                validator: (value) {
+                  if (double.parse(value) < 0) {
+                    return S.current.msg_prix_supp_zero;
+                  }
+                  return null;
+                },
                 decoration: InputDecoration(
                   labelText: S.current.prix_v2,
                   labelStyle: GoogleFonts.lato(
@@ -879,12 +878,12 @@ class _AddArticlePageState extends State<AddArticlePage>
                     baseOffset: 0,
                     extentOffset: _price3Control.value.text.length),
                 keyboardType: TextInputType.number,
-                // validator: (value) {
-                //   if (value.isEmpty && _price3) {
-                //     return S.current.msg_champ_oblg;
-                //   }
-                //   return null;
-                // },
+                validator: (value) {
+                  if (double.parse(value) < 0) {
+                    return S.current.msg_prix_supp_zero;
+                  }
+                  return null;
+                },
                 decoration: InputDecoration(
                   labelText: S.current.prix_v3,
                   labelStyle: GoogleFonts.lato(

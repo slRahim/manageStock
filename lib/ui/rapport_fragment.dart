@@ -566,7 +566,19 @@ class _RapportState extends State<Rapport> {
                                 style: pw.TextStyle(font: ttf, fontSize: 9)),
                       )
                   ]),
+
+            pw.TableRow(
+                decoration: pw.BoxDecoration(
+                    border: pw.Border(
+                        top: pw.BorderSide(
+                            width: 2, color: PdfColors.grey),
+                        bottom: pw.BorderSide(
+                            width: 2, color: PdfColors.grey))),
+                children: getTotatl(_resultList , ttf)
+
+            ),
           ]),
+
         ],
       ),
     );
@@ -615,6 +627,39 @@ class _RapportState extends State<Rapport> {
     return res;
   }
 
+  List getTotatl(data , ttf) {
+    var list ;
+    for (var map in data){
+      if (list == null){
+        list = List.from(map.values) ;
+      }else{
+        for(int i = 0 ; i < map.values.length ; i++){
+           if (list[i] is double || list[i] is int){
+             list[i] = list[i] + map.values.toList().elementAt(i);
+           }
+        }
+      }
+    }
+
+    List<pw.Widget> result = new List<pw.Widget>();
+    for (var item in list){
+      if(item is double || item is int){
+        result.add (pw.Container(
+            padding: pw.EdgeInsets.only(left: 5, right: 5 , top: 3 , bottom: 3),
+            child: pw.Text("${Helpers.numberFormat(item)}",
+                style: pw.TextStyle(font: ttf, fontSize: 11))
+        ));
+      }else{
+        result.add (pw.Container(
+            padding: pw.EdgeInsets.only(left: 5, right: 5 ,  top: 3 , bottom: 3),
+            child: pw.Text("-",
+                style: pw.TextStyle(font: ttf, fontSize: 11))
+        ));
+      }
+    }
+
+    return result;
+  }
 //  **********************************************************************************************************************************************************************
 //****************************************************************************traduction**********************************************************************************
 

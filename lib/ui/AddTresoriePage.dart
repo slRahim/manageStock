@@ -1272,6 +1272,7 @@ class _AddTresoriePageState extends State<AddTresoriePage>
         if (tresorie != null) {
           id = await _queryCtr.updateItemInDb(DbTablesNames.tresorie, tresorie);
           if (tresorie.categorie == 2 || tresorie.categorie == 3) {
+            await _queryCtr.removeItemWithForeignKey(DbTablesNames.reglementTresorie, tresorie.id, 'Tresorie_id');
             bool _haspiece = true;
             double verssementSolde = 0;
             if (tresorie.pieceId == null) {

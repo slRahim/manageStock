@@ -1979,7 +1979,7 @@ class _AddPiecePageState extends State<AddPiecePage>
           piece.etat = 0;
           id = await _queryCtr.addItemToTable(DbTablesNames.pieces, piece);
           if (id > -1) {
-            piece.id = await _queryCtr.getLastId(DbTablesNames.pieces);
+            piece.id = id;
           }
           _selectedItems.forEach((article) async {
             Journaux journaux = Journaux.fromPiece(piece, article);
@@ -2086,8 +2086,6 @@ class _AddPiecePageState extends State<AddPiecePage>
 
     //special pour l'etat de la tresorie
     tresorie.mov = item.mov;
-
-    tresorie.objet = "${S.current.reglement_piece}";
     tresorie.modalite = 0;
     tresorie.numCheque = '';
     tresorie.tierId = item.tier_id;
@@ -2098,10 +2096,12 @@ class _AddPiecePageState extends State<AddPiecePage>
         item.piece == PieceType.factureClient ||
         item.piece == PieceType.commandeClient) {
       tresorie.categorie = 2;
+      tresorie.objet = "${S.current.reglemnt_client} ${getPiecetype(_piece)} ${_piece.num_piece}";
     } else {
       if (item.piece == PieceType.bonReception ||
           item.piece == PieceType.factureFournisseur) {
         tresorie.categorie = 3;
+        tresorie.objet = "${S.current.reglement_fournisseur} ${getPiecetype(_piece)} ${_piece.num_piece}";
       } else {
         if (item.piece == PieceType.retourClient ||
             item.piece == PieceType.avoirClient) {
@@ -2121,19 +2121,17 @@ class _AddPiecePageState extends State<AddPiecePage>
     List<FormatPiece> list = await _queryCtr.getFormatPiece(PieceType.tresorie);
     tresorie.numTresorie = Helpers.generateNumPiece(list.first);
 
-    await _queryCtr.addItemToTable(DbTablesNames.tresorie, tresorie);
+    int id_tresorie = await _queryCtr.addItemToTable(DbTablesNames.tresorie, tresorie);
 
     if (tresorie.categorie == 2 || tresorie.categorie == 3) {
       ReglementTresorie reglementTresorie = new ReglementTresorie.init();
-      reglementTresorie.tresorie_id =
-          await _queryCtr.getLastId(DbTablesNames.tresorie);
-      reglementTresorie.piece_id =
-          await _queryCtr.getLastId(DbTablesNames.pieces);
-      reglementTresorie.regler =
-          double.parse((tresorie.montant).toStringAsFixed(2));
-      await _queryCtr.addItemToTable(
-          DbTablesNames.reglementTresorie, reglementTresorie);
+      reglementTresorie.tresorie_id = id_tresorie;
+      reglementTresorie.piece_id = tresorie.pieceId;
+      reglementTresorie.regler = double.parse((tresorie.montant).toStringAsFixed(2));
+
+      await _queryCtr.addItemToTable(DbTablesNames.reglementTresorie, reglementTresorie);
     }
+
   }
 
   //******************************************************************************************************************************************
@@ -2369,6 +2367,15 @@ class _AddPiecePageState extends State<AddPiecePage>
 
       int _oldMov = _piece.mov;
 
+      if(_newPiece.piece != PieceType.retourClient &&
+          _newPiece.piece != PieceType.avoirClient &&
+          _newPiece.piece != PieceType.retourFournisseur &&
+          _newPiece.piece != PieceType.avoirFournisseur){
+
+        await updateObjetTresorie(_newPiece) ;
+      }
+
+
       //  add la transformation à la table transformer (oldPiece_id newPiece_id , oldMov)
       // update tresorie with triggers
       Transformer transformer = new Transformer.init();
@@ -2376,8 +2383,7 @@ class _AddPiecePageState extends State<AddPiecePage>
       transformer.oldPieceId = _piece.id;
       transformer.newPieceId = _newPiece.id;
       transformer.type_piece = _newPiece.piece;
-      var resTrans = await _queryCtr.addItemToTable(
-          DbTablesNames.transformer, transformer);
+      var resTrans = await _queryCtr.addItemToTable(DbTablesNames.transformer, transformer);
 
       // FP ou BC vers bl/Fc ou BR/FF
       if (_oldMov == 0) {
@@ -2468,6 +2474,22 @@ class _AddPiecePageState extends State<AddPiecePage>
         return PieceType.avoirFournisseur;
         break;
     }
+  }
+
+  updateObjetTresorie(pieceTransfere) async{
+    String objet = '';
+    if (pieceTransfere.piece == PieceType.bonLivraison ||
+        pieceTransfere.piece == PieceType.factureClient ||
+        pieceTransfere.piece == PieceType.commandeClient) {
+      objet = "${S.current.reglemnt_client} ${getPiecetype(pieceTransfere)} ${pieceTransfere.num_piece}";
+    } else {
+      if (pieceTransfere.piece == PieceType.bonReception ||
+          pieceTransfere.piece == PieceType.factureFournisseur) {
+
+        objet = "${S.current.reglement_fournisseur} ${getPiecetype(pieceTransfere)} ${pieceTransfere.num_piece}";
+      }
+    }
+    await _queryCtr.updateObjetTresorie(oldPiece : _piece , objet : objet);
   }
 
   //******************************************************************************************************************************************

@@ -5,6 +5,7 @@ import 'dart:typed_data';
 
 import 'package:encrypt/encrypt.dart' as encrypt;
 import 'package:gestmob/Helpers/Statics.dart';
+import 'package:gestmob/generated/l10n.dart';
 import 'package:gestmob/models/Tiers.dart';
 import 'package:gestmob/services/cloud_backup_restore.dart';
 import 'package:path/path.dart';
@@ -989,8 +990,11 @@ class SqlLiteDatabaseHelper {
              UPDATE Tresories
                SET Tier_id = New.Tier_id ,
                    Tier_rs = (Select RaisonSociale From Tiers Where id = New.Tier_id)
-             WHERE Piece_id = OLD.id ;
-           
+             WHERE Piece_id = NEW.id ;
+             
+             UPDATE Pieces
+               SET Tier_id = New.Tier_id
+             WHERE id = (Select Old_Piece_id From Transformers Where New_Piece_id = OLD.id);
         END;
      ''');
 
@@ -1084,7 +1088,7 @@ class SqlLiteDatabaseHelper {
         CREATE TRIGGER IF NOT EXISTS update_piece_transformer
         AFTER UPDATE ON Pieces
         FOR EACH ROW
-        When New.Etat = 1 
+        When  (Old.Etat <> New.Etat) AND New.Etat = 1
         BEGIN
             UPDATE Pieces
               SET Regler = IFNULL((SELECT SUM(Regler)-OLD.Regler FROM ReglementTresorie WHERE Piece_id = OLD.id ),0)
@@ -1316,35 +1320,36 @@ class SqlLiteDatabaseHelper {
       ''');
 
     // le delete est spaecial pour add tresorie page (on update tresorie montant)
-    await db.execute('''CREATE TRIGGER update_tier_reglement_credit2
-        AFTER UPDATE ON Tresories 
-        FOR EACH ROW 
-        when (New.Categorie_id = 2 OR New.Categorie_id = 3 OR New.Categorie_id = 6 OR New.Categorie_id = 7) 
-              AND OLD.Mov = NEW.Mov  AND (OLD.Piece_id = NEW.Piece_id OR OLD.Piece_id  IS NULL) 
-        BEGIN         
-            UPDATE Tiers
-               SET Chiffre_affaires = IFNULL((Select Sum(Net_a_payer) From Pieces where Tier_id = OLD.Tier_id AND Mov = 1 AND Piece <> "CC" AND Piece <> "FP" AND Piece <> "BC"),0)
-            WHERE id = OLD.Tier_id; 
-            UPDATE Tiers
-              SET Regler = IFNULL((SELECT SUM(Montant) FROM Tresories WHERE Tier_id = OLD.Tier_id AND Mov = 1),0)
-            WHERE id = OLD.Tier_id ;
-            UPDATE Tiers
-               SET  Credit = (Solde_depart + Chiffre_affaires) - Regler 
-            WHERE id = OLD.Tier_id;
-                 
-            UPDATE Tiers
-               SET Chiffre_affaires = IFNULL((Select Sum(Net_a_payer) From Pieces where Tier_id = New.Tier_id AND Mov = 1 AND Piece <> "CC" AND Piece <> "FP" AND Piece <> "BC"),0)
-            WHERE id = New.Tier_id; 
-            UPDATE Tiers
-              SET Regler = IFNULL((SELECT SUM(Montant) FROM Tresories WHERE Tier_id = New.Tier_id AND Mov = 1),0)
-            WHERE id = NEW.Tier_id ;
-            UPDATE Tiers
-               SET  Credit = (Solde_depart + Chiffre_affaires) - Regler 
-            WHERE id = New.Tier_id;   
-             
-            DELETE FROM ReglementTresorie WHERE Tresorie_id = Old.id ;
-        END;
-      ''');
+    // await db.execute('''CREATE TRIGGER update_tier_reglement_credit2
+    //     AFTER UPDATE ON Tresories
+    //     FOR EACH ROW
+    //     when (New.Categorie_id = 2 OR New.Categorie_id = 3 OR New.Categorie_id = 6 OR New.Categorie_id = 7)
+    //           AND OLD.Mov = NEW.Mov  AND (OLD.Piece_id = NEW.Piece_id OR OLD.Piece_id  IS NULL)
+    //           AND OLD.Tier_id = New.Tier_id AND OLD.Categorie_id = NEW.Categorie_id
+    //     BEGIN
+    //         UPDATE Tiers
+    //            SET Chiffre_affaires = IFNULL((Select Sum(Net_a_payer) From Pieces where Tier_id = OLD.Tier_id AND Mov = 1 AND Piece <> "CC" AND Piece <> "FP" AND Piece <> "BC"),0)
+    //         WHERE id = OLD.Tier_id;
+    //         UPDATE Tiers
+    //           SET Regler = IFNULL((SELECT SUM(Montant) FROM Tresories WHERE Tier_id = OLD.Tier_id AND Mov = 1),0)
+    //         WHERE id = OLD.Tier_id ;
+    //         UPDATE Tiers
+    //            SET  Credit = (Solde_depart + Chiffre_affaires) - Regler
+    //         WHERE id = OLD.Tier_id;
+    //
+    //         UPDATE Tiers
+    //            SET Chiffre_affaires = IFNULL((Select Sum(Net_a_payer) From Pieces where Tier_id = New.Tier_id AND Mov = 1 AND Piece <> "CC" AND Piece <> "FP" AND Piece <> "BC"),0)
+    //         WHERE id = New.Tier_id;
+    //         UPDATE Tiers
+    //           SET Regler = IFNULL((SELECT SUM(Montant) FROM Tresories WHERE Tier_id = New.Tier_id AND Mov = 1),0)
+    //         WHERE id = NEW.Tier_id ;
+    //         UPDATE Tiers
+    //            SET  Credit = (Solde_depart + Chiffre_affaires) - Regler
+    //         WHERE id = New.Tier_id;
+    //
+    //         DELETE FROM ReglementTresorie WHERE Tresorie_id = Old.id ;
+    //     END;
+    //   ''');
 
     // ***************************************************************************************************************
     //**********************************************dell tresorie*******************************************************
@@ -1460,28 +1465,6 @@ class SqlLiteDatabaseHelper {
         END;
       ''');
 
-    // await db.execute('''CREATE TRIGGER update_reglemntTresorie_tresorie1
-    //     BEFORE DELETE ON Transformers
-    //     FOR EACH ROW
-    //     WHEN (OLD.Type_piece <> 'AC' AND OLD.Type_piece <> 'RC' AND OLD.Type_piece <> 'AF' AND OLD.Type_piece <> 'RF')
-    //     BEGIN
-    //        UPDATE Tresories
-    //           SET Piece_id = OLD.Old_Piece_id
-    //        WHERE Piece_id = OLD.New_Piece_id ;
-    //
-    //        UPDATE ReglementTresorie
-    //           SET Piece_id = OLD.Old_Piece_id
-    //        WHERE Piece_id = OLD.New_Piece_id ;
-    //
-    //        UPDATE Pieces
-    //           SET Regler = IFNULL((SELECT SUM(Regler) FROM ReglementTresorie WHERE Piece_id = OLD.Old_Piece_id),0)
-    //        WHERE id = OLD.Old_Piece_id ;
-    //
-    //        UPDATE Pieces
-    //           SET  Reste = Net_a_payer - Regler
-    //        WHERE id = OLD.Old_Piece_id ;
-    //     END;
-    //   ''');
   }
 
 //*****************************************************************************************************************************************

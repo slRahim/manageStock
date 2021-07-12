@@ -674,6 +674,17 @@ class QueryCtr {
     return res;
   }
 
+  Future updateObjetTresorie({Piece oldPiece, objet}) async {
+    var dbClient = await _databaseHelper.db;
+    String sql = '''
+      Update ${DbTablesNames.tresorie} 
+         Set Objet = '${objet}' 
+      where Piece_id = ${oldPiece.id} ;
+    ''' ;
+
+    var res = await dbClient.rawQuery(sql);
+  }
+
   Future<int> removeItemFromTable(String tableName, item) async {
     var dbClient = await _databaseHelper.db;
     int res =
@@ -1093,7 +1104,7 @@ class QueryCtr {
          From 
            (Select Articles.id, Articles.Designation as designation, Articles.Ref as referance, Sum(Journaux.Qte) as qte , 
                   Sum(Journaux.Net_ht*Journaux.Qte)/Sum(Journaux.Qte) as  prix_moyen,
-                  (Sum(Journaux.Marge*Journaux.Qte)/Sum(Journaux.Qte)*Sum(Journaux.Qte)) as total
+                  (Sum(Journaux.Net_ht*Journaux.Qte)/Sum(Journaux.Qte)*Sum(Journaux.Qte)) as total
            From Journaux 
            Join Articles ON Journaux.Article_id = Articles.id 
            Where Journaux.Mov = 1 AND (Piece_type like 'BR' OR Piece_type like 'FF' OR Piece_type like 'RF'  OR Piece_type like 'AF')
@@ -1325,4 +1336,6 @@ class QueryCtr {
     var res = await dbClient.rawQuery(query);
     return res;
   }
+
+
 }

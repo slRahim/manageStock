@@ -613,7 +613,8 @@
   "caisse_titre" : "Mes caisses",
   "telechargement" : "Téléchargement",
 
-  "prix_moyen" : "Prix moyen"
+  "prix_moyen" : "Prix moyen",
+  "msg_prix_supp_zero" : "La valeur doit etre superieure à zéro"
 
 
 

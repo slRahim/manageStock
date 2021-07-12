@@ -416,6 +416,16 @@ class _PieceListItemState extends State<PieceListItem> {
             widget.piece.piece != PieceType.bonCommande &&
             widget.piece.etat != 1 &&
             widget.piece.mov != 2 ) {
+
+          if(widget.piece.transformer == 1 &&
+              widget.piece.piece != PieceType.retourClient &&
+              widget.piece.piece != PieceType.avoirClient &&
+              widget.piece.piece != PieceType.retourFournisseur &&
+              widget.piece.piece != PieceType.avoirFournisseur){
+
+            await _queryCtr.updateObjetTresorie(oldPiece : widget.piece , objet : '${S.current.reglement_piece}');
+          }
+
           int res = await _queryCtr.removeItemFromTable(
               DbTablesNames.pieces, widget.piece);
           var message = "";

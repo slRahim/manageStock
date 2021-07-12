@@ -614,7 +614,9 @@
   "caisse_titre" : "Coffers",
   "telechargement" : "Downloading",
 
-  "prix_moyen" : "Average price"
+  "prix_moyen" : "Average price",
+  "msg_prix_supp_zero" : "The value must be greater than zero"
+
 
 
 }
