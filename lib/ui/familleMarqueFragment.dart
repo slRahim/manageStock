@@ -16,6 +16,7 @@ import 'package:gestmob/models/TiersFamille.dart';
 import 'package:gestmob/models/ChargeTresorie.dart';
 import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:gestmob/models/CompteTresorie.dart';
+import 'package:gestmob/Helpers/string_cap_extension.dart' ;
 
 class FamilleMarqueFragment extends StatefulWidget {
   final QueryCtr _queryCtr = QueryCtr();
@@ -514,6 +515,12 @@ class _FamilleMarqueFragmentState extends State<FamilleMarqueFragment> {
                     controller: _tauxTVAControl,
                     keyboardType: TextInputType.number,
                     validator: (value) {
+                      if(!value.isNumericUsingRegularExpression){
+                        return S.current.msg_val_valide ;
+                      }
+                      if(value.isNotEmpty &&  double.parse(value) < 0){
+                        return S.current.msg_prix_supp_zero ;
+                      }
                       if (value.isEmpty) {
                         return S.current.msg_champ_oblg;
                       }
@@ -819,12 +826,15 @@ class _FamilleMarqueFragmentState extends State<FamilleMarqueFragment> {
                         TextFormField(
                           controller: _soldeCompteControl,
                           keyboardType: TextInputType.number,
-                          // validator: (value) {
-                          //   if (value.isEmpty) {
-                          //     return S.current.msg_champ_oblg;
-                          //   }
-                          //   return null;
-                          // },
+                          validator: (value) {
+                            if(!value.isNumericUsingRegularExpression){
+                              return S.current.msg_val_valide ;
+                            }
+                            if(value.isNotEmpty && double.parse(value) < 0){
+                              return S.current.msg_prix_supp_zero ;
+                            }
+                            return null;
+                          },
                           decoration: InputDecoration(
                             prefixIcon: Icon(
                               Icons.monetization_on,

@@ -743,6 +743,10 @@ class _RapportState extends State<Rapport> {
       case "prix_moyen":
         return S.current.prix_moyen;
         break;
+      case "montant_ht":
+        return S.current.montant_ht;
+        break;
+
     }
   }
 

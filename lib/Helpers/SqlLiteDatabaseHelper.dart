@@ -1287,6 +1287,19 @@ class SqlLiteDatabaseHelper {
                                             ),0)
             WHERE id = New.Compte_id; 
            
+            UPDATE CompteTresorie
+              SET  Solde = Solde_depart + IFNULL((Select Sum(Montant) From Tresories 
+                                            Where Compte_id = OLD.Compte_id AND 
+                                                  (Categorie_id = 2 OR Categorie_id = 4 OR Categorie_id = 6)
+                                             ),0)
+            WHERE id = OLD.Compte_id; 
+            
+            UPDATE CompteTresorie
+              SET  Solde = Solde + IFNULL((Select  -1 * Sum(Montant) From Tresories 
+                                            Where Compte_id = OLD.Compte_id AND 
+                                                  (Categorie_id = 3 OR Categorie_id = 5 OR Categorie_id = 7 OR Categorie_id = 8)
+                                            ),0)
+            WHERE id = OLD.Compte_id; 
         END;
       ''');
 

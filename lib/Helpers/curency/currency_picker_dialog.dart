@@ -5,6 +5,7 @@ import 'package:gestmob/Helpers/curency/country.dart';
 import 'package:gestmob/Helpers/curency/utils/my_alert_dialog.dart';
 import 'package:gestmob/Helpers/curency/utils/typedefs.dart';
 import 'countries.dart';
+import 'package:gestmob/generated/l10n.dart';
 
 ///Provides a customizable [Dialog] which displays all countries
 /// with optional search feature
@@ -157,7 +158,7 @@ class SingleChoiceDialogState extends State<CurrencyPickerDialog> {
           )
         : widget.searchEmptyView ??
             Center(
-              child: Text('No country found.'),
+              child: Text(S.current.no_element),
             );
   }
 

@@ -15,6 +15,8 @@ import 'package:gestmob/search/items_sliver_list.dart';
 import 'package:gestmob/search/sliver_list_data_source.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
+import 'package:flutter/src/services/platform_channel.dart';
+import 'dart:async';
 
 class JournalFragment extends StatefulWidget {
   final Function(List<dynamic>) onConfirmSelectedItems;
@@ -59,6 +61,10 @@ class _JournalFragmentState extends State<JournalFragment> {
 
   SliverListDataSource _dataSource;
 
+  static const _stream = const EventChannel('pda.flutter.dev/scanEvent');
+  StreamSubscription subscription;
+
+
   @override
   Future<void> initState() {
     super.initState();
@@ -66,6 +72,16 @@ class _JournalFragmentState extends State<JournalFragment> {
     fillFilter(_filterMap);
     fillFilter(_emptyFilterMap);
     _dataSource = SliverListDataSource(ItemsListTypes.journalList, _filterMap);
+
+    subscription = _stream.receiveBroadcastStream().listen(_pdaScanner);
+
+  }
+
+
+  @override
+  void dispose() {
+    subscription.cancel();
+    super.dispose();
   }
 
   //***************************************************partie speciale pour le filtre de recherche***************************************
@@ -312,6 +328,7 @@ class _JournalFragmentState extends State<JournalFragment> {
         body: ItemsSliverList(
             dataSource: _dataSource,
             canRefresh: _selectedItems.length <= 0,
+            articleOriginalList: [],
             onItemSelected: widget.onConfirmSelectedItems != null
                 ? (selectedItem) {
                     onItemSelected(setState, selectedItem);
@@ -322,11 +339,12 @@ class _JournalFragmentState extends State<JournalFragment> {
   onItemSelected(setState, selectedItem) {
     setState(() {
       if (selectedItem != null) {
-        if (_selectedItems.contains(selectedItem)) {
-          _selectedItems.remove(selectedItem);
-        } else {
-          _selectedItems.add(selectedItem);
-        }
+        _selectedItems.add(selectedItem);
+        // if (_selectedItems.contains(selectedItem)) {
+        //   _selectedItems.remove(selectedItem);
+        // } else {
+        //   _selectedItems.add(selectedItem);
+        // }
       }
     });
   }
@@ -337,12 +355,7 @@ class _JournalFragmentState extends State<JournalFragment> {
         itemsCount: _selectedItems.length,
         onConfirm: () => {
           widget.onConfirmSelectedItems(_selectedItems),
-          setState(() {
-          _dataSource.refresh();
-          _selectedItems = new List<Object>();
-          }),
-          Helpers.showToast(S.current.msg_ajout_item),
-          // Navigator.pop(context)
+          Navigator.pop(context)
         },
         onCancel: () => {
           setState(() {
@@ -432,5 +445,13 @@ class _JournalFragmentState extends State<JournalFragment> {
       }
       Helpers.showToast(result.rawContent);
     }
+  }
+
+  void _pdaScanner(data) {
+    setState(() {
+      searchController.text = data;
+      _dataSource.updateSearchTerm(data);
+      FocusScope.of(context).requestFocus(null);
+    });
   }
 }

@@ -24,6 +24,7 @@ import 'package:gestmob/ui/ClientFourFragment.dart';
 import 'package:gestmob/ui/PiecesFragment.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
+import 'package:gestmob/Helpers/string_cap_extension.dart';
 
 class AddTresoriePage extends StatefulWidget {
   var arguments;
@@ -688,12 +689,12 @@ class _AddTresoriePageState extends State<AddTresoriePage>
                         baseOffset: 0,
                         extentOffset: _objetControl.value.text.length),
                     keyboardType: TextInputType.text,
-                    validator: (value) {
-                      if (value.isEmpty) {
-                        return S.current.msg_champ_oblg;
-                      }
-                      return null;
-                    },
+                    // validator: (value) {
+                    //   if (value.isEmpty) {
+                    //     return S.current.msg_champ_oblg;
+                    //   }
+                    //   return null;
+                    // },
                     decoration: InputDecoration(
                       labelText: S.current.objet,
                       labelStyle: GoogleFonts.lato(
@@ -821,6 +822,12 @@ class _AddTresoriePageState extends State<AddTresoriePage>
                         extentOffset: _montantControl.value.text.length),
                     keyboardType: TextInputType.number,
                     validator: (value) {
+                      if(!value.isNumericUsingRegularExpression){
+                        return S.current.msg_val_valide ;
+                      }
+                      if(value.isNotEmpty && double.parse(value) < 0){
+                        return S.current.msg_prix_supp_zero ;
+                      }
                       if (value.isEmpty) {
                         return S.current.msg_champ_oblg;
                       }
@@ -1054,8 +1061,11 @@ class _AddTresoriePageState extends State<AddTresoriePage>
                               controller: _soldeCompteControl,
                               keyboardType: TextInputType.number,
                               validator: (value) {
-                                if (value.isEmpty) {
-                                  return S.current.msg_champ_oblg;
+                                if(!value.isNumericUsingRegularExpression){
+                                  return S.current.msg_val_valide ;
+                                }
+                                if (value.isNotEmpty && double.parse(value) < 0) {
+                                  return S.current.msg_prix_supp_zero;
                                 }
                                 return null;
                               },
@@ -1343,10 +1353,6 @@ class _AddTresoriePageState extends State<AddTresoriePage>
           if (id > -1) {
             widget.arguments = tresorie;
             widget.arguments.id = id;
-            setState(() {
-              modification = true;
-              editMode = false;
-            });
             message = S.current.msg_update_item;
           } else {
             message = S.current.msg_update_err;
@@ -1424,10 +1430,6 @@ class _AddTresoriePageState extends State<AddTresoriePage>
           if (id > -1) {
             widget.arguments = tresorie;
             widget.arguments.id = id;
-            setState(() {
-              modification = true;
-              editMode = false;
-            });
             message = S.current.msg_ajout_item;
           } else {
             message = S.current.msg_ajout_err;
@@ -1438,7 +1440,9 @@ class _AddTresoriePageState extends State<AddTresoriePage>
           return Future.value(id);
         }
       }
-
+      if(!modification && editMode){
+        Navigator.pop(context);
+      }
       Helpers.showFlushBar(context, message);
       return Future.value(id);
     } catch (error) {

@@ -615,6 +615,9 @@
   "telechargement" : "تحميل",
 
   "prix_moyen" : "متوسط سعر",
-  "msg_prix_supp_zero" : "يجب أن يكون القيمة أكبر من الصفر"
+  "msg_prix_supp_zero" : "يجب أن يكون القيمة أكبر من الصفر",
+  "msg_val_valide" : "أدخل رقمًا صحيحا",
+  "montant_ht" : "المبلغ ب ض",
+  "search" : "بحث"
 
 }

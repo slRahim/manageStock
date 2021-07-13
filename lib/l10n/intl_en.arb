@@ -615,7 +615,10 @@
   "telechargement" : "Downloading",
 
   "prix_moyen" : "Average price",
-  "msg_prix_supp_zero" : "The value must be greater than zero"
+  "msg_prix_supp_zero" : "The value must be greater than zero",
+  "msg_val_valide" : "Enter a valid number",
+  "montant_ht" : "Amount excl. tax",
+  "search" : "Search"
 
 
 

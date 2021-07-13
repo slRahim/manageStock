@@ -20,6 +20,7 @@ import 'package:gestmob/search/sliver_list_data_source.dart';
 import 'package:gestmob/services/push_notifications.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
+import 'package:gestmob/Helpers/string_cap_extension.dart' ;
 
 class ProfilePage extends StatefulWidget {
   @override
@@ -1057,12 +1058,15 @@ class _ProfilePageState extends State<ProfilePage>
                   baseOffset: 0,
                   extentOffset: _capitalsocialControl.value.text.length),
               keyboardType: TextInputType.number,
-              // validator: (value) {
-              //   if (value.isEmpty) {
-              //     return S.current.msg_champ_oblg;
-              //   }
-              //   return null;
-              // },
+              validator: (value) {
+                if(!value.isNumericUsingRegularExpression){
+                  return S.current.msg_val_valide ;
+                }
+                if(value.isNotEmpty && double.parse(value) < 0){
+                  return S.current.msg_prix_supp_zero ;
+                }
+                return null;
+              },
               decoration: InputDecoration(
                 labelText: S.current.capitale_sociale,
                 labelStyle: GoogleFonts.lato(

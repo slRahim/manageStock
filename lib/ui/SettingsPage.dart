@@ -287,7 +287,7 @@ class _SettingsPageState extends State<SettingsPage> {
                                 borderRadius: BorderRadius.circular(20)),
                             contentPadding:
                                 EdgeInsets.only(left: 20, top: 20, bottom: 20),
-                            labelText: S.current.devise,
+                            labelText: S.current.search,
                             labelStyle: TextStyle(color: Colors.blue[600]),
                             alignLabelWithHint: true,
                             hintText: S.current.msg_search,
@@ -304,6 +304,9 @@ class _SettingsPageState extends State<SettingsPage> {
                             setState(() {
                               _countryname = country.name;
                               _currencycode = country.currencyCode;
+                              if(_currencycode != 'DZD'){
+                                _timbre = false ;
+                              }
                             });
                           },
                         ),
@@ -352,8 +355,11 @@ class _SettingsPageState extends State<SettingsPage> {
                   ),
                   SettingsTile.switchTile(
                     title: '${S.current.param_timbre}',
-                    titleTextStyle: GoogleFonts.lato(),
+                    titleTextStyle: GoogleFonts.lato(
+                        textStyle: TextStyle(
+                            color: (_currencycode != "DZD") ? Theme.of(context).tabBarTheme.unselectedLabelColor : null)),
                     subtitleTextStyle: GoogleFonts.lato(),
+                    enabled: (_currencycode == "DZD"),
                     leading: Icon(Icons.fact_check,
                         color: Theme.of(context).primaryColorDark),
                     switchValue: _timbre,

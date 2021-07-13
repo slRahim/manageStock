@@ -5764,6 +5764,36 @@ class S {
       args: [],
     );
   }
+
+  /// `Enter a valid number`
+  String get msg_val_valide {
+    return Intl.message(
+      'Enter a valid number',
+      name: 'msg_val_valide',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Amount excl. tax`
+  String get montant_ht {
+    return Intl.message(
+      'Amount excl. tax',
+      name: 'montant_ht',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Search`
+  String get search {
+    return Intl.message(
+      'Search',
+      name: 'search',
+      desc: '',
+      args: [],
+    );
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<S> {

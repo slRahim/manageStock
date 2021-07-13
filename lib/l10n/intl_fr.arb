@@ -217,7 +217,7 @@
   "msg_no_dispo" : "Cette option n'est pas disponible",
   "remise" : "Remise",
   "pourcentage" : "Pourcentage",
-  "journaux" : "Journaux",
+  "journaux" : "Journal",
   "generale" : "Général",
   "langue" : "Langue",
   "chois_lang" : "Choisir une langue",
@@ -335,7 +335,7 @@
   "date_d_f" : "Date (Début / Fin) :",
   "msg_rapport_vide" : "Le rapport est vide",
   "demonstration" : "Date du rapport ",
-  "rapport_date" : "Période du rapport (de / à)",
+  "rapport_date" : "Période du rapport (Du / Au)",
 
   "creance_cl" : "Créances client",
   "creance_four" : "Dettes fournisseur",
@@ -614,7 +614,10 @@
   "telechargement" : "Téléchargement",
 
   "prix_moyen" : "Prix moyen",
-  "msg_prix_supp_zero" : "La valeur doit etre superieure à zéro"
+  "msg_prix_supp_zero" : "La valeur doit etre superieure à zéro",
+  "msg_val_valide" : "Entrez un nombre valide",
+  "montant_ht" : "Montant HT",
+  "search" : "Rechercher"
 
 
 

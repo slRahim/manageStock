@@ -8,6 +8,7 @@ import 'package:gestmob/generated/l10n.dart';
 import 'package:gestmob/models/Article.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
+import 'package:gestmob/Helpers/string_cap_extension.dart';
 
 // article selectionné ds une piece
 class ArticleListItemSelected extends StatefulWidget {
@@ -36,6 +37,7 @@ class _ArticleListItemSelectedState extends State<ArticleListItemSelected> {
   TextEditingController _quntiteControler = new TextEditingController();
   TextEditingController _priceControler = new TextEditingController();
   String _validateQteError;
+  String _validatePriceError;
 
   @override
   Widget build(BuildContext context) {
@@ -164,7 +166,7 @@ class _ArticleListItemSelectedState extends State<ArticleListItemSelected> {
 
   //dialog pour modifier le prix et la quantité
   Widget addQtedialogue() {
-    return StatefulBuilder(builder: (context, StateSetter setState) {
+    return StatefulBuilder(builder: (context, StateSetter _setState) {
       Widget dialog = Dialog(
         //this right here
         child: Container(
@@ -277,6 +279,7 @@ class _ArticleListItemSelectedState extends State<ArticleListItemSelected> {
                                         _priceControler.value.text.length),
                               },
                               decoration: InputDecoration(
+                                errorText: _validatePriceError ?? null,
                                 prefixIcon: Icon(
                                   Icons.attach_money,
                                   color: Colors.orange[900],
@@ -306,7 +309,8 @@ class _ArticleListItemSelectedState extends State<ArticleListItemSelected> {
                             children: [
                               InkWell(
                                 onTap: () {
-                                  _quntiteControler.text = "0";
+                                  _quntiteControler.text = widget.article.selectedQuantite.toString();
+                                  _priceControler.text = widget.article.selectedPrice.toString() ;
                                   Navigator.pop(context);
                                 },
                                 child: Container(
@@ -329,30 +333,42 @@ class _ArticleListItemSelectedState extends State<ArticleListItemSelected> {
                               SizedBox(width: 10),
                               InkWell(
                                 onTap: () {
-                                  try {
-                                    double _qte =
-                                        double.parse(_quntiteControler.text);
-                                    double _price =
-                                        double.parse(_priceControler.text);
-                                    if (_qte > 0) {
-                                      _validateQteError = null;
-                                    } else {
-                                      _validateQteError = S.current.msg_qte_err;
+                                  if(_quntiteControler.text.trim() == ''){
+                                    _validateQteError = S.current.msg_champs_obg ;
+                                  }else{
+                                    _validateQteError = null ;
+                                    if(!_quntiteControler.text.trim().isNumericUsingRegularExpression){
+                                      _validateQteError = S.current.msg_val_valide ;
                                     }
-                                    if (_validateQteError == null) {
-                                      widget.article.selectedQuantite = _qte;
-                                      widget.article.selectedPrice = _price;
-                                      widget.onItemSelected(null);
+                                    if(double.parse(_quntiteControler.text.trim()) < 0){
+                                      _validateQteError = S.current.msg_qte_err ;
+                                    }
+                                  }
 
-                                      Navigator.pop(context);
-                                    } else {
-                                      setState(() {});
+                                  if(_priceControler.text.trim() == ''){
+                                    _validatePriceError = S.current.msg_champs_obg ;
+                                  }else{
+                                    _validatePriceError = null ;
+                                    if(!_priceControler.text.trim().isNumericUsingRegularExpression){
+                                      _validatePriceError = S.current.msg_val_valide ;
                                     }
-                                  } catch (e) {
-                                    setState(() {
-                                      _validateQteError = S.current.msg_num_err;
-                                    });
-                                    print(e);
+                                    if(double.parse(_priceControler.text.trim()) < 0){
+                                      _validatePriceError = S.current.msg_prix_supp_zero ;
+                                    }
+                                  }
+
+                                  if (_validateQteError == null && _validatePriceError == null) {
+                                    double _qte = double.parse(_quntiteControler.text.trim());
+                                    double _price = double.parse(_priceControler.text.trim());
+
+                                    widget.article.selectedQuantite = _qte;
+                                    widget.article.selectedPrice = _price;
+                                    widget.onItemSelected(null);
+                                    Navigator.pop(context);
+
+                                  }else{
+                                    _setState((){});
+
                                   }
                                 },
                                 child: Container(

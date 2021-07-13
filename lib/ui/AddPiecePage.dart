@@ -527,6 +527,36 @@ class _AddPiecePageState extends State<AddPiecePage>
                                 },
                                 btnOkText: S.current.confirme,
                                 btnOkOnPress: () {
+                                  if(_pourcentremiseControler.text.trim() == ''){
+                                    _pourcentremiseControler.text = '0.0';
+                                    _remisepieceControler.text = '0.0';
+                                  }else{
+                                    if(!_pourcentremiseControler.text.trim().isNumericUsingRegularExpression){
+                                      _pourcentremiseControler.text = '0.0';
+                                      _remisepieceControler.text = "0.0" ;
+                                      Helpers.showToast(S.current.msg_val_valide);
+                                    }
+                                    if(double.parse(_pourcentremiseControler.text.trim()) < 0){
+                                      _pourcentremiseControler.text = '0.0';
+                                      _remisepieceControler.text = '0.0' ;
+                                      Helpers.showToast(S.current.msg_prix_supp_zero);
+                                    }
+                                  }
+                                  if(_remisepieceControler.text.trim() == ''){
+                                    _remisepieceControler.text = '0.0' ;
+                                    _pourcentremiseControler.text = '0.0';
+                                  }else{
+                                    if(!_remisepieceControler.text.trim().isNumericUsingRegularExpression){
+                                      _remisepieceControler.text = '0.0';
+                                      _pourcentremiseControler.text = '0.0';
+                                      Helpers.showToast(S.current.msg_val_valide);
+                                    }
+                                    if(double.parse(_remisepieceControler.text.trim()) < 0){
+                                      _remisepieceControler.text = '0.0';
+                                      _pourcentremiseControler.text = '0.0';
+                                      Helpers.showToast(S.current.msg_val_valide);
+                                    }
+                                  }
                                   setState(() {
                                     _pourcentremise = double.parse(
                                         _pourcentremiseControler.text.trim());
@@ -637,6 +667,18 @@ class _AddPiecePageState extends State<AddPiecePage>
                                     btnCancelOnPress: () {},
                                     btnOkText: S.current.confirme,
                                     btnOkOnPress: () {
+                                      if(_verssementControler.text.trim()  == ''){
+                                        _verssementControler.text = "0.0" ;
+                                      }else{
+                                        if(!_verssementControler.text.trim().isNumericUsingRegularExpression){
+                                          _verssementControler.text = "0.0" ;
+                                          Helpers.showToast(S.current.msg_val_valide);
+                                        }
+                                        if(double.parse(_verssementControler.text.trim()) < 0){
+                                          _verssementControler.text = "0.0" ;
+                                          Helpers.showToast(S.current.msg_prix_supp_zero);
+                                        }
+                                      }
                                       setState(() {
                                         _restepiece = double.parse(
                                             _resteControler.text.trim());
@@ -1277,20 +1319,31 @@ class _AddPiecePageState extends State<AddPiecePage>
                       extentOffset: _verssementControler.value.text.length),
                 },
                 onChanged: (value) {
-                  if (_piece.id != null) {
-                    if (_verssementpiece == 0) {
-                      double _reste = _net_a_payer -
-                          (_piece.regler + double.parse(value.trim()));
-                      _resteControler.text = _reste.toStringAsFixed(2);
-                    } else {
-                      double _reste = _net_a_payer -
-                          (_piece.regler + double.parse(value.trim()));
-                      _resteControler.text = _reste.toStringAsFixed(2);
+                  if(value.isEmpty){
+
+                  }else{
+                    if(double.parse(value) < 0){
+
+
+                    }else{
+                      if (_piece.id != null) {
+                        if (_verssementpiece == 0) {
+                          double _reste = _net_a_payer -
+                              (_piece.regler + double.parse(value.trim()));
+                          _resteControler.text = _reste.toStringAsFixed(2);
+                        } else {
+                          double _reste = _net_a_payer -
+                              (_piece.regler + double.parse(value.trim()));
+                          _resteControler.text = _reste.toStringAsFixed(2);
+                        }
+                      } else {
+                        double _reste = _net_a_payer - double.parse(value.trim());
+                        _resteControler.text = _reste.toStringAsFixed(2);
+                      }
                     }
-                  } else {
-                    double _reste = _net_a_payer - double.parse(value.trim());
-                    _resteControler.text = _reste.toStringAsFixed(2);
                   }
+
+
                 },
                 decoration: InputDecoration(
                   errorText: _validateVerssemntError ?? null,
@@ -2007,6 +2060,9 @@ class _AddPiecePageState extends State<AddPiecePage>
       }
 
       Navigator.pop(context);
+      if(!modification && editMode){
+        Navigator.pop(context);
+      }
       Helpers.showFlushBar(context, message);
       return Future.value(id);
     } catch (error) {
@@ -3409,6 +3465,21 @@ class _AddPiecePageState extends State<AddPiecePage>
                             fontSize: 10)),
                   ),
                   pw.Container(
+                    padding: pw.EdgeInsets.only(left: 5, right: 5, bottom: 2),
+                    child: pw.Text("${S.current.tva}",
+                        style: pw.TextStyle(
+                            fontWeight: pw.FontWeight.bold,
+                            font: ttf,
+                            fontSize: 10)),
+                  ),
+                  pw.Container(
+                      padding: pw.EdgeInsets.only(left: 5, right: 5, bottom: 2),
+                      child: pw.Text("${S.current.montant_ht}",
+                          style: pw.TextStyle(
+                              fontWeight: pw.FontWeight.bold,
+                              font: ttf,
+                              fontSize: 10))),
+                  pw.Container(
                       padding: pw.EdgeInsets.only(left: 5, right: 5, bottom: 2),
                       child: pw.Text("${S.current.montant}",
                           style: pw.TextStyle(
@@ -3446,8 +3517,19 @@ class _AddPiecePageState extends State<AddPiecePage>
                     ),
                     pw.Container(
                       padding: pw.EdgeInsets.only(left: 5, right: 5),
+                      child: pw.Text("${Helpers.numberFormat(e.tva)}",
+                          style: pw.TextStyle(fontSize: 9)),
+                    ),
+                    pw.Container(
+                      padding: pw.EdgeInsets.only(left: 5, right: 5),
                       child: pw.Text(
                           "${Helpers.numberFormat((e.selectedPrice * e.selectedQuantite))}",
+                          style: pw.TextStyle(fontSize: 9)),
+                    ),
+                    pw.Container(
+                      padding: pw.EdgeInsets.only(left: 5, right: 5),
+                      child: pw.Text(
+                          "${Helpers.numberFormat(((e.selectedPrice + (e.selectedPrice * e.tva)/100)*e.selectedQuantite))}",
                           style: pw.TextStyle(fontSize: 9)),
                     ),
                   ]),

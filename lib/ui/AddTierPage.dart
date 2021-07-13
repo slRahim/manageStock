@@ -28,6 +28,7 @@ import 'package:pdf/widgets.dart' as pw;
 import 'package:printing/printing.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 import 'package:share/share.dart';
+import 'package:gestmob/Helpers/string_cap_extension.dart' ;
 
 class AddTierPage extends StatefulWidget {
   final QueryCtr _queryCtr = QueryCtr();
@@ -869,12 +870,15 @@ class _AddTierPageState extends State<AddTierPage>
                   baseOffset: 0,
                   extentOffset: _solde_departControl.value.text.length),
               keyboardType: TextInputType.number,
-              // validator: (value) {
-              //   if (value.isEmpty) {
-              //     return S.current.msg_champ_oblg;
-              //   }
-              //   return null;
-              // },
+              validator: (value) {
+                if(!value.isNumericUsingRegularExpression){
+                  return S.current.msg_val_valide ;
+                }
+                if(value.isNotEmpty && double.parse(value) < 0){
+                  return S.current.msg_prix_supp_zero ;
+                }
+                return null;
+              },
               onChanged: (value) {
                 var ch_affaire = (_chiffre_affairesControl.text != '')
                     ? double.parse(_chiffre_affairesControl.text)
@@ -1480,6 +1484,9 @@ class _AddTierPageState extends State<AddTierPage>
         } else {
           message = S.current.msg_ajout_err;
         }
+      }
+      if(!modification && editMode){
+        Navigator.pop(context);
       }
       Helpers.showFlushBar(context, message);
       return Future.value(id);

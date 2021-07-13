@@ -978,7 +978,7 @@ class QueryCtr {
     String query =
         "Select ArticlesFamilles.*, Sum(Journaux.Qte*Journaux.Net_ht) From Journaux " +
             "LEFT JOIN Articles ON Journaux.Article_id = Articles.id " +
-            "LEFT JOIN ArticlesFamilles ON Articles.Id_Famille+1 = ArticlesFamilles.id " +
+            "LEFT JOIN ArticlesFamilles ON Articles.Id_Famille = ArticlesFamilles.id " +
             "Where Mov = 1 AND (Piece_type LIKE 'BL' OR Piece_type LIKE 'FC' OR Piece_type LIKE 'RC' OR Piece_type LIKE 'AC')  " +
             "Group BY ArticlesFamilles.id " +
             "ORDER BY Sum(Journaux.Qte*Journaux.Net_ht) DESC LIMIT 5 ;";
@@ -1044,11 +1044,11 @@ class QueryCtr {
         break;
       case 1:
         query = """
-         Select designation, referance, qte , prix, montant
+         Select designation, referance, qte , prix, montant_ht
          From
            (Select Articles.id , Articles.Designation as designation, Articles.Ref as referance, Sum(Journaux.Qte) as qte , 
                   Sum(Journaux.Net_ht*Journaux.Qte)/Sum(Journaux.Qte) as prix,
-                  (Sum(Journaux.Net_ht*Journaux.Qte)/Sum(Journaux.Qte)*Sum(Journaux.Qte)) as montant
+                  (Sum(Journaux.Net_ht*Journaux.Qte)/Sum(Journaux.Qte)*Sum(Journaux.Qte)) as montant_ht
            From Journaux 
            Join Articles ON Journaux.Article_id = Articles.id 
            Where Journaux.Mov = 1 AND Piece_type like 'CC'  AND  Journaux.Date Between $dateStart AND $dateEnd
@@ -1061,7 +1061,7 @@ class QueryCtr {
          Select Journaux.Piece_type as piece_titre ,Pieces.Num_piece as n,
                 strftime('%d-%m-%Y', datetime(Pieces.Date/1000, 'unixepoch')) as date ,
                 Articles.Ref as referance ,Articles.Designation designation ,Tiers.RaisonSociale as client ,
-                Journaux.Qte as qte ,Journaux.Net_ht as prix, (Journaux.Net_ht * Journaux.Qte) as montant
+                Journaux.Qte as qte ,Journaux.Net_ht as prix, (Journaux.Net_ht * Journaux.Qte) as montant_ht
          From Journaux 
          Left Join Pieces ON Journaux.Piece_id = Pieces.id 
          Left Join Tiers ON Pieces.Tier_id = Tiers.id 
@@ -1076,7 +1076,7 @@ class QueryCtr {
          Select Journaux.Piece_type as piece_titre , Pieces.Num_piece as n ,
                 strftime('%d-%m-%Y', datetime(Pieces.Date/1000, 'unixepoch')) as date ,
                 Articles.Ref as  referance ,Articles.Designation as designation,Tiers.RaisonSociale as client ,
-                Journaux.Qte as qte ,Journaux.Net_ht as prix , (Journaux.Net_ht * Journaux.Qte) as montant
+                Journaux.Qte as qte ,Journaux.Net_ht as prix , (Journaux.Net_ht * Journaux.Qte) as montant_ht
          From Journaux 
          Left Join Pieces ON Journaux.Piece_id = Pieces.id 
          Left Join Tiers ON Pieces.Tier_id = Tiers.id 
@@ -1115,11 +1115,11 @@ class QueryCtr {
         break;
       case 1:
         query = """
-         Select designation, referance, qte , prix, montant
+         Select designation, referance, qte , prix, montant_ht
          From 
            (Select Articles.id, Articles.Designation as designation, Articles.Ref as referance, Sum(Journaux.Qte) as qte , 
                   Sum(Journaux.Net_ht*Journaux.Qte)/Sum(Journaux.Qte) as prix_moyen,
-                  (Sum(Journaux.Net_ht*Journaux.Qte)/Sum(Journaux.Qte)*Sum(Journaux.Qte)) as montant
+                  (Sum(Journaux.Net_ht*Journaux.Qte)/Sum(Journaux.Qte)*Sum(Journaux.Qte)) as montant_ht
            From Journaux 
            Join Articles ON Journaux.Article_id = Articles.id 
            Where Journaux.Mov = 0 AND Piece_type like 'BC'  AND  Journaux.Date Between ${dateStart} AND ${dateEnd}
@@ -1134,7 +1134,7 @@ class QueryCtr {
                 Articles.Ref as referance,
                 Articles.Designation as designation,Tiers.RaisonSociale as fournisseur ,
                 Journaux.Qte as qte,Journaux.Net_ht as prix, 
-                (Journaux.Net_ht * Journaux.Qte) as montant
+                (Journaux.Net_ht * Journaux.Qte) as montant_ht
          From Journaux 
          Left Join Pieces ON Journaux.Piece_id = Pieces.id 
          Left Join Tiers ON Pieces.Tier_id = Tiers.id 
@@ -1150,7 +1150,7 @@ class QueryCtr {
                 strftime('%d-%m-%Y', datetime(Pieces.Date/1000, 'unixepoch')) as date,
                 Articles.Ref as referance,Articles.Designation as designation,
                 Tiers.RaisonSociale as fournisseur ,
-                Journaux.Qte as qte,Journaux.Net_ht as prix, (Journaux.Net_ht * Journaux.Qte) as montant
+                Journaux.Qte as qte,Journaux.Net_ht as prix, (Journaux.Net_ht * Journaux.Qte) as montant_ht
          From Journaux 
          Left Join Pieces ON Journaux.Piece_id = Pieces.id 
          Left Join Tiers ON Pieces.Tier_id = Tiers.id 
@@ -1173,14 +1173,14 @@ class QueryCtr {
       case 0:
         query = """
         Select Designation as designation, Ref as referance , Qte as qte, 
-                PMP as pmp, (Qte*PMP) as montant
+                PMP as pmp, (Qte*PMP) as montant_ht
         From Articles where Qte > 0
         """;
         break;
       case 1:
         query = """
         Select Designation as designation, Ref as referance , Qte as qte, Qte_Min as qte_min, PMP as pmp, 
-              (Qte*PMP) as montant
+              (Qte*PMP) as montant_ht
         From Articles where Qte < 1 OR Qte < Qte_Min
         """;
         break;

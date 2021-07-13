@@ -22,6 +22,7 @@ import 'package:gestmob/models/ArticleTva.dart';
 import 'package:gestmob/models/MyParams.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
+import 'package:gestmob/Helpers/string_cap_extension.dart' ;
 
 class AddArticlePage extends StatefulWidget {
   final QueryCtr _queryCtr = QueryCtr();
@@ -465,7 +466,10 @@ class _AddArticlePageState extends State<AddArticlePage>
                     },
                     keyboardType: TextInputType.number,
                     validator: (value) {
-                      if (double.parse(value) < 0) {
+                      if(!value.isNumericUsingRegularExpression){
+                        return S.current.msg_val_valide ;
+                      }
+                      if (value.isNotEmpty && double.parse(value) < 0) {
                         return S.current.msg_prix_supp_zero;
                       }
                       return null;
@@ -534,7 +538,10 @@ class _AddArticlePageState extends State<AddArticlePage>
                   baseOffset: 0, extentOffset: _pmpControl.value.text.length),
               keyboardType: TextInputType.number,
               validator: (value) {
-                if (double.parse(value) < 0) {
+                if(!value.isNumericUsingRegularExpression){
+                  return S.current.msg_val_valide ;
+                }
+                if (value.isNotEmpty &&  double.parse(value) < 0) {
                   return S.current.msg_prix_supp_zero;
                 }
                 return null;
@@ -579,7 +586,10 @@ class _AddArticlePageState extends State<AddArticlePage>
                                   _stockInitialControl.value.text.length),
                       keyboardType: TextInputType.number,
                       validator: (value) {
-                        if (double.parse(value) < 0) {
+                        if(!value.isNumericUsingRegularExpression){
+                          return S.current.msg_val_valide ;
+                        }
+                        if (value.isNotEmpty && double.parse(value) < 0) {
                           return S.current.msg_prix_supp_zero;
                         }
                         return null;
@@ -624,7 +634,10 @@ class _AddArticlePageState extends State<AddArticlePage>
                                   _stockMinimumControl.value.text.length),
                       keyboardType: TextInputType.number,
                       validator: (value) {
-                        if (double.parse(value) < 0) {
+                        if(!value.isNumericUsingRegularExpression){
+                          return S.current.msg_val_valide ;
+                        }
+                        if (value.isNotEmpty && double.parse(value) < 0) {
                           return S.current.msg_prix_supp_zero;
                         }
                         return null;
@@ -672,7 +685,10 @@ class _AddArticlePageState extends State<AddArticlePage>
                           extentOffset: _qteColisCotrol.value.text.length),
                       keyboardType: TextInputType.number,
                       validator: (value) {
-                        if (double.parse(value) < 0) {
+                        if(!value.isNumericUsingRegularExpression){
+                          return S.current.msg_val_valide ;
+                        }
+                        if (value.isNotEmpty && double.parse(value) < 0) {
                           return S.current.msg_prix_supp_zero;
                         }
                         return null;
@@ -715,10 +731,13 @@ class _AddArticlePageState extends State<AddArticlePage>
                       enabled: editMode,
                       readOnly: true,
                       controller: _qteCmdCotrol,
-                      // onTap: () => _qteCmdCotrol.selection = TextSelection(baseOffset: 0, extentOffset: _qteCmdCotrol.value.text.length),
+                      onTap: () => _qteCmdCotrol.selection = TextSelection(baseOffset: 0, extentOffset: _qteCmdCotrol.value.text.length),
                       keyboardType: TextInputType.number,
                       validator: (value) {
-                        if (double.parse(value) < 0) {
+                        if(!value.isNumericUsingRegularExpression){
+                          return S.current.msg_val_valide ;
+                        }
+                        if (value.isNotEmpty && double.parse(value) < 0) {
                           return S.current.msg_prix_supp_zero;
                         }
                         return null;
@@ -762,7 +781,10 @@ class _AddArticlePageState extends State<AddArticlePage>
                     extentOffset: _colisControl.value.text.length),
                 keyboardType: TextInputType.number,
                 validator: (value) {
-                  if (double.parse(value) < 0) {
+                  if(!value.isNumericUsingRegularExpression){
+                    return S.current.msg_val_valide ;
+                  }
+                  if (value.isNotEmpty && double.parse(value) < 0) {
                     return S.current.msg_prix_supp_zero;
                   }
                   return null;
@@ -800,7 +822,10 @@ class _AddArticlePageState extends State<AddArticlePage>
                   extentOffset: _price1Control.value.text.length),
               keyboardType: TextInputType.number,
               validator: (value) {
-                if (double.parse(value) < 0) {
+                if(!value.isNumericUsingRegularExpression){
+                  return S.current.msg_val_valide ;
+                }
+                if (value.isNotEmpty && double.parse(value) < 0) {
                   return S.current.msg_prix_supp_zero;
                 }
                 return null;
@@ -839,7 +864,10 @@ class _AddArticlePageState extends State<AddArticlePage>
                     extentOffset: _price2Control.value.text.length),
                 keyboardType: TextInputType.number,
                 validator: (value) {
-                  if (double.parse(value) < 0) {
+                  if(!value.isNumericUsingRegularExpression){
+                    return S.current.msg_val_valide ;
+                  }
+                  if (value.isNotEmpty && double.parse(value) < 0) {
                     return S.current.msg_prix_supp_zero;
                   }
                   return null;
@@ -879,7 +907,10 @@ class _AddArticlePageState extends State<AddArticlePage>
                     extentOffset: _price3Control.value.text.length),
                 keyboardType: TextInputType.number,
                 validator: (value) {
-                  if (double.parse(value) < 0) {
+                  if(!value.isNumericUsingRegularExpression){
+                    return S.current.msg_val_valide ;
+                  }
+                  if (value.isNotEmpty && double.parse(value) < 0) {
                     return S.current.msg_prix_supp_zero;
                   }
                   return null;
@@ -1323,6 +1354,12 @@ class _AddArticlePageState extends State<AddArticlePage>
                     validator: (value) {
                       if (value.isEmpty) {
                         return S.current.msg_champ_oblg;
+                      }
+                      if(!value.isNumericUsingRegularExpression){
+                        return S.current.msg_val_valide ;
+                      }
+                      if(value.isNotEmpty && double.parse(value) < 0){
+                        return S.current.msg_prix_supp_zero ;
                       }
                       return null;
                     },
