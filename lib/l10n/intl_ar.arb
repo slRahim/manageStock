@@ -156,7 +156,7 @@
   "prix_achat": "ثمن الشراء ب ض",
   "stockable" : "قابل للتخزين",
   "pmp": "PMP",
-  "init" : "Initial",
+  "init" : "الأولي",
   "quantit": "الكمية",
   "stock_init" : "المخزون الإبتدائي",
   "stock_min": "الكمية الدنيا",
@@ -167,7 +167,7 @@
   "prix_v3": "سعر البيع ب ض 3",
   "msg_description" : "أدخل وصف للمنتج",
   "marque" : "العلامة",
-  "taux_tva": "معدل Tva",
+  "taux_tva": "معدل ضريبة",
   "msg_login_pin": "الدخول عن طريق الرمز",
   "msg_search": "رجاء أدخل نص",
   "blue_off" : "البلوتوث غير شغال",
@@ -234,7 +234,7 @@
   "msg_quitter1" : "إضغط على رجوع مرة أخرى للخروج",
 
   "msg_champs_obg" : "الرجاء ملأ كل الفراغات الإلزامية",
-  "tva" : "TVA",
+  "tva" : "ضريبة",
   "msg_visite" : "شكرا  لزيارتكم",
   "compte" : "الصندوق",
   "restore_data" : "إسترجاع",
@@ -251,7 +251,7 @@
   "dash_vente_fam_title" : "تصنيف المبيعات حسب العائلة",
   "dash_achat_art_title" : "تصنيف المشتريات حسب السلعة",
   "dash_achat_four_title" : "تصنيف المشتريات حسب المورد",
-  "msg_pdf_view" : "Pdf preview is available before Printing",
+  "msg_pdf_view" : "معاينة PDF متاحة قبل الطباعة",
   "format_a45" : "شكل A4/A5",
   "blue_device" : "طابعة بلوتوث",
 
@@ -296,7 +296,7 @@
   "n" : "رقم",
   "best_5" : "أفضل خمس",
   "item" : "عناصر",
-  "cl_four" : "زبون/مو",
+  "cl_four" : "زبون/مورد",
 
   "fp" : "ف ت",
   "cc" : "طلب",
@@ -314,7 +314,7 @@
   "reg_cl" : "دفع.ز",
   "reg_four" : "دفع.م",
   "dette" : "الدين",
-  "qte_min" : "ك م دن",
+  "qte_min" : "كم دنيا",
 
   "stock" : "المخزون",
   "recap_vente_article" : "ملخص البيع لكل منتج",
@@ -336,10 +336,10 @@
   "date_d_f" : "التاريخ (من / الى) :",
   "msg_rapport_vide" : "التقرير فارغ",
   "demonstration" : "حرر بتاريخ",
-  "rapport_date" : "فترة التقرير (من / إلى)",
+  "rapport_date" : "فترة التقرير )من / إلى(",
 
-  "creance_cl" : "دين الزبون",
-  "creance_four" : "ديون المورد",
+  "creance_cl" : "صحيفة الزبون",
+  "creance_four" : "صحيفة المورد",
 
   "impression_titre" : "طباعة",
   "imp_affichage" : "عرض ب",

@@ -94,10 +94,11 @@ class _RapportState extends State<Rapport> {
             now.year,
             now.month,
             now.day,
-          ),
-          end: now.add(Duration(days: 30)));
+          ).add(Duration(days: -30)),
+          end: now
+      );
       _dateControl.text =
-          "${Helpers.dateToText(DateTime(now.year, now.month, now.day, 0, 0))} / ${Helpers.dateToText(now.add(Duration(days: 30)))}";
+          "${Helpers.dateToText(_dateRange.start)} / ${Helpers.dateToText(_dateRange.end)}";
     });
   }
 
@@ -537,6 +538,7 @@ class _RapportState extends State<Rapport> {
           pw.Table(children: [
             pw.TableRow(
                 decoration: pw.BoxDecoration(
+                    color: PdfColors.grey200,
                     border: pw.Border(bottom: pw.BorderSide(width: 2))),
                 children: [
                   for (var key in _resultList.first.keys)
@@ -569,6 +571,7 @@ class _RapportState extends State<Rapport> {
 
             pw.TableRow(
                 decoration: pw.BoxDecoration(
+                    color: PdfColors.grey200,
                     border: pw.Border(
                         top: pw.BorderSide(
                             width: 2, color: PdfColors.grey),
@@ -623,43 +626,77 @@ class _RapportState extends State<Rapport> {
         break;
     }
 
-    print(res);
+    // print(res);
     return res;
   }
 
   List getTotatl(data , ttf) {
-    var list ;
+    var valeurs ;
     for (var map in data){
-      if (list == null){
-        list = List.from(map.values) ;
+      if (valeurs == null){
+        valeurs = List.from(map.values) ;
       }else{
         for(int i = 0 ; i < map.values.length ; i++){
-           if (list[i] is double || list[i] is int){
-             list[i] = list[i] + map.values.toList().elementAt(i);
+           if (valeurs[i] is double || valeurs[i] is int){
+             valeurs[i] = valeurs[i] + map.values.toList().elementAt(i);
            }
         }
       }
     }
 
     List<pw.Widget> result = new List<pw.Widget>();
-    for (var item in list){
-      if(item is double || item is int){
-        result.add (pw.Container(
-            padding: pw.EdgeInsets.only(left: 5, right: 5 , top: 3 , bottom: 3),
-            child: pw.Text("${Helpers.numberFormat(item)}",
-                style: pw.TextStyle(font: ttf, fontSize: 11))
-        ));
+    int lastIndex = valeurs.length-1 ;
+
+    for (int i =0 ; i<valeurs.length ; i++){
+      if(valeurs[i] is double || valeurs[i]  is int ){
+        if((_selectedParent == Statics.rapportItems[0] || _selectedParent == Statics.rapportItems[1]) &&
+           i == lastIndex
+        ){
+          result.add (pw.Container(
+              padding: pw.EdgeInsets.only(left: 5, right: 5 , top: 3 , bottom: 3),
+              child: pw.Text("${Helpers.numberFormat(valeurs[i] )}",
+                  style: pw.TextStyle(font: ttf, fontSize: 9))
+          ));
+        }else if((_selectedParent == Statics.rapportItems[2]) &&
+            (i == lastIndex || i == lastIndex-1) ){
+          result.add (pw.Container(
+              padding: pw.EdgeInsets.only(left: 5, right: 5 , top: 3 , bottom: 3),
+              child: pw.Text("${Helpers.numberFormat(valeurs[i])}",
+                  style: pw.TextStyle(font: ttf, fontSize: 9))
+          ));
+        }else if ((_selectedParent == Statics.rapportItems[3]) &&
+            (i == lastIndex || i == lastIndex-1 || i == lastIndex-2) ){
+          result.add (pw.Container(
+              padding: pw.EdgeInsets.only(left: 5, right: 5 , top: 3 , bottom: 3),
+              child: pw.Text("${Helpers.numberFormat(valeurs[i])}",
+                  style: pw.TextStyle(font: ttf, fontSize: 9))
+          ));
+        }else if ((_selectedParent == Statics.rapportItems[4]) && i != 0 ){
+          result.add (pw.Container(
+              padding: pw.EdgeInsets.only(left: 5, right: 5 , top: 3 , bottom: 3),
+              child: pw.Text("${Helpers.numberFormat(valeurs[i])}",
+                  style: pw.TextStyle(font: ttf, fontSize: 9))
+          ));
+        } else{
+          result.add (pw.Container(
+              padding: pw.EdgeInsets.only(left: 5, right: 5 ,  top: 3 , bottom: 3),
+              child: pw.Text("-",
+                  style: pw.TextStyle(font: ttf, fontSize: 9))
+          ));
+        }
+
       }else{
         result.add (pw.Container(
             padding: pw.EdgeInsets.only(left: 5, right: 5 ,  top: 3 , bottom: 3),
             child: pw.Text("-",
-                style: pw.TextStyle(font: ttf, fontSize: 11))
+                style: pw.TextStyle(font: ttf, fontSize: 9))
         ));
       }
     }
 
     return result;
   }
+
 //  **********************************************************************************************************************************************************************
 //****************************************************************************traduction**********************************************************************************
 
@@ -745,6 +782,9 @@ class _RapportState extends State<Rapport> {
         break;
       case "montant_ht":
         return S.current.montant_ht;
+        break;
+      case "tva":
+        return S.current.tva;
         break;
 
     }

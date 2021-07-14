@@ -325,7 +325,7 @@ class _ArticleListItemState extends State<ArticleListItem> {
                         ],
                       ),
                       Text(
-                        "${Helpers.numberFormat(widget.article.selectedQuantite * widget.article.selectedPrice).toString()} ${_devise}",
+                        "${Helpers.numberFormat(widget.article.selectedQuantite * widget.article.selectedPriceTTC).toString()} ${_devise}",
                         style: GoogleFonts.lato(
                             textStyle: TextStyle(
                                 fontSize: 16.0, fontWeight: FontWeight.bold)),
@@ -419,7 +419,7 @@ class _ArticleListItemState extends State<ArticleListItem> {
         widget.pieceOrigin == 'RF' ||
         widget.pieceOrigin == 'AF') {
       return Text(
-        "${Helpers.numberFormat(widget.article.prixAchat).toString()} $_devise",
+        "${Helpers.numberFormat(widget.article.prixAchatTTC).toString()} $_devise",
         style: GoogleFonts.lato(
             textStyle: TextStyle(fontSize: 16.0, fontWeight: FontWeight.bold)),
       );
@@ -427,7 +427,7 @@ class _ArticleListItemState extends State<ArticleListItem> {
       switch (widget.tarification) {
         case 1:
           return Text(
-              (!_tva) ? "${Helpers.numberFormat(widget.article.prixVente1).toString()} $_devise" : "${Helpers.numberFormat(widget.article.prixVente1TTC).toString()} $_devise",
+              (!_tva) ? "${Helpers.numberFormat(widget.article.prixVente1TTC).toString()} $_devise" : "${Helpers.numberFormat(widget.article.prixVente1TTC).toString()} $_devise",
             style: GoogleFonts.lato(
                 textStyle:
                     TextStyle(fontSize: 16.0, fontWeight: FontWeight.bold)),
@@ -436,7 +436,7 @@ class _ArticleListItemState extends State<ArticleListItem> {
 
         case 2:
           return Text(
-              (!_tva) ?"${Helpers.numberFormat(widget.article.prixVente2).toString()} $_devise":"${Helpers.numberFormat(widget.article.prixVente2TTC).toString()} $_devise",
+              (!_tva) ?"${Helpers.numberFormat(widget.article.prixVente2TTC).toString()} $_devise":"${Helpers.numberFormat(widget.article.prixVente2TTC).toString()} $_devise",
             style: GoogleFonts.lato(
                 textStyle:
                     TextStyle(fontSize: 16.0, fontWeight: FontWeight.bold)),
@@ -445,7 +445,7 @@ class _ArticleListItemState extends State<ArticleListItem> {
 
         case 3:
           return Text(
-              (!_tva)? "${Helpers.numberFormat(widget.article.prixVente3).toString()} $_devise" : "${Helpers.numberFormat(widget.article.prixVente3TTC).toString()} $_devise",
+              (!_tva)? "${Helpers.numberFormat(widget.article.prixVente3TTC).toString()} $_devise" : "${Helpers.numberFormat(widget.article.prixVente3TTC).toString()} $_devise",
             style: GoogleFonts.lato(
                 textStyle:
                     TextStyle(fontSize: 16.0, fontWeight: FontWeight.bold)),
@@ -462,7 +462,7 @@ class _ArticleListItemState extends State<ArticleListItem> {
             );
           }
           return Text(
-              (!_tva)? "${Helpers.numberFormat(widget.article.prixVente1).toString()} $_devise" : "${Helpers.numberFormat(widget.article.prixVente1TTC).toString()} $_devise",
+              (!_tva)? "${Helpers.numberFormat(widget.article.prixVente1TTC).toString()} $_devise" : "${Helpers.numberFormat(widget.article.prixVente1TTC).toString()} $_devise",
             style: GoogleFonts.lato(
                 textStyle:
                     TextStyle(fontSize: 16.0, fontWeight: FontWeight.bold)),
@@ -600,7 +600,7 @@ class _ArticleListItemState extends State<ArticleListItem> {
                                         BorderSide(color: Colors.orange[900]),
                                     borderRadius: BorderRadius.circular(20)),
                                 contentPadding: EdgeInsets.only(left: 10),
-                                labelText: S.current.prix,
+                                labelText: S.current.montant,
                                 labelStyle: GoogleFonts.lato(
                                     textStyle:
                                         TextStyle(color: Colors.orange[900])),
@@ -623,7 +623,7 @@ class _ArticleListItemState extends State<ArticleListItem> {
                                 onTap: () {
                                   setState(() {
                                     _quntiteControler.text = widget.article.selectedQuantite.toString();
-                                    _priceControler.text = widget.article.selectedPrice.toString() ;
+                                    _priceControler.text = widget.article.selectedPriceTTC.toString() ;
                                     _validateQteError = null ;
                                     _validatePriceError = null ;
                                   });
@@ -678,7 +678,8 @@ class _ArticleListItemState extends State<ArticleListItem> {
                                     double _price = double.parse(_priceControler.text.trim());
 
                                     widget.article.selectedQuantite = _qte;
-                                    widget.article.selectedPrice = _price;
+                                    widget.article.selectedPriceTTC = _price;
+                                    widget.article.selectedPrice = (_price*100)/(100+widget.article.tva);
                                     widget.onItemSelected(null);
                                     Navigator.pop(context);
 
@@ -719,7 +720,7 @@ class _ArticleListItemState extends State<ArticleListItem> {
       );
 
       _quntiteControler.text = widget.article.selectedQuantite.toString();
-      _priceControler.text = widget.article.selectedPrice.toStringAsFixed(2);
+      _priceControler.text = widget.article.selectedPriceTTC.toStringAsFixed(2);
       return dialog;
     });
   }
@@ -732,20 +733,25 @@ class _ArticleListItemState extends State<ArticleListItem> {
         widget.pieceOrigin == 'RF' ||
         widget.pieceOrigin == 'AF') {
       widget.article.selectedPrice = widget.article.prixAchat;
+      widget.article.selectedPriceTTC = widget.article.prixAchatTTC;
     } else {
       switch (widget.tarification) {
         case 1:
           widget.article.selectedPrice = widget.article.prixVente1;
+          widget.article.selectedPriceTTC = widget.article.prixVente1TTC;
           break;
         case 2:
           widget.article.selectedPrice = widget.article.prixVente2;
+          widget.article.selectedPriceTTC = widget.article.prixVente2TTC;
           break;
         case 3:
           widget.article.selectedPrice = widget.article.prixVente3;
+          widget.article.selectedPriceTTC = widget.article.prixVente3TTC;
           break;
         default:
           if (widget.article.selectedPrice == null) {
             widget.article.selectedPrice = widget.article.prixVente1;
+            widget.article.selectedPriceTTC = widget.article.prixVente1TTC;
           }
           break;
       }

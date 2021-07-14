@@ -31,12 +31,14 @@ class Article {
       _qteMin,
       _qteColis,
       _prixAchat,
+      _prixAchatTTC ,
       _pmpInit,
       _pmp,
       _tva;
 
   double _selectedQuantite = -1;
   double _selectedPrice = 0;
+  double _selectedPriceTTC = 0 ;
 
   bool _bloquer;
   bool _stockable;
@@ -98,6 +100,7 @@ class Article {
     this._pmpInit = obj["PMP_init"];
     this._pmp = obj["PMP"];
     this._tva = obj["TVA"];
+    this._prixAchatTTC = ((this._prixAchat*this._tva)/100) + this._prixAchat ;
     this._bloquer = obj["Bloquer"] == 1 ? true : false;
     this._stockable = obj["Stockable"] == 1 ? true : false;
     this._description = obj["Description"];
@@ -116,6 +119,7 @@ class Article {
     this._selectedQuantite = (obj["Qte"] > 0) ? obj["Qte"] : obj["Qte"] * -1;
     this._selectedPrice = obj["Prix_ht"];
     this._tva = obj["Tva"];
+    this._selectedPriceTTC = ((this._selectedPrice * this.tva)/100) + this._selectedPrice ;
     this._pmp = obj["Prix_revient"];
     this._codeBar = obj["CodeBar"];
     this._idFamille = obj["Id_Famille"];
@@ -181,6 +185,12 @@ class Article {
     _selectedPrice = value;
   }
 
+  double get selectedPriceTTC => _selectedPriceTTC;
+
+  set selectedPriceTTC(double value) {
+    _selectedPriceTTC = value;
+  }
+
   set selectedQuantite(double value) {
     _selectedQuantite = value;
   }
@@ -191,6 +201,12 @@ class Article {
 
   set stockable(bool value) {
     _stockable = value;
+  }
+
+  get prixAchatTTC => _prixAchatTTC;
+
+  set prixAchatTTC(value) {
+    _prixAchatTTC = value;
   }
 
   String get designation => _designation;

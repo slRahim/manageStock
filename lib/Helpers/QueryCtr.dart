@@ -1173,21 +1173,21 @@ class QueryCtr {
       case 0:
         query = """
         Select Designation as designation, Ref as referance , Qte as qte, 
-                PMP as pmp, (Qte*PMP) as montant_ht
+                PMP as pmp, TVA as tva, (Qte*PMP) as montant_ht , ((((TVA*PMP)/100)+PMP)*Qte) as montant
         From Articles where Qte > 0
         """;
         break;
       case 1:
         query = """
         Select Designation as designation, Ref as referance , Qte as qte, Qte_Min as qte_min, PMP as pmp, 
-              (Qte*PMP) as montant_ht
+               TVA as tva, (Qte*PMP) as montant_ht , ((((TVA*PMP)/100)+PMP)*Qte) as montant
         From Articles where Qte < 1 OR Qte < Qte_Min
         """;
         break;
       case 2:
         query = """
         Select Designation as designation, Ref as referance, Qte as qte, 
-              PrixVente1 as prix, (Qte*PrixVente1) as chifre_affaire
+              PrixVente1 as prix, TVA as tva , (Qte*PrixVente1) as montant_ht, (Qte*PrixVente1TTC) as chifre_affaire
         From Articles where Qte > 0
         """;
         break;

@@ -151,7 +151,7 @@ class _ArticleListItemSelectedState extends State<ArticleListItemSelected> {
         ),
         trailingChildren: [
           Text(
-              "${Helpers.numberFormat((widget.article.selectedQuantite * widget.article.selectedPrice))}",
+              "${Helpers.numberFormat((widget.article.selectedQuantite * widget.article.selectedPriceTTC))}",
               style: GoogleFonts.lato(
                 textStyle:
                     TextStyle(fontSize: 15.0, fontWeight: FontWeight.bold),
@@ -289,7 +289,7 @@ class _ArticleListItemSelectedState extends State<ArticleListItemSelected> {
                                         BorderSide(color: Colors.orange[900]),
                                     borderRadius: BorderRadius.circular(20)),
                                 contentPadding: EdgeInsets.only(left: 10),
-                                labelText: S.current.prix,
+                                labelText: S.current.montant,
                                 labelStyle: GoogleFonts.lato(
                                     textStyle:
                                         TextStyle(color: Colors.orange[900])),
@@ -310,7 +310,7 @@ class _ArticleListItemSelectedState extends State<ArticleListItemSelected> {
                               InkWell(
                                 onTap: () {
                                   _quntiteControler.text = widget.article.selectedQuantite.toString();
-                                  _priceControler.text = widget.article.selectedPrice.toString() ;
+                                  _priceControler.text = widget.article.selectedPriceTTC.toString() ;
                                   Navigator.pop(context);
                                 },
                                 child: Container(
@@ -362,7 +362,8 @@ class _ArticleListItemSelectedState extends State<ArticleListItemSelected> {
                                     double _price = double.parse(_priceControler.text.trim());
 
                                     widget.article.selectedQuantite = _qte;
-                                    widget.article.selectedPrice = _price;
+                                    widget.article.selectedPriceTTC = _price;
+                                    widget.article.selectedPrice = (_price*100)/(100+widget.article.tva);
                                     widget.onItemSelected(null);
                                     Navigator.pop(context);
 
@@ -401,7 +402,7 @@ class _ArticleListItemSelectedState extends State<ArticleListItemSelected> {
         ),
       );
       _quntiteControler.text = widget.article.selectedQuantite.toString();
-      _priceControler.text = widget.article.selectedPrice.toStringAsFixed(2);
+      _priceControler.text = widget.article.selectedPriceTTC.toStringAsFixed(2);
       return dialog;
     });
   }
