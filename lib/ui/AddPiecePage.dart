@@ -323,24 +323,50 @@ class _AddPiecePageState extends State<AddPiecePage>
     if (!finishedLoading) {
       return Scaffold(body: Helpers.buildLoading());
     } else {
-      return Scaffold(
-          key: _scaffoldKey,
-          backgroundColor: Theme.of(context).backgroundColor,
-          appBar: AddEditBar(
-            editMode: editMode,
-            modification: modification,
-            title: appBarTitle,
-            onCancelPressed: ()  {
-              Function eqal =  ListEquality().equals;
-              if (modification)
-                {
-                  if (editMode)
-                    {
-                      if(eqal(_originalItems , _selectedItems)){
-                        Navigator.of(context).pushReplacementNamed(
-                            RoutesKeys.addPiece,
-                            arguments: widget.arguments);
-                      }else{
+      return WillPopScope(
+        onWillPop: _onWillPop,
+        child: Scaffold(
+            key: _scaffoldKey,
+            backgroundColor: Theme.of(context).backgroundColor,
+            appBar: AddEditBar(
+              editMode: editMode,
+              modification: modification,
+              title: appBarTitle,
+              onCancelPressed: ()  {
+                Function eqal =  ListEquality().equals;
+                if (modification) {
+                    if (editMode)
+                      {
+                        if(eqal(_originalItems , _selectedItems)){
+                          Navigator.of(context).pushReplacementNamed(
+                              RoutesKeys.addPiece,
+                              arguments: widget.arguments);
+                        }else{
+                          AwesomeDialog(
+                              context: context,
+                              title: "",
+                              desc: "${S.current.msg_retour_no_save} ?",
+                              dialogType: DialogType.QUESTION,
+                              animType: AnimType.BOTTOMSLIDE,
+                              btnCancelText: S.current.non,
+                              btnCancelOnPress: () {},
+                              btnOkText: S.current.oui,
+                              btnOkOnPress: () async {
+                                Navigator.of(context).pushReplacementNamed(
+                                    RoutesKeys.addPiece,
+                                    arguments: widget.arguments);
+                              })
+                            ..show();
+                        }
+
+                      }
+                    else
+                      {Navigator.pop(context);}
+                  }
+                else
+                  {
+                    if (_selectedItems.isNotEmpty)
+                      {
                         AwesomeDialog(
                             context: context,
                             title: "",
@@ -351,485 +377,445 @@ class _AddPiecePageState extends State<AddPiecePage>
                             btnCancelOnPress: () {},
                             btnOkText: S.current.oui,
                             btnOkOnPress: () async {
-                              Navigator.of(context).pushReplacementNamed(
-                                  RoutesKeys.addPiece,
-                                  arguments: widget.arguments);
+                              Navigator.pop(context);
                             })
                           ..show();
                       }
-
-                    }
-                  else
-                    {Navigator.pop(context);}
-                }
-              else
-                {
-                  if (_selectedItems.isNotEmpty)
-                    {
-                      AwesomeDialog(
-                          context: context,
-                          title: "",
-                          desc: "${S.current.msg_retour_no_save} ?",
-                          dialogType: DialogType.QUESTION,
-                          animType: AnimType.BOTTOMSLIDE,
-                          btnCancelText: S.current.non,
-                          btnCancelOnPress: () {},
-                          btnOkText: S.current.oui,
-                          btnOkOnPress: () async {
-                            Navigator.pop(context);
-                          })
-                        ..show();
-                    }
-                  else
-                    {
-                      Navigator.pop(context);
-                    }
-                }
-            },
-            onEditPressed: (_piece.etat == 0)
-                ? () {
-                    if (_myParams.versionType == "demo") {
-                      setState(() {
-                        editMode = true;
-                      });
-                    } else {
-                      if (DateTime.now()
-                          .isBefore(Helpers.getDateExpiration(_myParams))) {
+                    else
+                      {
+                        Navigator.pop(context);
+                      }
+                  }
+              },
+              onEditPressed: (_piece.etat == 0)
+                  ? () {
+                      if (_myParams.versionType == "demo") {
                         setState(() {
                           editMode = true;
                         });
                       } else {
-                        Navigator.pushNamed(context, RoutesKeys.appPurchase);
-                        var message = S.current.msg_premium_exp;
-                        Helpers.showFlushBar(context, message);
+                        if (DateTime.now()
+                            .isBefore(Helpers.getDateExpiration(_myParams))) {
+                          setState(() {
+                            editMode = true;
+                          });
+                        } else {
+                          Navigator.pushNamed(context, RoutesKeys.appPurchase);
+                          var message = S.current.msg_premium_exp;
+                          Helpers.showFlushBar(context, message);
+                        }
                       }
                     }
+                  : () {
+                      Helpers.showFlushBar(
+                          context, S.current.msg_no_edit_transformer);
+                    },
+              onSavePressed: () async {
+                if (_formKey.currentState.validate()) {
+                  if (_selectedItems.length > 0) {
+                    AwesomeDialog(
+                      context: context,
+                      dialogType: DialogType.SUCCES,
+                      animType: AnimType.BOTTOMSLIDE,
+                      title: S.current.supp,
+                      body: addChoicesDialog(),
+                      closeIcon: Icon(
+                        Icons.cancel_sharp,
+                        color: Colors.red,
+                        size: 26,
+                      ),
+                      showCloseIcon: true,
+                    )..show();
+                  } else {
+                    Helpers.showFlushBar(context, S.current.msg_select_art);
                   }
-                : () {
-                    Helpers.showFlushBar(
-                        context, S.current.msg_no_edit_transformer);
-                  },
-            onSavePressed: () async {
-              if (_formKey.currentState.validate()) {
-                if (_selectedItems.length > 0) {
-                  AwesomeDialog(
-                    context: context,
-                    dialogType: DialogType.SUCCES,
-                    animType: AnimType.BOTTOMSLIDE,
-                    title: S.current.supp,
-                    body: addChoicesDialog(),
-                    closeIcon: Icon(
-                      Icons.cancel_sharp,
-                      color: Colors.red,
-                      size: 26,
-                    ),
-                    showCloseIcon: true,
-                  )..show();
                 } else {
-                  Helpers.showFlushBar(context, S.current.msg_select_art);
+                  Helpers.showFlushBar(context, "${S.current.msg_champs_obg}");
                 }
-              } else {
-                Helpers.showFlushBar(context, "${S.current.msg_champs_obg}");
-              }
-            },
-            onTrensferPressed: (_piece.etat == 0 &&
-                    _piece.piece != PieceType.retourClient &&
-                    _piece.piece != PieceType.avoirClient &&
-                    _piece.piece != PieceType.retourFournisseur &&
-                    _piece.piece != PieceType.avoirFournisseur)
-                ? () async {
-                    if (_piece.mov == 2) {
-                      var message = S.current.msg_err_transfer;
-                      Helpers.showFlushBar(context, message);
-                    } else {
-                      AwesomeDialog(
-                        context: context,
-                        dialogType: DialogType.QUESTION,
-                        animType: AnimType.BOTTOMSLIDE,
-                        title: S.current.supp,
-                        body: transferPieceDialog(),
-                        closeIcon: Icon(
-                          Icons.cancel_sharp,
-                          color: Colors.red,
-                          size: 26,
-                        ),
-                        showCloseIcon: true,
-                      )..show();
+              },
+              onTrensferPressed: (_piece.etat == 0 &&
+                      _piece.piece != PieceType.retourClient &&
+                      _piece.piece != PieceType.avoirClient &&
+                      _piece.piece != PieceType.retourFournisseur &&
+                      _piece.piece != PieceType.avoirFournisseur)
+                  ? () async {
+                      if (_piece.mov == 2) {
+                        var message = S.current.msg_err_transfer;
+                        Helpers.showFlushBar(context, message);
+                      } else {
+                        AwesomeDialog(
+                          context: context,
+                          dialogType: DialogType.QUESTION,
+                          animType: AnimType.BOTTOMSLIDE,
+                          title: S.current.supp,
+                          body: transferPieceDialog(),
+                          closeIcon: Icon(
+                            Icons.cancel_sharp,
+                            color: Colors.red,
+                            size: 26,
+                          ),
+                          showCloseIcon: true,
+                        )..show();
+                      }
                     }
-                  }
-                : null,
-          ),
-          // extendBody: true,
-          bottomNavigationBar: BottomExpandableAppBar(
-            appBarHeight: 70,
-            expandedHeight: 180,
-            controller: bottomBarControler,
-            horizontalMargin: 10,
-            shape: AutomaticNotchedShape(
-                RoundedRectangleBorder(), StadiumBorder(side: BorderSide())),
-            expandedBackColor: Colors.blue,
-            expandedBody: TotalDevis(
-              total_ht: _total_ht,
-              total_tva: _total_tva,
-              total_ttc: _total_ttc,
-              net_ht: _net_ht,
-              net_payer: (_myParams.timbre) ? _total_ttc + _timbre : _total_ttc,
-              remise: double.parse(_pourcentremise.toStringAsFixed(2)),
-              timbre: _timbre,
-              myParams: _myParams,
+                  : null,
             ),
-            bottomAppBarBody: Row(
-              mainAxisSize: MainAxisSize.max,
-              children: <Widget>[
-                Expanded(
-                  flex: 4,
-                  child: DescribedFeatureOverlay(
-                    featureId: feature1,
-                    tapTarget: Icon(
-                      MdiIcons.sigma,
-                      color: Colors.black,
-                    ),
-                    backgroundColor: Colors.blue,
-                    contentLocation: ContentLocation.above,
-                    title: Text(
-                      '${S.current.ajout_remise}',
-                      style: GoogleFonts.lato(fontWeight: FontWeight.bold),
-                    ),
-                    description: Container(
-                      width: 150,
-                      child: Text(
-                        '${S.current.msg_ajout_remise}',
-                        style: GoogleFonts.lato(),
+            // extendBody: true,
+            bottomNavigationBar: BottomExpandableAppBar(
+              appBarHeight: 70,
+              expandedHeight: 180,
+              controller: bottomBarControler,
+              horizontalMargin: 10,
+              shape: AutomaticNotchedShape(
+                  RoundedRectangleBorder(), StadiumBorder(side: BorderSide())),
+              expandedBackColor: Colors.blue,
+              expandedBody: TotalDevis(
+                total_ht: _total_ht,
+                total_tva: _total_tva,
+                total_ttc: _total_ttc,
+                net_ht: _net_ht,
+                net_payer: (_myParams.timbre) ? _total_ttc + _timbre : _total_ttc,
+                remise: double.parse(_pourcentremise.toStringAsFixed(2)),
+                timbre: _timbre,
+                myParams: _myParams,
+              ),
+              bottomAppBarBody: Row(
+                mainAxisSize: MainAxisSize.max,
+                children: <Widget>[
+                  Expanded(
+                    flex: 4,
+                    child: DescribedFeatureOverlay(
+                      featureId: feature1,
+                      tapTarget: Icon(
+                        MdiIcons.sigma,
+                        color: Colors.black,
                       ),
-                    ),
-                    onBackgroundTap: () async {
-                      await FeatureDiscovery.completeCurrentStep(context);
-                      return true;
-                    },
-                    child: InkWell(
-                      onTap: () async {
-                        if (editMode) {
-                          if (_selectedItems.isNotEmpty) {
-                            AwesomeDialog(
-                                context: context,
-                                dialogType: DialogType.INFO,
-                                animType: AnimType.BOTTOMSLIDE,
-                                title: S.current.supp,
-                                body: addRemisedialogue(),
-                                btnCancelText: S.current.annuler,
-                                btnCancelOnPress: () {
-                                  setState(() {
-                                    _pourcentremiseControler.text =
-                                        _pourcentremise.toStringAsFixed(2);
-                                    _remisepieceControler.text =
-                                        _remisepiece.toStringAsFixed(2);
-                                  });
-                                },
-                                btnOkText: S.current.confirme,
-                                btnOkOnPress: () {
-                                  if(_pourcentremiseControler.text.trim() == ''){
-                                    _pourcentremiseControler.text = '0.0';
-                                    _remisepieceControler.text = '0.0';
-                                  }else{
-                                    if(!_pourcentremiseControler.text.trim().isNumericUsingRegularExpression){
-                                      _pourcentremiseControler.text = '0.0';
-                                      _remisepieceControler.text = "0.0" ;
-                                      Helpers.showToast(S.current.msg_val_valide);
-                                    }
-                                    if(double.parse(_pourcentremiseControler.text.trim()) < 0){
-                                      _pourcentremiseControler.text = '0.0';
-                                      _remisepieceControler.text = '0.0' ;
-                                      Helpers.showToast(S.current.msg_prix_supp_zero);
-                                    }
-                                  }
-                                  if(_remisepieceControler.text.trim() == ''){
-                                    _remisepieceControler.text = '0.0' ;
-                                    _pourcentremiseControler.text = '0.0';
-                                  }else{
-                                    if(!_remisepieceControler.text.trim().isNumericUsingRegularExpression){
-                                      _remisepieceControler.text = '0.0';
-                                      _pourcentremiseControler.text = '0.0';
-                                      Helpers.showToast(S.current.msg_val_valide);
-                                    }
-                                    if(double.parse(_remisepieceControler.text.trim()) < 0){
-                                      _remisepieceControler.text = '0.0';
-                                      _pourcentremiseControler.text = '0.0';
-                                      Helpers.showToast(S.current.msg_val_valide);
-                                    }
-                                  }
-                                  setState(() {
-                                    _pourcentremise = double.parse(
-                                        _pourcentremiseControler.text.trim());
-                                    _remisepiece = double.parse(
-                                        _remisepieceControler.text.trim());
-                                  });
-                                  calculPiece();
-                                })
-                              ..show();
-                          } else {
-                            Helpers.showToast(S.current.msg_select_art);
-                          }
-                        }
-                      },
-                      child: Container(
-                        decoration: BoxDecoration(
-                            border: (editMode)
-                                ? Border(
-                                    bottom: BorderSide(
-                                        color: Colors.blue, width: 1))
-                                : null),
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceAround,
-                              children: [
-                                Icon(
-                                  MdiIcons.sigma,
-                                  color: (editMode)
-                                      ? Colors.blue
-                                      : Theme.of(context).primaryColorDark,
-                                  size: 18,
-                                ),
-                                Text(
-                                  "$_devise",
-                                  style: GoogleFonts.lato(
-                                      textStyle: TextStyle(
-                                          fontSize: 12,
-                                          fontWeight: FontWeight.bold)),
-                                ),
-                              ],
-                            ),
-                            SizedBox(
-                              height: 2,
-                            ),
-                            Text(
-                              Helpers.numberFormat(_net_a_payer).toString(),
-                              textAlign: TextAlign.center,
-                              style: GoogleFonts.lato(
-                                  textStyle: TextStyle(
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: 14)),
-                            ),
-                          ],
+                      backgroundColor: Colors.blue,
+                      contentLocation: ContentLocation.above,
+                      title: Text(
+                        '${S.current.ajout_remise}',
+                        style: GoogleFonts.lato(fontWeight: FontWeight.bold),
+                      ),
+                      description: Container(
+                        width: 150,
+                        child: Text(
+                          '${S.current.msg_ajout_remise}',
+                          style: GoogleFonts.lato(),
                         ),
                       ),
-                    ),
-                  ),
-                ),
-                Spacer(
-                  flex: 1,
-                ),
-                Expanded(
-                  flex: 4,
-                  child: DescribedFeatureOverlay(
-                    featureId: feature2,
-                    tapTarget: Icon(
-                      MdiIcons.cashMultiple,
-                      color: Colors.black,
-                    ),
-                    backgroundColor: Colors.green,
-                    contentLocation: ContentLocation.above,
-                    title: Text(
-                      '${S.current.ajout_verssement}',
-                      style: GoogleFonts.lato(fontWeight: FontWeight.bold),
-                    ),
-                    description: Container(
-                      width: 150,
-                      child: Text(
-                        '${S.current.msg_ajout_verssement}',
-                        style: GoogleFonts.lato(),
-                      ),
-                    ),
-                    onBackgroundTap: () async {
-                      await FeatureDiscovery.completeCurrentStep(context);
-                      return true;
-                    },
-                    child: InkWell(
-                      onTap: () async {
-                        if (editMode) {
-                          if (_piece.piece != PieceType.devis &&
-                              _piece.piece != PieceType.bonCommande) {
+                      onBackgroundTap: () async {
+                        await FeatureDiscovery.completeCurrentStep(context);
+                        return true;
+                      },
+                      child: InkWell(
+                        onTap: () async {
+                          if (editMode) {
                             if (_selectedItems.isNotEmpty) {
-                              if (_net_a_payer > _piece.regler) {
-                                setState(() {
-                                  double _reste = _net_a_payer -
-                                      (_piece.regler + _verssementpiece);
-                                  _resteControler.text = _reste.toString();
-                                });
-                                AwesomeDialog(
-                                    context: context,
-                                    dialogType: DialogType.INFO,
-                                    animType: AnimType.BOTTOMSLIDE,
-                                    title: S.current.supp,
-                                    body: addVerssementdialogue(),
-                                    btnCancelText: S.current.annuler,
-                                    btnCancelOnPress: () {},
-                                    btnOkText: S.current.confirme,
-                                    btnOkOnPress: () {
-                                      if(_verssementControler.text.trim()  == ''){
-                                        _verssementControler.text = "0.0" ;
-                                      }else{
-                                        if(!_verssementControler.text.trim().isNumericUsingRegularExpression){
-                                          _verssementControler.text = "0.0" ;
-                                          Helpers.showToast(S.current.msg_val_valide);
-                                        }
-                                        if(double.parse(_verssementControler.text.trim()) < 0){
-                                          _verssementControler.text = "0.0" ;
-                                          Helpers.showToast(S.current.msg_prix_supp_zero);
-                                        }
+                              AwesomeDialog(
+                                  context: context,
+                                  dialogType: DialogType.INFO,
+                                  animType: AnimType.BOTTOMSLIDE,
+                                  title: S.current.supp,
+                                  body: addRemisedialogue(),
+                                  btnCancelText: S.current.annuler,
+                                  btnCancelOnPress: () {
+                                    setState(() {
+                                      _pourcentremiseControler.text =
+                                          _pourcentremise.toStringAsFixed(2);
+                                      _remisepieceControler.text =
+                                          _remisepiece.toStringAsFixed(2);
+                                    });
+                                  },
+                                  btnOkText: S.current.confirme,
+                                  btnOkOnPress: () {
+                                    if(_pourcentremiseControler.text.trim() == ''){
+                                      _pourcentremiseControler.text = '0.0';
+                                      _remisepieceControler.text = '0.0';
+                                    }else{
+                                      if(!_pourcentremiseControler.text.trim().isNumericUsingRegularExpression){
+                                        _pourcentremiseControler.text = '0.0';
+                                        _remisepieceControler.text = "0.0" ;
+                                        Helpers.showToast(S.current.msg_val_valide);
                                       }
-                                      setState(() {
-                                        _restepiece = double.parse(
-                                            _resteControler.text.trim());
-                                        _verssementpiece = double.parse(
-                                            _verssementControler.text.trim());
-                                      });
-                                    })
-                                  ..show();
-                              } else {
-                                Helpers.showToast(S.current.msg_versement_err);
-                              }
+                                      if(double.parse(_pourcentremiseControler.text.trim()) < 0){
+                                        _pourcentremiseControler.text = '0.0';
+                                        _remisepieceControler.text = '0.0' ;
+                                        Helpers.showToast(S.current.msg_prix_supp_zero);
+                                      }
+                                    }
+                                    if(_remisepieceControler.text.trim() == ''){
+                                      _remisepieceControler.text = '0.0' ;
+                                      _pourcentremiseControler.text = '0.0';
+                                    }else{
+                                      if(!_remisepieceControler.text.trim().isNumericUsingRegularExpression){
+                                        _remisepieceControler.text = '0.0';
+                                        _pourcentremiseControler.text = '0.0';
+                                        Helpers.showToast(S.current.msg_val_valide);
+                                      }
+                                      if(double.parse(_remisepieceControler.text.trim()) < 0){
+                                        _remisepieceControler.text = '0.0';
+                                        _pourcentremiseControler.text = '0.0';
+                                        Helpers.showToast(S.current.msg_val_valide);
+                                      }
+                                    }
+                                    setState(() {
+                                      _pourcentremise = double.parse(
+                                          _pourcentremiseControler.text.trim());
+                                      _remisepiece = double.parse(
+                                          _remisepieceControler.text.trim());
+                                    });
+                                    calculPiece();
+                                  })
+                                ..show();
                             } else {
                               Helpers.showToast(S.current.msg_select_art);
                             }
-                          } else {
-                            Helpers.showToast(S.current.msg_no_dispo);
                           }
-                        }
-                      },
-                      child: Container(
-                        decoration: BoxDecoration(
-                            border: (editMode &&
-                                    _piece.piece != PieceType.devis &&
-                                    _piece.piece != PieceType.bonCommande)
-                                ? Border(
-                                    bottom: BorderSide(
-                                        color: Colors.blue, width: 1))
-                                : null),
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceAround,
-                              children: [
-                                Icon(MdiIcons.cashMultiple,
-                                    size: 20,
-                                    color: (_piece.piece != PieceType.devis &&
-                                            _piece.piece !=
-                                                PieceType.bonCommande &&
-                                            editMode)
+                        },
+                        child: Container(
+                          decoration: BoxDecoration(
+                              border: (editMode)
+                                  ? Border(
+                                      bottom: BorderSide(
+                                          color: Colors.blue, width: 1))
+                                  : null),
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                                children: [
+                                  Icon(
+                                    MdiIcons.sigma,
+                                    color: (editMode)
                                         ? Colors.blue
-                                        : Theme.of(context).primaryColorDark),
-                                Text(
-                                  "${_devise}",
-                                  style: GoogleFonts.lato(
-                                      textStyle: TextStyle(
-                                          fontSize: 12,
-                                          fontWeight: FontWeight.bold)),
-                                ),
-                              ],
-                            ),
-                            SizedBox(
-                              height: 2,
-                            ),
-                            Text(
-                              Helpers.numberFormat(
-                                      _verssementpiece + _piece.regler)
-                                  .toString(),
-                              textAlign: TextAlign.center,
-                              style: GoogleFonts.lato(
-                                  textStyle: TextStyle(
-                                fontWeight: FontWeight.bold,
-                              )),
-                            ),
-                          ],
+                                        : Theme.of(context).primaryColorDark,
+                                    size: 18,
+                                  ),
+                                  Text(
+                                    "$_devise",
+                                    style: GoogleFonts.lato(
+                                        textStyle: TextStyle(
+                                            fontSize: 12,
+                                            fontWeight: FontWeight.bold)),
+                                  ),
+                                ],
+                              ),
+                              SizedBox(
+                                height: 2,
+                              ),
+                              Text(
+                                Helpers.numberFormat(_net_a_payer).toString(),
+                                textAlign: TextAlign.center,
+                                style: GoogleFonts.lato(
+                                    textStyle: TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 14)),
+                              ),
+                            ],
+                          ),
                         ),
                       ),
                     ),
                   ),
-                ),
-              ],
-            ),
-          ),
-          floatingActionButtonLocation:
-              FloatingActionButtonLocation.centerDocked,
-          floatingActionButton: GestureDetector(
-            // Set onVerticalDrag event to drag handlers of controller for swipe effect
-            onVerticalDragUpdate: bottomBarControler.onDrag,
-            onVerticalDragEnd: bottomBarControler.onDragEnd,
-            child: DescribedFeatureOverlay(
-              featureId: feature3,
-              tapTarget: Icon(
-                MdiIcons.arrowExpandUp,
-                color: Colors.black,
-              ),
-              backgroundColor: Colors.blue,
-              contentLocation: ContentLocation.above,
-              title: Text('${S.current.swipe_top}',
-                  style: GoogleFonts.lato(fontWeight: FontWeight.bold)),
-              description: Container(
-                width: 150,
-                child: Text(
-                  '${S.current.msg_swipe_top}',
-                  style: GoogleFonts.lato(),
-                ),
-              ),
-              onBackgroundTap: () async {
-                await FeatureDiscovery.completeCurrentStep(context);
-                return true;
-              },
-              child: FloatingActionRow(
-                children: [
-                  FloatingActionRowButton(
-                      icon: (editMode)
-                          ? Icon(
-                              Icons.add,
-                              color: Colors.white,
-                            )
-                          : Icon(
-                              Icons.print,
-                              color: Colors.white,
-                            ),
-                      color: editMode ? Colors.blue : Colors.redAccent,
-                      foregroundColor: Colors.white,
-                      //Set onPressed event to swap state of bottom bar
-                      onTap: editMode
-                          ? () async {
-                              await showDialog(
-                                  context: context,
-                                  builder: (BuildContext context) {
-                                    return addArticleDialog();
-                                  }).then((val) {
-                                if (_piece.piece == PieceType.avoirClient ||
-                                    _piece.piece == PieceType.retourClient ||
-                                    _piece.piece ==
-                                        PieceType.retourFournisseur ||
-                                    _piece.piece ==
-                                        PieceType.avoirFournisseur) {
-                                  var message = S.current.msg_info_article;
-                                  Helpers.showFlushBar(context, message);
+                  Spacer(
+                    flex: 1,
+                  ),
+                  Expanded(
+                    flex: 4,
+                    child: DescribedFeatureOverlay(
+                      featureId: feature2,
+                      tapTarget: Icon(
+                        MdiIcons.cashMultiple,
+                        color: Colors.black,
+                      ),
+                      backgroundColor: Colors.green,
+                      contentLocation: ContentLocation.above,
+                      title: Text(
+                        '${S.current.ajout_verssement}',
+                        style: GoogleFonts.lato(fontWeight: FontWeight.bold),
+                      ),
+                      description: Container(
+                        width: 150,
+                        child: Text(
+                          '${S.current.msg_ajout_verssement}',
+                          style: GoogleFonts.lato(),
+                        ),
+                      ),
+                      onBackgroundTap: () async {
+                        await FeatureDiscovery.completeCurrentStep(context);
+                        return true;
+                      },
+                      child: InkWell(
+                        onTap: () async {
+                          if (editMode) {
+                            if (_piece.piece != PieceType.devis &&
+                                _piece.piece != PieceType.bonCommande) {
+                              if (_selectedItems.isNotEmpty) {
+                                if (_net_a_payer > _piece.regler) {
+                                  setState(() {
+                                    double _reste = _net_a_payer -
+                                        (_piece.regler + _verssementpiece);
+                                    _resteControler.text = _reste.toString();
+                                  });
+                                  AwesomeDialog(
+                                      context: context,
+                                      dialogType: DialogType.INFO,
+                                      animType: AnimType.BOTTOMSLIDE,
+                                      title: S.current.supp,
+                                      body: addVerssementdialogue(),
+                                      btnCancelText: S.current.annuler,
+                                      btnCancelOnPress: () {},
+                                      btnOkText: S.current.confirme,
+                                      btnOkOnPress: () {
+                                        if(_verssementControler.text.trim()  == ''){
+                                          _verssementControler.text = "0.0" ;
+                                        }else{
+                                          if(!_verssementControler.text.trim().isNumericUsingRegularExpression){
+                                            _verssementControler.text = "0.0" ;
+                                            Helpers.showToast(S.current.msg_val_valide);
+                                          }
+                                          if(double.parse(_verssementControler.text.trim()) < 0){
+                                            _verssementControler.text = "0.0" ;
+                                            Helpers.showToast(S.current.msg_prix_supp_zero);
+                                          }
+                                        }
+                                        setState(() {
+                                          _restepiece = double.parse(
+                                              _resteControler.text.trim());
+                                          _verssementpiece = double.parse(
+                                              _verssementControler.text.trim());
+                                        });
+                                      })
+                                    ..show();
+                                } else {
+                                  Helpers.showToast(S.current.msg_versement_err);
                                 }
-                                calculPiece();
-                              });
-                            }
-                          : () async {
-                              if (_myParams.versionType == "demo") {
-                                AwesomeDialog(
-                                  context: context,
-                                  dialogType: DialogType.QUESTION,
-                                  animType: AnimType.BOTTOMSLIDE,
-                                  body: printChoicesDialog(),
-                                  closeIcon: Icon(
-                                    Icons.cancel_sharp,
-                                    color: Colors.red,
-                                    size: 26,
-                                  ),
-                                  showCloseIcon: true,
-                                )..show();
                               } else {
-                                if (DateTime.now().isBefore(
-                                    Helpers.getDateExpiration(_myParams))) {
+                                Helpers.showToast(S.current.msg_select_art);
+                              }
+                            } else {
+                              Helpers.showToast(S.current.msg_no_dispo);
+                            }
+                          }
+                        },
+                        child: Container(
+                          decoration: BoxDecoration(
+                              border: (editMode &&
+                                      _piece.piece != PieceType.devis &&
+                                      _piece.piece != PieceType.bonCommande)
+                                  ? Border(
+                                      bottom: BorderSide(
+                                          color: Colors.blue, width: 1))
+                                  : null),
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                                children: [
+                                  Icon(MdiIcons.cashMultiple,
+                                      size: 20,
+                                      color: (_piece.piece != PieceType.devis &&
+                                              _piece.piece !=
+                                                  PieceType.bonCommande &&
+                                              editMode)
+                                          ? Colors.blue
+                                          : Theme.of(context).primaryColorDark),
+                                  Text(
+                                    "${_devise}",
+                                    style: GoogleFonts.lato(
+                                        textStyle: TextStyle(
+                                            fontSize: 12,
+                                            fontWeight: FontWeight.bold)),
+                                  ),
+                                ],
+                              ),
+                              SizedBox(
+                                height: 2,
+                              ),
+                              Text(
+                                Helpers.numberFormat(
+                                        _verssementpiece + _piece.regler)
+                                    .toString(),
+                                textAlign: TextAlign.center,
+                                style: GoogleFonts.lato(
+                                    textStyle: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                )),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            floatingActionButtonLocation:
+                FloatingActionButtonLocation.centerDocked,
+            floatingActionButton: GestureDetector(
+              // Set onVerticalDrag event to drag handlers of controller for swipe effect
+              onVerticalDragUpdate: bottomBarControler.onDrag,
+              onVerticalDragEnd: bottomBarControler.onDragEnd,
+              child: DescribedFeatureOverlay(
+                featureId: feature3,
+                tapTarget: Icon(
+                  MdiIcons.arrowExpandUp,
+                  color: Colors.black,
+                ),
+                backgroundColor: Colors.blue,
+                contentLocation: ContentLocation.above,
+                title: Text('${S.current.swipe_top}',
+                    style: GoogleFonts.lato(fontWeight: FontWeight.bold)),
+                description: Container(
+                  width: 150,
+                  child: Text(
+                    '${S.current.msg_swipe_top}',
+                    style: GoogleFonts.lato(),
+                  ),
+                ),
+                onBackgroundTap: () async {
+                  await FeatureDiscovery.completeCurrentStep(context);
+                  return true;
+                },
+                child: FloatingActionRow(
+                  children: [
+                    FloatingActionRowButton(
+                        icon: (editMode)
+                            ? Icon(
+                                Icons.add,
+                                color: Colors.white,
+                              )
+                            : Icon(
+                                Icons.print,
+                                color: Colors.white,
+                              ),
+                        color: editMode ? Colors.blue : Colors.redAccent,
+                        foregroundColor: Colors.white,
+                        //Set onPressed event to swap state of bottom bar
+                        onTap: editMode
+                            ? () async {
+                                await showDialog(
+                                    context: context,
+                                    builder: (BuildContext context) {
+                                      return addArticleDialog();
+                                    }).then((val) {
+                                  if (_piece.piece == PieceType.avoirClient ||
+                                      _piece.piece == PieceType.retourClient ||
+                                      _piece.piece ==
+                                          PieceType.retourFournisseur ||
+                                      _piece.piece ==
+                                          PieceType.avoirFournisseur) {
+                                    var message = S.current.msg_info_article;
+                                    Helpers.showFlushBar(context, message);
+                                  }
+                                  calculPiece();
+                                });
+                              }
+                            : () async {
+                                if (_myParams.versionType == "demo") {
                                   AwesomeDialog(
                                     context: context,
                                     dialogType: DialogType.QUESTION,
@@ -843,44 +829,119 @@ class _AddPiecePageState extends State<AddPiecePage>
                                     showCloseIcon: true,
                                   )..show();
                                 } else {
-                                  Navigator.pushNamed(
-                                      context, RoutesKeys.appPurchase);
-                                  var message = S.current.msg_premium_exp;
-                                  Helpers.showFlushBar(context, message);
+                                  if (DateTime.now().isBefore(
+                                      Helpers.getDateExpiration(_myParams))) {
+                                    AwesomeDialog(
+                                      context: context,
+                                      dialogType: DialogType.QUESTION,
+                                      animType: AnimType.BOTTOMSLIDE,
+                                      body: printChoicesDialog(),
+                                      closeIcon: Icon(
+                                        Icons.cancel_sharp,
+                                        color: Colors.red,
+                                        size: 26,
+                                      ),
+                                      showCloseIcon: true,
+                                    )..show();
+                                  } else {
+                                    Navigator.pushNamed(
+                                        context, RoutesKeys.appPurchase);
+                                    var message = S.current.msg_premium_exp;
+                                    Helpers.showFlushBar(context, message);
+                                  }
                                 }
-                              }
-                            }),
-                  (editMode &&
-                          (_piece.piece == PieceType.avoirClient ||
-                              _piece.piece == PieceType.retourClient ||
-                              _piece.piece == PieceType.retourFournisseur ||
-                              _piece.piece == PieceType.avoirFournisseur))
-                      ? FloatingActionRowButton(
-                          icon: Icon(
-                            Icons.insert_drive_file_outlined,
-                            color: Colors.white,
+                              }),
+                    (editMode &&
+                            (_piece.piece == PieceType.avoirClient ||
+                                _piece.piece == PieceType.retourClient ||
+                                _piece.piece == PieceType.retourFournisseur ||
+                                _piece.piece == PieceType.avoirFournisseur))
+                        ? FloatingActionRowButton(
+                            icon: Icon(
+                              Icons.insert_drive_file_outlined,
+                              color: Colors.white,
+                            ),
+                            color: Colors.redAccent,
+                            onTap: () async {
+                              await showDialog(
+                                  context: context,
+                                  builder: (BuildContext context) {
+                                    return addJournauxDialog();
+                                  }).then((val) {
+                                calculPiece();
+                              });
+                            })
+                        : SizedBox(
+                            height: 0,
                           ),
-                          color: Colors.redAccent,
-                          onTap: () async {
-                            await showDialog(
-                                context: context,
-                                builder: (BuildContext context) {
-                                  return addJournauxDialog();
-                                }).then((val) {
-                              calculPiece();
-                            });
-                          })
-                      : SizedBox(
-                          height: 0,
-                        ),
-                ],
+                  ],
+                ),
               ),
             ),
-          ),
-          body: Builder(
-            builder: (context) => fichetab(),
-          ));
+            body: Builder(
+              builder: (context) => fichetab(),
+            )),
+      );
     }
+  }
+
+  Future<bool> _onWillPop() async {
+    Function eqal =  ListEquality().equals;
+    if (modification) {
+      if (editMode) {
+
+        if(eqal(_originalItems , _selectedItems)){
+          Navigator.of(context).pushReplacementNamed(
+              RoutesKeys.addPiece,
+              arguments: widget.arguments);
+          return Future.value(false);
+        }else{
+          AwesomeDialog(
+              context: context,
+              title: "",
+              desc: "${S.current.msg_retour_no_save} ?",
+              dialogType: DialogType.QUESTION,
+              animType: AnimType.BOTTOMSLIDE,
+              btnCancelText: S.current.non,
+              btnCancelOnPress: () {},
+              btnOkText: S.current.oui,
+              btnOkOnPress: () async {
+                Navigator.of(context).pushReplacementNamed(
+                    RoutesKeys.addPiece,
+                    arguments: widget.arguments);
+              })
+            ..show();
+          return Future.value(true);
+        }
+
+      }
+      else {
+        Navigator.pop(context);
+        return Future.value(false);
+      }
+
+    } else {
+      if (_selectedItems.isNotEmpty) {
+        AwesomeDialog(
+            context: context,
+            title: "",
+            desc: "${S.current.msg_retour_no_save} ?",
+            dialogType: DialogType.QUESTION,
+            animType: AnimType.BOTTOMSLIDE,
+            btnCancelText: S.current.non,
+            btnCancelOnPress: () {},
+            btnOkText: S.current.oui,
+            btnOkOnPress: () async {
+              Navigator.pop(context);
+            })
+          ..show();
+        return Future.value(true);
+      } else {
+        Navigator.pop(context);
+        return Future.value(false);
+      }
+    }
+
   }
 
   Widget fichetab() {
@@ -1243,7 +1304,7 @@ class _AddPiecePageState extends State<AddPiecePage>
           _piece.piece == PieceType.commandeClient ||
           _piece.piece == PieceType.bonLivraison ||
           _piece.piece == PieceType.factureClient) {
-        if (_selectedItems.isNotEmpty)
+
           dialogChangeTarif(fromClientDialog: true);
       }
     });
@@ -1268,12 +1329,15 @@ class _AddPiecePageState extends State<AddPiecePage>
             switch (_selectedTarification) {
               case 1:
                 element.selectedPrice = element.prixVente1;
+                element.selectedPriceTTC = element.prixVente1TTC;
                 break;
               case 2:
                 element.selectedPrice = element.prixVente2;
+                element.selectedPriceTTC = element.prixVente2TTC;
                 break;
               case 3:
                 element.selectedPrice = element.prixVente3;
+                element.selectedPriceTTC = element.prixVente3TTC;
                 break;
             }
           });
@@ -2408,8 +2472,8 @@ class _AddPiecePageState extends State<AddPiecePage>
           _newPiece.piece == PieceType.retourFournisseur ||
           _newPiece.piece == PieceType.avoirFournisseur) {
         _newPiece.net_a_payer = _newPiece.net_a_payer * -1;
-        _newPiece.regler = 0;
-        _newPiece.reste = _piece.reste * -1;
+        _newPiece.regler = 0.0;
+        _newPiece.reste = _newPiece.net_a_payer  * -1;
       }
 
       id = await _queryCtr.addItemToTable(DbTablesNames.pieces, _newPiece);
@@ -2895,7 +2959,7 @@ class _AddPiecePageState extends State<AddPiecePage>
                     ? PosAlign.center
                     : PosAlign.left));
 
-        input = "${S.current.total}";
+        input = "${S.current.total_ttc}";
         encArabic = await CharsetConverter.encode("ISO-8859-6",
             "${Helpers.numberFormat(_piece.total_ttc).toString()}: ${input.split('').reversed.join()}");
         ticket.textEncoded(encArabic,
@@ -3170,7 +3234,7 @@ class _AddPiecePageState extends State<AddPiecePage>
                     : PosAlign.left));
 
         encode = await CharsetConverter.encode("ISO-8859-6",
-            "${S.current.total} : ${Helpers.numberFormat(_piece.total_ttc).toString()}");
+            "${S.current.total_ttc} : ${Helpers.numberFormat(_piece.total_ttc).toString()}");
         ticket.textEncoded(encode,
             styles: PosStyles(
                 align: (formatPrint == PaperSize.mm80)
@@ -3479,13 +3543,6 @@ class _AddPiecePageState extends State<AddPiecePage>
                               fontWeight: pw.FontWeight.bold,
                               font: ttf,
                               fontSize: 10))),
-                  pw.Container(
-                      padding: pw.EdgeInsets.only(left: 5, right: 5, bottom: 2),
-                      child: pw.Text("${S.current.montant}",
-                          style: pw.TextStyle(
-                              fontWeight: pw.FontWeight.bold,
-                              font: ttf,
-                              fontSize: 10))),
                 ]),
             for (var e in _selectedItems)
               pw.TableRow(
@@ -3524,12 +3581,6 @@ class _AddPiecePageState extends State<AddPiecePage>
                       padding: pw.EdgeInsets.only(left: 5, right: 5),
                       child: pw.Text(
                           "${Helpers.numberFormat((e.selectedPrice * e.selectedQuantite))}",
-                          style: pw.TextStyle(fontSize: 9)),
-                    ),
-                    pw.Container(
-                      padding: pw.EdgeInsets.only(left: 5, right: 5),
-                      child: pw.Text(
-                          "${Helpers.numberFormat(((e.selectedPrice + (e.selectedPrice * e.tva)/100)*e.selectedQuantite))}",
                           style: pw.TextStyle(fontSize: 9)),
                     ),
                   ]),
@@ -3603,7 +3654,7 @@ class _AddPiecePageState extends State<AddPiecePage>
                           : pw.SizedBox(),
                       (_piece.total_tva > 0 && _myParams.tva)
                           ? pw.Text(
-                              "${S.current.total}\t  ${Helpers.numberFormat(_piece.total_ttc)}\t  ${_devise}",
+                              "${S.current.total_ttc}\t  ${Helpers.numberFormat(_piece.total_ttc)}\t  ${_devise}",
                               style: pw.TextStyle(font: ttf))
                           : pw.SizedBox(),
                       pw.Divider(height: 2),

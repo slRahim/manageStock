@@ -1215,6 +1215,16 @@ class S {
     );
   }
 
+  /// `Total TTC`
+  String get total_ttc {
+    return Intl.message(
+      'Total TTC',
+      name: 'total_ttc',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `Confirm`
   String get confirme {
     return Intl.message(
@@ -5790,6 +5800,16 @@ class S {
     return Intl.message(
       'Search',
       name: 'search',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Not defined`
+  String get no_defenie {
+    return Intl.message(
+      'Not defined',
+      name: 'no_defenie',
       desc: '',
       args: [],
     );

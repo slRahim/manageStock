@@ -49,17 +49,16 @@ class _PieceListItemState extends State<PieceListItem> {
   @override
   void initState() {
     super.initState();
-    controller = SlidingCardController();
-
     if(widget.piece.piece == PieceType.retourClient ||
         widget.piece.piece == PieceType.avoirClient ||
         widget.piece.piece == PieceType.retourFournisseur ||
         widget.piece.piece == PieceType.avoirFournisseur){
 
-      widget.piece.regler = widget.piece.regler *-1 ;
-      widget.piece.reste = widget.piece.reste *-1 ;
-      widget.piece.marge = widget.piece.marge *-1 ;
+      widget.piece.regler =(widget.piece.regler != 0)? widget.piece.regler *-1 : widget.piece.regler;
+      widget.piece.reste = (widget.piece.reste != 0)? widget.piece.reste *-1 : widget.piece.reste;
+
     }
+    controller = SlidingCardController();
   }
 
   @override
@@ -361,11 +360,7 @@ class _PieceListItemState extends State<PieceListItem> {
     } else {
       switch (widget.piece.mov) {
         case 1:
-          if (widget.piece.reste > 0 &&
-              widget.piece.piece != PieceType.retourClient &&
-              widget.piece.piece != PieceType.avoirClient &&
-              widget.piece.piece != PieceType.retourFournisseur &&
-              widget.piece.piece != PieceType.avoirFournisseur) {
+          if (widget.piece.reste > 0) {
             return Colors.red;
           } else {
             return Colors.green;

@@ -453,9 +453,9 @@ class _ArticleListItemState extends State<ArticleListItem> {
           break;
 
         default:
-          if (widget.article.selectedPrice > 0) {
+          if (widget.article.selectedPriceTTC > 0) {
             return Text(
-              "${Helpers.numberFormat(widget.article.selectedPrice).toString()} $_devise",
+              "${Helpers.numberFormat(widget.article.selectedPriceTTC).toString()} $_devise",
               style: GoogleFonts.lato(
                   textStyle:
                       TextStyle(fontSize: 16.0, fontWeight: FontWeight.bold)),

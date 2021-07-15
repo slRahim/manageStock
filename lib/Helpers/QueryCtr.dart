@@ -193,7 +193,13 @@ class QueryCtr {
 
     String _pieceFilter = (_piece != null && _piece != "TR")
         ? " AND Piece like '$_piece'"
-        : " AND (Piece like 'BL' OR Piece like 'FC' OR Piece like 'BR' OR Piece like 'FF')";
+        :" AND (Piece like 'BL' OR Piece like 'FC' OR Piece like 'BR' OR Piece like 'FF')";
+
+
+    if(_piece == 'TRRemb'){
+      _pieceFilter =  " AND (Piece like 'RC' OR Piece like 'AC' OR Piece like 'RF' OR Piece like 'AF')";
+    }
+
     String _movFilter = " AND Mov >= $_mov";
     String _startDateFilter = ' AND Date >= $_startDate';
     String _endDateFilter = ' AND Date <= $_endDate';
@@ -208,9 +214,12 @@ class QueryCtr {
     }
 
     String _tierFilter = "";
-    if (_tier_id != null) {
+    if (_tier_id != null ) {
       _tierFilter = " AND Tier_id = $_tier_id";
       _creditFilter = " AND Reste > 0";
+      if(_piece == 'TRRemb'){
+        _creditFilter = " AND Reste < 0";
+      }
       _movFilter = " AND Mov = 1";
     }
 
@@ -1032,8 +1041,8 @@ class QueryCtr {
          Select designation,  referance , qte ,  marge , total
          From
            (Select Articles.id , Articles.Designation as designation, Articles.Ref as referance , Sum(Journaux.Qte) as qte , 
-                  Sum(Journaux.Marge*Journaux.Qte)/Sum(Journaux.Qte) as marge ,
-                  (Sum(Journaux.Marge*Journaux.Qte)/Sum(Journaux.Qte)*Sum(Journaux.Qte)) as total
+                  IFNULL(Sum(Journaux.Marge*Journaux.Qte)/Sum(Journaux.Qte),0) as marge ,
+                  IFNULL((Sum(Journaux.Marge*Journaux.Qte)/Sum(Journaux.Qte)*Sum(Journaux.Qte)),0) as total
            From Journaux 
            Join Articles ON Journaux.Article_id = Articles.id 
            Where Journaux.Mov = 1 AND (Piece_type like 'BL' OR Piece_type like 'FC'  OR Piece_type like 'RC'  OR Piece_type like 'AC') 
@@ -1047,8 +1056,8 @@ class QueryCtr {
          Select designation, referance, qte , prix, montant_ht
          From
            (Select Articles.id , Articles.Designation as designation, Articles.Ref as referance, Sum(Journaux.Qte) as qte , 
-                  Sum(Journaux.Net_ht*Journaux.Qte)/Sum(Journaux.Qte) as prix,
-                  (Sum(Journaux.Net_ht*Journaux.Qte)/Sum(Journaux.Qte)*Sum(Journaux.Qte)) as montant_ht
+                  IFNULL(Sum(Journaux.Net_ht*Journaux.Qte)/Sum(Journaux.Qte),0) as prix_moyen,
+                  IFNULL((Sum(Journaux.Net_ht*Journaux.Qte)/Sum(Journaux.Qte)*Sum(Journaux.Qte)),0) as montant_ht
            From Journaux 
            Join Articles ON Journaux.Article_id = Articles.id 
            Where Journaux.Mov = 1 AND Piece_type like 'CC'  AND  Journaux.Date Between $dateStart AND $dateEnd
@@ -1103,8 +1112,8 @@ class QueryCtr {
          Select designation , referance, qte , prix_moyen, total
          From 
            (Select Articles.id, Articles.Designation as designation, Articles.Ref as referance, Sum(Journaux.Qte) as qte , 
-                  Sum(Journaux.Net_ht*Journaux.Qte)/Sum(Journaux.Qte) as  prix_moyen,
-                  (Sum(Journaux.Net_ht*Journaux.Qte)/Sum(Journaux.Qte)*Sum(Journaux.Qte)) as total
+                  IFNULL(Sum(Journaux.Net_ht*Journaux.Qte)/Sum(Journaux.Qte),0) as  prix_moyen,
+                  IFNULL((Sum(Journaux.Net_ht*Journaux.Qte)/Sum(Journaux.Qte)*Sum(Journaux.Qte)),0) as total
            From Journaux 
            Join Articles ON Journaux.Article_id = Articles.id 
            Where Journaux.Mov = 1 AND (Piece_type like 'BR' OR Piece_type like 'FF' OR Piece_type like 'RF'  OR Piece_type like 'AF')
@@ -1118,8 +1127,8 @@ class QueryCtr {
          Select designation, referance, qte , prix, montant_ht
          From 
            (Select Articles.id, Articles.Designation as designation, Articles.Ref as referance, Sum(Journaux.Qte) as qte , 
-                  Sum(Journaux.Net_ht*Journaux.Qte)/Sum(Journaux.Qte) as prix_moyen,
-                  (Sum(Journaux.Net_ht*Journaux.Qte)/Sum(Journaux.Qte)*Sum(Journaux.Qte)) as montant_ht
+                  IFNULL(Sum(Journaux.Net_ht*Journaux.Qte)/Sum(Journaux.Qte),0) as prix_moyen,
+                  IFNULL((Sum(Journaux.Net_ht*Journaux.Qte)/Sum(Journaux.Qte)*Sum(Journaux.Qte)),0) as montant_ht
            From Journaux 
            Join Articles ON Journaux.Article_id = Articles.id 
            Where Journaux.Mov = 0 AND Piece_type like 'BC'  AND  Journaux.Date Between ${dateStart} AND ${dateEnd}
@@ -1187,7 +1196,7 @@ class QueryCtr {
       case 2:
         query = """
         Select Designation as designation, Ref as referance, Qte as qte, 
-              PrixVente1 as prix, TVA as tva , (Qte*PrixVente1) as montant_ht, (Qte*PrixVente1TTC) as chifre_affaire
+              PrixVente1 as prix, TVA as tva , (Qte*PrixVente1) as montant_ht, (Qte*PrixVente1TTC) as total_ttc
         From Articles where Qte > 0
         """;
         break;

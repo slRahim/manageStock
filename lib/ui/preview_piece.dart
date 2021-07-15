@@ -355,7 +355,7 @@ class _PreviewPieceState extends State<PreviewPiece> {
                               : SizedBox(),
                           (widget.piece.total_tva > 0)
                               ? Text(
-                                  "${S.current.total} :${Helpers.numberFormat(widget.piece.total_ttc)}",
+                                  "${S.current.total_ttc} :${Helpers.numberFormat(widget.piece.total_ttc)}",
                                   style: TextStyle(color: Colors.black),
                                 )
                               : SizedBox(),
@@ -774,7 +774,7 @@ class _PreviewPieceState extends State<PreviewPiece> {
                     ? PosAlign.center
                     : PosAlign.left));
 
-        input = "${S.current.total}";
+        input = "${S.current.total_ttc}";
         encArabic = await CharsetConverter.encode("ISO-8859-6",
             "${Helpers.numberFormat(widget.piece.total_ttc).toString()}: ${input.split('').reversed.join()}");
         ticket.textEncoded(encArabic,
@@ -1049,7 +1049,7 @@ class _PreviewPieceState extends State<PreviewPiece> {
                     : PosAlign.left));
 
         encode = await CharsetConverter.encode("ISO-8859-6",
-            "${S.current.total} : ${Helpers.numberFormat(widget.piece.total_ttc).toString()}");
+            "${S.current.total_ttc} : ${Helpers.numberFormat(widget.piece.total_ttc).toString()}");
         ticket.textEncoded(encode,
             styles: PosStyles(
                 align: (_default_format == PaperSize.mm80)

@@ -30,7 +30,7 @@ class Tiers {
 
   int _id;
   int _clientFour;
-  int originClientOrFourn;
+  // int originClientOrFourn;
   String _raisonSociale;
   double _latitude;
   double _longitude;
@@ -274,7 +274,7 @@ class Tiers {
 
   @override
   String toString() {
-    return 'Tiers{_id: $_id, _clientFour: $_clientFour, originClientOrFourn: $originClientOrFourn, _raisonSociale: $_raisonSociale, _latitude: $_latitude, _longitude: $_longitude, _qrCode: $_qrCode, _imageUint8List: $_imageUint8List, _id_famille: $_id_famille, _statut: $_statut, _tarification: $_tarification, _adresse: $_adresse, _ville: $_ville, _telephone: $_telephone, _mobile: $_mobile, _fax: $_fax, _email: $_email, _solde_depart: $_solde_depart, _chiffre_affaires: $_chiffre_affaires, _regler: $_regler, _credit: $_credit, _bloquer: $_bloquer}';
+    return 'Tiers{_id: $_id, _clientFour: $_clientFour, _raisonSociale: $_raisonSociale, _latitude: $_latitude, _longitude: $_longitude, _qrCode: $_qrCode, _imageUint8List: $_imageUint8List, _id_famille: $_id_famille, _statut: $_statut, _tarification: $_tarification, _adresse: $_adresse, _ville: $_ville, _telephone: $_telephone, _mobile: $_mobile, _fax: $_fax, _email: $_email, _solde_depart: $_solde_depart, _chiffre_affaires: $_chiffre_affaires, _regler: $_regler, _credit: $_credit, _bloquer: $_bloquer}';
   }
 
   @override

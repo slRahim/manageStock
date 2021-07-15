@@ -1502,9 +1502,7 @@ class _AddTierPageState extends State<AddTierPage>
 
     if (_clientFournBool) {
       item.clientFour = 1;
-    } else if (widget.arguments.originClientOrFourn != null) {
-      item.clientFour = widget.arguments.originClientOrFourn;
-    } else {
+    }  else {
       item.clientFour = _clientFourn;
     }
 

@@ -671,7 +671,7 @@ class SqlLiteDatabaseHelper {
         BEGIN
             UPDATE Articles
                SET Qte = Qte - (NEW.Qte - OLD.Qte) ,
-               Colis = (Qte - (NEW.Qte - OLD.Qte)) / Qte_Colis
+               Colis = IFNULL((Qte - (NEW.Qte - OLD.Qte)) / Qte_Colis , 0)
              WHERE id = NEW.Article_id ;
              
             Update Pieces
@@ -688,7 +688,7 @@ class SqlLiteDatabaseHelper {
         BEGIN
             UPDATE Articles
                SET Qte = Qte - NEW.Qte ,
-               Colis = (Qte - NEW.Qte) / Qte_Colis
+               Colis = IFNULL((Qte - NEW.Qte) / Qte_Colis , 0)
              WHERE id = NEW.Article_id ;
              
             Update Pieces
@@ -706,7 +706,7 @@ class SqlLiteDatabaseHelper {
         BEGIN
             UPDATE Articles
                SET Qte = Qte + OLD.Qte ,
-                   Colis = (Qte + OLD.Qte) / Qte_Colis
+                   Colis = IFNULL((Qte + OLD.Qte) / Qte_Colis , 0)
              WHERE id = New.Article_id;
             
         END;
@@ -723,9 +723,9 @@ class SqlLiteDatabaseHelper {
         WHEN NEW.Mov = 1 AND (NEW.Piece_type = 'BR' OR NEW.Piece_type = 'FF')
         BEGIN
             UPDATE Articles
-               SET PMP = ((Qte * PMP)+(NEW.Qte * NEW.Net_ht))/(Qte + NEW.Qte) , 
+               SET PMP = IFNULL(((Qte * PMP)+(NEW.Qte * NEW.Net_ht))/(Qte + NEW.Qte) , 0), 
                    Qte = Qte + NEW.Qte,
-                   Colis = (Qte + NEW.Qte) / Qte_Colis,
+                   Colis = IFNULL((Qte + NEW.Qte) / Qte_Colis , 0),
                    PrixAchat = NEW.Net_ht
             WHERE id = New.Article_id;
              
@@ -743,9 +743,9 @@ class SqlLiteDatabaseHelper {
         WHEN NEW.Mov = 1 AND (NEW.Piece_type = 'BR' OR NEW.Piece_type = 'FF')
         BEGIN
             UPDATE Articles
-               SET PMP = ((Qte * PMP)+((NEW.Qte-OLD.Qte) * NEW.Net_ht))/(Qte + (NEW.Qte-OLD.Qte)) , 
+               SET PMP = IFNULL(((Qte * PMP)+((NEW.Qte-OLD.Qte) * NEW.Net_ht))/(Qte + (NEW.Qte-OLD.Qte)) , 0) , 
                    Qte = Qte + (NEW.Qte-OLD.Qte),
-                   Colis = (Qte + (NEW.Qte-OLD.Qte)) / Qte_Colis,
+                   Colis = IFNULL((Qte + (NEW.Qte-OLD.Qte)) / Qte_Colis , 0),
                    PrixAchat = NEW.Net_ht
              WHERE id = New.Article_id;
              
@@ -762,9 +762,9 @@ class SqlLiteDatabaseHelper {
         WHEN (OLD.Mov <> NEW.Mov) AND NEW.Mov = 1 AND (NEW.Piece_type = 'BR' OR NEW.Piece_type = 'FF')
         BEGIN
            UPDATE Articles
-               SET PMP = ((Qte * PMP)+(NEW.Qte * NEW.Net_ht))/(Qte + NEW.Qte) , 
+               SET PMP = IFNULL(((Qte * PMP)+(NEW.Qte * NEW.Net_ht))/(Qte + NEW.Qte) , 0) , 
                    Qte = Qte + NEW.Qte,
-                   Colis = (Qte + NEW.Qte) / Qte_Colis,
+                   Colis = IFNULL((Qte + NEW.Qte) / Qte_Colis , 0),
                    PrixAchat = NEW.Net_ht
              WHERE id = New.Article_id;
              
@@ -785,7 +785,7 @@ class SqlLiteDatabaseHelper {
             UPDATE Articles
                SET PMP = IFNULL(((Qte * PMP)-(OLD.Qte * OLD.Net_ht)) / (Qte - OLD.Qte),Old.Prix_revient) , 
                    Qte = Qte - OLD.Qte,
-                   Colis = (Qte - OLD.Qte) / Qte_Colis
+                   Colis = IFNULL((Qte - OLD.Qte) / Qte_Colis , 0)
              WHERE id = New.Article_id;
             
         END;
@@ -801,9 +801,9 @@ class SqlLiteDatabaseHelper {
         WHEN NEW.Mov = 1 AND (NEW.Piece_type = 'RC' OR NEW.Piece_type = 'AC')
         BEGIN
             UPDATE Articles
-               SET PMP = ((Qte * PMP)+((NEW.Qte*-1) * NEW.Prix_revient))/(Qte + (NEW.Qte*-1)) , 
+               SET PMP = IFNULL(((Qte * PMP)+((NEW.Qte*-1) * NEW.Prix_revient))/(Qte + (NEW.Qte*-1)),0) , 
                    Qte = Qte + (NEW.Qte*-1),
-                   Colis = (Qte + (NEW.Qte*-1)) / Qte_Colis
+                   Colis = IFNULL((Qte + (NEW.Qte*-1)) / Qte_Colis , 0)
              WHERE id = New.Article_id;
              
             Update Pieces
@@ -820,9 +820,9 @@ class SqlLiteDatabaseHelper {
         WHEN NEW.Mov = 1 AND (NEW.Piece_type = 'RC' OR NEW.Piece_type = 'AC')
         BEGIN
             UPDATE Articles
-               SET PMP = ((Qte * PMP)+(((NEW.Qte*-1)-(OLD.Qte*-1)) * NEW.Prix_revient))/(Qte + ((NEW.Qte*-1)-(OLD.Qte*-1))) , 
+               SET PMP = IFNULL(((Qte * PMP)+(((NEW.Qte*-1)-(OLD.Qte*-1)) * NEW.Prix_revient))/(Qte + ((NEW.Qte*-1)-(OLD.Qte*-1))) , 0) , 
                    Qte = Qte + ((NEW.Qte*-1)-(OLD.Qte*-1)),
-                   Colis = (Qte + ((NEW.Qte*-1)-(OLD.Qte*-1))) / Qte_Colis
+                   Colis = IFNULL((Qte + ((NEW.Qte*-1)-(OLD.Qte*-1))) / Qte_Colis , 0)
              WHERE id = New.Article_id;
             
             Update Pieces
@@ -838,9 +838,9 @@ class SqlLiteDatabaseHelper {
         WHEN (OLD.Mov <> NEW.Mov) AND NEW.Mov = 1 AND (NEW.Piece_type = 'RC' OR NEW.Piece_type = 'AC')
         BEGIN
            UPDATE Articles
-               SET PMP = ((Qte * PMP)+((NEW.Qte*-1) * NEW.Prix_revient))/(Qte + (NEW.Qte*-1)) , 
+               SET PMP = IFNULL(((Qte * PMP)+((NEW.Qte*-1) * NEW.Prix_revient))/(Qte + (NEW.Qte*-1)) , 0), 
                    Qte = Qte + (NEW.Qte*-1),
-                   Colis = (Qte + (NEW.Qte*-1)) / Qte_Colis
+                   Colis = IFNULL((Qte + (NEW.Qte*-1)) / Qte_Colis , 0)
              WHERE id = New.Article_id;
 
            Update Pieces
@@ -857,9 +857,9 @@ class SqlLiteDatabaseHelper {
               AND (NEW.Piece_type = 'RC' OR NEW.Piece_type = 'AC') 
         BEGIN
             UPDATE Articles
-               SET PMP = ((Qte * PMP)-((OLD.Qte*-1) * OLD.Prix_revient))/(Qte - (OLD.Qte*-1)) , 
+               SET PMP = IFNULL(((Qte * PMP)-((OLD.Qte*-1) * OLD.Prix_revient))/(Qte - (OLD.Qte*-1)),0) , 
                    Qte = Qte - (OLD.Qte*-1),
-                   Colis = (Qte - (OLD.Qte*-1)) / Qte_Colis
+                   Colis = IFNULL((Qte - (OLD.Qte*-1)) / Qte_Colis , 0)
              WHERE id = New.Article_id;
         
         END;
@@ -875,9 +875,9 @@ class SqlLiteDatabaseHelper {
         WHEN  NEW.Mov = 1 AND (NEW.Piece_type = 'RF' OR NEW.Piece_type = 'AF')
         BEGIN
             UPDATE Articles
-               SET PMP = ((Qte * PMP)-((NEW.Qte*-1) * NEW.Net_ht))/(Qte - (NEW.Qte*-1)) ,
+               SET PMP = IFNULL(((Qte * PMP)-((NEW.Qte*-1) * NEW.Net_ht))/(Qte - (NEW.Qte*-1)) , 0) ,
                    Qte = Qte - (NEW.Qte*-1),
-                   Colis = (Qte - (NEW.Qte*-1)) / Qte_Colis
+                   Colis = IFNULL((Qte - (NEW.Qte*-1)) / Qte_Colis , 0)
              WHERE id = New.Article_id;
              
         END;
@@ -890,9 +890,9 @@ class SqlLiteDatabaseHelper {
         WHEN NEW.Mov = 1 AND (NEW.Piece_type = 'RF' OR NEW.Piece_type = 'AF')
         BEGIN
             UPDATE Articles
-               SET PMP = ((Qte * PMP)-(((NEW.Qte*-1) - (OLD.Qte*-1)) * NEW.Net_ht))/(Qte - ((NEW.Qte*-1) - (OLD.Qte*-1))) ,
+               SET PMP = IFNULL(((Qte * PMP)-(((NEW.Qte*-1) - (OLD.Qte*-1)) * NEW.Net_ht))/(Qte - ((NEW.Qte*-1) - (OLD.Qte*-1))),0) ,
                    Qte = Qte - ((NEW.Qte*-1) - (OLD.Qte*-1)) ,
-                   Colis = (Qte - ((NEW.Qte*-1) - (OLD.Qte*-1))) / Qte_Colis
+                   Colis = IFNULL((Qte - ((NEW.Qte*-1) - (OLD.Qte*-1))) / Qte_Colis , 0)
              WHERE id = NEW.Article_id ;
              
         END;
@@ -905,9 +905,9 @@ class SqlLiteDatabaseHelper {
         WHEN (OLD.Mov <> NEW.Mov) AND NEW.Mov = 1 AND (NEW.Piece_type = 'RF' OR NEW.Piece_type = 'AF')
         BEGIN
             UPDATE Articles
-               SET PMP = ((Qte * PMP)-((NEW.Qte*-1) * NEW.Net_ht))/(Qte - (NEW.Qte*-1)) ,
+               SET PMP = IFNULL(((Qte * PMP)-((NEW.Qte*-1) * NEW.Net_ht))/(Qte - (NEW.Qte*-1)) , 0) ,
                    Qte = Qte - (NEW.Qte*-1) ,
-                   Colis = (Qte - (NEW.Qte*-1)) / Qte_Colis
+                   Colis = IFNULL((Qte - (NEW.Qte*-1)) / Qte_Colis , 0)
              WHERE id = NEW.Article_id ;
              
         END;
@@ -921,9 +921,9 @@ class SqlLiteDatabaseHelper {
               AND (NEW.Piece_type = 'RF' OR NEW.Piece_type = 'AF')      
         BEGIN
             UPDATE Articles
-               SET PMP = ((Qte * PMP)+((OLD.Qte*-1) * OLD.Net_ht))/(Qte + (OLD.Qte*-1)) ,
+               SET PMP = IFNULL(((Qte * PMP)+((OLD.Qte*-1) * OLD.Net_ht))/(Qte + (OLD.Qte*-1)) , 0) ,
                    Qte = Qte + (OLD.Qte*-1) ,
-                   Colis = (Qte + (OLD.Qte*-1)) / Qte_Colis,
+                   Colis = IFNULL((Qte + (OLD.Qte*-1)) / Qte_Colis , 0),
                    PrixAchat = OLD.Prix_ht
              WHERE id = New.Article_id;
             
@@ -1382,6 +1382,7 @@ class SqlLiteDatabaseHelper {
         AFTER DELETE ON Tresories 
         FOR EACH ROW 
         BEGIN     
+        
              UPDATE CompteTresorie
               SET Solde = IFNULL(Solde_depart + (SELECT Sum(Montant) FROM Tresories 
                                             WHERE (Compte_id = OLD.Compte_id) AND 

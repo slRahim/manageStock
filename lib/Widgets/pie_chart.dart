@@ -224,9 +224,15 @@ class _ChartPieState extends State<ChartPie> {
         return widget.data[index].raisonSociale;
         break;
       case ("famille"):
+        if(widget.data[index]["Libelle"] == 'No Famille'){
+          return S.current.no_defenie ;
+        }
         return widget.data[index]["Libelle"];
         break;
       case ("charge"):
+        if(widget.data[index]["Libelle"] == 'No Categorie'){
+          return S.current.no_defenie ;
+        }
         return widget.data[index]["Libelle"];
         break;
     }

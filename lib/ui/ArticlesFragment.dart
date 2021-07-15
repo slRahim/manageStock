@@ -446,6 +446,7 @@ class _ArticlesFragmentState extends State<ArticlesFragment> {
         }
       }
     });
+
   }
 
   Future scanBarCode() async {

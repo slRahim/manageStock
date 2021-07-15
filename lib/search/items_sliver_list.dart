@@ -100,8 +100,8 @@ class _ItemsSliverListState extends State<ItemsSliverList> {
         alreadySelected:(widget.articleOriginalList.isNotEmpty)? widget.articleOriginalList.where((element) => element.id == item.id ).isNotEmpty : null,
       );
     } else if (item is Tiers) {
-      item.originClientOrFourn =
-          widget.dataSource.listType == ItemsListTypes.clientsList ? 0 : 2;
+      // item.originClientOrFourn =
+      //     widget.dataSource.listType == ItemsListTypes.clientsList ? 0 : 2;
       return TierListItem(
         tier: item,
         onItemSelected: widget.onItemSelected,

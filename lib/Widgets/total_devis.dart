@@ -137,7 +137,7 @@ class TotalDevis extends StatelessWidget {
                   mainAxisSize: MainAxisSize.max,
                   children: [
                     Text(
-                      "${S.current.total}",
+                      "${S.current.total_ttc}",
                       style: GoogleFonts.lato(
                           textStyle: TextStyle(color: Colors.white)),
                     ),

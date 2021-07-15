@@ -245,7 +245,7 @@ class _AddArticlePageState extends State<AddArticlePage>
                       } else {
                           Navigator.pop(context),
                       }
-                    } else {
+                  } else {
                       Navigator.pop(context),
                   }
                 },

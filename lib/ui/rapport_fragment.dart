@@ -99,6 +99,8 @@ class _RapportState extends State<Rapport> {
       );
       _dateControl.text =
           "${Helpers.dateToText(_dateRange.start)} / ${Helpers.dateToText(_dateRange.end)}";
+
+      _yearControl.text = now.year.toString() ;
     });
   }
 
@@ -785,6 +787,9 @@ class _RapportState extends State<Rapport> {
         break;
       case "tva":
         return S.current.tva;
+        break;
+      case "total_ttc":
+        return S.current.total_ttc;
         break;
 
     }

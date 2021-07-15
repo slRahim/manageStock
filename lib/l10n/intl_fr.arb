@@ -123,6 +123,7 @@
   "tarif" : "Tarif: ",
   "verssement": "Versement",
   "total" : "Total",
+  "total_ttc" : "Total incl tax",
   "confirme": "Confirmer",
   "choisir_action" : "Choisir une action",
   "imp_rapide_btn" : "Impression rapide",
@@ -617,7 +618,8 @@
   "msg_prix_supp_zero" : "La valeur doit etre superieure à zéro",
   "msg_val_valide" : "Entrez un nombre valide",
   "montant_ht" : "Montant HT",
-  "search" : "Rechercher"
+  "search" : "Rechercher",
+  "no_defenie" : "Non défenie"
 
 
 

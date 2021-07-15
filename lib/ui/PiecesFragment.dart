@@ -302,7 +302,7 @@ class _PiecesFragmentState extends State<PiecesFragment> {
         appBar: SearchBar(
           searchController: searchController,
           mainContext: widget.onConfirmSelectedItem != null ? null : context,
-          title: (widget.peaceType != null && widget.peaceType != "TR")
+          title: (widget.peaceType != null && widget.peaceType != "TR" && widget.peaceType != "TRRemb")
               ? Helpers.getPieceTitle(widget.peaceType)
               : S.current.piece_titre,
           isFilterOn: isFilterOn,

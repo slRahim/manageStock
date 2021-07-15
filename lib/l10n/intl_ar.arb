@@ -124,6 +124,7 @@
   "tarif" : "السعر:",
   "verssement": "دفع",
   "total" : "المجموع",
+  "total_ttc" : "المجموع TTC",
   "confirme": "تأكيد",
   "choisir_action" : "إختار عملية",
   "imp_rapide_btn" : "طباعة مباشرة",
@@ -618,6 +619,7 @@
   "msg_prix_supp_zero" : "يجب أن يكون القيمة أكبر من الصفر",
   "msg_val_valide" : "أدخل رقمًا صحيحا",
   "montant_ht" : "المبلغ ب ض",
-  "search" : "بحث"
+  "search" : "بحث",
+  "no_defenie" : "غير محدد"
 
 }

@@ -394,7 +394,8 @@ class _AddTresoriePageState extends State<AddTresoriePage>
           floatingActionButtonLocation:
               FloatingActionButtonLocation.centerDocked,
           floatingActionButton: ((_selectedCategorie.id == 2 ||
-                      _selectedCategorie.id == 3 ) &&
+                      _selectedCategorie.id == 3  ||
+                      _selectedCategorie.id == 6 || _selectedCategorie.id == 7) &&
                   !modification)
               ? FloatingActionButton(
                   child: Icon(Icons.add),
@@ -889,14 +890,18 @@ class _AddTresoriePageState extends State<AddTresoriePage>
   choosePieceDialog() {
     return PiecesFragment(
       tierId: _selectedClient.id,
-      peaceType: "TR",
+      peaceType: (_selectedCategorie.id == 2 || _selectedCategorie.id == 3)? "TR" : "TRRemb",
       onConfirmSelectedItem: (selectedItem) {
         setState(() {
           _selectedPieces.clear();
           _selectedPieces.add(selectedItem);
           _restepiece = _selectedPieces.first.reste;
-          _objetControl.text = _objetControl.text +
+          _objetControl.text = '';
+          _objetControl.text = _selectedCategorie.libelle +
               " ${selectedItem.piece} ${selectedItem.num_piece}";
+        });
+        setState(() {
+
         });
       },
     );
@@ -1348,6 +1353,16 @@ class _AddTresoriePageState extends State<AddTresoriePage>
                 await _queryCtr.addItemToTable(DbTablesNames.reglementTresorie, item);
               });
             }
+          }else if(_selectedCategorie.id == 6 || _selectedCategorie.id == 7){
+            await _queryCtr.removeItemWithForeignKey(DbTablesNames.reglementTresorie, tresorie.id, 'Tresorie_id');
+            double _montant = double.parse((tresorie.montant).toStringAsFixed(2));
+            _selectedPieces.forEach((piece) async {
+              ReglementTresorie item = new ReglementTresorie.init();
+              item.piece_id = piece.id;
+              item.tresorie_id = widget.arguments.id;
+              item.regler = _montant;
+              await _queryCtr.addItemToTable(DbTablesNames.reglementTresorie, item);
+            });
           }
 
           if (id > -1) {
@@ -1426,6 +1441,27 @@ class _AddTresoriePageState extends State<AddTresoriePage>
                 _selectedPieces = new List<Piece>();
               });
             }
+          }else if(tresorie.categorie == 6 || tresorie.categorie == 7){
+            double _montant = double.parse((tresorie.montant).toStringAsFixed(2)) * -1;
+            _selectedPieces.forEach((piece) async {
+              ReglementTresorie item = new ReglementTresorie.init();
+              item.piece_id = piece.id;
+              item.tresorie_id = tresorie.id;
+
+              if (_montant >= _restepiece) {
+                item.regler = _restepiece;
+                _montant = _montant - _restepiece;
+              } else if (_montant != 0) {
+                item.regler = _montant;
+                _montant = 0;
+              } else {
+                return;
+              }
+
+              item.regler = item.regler * -1 ;
+              await _queryCtr.addItemToTable(
+                  DbTablesNames.reglementTresorie, item);
+            });
           }
           if (id > -1) {
             widget.arguments = tresorie;
@@ -1473,6 +1509,7 @@ class _AddTresoriePageState extends State<AddTresoriePage>
     _tresorie.numCheque =(Statics.modaliteList.indexOf(_selectedmodalite) == 1)? _numchequeControl.text.trim() : '';
     _tresorie.montant = double.parse(_montantControl.text.trim());
     _tresorie.montant = double.parse((_tresorie.montant).toStringAsFixed(2));
+
     if (_selectedCategorie.id == 6 || _selectedCategorie.id == 7) {
       _tresorie.montant =  double.parse((_tresorie.montant * -1).toStringAsFixed(2)) ;
     }
