@@ -454,30 +454,27 @@ class _PieceListItemState extends State<PieceListItem> {
           if (res < 0) {
             message = S.current.msg_err_tresorie;
             Helpers.showFlushBar(context, message);
+
+          }else{
+            int res1 = await _queryCtr.removeItemFromTable(
+                DbTablesNames.pieces, widget.piece);
+
+            await _queryCtr.updateComptesSolde();
+            if (res1 > 0) {
+              message = S.current.msg_supp_ok;
+              _confirmDell = true;
+            } else {
+              message = S.current.msg_ereure;
+            }
+
+            Helpers.showFlushBar(context, message);
+            if (_confirmDell) {
+              setState(() {
+                _visible = false;
+              });
+            }
           }
 
-          int res1 = await _queryCtr.removeItemFromTable(
-              DbTablesNames.pieces, widget.piece);
-          if (res1 > 0) {
-            message = S.current.msg_supp_ok;
-            _confirmDell = true;
-          } else {
-            message = S.current.msg_ereure;
-          }
-
-          Helpers.showFlushBar(context, message);
-          if (_confirmDell) {
-            setState(() {
-              _visible = false;
-            });
-          }
-
-          Helpers.showFlushBar(context, message);
-          if (_confirmDell) {
-            setState(() {
-              _visible = false;
-            });
-          }
         } else {
           //ds le cas d'un devis uniquement
           int res = await _queryCtr.removeItemFromTable(

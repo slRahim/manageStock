@@ -218,6 +218,7 @@ class _TresorieListItemState extends State<TresorieListItem> {
         } else {
           message = S.current.msg_ereure;
         }
+        await _queryCtr.updateComptesSolde();
         Helpers.showFlushBar(context, message);
         if (_confirmDell) {
           setState(() {

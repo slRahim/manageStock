@@ -1332,38 +1332,6 @@ class SqlLiteDatabaseHelper {
         END;
       ''');
 
-    // le delete est spaecial pour add tresorie page (on update tresorie montant)
-    // await db.execute('''CREATE TRIGGER update_tier_reglement_credit2
-    //     AFTER UPDATE ON Tresories
-    //     FOR EACH ROW
-    //     when (New.Categorie_id = 2 OR New.Categorie_id = 3 OR New.Categorie_id = 6 OR New.Categorie_id = 7)
-    //           AND OLD.Mov = NEW.Mov  AND (OLD.Piece_id = NEW.Piece_id OR OLD.Piece_id  IS NULL)
-    //           AND OLD.Tier_id = New.Tier_id AND OLD.Categorie_id = NEW.Categorie_id
-    //     BEGIN
-    //         UPDATE Tiers
-    //            SET Chiffre_affaires = IFNULL((Select Sum(Net_a_payer) From Pieces where Tier_id = OLD.Tier_id AND Mov = 1 AND Piece <> "CC" AND Piece <> "FP" AND Piece <> "BC"),0)
-    //         WHERE id = OLD.Tier_id;
-    //         UPDATE Tiers
-    //           SET Regler = IFNULL((SELECT SUM(Montant) FROM Tresories WHERE Tier_id = OLD.Tier_id AND Mov = 1),0)
-    //         WHERE id = OLD.Tier_id ;
-    //         UPDATE Tiers
-    //            SET  Credit = (Solde_depart + Chiffre_affaires) - Regler
-    //         WHERE id = OLD.Tier_id;
-    //
-    //         UPDATE Tiers
-    //            SET Chiffre_affaires = IFNULL((Select Sum(Net_a_payer) From Pieces where Tier_id = New.Tier_id AND Mov = 1 AND Piece <> "CC" AND Piece <> "FP" AND Piece <> "BC"),0)
-    //         WHERE id = New.Tier_id;
-    //         UPDATE Tiers
-    //           SET Regler = IFNULL((SELECT SUM(Montant) FROM Tresories WHERE Tier_id = New.Tier_id AND Mov = 1),0)
-    //         WHERE id = NEW.Tier_id ;
-    //         UPDATE Tiers
-    //            SET  Credit = (Solde_depart + Chiffre_affaires) - Regler
-    //         WHERE id = New.Tier_id;
-    //
-    //         DELETE FROM ReglementTresorie WHERE Tresorie_id = Old.id ;
-    //     END;
-    //   ''');
-
     // ***************************************************************************************************************
     //**********************************************dell tresorie*******************************************************
     await db.execute('''
@@ -1377,23 +1345,6 @@ class SqlLiteDatabaseHelper {
             WHERE  FormatPiece.Piece LIKE 'TR' ;
         END;
      ''');
-
-    await db.execute('''CREATE TRIGGER update_compte_solde_onDELETE
-        AFTER DELETE ON Tresories 
-        FOR EACH ROW 
-        BEGIN     
-        
-             UPDATE CompteTresorie
-              SET Solde = IFNULL(Solde_depart + (SELECT Sum(Montant) FROM Tresories 
-                                            WHERE (Compte_id = OLD.Compte_id) AND 
-                                                  (Categorie_id = 2 OR Categorie_id = 4 OR Categorie_id = 6))  
-                                         +  (SELECT  -1 * Sum(Montant) FROM Tresories 
-                                              WHERE (Compte_id = OLD.Compte_id) AND 
-                                                 (Categorie_id = 3 OR Categorie_id = 5 OR Categorie_id = 7 OR Categorie_id = 8)),0)
-            WHERE id = OLD.Compte_id; 
-          
-        END;
-      ''');
 
     await db.execute('''CREATE TRIGGER dell_tresorie 
         BEFORE DELETE ON Tresories 

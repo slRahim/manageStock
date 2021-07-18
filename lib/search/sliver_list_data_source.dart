@@ -11,7 +11,7 @@ class SliverListDataSource extends PagedDataSource<int, Object> {
   SliverListDataSource(this.listType, this.filterMap) : super(0);
 
 
-  static const _pageSize = 10;
+  static const _pageSize = 12;
   Object _activeCallbackIdentity;
 
   QueryCtr _queryCtr = QueryCtr();
