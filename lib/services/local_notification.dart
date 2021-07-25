@@ -3,6 +3,7 @@ import 'dart:io' show File, Platform;
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:rxdart/subjects.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class NotificationPlugin {
   FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin;
@@ -12,13 +13,17 @@ class NotificationPlugin {
   var initializationSettings;
   int IdNotification = 0;
 
+  SharedPreferences _prefs;
+
   NotificationPlugin._() {
     init();
   }
 
+
   //***********************************************************************************************************************************************************************************
   //******************************************************************************configuration*****************************************************************************************
   init() async {
+    _prefs = await SharedPreferences.getInstance();
     flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
     if (Platform.isIOS) {
       _requestIOSPermission();
@@ -92,6 +97,8 @@ class NotificationPlugin {
   Future<void> showDailyAtTime(String dayTime) async {
     var hh_mm = dayTime.split(":");
     var time = Time(int.parse(hh_mm.first), int.parse(hh_mm.last), 0);
+    String credit = '';
+    String msg_credit = '' ;
     var androidChannelSpecifics = AndroidNotificationDetails(
       'CHANNEL_ID 41',
       'CHANNEL_NAME 41',
@@ -103,10 +110,29 @@ class NotificationPlugin {
     var platformChannelSpecifics =
         NotificationDetails(androidChannelSpecifics, iosChannelSpecifics);
 
+    switch (_prefs.getString("myLocale")) {
+      case ("en"):
+        credit = 'Credit' ;
+        msg_credit = 'You have unpaid invoices';
+        break;
+      case ("fr"):
+        credit = 'Credit' ;
+        msg_credit = 'Vous avez des pièces non payer';
+        break;
+      case ("ar"):
+        credit = 'ديون' ;
+        msg_credit = '"لديك فواتير بها ديون';
+        break;
+      default:
+        credit = 'Credit' ;
+        msg_credit = 'You have unpaid invoices';
+        break;
+    }
+
     await flutterLocalNotificationsPlugin.showDailyAtTime(
       IdNotification,
-      'Credit',
-      'Vous avez des pieces non payer', //null
+      credit,
+      msg_credit, //null
       time,
       platformChannelSpecifics,
       payload: 'Test Payload',
@@ -128,7 +154,9 @@ class NotificationPlugin {
       Day.Friday,
       Day.Sunday
     ];
-    print(days[day]);
+    String credit = '';
+    String msg_credit = '' ;
+
     var androidChannelSpecifics = AndroidNotificationDetails(
       'CHANNEL_ID 55',
       'CHANNEL_NAME 55',
@@ -140,10 +168,30 @@ class NotificationPlugin {
 
     var platformChannelSpecifics =
         NotificationDetails(androidChannelSpecifics, iosChannelSpecifics);
+
+    switch (_prefs.getString("myLocale")) {
+      case ("en"):
+        credit = 'Credit' ;
+        msg_credit = 'You have unpaid invoices';
+        break;
+      case ("fr"):
+        credit = 'Credit' ;
+        msg_credit = 'Vous avez des pièces non payer';
+        break;
+      case ("ar"):
+        credit = 'ديون' ;
+        msg_credit = '"لديك فواتير بها ديون';
+        break;
+      default:
+        credit = 'Credit' ;
+        msg_credit = 'You have unpaid invoices';
+        break;
+    }
+
     await flutterLocalNotificationsPlugin.showWeeklyAtDayAndTime(
       IdNotification,
-      'Credit',
-      'Vous avez des pieces non payer',
+      credit,
+      msg_credit,
       days[day],
       time,
       platformChannelSpecifics,
@@ -159,6 +207,8 @@ class NotificationPlugin {
   Future<void> cancelAllNotification() async {
     await flutterLocalNotificationsPlugin.cancelAll();
   }
+
+
 }
 
 //***************************************************************************************************************************************************************************

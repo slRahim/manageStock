@@ -461,7 +461,7 @@ class _SettingsPageState extends State<SettingsPage> {
                           initialTime: TimeOfDay.now(),
                         ).then((value) {
                           setState(() {
-                            _dayTime = "${value.hour}:${value.minute}";
+                            _dayTime = "${value.hour}:${value.minute.toString().padLeft(2, '0')}";
                           });
                         });
                       }
