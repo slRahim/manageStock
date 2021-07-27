@@ -260,180 +260,201 @@ class _AddTierPageState extends State<AddTierPage>
     if (!finishedLoading) {
       return Scaffold(body: Helpers.buildLoading());
     } else {
-      return DefaultTabController(
-        length: 4,
-        child: Scaffold(
-            backgroundColor: Theme.of(context).backgroundColor,
-            floatingActionButton: Padding(
-              padding: const EdgeInsetsDirectional.fromSTEB(40, 10, 10, 10),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.end,
-                mainAxisSize: MainAxisSize.max,
-                mainAxisAlignment: MainAxisAlignment.end,
-                children: [
-                  Visibility(
-                    visible: _tabSelectedIndex == 2 && editMode,
-                    child: FloatingActionButton(
-                      backgroundColor: Colors.green[700],
-                      foregroundColor: Colors.white,
-                      onPressed: () async {
-                        Helpers.showToast(S.current.msg_map_add_position);
-                        GeoPoint geoPoint =
-                            await osmKey.currentState.selectPosition();
-                        if (geoPoint != null) {
-                          osmKey.currentState.changeLocation(geoPoint);
-                          setState(() {
-                            _latitude = geoPoint.latitude;
-                            _longitude = geoPoint.longitude;
-                          });
-                        }
-                      },
-                      child: Icon(
-                        Icons.add_location_alt,
-                        size: 28,
+      return WillPopScope(
+        onWillPop: _onWillPop,
+        child: DefaultTabController(
+          length: 4,
+          child: Scaffold(
+              backgroundColor: Theme.of(context).backgroundColor,
+              floatingActionButton: Padding(
+                padding: const EdgeInsetsDirectional.fromSTEB(40, 10, 10, 10),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.end,
+                  mainAxisSize: MainAxisSize.max,
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: [
+                    Visibility(
+                      visible: _tabSelectedIndex == 2 && editMode,
+                      child: FloatingActionButton(
+                        backgroundColor: Colors.green[700],
+                        foregroundColor: Colors.white,
+                        onPressed: () async {
+                          Helpers.showToast(S.current.msg_map_add_position);
+                          GeoPoint geoPoint =
+                              await osmKey.currentState.selectPosition();
+                          if (geoPoint != null) {
+                            osmKey.currentState.changeLocation(geoPoint);
+                            setState(() {
+                              _latitude = geoPoint.latitude;
+                              _longitude = geoPoint.longitude;
+                            });
+                          }
+                        },
+                        child: Icon(
+                          Icons.add_location_alt,
+                          size: 28,
+                        ),
                       ),
                     ),
-                  ),
-                  SizedBox(
-                    height: 15,
-                  ),
-                  (_tabSelectedIndex == 2 && !editMode)
-                      ? FloatingActionButton(
-                          foregroundColor: Colors.white,
-                          backgroundColor: Colors.blueAccent,
-                          onPressed: () async {
-                            Helpers.openMapsSheet(
-                                context, new Coords(_latitude, _longitude));
-                          },
-                          child: Icon(Icons.directions),
-                        )
-                      : (_tabSelectedIndex == 2 && editMode)
-                          ? FloatingActionButton(
-                              foregroundColor: Colors.white,
-                              backgroundColor: Colors.blueAccent,
-                              onPressed: () async {
-                                await osmKey.currentState.currentLocation();
-                              },
-                              child: Icon(Icons.my_location),
-                            )
-                          : SizedBox(),
-                ],
+                    SizedBox(
+                      height: 15,
+                    ),
+                    (_tabSelectedIndex == 2 && !editMode)
+                        ? FloatingActionButton(
+                            foregroundColor: Colors.white,
+                            backgroundColor: Colors.blueAccent,
+                            onPressed: () async {
+                              Helpers.openMapsSheet(
+                                  context, new Coords(_latitude, _longitude));
+                            },
+                            child: Icon(Icons.directions),
+                          )
+                        : (_tabSelectedIndex == 2 && editMode)
+                            ? FloatingActionButton(
+                                foregroundColor: Colors.white,
+                                backgroundColor: Colors.blueAccent,
+                                onPressed: () async {
+                                  await osmKey.currentState.currentLocation();
+                                },
+                                child: Icon(Icons.my_location),
+                              )
+                            : SizedBox(),
+                  ],
+                ),
               ),
-            ),
-            key: _scaffoldKey,
-            appBar: AddEditBar(
-              editMode: editMode,
-              modification: modification,
-              title: appBarTitle,
-              onCancelPressed: () => {
-                if (modification)
-                  {
-                    if (editMode)
-                      {
-                        Navigator.of(context).pushReplacementNamed(
-                            RoutesKeys.addTier,
-                            arguments: widget.arguments)
+              key: _scaffoldKey,
+              appBar: AddEditBar(
+                editMode: editMode,
+                modification: modification,
+                title: appBarTitle,
+                onCancelPressed: () => {
+                  if (modification)
+                    {
+                      if (editMode)
+                        {
+                          Navigator.of(context).pushReplacementNamed(
+                              RoutesKeys.addTier,
+                              arguments: widget.arguments)
+                        }
+                      else
+                        {Navigator.pop(context , widget.arguments)}
+                    }
+                  else
+                    {
+                      Navigator.pop(context),
+                    }
+                },
+                onEditPressed: () {
+                  setState(() {
+                    editMode = true;
+                  });
+                },
+                onSavePressed: () async {
+                  if (_formKey.currentState != null) {
+                    if (_formKey.currentState.validate()) {
+                      int id = await addItemToDb();
+                      if (id > -1) {
+                        setState(() {
+                          modification = true;
+                          editMode = false;
+                        });
                       }
-                    else
-                      {Navigator.pop(context)}
-                  }
-                else
-                  {
-                    Navigator.pop(context),
-                  }
-              },
-              onEditPressed: () {
-                setState(() {
-                  editMode = true;
-                });
-              },
-              onSavePressed: () async {
-                if (_formKey.currentState != null) {
-                  if (_formKey.currentState.validate()) {
-                    int id = await addItemToDb();
-                    if (id > -1) {
-                      setState(() {
-                        modification = true;
-                        editMode = false;
-                      });
+                    } else {
+                      Helpers.showFlushBar(
+                          context, "${S.current.msg_champs_obg}");
                     }
                   } else {
-                    Helpers.showFlushBar(
-                        context, "${S.current.msg_champs_obg}");
+                    setState(() {
+                      _tabSelectedIndex = 0;
+                      _tabController.index = _tabSelectedIndex;
+                    });
                   }
-                } else {
-                  setState(() {
-                    _tabSelectedIndex = 0;
-                    _tabController.index = _tabSelectedIndex;
-                  });
-                }
-              },
-            ),
-            bottomNavigationBar: BottomTabBar(
-              selectedIndex: _tabSelectedIndex,
-              controller: _tabController,
-              tabs: [
-                Tab(
-                    child: Column(
-                  children: [
-                    Icon(Icons.insert_drive_file),
-                    SizedBox(height: 1),
-                    Text(
-                      S.current.fiche,
-                      style: GoogleFonts.lato(),
-                    ),
-                  ],
-                )),
-                Tab(
-                    child: Column(
-                  children: [
-                    Icon(Icons.image),
-                    SizedBox(height: 1),
-                    Text(
-                      S.current.photo,
-                      style: GoogleFonts.lato(),
-                    ),
-                  ],
-                )),
-                Tab(
-                    child: Column(
-                  children: [
-                    Icon(Icons.map),
-                    SizedBox(height: 1),
-                    Text(
-                      S.current.map,
-                      style: GoogleFonts.lato(),
-                    ),
-                  ],
-                )),
-                Tab(
-                    child: Column(
-                  children: [
-                    Icon(MdiIcons.qrcode),
-                    SizedBox(height: 1),
-                    Text(
-                      S.current.qr_code,
-                      style: GoogleFonts.lato(),
-                    ),
-                  ],
-                )),
-              ],
-            ),
-            body: Builder(
-              builder: (context) => TabBarView(
+                },
+              ),
+              bottomNavigationBar: BottomTabBar(
+                selectedIndex: _tabSelectedIndex,
                 controller: _tabController,
-                physics: _tabSelectedIndex == 2
-                    ? NeverScrollableScrollPhysics()
-                    : ClampingScrollPhysics(),
-                children: [
-                  fichetab(),
-                  imageTab(),
-                  mapTab(),
-                  qrCodeTab(),
+                tabs: [
+                  Tab(
+                      child: Column(
+                    children: [
+                      Icon(Icons.insert_drive_file),
+                      SizedBox(height: 1),
+                      Text(
+                        S.current.fiche,
+                        style: GoogleFonts.lato(),
+                      ),
+                    ],
+                  )),
+                  Tab(
+                      child: Column(
+                    children: [
+                      Icon(Icons.image),
+                      SizedBox(height: 1),
+                      Text(
+                        S.current.photo,
+                        style: GoogleFonts.lato(),
+                      ),
+                    ],
+                  )),
+                  Tab(
+                      child: Column(
+                    children: [
+                      Icon(Icons.map),
+                      SizedBox(height: 1),
+                      Text(
+                        S.current.map,
+                        style: GoogleFonts.lato(),
+                      ),
+                    ],
+                  )),
+                  Tab(
+                      child: Column(
+                    children: [
+                      Icon(MdiIcons.qrcode),
+                      SizedBox(height: 1),
+                      Text(
+                        S.current.qr_code,
+                        style: GoogleFonts.lato(),
+                      ),
+                    ],
+                  )),
                 ],
               ),
-            )),
+              body: Builder(
+                builder: (context) => TabBarView(
+                  controller: _tabController,
+                  physics: _tabSelectedIndex == 2
+                      ? NeverScrollableScrollPhysics()
+                      : ClampingScrollPhysics(),
+                  children: [
+                    fichetab(),
+                    imageTab(),
+                    mapTab(),
+                    qrCodeTab(),
+                  ],
+                ),
+              )),
+        ),
       );
+    }
+  }
+
+  Future<bool> _onWillPop() async {
+    if (modification) {
+      if (editMode) {
+        Navigator.of(context).pushReplacementNamed(
+            RoutesKeys.addTier,
+            arguments: widget.arguments);
+        return Future.value(false);
+      } else {
+        Navigator.pop(context , widget.arguments);
+        return Future.value(false);
+      }
+
+    } else {
+      Navigator.pop(context);
+      return Future.value(false);
     }
   }
 

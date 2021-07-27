@@ -238,133 +238,90 @@ class _AddTresoriePageState extends State<AddTresoriePage>
     if (!finishedLoading) {
       return Scaffold(body: Helpers.buildLoading());
     } else {
-      return Scaffold(
-          key: _scaffoldKey,
-          backgroundColor: Theme.of(context).backgroundColor,
-          appBar: AddEditBar(
-            editMode: editMode,
-            modification: modification,
-            title: appBarTitle,
-            onCancelPressed: () => {
-              if (modification)
-                {
-                  if (editMode)
-                    {
-                      Navigator.of(context).pushReplacementNamed(
-                          RoutesKeys.addTresorie,
-                          arguments: widget.arguments)
-                    }
-                  else
-                    {Navigator.pop(context)}
+      return WillPopScope(
+        onWillPop: _onWillPop,
+        child: Scaffold(
+            key: _scaffoldKey,
+            backgroundColor: Theme.of(context).backgroundColor,
+            appBar: AddEditBar(
+              editMode: editMode,
+              modification: modification,
+              title: appBarTitle,
+              onCancelPressed: () => {
+                if (modification)
+                  {
+                    if (editMode)
+                      {
+                        Navigator.of(context).pushReplacementNamed(
+                            RoutesKeys.addTresorie,
+                            arguments: widget.arguments)
+                      }
+                    else
+                      {Navigator.pop(context, widget.arguments)}
+                  }
+                else
+                  {
+                    Navigator.pop(context),
+                  }
+              },
+              onEditPressed: () {
+                setState(() {
+                  editMode = true;
+                });
+              },
+              onSavePressed: () async {
+                if (_formKey.currentState.validate() &&
+                    _formKey1.currentState.validate()) {
+                  int id = await addItemToDb();
+                  if (id > -1) {
+                    setState(() {
+                      modification = true;
+                      editMode = false;
+                    });
+                  }
+                } else {
+                  Helpers.showFlushBar(context, "${S.current.msg_champs_obg}");
                 }
-              else
-                {
-                  Navigator.pop(context),
-                }
-            },
-            onEditPressed: () {
-              setState(() {
-                editMode = true;
-              });
-            },
-            onSavePressed: () async {
-              if (_formKey.currentState.validate() &&
-                  _formKey1.currentState.validate()) {
-                int id = await addItemToDb();
-                if (id > -1) {
-                  setState(() {
-                    modification = true;
-                    editMode = false;
-                  });
-                }
-              } else {
-                Helpers.showFlushBar(context, "${S.current.msg_champs_obg}");
-              }
-            },
-          ),
-          // extendBody: true,
-          bottomNavigationBar: ((_selectedCategorie.id == 2 ||
-                      _selectedCategorie.id == 3 ||
-                      _selectedCategorie.id == 6 ||
-                      _selectedCategorie.id == 7) &&
-                  !modification)
-              ? BottomExpandableAppBar(
-                  controller: bottomBarControler,
-                  horizontalMargin: 10,
-                  shape: AutomaticNotchedShape(RoundedRectangleBorder(),
-                      StadiumBorder(side: BorderSide())),
-                  expandedBackColor: Colors.blue,
-                  expandedBody: Container(),
-                  appBarHeight: 60,
-                  bottomAppBarBody: Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Row(
-                      mainAxisSize: MainAxisSize.max,
-                      children: <Widget>[
-                        Expanded(
-                          flex: 4,
-                          child: (_selectedClient != null)
-                              ? Container(
-                                  child: Column(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    children: [
-                                      Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.spaceAround,
-                                        children: [
-                                          Icon(
-                                            Icons.person_sharp,
-                                            color: (editMode)
-                                                ? Colors.blue
-                                                : Theme.of(context)
-                                                    .primaryColorDark,
-                                            size: 18,
-                                          ),
-                                          Text(
-                                            "($_devise)",
-                                            style: GoogleFonts.lato(
-                                                textStyle: TextStyle(
-                                                    fontSize: 12,
-                                                    fontWeight:
-                                                        FontWeight.bold)),
-                                          ),
-                                        ],
-                                      ),
-                                      SizedBox(
-                                        height: 2,
-                                      ),
-                                      Text(
-                                        '${Helpers.numberFormat(_selectedClient.credit).toString()}',
-                                        textAlign: TextAlign.center,
-                                        style: GoogleFonts.lato(
-                                            textStyle: TextStyle(
-                                                fontWeight: FontWeight.bold,
-                                                fontSize: 14)),
-                                      ),
-                                    ],
-                                  ),
-                                )
-                              : SizedBox(),
-                        ),
-                        Spacer(
-                          flex: 1,
-                        ),
-                        Expanded(
-                          flex: 4,
-                          child: Container(
-                              child: (_selectedPieces.isNotEmpty)
-                                  ? Column(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.center,
+              },
+            ),
+            // extendBody: true,
+            bottomNavigationBar: ((_selectedCategorie.id == 2 ||
+                        _selectedCategorie.id == 3 ||
+                        _selectedCategorie.id == 6 ||
+                        _selectedCategorie.id == 7) &&
+                    !modification)
+                ? BottomExpandableAppBar(
+                    controller: bottomBarControler,
+                    horizontalMargin: 10,
+                    shape: AutomaticNotchedShape(RoundedRectangleBorder(),
+                        StadiumBorder(side: BorderSide())),
+                    expandedBackColor: Colors.blue,
+                    expandedBody: Container(),
+                    appBarHeight: 60,
+                    bottomAppBarBody: Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Row(
+                        mainAxisSize: MainAxisSize.max,
+                        children: <Widget>[
+                          Expanded(
+                            flex: 4,
+                            child: (_selectedClient != null)
+                                ? Container(
+                                    child: Column(
+                                      mainAxisAlignment: MainAxisAlignment.center,
                                       children: [
                                         Row(
                                           mainAxisAlignment:
                                               MainAxisAlignment.spaceAround,
                                           children: [
-                                            Icon(Icons.attach_money,
-                                                size: 20,
-                                                color: Theme.of(context)
-                                                    .primaryColorDark),
+                                            Icon(
+                                              Icons.person_sharp,
+                                              color: (editMode)
+                                                  ? Colors.blue
+                                                  : Theme.of(context)
+                                                      .primaryColorDark,
+                                              size: 18,
+                                            ),
                                             Text(
                                               "($_devise)",
                                               style: GoogleFonts.lato(
@@ -375,52 +332,116 @@ class _AddTresoriePageState extends State<AddTresoriePage>
                                             ),
                                           ],
                                         ),
+                                        SizedBox(
+                                          height: 2,
+                                        ),
                                         Text(
-                                          "${Helpers.numberFormat(_restepiece).toString()}",
+                                          '${Helpers.numberFormat(_selectedClient.credit).toString()}',
                                           textAlign: TextAlign.center,
                                           style: GoogleFonts.lato(
                                               textStyle: TextStyle(
-                                                  fontWeight: FontWeight.bold)),
+                                                  fontWeight: FontWeight.bold,
+                                                  fontSize: 14)),
                                         ),
                                       ],
-                                    )
-                                  : null),
-                        ),
-                      ],
+                                    ),
+                                  )
+                                : SizedBox(),
+                          ),
+                          Spacer(
+                            flex: 1,
+                          ),
+                          Expanded(
+                            flex: 4,
+                            child: Container(
+                                child: (_selectedPieces.isNotEmpty)
+                                    ? Column(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.center,
+                                        children: [
+                                          Row(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.spaceAround,
+                                            children: [
+                                              Icon(Icons.attach_money,
+                                                  size: 20,
+                                                  color: Theme.of(context)
+                                                      .primaryColorDark),
+                                              Text(
+                                                "($_devise)",
+                                                style: GoogleFonts.lato(
+                                                    textStyle: TextStyle(
+                                                        fontSize: 12,
+                                                        fontWeight:
+                                                            FontWeight.bold)),
+                                              ),
+                                            ],
+                                          ),
+                                          Text(
+                                            "${Helpers.numberFormat(_restepiece).toString()}",
+                                            textAlign: TextAlign.center,
+                                            style: GoogleFonts.lato(
+                                                textStyle: TextStyle(
+                                                    fontWeight: FontWeight.bold)),
+                                          ),
+                                        ],
+                                      )
+                                    : null),
+                          ),
+                        ],
+                      ),
                     ),
-                  ),
-                )
-              : null,
-          floatingActionButtonLocation:
-              FloatingActionButtonLocation.centerDocked,
-          floatingActionButton: ((_selectedCategorie.id == 2 ||
-                      _selectedCategorie.id == 3  ||
-                      _selectedCategorie.id == 6 || _selectedCategorie.id == 7) &&
-                  !modification)
-              ? FloatingActionButton(
-                  child: Icon(Icons.add),
-                  elevation: 2,
-                  backgroundColor: Colors.blue,
-                  foregroundColor: Colors.white,
-                  onPressed: () async {
-                    if (editMode && !modification) {
-                      if (_selectedClient != null) {
-                        await showDialog(
-                            context: context,
-                            builder: (BuildContext context) {
-                              return choosePieceDialog();
-                            });
-                      } else {
-                        var message = S.current.msg_select_tier;
-                        Helpers.showFlushBar(context, message);
+                  )
+                : null,
+            floatingActionButtonLocation:
+                FloatingActionButtonLocation.centerDocked,
+            floatingActionButton: ((_selectedCategorie.id == 2 ||
+                        _selectedCategorie.id == 3  ||
+                        _selectedCategorie.id == 6 || _selectedCategorie.id == 7) &&
+                    !modification)
+                ? FloatingActionButton(
+                    child: Icon(Icons.add),
+                    elevation: 2,
+                    backgroundColor: Colors.blue,
+                    foregroundColor: Colors.white,
+                    onPressed: () async {
+                      if (editMode && !modification) {
+                        if (_selectedClient != null) {
+                          await showDialog(
+                              context: context,
+                              builder: (BuildContext context) {
+                                return choosePieceDialog();
+                              });
+                        } else {
+                          var message = S.current.msg_select_tier;
+                          Helpers.showFlushBar(context, message);
+                        }
                       }
-                    }
-                  },
-                )
-              : null,
-          body: Builder(
-            builder: (context) => fichetab(),
-          ));
+                    },
+                  )
+                : null,
+            body: Builder(
+              builder: (context) => fichetab(),
+            )),
+      );
+    }
+  }
+
+
+  Future<bool> _onWillPop() async {
+    if (modification) {
+      if (editMode) {
+        Navigator.of(context).pushReplacementNamed(
+            RoutesKeys.addTresorie,
+            arguments: widget.arguments) ;
+        return Future.value(false);
+      } else {
+        Navigator.pop(context, widget.arguments) ;
+        return Future.value(false);
+      }
+    } else {
+      Navigator.pop(context);
+      return Future.value(false);
     }
   }
 

@@ -1,6 +1,6 @@
 import 'dart:async';
 import 'dart:math';
-
+import 'dart:io' show Platform;
 import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:barcode_scan/barcode_scan.dart';
 import 'package:circular_menu/circular_menu.dart';
@@ -96,7 +96,10 @@ class _ArticlesFragmentState extends State<ArticlesFragment> {
     fillFilter(_emptyFilterMap);
     _dataSource = SliverListDataSource(ItemsListTypes.articlesList, _filterMap);
 
-    subscription = _stream.receiveBroadcastStream().listen(_pdaScanner);
+    if(Platform.isAndroid ){
+      subscription = _stream.receiveBroadcastStream().listen(_pdaScanner);
+    }
+
     if(widget.articleSelected != null){
       articleAlreadySelected = List.from(widget.articleSelected) ;
     }else{
@@ -113,7 +116,9 @@ class _ArticlesFragmentState extends State<ArticlesFragment> {
 
   @override
   void dispose() {
-    subscription.cancel();
+    if(Platform.isAndroid && subscription != null){
+      subscription.cancel();
+    }
     super.dispose();
   }
 

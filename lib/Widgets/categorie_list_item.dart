@@ -14,9 +14,8 @@ import 'package:google_fonts/google_fonts.dart';
 
 class CategoryListItem extends StatefulWidget {
   final dynamic item;
-  final dataSource;
 
-  CategoryListItem({Key key, this.item, this.dataSource}) : super(key: key);
+  CategoryListItem({Key key, this.item,}) : super(key: key);
 
   @override
   _CategoryListItemState createState() => _CategoryListItemState();
@@ -413,7 +412,9 @@ class _CategoryListItemState extends State<CategoryListItem> {
 
     var message = "";
     if (res > 0) {
-      widget.dataSource.refresh();
+      setState(() {
+        widget.item;
+      });
       message = S.current.msg_update_item;
     } else {
       message = S.current.msg_update_err;

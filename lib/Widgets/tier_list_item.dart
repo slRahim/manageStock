@@ -21,13 +21,12 @@ import 'CustomWidgets/list_tile_card.dart';
 // element à afficher lors de listing des clients ou des fournisseurs
 class TierListItem extends StatefulWidget {
   TierListItem(
-      {@required this.tier, Key key, this.onItemSelected, this.dataSource})
+      {@required this.tier, Key key, this.onItemSelected,})
       : assert(tier != null),
         super(key: key);
 
-  final Tiers tier;
+  Tiers tier;
   final Function(Object) onItemSelected;
-  final dataSource;
 
   @override
   _TierListItemState createState() => _TierListItemState();
@@ -113,7 +112,13 @@ class _TierListItemState extends State<TierListItem> {
                   {
                     Navigator.of(context)
                         .pushNamed(RoutesKeys.addTier, arguments: widget.tier)
-                        .then((value) => widget.dataSource.refresh())
+                        .then((value) {
+                          if(value is Tiers){
+                            setState(() {
+                              widget.tier = value ;
+                            });
+                          }
+                    })
                   }
                 else
                   {widget.onItemSelected(widget.tier)}

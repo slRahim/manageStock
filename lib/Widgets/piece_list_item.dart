@@ -24,14 +24,12 @@ class PieceListItem extends StatefulWidget {
       {@required this.piece,
       Key key,
       this.onItemSelected,
-      this.dataSource,
       this.fromTresory})
       : assert(piece != null),
         super(key: key);
 
-  final Piece piece;
+  Piece piece;
   final Function(Object) onItemSelected;
-  final dataSource;
   final bool fromTresory;
 
   @override
@@ -107,7 +105,13 @@ class _PieceListItemState extends State<PieceListItem> {
                       Navigator.of(context)
                           .pushNamed(RoutesKeys.addPiece,
                               arguments: widget.piece)
-                          .then((value) => widget.dataSource.refresh())
+                          .then((value) {
+                            if(value is Piece){
+                              setState(() {
+                                widget.piece = value ;
+                              });
+                            }
+                      })
                     }
                   else
                     {widget.onItemSelected(widget.piece)}

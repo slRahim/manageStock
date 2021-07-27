@@ -335,36 +335,37 @@ class _AddPiecePageState extends State<AddPiecePage>
               onCancelPressed: ()  {
                 Function eqal =  ListEquality().equals;
                 if (modification) {
-                    if (editMode)
-                      {
-                        if(eqal(_originalItems , _selectedItems)){
-                          Navigator.of(context).pushReplacementNamed(
-                              RoutesKeys.addPiece,
-                              arguments: widget.arguments);
-                        }else{
-                          AwesomeDialog(
-                              context: context,
-                              title: "",
-                              desc: "${S.current.msg_retour_no_save} ?",
-                              dialogType: DialogType.QUESTION,
-                              animType: AnimType.BOTTOMSLIDE,
-                              btnCancelText: S.current.non,
-                              btnCancelOnPress: () {},
-                              btnOkText: S.current.oui,
-                              btnOkOnPress: () async {
-                                Navigator.of(context).pushReplacementNamed(
-                                    RoutesKeys.addPiece,
-                                    arguments: widget.arguments);
-                              })
-                            ..show();
-                        }
+                  if (editMode) {
+                    if(eqal(_originalItems , _selectedItems)){
+                      print(widget.arguments.piece);
+                      Navigator.of(context).pushReplacementNamed(
+                          RoutesKeys.addPiece,
+                          arguments: widget.arguments);
 
-                      }
-                    else
-                      {Navigator.pop(context);}
+                    }else{
+                      AwesomeDialog(
+                          context: context,
+                          title: "",
+                          desc: "${S.current.msg_retour_no_save} ?",
+                          dialogType: DialogType.QUESTION,
+                          animType: AnimType.BOTTOMSLIDE,
+                          btnCancelText: S.current.non,
+                          btnCancelOnPress: () {},
+                          btnOkText: S.current.oui,
+                          btnOkOnPress: () async {
+                            Navigator.of(context).pushReplacementNamed(
+                                RoutesKeys.addPiece,
+                                arguments: widget.arguments);
+
+                          })
+                        ..show();
+                    }
+
+                  } else {
+                      Navigator.pop(context , widget.arguments);
                   }
-                else
-                  {
+
+                } else {
                     if (_selectedItems.isNotEmpty)
                       {
                         AwesomeDialog(
@@ -889,7 +890,6 @@ class _AddPiecePageState extends State<AddPiecePage>
     Function eqal =  ListEquality().equals;
     if (modification) {
       if (editMode) {
-
         if(eqal(_originalItems , _selectedItems)){
           Navigator.of(context).pushReplacementNamed(
               RoutesKeys.addPiece,
@@ -914,9 +914,8 @@ class _AddPiecePageState extends State<AddPiecePage>
           return Future.value(true);
         }
 
-      }
-      else {
-        Navigator.pop(context);
+      } else {
+        Navigator.pop(context , widget.arguments);
         return Future.value(false);
       }
 

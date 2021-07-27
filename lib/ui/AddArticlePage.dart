@@ -227,104 +227,124 @@ class _AddArticlePageState extends State<AddArticlePage>
     if (!finishedLoading) {
       return Scaffold(body: Helpers.buildLoading());
     } else {
-      return DefaultTabController(
-          length: 3,
-          child: Scaffold(
-              key: _scaffoldKey,
-              backgroundColor: Theme.of(context).backgroundColor,
-              appBar: AddEditBar(
-                editMode: editMode,
-                modification: modification,
-                title: appBarTitle,
-                onCancelPressed: () => {
-                  if (modification){
-                      if (editMode){
-                          Navigator.of(context).pushReplacementNamed(
-                              RoutesKeys.addArticle,
-                              arguments: widget.arguments)
+      return WillPopScope(
+        onWillPop: _onWillPop,
+        child: DefaultTabController(
+            length: 3,
+            child: Scaffold(
+                key: _scaffoldKey,
+                backgroundColor: Theme.of(context).backgroundColor,
+                appBar: AddEditBar(
+                  editMode: editMode,
+                  modification: modification,
+                  title: appBarTitle,
+                  onCancelPressed: () => {
+                    if (modification){
+                        if (editMode){
+                            Navigator.of(context).pushReplacementNamed(
+                                RoutesKeys.addArticle,
+                                arguments: widget.arguments)
+                        } else {
+                            Navigator.pop(context , widget.arguments),
+                        }
+                    } else {
+                        Navigator.pop(context),
+                    }
+                  },
+                  onEditPressed: () {
+                    setState(() {
+                      editMode = true;
+                    });
+                  },
+                  onSavePressed: () async {
+                    if (_formKey.currentState != null) {
+                      if (_formKey.currentState.validate()) {
+                        int id = await addArticleToDb();
+                        if (id > -1) {
+                          setState(() {
+                            modification = true;
+                            editMode = false;
+                          });
+                        }
                       } else {
-                          Navigator.pop(context),
-                      }
-                  } else {
-                      Navigator.pop(context),
-                  }
-                },
-                onEditPressed: () {
-                  setState(() {
-                    editMode = true;
-                  });
-                },
-                onSavePressed: () async {
-                  if (_formKey.currentState != null) {
-                    if (_formKey.currentState.validate()) {
-                      int id = await addArticleToDb();
-                      if (id > -1) {
-                        setState(() {
-                          modification = true;
-                          editMode = false;
-                        });
+                        Helpers.showFlushBar(
+                            context, "${S.current.msg_champs_obg}");
                       }
                     } else {
-                      Helpers.showFlushBar(
-                          context, "${S.current.msg_champs_obg}");
+                      setState(() {
+                        _tabSelectedIndex = 0;
+                        _tabController.index = _tabSelectedIndex;
+                      });
                     }
-                  } else {
-                    setState(() {
-                      _tabSelectedIndex = 0;
-                      _tabController.index = _tabSelectedIndex;
-                    });
-                  }
-                },
-              ),
-              bottomNavigationBar: BottomTabBar(
-                selectedIndex: _tabSelectedIndex,
-                controller: _tabController,
-                tabs: [
-                  Tab(
-                      child: Column(
-                    children: [
-                      Icon(Icons.insert_drive_file),
-                      SizedBox(height: 1),
-                      Text(
-                        "${S.current.fiche_art}",
-                        style: GoogleFonts.lato(),
-                      ),
-                    ],
-                  )),
-                  Tab(
-                      child: Column(
-                    children: [
-                      Icon(Icons.image),
-                      SizedBox(height: 1),
-                      Text(
-                        S.current.photo,
-                        style: GoogleFonts.lato(),
-                      ),
-                    ],
-                  )),
-                  Tab(
-                      child: Column(
-                    children: [
-                      Icon(Icons.description),
-                      SizedBox(height: 1),
-                      Text(
-                        S.current.description,
-                        style: GoogleFonts.lato(),
-                      ),
-                    ],
-                  )),
-                ],
-              ),
-              body: Builder(
-                builder: (context) => TabBarView(
+                  },
+                ),
+                bottomNavigationBar: BottomTabBar(
+                  selectedIndex: _tabSelectedIndex,
                   controller: _tabController,
-                  children: [
-                    fichetab(),
-                    imageTab(),
-                    descriptionTab(),
+                  tabs: [
+                    Tab(
+                        child: Column(
+                      children: [
+                        Icon(Icons.insert_drive_file),
+                        SizedBox(height: 1),
+                        Text(
+                          "${S.current.fiche_art}",
+                          style: GoogleFonts.lato(),
+                        ),
+                      ],
+                    )),
+                    Tab(
+                        child: Column(
+                      children: [
+                        Icon(Icons.image),
+                        SizedBox(height: 1),
+                        Text(
+                          S.current.photo,
+                          style: GoogleFonts.lato(),
+                        ),
+                      ],
+                    )),
+                    Tab(
+                        child: Column(
+                      children: [
+                        Icon(Icons.description),
+                        SizedBox(height: 1),
+                        Text(
+                          S.current.description,
+                          style: GoogleFonts.lato(),
+                        ),
+                      ],
+                    )),
                   ],
                 ),
-              )));
+                body: Builder(
+                  builder: (context) => TabBarView(
+                    controller: _tabController,
+                    children: [
+                      fichetab(),
+                      imageTab(),
+                      descriptionTab(),
+                    ],
+                  ),
+                ))),
+      );
+    }
+  }
+
+  Future<bool> _onWillPop() async {
+    if (modification){
+      if (editMode){
+        Navigator.of(context).pushReplacementNamed(
+            RoutesKeys.addArticle,
+            arguments: widget.arguments);
+        return Future.value(false);
+      } else {
+        Navigator.pop(context , widget.arguments);
+        return Future.value(false);
+      }
+    } else {
+      Navigator.pop(context);
+      return Future.value(false);
     }
   }
 
@@ -1448,6 +1468,7 @@ class _AddArticlePageState extends State<AddArticlePage>
         id = await widget._queryCtr
             .updateItemInDb(DbTablesNames.articles, item);
         if (id > -1) {
+          widget.arguments = item;
           message = S.current.msg_update_item;
         } else {
           message = S.current.msg_update_err;
@@ -1510,7 +1531,6 @@ class _AddArticlePageState extends State<AddArticlePage>
         ? article.setPmp(double.parse(_pmpControl.text.trim()))
         : article.setPmp(0.0);
 
-    print(widget.arguments.pmpInit);
     if (!modification && editMode) {
       article.setPmpInit(article.pmp);
     }else if (modification){

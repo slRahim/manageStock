@@ -17,12 +17,11 @@ import 'CustomWidgets/list_tile_card.dart';
 
 // element à afficher lors de listing des tresorie
 class TresorieListItem extends StatefulWidget {
-  TresorieListItem({@required this.tresorie, Key key, this.dataSource})
+  TresorieListItem({@required this.tresorie, Key key,})
       : assert(tresorie != null),
         super(key: key);
 
-  final Tresorie tresorie;
-  final dataSource;
+  Tresorie tresorie;
 
   @override
   _TresorieListItemState createState() => _TresorieListItemState();
@@ -85,7 +84,13 @@ class _TresorieListItemState extends State<TresorieListItem> {
             onTap: () => {
               Navigator.of(context)
                   .pushNamed(RoutesKeys.addTresorie, arguments: widget.tresorie)
-                  .then((value) => widget.dataSource.refresh())
+                  .then((value) {
+                    if(value is Tresorie){
+                      setState(() {
+                        widget.tresorie = value ;
+                      });
+                    }
+              })
             },
             slidingCardController: controller,
             onCardTapped: () {

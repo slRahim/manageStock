@@ -24,24 +24,19 @@ class ArticleListItem extends StatefulWidget {
       Key key,
       this.onItemSelected,
       this.tarification,
-      this.fromListing = false,
       this.pieceOrigin,
-      this.dataSource ,
+
       this.alreadySelected})
       : assert(article != null),
         super(key: key);
 
-  final Article article;
+  Article article;
   final Function(Object) onItemSelected;
   final int tarification;
 
-  final bool fromListing;
-
   final String pieceOrigin;
 
-  final dataSource;
-
-  final bool alreadySelected ;
+  final bool alreadySelected;
 
   @override
   _ArticleListItemState createState() => _ArticleListItemState();
@@ -59,7 +54,7 @@ class _ArticleListItemState extends State<ArticleListItem> {
   bool _visible = true;
   QueryCtr _queryCtr = new QueryCtr();
   bool _confirmDell = false;
-  bool _tva = false ;
+  bool _tva = false;
 
   String feature9 = 'feature9';
   String feature10 = 'feature10';
@@ -76,7 +71,7 @@ class _ArticleListItemState extends State<ArticleListItem> {
     super.didChangeDependencies();
     PushNotificationsManagerState data = PushNotificationsManager.of(context);
     _devise = Helpers.getDeviseTranslate(data.myParams.devise);
-    _tva = data.myParams.tva ;
+    _tva = data.myParams.tva;
   }
 
   @override
@@ -146,7 +141,7 @@ class _ArticleListItemState extends State<ArticleListItem> {
                       if (widget.pieceOrigin == 'BL' ||
                           widget.pieceOrigin == 'FC') {
                         if ((widget.article.quantite -
-                            widget.article.cmdClient) <
+                                widget.article.cmdClient) <
                             widget.article.selectedQuantite) {
                           AwesomeDialog(
                               context: context,
@@ -174,44 +169,46 @@ class _ArticleListItemState extends State<ArticleListItem> {
                 }
               },
               onTap: () async {
-                if (widget.fromListing == false) {
-                  if (widget.onItemSelected == null) {
-                    Navigator.of(context)
-                        .pushNamed(RoutesKeys.addArticle,
-                            arguments: widget.article)
-                        .then((value) => widget.dataSource.refresh());
+                if (widget.onItemSelected == null) {
+                  Navigator.of(context)
+                      .pushNamed(RoutesKeys.addArticle,
+                          arguments: widget.article)
+                      .then((value) {
+                        if(value is Article){
+                          setState(() {
+                            widget.article = value ;
+                          });
+                        }
+                  });
+                } else {
+                  if (widget.article.selectedQuantite > 0) {
+                    widget.article.selectedQuantite = -1;
+                    widget.onItemSelected(widget.article);
                   } else {
-                    if (widget.article.selectedQuantite > 0) {
+                    selectThisItem();
+                    if (widget.article.stockable) {
+                      if (widget.pieceOrigin == 'BL' ||
+                          widget.pieceOrigin == 'FC') {
+                        if ((widget.article.quantite -
+                                widget.article.cmdClient) <
+                            widget.article.selectedQuantite) {
+                          // AwesomeDialog(
+                          //     context: context,
+                          //     dialogType: DialogType.WARNING,
+                          //     animType: AnimType.BOTTOMSLIDE,
+                          //     title: "",
+                          //     desc: S.current.msg_qte_zero,
+                          //     btnCancelText: S.current.confirme,
+                          //     btnCancelOnPress: () {},
+                          //     btnOkText: S.current.annuler,
+                          //     btnOkOnPress: () {
+                          //       setState(() {
+                          //         widget.article.selectedQuantite = 0;
+                          //       });
+                          //     })
+                          //   ..show();
 
-                      widget.article.selectedQuantite = -1;
-                      widget.onItemSelected(widget.article);
-
-                    } else {
-                      selectThisItem();
-                      if (widget.article.stockable) {
-                        if (widget.pieceOrigin == 'BL' ||
-                            widget.pieceOrigin == 'FC') {
-                          if ((widget.article.quantite -
-                                  widget.article.cmdClient) <
-                              widget.article.selectedQuantite) {
-                            // AwesomeDialog(
-                            //     context: context,
-                            //     dialogType: DialogType.WARNING,
-                            //     animType: AnimType.BOTTOMSLIDE,
-                            //     title: "",
-                            //     desc: S.current.msg_qte_zero,
-                            //     btnCancelText: S.current.confirme,
-                            //     btnCancelOnPress: () {},
-                            //     btnOkText: S.current.annuler,
-                            //     btnOkOnPress: () {
-                            //       setState(() {
-                            //         widget.article.selectedQuantite = 0;
-                            //       });
-                            //     })
-                            //   ..show();
-
-                            Helpers.showToast(S.current.msg_qte_zero);
-                          }
+                          Helpers.showToast(S.current.msg_qte_zero);
                         }
                       }
                     }
@@ -427,7 +424,9 @@ class _ArticleListItemState extends State<ArticleListItem> {
       switch (widget.tarification) {
         case 1:
           return Text(
-              (!_tva) ? "${Helpers.numberFormat(widget.article.prixVente1TTC).toString()} $_devise" : "${Helpers.numberFormat(widget.article.prixVente1TTC).toString()} $_devise",
+            (!_tva)
+                ? "${Helpers.numberFormat(widget.article.prixVente1TTC).toString()} $_devise"
+                : "${Helpers.numberFormat(widget.article.prixVente1TTC).toString()} $_devise",
             style: GoogleFonts.lato(
                 textStyle:
                     TextStyle(fontSize: 16.0, fontWeight: FontWeight.bold)),
@@ -436,7 +435,9 @@ class _ArticleListItemState extends State<ArticleListItem> {
 
         case 2:
           return Text(
-              (!_tva) ?"${Helpers.numberFormat(widget.article.prixVente2TTC).toString()} $_devise":"${Helpers.numberFormat(widget.article.prixVente2TTC).toString()} $_devise",
+            (!_tva)
+                ? "${Helpers.numberFormat(widget.article.prixVente2TTC).toString()} $_devise"
+                : "${Helpers.numberFormat(widget.article.prixVente2TTC).toString()} $_devise",
             style: GoogleFonts.lato(
                 textStyle:
                     TextStyle(fontSize: 16.0, fontWeight: FontWeight.bold)),
@@ -445,7 +446,9 @@ class _ArticleListItemState extends State<ArticleListItem> {
 
         case 3:
           return Text(
-              (!_tva)? "${Helpers.numberFormat(widget.article.prixVente3TTC).toString()} $_devise" : "${Helpers.numberFormat(widget.article.prixVente3TTC).toString()} $_devise",
+            (!_tva)
+                ? "${Helpers.numberFormat(widget.article.prixVente3TTC).toString()} $_devise"
+                : "${Helpers.numberFormat(widget.article.prixVente3TTC).toString()} $_devise",
             style: GoogleFonts.lato(
                 textStyle:
                     TextStyle(fontSize: 16.0, fontWeight: FontWeight.bold)),
@@ -462,7 +465,9 @@ class _ArticleListItemState extends State<ArticleListItem> {
             );
           }
           return Text(
-              (!_tva)? "${Helpers.numberFormat(widget.article.prixVente1TTC).toString()} $_devise" : "${Helpers.numberFormat(widget.article.prixVente1TTC).toString()} $_devise",
+            (!_tva)
+                ? "${Helpers.numberFormat(widget.article.prixVente1TTC).toString()} $_devise"
+                : "${Helpers.numberFormat(widget.article.prixVente1TTC).toString()} $_devise",
             style: GoogleFonts.lato(
                 textStyle:
                     TextStyle(fontSize: 16.0, fontWeight: FontWeight.bold)),
@@ -622,10 +627,14 @@ class _ArticleListItemState extends State<ArticleListItem> {
                               InkWell(
                                 onTap: () {
                                   setState(() {
-                                    _quntiteControler.text = widget.article.selectedQuantite.toString();
-                                    _priceControler.text = widget.article.selectedPriceTTC.toString() ;
-                                    _validateQteError = null ;
-                                    _validatePriceError = null ;
+                                    _quntiteControler.text = widget
+                                        .article.selectedQuantite
+                                        .toString();
+                                    _priceControler.text = widget
+                                        .article.selectedPriceTTC
+                                        .toString();
+                                    _validateQteError = null;
+                                    _validatePriceError = null;
                                   });
                                   Navigator.pop(context);
                                 },
@@ -649,45 +658,60 @@ class _ArticleListItemState extends State<ArticleListItem> {
                               SizedBox(width: 10),
                               InkWell(
                                 onTap: () {
-                                  if(_quntiteControler.text.trim() == ''){
-                                    _validateQteError = S.current.msg_champs_obg ;
-                                  }else{
-                                    _validateQteError = null ;
-                                    if(!_quntiteControler.text.trim().isNumericUsingRegularExpression){
-                                      _validateQteError = S.current.msg_val_valide ;
+                                  if (_quntiteControler.text.trim() == '') {
+                                    _validateQteError =
+                                        S.current.msg_champs_obg;
+                                  } else {
+                                    _validateQteError = null;
+                                    if (!_quntiteControler.text
+                                        .trim()
+                                        .isNumericUsingRegularExpression) {
+                                      _validateQteError =
+                                          S.current.msg_val_valide;
                                     }
-                                    if(double.parse(_quntiteControler.text.trim()) < 0){
-                                      _validateQteError = S.current.msg_qte_err ;
-                                    }
-                                  }
-
-                                  if(_priceControler.text.trim() == ''){
-                                    _validatePriceError = S.current.msg_champs_obg ;
-                                  }else{
-                                    _validatePriceError = null ;
-                                    if(!_priceControler.text.trim().isNumericUsingRegularExpression){
-                                      _validatePriceError = S.current.msg_val_valide ;
-                                    }
-                                    if(double.parse(_priceControler.text.trim()) < 0){
-                                      _validatePriceError = S.current.msg_prix_supp_zero ;
+                                    if (double.parse(
+                                            _quntiteControler.text.trim()) <
+                                        0) {
+                                      _validateQteError = S.current.msg_qte_err;
                                     }
                                   }
 
-                                  if (_validateQteError == null && _validatePriceError == null) {
-                                    double _qte = double.parse(_quntiteControler.text.trim());
-                                    double _price = double.parse(_priceControler.text.trim());
+                                  if (_priceControler.text.trim() == '') {
+                                    _validatePriceError =
+                                        S.current.msg_champs_obg;
+                                  } else {
+                                    _validatePriceError = null;
+                                    if (!_priceControler.text
+                                        .trim()
+                                        .isNumericUsingRegularExpression) {
+                                      _validatePriceError =
+                                          S.current.msg_val_valide;
+                                    }
+                                    if (double.parse(
+                                            _priceControler.text.trim()) <
+                                        0) {
+                                      _validatePriceError =
+                                          S.current.msg_prix_supp_zero;
+                                    }
+                                  }
+
+                                  if (_validateQteError == null &&
+                                      _validatePriceError == null) {
+                                    double _qte = double.parse(
+                                        _quntiteControler.text.trim());
+                                    double _price = double.parse(
+                                        _priceControler.text.trim());
 
                                     widget.article.selectedQuantite = _qte;
                                     widget.article.selectedPriceTTC = _price;
-                                    widget.article.selectedPrice = (_price*100)/(100+widget.article.tva);
+                                    widget.article.selectedPrice =
+                                        (_price * 100) /
+                                            (100 + widget.article.tva);
                                     widget.onItemSelected(null);
                                     Navigator.pop(context);
-
-                                  }else{
-                                    _setState((){});
-
+                                  } else {
+                                    _setState(() {});
                                   }
-
                                 },
                                 child: Container(
                                   padding: EdgeInsets.all(8.0),
@@ -795,6 +819,4 @@ class _ArticleListItemState extends State<ArticleListItem> {
       },
     )..show();
   }
-
-
 }

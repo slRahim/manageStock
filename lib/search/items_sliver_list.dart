@@ -96,7 +96,6 @@ class _ItemsSliverListState extends State<ItemsSliverList> {
         onItemSelected: widget.onItemSelected,
         tarification: widget.tarification,
         pieceOrigin: widget.pieceOrigin,
-        dataSource: widget.dataSource,
         alreadySelected:(widget.articleOriginalList.isNotEmpty)? widget.articleOriginalList.where((element) => element.id == item.id ).isNotEmpty : null,
       );
     } else if (item is Tiers) {
@@ -105,18 +104,15 @@ class _ItemsSliverListState extends State<ItemsSliverList> {
       return TierListItem(
         tier: item,
         onItemSelected: widget.onItemSelected,
-        dataSource: widget.dataSource,
       );
     } else if (item is Piece) {
       return PieceListItem(
         piece: item,
         onItemSelected: widget.onItemSelected,
-        dataSource: widget.dataSource,
       );
     } else if (item is Tresorie) {
       return TresorieListItem(
         tresorie: item,
-        dataSource: widget.dataSource,
       );
     } else if (item is ArticleFamille ||
         item is ArticleMarque ||
@@ -126,7 +122,6 @@ class _ItemsSliverListState extends State<ItemsSliverList> {
     item is CompteTresorie) {
       return CategoryListItem(
         item: item,
-        dataSource: widget.dataSource,
       );
     } else {
       return null;
