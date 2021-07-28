@@ -191,12 +191,17 @@ class QueryCtr {
         ? filters["End_date"].millisecondsSinceEpoch + 89940000
         : null;
 
-    String _pieceFilter = (_piece != null && _piece != "TR")
-        ? " AND Piece like '$_piece'"
-        :" AND (Piece like 'BL' OR Piece like 'FC' OR Piece like 'BR' OR Piece like 'FF')";
+    String _pieceFilter = '' ;
 
+    if(_piece != null && _piece != 'TR' && _piece != 'TRRemb'){
+      _pieceFilter =  " AND Piece like '$_piece'" ;
+    }
 
-    if(_piece == 'TRRemb'){
+    if(_piece != null && _piece == 'TR'){
+      _pieceFilter =  " AND (Piece like 'BL' OR Piece like 'FC' OR Piece like 'BR' OR Piece like 'FF')";
+    }
+
+    if(_piece != null && _piece == 'TRRemb'){
       _pieceFilter =  " AND (Piece like 'RC' OR Piece like 'AC' OR Piece like 'RF' OR Piece like 'AF')";
     }
 

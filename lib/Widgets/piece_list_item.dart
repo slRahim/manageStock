@@ -47,15 +47,6 @@ class _PieceListItemState extends State<PieceListItem> {
   @override
   void initState() {
     super.initState();
-    if(widget.piece.piece == PieceType.retourClient ||
-        widget.piece.piece == PieceType.avoirClient ||
-        widget.piece.piece == PieceType.retourFournisseur ||
-        widget.piece.piece == PieceType.avoirFournisseur){
-
-      widget.piece.regler =(widget.piece.regler != 0)? widget.piece.regler *-1 : widget.piece.regler;
-      widget.piece.reste = (widget.piece.reste != 0)? widget.piece.reste *-1 : widget.piece.reste;
-
-    }
     controller = SlidingCardController();
   }
 
@@ -69,6 +60,15 @@ class _PieceListItemState extends State<PieceListItem> {
   @override
   Widget build(BuildContext context) {
     SizeConfig().init(context);
+    if((widget.piece.piece == PieceType.retourClient ||
+        widget.piece.piece == PieceType.avoirClient ||
+        widget.piece.piece == PieceType.retourFournisseur ||
+        widget.piece.piece == PieceType.avoirFournisseur) && widget.fromTresory == null ){
+
+      widget.piece.regler =(widget.piece.regler != 0)? widget.piece.regler *-1 : widget.piece.regler;
+      widget.piece.reste = (widget.piece.reste != 0)? widget.piece.reste *-1 : widget.piece.reste;
+
+    }
     return Visibility(
       visible: _visible,
       child: DescribedFeatureOverlay(
@@ -107,6 +107,15 @@ class _PieceListItemState extends State<PieceListItem> {
                               arguments: widget.piece)
                           .then((value) {
                             if(value is Piece){
+                              if(value.piece == PieceType.retourClient ||
+                                  value.piece == PieceType.avoirClient ||
+                                  value.piece == PieceType.retourFournisseur ||
+                                  value.piece == PieceType.avoirFournisseur){
+
+                                value.regler =(value.regler != 0)? value.regler *-1 : value.regler;
+                                value.reste = (value.reste != 0)? value.reste *-1 : value.reste;
+
+                              }
                               setState(() {
                                 widget.piece = value ;
                               });

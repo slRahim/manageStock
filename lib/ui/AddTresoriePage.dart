@@ -916,6 +916,7 @@ class _AddTresoriePageState extends State<AddTresoriePage>
         setState(() {
           _selectedPieces.clear();
           _selectedPieces.add(selectedItem);
+          print(_selectedPieces.first);
           _restepiece = _selectedPieces.first.reste;
           _objetControl.text = '';
           _objetControl.text = _selectedCategorie.libelle +

@@ -2472,7 +2472,7 @@ class _AddPiecePageState extends State<AddPiecePage>
           _newPiece.piece == PieceType.avoirFournisseur) {
         _newPiece.net_a_payer = _newPiece.net_a_payer * -1;
         _newPiece.regler = 0.0;
-        _newPiece.reste = _newPiece.net_a_payer  * -1;
+        _newPiece.reste = _newPiece.reste  * -1;
       }
 
       id = await _queryCtr.addItemToTable(DbTablesNames.pieces, _newPiece);
