@@ -609,7 +609,7 @@ class _AddArticlePageState extends State<AddArticlePage>
                         if(!value.isNumericUsingRegularExpression){
                           return S.current.msg_val_valide ;
                         }
-                        if (value.isNotEmpty && double.parse(value) < 0) {
+                        if (!modification && value.isNotEmpty && double.parse(value) < 0) {
                           return S.current.msg_prix_supp_zero;
                         }
                         return null;
@@ -804,9 +804,9 @@ class _AddArticlePageState extends State<AddArticlePage>
                   if(!value.isNumericUsingRegularExpression){
                     return S.current.msg_val_valide ;
                   }
-                  if (value.isNotEmpty && double.parse(value) < 0) {
-                    return S.current.msg_prix_supp_zero;
-                  }
+                  // if (value.isNotEmpty && double.parse(value) < 0) {
+                  //   return S.current.msg_prix_supp_zero;
+                  // }
                   return null;
                 },
                 decoration: InputDecoration(
