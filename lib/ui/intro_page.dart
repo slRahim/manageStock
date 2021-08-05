@@ -933,11 +933,11 @@ class _IntroPageState extends State<IntroPage> {
 
   Future initData() async{
     Uint8List image = await Helpers.getDefaultImageUint8List(from: "tier");
-    Tiers tier0 = new Tiers(image, "Client 00", null, 1, 0, 1, "", "","", "", "",
+    Tiers tier0 = new Tiers(image, "Unknown customer", null, 1, 0, 1, "", "","", "", "",
         "", "", "", "", "", 0.0, 0, 0, false);
     tier0.clientFour = 0;
 
-    Tiers tier2 = new Tiers(image, "Prov 00", null, 1, 0, 1, "", "","", "", "", "",
+    Tiers tier2 = new Tiers(image, "Unknown provider", null, 1, 0, 1, "", "","", "", "", "",
         "", "", "", "", 0.0, 0, 0, false);
     tier2.clientFour = 2;
 
@@ -956,8 +956,8 @@ class _IntroPageState extends State<IntroPage> {
         charges.add(new ChargeTresorie(null,"Loyer"));
         charges.add(new ChargeTresorie(null,"Salaire"));
         comptes.add(new CompteTresorie(null, "00001", "Caisse", "0000", 0.0, 0.0));
-        tier0.raisonSociale = "Client 00";
-        tier2.raisonSociale = "Four 00";
+        tier0.raisonSociale = "Client inconnus";
+        tier2.raisonSociale = "Fournisseur inconnus";
         break;
 
       case ("عربي (AR)"):
@@ -965,8 +965,8 @@ class _IntroPageState extends State<IntroPage> {
         charges.add(new ChargeTresorie(null,"الإيجار"));
         charges.add(new ChargeTresorie(null,"المرتب"));
         comptes.add(new CompteTresorie(null, "00001", "الصندوق", "0000", 0.0, 0.0));
-        tier0.raisonSociale = "الزبون 00";
-        tier2.raisonSociale = "المورد 00";
+        tier0.raisonSociale = "زبون غير معرف";
+        tier2.raisonSociale = "مورد غير معرف";
         break;
     }
 

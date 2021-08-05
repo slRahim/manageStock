@@ -243,7 +243,7 @@ class _TierListItemState extends State<TierListItem> {
                 }),
           ] : null ,
           secondaryActions: <Widget>[
-            IconSlideAction(
+            (widget.tier.mobile != '' || widget.tier.telephone != '')?IconSlideAction(
               color: Colors.white10,
               iconWidget: Icon(
                 Icons.phone_enabled,
@@ -251,10 +251,15 @@ class _TierListItemState extends State<TierListItem> {
                 color: Colors.green,
               ),
               onTap: () async {
-                await _makePhoneCall("tel:${widget.tier.mobile}");
+                if(widget.tier.telephone != ''){
+                  await _makePhoneCall("tel:${widget.tier.telephone}");
+                }else{
+                  await _makePhoneCall("tel:${widget.tier.mobile}");
+                }
+
               },
               foregroundColor: Colors.green,
-            ),
+            ) : null,
           ],
         ),
       ),
