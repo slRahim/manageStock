@@ -22,7 +22,7 @@ import 'package:gestmob/models/ArticleTva.dart';
 import 'package:gestmob/models/MyParams.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
-import 'package:gestmob/Helpers/string_cap_extension.dart' ;
+import 'package:gestmob/Helpers/string_cap_extension.dart';
 
 class AddArticlePage extends StatefulWidget {
   final QueryCtr _queryCtr = QueryCtr();
@@ -182,8 +182,10 @@ class _AddArticlePageState extends State<AddArticlePage>
     _price1Control.text = article.prixVente1.toStringAsFixed(2);
     _price2Control.text = article.prixVente2.toStringAsFixed(2);
     _price3Control.text = article.prixVente3.toStringAsFixed(2);
-    _selectedMarque = _marqueItems.firstWhere((element) => element.id == article.idMarque);
-    _selectedFamille = _familleItems.firstWhere((element) => element.id == article.idFamille);
+    _selectedMarque =
+        _marqueItems.firstWhere((element) => element.id == article.idMarque);
+    _selectedFamille =
+        _familleItems.firstWhere((element) => element.id == article.idFamille);
     _selectedTva = new ArticleTva(article.tva);
   }
 
@@ -239,17 +241,54 @@ class _AddArticlePageState extends State<AddArticlePage>
                   modification: modification,
                   title: appBarTitle,
                   onCancelPressed: () => {
-                    if (modification){
-                        if (editMode){
-                            Navigator.of(context).pushReplacementNamed(
-                                RoutesKeys.addArticle,
-                                arguments: widget.arguments)
-                        } else {
-                            Navigator.pop(context , widget.arguments),
-                        }
-                    } else {
-                        Navigator.pop(context),
-                    }
+                    if (modification)
+                      {
+                        if (editMode)
+                          {
+                            AwesomeDialog(
+                                context: context,
+                                title: "",
+                                desc: "${S.current.msg_retour_no_save} ?",
+                                dialogType: DialogType.QUESTION,
+                                animType: AnimType.BOTTOMSLIDE,
+                                btnCancelText: S.current.non,
+                                btnCancelOnPress: () {},
+                                btnOkText: S.current.oui,
+                                btnOkOnPress: () async {
+                                  Navigator.of(context).pushReplacementNamed(
+                                      RoutesKeys.addArticle,
+                                      arguments: widget.arguments);
+                                })
+                              ..show()
+                          }
+                        else
+                          {
+                            Navigator.pop(context, widget.arguments),
+                          }
+                      }
+                    else
+                      {
+                        if (_designationControl.text != '')
+                          {
+                            AwesomeDialog(
+                                context: context,
+                                title: "",
+                                desc: "${S.current.msg_retour_no_save} ?",
+                                dialogType: DialogType.QUESTION,
+                                animType: AnimType.BOTTOMSLIDE,
+                                btnCancelText: S.current.non,
+                                btnCancelOnPress: () {},
+                                btnOkText: S.current.oui,
+                                btnOkOnPress: () async {
+                                  Navigator.pop(context);
+                                })
+                              ..show()
+                          }
+                        else
+                          {
+                            Navigator.pop(context),
+                          }
+                      }
                   },
                   onEditPressed: () {
                     setState(() {
@@ -332,19 +371,47 @@ class _AddArticlePageState extends State<AddArticlePage>
   }
 
   Future<bool> _onWillPop() async {
-    if (modification){
-      if (editMode){
-        Navigator.of(context).pushReplacementNamed(
-            RoutesKeys.addArticle,
-            arguments: widget.arguments);
+    if (modification) {
+      if (editMode) {
+        AwesomeDialog(
+            context: context,
+            title: "",
+            desc: "${S.current.msg_retour_no_save} ?",
+            dialogType: DialogType.QUESTION,
+            animType: AnimType.BOTTOMSLIDE,
+            btnCancelText: S.current.non,
+            btnCancelOnPress: () {},
+            btnOkText: S.current.oui,
+            btnOkOnPress: () async {
+              Navigator.of(context).pushReplacementNamed(RoutesKeys.addArticle,
+                  arguments: widget.arguments);
+            })
+          ..show();
         return Future.value(false);
       } else {
-        Navigator.pop(context , widget.arguments);
+        Navigator.pop(context, widget.arguments);
         return Future.value(false);
       }
     } else {
-      Navigator.pop(context);
-      return Future.value(false);
+      if (_designationControl.text != '') {
+        AwesomeDialog(
+            context: context,
+            title: "",
+            desc: "${S.current.msg_retour_no_save} ?",
+            dialogType: DialogType.QUESTION,
+            animType: AnimType.BOTTOMSLIDE,
+            btnCancelText: S.current.non,
+            btnCancelOnPress: () {},
+            btnOkText: S.current.oui,
+            btnOkOnPress: () async {
+              Navigator.pop(context);
+            })
+          ..show();
+        return Future.value(false);
+      } else {
+        Navigator.pop(context);
+        return Future.value(false);
+      }
     }
   }
 
@@ -486,8 +553,8 @@ class _AddArticlePageState extends State<AddArticlePage>
                     },
                     keyboardType: TextInputType.number,
                     validator: (value) {
-                      if(!value.isNumericUsingRegularExpression){
-                        return S.current.msg_val_valide ;
+                      if (!value.isNumericUsingRegularExpression) {
+                        return S.current.msg_val_valide;
                       }
                       if (value.isNotEmpty && double.parse(value) < 0) {
                         return S.current.msg_prix_supp_zero;
@@ -558,10 +625,10 @@ class _AddArticlePageState extends State<AddArticlePage>
                   baseOffset: 0, extentOffset: _pmpControl.value.text.length),
               keyboardType: TextInputType.number,
               validator: (value) {
-                if(!value.isNumericUsingRegularExpression){
-                  return S.current.msg_val_valide ;
+                if (!value.isNumericUsingRegularExpression) {
+                  return S.current.msg_val_valide;
                 }
-                if (value.isNotEmpty &&  double.parse(value) < 0) {
+                if (value.isNotEmpty && double.parse(value) < 0) {
                   return S.current.msg_prix_supp_zero;
                 }
                 return null;
@@ -606,10 +673,12 @@ class _AddArticlePageState extends State<AddArticlePage>
                                   _stockInitialControl.value.text.length),
                       keyboardType: TextInputType.number,
                       validator: (value) {
-                        if(!value.isNumericUsingRegularExpression){
-                          return S.current.msg_val_valide ;
+                        if (!value.isNumericUsingRegularExpression) {
+                          return S.current.msg_val_valide;
                         }
-                        if (!modification && value.isNotEmpty && double.parse(value) < 0) {
+                        if (!modification &&
+                            value.isNotEmpty &&
+                            double.parse(value) < 0) {
                           return S.current.msg_prix_supp_zero;
                         }
                         return null;
@@ -654,8 +723,8 @@ class _AddArticlePageState extends State<AddArticlePage>
                                   _stockMinimumControl.value.text.length),
                       keyboardType: TextInputType.number,
                       validator: (value) {
-                        if(!value.isNumericUsingRegularExpression){
-                          return S.current.msg_val_valide ;
+                        if (!value.isNumericUsingRegularExpression) {
+                          return S.current.msg_val_valide;
                         }
                         if (value.isNotEmpty && double.parse(value) < 0) {
                           return S.current.msg_prix_supp_zero;
@@ -705,8 +774,8 @@ class _AddArticlePageState extends State<AddArticlePage>
                           extentOffset: _qteColisCotrol.value.text.length),
                       keyboardType: TextInputType.number,
                       validator: (value) {
-                        if(!value.isNumericUsingRegularExpression){
-                          return S.current.msg_val_valide ;
+                        if (!value.isNumericUsingRegularExpression) {
+                          return S.current.msg_val_valide;
                         }
                         if (value.isNotEmpty && double.parse(value) < 0) {
                           return S.current.msg_prix_supp_zero;
@@ -751,11 +820,13 @@ class _AddArticlePageState extends State<AddArticlePage>
                       enabled: editMode,
                       readOnly: true,
                       controller: _qteCmdCotrol,
-                      onTap: () => _qteCmdCotrol.selection = TextSelection(baseOffset: 0, extentOffset: _qteCmdCotrol.value.text.length),
+                      onTap: () => _qteCmdCotrol.selection = TextSelection(
+                          baseOffset: 0,
+                          extentOffset: _qteCmdCotrol.value.text.length),
                       keyboardType: TextInputType.number,
                       validator: (value) {
-                        if(!value.isNumericUsingRegularExpression){
-                          return S.current.msg_val_valide ;
+                        if (!value.isNumericUsingRegularExpression) {
+                          return S.current.msg_val_valide;
                         }
                         if (value.isNotEmpty && double.parse(value) < 0) {
                           return S.current.msg_prix_supp_zero;
@@ -801,8 +872,8 @@ class _AddArticlePageState extends State<AddArticlePage>
                     extentOffset: _colisControl.value.text.length),
                 keyboardType: TextInputType.number,
                 validator: (value) {
-                  if(!value.isNumericUsingRegularExpression){
-                    return S.current.msg_val_valide ;
+                  if (!value.isNumericUsingRegularExpression) {
+                    return S.current.msg_val_valide;
                   }
                   // if (value.isNotEmpty && double.parse(value) < 0) {
                   //   return S.current.msg_prix_supp_zero;
@@ -842,8 +913,8 @@ class _AddArticlePageState extends State<AddArticlePage>
                   extentOffset: _price1Control.value.text.length),
               keyboardType: TextInputType.number,
               validator: (value) {
-                if(!value.isNumericUsingRegularExpression){
-                  return S.current.msg_val_valide ;
+                if (!value.isNumericUsingRegularExpression) {
+                  return S.current.msg_val_valide;
                 }
                 if (value.isNotEmpty && double.parse(value) < 0) {
                   return S.current.msg_prix_supp_zero;
@@ -884,8 +955,8 @@ class _AddArticlePageState extends State<AddArticlePage>
                     extentOffset: _price2Control.value.text.length),
                 keyboardType: TextInputType.number,
                 validator: (value) {
-                  if(!value.isNumericUsingRegularExpression){
-                    return S.current.msg_val_valide ;
+                  if (!value.isNumericUsingRegularExpression) {
+                    return S.current.msg_val_valide;
                   }
                   if (value.isNotEmpty && double.parse(value) < 0) {
                     return S.current.msg_prix_supp_zero;
@@ -927,8 +998,8 @@ class _AddArticlePageState extends State<AddArticlePage>
                     extentOffset: _price3Control.value.text.length),
                 keyboardType: TextInputType.number,
                 validator: (value) {
-                  if(!value.isNumericUsingRegularExpression){
-                    return S.current.msg_val_valide ;
+                  if (!value.isNumericUsingRegularExpression) {
+                    return S.current.msg_val_valide;
                   }
                   if (value.isNotEmpty && double.parse(value) < 0) {
                     return S.current.msg_prix_supp_zero;
@@ -1375,11 +1446,11 @@ class _AddArticlePageState extends State<AddArticlePage>
                       if (value.isEmpty) {
                         return S.current.msg_champ_oblg;
                       }
-                      if(!value.isNumericUsingRegularExpression){
-                        return S.current.msg_val_valide ;
+                      if (!value.isNumericUsingRegularExpression) {
+                        return S.current.msg_val_valide;
                       }
-                      if(value.isNotEmpty && double.parse(value) < 0){
-                        return S.current.msg_prix_supp_zero ;
+                      if (value.isNotEmpty && double.parse(value) < 0) {
+                        return S.current.msg_prix_supp_zero;
                       }
                       return null;
                     },
@@ -1464,9 +1535,9 @@ class _AddArticlePageState extends State<AddArticlePage>
     String message;
     try {
       if (widget.arguments.id != null) {
-        var item = await makeArticle() ;
-        id = await widget._queryCtr
-            .updateItemInDb(DbTablesNames.articles, item);
+        var item = await makeArticle();
+        id =
+            await widget._queryCtr.updateItemInDb(DbTablesNames.articles, item);
         if (id > -1) {
           widget.arguments = item;
           message = S.current.msg_update_item;
@@ -1486,7 +1557,7 @@ class _AddArticlePageState extends State<AddArticlePage>
           message = S.current.msg_ajout_err;
         }
       }
-      if(!modification && editMode){
+      if (!modification && editMode) {
         Navigator.pop(context);
       }
       Helpers.showFlushBar(context, message);
@@ -1509,12 +1580,12 @@ class _AddArticlePageState extends State<AddArticlePage>
         ? article.setprixAchat(double.parse(_prixAchatControl.text.trim()))
         : article.setprixAchat(0.0);
 
-    if(!modification && editMode){
+    if (!modification && editMode) {
       (_stockInitialControl.text.trim() != "")
           ? article.setQteInit(double.parse(_stockInitialControl.text.trim()))
           : article.setQteInit(0.0);
-    }else if (modification){
-      article.setQteInit(widget.arguments.qteInit) ;
+    } else if (modification) {
+      article.setQteInit(widget.arguments.qteInit);
     }
 
     (_stockInitialControl.text.trim() != "")
@@ -1533,7 +1604,7 @@ class _AddArticlePageState extends State<AddArticlePage>
 
     if (!modification && editMode) {
       article.setPmpInit(article.pmp);
-    }else if (modification){
+    } else if (modification) {
       article.setPmpInit(widget.arguments.pmpInit);
     }
 

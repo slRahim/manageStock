@@ -252,16 +252,47 @@ class _AddTresoriePageState extends State<AddTresoriePage>
                   {
                     if (editMode)
                       {
-                        Navigator.of(context).pushReplacementNamed(
-                            RoutesKeys.addTresorie,
-                            arguments: widget.arguments)
+                        AwesomeDialog(
+                            context: context,
+                            title: "",
+                            desc: "${S.current.msg_retour_no_save} ?",
+                            dialogType: DialogType.QUESTION,
+                            animType: AnimType.BOTTOMSLIDE,
+                            btnCancelText: S.current.non,
+                            btnCancelOnPress: () {},
+                            btnOkText: S.current.oui,
+                            btnOkOnPress: () async {
+                              Navigator.of(context).pushReplacementNamed(
+                                  RoutesKeys.addTresorie,
+                                  arguments: widget.arguments);
+                            })
+                          ..show()
                       }
                     else
                       {Navigator.pop(context, widget.arguments)}
                   }
                 else
                   {
-                    Navigator.pop(context),
+                    if (_montantControl.text != '')
+                      {
+                        AwesomeDialog(
+                            context: context,
+                            title: "",
+                            desc: "${S.current.msg_retour_no_save} ?",
+                            dialogType: DialogType.QUESTION,
+                            animType: AnimType.BOTTOMSLIDE,
+                            btnCancelText: S.current.non,
+                            btnCancelOnPress: () {},
+                            btnOkText: S.current.oui,
+                            btnOkOnPress: () async {
+                              Navigator.pop(context);
+                            })
+                          ..show()
+                      }
+                    else
+                      {
+                        Navigator.pop(context),
+                      }
                   }
               },
               onEditPressed: () {
@@ -431,17 +462,46 @@ class _AddTresoriePageState extends State<AddTresoriePage>
   Future<bool> _onWillPop() async {
     if (modification) {
       if (editMode) {
-        Navigator.of(context).pushReplacementNamed(
-            RoutesKeys.addTresorie,
-            arguments: widget.arguments) ;
+        AwesomeDialog(
+            context: context,
+            title: "",
+            desc: "${S.current.msg_retour_no_save} ?",
+            dialogType: DialogType.QUESTION,
+            animType: AnimType.BOTTOMSLIDE,
+            btnCancelText: S.current.non,
+            btnCancelOnPress: () {},
+            btnOkText: S.current.oui,
+            btnOkOnPress: () async {
+              Navigator.of(context).pushReplacementNamed(
+                  RoutesKeys.addTresorie,
+                  arguments: widget.arguments) ;
+            })
+          ..show();
         return Future.value(false);
       } else {
         Navigator.pop(context, widget.arguments) ;
         return Future.value(false);
       }
     } else {
-      Navigator.pop(context);
-      return Future.value(false);
+      if (_montantControl.text != '') {
+        AwesomeDialog(
+            context: context,
+            title: "",
+            desc: "${S.current.msg_retour_no_save} ?",
+            dialogType: DialogType.QUESTION,
+            animType: AnimType.BOTTOMSLIDE,
+            btnCancelText: S.current.non,
+            btnCancelOnPress: () {},
+            btnOkText: S.current.oui,
+            btnOkOnPress: () async {
+              Navigator.pop(context);
+            })
+          ..show();
+        return Future.value(false);
+      } else {
+        Navigator.pop(context);
+        return Future.value(false);
+      }
     }
   }
 

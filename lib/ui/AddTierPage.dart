@@ -28,7 +28,7 @@ import 'package:pdf/widgets.dart' as pw;
 import 'package:printing/printing.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 import 'package:share/share.dart';
-import 'package:gestmob/Helpers/string_cap_extension.dart' ;
+import 'package:gestmob/Helpers/string_cap_extension.dart';
 
 class AddTierPage extends StatefulWidget {
   final QueryCtr _queryCtr = QueryCtr();
@@ -106,7 +106,6 @@ class _AddTierPageState extends State<AddTierPage>
 
   MyParams _myParams;
 
-
   GlobalKey globalKey = new GlobalKey();
   final _formKey = GlobalKey<FormState>();
 
@@ -154,7 +153,8 @@ class _AddTierPageState extends State<AddTierPage>
     _familleDropdownItems = utils.buildDropFamilleTier(_familleItems);
     _statutDropdownItems = utils.buildDropStatutTier(Statics.statutItems);
     await buildTarification();
-    _tarificationDropdownItems = utils.buildDropTarificationTier(_tarificationItems);
+    _tarificationDropdownItems =
+        utils.buildDropTarificationTier(_tarificationItems);
 
     _selectedStatut = Statics.statutItems[0];
     _selectedTarification = _tarificationItems[0];
@@ -193,12 +193,13 @@ class _AddTierPageState extends State<AddTierPage>
     _rcControl.text = item.rc;
     _aiControl.text = item.ai;
     _nifControl.text = item.nif;
-    _nisControl.text = item.nis ;
+    _nisControl.text = item.nis;
     _solde_departControl.text = item.solde_depart.toStringAsFixed(2);
     _chiffre_affairesControl.text = item.chiffre_affaires.toStringAsFixed(2);
     _reglerControl.text = item.regler.toStringAsFixed(2);
     _creditControl.text = item.credit.toStringAsFixed(2);
-    _selectedFamille = _familleItems.firstWhere((element) => element.id == item.id_famille);
+    _selectedFamille =
+        _familleItems.firstWhere((element) => element.id == item.id_famille);
     _selectedStatut = Statics.statutItems[item.statut];
     _selectedTarification = item.tarification;
     _controlBloquer = item.bloquer;
@@ -332,16 +333,47 @@ class _AddTierPageState extends State<AddTierPage>
                     {
                       if (editMode)
                         {
-                          Navigator.of(context).pushReplacementNamed(
-                              RoutesKeys.addTier,
-                              arguments: widget.arguments)
+                          AwesomeDialog(
+                              context: context,
+                              title: "",
+                              desc: "${S.current.msg_retour_no_save} ?",
+                              dialogType: DialogType.QUESTION,
+                              animType: AnimType.BOTTOMSLIDE,
+                              btnCancelText: S.current.non,
+                              btnCancelOnPress: () {},
+                              btnOkText: S.current.oui,
+                              btnOkOnPress: () async {
+                                Navigator.of(context).pushReplacementNamed(
+                                    RoutesKeys.addTier,
+                                    arguments: widget.arguments);
+                              })
+                            ..show()
                         }
                       else
-                        {Navigator.pop(context , widget.arguments)}
+                        {Navigator.pop(context, widget.arguments)}
                     }
                   else
                     {
-                      Navigator.pop(context),
+                      if (_raisonSocialeControl.text != '')
+                        {
+                          AwesomeDialog(
+                              context: context,
+                              title: "",
+                              desc: "${S.current.msg_retour_no_save} ?",
+                              dialogType: DialogType.QUESTION,
+                              animType: AnimType.BOTTOMSLIDE,
+                              btnCancelText: S.current.non,
+                              btnCancelOnPress: () {},
+                              btnOkText: S.current.oui,
+                              btnOkOnPress: () async {
+                                Navigator.pop(context);
+                              })
+                            ..show()
+                        }
+                      else
+                        {
+                          Navigator.pop(context),
+                        }
                     }
                 },
                 onEditPressed: () {
@@ -443,18 +475,45 @@ class _AddTierPageState extends State<AddTierPage>
   Future<bool> _onWillPop() async {
     if (modification) {
       if (editMode) {
-        Navigator.of(context).pushReplacementNamed(
-            RoutesKeys.addTier,
-            arguments: widget.arguments);
+        AwesomeDialog(
+            context: context,
+            title: "",
+            desc: "${S.current.msg_retour_no_save} ?",
+            dialogType: DialogType.QUESTION,
+            animType: AnimType.BOTTOMSLIDE,
+            btnCancelText: S.current.non,
+            btnCancelOnPress: () {},
+            btnOkText: S.current.oui,
+            btnOkOnPress: () async {
+              Navigator.of(context).pushReplacementNamed(RoutesKeys.addTier,
+                  arguments: widget.arguments);
+            })
+          ..show();
         return Future.value(false);
       } else {
-        Navigator.pop(context , widget.arguments);
+        Navigator.pop(context, widget.arguments);
         return Future.value(false);
       }
-
     } else {
-      Navigator.pop(context);
-      return Future.value(false);
+      if (_raisonSocialeControl.text != '') {
+        AwesomeDialog(
+            context: context,
+            title: "",
+            desc: "${S.current.msg_retour_no_save} ?",
+            dialogType: DialogType.QUESTION,
+            animType: AnimType.BOTTOMSLIDE,
+            btnCancelText: S.current.non,
+            btnCancelOnPress: () {},
+            btnOkText: S.current.oui,
+            btnOkOnPress: () async {
+              Navigator.pop(context);
+            })
+          ..show();
+        return Future.value(false);
+      } else {
+        Navigator.pop(context);
+        return Future.value(false);
+      }
     }
   }
 
@@ -892,11 +951,11 @@ class _AddTierPageState extends State<AddTierPage>
                   extentOffset: _solde_departControl.value.text.length),
               keyboardType: TextInputType.number,
               validator: (value) {
-                if(!value.isNumericUsingRegularExpression){
-                  return S.current.msg_val_valide ;
+                if (!value.isNumericUsingRegularExpression) {
+                  return S.current.msg_val_valide;
                 }
-                if(value.isNotEmpty && double.parse(value) < 0){
-                  return S.current.msg_prix_supp_zero ;
+                if (value.isNotEmpty && double.parse(value) < 0) {
+                  return S.current.msg_prix_supp_zero;
                 }
                 return null;
               },
@@ -1506,7 +1565,7 @@ class _AddTierPageState extends State<AddTierPage>
           message = S.current.msg_ajout_err;
         }
       }
-      if(!modification && editMode){
+      if (!modification && editMode) {
         Navigator.pop(context);
       }
       Helpers.showFlushBar(context, message);
@@ -1523,7 +1582,7 @@ class _AddTierPageState extends State<AddTierPage>
 
     if (_clientFournBool) {
       item.clientFour = 1;
-    }  else {
+    } else {
       item.clientFour = _clientFourn;
     }
 

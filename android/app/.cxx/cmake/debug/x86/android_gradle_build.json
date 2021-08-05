@@ -4,7 +4,7 @@
 	"cFileExtensions" : [ "c" ],
 	"cleanCommands" : 
 	[
-		"C:\\Users\\wassim\\AppData\\Local\\Android\\sdk\\cmake\\3.6.4111459\\bin\\cmake.exe --build E:\\AndroidStudio\\FlutterProjects\\gestmob\\android\\app\\.cxx\\cmake\\debug\\x86 --target clean"
+		"E:\\AndroidStudio\\SDK\\cmake\\3.6.4111459\\bin\\cmake.exe --build E:\\AndroidStudio\\FlutterProjects\\gestmob\\android\\app\\.cxx\\cmake\\debug\\x86 --target clean"
 	],
 	"libraries" : 
 	{
@@ -12,27 +12,27 @@
 		{
 			"abi" : "x86",
 			"artifactName" : "serial_port",
-			"buildCommand" : "C:\\Users\\wassim\\AppData\\Local\\Android\\sdk\\cmake\\3.6.4111459\\bin\\cmake.exe --build E:\\AndroidStudio\\FlutterProjects\\gestmob\\android\\app\\.cxx\\cmake\\debug\\x86 --target serial_port",
+			"buildCommand" : "E:\\AndroidStudio\\SDK\\cmake\\3.6.4111459\\bin\\cmake.exe --build E:\\AndroidStudio\\FlutterProjects\\gestmob\\android\\app\\.cxx\\cmake\\debug\\x86 --target serial_port",
 			"buildType" : "debug",
 			"files" : 
 			[
 				
 				{
-					"flags" : "  --target=i686-none-linux-android23 --gcc-toolchain=C:/Users/wassim/AppData/Local/Android/Sdk/ndk/22.1.7171670/toolchains/llvm/prebuilt/windows-x86_64 --sysroot=C:/Users/wassim/AppData/Local/Android/Sdk/ndk/22.1.7171670/toolchains/llvm/prebuilt/windows-x86_64/sysroot -Dserial_port_EXPORTS -I..\\..\\..\\..\\third_party -I..\\..\\..\\..\\src\\main\\jni  -g -DANDROID -fdata-sections -ffunction-sections -funwind-tables -fstack-protector-strong -no-canonical-prefixes -mstackrealign -D_FORTIFY_SOURCE=2 -Wformat -Werror=format-security  -O0 -fno-limit-debug-info  -fPIC      -c ",
+					"flags" : "  --target=i686-none-linux-android23 --gcc-toolchain=E:/AndroidStudio/SDK/ndk/21.1.6352462/toolchains/llvm/prebuilt/windows-x86_64 --sysroot=E:/AndroidStudio/SDK/ndk/21.1.6352462/toolchains/llvm/prebuilt/windows-x86_64/sysroot -Dserial_port_EXPORTS -I..\\..\\..\\..\\third_party -I..\\..\\..\\..\\src\\main\\jni  -g -DANDROID -fdata-sections -ffunction-sections -funwind-tables -fstack-protector-strong -no-canonical-prefixes -mstackrealign -D_FORTIFY_SOURCE=2 -Wformat -Werror=format-security  -O0 -fno-limit-debug-info  -fPIC      -c ",
 					"src" : "E:/AndroidStudio/FlutterProjects/gestmob/android/app/src/main/jni/com_cirtait_mobile_gestmob_serialport_SerialPort.c",
 					"workingDirectory" : "E:/AndroidStudio/FlutterProjects/gestmob/android/app/.cxx/cmake/debug/x86"
 				}
 			],
 			"output" : "E:/AndroidStudio/FlutterProjects/gestmob/build/app/intermediates/cmake/debug/obj/x86/libserial_port.so",
-			"toolchain" : "1477728957"
+			"toolchain" : "254838885"
 		}
 	},
 	"toolchains" : 
 	{
-		"1477728957" : 
+		"254838885" : 
 		{
-			"cCompilerExecutable" : "C:/Users/wassim/AppData/Local/Android/Sdk/ndk/22.1.7171670/toolchains/llvm/prebuilt/windows-x86_64/bin/clang.exe",
-			"cppCompilerExecutable" : "C:/Users/wassim/AppData/Local/Android/Sdk/ndk/22.1.7171670/toolchains/llvm/prebuilt/windows-x86_64/bin/clang++.exe"
+			"cCompilerExecutable" : "E:/AndroidStudio/SDK/ndk/21.1.6352462/toolchains/llvm/prebuilt/windows-x86_64/bin/clang.exe",
+			"cppCompilerExecutable" : "E:/AndroidStudio/SDK/ndk/21.1.6352462/toolchains/llvm/prebuilt/windows-x86_64/bin/clang++.exe"
 		}
 	}
 }
