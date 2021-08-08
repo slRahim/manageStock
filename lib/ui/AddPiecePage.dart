@@ -1382,13 +1382,10 @@ class _AddPiecePageState extends State<AddPiecePage>
                       extentOffset: _verssementControler.value.text.length),
                 },
                 onChanged: (value) {
-                  if(value.isEmpty){
-
+                  if(value.trim() == ''){
+                    _resteControler.text = '0.0';
                   }else{
-                    if(double.parse(value) < 0){
 
-
-                    }else{
                       if (_piece.id != null) {
                         if (_verssementpiece == 0) {
                           double _reste = _net_a_payer -
@@ -1403,7 +1400,6 @@ class _AddPiecePageState extends State<AddPiecePage>
                         double _reste = _net_a_payer - double.parse(value.trim());
                         _resteControler.text = _reste.toStringAsFixed(2);
                       }
-                    }
                   }
 
 
