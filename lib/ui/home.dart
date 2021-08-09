@@ -44,7 +44,13 @@ class _homeState extends State<home> {
 
   onNotificationClick(String payload) {
     print('taped notification from home: $payload');
-    Navigator.pushNamed(context, RoutesKeys.allPieces);
+    if(payload == 'Credit Payload'){
+      Navigator.pushNamed(context, RoutesKeys.allPieces);
+
+    }else{
+      Helpers.backupData(context, _myParams);
+    }
+
   }
 
   @override

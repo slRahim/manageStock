@@ -434,6 +434,9 @@ class _PieceListItemState extends State<PieceListItem> {
             await _queryCtr.updateObjetTresorie(oldPiece : widget.piece , objet : '${S.current.reglement_piece}');
           }
 
+          await _queryCtr.removeItemWithForeignKey(DbTablesNames.reglementTresorie, widget.piece.id , 'Piece_id') ;
+          await _queryCtr.updateItemByForeignKey(DbTablesNames.tresorie, 'Piece_id', 'null', 'Piece_id', widget.piece.id);
+
           int res = await _queryCtr.removeItemFromTable(
               DbTablesNames.pieces, widget.piece);
           var message = "";

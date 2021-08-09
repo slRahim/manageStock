@@ -29,6 +29,7 @@ const String drawerItemPurchaseId = "drawerItemPurchaseId";
 const String drawerItemVenteId = "drawerItemVenteId";
 const String drawerItemAchatId = "drawerItemAchatId";
 const String drawerItemFamilleMarqueId = "drawerItemFamilleMarqueId";
+const String drawerItemBackupId = 'drawerItemBackupId';
 
 class HomeItem {
   String id;
@@ -157,6 +158,11 @@ HomeItem drawerItemAchat = new HomeItem(
 HomeItem drawerItemFamilleMarque = new HomeItem(
     id: drawerItemFamilleMarqueId,
     title: S.current.famille_marque,
+    img: "assets/setting.png",
+    active: true);
+HomeItem drawerItemBackup = new HomeItem(
+    id: drawerItemBackupId,
+    title: S.current.param_backup,
     img: "assets/setting.png",
     active: true);
 
@@ -348,6 +354,14 @@ Widget iconsSet(String itemId, double iconSize) {
     case drawerItemFamilleMarqueId:
       return Icon(
         Icons.category,
+        size: iconSize,
+        color: Colors.white,
+      );
+      break;
+
+    case drawerItemBackupId:
+      return Icon(
+        Icons.backup_outlined,
         size: iconSize,
         color: Colors.white,
       );

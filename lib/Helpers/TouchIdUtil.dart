@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:local_auth/auth_strings.dart';
 import 'package:local_auth/local_auth.dart';
+import 'package:gestmob/generated/l10n.dart';
 
 class TouchIdUtil {
   BuildContext context;
@@ -15,34 +16,34 @@ class TouchIdUtil {
       return false;
     }
 
-    List<BiometricType> availableBiometrics =
-    await _auth.getAvailableBiometrics();
-    return availableBiometrics.contains(BiometricType.fingerprint);
+    List<BiometricType> availableBiometrics = await _auth.getAvailableBiometrics();
+
+    return availableBiometrics.isNotEmpty ;
   }
 
   Future<bool> auth() async {
     try {
-      return await _auth.authenticateWithBiometrics(localizedReason:
-        "locaization.ScannezVotreEmpreinteDigitalePourVousAuthentifier",
+      var res =  await _auth.authenticateWithBiometrics(
+        localizedReason: "Scannez Votre Empreinte Digitale Pour Vous Authentifier",
         useErrorDialogs: true,
         stickyAuth: true,
         androidAuthStrings: AndroidAuthMessages(
-            cancelButton: "locaization.Annuler",
-            fingerprintRequiredTitle: "locaization.EmpreinteDigitaleRequise",
-            fingerprintHint: "locaization.TouchezLeCapteur",
-            signInTitle: "locaization.AuthentificationDEmpreinteDigitale",
-            fingerprintSuccess: "locaization.EmpreinteDigitaleReconnue",
-            fingerprintNotRecognized:
-            "locaization.EmpreinteDigitaleNonReconnueReessayer",
-            goToSettingsButton: "locaization.AllerAuxParametres",
-            goToSettingsDescription: "locaization.AllerAuxParametresDescription"),
+            cancelButton: S.current.annuler,
+            fingerprintRequiredTitle: "Empreinte Digitale Requise",
+            fingerprintHint: "Touchez Le Capteur",
+            signInTitle: "Authentification empreinte digitale",
+            fingerprintSuccess: "Empreinte Digitale Reconnue",
+            fingerprintNotRecognized: "Empreinte Digitale Non Reconnue Reessayer",
+            goToSettingsButton: "Aller Aux Parametres",
+            goToSettingsDescription: "Aller Aux Parametres Description"),
         iOSAuthStrings: IOSAuthMessages(
-            lockOut: "locaization.LAuthentificationBiometriqueEstDesactivee",
-            cancelButton: "locaization.Annuler",
-            goToSettingsButton: "locaization.AllerAuxParametres",
-            goToSettingsDescription:
-            "locaization.LAuthentificationDiometriqueNEstPasConfiguree"),
+            lockOut: "L Authentification Biometrique Est Desactivee",
+            cancelButton: S.current.annuler,
+            goToSettingsButton: "Aller Aux Parametres",
+            goToSettingsDescription: "L Authentification Biometrique NEst Pas Configuree"),
       );
+
+      return res ;
     } on Exception catch (e) {
       return false;
     }

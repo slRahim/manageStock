@@ -127,6 +127,9 @@ class Article {
     this._prixVente1 = obj["PrixVente1"];
     this._prixVente2 = obj["PrixVente2"];
     this._prixVente3 = obj["PrixVente3"];
+    this._prixVente1TTC = obj["PrixVente1TTC"];
+    this._prixVente2TTC = obj["PrixVente2TTC"];
+    this._prixVente3TTC = obj["PrixVente3TTC"];
     this.stockable = obj["Stockable"] == 1 ? true : false;
   }
 

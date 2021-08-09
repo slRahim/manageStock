@@ -23,6 +23,8 @@ import 'package:map_launcher/map_launcher.dart';
 import 'package:path_provider/path_provider.dart';
 
 import 'Statics.dart';
+import 'package:future_progress_dialog/future_progress_dialog.dart';
+import 'package:gestmob/Helpers/QueryCtr.dart';
 
 class Helpers {
   static Widget buildLoading() {
@@ -129,7 +131,7 @@ class Helpers {
 
   //********************************************************************fin/to save image into db/***************************************************************************************
 
-  static handleIdClick(context, id) {
+  static handleIdClick(context, id, {myparams}) {
     switch (id) {
       case drawerItemExitId:
         exit(0);
@@ -145,9 +147,44 @@ class Helpers {
         break;
       case drawerItemVenteId:
         break;
+      case drawerItemBackupId:
+        backupData(context, myparams);
+        break;
       default:
         BlocProvider.of<HomeCubit>(context).getHomeData(id);
         break;
+    }
+  }
+
+  static backupData(context, _myParams) async {
+    var _queryCtr = new QueryCtr();
+    if (_myParams.versionType != "demo" &&
+        DateTime.now().isBefore(Helpers.getDateExpiration(_myParams))) {
+      await showDialog(
+          context: context,
+          barrierDismissible: false,
+          builder: (context) => FutureProgressDialog(
+                _queryCtr.createBackup().then((value) {
+                  if (value["name"] != null) {
+                    Navigator.pop(context);
+                    Helpers.showToast("${S.current.msg_back_suce}");
+                  } else {
+                    Helpers.showToast("${S.current.msg_back_err}");
+                  }
+                }).catchError((e) => {
+                      Navigator.pop(context),
+                      Helpers.showToast("${S.current.msg_back_err}")
+                    }),
+                message: Text('${S.current.chargement}...'),
+                progress: CircularProgressIndicator(),
+                decoration: BoxDecoration(
+                  color: Theme.of(context).cardColor,
+                  shape: BoxShape.rectangle,
+                  borderRadius: BorderRadius.all(Radius.circular(10)),
+                ),
+              ));
+    } else {
+      Helpers.showFlushBar(context, S.current.msg_demo_option);
     }
   }
 
@@ -320,10 +357,14 @@ class Helpers {
   }
 
   static double calcTimber(ttc, myparams) {
-    double val = 0.0 ;
+    double val = 0.0;
     if (myparams.timbre) {
-      val =  (ttc >= 1000000) ? 2500 : (ttc >= 500)? ttc * 0.01 : 5 ;
-      val = val.roundToDouble() ;
+      val = (ttc >= 1000000)
+          ? 2500
+          : (ttc >= 500)
+              ? ttc * 0.01
+              : 5;
+      val = val.roundToDouble();
     }
     return val;
   }

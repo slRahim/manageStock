@@ -337,7 +337,6 @@ class _AddPiecePageState extends State<AddPiecePage>
                 if (modification) {
                   if (editMode) {
                     if(eqal(_originalItems , _selectedItems)){
-                      print(widget.arguments.piece);
                       Navigator.of(context).pushReplacementNamed(
                           RoutesKeys.addPiece,
                           arguments: widget.arguments);
@@ -1279,8 +1278,8 @@ class _AddPiecePageState extends State<AddPiecePage>
           onConfirmSelectedItem: (selectedItem) {
             setState(() {
               _selectedClient = selectedItem;
-              _piece.tier_id = _selectedClient.id;
-              _piece.raisonSociale = _selectedClient.raisonSociale;
+              // _piece.tier_id = _selectedClient.id;
+              // _piece.raisonSociale = _selectedClient.raisonSociale;
               _clientControl.text = _selectedClient.raisonSociale;
 
               if (selectedItem.tarification > _myParams.tarification) {
@@ -1383,7 +1382,7 @@ class _AddPiecePageState extends State<AddPiecePage>
                 },
                 onChanged: (value) {
                   if(value.trim() == ''){
-                    _resteControler.text = '0.0';
+                    _resteControler.text = (_net_a_payer - _piece.regler).toString();
                   }else{
 
                       if (_piece.id != null) {
@@ -2238,7 +2237,8 @@ class _AddPiecePageState extends State<AddPiecePage>
 
     int id_tresorie = await _queryCtr.addItemToTable(DbTablesNames.tresorie, tresorie);
 
-    if (tresorie.categorie == 2 || tresorie.categorie == 3) {
+    if (tresorie.categorie == 2 || tresorie.categorie == 3 ||
+        tresorie.categorie == 6 || tresorie.categorie == 7) {
       ReglementTresorie reglementTresorie = new ReglementTresorie.init();
       reglementTresorie.tresorie_id = id_tresorie;
       reglementTresorie.piece_id = tresorie.pieceId;

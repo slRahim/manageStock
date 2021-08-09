@@ -27,6 +27,7 @@ class NavDrawer extends StatelessWidget {
     homeItemTresorerie,
     drawerItemFamilleMarque,
     homeItemRapports,
+    drawerItemBackup,
     drawerItemExit
   ];
 
@@ -76,7 +77,7 @@ class NavDrawer extends StatelessWidget {
                   InkWell(
                       onTap: () {
                         print(homeItemParametres.title);
-                        Helpers.handleIdClick(context, homeItemParametres.id);
+                        Helpers.handleIdClick(context, homeItemParametres.id ,);
                       },
                       child: Icon(
                         LineIcons.cog,
@@ -219,7 +220,7 @@ class NavDrawer extends StatelessWidget {
                       onTap: () {
                         print(e.title);
                         Navigator.of(context).pop();
-                        Helpers.handleIdClick(context, e.id);
+                        Helpers.handleIdClick(context, e.id , myparams:myparams);
                       },
                     ),
                   )
@@ -240,7 +241,7 @@ class NavDrawer extends StatelessWidget {
                       onTap: () {
                         print(e.title);
                         Navigator.of(context).pop();
-                        Helpers.handleIdClick(context, e.id);
+                        Helpers.handleIdClick(context, e.id , myparams:myparams);
                       },
                     ),
                   )
@@ -263,7 +264,7 @@ class NavDrawer extends StatelessWidget {
           onTap: () {
             print(data.title);
             Navigator.of(context).pop();
-            Helpers.handleIdClick(context, data.id);
+            Helpers.handleIdClick(context, data.id , myparams:myparams);
           },
         ),
       );

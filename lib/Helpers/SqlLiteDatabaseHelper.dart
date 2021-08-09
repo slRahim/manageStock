@@ -1104,6 +1104,18 @@ class SqlLiteDatabaseHelper {
     //***************************************************dell piece***********************************************************
 
     await db.execute('''
+        CREATE TRIGGER IF NOT EXISTS reset_current_index
+        BEFORE DELETE ON Pieces
+        FOR EACH ROW
+        WHEN  Cast(Substr (OLD.Num_piece,0,INSTR(OLD.Num_piece , '/' )) as interger)  = (Select Current_index From FormatPiece Where Piece like OLD.Piece)
+        BEGIN
+           UPDATE FormatPiece
+               SET Current_index = IFNULL((Select Max(Cast(Substr (Num_piece,0,INSTR(Num_piece , '/' )) as interger)) From Pieces where Piece like OLD.Piece And Num_piece <> Old.Num_piece),0)
+            WHERE  FormatPiece.Piece LIKE OLD.Piece;
+        END;
+     ''');
+
+    await db.execute('''
         CREATE TRIGGER IF NOT EXISTS delete_journaux
         BEFORE DELETE ON Pieces
         FOR EACH ROW
@@ -1118,17 +1130,6 @@ class SqlLiteDatabaseHelper {
         END;
      ''');
 
-    await db.execute('''
-        CREATE TRIGGER IF NOT EXISTS reset_current_index
-        BEFORE DELETE ON Pieces
-        FOR EACH ROW
-        WHEN  Cast(Substr (OLD.Num_piece,0,INSTR(OLD.Num_piece , '/' )) as interger)  = (Select Current_index From FormatPiece Where Piece like OLD.Piece)
-        BEGIN
-           UPDATE FormatPiece
-               SET Current_index = IFNULL((Select Max(Cast(Substr (Num_piece,0,INSTR(Num_piece , '/' )) as interger)) From Pieces where Piece like OLD.Piece And Num_piece <> Old.Num_piece),0)
-            WHERE  FormatPiece.Piece LIKE OLD.Piece;
-        END;
-     ''');
 
     await db.execute('''
         CREATE TRIGGER IF NOT EXISTS delete_tresorie

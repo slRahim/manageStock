@@ -552,7 +552,8 @@ class _SettingsPageState extends State<SettingsPage> {
                     leading: Icon(Icons.backup,
                         color: Theme.of(context).primaryColorDark),
                     onTap: () async {
-                      if (_myParams.versionType != "demo") {
+                      if (_myParams.versionType != "demo" &&
+                          DateTime.now().isBefore(Helpers.getDateExpiration(_myParams))) {
                         await showDialog(
                             context: context,
                             barrierDismissible: false,
@@ -597,7 +598,8 @@ class _SettingsPageState extends State<SettingsPage> {
                     leading: Icon(Icons.restore,
                         color: Theme.of(context).primaryColorDark),
                     onTap: () async {
-                      if (_myParams.versionType != "demo") {
+                      if (_myParams.versionType != "demo" &&
+                          DateTime.now().isBefore(Helpers.getDateExpiration(_myParams))) {
                         Navigator.pushNamed(context, RoutesKeys.driveListing);
                       } else {
                         Helpers.showFlushBar(

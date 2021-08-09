@@ -94,54 +94,103 @@ class NotificationPlugin {
     IdNotification++;
   }
 
-  Future<void> showDailyAtTime(String dayTime) async {
+  Future<void> showDailyAtTime(String dayTime , bool backupNotification) async {
     var hh_mm = dayTime.split(":");
     var time = Time(int.parse(hh_mm.first), int.parse(hh_mm.last), 0);
+
     String credit = '';
     String msg_credit = '' ;
-    var androidChannelSpecifics = AndroidNotificationDetails(
-      'CHANNEL_ID 41',
-      'CHANNEL_NAME 41',
-      "CHANNEL_DESCRIPTION 41",
-      importance: Importance.Max,
-      priority: Priority.Max,
-    );
-    var iosChannelSpecifics = IOSNotificationDetails();
-    var platformChannelSpecifics =
-        NotificationDetails(androidChannelSpecifics, iosChannelSpecifics);
 
-    switch (_prefs.getString("myLocale")) {
-      case ("en"):
-        credit = 'Credit' ;
-        msg_credit = 'You have unpaid invoices';
-        break;
-      case ("fr"):
-        credit = 'Credit' ;
-        msg_credit = 'Vous avez des pièces non payer';
-        break;
-      case ("ar"):
-        credit = 'ديون' ;
-        msg_credit = '"لديك فواتير بها ديون';
-        break;
-      default:
-        credit = 'Credit' ;
-        msg_credit = 'You have unpaid invoices';
-        break;
+    String backup = '';
+    String backupMsg = '';
+
+    if(!backupNotification){
+      var androidChannelSpecifics = AndroidNotificationDetails(
+        'CHANNEL_ID 41',
+        'CHANNEL_NAME 41',
+        "CHANNEL_DESCRIPTION 41",
+        importance: Importance.Max,
+        priority: Priority.Max,
+      );
+      var iosChannelSpecifics = IOSNotificationDetails();
+      var platformChannelSpecifics =
+      NotificationDetails(androidChannelSpecifics, iosChannelSpecifics);
+
+      switch (_prefs.getString("myLocale")) {
+        case ("en"):
+          credit = 'Credit' ;
+          msg_credit = 'You have unpaid invoices';
+          break;
+        case ("fr"):
+          credit = 'Credit' ;
+          msg_credit = 'Vous avez des pièces non payer';
+          break;
+        case ("ar"):
+          credit = 'ديون' ;
+          msg_credit = '"لديك فواتير بها ديون';
+          break;
+        default:
+          credit = 'Credit' ;
+          msg_credit = 'You have unpaid invoices';
+          break;
+      }
+
+      await flutterLocalNotificationsPlugin.showDailyAtTime(
+        IdNotification,
+        credit,
+        msg_credit, //null
+        time,
+        platformChannelSpecifics,
+        payload: 'Credit Payload',
+      );
+      IdNotification++;
+
+    }else{
+      var androidChannelSpecifics = AndroidNotificationDetails(
+        'CHANNEL_ID 42',
+        'CHANNEL_NAME 42',
+        "CHANNEL_DESCRIPTION 42",
+        importance: Importance.Max,
+        priority: Priority.Max,
+      );
+      var iosChannelSpecifics = IOSNotificationDetails();
+      var platformChannelSpecifics =
+      NotificationDetails(androidChannelSpecifics, iosChannelSpecifics);
+
+      switch (_prefs.getString("myLocale")) {
+        case ("en"):
+          backup = 'Backup' ;
+          backupMsg = 'backup your data of the last day';
+          break;
+        case ("fr"):
+          backup = 'Sauvegarde' ;
+          backupMsg = 'sauvegardez vos données du dernier jour';
+          break;
+        case ("ar"):
+          backup = 'نسخة إحتياطية' ;
+          backupMsg = 'احتفظ بنسخة احتياطية من بياناتك  لليوم الأخير';
+          break;
+        default:
+          backup = 'Backup' ;
+          backupMsg = 'backup your data of the last day';
+          break;
+      }
+
+      await flutterLocalNotificationsPlugin.showDailyAtTime(
+        IdNotification,
+        backup,
+        backupMsg, //null
+        time,
+        platformChannelSpecifics,
+        payload: 'Backup Payload',
+      );
+      IdNotification++;
     }
 
-    await flutterLocalNotificationsPlugin.showDailyAtTime(
-      IdNotification,
-      credit,
-      msg_credit, //null
-      time,
-      platformChannelSpecifics,
-      payload: 'Test Payload',
-    );
-    IdNotification++;
   }
 
   // la semaine demmare par dimanche = 1 / termine le samedi = 7
-  Future<void> showWeeklyAtDayTime(String dayTime, int day) async {
+  Future<void> showWeeklyAtDayTime(String dayTime, int day , bool backupNotification) async {
     var hh_mm = dayTime.split(":");
     var time = Time(int.parse(hh_mm.first), int.parse(hh_mm.last), 0);
     var days = [
@@ -154,50 +203,98 @@ class NotificationPlugin {
       Day.Friday,
       Day.Sunday
     ];
+
     String credit = '';
     String msg_credit = '' ;
 
-    var androidChannelSpecifics = AndroidNotificationDetails(
-      'CHANNEL_ID 55',
-      'CHANNEL_NAME 55',
-      "CHANNEL_DESCRIPTION 55",
-      importance: Importance.Max,
-      priority: Priority.Max,
-    );
-    var iosChannelSpecifics = IOSNotificationDetails();
+    String backup = '';
+    String backupMsg = '';
 
-    var platformChannelSpecifics =
-        NotificationDetails(androidChannelSpecifics, iosChannelSpecifics);
+    if(!backupNotification){
+      var androidChannelSpecifics = AndroidNotificationDetails(
+        'CHANNEL_ID 55',
+        'CHANNEL_NAME 55',
+        "CHANNEL_DESCRIPTION 55",
+        importance: Importance.Max,
+        priority: Priority.Max,
+      );
+      var iosChannelSpecifics = IOSNotificationDetails();
 
-    switch (_prefs.getString("myLocale")) {
-      case ("en"):
-        credit = 'Credit' ;
-        msg_credit = 'You have unpaid invoices';
-        break;
-      case ("fr"):
-        credit = 'Credit' ;
-        msg_credit = 'Vous avez des pièces non payer';
-        break;
-      case ("ar"):
-        credit = 'ديون' ;
-        msg_credit = '"لديك فواتير بها ديون';
-        break;
-      default:
-        credit = 'Credit' ;
-        msg_credit = 'You have unpaid invoices';
-        break;
+      var platformChannelSpecifics =
+      NotificationDetails(androidChannelSpecifics, iosChannelSpecifics);
+
+      switch (_prefs.getString("myLocale")) {
+        case ("en"):
+          credit = 'Credit' ;
+          msg_credit = 'You have unpaid invoices';
+          break;
+        case ("fr"):
+          credit = 'Credit' ;
+          msg_credit = 'Vous avez des pièces non payer';
+          break;
+        case ("ar"):
+          credit = 'ديون' ;
+          msg_credit = '"لديك فواتير بها ديون';
+          break;
+        default:
+          credit = 'Credit' ;
+          msg_credit = 'You have unpaid invoices';
+          break;
+      }
+
+      await flutterLocalNotificationsPlugin.showWeeklyAtDayAndTime(
+        IdNotification,
+        credit,
+        msg_credit,
+        days[day],
+        time,
+        platformChannelSpecifics,
+        payload: 'Credit Payload',
+      );
+      IdNotification++;
+    }else{
+      var androidChannelSpecifics = AndroidNotificationDetails(
+        'CHANNEL_ID 56',
+        'CHANNEL_NAME 56',
+        "CHANNEL_DESCRIPTION 56",
+        importance: Importance.Max,
+        priority: Priority.Max,
+      );
+      var iosChannelSpecifics = IOSNotificationDetails();
+      var platformChannelSpecifics =
+      NotificationDetails(androidChannelSpecifics, iosChannelSpecifics);
+
+      switch (_prefs.getString("myLocale")) {
+        case ("en"):
+          backup = 'Backup' ;
+          backupMsg = 'backup your data of the last day';
+          break;
+        case ("fr"):
+          backup = 'Sauvegarde' ;
+          backupMsg = 'sauvegardez vos données du dernier jour';
+          break;
+        case ("ar"):
+          backup = 'نسخة إحتياطية' ;
+          backupMsg = 'احتفظ بنسخة احتياطية من بياناتك  لليوم الأخير';
+          break;
+        default:
+          backup = 'Backup' ;
+          backupMsg = 'backup your data of the last day';
+          break;
+      }
+
+      await flutterLocalNotificationsPlugin.showDailyAtTime(
+        IdNotification,
+        backup,
+        backupMsg, //null
+        time,
+        platformChannelSpecifics,
+        payload: 'Backup Payload',
+      );
+      IdNotification++;
     }
 
-    await flutterLocalNotificationsPlugin.showWeeklyAtDayAndTime(
-      IdNotification,
-      credit,
-      msg_credit,
-      days[day],
-      time,
-      platformChannelSpecifics,
-      payload: 'Test Payload',
-    );
-    IdNotification++;
+
   }
 
   Future<void> cancelNotification() async {

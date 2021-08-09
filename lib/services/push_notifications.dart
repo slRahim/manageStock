@@ -4,7 +4,7 @@ import 'package:gestmob/Helpers/QueryCtr.dart';
 import 'package:gestmob/Helpers/Statics.dart';
 import 'package:gestmob/models/MyParams.dart';
 import 'package:gestmob/models/Profile.dart';
-
+import 'package:gestmob/Helpers/Helpers.dart';
 import 'local_notification.dart';
 
 class PushNotificationsManager extends StatefulWidget {
@@ -109,27 +109,46 @@ class PushNotificationsManagerState extends State<PushNotificationsManager> {
   configureLocalNotification() async {
     _profile = await _queryCtr.getProfileById(1);
     _myParams = await _queryCtr.getAllParams();
-    _pieceHasCredit = await _queryCtr.pieceHasCredit();
 
-    if (_pieceHasCredit) {
-      if (_myParams.notifications) {
+    if (_myParams.notifications) {
+
+      //notification du credit
+      _pieceHasCredit = await _queryCtr.pieceHasCredit();
+      if (_pieceHasCredit) {
         await notificationPlugin.cancelAllNotification();
         switch (_myParams.notificationDay) {
           case 0:
             await notificationPlugin
-                .showDailyAtTime(_myParams.notificationTime);
+                .showDailyAtTime(_myParams.notificationTime , false);
             break;
           default:
             await notificationPlugin.showWeeklyAtDayTime(
-                _myParams.notificationTime, _myParams.notificationDay);
+                _myParams.notificationTime, _myParams.notificationDay , false);
             break;
         }
-      } else {
+      }else{
         await notificationPlugin.cancelAllNotification();
       }
+
+      //special pour la notification du backup
+      if (_myParams.versionType != "demo" &&
+          DateTime.now().isBefore(Helpers.getDateExpiration(_myParams))){
+        switch (_myParams.notificationDay) {
+          case 0:
+            await notificationPlugin
+                .showDailyAtTime(_myParams.notificationTime , true);
+            break;
+          default:
+            await notificationPlugin.showWeeklyAtDayTime(
+                _myParams.notificationTime, _myParams.notificationDay , true);
+            break;
+        }
+      }
+
     } else {
       await notificationPlugin.cancelAllNotification();
     }
+
   }
 
   onNotificationInLowerVersions(ReceivedNotification receivedNotification) {
