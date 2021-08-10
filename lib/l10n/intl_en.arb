@@ -73,7 +73,7 @@
   "client_titre" : "Customer",
   "fournisseur_titre" : "Provider",
   "a_credit" : "Has Credit" ,
-  "aff_bloquer" : "Show Bloqued",
+  "aff_bloquer" : "Bloqued",
   "annuler" : "Cancel",
   "flash_on" : "Flash ON",
   "flash_off": "Flash Off",
@@ -429,7 +429,7 @@
   "msg_qte_select_sup" : "Please note that the selected quantity is greater than the available quantity",
   "msg_no_edit_transformer" : "You can't edit transformed invoice",
 
-  "tarif_s" : "Price (s)",
+  "tarif_s" : "Price",
   "titre_dialog_tarification" : "Number of prices to use:",
   "msg_piece_transformer_to" : "Item transform to",
   "msg_piece_transformer_from" : "Item from",
@@ -620,7 +620,16 @@
   "msg_val_valide" : "Enter a valid number",
   "montant_ht" : "Amount excl. tax",
   "search" : "Search",
-  "no_defenie" : "Not defined"
+  "no_defenie" : "Not defined",
+  "msg_arret_somme" : "Stop this document at the sum of:",
+  "tarifs" : "Prices",
+
+  "msg_scaner_empreinte" : "Scan your fingerprint to authenticate",
+  "titre_auth_empreinte" : "Authentication",
+  "msg_config_auth" : "Go to settings",
+  "msg_aut_lockout" : "Biometric authentication is disabled",
+  "msg_auth_success" : "Fingerprint has been recognized",
+  "msg_auth_fail" : "Fingerprint not recognized, Try again!"
 
 
 

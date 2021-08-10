@@ -74,7 +74,7 @@
   "client_titre" : "زبون",
   "fournisseur_titre" : "مورد",
   "a_credit" : "لديه دين" ,
-  "aff_bloquer" : "عرض الموقوفين",
+  "aff_bloquer" : "موقوف",
   "annuler" : "إلغاء",
   "flash_on" : "إنارة ON",
   "flash_off": "إنارة Off",
@@ -620,6 +620,15 @@
   "msg_val_valide" : "أدخل رقمًا صحيحا",
   "montant_ht" : "المبلغ ب ض",
   "search" : "بحث",
-  "no_defenie" : "غير محدد"
+  "no_defenie" : "غير محدد",
+  "msg_arret_somme" : "وقف هذا المستند بمبلغ:",
+  "tarifs" : "سعر",
+
+  "msg_scaner_empreinte" : "امسح بصمة إصبعك لتسحيل الدخول",
+  "titre_auth_empreinte" : "تسجيل الدخول",
+  "msg_config_auth" : "اذهب للاعدادات",
+  "msg_aut_lockout" : "تم تعطيل المصادقة البيومترية",
+  "msg_auth_success" : "تم التعرف على بصمة الإصبع",
+  "msg_auth_fail" : "لم يتم التعرف على بصمة الإصبع ، حاول مرة أخرى!"
 
 }

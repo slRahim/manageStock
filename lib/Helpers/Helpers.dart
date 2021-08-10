@@ -166,13 +166,11 @@ class Helpers {
           builder: (context) => FutureProgressDialog(
                 _queryCtr.createBackup().then((value) {
                   if (value["name"] != null) {
-                    Navigator.pop(context);
                     Helpers.showToast("${S.current.msg_back_suce}");
                   } else {
                     Helpers.showToast("${S.current.msg_back_err}");
                   }
                 }).catchError((e) => {
-                      Navigator.pop(context),
                       Helpers.showToast("${S.current.msg_back_err}")
                     }),
                 message: Text('${S.current.chargement}...'),

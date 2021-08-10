@@ -24,23 +24,22 @@ class TouchIdUtil {
   Future<bool> auth() async {
     try {
       var res =  await _auth.authenticateWithBiometrics(
-        localizedReason: "Scannez Votre Empreinte Digitale Pour Vous Authentifier",
+        localizedReason: S.current.msg_scaner_empreinte,
         useErrorDialogs: true,
         stickyAuth: true,
         androidAuthStrings: AndroidAuthMessages(
             cancelButton: S.current.annuler,
-            fingerprintRequiredTitle: "Empreinte Digitale Requise",
-            fingerprintHint: "Touchez Le Capteur",
-            signInTitle: "Authentification empreinte digitale",
-            fingerprintSuccess: "Empreinte Digitale Reconnue",
-            fingerprintNotRecognized: "Empreinte Digitale Non Reconnue Reessayer",
-            goToSettingsButton: "Aller Aux Parametres",
-            goToSettingsDescription: "Aller Aux Parametres Description"),
+            fingerprintHint: '',
+            signInTitle: S.current.titre_auth_empreinte,
+            fingerprintSuccess: S.current.msg_auth_success,
+            fingerprintNotRecognized: S.current.msg_auth_fail,
+            goToSettingsButton: S.current.msg_config_auth
+        ),
         iOSAuthStrings: IOSAuthMessages(
-            lockOut: "L Authentification Biometrique Est Desactivee",
+            lockOut: S.current.msg_aut_lockout,
             cancelButton: S.current.annuler,
-            goToSettingsButton: "Aller Aux Parametres",
-            goToSettingsDescription: "L Authentification Biometrique NEst Pas Configuree"),
+            goToSettingsButton: S.current.msg_config_auth,
+        ),
       );
 
       return res ;

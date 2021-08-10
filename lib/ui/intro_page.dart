@@ -139,7 +139,7 @@ class _IntroPageState extends State<IntroPage> {
         case "Français (FR)":
           model.name = model.translations.fr;
           break;
-        case "عربي (AR)":
+        case "عربية (AR)":
           model.name = model.translations.fa;
           break;
       }
@@ -306,7 +306,7 @@ class _IntroPageState extends State<IntroPage> {
                                 });
                                 break;
 
-                              case ("عربي (AR)"):
+                              case ("عربية (AR)"):
                                 S.load(Locale("ar")).then((value) {
                                   _countries.clear();
                                   _countries.add(CountryModel.init(
@@ -876,7 +876,7 @@ class _IntroPageState extends State<IntroPage> {
         _prefs.setString("myLocale", "fr");
         break;
 
-      case ("عربي (AR)"):
+      case ("عربية (AR)"):
         _prefs.setString("myLocale", "ar");
         break;
     }
@@ -960,7 +960,7 @@ class _IntroPageState extends State<IntroPage> {
         tier2.raisonSociale = "Fournisseur inconnus";
         break;
 
-      case ("عربي (AR)"):
+      case ("عربية (AR)"):
         charges.add(new ChargeTresorie(null,"الكهرباء"));
         charges.add(new ChargeTresorie(null,"الإيجار"));
         charges.add(new ChargeTresorie(null,"المرتب"));

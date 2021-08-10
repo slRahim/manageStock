@@ -3,7 +3,7 @@ set(CMAKE_HOST_SYSTEM_NAME "Windows")
 set(CMAKE_HOST_SYSTEM_VERSION "10.0.19042")
 set(CMAKE_HOST_SYSTEM_PROCESSOR "AMD64")
 
-include("E:/AndroidStudio/SDK/ndk/21.1.6352462/build/cmake/android.toolchain.cmake")
+include("C:/Users/wassim/AppData/Local/Android/Sdk/ndk/22.1.7171670/build/cmake/android.toolchain.cmake")
 
 set(CMAKE_SYSTEM "Android-1")
 set(CMAKE_SYSTEM_NAME "Android")

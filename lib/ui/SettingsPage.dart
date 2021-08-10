@@ -654,7 +654,7 @@ class _SettingsPageState extends State<SettingsPage> {
                         value: Statics.languages[2],
                         groupValue: _language,
                         title: Text(
-                          'عربي (AR)',
+                          'عربية (AR)',
                           style: GoogleFonts.lato(),
                         ),
                         onChanged: (value) {
@@ -783,7 +783,7 @@ class _SettingsPageState extends State<SettingsPage> {
                           value: Statics.tarificationItems[1],
                           groupValue: _tarification,
                           title: Text(
-                            '2 ${S.current.tarif_s}',
+                            '2 ${S.current.tarifs}',
                             style: GoogleFonts.lato(),
                           ),
                           onChanged: (value) {
@@ -796,7 +796,7 @@ class _SettingsPageState extends State<SettingsPage> {
                           value: Statics.tarificationItems[2],
                           groupValue: _tarification,
                           title: Text(
-                            '3 ${S.current.tarif_s}',
+                            '3 ${S.current.tarifs}',
                             style: GoogleFonts.lato(),
                           ),
                           onChanged: (value) {
@@ -1096,7 +1096,7 @@ class _SettingsPageState extends State<SettingsPage> {
         _prefs.setString("myLocale", "fr");
         break;
 
-      case ("عربي (AR)"):
+      case ("عربية (AR)"):
         _prefs.setString("myLocale", "ar");
         break;
     }
@@ -1167,7 +1167,7 @@ class _SettingsPageState extends State<SettingsPage> {
             _profile.pays = model.translations.fr ;
             break;
 
-          case ("عربي (AR)"):
+          case ("عربية (AR)"):
             _profile.pays = model.translations.fa ;
             break;
         }

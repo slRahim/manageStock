@@ -735,10 +735,10 @@ class S {
     );
   }
 
-  /// `Show Bloqued`
+  /// `Bloqued`
   String get aff_bloquer {
     return Intl.message(
-      'Show Bloqued',
+      'Bloqued',
       name: 'aff_bloquer',
       desc: '',
       args: [],
@@ -3965,10 +3965,10 @@ class S {
     );
   }
 
-  /// `Price (s)`
+  /// `Price`
   String get tarif_s {
     return Intl.message(
-      'Price (s)',
+      'Price',
       name: 'tarif_s',
       desc: '',
       args: [],
@@ -5810,6 +5810,86 @@ class S {
     return Intl.message(
       'Not defined',
       name: 'no_defenie',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Stop this document at the sum of:`
+  String get msg_arret_somme {
+    return Intl.message(
+      'Stop this document at the sum of:',
+      name: 'msg_arret_somme',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Prices`
+  String get tarifs {
+    return Intl.message(
+      'Prices',
+      name: 'tarifs',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Scan your fingerprint to authenticate`
+  String get msg_scaner_empreinte {
+    return Intl.message(
+      'Scan your fingerprint to authenticate',
+      name: 'msg_scaner_empreinte',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Authentication`
+  String get titre_auth_empreinte {
+    return Intl.message(
+      'Authentication',
+      name: 'titre_auth_empreinte',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Go to settings`
+  String get msg_config_auth {
+    return Intl.message(
+      'Go to settings',
+      name: 'msg_config_auth',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Biometric authentication is disabled`
+  String get msg_aut_lockout {
+    return Intl.message(
+      'Biometric authentication is disabled',
+      name: 'msg_aut_lockout',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Fingerprint has been recognized`
+  String get msg_auth_success {
+    return Intl.message(
+      'Fingerprint has been recognized',
+      name: 'msg_auth_success',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Fingerprint not recognized, Try again!`
+  String get msg_auth_fail {
+    return Intl.message(
+      'Fingerprint not recognized, Try again!',
+      name: 'msg_auth_fail',
       desc: '',
       args: [],
     );

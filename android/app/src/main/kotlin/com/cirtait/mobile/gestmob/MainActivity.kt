@@ -12,7 +12,6 @@ import android.view.KeyEvent
 import android.widget.Toast
 import androidx.annotation.NonNull
 import androidx.core.internal.view.SupportMenu
-import io.flutter.embedding.android.FlutterActivity
 import io.flutter.embedding.engine.FlutterEngine
 import io.flutter.embedding.engine.plugins.util.GeneratedPluginRegister
 import io.flutter.plugin.common.EventChannel
@@ -20,7 +19,10 @@ import io.flutter.plugin.common.EventChannel.EventSink
 import java.util.*
 import java.util.concurrent.TimeUnit
 
-class MainActivity : FlutterActivity() {
+import io.flutter.embedding.android.FlutterFragmentActivity
+import io.flutter.plugins.GeneratedPluginRegistrant
+
+class MainActivity : FlutterFragmentActivity() {
     private val STREAM = "pda.flutter.dev/scanEvent"
     companion object {
         const val TAG = "Gestmob"
@@ -71,7 +73,7 @@ class MainActivity : FlutterActivity() {
 //    }
 
     override fun configureFlutterEngine(@NonNull flutterEngine: FlutterEngine) {
-        super.configureFlutterEngine(flutterEngine)
+        GeneratedPluginRegistrant.registerWith(flutterEngine);
 
         eventChannel = EventChannel(flutterEngine.dartExecutor.binaryMessenger, STREAM)
         eventChannel.setStreamHandler(

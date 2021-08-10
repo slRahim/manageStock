@@ -3020,7 +3020,7 @@ class _AddPiecePageState extends State<AddPiecePage>
                 width: 6)
             : PosColumn(width: 6),
       ]);
-      if (_myParams.creditTier) {
+      if (_myParams.creditTier && _piece.piece != PieceType.devis) {
         input = "${S.current.credit}";
         encArabic = await CharsetConverter.encode("ISO-8859-6",
             "${Helpers.numberFormat(_selectedClient.credit).toString()}: ${input.split('').reversed.join()}");
@@ -3288,7 +3288,7 @@ class _AddPiecePageState extends State<AddPiecePage>
                 width: 6)
             : PosColumn(width: 6),
       ]);
-      if (_myParams.creditTier) {
+      if (_myParams.creditTier && _piece.piece != PieceType.devis) {
         encode = await CharsetConverter.encode("ISO-8859-6",
             "${S.current.credit} : ${Helpers.numberFormat(_selectedClient.credit).toString()}");
         ticket.textEncoded(encode);
@@ -3302,7 +3302,7 @@ class _AddPiecePageState extends State<AddPiecePage>
 
   Future _makePdfDocument() async {
     var data = await rootBundle.load("assets/arial.ttf");
-    final ttf = pw.Font.ttf(data);
+    final arial = pw.Font.ttf(data);
 
     final doc = pw.Document();
     doc.addPage(
@@ -3321,68 +3321,68 @@ class _AddPiecePageState extends State<AddPiecePage>
                         (_profile.raisonSociale != null)
                             ? pw.Text("${_profile.raisonSociale} ",
                                 style: pw.TextStyle(
-                                    font: ttf,
+                                    font: arial,
                                     fontWeight: pw.FontWeight.bold,
                                     fontSize: 20))
                             : pw.SizedBox(),
                         (_profile.activite != "")
                             ? pw.Text("${_profile.activite} ",
                                 style: pw.TextStyle(
-                                    font: ttf, fontWeight: pw.FontWeight.bold))
+                                    font: arial, fontWeight: pw.FontWeight.bold))
                             : pw.SizedBox(),
                         (_profile.adresse != "")
                             ? pw.Text(
                                 "${_profile.adresse} ${_profile.departement} ${_profile.ville} ${_profile.pays}",
                                 style: pw.TextStyle(
-                                    font: ttf, fontWeight: pw.FontWeight.bold))
+                                    font: arial, fontWeight: pw.FontWeight.bold))
                             : pw.SizedBox(),
                         (_profile.telephone != "")
                             ? pw.Text(
                                 "${S.current.telephone}\t: ${_profile.telephone}",
                                 style: pw.TextStyle(
-                                    font: ttf, fontWeight: pw.FontWeight.bold))
+                                    font: arial, fontWeight: pw.FontWeight.bold))
                             : pw.SizedBox(),
                         (_profile.fax != "")
                             ? pw.Text("${S.current.fax}\t: ${_profile.fax}",
                                 style: pw.TextStyle(
-                                    font: ttf, fontWeight: pw.FontWeight.bold))
+                                    font: arial, fontWeight: pw.FontWeight.bold))
                             : pw.SizedBox(),
                         (_profile.mobile != "")
                             ? pw.Text(
                                 "${S.current.mobile}\t: ${_profile.mobile}",
                                 style: pw.TextStyle(
-                                    font: ttf, fontWeight: pw.FontWeight.bold))
+                                    font: arial, fontWeight: pw.FontWeight.bold))
                             : pw.SizedBox(),
                         (_profile.email != "")
                             ? pw.Text("${S.current.mail}\t: ${_profile.email}",
                                 style: pw.TextStyle(
-                                    font: ttf, fontWeight: pw.FontWeight.bold))
+                                    font: arial, fontWeight: pw.FontWeight.bold))
                             : pw.SizedBox(),
                         (_profile.rc != "")
                             ? pw.Text("${S.current.rc}\t: ${_profile.rc}",
                                 style: pw.TextStyle(
-                                    font: ttf, fontWeight: pw.FontWeight.bold))
+                                    font: arial, fontWeight: pw.FontWeight.bold))
                             : pw.SizedBox(),
                         (_profile.nif != "")
                             ? pw.Text("${S.current.nif}\t: ${_profile.nif}",
                                 style: pw.TextStyle(
-                                    font: ttf, fontWeight: pw.FontWeight.bold))
+                                    font: arial, fontWeight: pw.FontWeight.bold))
                             : pw.SizedBox(),
                         (_profile.nis != "")
                             ? pw.Text("${S.current.nis}\t: ${_profile.nis}",
                                 style: pw.TextStyle(
-                                    font: ttf, fontWeight: pw.FontWeight.bold))
+                                    font: arial, fontWeight: pw.FontWeight.bold))
                             : pw.SizedBox(),
                         (_profile.ai != "")
                             ? pw.Text("${S.current.art_imp}\t: ${_profile.ai}",
                                 style: pw.TextStyle(
-                                    font: ttf, fontWeight: pw.FontWeight.bold))
+                                    font: arial, fontWeight: pw.FontWeight.bold))
                             : pw.SizedBox(),
                         (_profile.capital > 0)
                             ? pw.Text(
                                 "${S.current.capitale_sociale}\t: ${Helpers.numberFormat(_profile.capital)} ${Helpers.getDeviseTranslate(_myParams.devise)}",
                                 style: pw.TextStyle(
-                                    font: ttf, fontWeight: pw.FontWeight.bold))
+                                    font: arial, fontWeight: pw.FontWeight.bold))
                             : pw.SizedBox(),
                       ]),
                 ),
@@ -3416,17 +3416,17 @@ class _AddPiecePageState extends State<AddPiecePage>
                                   _piece.piece == PieceType.avoirClient)
                               ? "${S.current.client_titre}\t ${_selectedClient.raisonSociale} "
                               : "${S.current.fournisseur_titre}\t ${_selectedClient.raisonSociale} ",
-                          style: pw.TextStyle(font: ttf)),
+                          style: pw.TextStyle(font: arial)),
                       pw.Divider(height: 2),
                       (_selectedClient.adresse != "")
                           ? pw.Text(
                               "${S.current.adresse}\t  ${_selectedClient.adresse} ",
-                              style: pw.TextStyle(font: ttf))
+                              style: pw.TextStyle(font: arial))
                           : pw.SizedBox(),
                       (_selectedClient.ville != "")
                           ? pw.Text(
                               "${S.current.ville}\t  ${_selectedClient.ville}",
-                              style: pw.TextStyle(font: ttf))
+                              style: pw.TextStyle(font: arial))
                           : pw.SizedBox(),
                       ((_piece.piece == PieceType.factureClient ||
                                   _piece.piece ==
@@ -3435,7 +3435,7 @@ class _AddPiecePageState extends State<AddPiecePage>
                                   _piece.piece == PieceType.avoirFournisseur) &&
                               (_selectedClient.rc != ""))
                           ? pw.Text("${S.current.rc}\t  ${_selectedClient.rc}",
-                              style: pw.TextStyle(font: ttf))
+                              style: pw.TextStyle(font: arial))
                           : pw.SizedBox(),
                       ((_piece.piece == PieceType.factureClient ||
                                   _piece.piece ==
@@ -3445,7 +3445,7 @@ class _AddPiecePageState extends State<AddPiecePage>
                               (_selectedClient.nif != ""))
                           ? pw.Text(
                               "${S.current.nif}\t  ${_selectedClient.nif}",
-                              style: pw.TextStyle(font: ttf))
+                              style: pw.TextStyle(font: arial))
                           : pw.SizedBox(),
                       ((_piece.piece == PieceType.factureClient ||
                                   _piece.piece ==
@@ -3455,7 +3455,7 @@ class _AddPiecePageState extends State<AddPiecePage>
                               (_selectedClient.nis != ""))
                           ? pw.Text(
                               "${S.current.nis}\t  ${_selectedClient.nis}",
-                              style: pw.TextStyle(font: ttf))
+                              style: pw.TextStyle(font: arial))
                           : pw.SizedBox(),
                       ((_piece.piece == PieceType.factureClient ||
                                   _piece.piece ==
@@ -3465,7 +3465,7 @@ class _AddPiecePageState extends State<AddPiecePage>
                               (_selectedClient.ai != ""))
                           ? pw.Text(
                               "${S.current.art_imp}\t  ${_selectedClient.ai}",
-                              style: pw.TextStyle(font: ttf))
+                              style: pw.TextStyle(font: arial))
                           : pw.SizedBox(),
                     ])),
             pw.SizedBox(width: 3),
@@ -3475,16 +3475,16 @@ class _AddPiecePageState extends State<AddPiecePage>
                   pw.Text("${Helpers.getPieceTitle(_piece.piece)}",
                       style: pw.TextStyle(
                           fontWeight: pw.FontWeight.bold,
-                          font: ttf,
+                          font: arial,
                           fontSize: 20)),
                   pw.Text("${S.current.n}\t  ${_piece.num_piece}",
                       style: pw.TextStyle(
                           fontWeight: pw.FontWeight.bold,
-                          font: ttf,
+                          font: arial,
                           fontSize: 16)),
                   pw.Text(
-                      "${S.current.date}\t  ${Helpers.dateToText(_piece.date)}",
-                      style: pw.TextStyle(font: ttf)),
+                      "${S.current.date}\t  ${Helpers.dateToText(_piece.date).split(' ').first}",
+                      style: pw.TextStyle(font: arial)),
                 ]))
           ]),
           pw.SizedBox(height: 20),
@@ -3498,7 +3498,7 @@ class _AddPiecePageState extends State<AddPiecePage>
                     child: pw.Text("${S.current.referance}",
                         style: pw.TextStyle(
                             fontWeight: pw.FontWeight.bold,
-                            font: ttf,
+                            font: arial,
                             fontSize: 10)),
                   ),
                   pw.Container(
@@ -3506,7 +3506,7 @@ class _AddPiecePageState extends State<AddPiecePage>
                     child: pw.Text("${S.current.designation}",
                         style: pw.TextStyle(
                             fontWeight: pw.FontWeight.bold,
-                            font: ttf,
+                            font: arial,
                             fontSize: 10)),
                   ),
                   pw.Container(
@@ -3514,7 +3514,7 @@ class _AddPiecePageState extends State<AddPiecePage>
                     child: pw.Text("${S.current.qte}",
                         style: pw.TextStyle(
                             fontWeight: pw.FontWeight.bold,
-                            font: ttf,
+                            font: arial,
                             fontSize: 10)),
                   ),
                   pw.Container(
@@ -3522,7 +3522,7 @@ class _AddPiecePageState extends State<AddPiecePage>
                     child: pw.Text("${S.current.prix}",
                         style: pw.TextStyle(
                             fontWeight: pw.FontWeight.bold,
-                            font: ttf,
+                            font: arial,
                             fontSize: 10)),
                   ),
                   pw.Container(
@@ -3530,7 +3530,7 @@ class _AddPiecePageState extends State<AddPiecePage>
                     child: pw.Text("${S.current.tva}",
                         style: pw.TextStyle(
                             fontWeight: pw.FontWeight.bold,
-                            font: ttf,
+                            font: arial,
                             fontSize: 10)),
                   ),
                   pw.Container(
@@ -3538,7 +3538,7 @@ class _AddPiecePageState extends State<AddPiecePage>
                       child: pw.Text("${S.current.montant_ht}",
                           style: pw.TextStyle(
                               fontWeight: pw.FontWeight.bold,
-                              font: ttf,
+                              font: arial,
                               fontSize: 10))),
                 ]),
             for (var e in _selectedItems)
@@ -3551,12 +3551,12 @@ class _AddPiecePageState extends State<AddPiecePage>
                     pw.Container(
                       padding: pw.EdgeInsets.only(left: 5, right: 5),
                       child: pw.Text((e.ref != '') ? "${e.ref}" : "##",
-                          style: pw.TextStyle(font: ttf, fontSize: 9)),
+                          style: pw.TextStyle(font: arial, fontSize: 9)),
                     ),
                     pw.Container(
                       padding: pw.EdgeInsets.only(left: 5, right: 5),
                       child: pw.Text("${e.designation}",
-                          style: pw.TextStyle(font: ttf, fontSize: 9)),
+                          style: pw.TextStyle(font: arial, fontSize: 9)),
                     ),
                     pw.Container(
                       padding: pw.EdgeInsets.only(left: 5, right: 5),
@@ -3599,7 +3599,7 @@ class _AddPiecePageState extends State<AddPiecePage>
                               (_piece.regler >= 0)
                                   ? "${S.current.regler}\t ${Helpers.numberFormat(_piece.regler)} ${_devise}"
                                   : "${S.current.regler}\t ${Helpers.numberFormat(_piece.regler * -1)} ${_devise}",
-                              style: pw.TextStyle(font: ttf))
+                              style: pw.TextStyle(font: arial))
                           : pw.SizedBox(),
                       (_piece.reste != 0 &&
                               (_piece.piece != PieceType.bonCommande &&
@@ -3608,17 +3608,19 @@ class _AddPiecePageState extends State<AddPiecePage>
                               (_piece.reste > 0)
                                   ? "${S.current.reste}\t ${Helpers.numberFormat(_piece.reste)} ${_devise}"
                                   : "${S.current.reste}\t ${Helpers.numberFormat(_piece.reste * -1)} ${_devise}",
-                              style: pw.TextStyle(font: ttf))
+                              style: pw.TextStyle(font: arial))
                           : pw.SizedBox(),
-                      (_myParams.creditTier)
+                      (_myParams.creditTier && _piece.piece != PieceType.devis)
                           ? pw.Text(
                               "${S.current.credit}\t ${Helpers.numberFormat(_selectedClient.credit)} ${_devise}",
-                              style: pw.TextStyle(font: ttf))
+                              style: pw.TextStyle(font: arial))
                           : pw.SizedBox(),
                       pw.Divider(height: 2),
+                      pw.Text('Arreter le présent document à la somme de : ' ,
+                      style: pw.TextStyle(font: arial , fontSize: 10)),
                       pw.Text(getPieceSuminLetters(),
                           style: pw.TextStyle(
-                              font: ttf, fontWeight: pw.FontWeight.bold)),
+                              font: arial, fontWeight:pw.FontWeight.bold)),
                     ])),
             pw.SizedBox(width: 10),
             pw.Expanded(
@@ -3632,39 +3634,50 @@ class _AddPiecePageState extends State<AddPiecePage>
                               _piece.remise > 0)
                           ? pw.Text(
                               "${S.current.total_ht}\t  ${Helpers.numberFormat(_piece.total_ht)}\t ${_devise}",
-                              style: pw.TextStyle(font: ttf))
+                              style: pw.TextStyle(font: arial))
                           : pw.SizedBox(),
                       (_piece.remise > 0)
                           ? pw.Text(
                               "${S.current.remise}\t  ${Helpers.numberFormat((_piece.total_ht * _piece.remise) / 100)}\t ${_devise}\t (${_piece.remise.toStringAsFixed(2)}\t %)",
-                              style: pw.TextStyle(font: ttf))
+                              style: pw.TextStyle(font: arial))
                           : pw.SizedBox(),
                       (_piece.remise > 0)
                           ? pw.Text(
                               "${S.current.net_ht}\t  ${Helpers.numberFormat(_piece.net_ht)}\t ${_devise}",
-                              style: pw.TextStyle(font: ttf))
+                              style: pw.TextStyle(font: arial))
                           : pw.SizedBox(),
                       (_piece.total_tva > 0 && _myParams.tva)
                           ? pw.Text(
                               "${S.current.total_tva}\t  ${Helpers.numberFormat(_piece.total_tva)}\t  ${_devise}",
-                              style: pw.TextStyle(font: ttf))
+                              style: pw.TextStyle(font: arial))
                           : pw.SizedBox(),
                       (_piece.total_tva > 0 && _myParams.tva)
                           ? pw.Text(
                               "${S.current.total_ttc}\t  ${Helpers.numberFormat(_piece.total_ttc)}\t  ${_devise}",
-                              style: pw.TextStyle(font: ttf))
+                              style: pw.TextStyle(font: arial))
                           : pw.SizedBox(),
                       pw.Divider(height: 2),
                       (_myParams.timbre)
                           ? pw.Text(
                               "${S.current.timbre}\t  ${(_piece.total_ttc < _piece.net_a_payer) ? Helpers.numberFormat(_piece.timbre) : Helpers.numberFormat(0.0)}\t  ${_devise}",
-                              style: pw.TextStyle(font: ttf))
+                              style: pw.TextStyle(font: arial))
                           : pw.SizedBox(),
-                      pw.Text(
-                          (_piece.net_a_payer >= 0)
-                              ? "${S.current.net_payer}\t  ${Helpers.numberFormat(_piece.net_a_payer)}\t  $_devise"
-                              : "${S.current.net_payer}\t  ${Helpers.numberFormat(_piece.net_a_payer * -1)}\t  ${_devise}",
-                          style: pw.TextStyle(font: ttf)),
+                      pw.RichText(
+                        text: pw.TextSpan(
+                          children: [
+                            pw.TextSpan(
+                              text: "${S.current.net_payer}\t ",
+                              style: pw.TextStyle(font: arial)
+                            ),
+                            pw.TextSpan(
+                                text: (_piece.net_a_payer >= 0)
+                                    ? "${Helpers.numberFormat(_piece.net_a_payer)}\t  $_devise"
+                                    : "${Helpers.numberFormat(_piece.net_a_payer * -1)}\t  ${_devise}",
+                                style: pw.TextStyle(fontWeight: pw.FontWeight.bold , fontSize: 15)
+                            ),
+                          ]
+                        )
+                      ),
                       pw.Divider(height: 2),
                     ])),
             pw.SizedBox(width: 3),

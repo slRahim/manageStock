@@ -407,7 +407,7 @@ class _PreviewPieceState extends State<PreviewPiece> {
                               )
                             ],
                           ),
-                          (_myParams.creditTier)
+                          (_myParams.creditTier && widget.piece.piece != PieceType.devis)
                               ? Row(
                                   mainAxisAlignment: MainAxisAlignment.start,
                                   children: [
@@ -835,7 +835,7 @@ class _PreviewPieceState extends State<PreviewPiece> {
                 width: 6)
             : PosColumn(width: 6),
       ]);
-      if (_myParams.creditTier) {
+      if (_myParams.creditTier && widget.piece.piece != PieceType.devis) {
         input = "${S.current.credit}";
         encArabic = await CharsetConverter.encode("ISO-8859-6",
             "${Helpers.numberFormat(widget.tier.credit).toString()}: ${input.split('').reversed.join()}");
@@ -1103,7 +1103,7 @@ class _PreviewPieceState extends State<PreviewPiece> {
             : PosColumn(width: 6),
       ]);
 
-      if (_myParams.creditTier) {
+      if (_myParams.creditTier && widget.piece.piece != PieceType.devis) {
         encode = await CharsetConverter.encode("ISO-8859-6",
             "${S.current.credit} : ${Helpers.numberFormat(widget.tier.credit).toString()}");
         ticket.textEncoded(encode);

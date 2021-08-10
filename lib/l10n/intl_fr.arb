@@ -73,7 +73,7 @@
   "client_titre" : "Client",
   "fournisseur_titre" : "Fournisseurs",
   "a_credit" : "Avec Crédit" ,
-  "aff_bloquer" : "Afficher / Bloquer",
+  "aff_bloquer" : "Bloquer",
   "annuler" : "Annuler",
   "flash_on" : "Flash ON",
   "flash_off": "Flash Off",
@@ -428,7 +428,7 @@
   "msg_qte_select_sup" : "Attention la quantité séléctionnée est supérieure à la quantité disponible",
   "msg_no_edit_transformer" : "La pièce transformée ne peut pas étre modifiée",
 
-  "tarif_s" : "Tarif (s)",
+  "tarif_s" : "Tarif",
   "titre_dialog_tarification" : "Nombre de tarif à utiliser :",
   "msg_piece_transformer_to" : "Piéce transformée en",
   "msg_piece_transformer_from" : "Piece depuis",
@@ -619,7 +619,16 @@
   "msg_val_valide" : "Entrez un nombre valide",
   "montant_ht" : "Montant HT",
   "search" : "Rechercher",
-  "no_defenie" : "Non défenie"
+  "no_defenie" : "Non défenie",
+  "msg_arret_somme" : "Arrêter le présent document à la somme de :",
+  "tarifs" : "Tarifs",
+
+  "msg_scaner_empreinte" : "Scannez votre empreinte digitale pour vous authentifier",
+  "titre_auth_empreinte" : "Authentification",
+  "msg_config_auth" : "Aller aux paramétres",
+  "msg_aut_lockout" : "L'authentification biometrique est désactivée",
+  "msg_auth_success" : "Empreinte digitale a bien été reconnue",
+  "msg_auth_fail" : "Empreinte digitale non reconnue, Reessayer !"
 
 
 
