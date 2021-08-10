@@ -104,25 +104,8 @@ class _TierListItemState extends State<TierListItem> {
             },
             child: ListTileCard(
               from: widget.tier,
-              onLongPress: () => widget.onItemSelected != null
-                  ? widget.onItemSelected(widget.tier)
-                  : null,
-              onTap: () => {
-                if (widget.onItemSelected == null)
-                  {
-                    Navigator.of(context)
-                        .pushNamed(RoutesKeys.addTier, arguments: widget.tier)
-                        .then((value) {
-                          if(value is Tiers){
-                            setState(() {
-                              widget.tier = value ;
-                            });
-                          }
-                    })
-                  }
-                else
-                  {widget.onItemSelected(widget.tier)}
-              },
+              onLongPress: _longpressItem,
+              onTap: _tapItem,
               slidingCardController: controller,
               onCardTapped: () {
                 if (controller.isCardSeparated == true) {
@@ -264,6 +247,28 @@ class _TierListItemState extends State<TierListItem> {
         ),
       ),
     );
+  }
+
+  _longpressItem(){
+    widget.onItemSelected != null
+        ? widget.onItemSelected(widget.tier)
+        : null ;
+  }
+
+  _tapItem(){
+    if (widget.onItemSelected == null) {
+      Navigator.of(context)
+          .pushNamed(RoutesKeys.addTier, arguments: widget.tier)
+          .then((value) {
+        if(value is Tiers){
+          setState(() {
+            widget.tier = value ;
+          });
+        }
+      });
+    } else {
+      widget.onItemSelected(widget.tier);
+    }
   }
 
   Future<void> _makePhoneCall(String phone) async {

@@ -25,7 +25,6 @@ class ArticleListItem extends StatefulWidget {
       this.onItemSelected,
       this.tarification,
       this.pieceOrigin,
-
       this.alreadySelected})
       : assert(article != null),
         super(key: key);
@@ -129,92 +128,8 @@ class _ArticleListItemState extends State<ArticleListItem> {
             child: ListTileCard(
               from: widget.article,
               alreadySelected: widget.alreadySelected,
-              onLongPress: () {
-                if (widget.onItemSelected != null &&
-                    widget.article.selectedQuantite >= 0) {
-                  showDialog(
-                      context: context,
-                      builder: (BuildContext context) {
-                        return addQtedialogue();
-                      }).then((val) {
-                    if (widget.article.stockable) {
-                      if (widget.pieceOrigin == 'BL' ||
-                          widget.pieceOrigin == 'FC') {
-                        if ((widget.article.quantite -
-                                widget.article.cmdClient) <
-                            widget.article.selectedQuantite) {
-                          AwesomeDialog(
-                              context: context,
-                              dialogType: DialogType.WARNING,
-                              dismissOnBackKeyPress: false,
-                              dismissOnTouchOutside: false,
-                              animType: AnimType.BOTTOMSLIDE,
-                              title: "",
-                              desc: S.current.msg_qte_select_sup,
-                              btnCancelText: S.current.confirme,
-                              btnCancelOnPress: () {},
-                              btnOkText: S.current.annuler,
-                              btnOkOnPress: () {
-                                setState(() {
-                                  widget.article.selectedQuantite = 1;
-                                });
-                              })
-                            ..show();
-                          // Helpers.showToast(S.current.msg_qte_select_sup);
-                        }
-                      }
-                    }
-                    setState(() {});
-                  });
-                }
-              },
-              onTap: () async {
-                if (widget.onItemSelected == null) {
-                  Navigator.of(context)
-                      .pushNamed(RoutesKeys.addArticle,
-                          arguments: widget.article)
-                      .then((value) {
-                        if(value is Article){
-                          setState(() {
-                            widget.article = value ;
-                          });
-                        }
-                  });
-                } else {
-                  if (widget.article.selectedQuantite > 0) {
-                    widget.article.selectedQuantite = -1;
-                    widget.onItemSelected(widget.article);
-                  } else {
-                    selectThisItem();
-                    if (widget.article.stockable) {
-                      if (widget.pieceOrigin == 'BL' ||
-                          widget.pieceOrigin == 'FC') {
-                        if ((widget.article.quantite -
-                                widget.article.cmdClient) <
-                            widget.article.selectedQuantite) {
-                          // AwesomeDialog(
-                          //     context: context,
-                          //     dialogType: DialogType.WARNING,
-                          //     animType: AnimType.BOTTOMSLIDE,
-                          //     title: "",
-                          //     desc: S.current.msg_qte_zero,
-                          //     btnCancelText: S.current.confirme,
-                          //     btnCancelOnPress: () {},
-                          //     btnOkText: S.current.annuler,
-                          //     btnOkOnPress: () {
-                          //       setState(() {
-                          //         widget.article.selectedQuantite = 0;
-                          //       });
-                          //     })
-                          //   ..show();
-
-                          Helpers.showToast(S.current.msg_qte_zero);
-                        }
-                      }
-                    }
-                  }
-                }
-              },
+              onLongPress: _longpressItem,
+              onTap: _tapItem,
               slidingCardController: controller,
               onCardTapped: () {
                 if (controller.isCardSeparated == true) {
@@ -406,6 +321,96 @@ class _ArticleListItemState extends State<ArticleListItem> {
         ),
       ),
     );
+  }
+
+  _longpressItem(){
+    if (widget.onItemSelected != null &&
+        widget.article.selectedQuantite >= 0) {
+      showDialog(
+          context: context,
+          builder: (BuildContext context) {
+            return addQtedialogue();
+          }).then((val) {
+        if (widget.article.stockable &&
+            (widget.pieceOrigin == 'BL' ||
+                widget.pieceOrigin == 'FC') &&
+            ((widget.article.quantite - widget.article.cmdClient) <
+                widget.article.selectedQuantite)) {
+          AwesomeDialog(
+              context: context,
+              dialogType: DialogType.WARNING,
+              dismissOnBackKeyPress: false,
+              dismissOnTouchOutside: false,
+              animType: AnimType.BOTTOMSLIDE,
+              title: "",
+              desc: S.current.msg_qte_select_sup,
+              btnCancelText: S.current.confirme,
+              btnCancelOnPress: () {},
+              btnOkText: S.current.annuler,
+              btnOkOnPress: () {
+                setState(() {
+                  widget.article.selectedQuantite = 1;
+                });
+              })
+            ..show();
+
+        }
+        setState(() {});
+      });
+    }
+  }
+
+  _tapItem() async{
+    if (widget.onItemSelected == null) {
+      Navigator.of(context)
+          .pushNamed(RoutesKeys.addArticle,
+          arguments: widget.article)
+          .then((value) {
+        if (value is Article) {
+          setState(() {
+            widget.article = value;
+          });
+        }
+      });
+    } else {
+      if (widget.article.selectedQuantite > 0) {
+        widget.article.selectedQuantite = -1;
+        widget.onItemSelected(widget.article);
+      } else {
+        selectThisItem();
+        showDialog(
+            context: context,
+            builder: (BuildContext context) {
+              return addQtedialogue();
+            }).then((val) {
+          if (widget.article.stockable &&
+              (widget.pieceOrigin == 'BL' ||
+                  widget.pieceOrigin == 'FC') &&
+              ((widget.article.quantite -
+                  widget.article.cmdClient) <
+                  widget.article.selectedQuantite)) {
+            AwesomeDialog(
+                context: context,
+                dialogType: DialogType.WARNING,
+                dismissOnBackKeyPress: false,
+                dismissOnTouchOutside: false,
+                animType: AnimType.BOTTOMSLIDE,
+                title: "",
+                desc: S.current.msg_qte_select_sup,
+                btnCancelText: S.current.confirme,
+                btnCancelOnPress: () {},
+                btnOkText: S.current.annuler,
+                btnOkOnPress: () {
+                  setState(() {
+                    widget.article.selectedQuantite = 1;
+                  });
+                })
+              ..show();
+          }
+          setState(() {});
+        });
+      }
+    }
   }
 
   //afficher le prix de vente selon la tarification
@@ -626,16 +631,18 @@ class _ArticleListItemState extends State<ArticleListItem> {
                             children: [
                               InkWell(
                                 onTap: () {
-                                  setState(() {
-                                    _quntiteControler.text = widget
-                                        .article.selectedQuantite
-                                        .toString();
-                                    _priceControler.text = widget
-                                        .article.selectedPriceTTC
-                                        .toString();
-                                    _validateQteError = null;
-                                    _validatePriceError = null;
-                                  });
+                                  if (mounted) {
+                                    setState(() {
+                                      _quntiteControler.text = widget
+                                          .article.selectedQuantite
+                                          .toString();
+                                      _priceControler.text = widget
+                                          .article.selectedPriceTTC
+                                          .toString();
+                                      _validateQteError = null;
+                                      _validatePriceError = null;
+                                    });
+                                  }
                                   Navigator.pop(context);
                                 },
                                 child: Container(

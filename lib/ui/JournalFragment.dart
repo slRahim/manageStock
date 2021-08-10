@@ -339,12 +339,11 @@ class _JournalFragmentState extends State<JournalFragment> {
   onItemSelected(setState, selectedItem) {
     setState(() {
       if (selectedItem != null) {
-        _selectedItems.add(selectedItem);
-        // if (_selectedItems.contains(selectedItem)) {
-        //   _selectedItems.remove(selectedItem);
-        // } else {
-        //   _selectedItems.add(selectedItem);
-        // }
+        if (_selectedItems.contains(selectedItem)) {
+          _selectedItems.remove(selectedItem);
+        } else {
+          _selectedItems.add(selectedItem);
+        }
       }
     });
   }

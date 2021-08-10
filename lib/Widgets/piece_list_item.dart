@@ -93,39 +93,8 @@ class _PieceListItemState extends State<PieceListItem> {
           actionExtentRatio: 0.25,
           child: ListTileCard(
             from: widget.piece,
-            onLongPress: () =>
-                (widget.onItemSelected != null && widget.fromTresory == null)
-                    ? widget.onItemSelected(widget.piece)
-                    : null,
-            onTap: () => {
-              if (widget.fromTresory == null)
-                {
-                  if (widget.onItemSelected == null)
-                    {
-                      Navigator.of(context)
-                          .pushNamed(RoutesKeys.addPiece,
-                              arguments: widget.piece)
-                          .then((value) {
-                            if(value is Piece){
-                              if(value.piece == PieceType.retourClient ||
-                                  value.piece == PieceType.avoirClient ||
-                                  value.piece == PieceType.retourFournisseur ||
-                                  value.piece == PieceType.avoirFournisseur){
-
-                                value.regler =(value.regler != 0)? value.regler *-1 : value.regler;
-                                value.reste = (value.reste != 0)? value.reste *-1 : value.reste;
-
-                              }
-                              setState(() {
-                                widget.piece = value ;
-                              });
-                            }
-                      })
-                    }
-                  else
-                    {widget.onItemSelected(widget.piece)}
-                }
-            },
+            onLongPress: _longpressItem,
+            onTap: _tapItem,
             slidingCardController: controller,
             onCardTapped: () {
               if (controller.isCardSeparated == true) {
@@ -316,6 +285,41 @@ class _PieceListItemState extends State<PieceListItem> {
         ),
       ),
     );
+  }
+
+  _longpressItem(){
+    (widget.onItemSelected != null && widget.fromTresory == null)
+        ? widget.onItemSelected(widget.piece)
+        : null ;
+  }
+
+  _tapItem(){
+    if (widget.fromTresory == null) {
+      if (widget.onItemSelected == null) {
+        Navigator.of(context)
+            .pushNamed(RoutesKeys.addPiece,
+            arguments: widget.piece)
+            .then((value) {
+          if(value is Piece){
+            if(value.piece == PieceType.retourClient ||
+                value.piece == PieceType.avoirClient ||
+                value.piece == PieceType.retourFournisseur ||
+                value.piece == PieceType.avoirFournisseur){
+
+              value.regler =(value.regler != 0)? value.regler *-1 : value.regler;
+              value.reste = (value.reste != 0)? value.reste *-1 : value.reste;
+
+            }
+            setState(() {
+              widget.piece = value ;
+            });
+          }
+        });
+      }
+      else {
+        widget.onItemSelected(widget.piece);
+      }
+    }
   }
 
   String getPiecetype() {

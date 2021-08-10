@@ -81,17 +81,7 @@ class _TresorieListItemState extends State<TresorieListItem> {
           actionExtentRatio: 0.25,
           child: ListTileCard(
             from: widget.tresorie,
-            onTap: () => {
-              Navigator.of(context)
-                  .pushNamed(RoutesKeys.addTresorie, arguments: widget.tresorie)
-                  .then((value) {
-                    if(value is Tresorie){
-                      setState(() {
-                        widget.tresorie = value ;
-                      });
-                    }
-              })
-            },
+            onTap: _tapItem,
             slidingCardController: controller,
             onCardTapped: () {
               if (controller.isCardSeparated == true) {
@@ -186,6 +176,18 @@ class _TresorieListItemState extends State<TresorieListItem> {
         ),
       ),
     );
+  }
+
+  _tapItem(){
+    Navigator.of(context)
+        .pushNamed(RoutesKeys.addTresorie, arguments: widget.tresorie)
+        .then((value) {
+      if(value is Tresorie){
+        setState(() {
+          widget.tresorie = value ;
+        });
+      }
+    });
   }
 
   Color getColor() {
