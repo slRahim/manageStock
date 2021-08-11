@@ -67,10 +67,15 @@ class NotificationPlugin {
   }
 
   setOnNotificationClick(Function onNotificationClick) async {
-    await flutterLocalNotificationsPlugin.initialize(initializationSettings,
-        onSelectNotification: (String payload) async {
-      onNotificationClick(payload);
-    });
+    try{
+      await flutterLocalNotificationsPlugin.initialize(initializationSettings,
+          onSelectNotification: (String payload) async {
+            onNotificationClick(payload);
+          });
+    }catch(e){
+      print(e);
+    }
+
   }
 
   //******************************************************************************************************************************************************************

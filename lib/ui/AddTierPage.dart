@@ -142,7 +142,6 @@ class _AddTierPageState extends State<AddTierPage>
       setState(() {
         _tabSelectedIndex = _tabController.index;
       });
-      // print("Selected Index: " + _tabController.index.toString());
     });
   }
 
@@ -328,80 +327,13 @@ class _AddTierPageState extends State<AddTierPage>
                 editMode: editMode,
                 modification: modification,
                 title: appBarTitle,
-                onCancelPressed: () => {
-                  if (modification)
-                    {
-                      if (editMode)
-                        {
-                          AwesomeDialog(
-                              context: context,
-                              title: "",
-                              desc: "${S.current.msg_retour_no_save} ?",
-                              dialogType: DialogType.QUESTION,
-                              animType: AnimType.BOTTOMSLIDE,
-                              btnCancelText: S.current.non,
-                              btnCancelOnPress: () {},
-                              btnOkText: S.current.oui,
-                              btnOkOnPress: () async {
-                                Navigator.of(context).pushReplacementNamed(
-                                    RoutesKeys.addTier,
-                                    arguments: widget.arguments);
-                              })
-                            ..show()
-                        }
-                      else
-                        {Navigator.pop(context, widget.arguments)}
-                    }
-                  else
-                    {
-                      if (_raisonSocialeControl.text != '')
-                        {
-                          AwesomeDialog(
-                              context: context,
-                              title: "",
-                              desc: "${S.current.msg_retour_no_save} ?",
-                              dialogType: DialogType.QUESTION,
-                              animType: AnimType.BOTTOMSLIDE,
-                              btnCancelText: S.current.non,
-                              btnCancelOnPress: () {},
-                              btnOkText: S.current.oui,
-                              btnOkOnPress: () async {
-                                Navigator.pop(context);
-                              })
-                            ..show()
-                        }
-                      else
-                        {
-                          Navigator.pop(context),
-                        }
-                    }
-                },
+                onCancelPressed: _pressCancel,
                 onEditPressed: () {
                   setState(() {
                     editMode = true;
                   });
                 },
-                onSavePressed: () async {
-                  if (_formKey.currentState != null) {
-                    if (_formKey.currentState.validate()) {
-                      int id = await addItemToDb();
-                      if (id > -1) {
-                        setState(() {
-                          modification = true;
-                          editMode = false;
-                        });
-                      }
-                    } else {
-                      Helpers.showFlushBar(
-                          context, "${S.current.msg_champs_obg}");
-                    }
-                  } else {
-                    setState(() {
-                      _tabSelectedIndex = 0;
-                      _tabController.index = _tabSelectedIndex;
-                    });
-                  }
-                },
+                onSavePressed: _pressSave,
               ),
               bottomNavigationBar: BottomTabBar(
                 selectedIndex: _tabSelectedIndex,
@@ -514,6 +446,68 @@ class _AddTierPageState extends State<AddTierPage>
         Navigator.pop(context);
         return Future.value(false);
       }
+    }
+  }
+
+  _pressCancel() {
+    if (modification) {
+      if (editMode) {
+        AwesomeDialog(
+            context: context,
+            title: "",
+            desc: "${S.current.msg_retour_no_save} ?",
+            dialogType: DialogType.QUESTION,
+            animType: AnimType.BOTTOMSLIDE,
+            btnCancelText: S.current.non,
+            btnCancelOnPress: () {},
+            btnOkText: S.current.oui,
+            btnOkOnPress: () async {
+              Navigator.of(context).pushReplacementNamed(RoutesKeys.addTier,
+                  arguments: widget.arguments);
+            })
+          ..show();
+      } else {
+        Navigator.pop(context, widget.arguments);
+      }
+    } else {
+      if (_raisonSocialeControl.text != '') {
+        AwesomeDialog(
+            context: context,
+            title: "",
+            desc: "${S.current.msg_retour_no_save} ?",
+            dialogType: DialogType.QUESTION,
+            animType: AnimType.BOTTOMSLIDE,
+            btnCancelText: S.current.non,
+            btnCancelOnPress: () {},
+            btnOkText: S.current.oui,
+            btnOkOnPress: () async {
+              Navigator.pop(context);
+            })
+          ..show();
+      } else {
+        Navigator.pop(context);
+      }
+    }
+  }
+
+  _pressSave() async {
+    if (_formKey.currentState != null) {
+      if (_formKey.currentState.validate()) {
+        int id = await addItemToDb();
+        if (id > -1) {
+          setState(() {
+            modification = true;
+            editMode = false;
+          });
+        }
+      } else {
+        Helpers.showFlushBar(context, "${S.current.msg_champs_obg}");
+      }
+    } else {
+      setState(() {
+        _tabSelectedIndex = 0;
+        _tabController.index = _tabSelectedIndex;
+      });
     }
   }
 

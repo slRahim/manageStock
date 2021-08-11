@@ -291,11 +291,8 @@ class _PiecesFragmentState extends State<PiecesFragment> {
     return Scaffold(
         floatingActionButton: (widget.onConfirmSelectedItem == null)
             ? FloatingActionButton(
-                backgroundColor:
-                    Theme.of(context).floatingActionButtonTheme.backgroundColor,
-                onPressed: () {
-                  _addNewPiece(context);
-                },
+                backgroundColor: Theme.of(context).floatingActionButtonTheme.backgroundColor,
+                onPressed: () => _addNewPiece(context),
                 child: Icon(Icons.add),
               )
             : null,
@@ -306,40 +303,8 @@ class _PiecesFragmentState extends State<PiecesFragment> {
               ? Helpers.getPieceTitle(widget.peaceType)
               : S.current.piece_titre,
           isFilterOn: isFilterOn,
-          onSearchChanged: (String search) =>
-              _dataSource.updateSearchTerm(search.trim()),
-          onFilterPressed: () async {
-            AwesomeDialog(
-                context: context,
-                dialogType: DialogType.INFO,
-                animType: AnimType.BOTTOMSLIDE,
-                body: addFilterdialogue(),
-                btnOkText: S.current.filtrer_btn,
-                closeIcon: Icon(
-                  Icons.cancel_sharp,
-                  color: Colors.red,
-                  size: 26,
-                ),
-                showCloseIcon: true,
-                btnOkOnPress: () async {
-                  setState(() {
-                    _savedFilterIsDraft = _filterIsDraft;
-                    _savedFilterHasCredit = _filterInHasCredit;
-                    _savedFilterStartDate = _filterStartDate;
-                    _savedFilterEndDate = _filterEndDate;
-
-                    fillFilter(_filterMap);
-
-                    if (_filterMap.toString() == _emptyFilterMap.toString()) {
-                      isFilterOn = false;
-                    } else {
-                      isFilterOn = true;
-                    }
-                    _dataSource.updateFilters(_filterMap);
-                  });
-                })
-              ..show();
-          },
+          onSearchChanged: (String search) => _dataSource.updateSearchTerm(search.trim()),
+          onFilterPressed: _pressFilter,
         ),
         body: ItemsSliverList(
             dataSource: _dataSource,
@@ -349,6 +314,39 @@ class _PiecesFragmentState extends State<PiecesFragment> {
                     Navigator.pop(context);
                   }
                 : null));
+  }
+
+  _pressFilter(){
+    AwesomeDialog(
+        context: context,
+        dialogType: DialogType.INFO,
+        animType: AnimType.BOTTOMSLIDE,
+        body: addFilterdialogue(),
+        btnOkText: S.current.filtrer_btn,
+        closeIcon: Icon(
+          Icons.cancel_sharp,
+          color: Colors.red,
+          size: 26,
+        ),
+        showCloseIcon: true,
+        btnOkOnPress: () async {
+          setState(() {
+            _savedFilterIsDraft = _filterIsDraft;
+            _savedFilterHasCredit = _filterInHasCredit;
+            _savedFilterStartDate = _filterStartDate;
+            _savedFilterEndDate = _filterEndDate;
+
+            fillFilter(_filterMap);
+
+            if (_filterMap.toString() == _emptyFilterMap.toString()) {
+              isFilterOn = false;
+            } else {
+              isFilterOn = true;
+            }
+            _dataSource.updateFilters(_filterMap);
+          });
+        })
+      ..show();
   }
 
   _addNewPiece(context) {

@@ -384,9 +384,8 @@ class _ArticlesFragmentState extends State<ArticlesFragment> {
                 iconSize: 30.0,
                 margin: 10.0,
                 padding: 10.0,
-                onTap: () {
-                  _addNewArticle(context);
-                },
+                onTap: ()=>_addNewArticle(context)
+                ,
               ),
               CircularMenuItem(
                 icon: (MdiIcons.barcode),
@@ -394,9 +393,7 @@ class _ArticlesFragmentState extends State<ArticlesFragment> {
                 margin: 10.0,
                 padding: 10.0,
                 color: Colors.blue,
-                onTap: () {
-                  scanBarCode();
-                },
+                onTap: () => scanBarCode(),
               )
             ]),
         appBar: getAppBar(setState),
@@ -407,10 +404,10 @@ class _ArticlesFragmentState extends State<ArticlesFragment> {
             pieceOrigin: widget.pieceOrigin,
             articleOriginalList: articleAlreadySelected,
             onItemSelected: widget.onConfirmSelectedItems != null
-                ? (selectedItem) {
-                    onItemSelected(setState, selectedItem);
-                  }
-                : null));
+                ? (selectedItem) => onItemSelected(setState, selectedItem)
+                : null
+        )
+    );
   }
 
   _addNewArticle(context) {

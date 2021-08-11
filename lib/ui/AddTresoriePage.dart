@@ -130,7 +130,7 @@ class _AddTresoriePageState extends State<AddTresoriePage>
     Statics.modaliteList[4] = S.current.carte_bancaire;
     Statics.modaliteList[5] = S.current.traite_bancaire;
     _modaliteDropdownItems = utils.buildDropStatutTier(Statics.modaliteList);
-    _selectedmodalite = Statics.modaliteList[0] ;
+    _selectedmodalite = Statics.modaliteList[0];
 
     _compteItems = await _queryCtr.getAllCompteTresorie();
     _compteDropdownItems =
@@ -196,7 +196,7 @@ class _AddTresoriePageState extends State<AddTresoriePage>
       }
       _objetControl.text = _tresorie.objet;
       _selectedmodalite = Statics.modaliteList[_tresorie.modalite];
-      _numchequeControl.text = _tresorie.numCheque ;
+      _numchequeControl.text = _tresorie.numCheque;
       _montantControl.text = (_tresorie.montant < 0)
           ? ((_tresorie.montant * -1)).toStringAsFixed(2)
           : (_tresorie.montant).toStringAsFixed(2);
@@ -247,73 +247,13 @@ class _AddTresoriePageState extends State<AddTresoriePage>
               editMode: editMode,
               modification: modification,
               title: appBarTitle,
-              onCancelPressed: () => {
-                if (modification)
-                  {
-                    if (editMode)
-                      {
-                        AwesomeDialog(
-                            context: context,
-                            title: "",
-                            desc: "${S.current.msg_retour_no_save} ?",
-                            dialogType: DialogType.QUESTION,
-                            animType: AnimType.BOTTOMSLIDE,
-                            btnCancelText: S.current.non,
-                            btnCancelOnPress: () {},
-                            btnOkText: S.current.oui,
-                            btnOkOnPress: () async {
-                              Navigator.of(context).pushReplacementNamed(
-                                  RoutesKeys.addTresorie,
-                                  arguments: widget.arguments);
-                            })
-                          ..show()
-                      }
-                    else
-                      {Navigator.pop(context, widget.arguments)}
-                  }
-                else
-                  {
-                    if (_montantControl.text != '')
-                      {
-                        AwesomeDialog(
-                            context: context,
-                            title: "",
-                            desc: "${S.current.msg_retour_no_save} ?",
-                            dialogType: DialogType.QUESTION,
-                            animType: AnimType.BOTTOMSLIDE,
-                            btnCancelText: S.current.non,
-                            btnCancelOnPress: () {},
-                            btnOkText: S.current.oui,
-                            btnOkOnPress: () async {
-                              Navigator.pop(context);
-                            })
-                          ..show()
-                      }
-                    else
-                      {
-                        Navigator.pop(context),
-                      }
-                  }
-              },
+              onCancelPressed: _pressCancel,
               onEditPressed: () {
                 setState(() {
                   editMode = true;
                 });
               },
-              onSavePressed: () async {
-                if (_formKey.currentState.validate() &&
-                    _formKey1.currentState.validate()) {
-                  int id = await addItemToDb();
-                  if (id > -1) {
-                    setState(() {
-                      modification = true;
-                      editMode = false;
-                    });
-                  }
-                } else {
-                  Helpers.showFlushBar(context, "${S.current.msg_champs_obg}");
-                }
-              },
+              onSavePressed: _pressSave,
             ),
             // extendBody: true,
             bottomNavigationBar: ((_selectedCategorie.id == 2 ||
@@ -339,7 +279,8 @@ class _AddTresoriePageState extends State<AddTresoriePage>
                             child: (_selectedClient != null)
                                 ? Container(
                                     child: Column(
-                                      mainAxisAlignment: MainAxisAlignment.center,
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
                                       children: [
                                         Row(
                                           mainAxisAlignment:
@@ -413,7 +354,8 @@ class _AddTresoriePageState extends State<AddTresoriePage>
                                             textAlign: TextAlign.center,
                                             style: GoogleFonts.lato(
                                                 textStyle: TextStyle(
-                                                    fontWeight: FontWeight.bold)),
+                                                    fontWeight:
+                                                        FontWeight.bold)),
                                           ),
                                         ],
                                       )
@@ -427,28 +369,16 @@ class _AddTresoriePageState extends State<AddTresoriePage>
             floatingActionButtonLocation:
                 FloatingActionButtonLocation.centerDocked,
             floatingActionButton: ((_selectedCategorie.id == 2 ||
-                        _selectedCategorie.id == 3  ||
-                        _selectedCategorie.id == 6 || _selectedCategorie.id == 7) &&
+                        _selectedCategorie.id == 3 ||
+                        _selectedCategorie.id == 6 ||
+                        _selectedCategorie.id == 7) &&
                     !modification)
                 ? FloatingActionButton(
                     child: Icon(Icons.add),
                     elevation: 2,
                     backgroundColor: Colors.blue,
                     foregroundColor: Colors.white,
-                    onPressed: () async {
-                      if (editMode && !modification) {
-                        if (_selectedClient != null) {
-                          await showDialog(
-                              context: context,
-                              builder: (BuildContext context) {
-                                return choosePieceDialog();
-                              });
-                        } else {
-                          var message = S.current.msg_select_tier;
-                          Helpers.showFlushBar(context, message);
-                        }
-                      }
-                    },
+                    onPressed: _pressAddPiece,
                   )
                 : null,
             body: Builder(
@@ -457,7 +387,6 @@ class _AddTresoriePageState extends State<AddTresoriePage>
       );
     }
   }
-
 
   Future<bool> _onWillPop() async {
     if (modification) {
@@ -472,14 +401,13 @@ class _AddTresoriePageState extends State<AddTresoriePage>
             btnCancelOnPress: () {},
             btnOkText: S.current.oui,
             btnOkOnPress: () async {
-              Navigator.of(context).pushReplacementNamed(
-                  RoutesKeys.addTresorie,
-                  arguments: widget.arguments) ;
+              Navigator.of(context).pushReplacementNamed(RoutesKeys.addTresorie,
+                  arguments: widget.arguments);
             })
           ..show();
         return Future.value(false);
       } else {
-        Navigator.pop(context, widget.arguments) ;
+        Navigator.pop(context, widget.arguments);
         return Future.value(false);
       }
     } else {
@@ -501,6 +429,76 @@ class _AddTresoriePageState extends State<AddTresoriePage>
       } else {
         Navigator.pop(context);
         return Future.value(false);
+      }
+    }
+  }
+
+  _pressCancel() {
+    if (modification) {
+      if (editMode) {
+        AwesomeDialog(
+            context: context,
+            title: "",
+            desc: "${S.current.msg_retour_no_save} ?",
+            dialogType: DialogType.QUESTION,
+            animType: AnimType.BOTTOMSLIDE,
+            btnCancelText: S.current.non,
+            btnCancelOnPress: () {},
+            btnOkText: S.current.oui,
+            btnOkOnPress: () async {
+              Navigator.of(context).pushReplacementNamed(RoutesKeys.addTresorie,
+                  arguments: widget.arguments);
+            })
+          ..show();
+      } else {
+        Navigator.pop(context, widget.arguments);
+      }
+    } else {
+      if (_montantControl.text != '') {
+        AwesomeDialog(
+            context: context,
+            title: "",
+            desc: "${S.current.msg_retour_no_save} ?",
+            dialogType: DialogType.QUESTION,
+            animType: AnimType.BOTTOMSLIDE,
+            btnCancelText: S.current.non,
+            btnCancelOnPress: () {},
+            btnOkText: S.current.oui,
+            btnOkOnPress: () async {
+              Navigator.pop(context);
+            })
+          ..show();
+      } else {
+        Navigator.pop(context);
+      }
+    }
+  }
+
+  _pressSave() async {
+    if (_formKey.currentState.validate() && _formKey1.currentState.validate()) {
+      int id = await addItemToDb();
+      if (id > -1) {
+        setState(() {
+          modification = true;
+          editMode = false;
+        });
+      }
+    } else {
+      Helpers.showFlushBar(context, "${S.current.msg_champs_obg}");
+    }
+  }
+
+  _pressAddPiece() async {
+    if (editMode && !modification) {
+      if (_selectedClient != null) {
+        await showDialog(
+            context: context,
+            builder: (BuildContext context) {
+              return choosePieceDialog();
+            });
+      } else {
+        var message = S.current.msg_select_tier;
+        Helpers.showFlushBar(context, message);
       }
     }
   }
@@ -596,7 +594,7 @@ class _AddTresoriePageState extends State<AddTresoriePage>
                   onChanged: (value) {
                     setState(() {
                       _selectedCategorie = value;
-                      if(_selectedCategorie.id ==  1 ){
+                      if (_selectedCategorie.id == 1) {
                         _selectedCategorie = _categorieItems.elementAt(1);
                       }
                       _objetControl.text = _selectedCategorie.libelle;
@@ -805,17 +803,20 @@ class _AddTresoriePageState extends State<AddTresoriePage>
                     padding: EdgeInsetsDirectional.fromSTEB(10, 3, 10, 3),
                     decoration: editMode
                         ? new BoxDecoration(
-                      border: Border.all(
-                        color: Colors.blueAccent,
-                      ),
-                      borderRadius: BorderRadius.circular(20.0),
-                    )
+                            border: Border.all(
+                              color: Colors.blueAccent,
+                            ),
+                            borderRadius: BorderRadius.circular(20.0),
+                          )
                         : null,
                     child: Row(
                       crossAxisAlignment: CrossAxisAlignment.center,
                       mainAxisSize: MainAxisSize.max,
                       children: [
-                        Icon(MdiIcons.creditCardSettingsOutline, color: Colors.blue,),
+                        Icon(
+                          MdiIcons.creditCardSettingsOutline,
+                          color: Colors.blue,
+                        ),
                         SizedBox(width: 13),
                         Expanded(
                           child: DropdownButtonHideUnderline(
@@ -825,10 +826,10 @@ class _AddTresoriePageState extends State<AddTresoriePage>
                                 items: _modaliteDropdownItems,
                                 onChanged: editMode
                                     ? (value) {
-                                  setState(() {
-                                    _selectedmodalite = value;
-                                  });
-                                }
+                                        setState(() {
+                                          _selectedmodalite = value;
+                                        });
+                                      }
                                     : null),
                           ),
                         ),
@@ -836,7 +837,8 @@ class _AddTresoriePageState extends State<AddTresoriePage>
                     ),
                   ),
                   Visibility(
-                    visible: (Statics.modaliteList.indexOf(_selectedmodalite) == 1),
+                    visible:
+                        (Statics.modaliteList.indexOf(_selectedmodalite) == 1),
                     child: TextFormField(
                       enabled: editMode,
                       controller: _numchequeControl,
@@ -854,7 +856,7 @@ class _AddTresoriePageState extends State<AddTresoriePage>
                         labelText: S.current.num_cheque,
                         labelStyle: GoogleFonts.lato(
                             textStyle:
-                            TextStyle(color: Theme.of(context).hintColor)),
+                                TextStyle(color: Theme.of(context).hintColor)),
                         prefixIcon: Icon(
                           MdiIcons.idCard,
                           color: Colors.blue,
@@ -904,11 +906,11 @@ class _AddTresoriePageState extends State<AddTresoriePage>
                         extentOffset: _montantControl.value.text.length),
                     keyboardType: TextInputType.number,
                     validator: (value) {
-                      if(!value.isNumericUsingRegularExpression){
-                        return S.current.msg_val_valide ;
+                      if (!value.isNumericUsingRegularExpression) {
+                        return S.current.msg_val_valide;
                       }
-                      if(value.isNotEmpty && double.parse(value) < 0){
-                        return S.current.msg_prix_supp_zero ;
+                      if (value.isNotEmpty && double.parse(value) < 0) {
+                        return S.current.msg_prix_supp_zero;
                       }
                       if (value.isEmpty) {
                         return S.current.msg_champ_oblg;
@@ -971,7 +973,9 @@ class _AddTresoriePageState extends State<AddTresoriePage>
   choosePieceDialog() {
     return PiecesFragment(
       tierId: _selectedClient.id,
-      peaceType: (_selectedCategorie.id == 2 || _selectedCategorie.id == 3)? "TR" : "TRRemb",
+      peaceType: (_selectedCategorie.id == 2 || _selectedCategorie.id == 3)
+          ? "TR"
+          : "TRRemb",
       onConfirmSelectedItem: (selectedItem) {
         setState(() {
           _selectedPieces.clear();
@@ -982,9 +986,7 @@ class _AddTresoriePageState extends State<AddTresoriePage>
           _objetControl.text = _selectedCategorie.libelle +
               " ${selectedItem.piece} ${selectedItem.num_piece}";
         });
-        setState(() {
-
-        });
+        setState(() {});
       },
     );
   }
@@ -1148,10 +1150,11 @@ class _AddTresoriePageState extends State<AddTresoriePage>
                               controller: _soldeCompteControl,
                               keyboardType: TextInputType.number,
                               validator: (value) {
-                                if(!value.isNumericUsingRegularExpression){
-                                  return S.current.msg_val_valide ;
+                                if (!value.isNumericUsingRegularExpression) {
+                                  return S.current.msg_val_valide;
                                 }
-                                if (value.isNotEmpty && double.parse(value) < 0) {
+                                if (value.isNotEmpty &&
+                                    double.parse(value) < 0) {
                                   return S.current.msg_prix_supp_zero;
                                 }
                                 return null;
@@ -1197,10 +1200,13 @@ class _AddTresoriePageState extends State<AddTresoriePage>
                                         _compteTresorie.codeCompte =
                                             _codeCompteControl.text.trim();
                                         _codeCompteControl.text = "";
-                                        _compteTresorie.soldeDepart = (_soldeCompteControl.text.trim() != '')
-                                            ?double.parse(_soldeCompteControl
-                                                .text
-                                                .trim()) : 0.0;
+                                        _compteTresorie.soldeDepart =
+                                            (_soldeCompteControl.text.trim() !=
+                                                    '')
+                                                ? double.parse(
+                                                    _soldeCompteControl.text
+                                                        .trim())
+                                                : 0.0;
                                         _soldeCompteControl.text = "";
                                         _compteTresorie.solde = 0.0;
                                       });
@@ -1369,19 +1375,23 @@ class _AddTresoriePageState extends State<AddTresoriePage>
         if (tresorie != null) {
           id = await _queryCtr.updateItemInDb(DbTablesNames.tresorie, tresorie);
           if (tresorie.categorie == 2 || tresorie.categorie == 3) {
-            await _queryCtr.removeItemWithForeignKey(DbTablesNames.reglementTresorie, tresorie.id, 'Tresorie_id');
+            await _queryCtr.removeItemWithForeignKey(
+                DbTablesNames.reglementTresorie, tresorie.id, 'Tresorie_id');
             bool _haspiece = true;
             double verssementSolde = 0;
             if (tresorie.pieceId == null) {
               _haspiece = false;
               _selectedPieces =
-              await _queryCtr.getAllPiecesByTierId(_selectedClient.id);
+                  await _queryCtr.getAllPiecesByTierId(_selectedClient.id);
 
-              double _montant = double.parse((tresorie.montant).toStringAsFixed(2));
+              double _montant =
+                  double.parse((tresorie.montant).toStringAsFixed(2));
               while (_montant > 0) {
                 // recuperer la some des verssement pour le solde
-                verssementSolde = await _queryCtr.getVerssementSolde(_selectedClient);
-                if ((_selectedClient.solde_depart - verssementSolde) > 0 && _haspiece == false) {
+                verssementSolde =
+                    await _queryCtr.getVerssementSolde(_selectedClient);
+                if ((_selectedClient.solde_depart - verssementSolde) > 0 &&
+                    _haspiece == false) {
                   ReglementTresorie item = new ReglementTresorie.init();
                   item.piece_id = 0;
                   item.tresorie_id = tresorie.id;
@@ -1391,13 +1401,12 @@ class _AddTresoriePageState extends State<AddTresoriePage>
                     _montant = 0;
                   } else {
                     item.regler =
-                    (_selectedClient.solde_depart - verssementSolde);
+                        (_selectedClient.solde_depart - verssementSolde);
                     _montant = _montant -
                         (_selectedClient.solde_depart - verssementSolde);
                   }
                   await _queryCtr.addItemToTable(
                       DbTablesNames.reglementTresorie, item);
-
                 } else {
                   // le solde de depart est reglé
                   _selectedPieces.forEach((piece) async {
@@ -1414,7 +1423,8 @@ class _AddTresoriePageState extends State<AddTresoriePage>
                     } else {
                       return;
                     }
-                    await _queryCtr.addItemToTable(DbTablesNames.reglementTresorie, item);
+                    await _queryCtr.addItemToTable(
+                        DbTablesNames.reglementTresorie, item);
                   });
                 }
               }
@@ -1423,27 +1433,31 @@ class _AddTresoriePageState extends State<AddTresoriePage>
                   _selectedPieces = new List<Piece>();
                 });
               }
-            }else{
+            } else {
               // màj montant verss d'une piece
-              double _montant = double.parse(
-                  (tresorie.montant).toStringAsFixed(2));
+              double _montant =
+                  double.parse((tresorie.montant).toStringAsFixed(2));
               _selectedPieces.forEach((piece) async {
                 ReglementTresorie item = new ReglementTresorie.init();
                 item.piece_id = piece.id;
                 item.tresorie_id = widget.arguments.id;
                 item.regler = _montant;
-                await _queryCtr.addItemToTable(DbTablesNames.reglementTresorie, item);
+                await _queryCtr.addItemToTable(
+                    DbTablesNames.reglementTresorie, item);
               });
             }
-          }else if(_selectedCategorie.id == 6 || _selectedCategorie.id == 7){
-            await _queryCtr.removeItemWithForeignKey(DbTablesNames.reglementTresorie, tresorie.id, 'Tresorie_id');
-            double _montant = double.parse((tresorie.montant).toStringAsFixed(2));
+          } else if (_selectedCategorie.id == 6 || _selectedCategorie.id == 7) {
+            await _queryCtr.removeItemWithForeignKey(
+                DbTablesNames.reglementTresorie, tresorie.id, 'Tresorie_id');
+            double _montant =
+                double.parse((tresorie.montant).toStringAsFixed(2));
             _selectedPieces.forEach((piece) async {
               ReglementTresorie item = new ReglementTresorie.init();
               item.piece_id = piece.id;
               item.tresorie_id = widget.arguments.id;
               item.regler = _montant;
-              await _queryCtr.addItemToTable(DbTablesNames.reglementTresorie, item);
+              await _queryCtr.addItemToTable(
+                  DbTablesNames.reglementTresorie, item);
             });
           }
 
@@ -1477,10 +1491,12 @@ class _AddTresoriePageState extends State<AddTresoriePage>
               _selectedPieces =
                   await _queryCtr.getAllPiecesByTierId(_selectedClient.id);
             }
-            double _montant = double.parse((tresorie.montant).toStringAsFixed(2));
+            double _montant =
+                double.parse((tresorie.montant).toStringAsFixed(2));
             while (_montant > 0) {
               // recuperer la some des verssement pour le solde
-              verssementSolde = await _queryCtr.getVerssementSolde(_selectedClient);
+              verssementSolde =
+                  await _queryCtr.getVerssementSolde(_selectedClient);
               if ((_selectedClient.solde_depart - verssementSolde) > 0 &&
                   !_haspiece) {
                 ReglementTresorie item = new ReglementTresorie.init();
@@ -1523,8 +1539,9 @@ class _AddTresoriePageState extends State<AddTresoriePage>
                 _selectedPieces = new List<Piece>();
               });
             }
-          }else if(tresorie.categorie == 6 || tresorie.categorie == 7){
-            double _montant = double.parse((tresorie.montant).toStringAsFixed(2)) * -1;
+          } else if (tresorie.categorie == 6 || tresorie.categorie == 7) {
+            double _montant =
+                double.parse((tresorie.montant).toStringAsFixed(2)) * -1;
             _selectedPieces.forEach((piece) async {
               ReglementTresorie item = new ReglementTresorie.init();
               item.piece_id = piece.id;
@@ -1540,7 +1557,7 @@ class _AddTresoriePageState extends State<AddTresoriePage>
                 return;
               }
 
-              item.regler = item.regler * -1 ;
+              item.regler = item.regler * -1;
               await _queryCtr.addItemToTable(
                   DbTablesNames.reglementTresorie, item);
             });
@@ -1558,7 +1575,7 @@ class _AddTresoriePageState extends State<AddTresoriePage>
           return Future.value(id);
         }
       }
-      if(!modification && editMode){
+      if (!modification && editMode) {
         Navigator.pop(context);
       }
       Helpers.showFlushBar(context, message);
@@ -1571,7 +1588,7 @@ class _AddTresoriePageState extends State<AddTresoriePage>
 
   Future<Object> makeItem() async {
     var tiers = _selectedClient;
-    var _old_num_tresorie= _tresorie.numTresorie;
+    var _old_num_tresorie = _tresorie.numTresorie;
     if (tiers != null) {
       _tresorie.tierId = tiers.id;
       _tresorie.tierRS = tiers.raisonSociale;
@@ -1588,12 +1605,15 @@ class _AddTresoriePageState extends State<AddTresoriePage>
     }
     _tresorie.objet = _objetControl.text.trim();
     _tresorie.modalite = Statics.modaliteList.indexOf(_selectedmodalite);
-    _tresorie.numCheque =(Statics.modaliteList.indexOf(_selectedmodalite) == 1)? _numchequeControl.text.trim() : '';
+    _tresorie.numCheque = (Statics.modaliteList.indexOf(_selectedmodalite) == 1)
+        ? _numchequeControl.text.trim()
+        : '';
     _tresorie.montant = double.parse(_montantControl.text.trim());
     _tresorie.montant = double.parse((_tresorie.montant).toStringAsFixed(2));
 
     if (_selectedCategorie.id == 6 || _selectedCategorie.id == 7) {
-      _tresorie.montant =  double.parse((_tresorie.montant * -1).toStringAsFixed(2)) ;
+      _tresorie.montant =
+          double.parse((_tresorie.montant * -1).toStringAsFixed(2));
     }
     if (_selectedCategorie.id == 5) {
       _tresorie.charge = _selectedCharge.id;
@@ -1602,17 +1622,17 @@ class _AddTresoriePageState extends State<AddTresoriePage>
       _tresorie.pieceId = _selectedPieces.first.id;
     }
 
-    if(!modification){
+    if (!modification) {
       var res = await _queryCtr.getTresorieByNum(_tresorie.numTresorie);
       if (res.isNotEmpty) {
         await getNumPiece();
         return null;
       }
-    }else{
+    } else {
       if (_tresorie.numTresorie != _old_num_tresorie) {
         var res = await _queryCtr.getTresorieByNum(_tresorie.numTresorie);
         if (res.isNotEmpty) {
-          _tresorie.numTresorie= _old_num_tresorie;
+          _tresorie.numTresorie = _old_num_tresorie;
           await getNumPiece();
           return null;
         }

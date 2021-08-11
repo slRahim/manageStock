@@ -216,9 +216,7 @@ class _ClientFourFragmentState extends State<ClientFourFragment> {
                   iconSize: 30.0,
                   margin: 10.0,
                   padding: 10.0,
-                  onTap: () {
-                      _addNewTier(context);
-                  },
+                  onTap: () => _addNewTier(context),
               ),
               CircularMenuItem(
                 icon: (MdiIcons.qrcode),
@@ -226,10 +224,7 @@ class _ClientFourFragmentState extends State<ClientFourFragment> {
                 margin: 10.0,
                 padding: 10.0,
                 color: Colors.blue,
-                onTap: () {
-                  scanQRCode() ;
-                },
-
+                onTap: () => scanQRCode(),
               )
             ]
         ),
@@ -239,39 +234,7 @@ class _ClientFourFragmentState extends State<ClientFourFragment> {
           title: widget.clientFourn == 0? S.current.client : S.current.fournisseur,
           isFilterOn: isFilterOn,
           onSearchChanged: (String search) => _dataSource.updateSearchTerm(search.trim()),
-          onFilterPressed: () async {
-            AwesomeDialog(
-                context: context,
-                dialogType: DialogType.INFO,
-                animType: AnimType.BOTTOMSLIDE,
-                title: S.current.supp,
-                body: addFilterdialogue(),
-                btnOkText: S.current.filtrer_btn,
-                closeIcon: Icon(
-                  Icons.cancel_sharp,
-                  color: Colors.red,
-                  size: 26,
-                ),
-                showCloseIcon: true,
-                btnOkOnPress: () async{
-                  setState(() {
-                    _savedSelectedFamille = _selectedFamille.id;
-                    _savedFilterHasCredit = _filterInHasCredit;
-                    _savedFilterTierBloquer = _filterTierBloquer ;
-
-                    fillFilter(_filterMap);
-
-                    if( _filterMap.toString() == _emptyFilterMap.toString()){
-                      isFilterOn = false;
-                    } else{
-                      isFilterOn = true;
-                    }
-                    _dataSource.updateFilters(_filterMap);
-                  });
-
-                }
-            )..show();
-          },
+          onFilterPressed: _pressFilter,
         ),
         body: ItemsSliverList(
             dataSource: _dataSource,
@@ -284,6 +247,40 @@ class _ClientFourFragmentState extends State<ClientFourFragment> {
 
   //********************************************************************************************************************************************************
   //******************************************************************************************************************************************************************
+
+  _pressFilter(){
+    AwesomeDialog(
+        context: context,
+        dialogType: DialogType.INFO,
+        animType: AnimType.BOTTOMSLIDE,
+        title: S.current.supp,
+        body: addFilterdialogue(),
+        btnOkText: S.current.filtrer_btn,
+        closeIcon: Icon(
+          Icons.cancel_sharp,
+          color: Colors.red,
+          size: 26,
+        ),
+        showCloseIcon: true,
+        btnOkOnPress: () async{
+          setState(() {
+            _savedSelectedFamille = _selectedFamille.id;
+            _savedFilterHasCredit = _filterInHasCredit;
+            _savedFilterTierBloquer = _filterTierBloquer ;
+
+            fillFilter(_filterMap);
+
+            if( _filterMap.toString() == _emptyFilterMap.toString()){
+              isFilterOn = false;
+            } else{
+              isFilterOn = true;
+            }
+            _dataSource.updateFilters(_filterMap);
+          });
+
+        }
+    )..show();
+  }
 
   _addNewTier (context){
     if(_myParams.versionType == "demo"){

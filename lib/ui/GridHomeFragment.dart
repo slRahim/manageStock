@@ -67,7 +67,59 @@ class _GridHomeWidgetState extends State<GridHomeWidget> {
       });
     });
 
-    _addButton = DraggableItem(
+    _addButton = _addButtonWidget();
+  }
+
+  @override
+  void didChangeDependencies() {
+    final newLocale = Localizations.localeOf(context);
+    PushNotificationsManagerState data = PushNotificationsManager.of(context);
+    _devise = Helpers.getDeviseTranslate(data.myParams.devise);
+    if (newLocale != _userLocale) {
+      homeItemList[0].title = S.current.tableau_bord;
+      homeItemList[1].title = S.current.articles;
+      homeItemList[2].title = S.current.client;
+      homeItemList[3].title = S.current.devis;
+      homeItemList[4].title = S.current.commande_client;
+      homeItemList[5].title = S.current.bon_livraison;
+      homeItemList[6].title = S.current.facture_vente;
+      homeItemList[7].title = S.current.fournisseur;
+      homeItemList[8].title = S.current.bon_reception;
+      homeItemList[9].title = S.current.facture_achat;
+      homeItemList[10].title = S.current.tresories;
+      homeItemList[11].title = S.current.rapports;
+
+      homeItemAccueil.title = S.current.accueil;
+      homeItemParametres.title = S.current.settings;
+      drawerItemAvoirFournisseur.title = S.current.avoir_fournisseur;
+      drawerItemAvoirClient.title = S.current.avoir_client;
+      drawerItemRetourClient.title = S.current.retour_client;
+      drawerItemRetourFournisseur.title = S.current.retour_fournisseur;
+      drawerItemBonDeCommande.title = S.current.bon_commande;
+      drawerItemExit.title = S.current.quitter;
+      drawerItemPurchase.title = S.current.abonnement;
+      drawerItemVente.title = S.current.vente;
+      drawerItemAchat.title = S.current.achat;
+      drawerItemFamilleMarque.title = S.current.famille_marque;
+      drawerItemBackup.title = S.current.param_backup;
+
+      _appBarTitle = S.current.app_name;
+
+      Statics.statutItems[0] = S.current.statut_m;
+      Statics.statutItems[1] = S.current.statut_mlle;
+      Statics.statutItems[2] = S.current.statut_mme;
+      Statics.statutItems[3] = S.current.statut_dr;
+      Statics.statutItems[4] = S.current.statut_pr;
+      Statics.statutItems[5] = S.current.statut_eurl;
+    }
+  }
+
+  Future futurInit() async {
+    _indiceFinanciere = await _queryCtr.statHomePage();
+  }
+
+  _addButtonWidget() {
+    return DraggableItem(
       fixed: true,
       deletable: false,
       child: InkWell(
@@ -131,60 +183,6 @@ class _GridHomeWidgetState extends State<GridHomeWidget> {
   }
 
   @override
-  void didChangeDependencies() {
-    final newLocale = Localizations.localeOf(context);
-    PushNotificationsManagerState data = PushNotificationsManager.of(context);
-    _devise = Helpers.getDeviseTranslate(data.myParams.devise);
-    if (newLocale != _userLocale) {
-      homeItemList[0].title = S.current.tableau_bord;
-      homeItemList[1].title = S.current.articles;
-      homeItemList[2].title = S.current.client;
-      homeItemList[3].title = S.current.devis;
-      homeItemList[4].title = S.current.commande_client;
-      homeItemList[5].title = S.current.bon_livraison;
-      homeItemList[6].title = S.current.facture_vente;
-      homeItemList[7].title = S.current.fournisseur;
-      homeItemList[8].title = S.current.bon_reception;
-      homeItemList[9].title = S.current.facture_achat;
-      homeItemList[10].title = S.current.tresories;
-      homeItemList[11].title = S.current.rapports;
-
-      homeItemAccueil.title = S.current.accueil;
-      homeItemParametres.title = S.current.settings;
-      drawerItemAvoirFournisseur.title = S.current.avoir_fournisseur;
-      drawerItemAvoirClient.title = S.current.avoir_client;
-      drawerItemRetourClient.title = S.current.retour_client;
-      drawerItemRetourFournisseur.title = S.current.retour_fournisseur;
-      drawerItemBonDeCommande.title = S.current.bon_commande;
-      drawerItemExit.title = S.current.quitter;
-      drawerItemPurchase.title = S.current.abonnement;
-      drawerItemVente.title = S.current.vente;
-      drawerItemAchat.title = S.current.achat;
-      drawerItemFamilleMarque.title = S.current.famille_marque;
-
-      _appBarTitle = S.current.app_name;
-
-      Statics.statutItems[0] = S.current.statut_m;
-      Statics.statutItems[1] = S.current.statut_mlle;
-      Statics.statutItems[2] = S.current.statut_mme;
-      Statics.statutItems[3] = S.current.statut_dr;
-      Statics.statutItems[4] = S.current.statut_pr;
-      Statics.statutItems[5] = S.current.statut_eurl;
-    }
-  }
-
-  Future futurInit() async {
-    _indiceFinanciere = await _queryCtr.statHomePage();
-  }
-
-  void showSnackBar(String text) {
-    _key.currentState.hideCurrentSnackBar();
-    _key.currentState.showSnackBar(SnackBar(
-      content: Text(text),
-    ));
-  }
-
-  @override
   Widget build(BuildContext context) {
     var size = (MediaQuery.of(context).size.width % 115).toInt() / 2;
 
@@ -215,23 +213,7 @@ class _GridHomeWidgetState extends State<GridHomeWidget> {
                 Icons.contact_support,
                 size: 30,
               ),
-              onPressed: () async {
-                // Navigator.pushNamed(context, RoutesKeys.supportPage);
-                var url = "https://cirtait.com/contact";
-                if (await canLaunch(url)) {
-                  await launch(
-                    url,
-                    forceSafariVC: true,
-                    forceWebView: true,
-                    enableJavaScript: true,
-                    headers: <String, String>{
-                      'my_header_key': 'my_header_value'
-                    },
-                  );
-                } else {
-                  throw 'Could not launch $url';
-                }
-              },
+              onPressed: _pressHelp,
             )
           ],
           bottom: PreferredSize(
@@ -459,6 +441,22 @@ class _GridHomeWidgetState extends State<GridHomeWidget> {
               }
             }),
       );
+    }
+  }
+
+  _pressHelp() async {
+    // Navigator.pushNamed(context, RoutesKeys.supportPage);
+    var url = "https://gestmob.com/#contact%20us";
+    if (await canLaunch(url)) {
+      await launch(
+        url,
+        forceSafariVC: true,
+        forceWebView: true,
+        enableJavaScript: true,
+        headers: <String, String>{'my_header_key': 'my_header_value'},
+      );
+    } else {
+      throw 'Could not launch $url';
     }
   }
 

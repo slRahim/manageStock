@@ -268,9 +268,7 @@ class _TresorieFragmentState extends State<TresorieFragment> {
         floatingActionButton: FloatingActionButton(
           backgroundColor:
               Theme.of(context).floatingActionButtonTheme.backgroundColor,
-          onPressed: () {
-            _addNewTresorie(context);
-          },
+          onPressed: ()=>_addNewTresorie(context),
           child: Icon(Icons.add),
         ),
         appBar: SearchBar(
@@ -280,44 +278,45 @@ class _TresorieFragmentState extends State<TresorieFragment> {
           isFilterOn: isFilterOn,
           onSearchChanged: (String search) =>
               _dataSource.updateSearchTerm(search.trim()),
-          onFilterPressed: () async {
-            AwesomeDialog(
-                context: context,
-                dialogType: DialogType.INFO,
-                animType: AnimType.BOTTOMSLIDE,
-                title: S.current.supp,
-                body: addFilterdialogue(),
-                btnOkText: S.current.filtrer_btn,
-                closeIcon: Icon(
-                  Icons.cancel_sharp,
-                  color: Colors.red,
-                  size: 26,
-                ),
-                showCloseIcon: true,
-                btnOkOnPress: () async {
-                  setState(() {
-                    _savedSelectedCategorie =
-                        _categorieItems.indexOf(_selectedCategorie);
-                    _savedFilterStartDate = _filterStartDate;
-                    _savedFilterEndDate = _filterEndDate;
-                    fillFilter(_filterMap);
-
-                    if (_filterMap.toString() == _emptyFilterMap.toString()) {
-                      isFilterOn = false;
-                    } else {
-                      isFilterOn = true;
-                    }
-                    _dataSource.updateFilters(_filterMap);
-                  });
-                })
-              ..show();
-          },
+          onFilterPressed: _pressFilter,
         ),
         body: ItemsSliverList(
           dataSource: _dataSource,
         ));
   }
 
+  _pressFilter(){
+    AwesomeDialog(
+        context: context,
+        dialogType: DialogType.INFO,
+        animType: AnimType.BOTTOMSLIDE,
+        title: S.current.supp,
+        body: addFilterdialogue(),
+        btnOkText: S.current.filtrer_btn,
+        closeIcon: Icon(
+          Icons.cancel_sharp,
+          color: Colors.red,
+          size: 26,
+        ),
+        showCloseIcon: true,
+        btnOkOnPress: () async {
+          setState(() {
+            _savedSelectedCategorie =
+                _categorieItems.indexOf(_selectedCategorie);
+            _savedFilterStartDate = _filterStartDate;
+            _savedFilterEndDate = _filterEndDate;
+            fillFilter(_filterMap);
+
+            if (_filterMap.toString() == _emptyFilterMap.toString()) {
+              isFilterOn = false;
+            } else {
+              isFilterOn = true;
+            }
+            _dataSource.updateFilters(_filterMap);
+          });
+        })
+      ..show();
+  }
   _addNewTresorie(context) {
     if (_myParams.versionType == "demo") {
       if (_dataSource.itemCount < 10) {

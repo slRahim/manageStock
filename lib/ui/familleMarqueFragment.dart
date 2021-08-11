@@ -84,58 +84,12 @@ class _FamilleMarqueFragmentState extends State<FamilleMarqueFragment> {
           mainContext: context,
           title: _tabTitle,
           isFilterOn: false,
-          onSearchChanged: (String search) {
-            switch (_tabSelectedIndex) {
-              case 0:
-                _dataSourceFamilleArticle.updateSearchTerm(search);
-                break;
-              case 1:
-                _dataSourceMarqueArticle.updateSearchTerm(search);
-                break;
-              case 2:
-                _dataSourceTvaArticle.updateSearchTerm(search);
-                break;
-              case 3:
-                _dataSourceFamilleTiers.updateSearchTerm(search);
-                break;
-              case 4:
-                _dataSourceCompte.updateSearchTerm(search);
-                break;
-              case 5:
-                _dataSourceCharge.updateSearchTerm(search);
-                break;
-            }
-          },
+          onSearchChanged: (String search)=>_searchChanged(search),
         ),
         bottomNavigationBar: BottomTabBar(
           selectedIndex: _tabSelectedIndex,
           controller: _tabController,
-          onItemSelected: (index) {
-            setState(() {
-              _tabSelectedIndex = index;
-              searchController.clear();
-              switch (index) {
-                case 0:
-                  _tabTitle = S.current.famille_article;
-                  break;
-                case 1:
-                  _tabTitle = S.current.marque_article;
-                  break;
-                case 2:
-                  _tabTitle = S.current.tva_article;
-                  break;
-                case 3:
-                  _tabTitle = S.current.famille_tiers;
-                  break;
-                case 4:
-                  _tabTitle = S.current.caisse_titre;
-                  break;
-                case 5:
-                  _tabTitle = S.current.cat_charge;
-                  break;
-              }
-            });
-          },
+          onItemSelected: (index) => _itemSelectedButtomBar(index),
           tabs: [
             Tab(
                 child: Column(
@@ -182,64 +136,7 @@ class _FamilleMarqueFragmentState extends State<FamilleMarqueFragment> {
           ],
         ),
         floatingActionButton: FloatingActionButton(
-          onPressed: () async {
-            switch (_tabSelectedIndex) {
-              case 0:
-                AwesomeDialog(
-                    context: context,
-                    dialogType: DialogType.NO_HEADER,
-                    animType: AnimType.BOTTOMSLIDE,
-                    title: S.current.supp,
-                    body: addFamilleArticleDialogue(),
-                )..show();
-                break;
-              case 1:
-                AwesomeDialog(
-                  context: context,
-                  dialogType: DialogType.NO_HEADER,
-                  animType: AnimType.BOTTOMSLIDE,
-                  title: S.current.supp,
-                  body: addMarquedialogue(),
-                )..show();
-                break;
-              case 2:
-                AwesomeDialog(
-                  context: context,
-                  dialogType: DialogType.NO_HEADER,
-                  animType: AnimType.BOTTOMSLIDE,
-                  title: S.current.supp,
-                  body: addTVAdialogue(),
-                )..show();
-                break;
-              case 3:
-                AwesomeDialog(
-                  context: context,
-                  dialogType: DialogType.NO_HEADER,
-                  animType: AnimType.BOTTOMSLIDE,
-                  title: S.current.supp,
-                  body: addFamilleTiersdialogue(),
-                )..show();
-                break;
-              case 4:
-                AwesomeDialog(
-                  context: context,
-                  dialogType: DialogType.NO_HEADER,
-                  animType: AnimType.BOTTOMSLIDE,
-                  title: S.current.supp,
-                  body: addCompteDialog(),
-                )..show();
-                break;
-              case 5:
-                AwesomeDialog(
-                  context: context,
-                  dialogType: DialogType.NO_HEADER,
-                  animType: AnimType.BOTTOMSLIDE,
-                  title: S.current.supp,
-                  body: addChargeDialog(),
-                )..show();
-                break;
-            }
-          },
+          onPressed: _pressAddButton,
           child: Icon(
             Icons.add,
           ),
@@ -261,6 +158,116 @@ class _FamilleMarqueFragmentState extends State<FamilleMarqueFragment> {
       ),
     );
   }
+
+  _searchChanged(String search){
+    switch (_tabSelectedIndex) {
+      case 0:
+        _dataSourceFamilleArticle.updateSearchTerm(search);
+        break;
+      case 1:
+        _dataSourceMarqueArticle.updateSearchTerm(search);
+        break;
+      case 2:
+        _dataSourceTvaArticle.updateSearchTerm(search);
+        break;
+      case 3:
+        _dataSourceFamilleTiers.updateSearchTerm(search);
+        break;
+      case 4:
+        _dataSourceCompte.updateSearchTerm(search);
+        break;
+      case 5:
+        _dataSourceCharge.updateSearchTerm(search);
+        break;
+    }
+  }
+
+  _itemSelectedButtomBar(index){
+    setState(() {
+      _tabSelectedIndex = index;
+      searchController.clear();
+      switch (index) {
+        case 0:
+          _tabTitle = S.current.famille_article;
+          break;
+        case 1:
+          _tabTitle = S.current.marque_article;
+          break;
+        case 2:
+          _tabTitle = S.current.tva_article;
+          break;
+        case 3:
+          _tabTitle = S.current.famille_tiers;
+          break;
+        case 4:
+          _tabTitle = S.current.caisse_titre;
+          break;
+        case 5:
+          _tabTitle = S.current.cat_charge;
+          break;
+      }
+    });
+  }
+
+  _pressAddButton(){
+    switch (_tabSelectedIndex) {
+      case 0:
+        AwesomeDialog(
+          context: context,
+          dialogType: DialogType.NO_HEADER,
+          animType: AnimType.BOTTOMSLIDE,
+          title: S.current.supp,
+          body: addFamilleArticleDialogue(),
+        )..show();
+        break;
+      case 1:
+        AwesomeDialog(
+          context: context,
+          dialogType: DialogType.NO_HEADER,
+          animType: AnimType.BOTTOMSLIDE,
+          title: S.current.supp,
+          body: addMarquedialogue(),
+        )..show();
+        break;
+      case 2:
+        AwesomeDialog(
+          context: context,
+          dialogType: DialogType.NO_HEADER,
+          animType: AnimType.BOTTOMSLIDE,
+          title: S.current.supp,
+          body: addTVAdialogue(),
+        )..show();
+        break;
+      case 3:
+        AwesomeDialog(
+          context: context,
+          dialogType: DialogType.NO_HEADER,
+          animType: AnimType.BOTTOMSLIDE,
+          title: S.current.supp,
+          body: addFamilleTiersdialogue(),
+        )..show();
+        break;
+      case 4:
+        AwesomeDialog(
+          context: context,
+          dialogType: DialogType.NO_HEADER,
+          animType: AnimType.BOTTOMSLIDE,
+          title: S.current.supp,
+          body: addCompteDialog(),
+        )..show();
+        break;
+      case 5:
+        AwesomeDialog(
+          context: context,
+          dialogType: DialogType.NO_HEADER,
+          animType: AnimType.BOTTOMSLIDE,
+          title: S.current.supp,
+          body: addChargeDialog(),
+        )..show();
+        break;
+    }
+  }
+
 
   //***********************************************************************************************************************************************************
   //*************************************************************************add/edit Famille article************************************************************

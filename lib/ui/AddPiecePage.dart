@@ -332,132 +332,20 @@ class _AddPiecePageState extends State<AddPiecePage>
               editMode: editMode,
               modification: modification,
               title: appBarTitle,
-              onCancelPressed: ()  {
-                Function eqal =  ListEquality().equals;
-                if (modification) {
-                  if (editMode) {
-                    if(eqal(_originalItems , _selectedItems)){
-                      Navigator.of(context).pushReplacementNamed(
-                          RoutesKeys.addPiece,
-                          arguments: widget.arguments);
-
-                    }else{
-                      AwesomeDialog(
-                          context: context,
-                          title: "",
-                          desc: "${S.current.msg_retour_no_save} ?",
-                          dialogType: DialogType.QUESTION,
-                          animType: AnimType.BOTTOMSLIDE,
-                          btnCancelText: S.current.non,
-                          btnCancelOnPress: () {},
-                          btnOkText: S.current.oui,
-                          btnOkOnPress: () async {
-                            Navigator.of(context).pushReplacementNamed(
-                                RoutesKeys.addPiece,
-                                arguments: widget.arguments);
-
-                          })
-                        ..show();
-                    }
-
-                  } else {
-                      Navigator.pop(context , widget.arguments);
-                  }
-
-                } else {
-                    if (_selectedItems.isNotEmpty)
-                      {
-                        AwesomeDialog(
-                            context: context,
-                            title: "",
-                            desc: "${S.current.msg_retour_no_save} ?",
-                            dialogType: DialogType.QUESTION,
-                            animType: AnimType.BOTTOMSLIDE,
-                            btnCancelText: S.current.non,
-                            btnCancelOnPress: () {},
-                            btnOkText: S.current.oui,
-                            btnOkOnPress: () async {
-                              Navigator.pop(context);
-                            })
-                          ..show();
-                      }
-                    else
-                      {
-                        Navigator.pop(context);
-                      }
-                  }
-              },
+              onCancelPressed: _pressCancel,
               onEditPressed: (_piece.etat == 0)
-                  ? () {
-                      if (_myParams.versionType == "demo") {
-                        setState(() {
-                          editMode = true;
-                        });
-                      } else {
-                        if (DateTime.now()
-                            .isBefore(Helpers.getDateExpiration(_myParams))) {
-                          setState(() {
-                            editMode = true;
-                          });
-                        } else {
-                          Navigator.pushNamed(context, RoutesKeys.appPurchase);
-                          var message = S.current.msg_premium_exp;
-                          Helpers.showFlushBar(context, message);
-                        }
-                      }
-                    }
+                  ? _pressEdit
                   : () {
                       Helpers.showFlushBar(
                           context, S.current.msg_no_edit_transformer);
                     },
-              onSavePressed: () async {
-                if (_formKey.currentState.validate()) {
-                  if (_selectedItems.length > 0) {
-                    AwesomeDialog(
-                      context: context,
-                      dialogType: DialogType.SUCCES,
-                      animType: AnimType.BOTTOMSLIDE,
-                      title: S.current.supp,
-                      body: addChoicesDialog(),
-                      closeIcon: Icon(
-                        Icons.cancel_sharp,
-                        color: Colors.red,
-                        size: 26,
-                      ),
-                      showCloseIcon: true,
-                    )..show();
-                  } else {
-                    Helpers.showFlushBar(context, S.current.msg_select_art);
-                  }
-                } else {
-                  Helpers.showFlushBar(context, "${S.current.msg_champs_obg}");
-                }
-              },
+              onSavePressed: _pressSave,
               onTrensferPressed: (_piece.etat == 0 &&
                       _piece.piece != PieceType.retourClient &&
                       _piece.piece != PieceType.avoirClient &&
                       _piece.piece != PieceType.retourFournisseur &&
                       _piece.piece != PieceType.avoirFournisseur)
-                  ? () async {
-                      if (_piece.mov == 2) {
-                        var message = S.current.msg_err_transfer;
-                        Helpers.showFlushBar(context, message);
-                      } else {
-                        AwesomeDialog(
-                          context: context,
-                          dialogType: DialogType.QUESTION,
-                          animType: AnimType.BOTTOMSLIDE,
-                          title: S.current.supp,
-                          body: transferPieceDialog(),
-                          closeIcon: Icon(
-                            Icons.cancel_sharp,
-                            color: Colors.red,
-                            size: 26,
-                          ),
-                          showCloseIcon: true,
-                        )..show();
-                      }
-                    }
+                  ? _pressTransfer
                   : null,
             ),
             // extendBody: true,
@@ -755,129 +643,7 @@ class _AddPiecePageState extends State<AddPiecePage>
             ),
             floatingActionButtonLocation:
                 FloatingActionButtonLocation.centerDocked,
-            floatingActionButton: GestureDetector(
-              // Set onVerticalDrag event to drag handlers of controller for swipe effect
-              onVerticalDragUpdate: bottomBarControler.onDrag,
-              onVerticalDragEnd: bottomBarControler.onDragEnd,
-              child: DescribedFeatureOverlay(
-                featureId: feature3,
-                tapTarget: Icon(
-                  MdiIcons.arrowExpandUp,
-                  color: Colors.black,
-                ),
-                backgroundColor: Colors.blue,
-                contentLocation: ContentLocation.above,
-                title: Text('${S.current.swipe_top}',
-                    style: GoogleFonts.lato(fontWeight: FontWeight.bold)),
-                description: Container(
-                  width: 150,
-                  child: Text(
-                    '${S.current.msg_swipe_top}',
-                    style: GoogleFonts.lato(),
-                  ),
-                ),
-                onBackgroundTap: () async {
-                  await FeatureDiscovery.completeCurrentStep(context);
-                  return true;
-                },
-                child: FloatingActionRow(
-                  children: [
-                    FloatingActionRowButton(
-                        icon: (editMode)
-                            ? Icon(
-                                Icons.add,
-                                color: Colors.white,
-                              )
-                            : Icon(
-                                Icons.print,
-                                color: Colors.white,
-                              ),
-                        color: editMode ? Colors.blue : Colors.redAccent,
-                        foregroundColor: Colors.white,
-                        //Set onPressed event to swap state of bottom bar
-                        onTap: editMode
-                            ? () async {
-                                await showDialog(
-                                    context: context,
-                                    builder: (BuildContext context) {
-                                      return addArticleDialog();
-                                    }).then((val) {
-                                  if (_piece.piece == PieceType.avoirClient ||
-                                      _piece.piece == PieceType.retourClient ||
-                                      _piece.piece ==
-                                          PieceType.retourFournisseur ||
-                                      _piece.piece ==
-                                          PieceType.avoirFournisseur) {
-                                    var message = S.current.msg_info_article;
-                                    Helpers.showFlushBar(context, message);
-                                  }
-                                  calculPiece();
-                                });
-                              }
-                            : () async {
-                                if (_myParams.versionType == "demo") {
-                                  AwesomeDialog(
-                                    context: context,
-                                    dialogType: DialogType.QUESTION,
-                                    animType: AnimType.BOTTOMSLIDE,
-                                    body: printChoicesDialog(),
-                                    closeIcon: Icon(
-                                      Icons.cancel_sharp,
-                                      color: Colors.red,
-                                      size: 26,
-                                    ),
-                                    showCloseIcon: true,
-                                  )..show();
-                                } else {
-                                  if (DateTime.now().isBefore(
-                                      Helpers.getDateExpiration(_myParams))) {
-                                    AwesomeDialog(
-                                      context: context,
-                                      dialogType: DialogType.QUESTION,
-                                      animType: AnimType.BOTTOMSLIDE,
-                                      body: printChoicesDialog(),
-                                      closeIcon: Icon(
-                                        Icons.cancel_sharp,
-                                        color: Colors.red,
-                                        size: 26,
-                                      ),
-                                      showCloseIcon: true,
-                                    )..show();
-                                  } else {
-                                    Navigator.pushNamed(
-                                        context, RoutesKeys.appPurchase);
-                                    var message = S.current.msg_premium_exp;
-                                    Helpers.showFlushBar(context, message);
-                                  }
-                                }
-                              }),
-                    (editMode &&
-                            (_piece.piece == PieceType.avoirClient ||
-                                _piece.piece == PieceType.retourClient ||
-                                _piece.piece == PieceType.retourFournisseur ||
-                                _piece.piece == PieceType.avoirFournisseur))
-                        ? FloatingActionRowButton(
-                            icon: Icon(
-                              Icons.insert_drive_file_outlined,
-                              color: Colors.white,
-                            ),
-                            color: Colors.redAccent,
-                            onTap: () async {
-                              await showDialog(
-                                  context: context,
-                                  builder: (BuildContext context) {
-                                    return addJournauxDialog();
-                                  }).then((val) {
-                                calculPiece();
-                              });
-                            })
-                        : SizedBox(
-                            height: 0,
-                          ),
-                  ],
-                ),
-              ),
-            ),
+            floatingActionButton: _floationButtonWidget(),
             body: Builder(
               builder: (context) => fichetab(),
             )),
@@ -940,6 +706,252 @@ class _AddPiecePageState extends State<AddPiecePage>
       }
     }
 
+  }
+
+  _pressCancel(){
+    Function eqal =  ListEquality().equals;
+    if (modification) {
+      if (editMode) {
+        if(eqal(_originalItems , _selectedItems)){
+          Navigator.of(context).pushReplacementNamed(
+              RoutesKeys.addPiece,
+              arguments: widget.arguments);
+
+        }else{
+          AwesomeDialog(
+              context: context,
+              title: "",
+              desc: "${S.current.msg_retour_no_save} ?",
+              dialogType: DialogType.QUESTION,
+              animType: AnimType.BOTTOMSLIDE,
+              btnCancelText: S.current.non,
+              btnCancelOnPress: () {},
+              btnOkText: S.current.oui,
+              btnOkOnPress: () async {
+                Navigator.of(context).pushReplacementNamed(
+                    RoutesKeys.addPiece,
+                    arguments: widget.arguments);
+
+              })
+            ..show();
+        }
+
+      } else {
+        Navigator.pop(context , widget.arguments);
+      }
+
+    } else {
+      if (_selectedItems.isNotEmpty)
+      {
+        AwesomeDialog(
+            context: context,
+            title: "",
+            desc: "${S.current.msg_retour_no_save} ?",
+            dialogType: DialogType.QUESTION,
+            animType: AnimType.BOTTOMSLIDE,
+            btnCancelText: S.current.non,
+            btnCancelOnPress: () {},
+            btnOkText: S.current.oui,
+            btnOkOnPress: () async {
+              Navigator.pop(context);
+            })
+          ..show();
+      }
+      else
+      {
+        Navigator.pop(context);
+      }
+    }
+  }
+
+  _pressSave(){
+    if (_formKey.currentState.validate()) {
+      if (_selectedItems.length > 0) {
+        AwesomeDialog(
+          context: context,
+          dialogType: DialogType.SUCCES,
+          animType: AnimType.BOTTOMSLIDE,
+          title: S.current.supp,
+          body: addChoicesDialog(),
+          closeIcon: Icon(
+            Icons.cancel_sharp,
+            color: Colors.red,
+            size: 26,
+          ),
+          showCloseIcon: true,
+        )..show();
+      } else {
+        Helpers.showFlushBar(context, S.current.msg_select_art);
+      }
+    } else {
+      Helpers.showFlushBar(context, "${S.current.msg_champs_obg}");
+    }
+  }
+
+  _pressEdit(){
+    if (_myParams.versionType == "demo") {
+      setState(() {
+        editMode = true;
+      });
+    } else {
+      if (DateTime.now()
+          .isBefore(Helpers.getDateExpiration(_myParams))) {
+        setState(() {
+          editMode = true;
+        });
+      } else {
+        Navigator.pushNamed(context, RoutesKeys.appPurchase);
+        var message = S.current.msg_premium_exp;
+        Helpers.showFlushBar(context, message);
+      }
+    }
+  }
+
+  _pressTransfer(){
+    if (_piece.mov == 2) {
+      var message = S.current.msg_err_transfer;
+      Helpers.showFlushBar(context, message);
+    } else {
+      AwesomeDialog(
+        context: context,
+        dialogType: DialogType.QUESTION,
+        animType: AnimType.BOTTOMSLIDE,
+        title: S.current.supp,
+        body: transferPieceDialog(),
+        closeIcon: Icon(
+          Icons.cancel_sharp,
+          color: Colors.red,
+          size: 26,
+        ),
+        showCloseIcon: true,
+      )..show();
+    }
+  }
+
+  Widget _floationButtonWidget(){
+    return GestureDetector(
+      // Set onVerticalDrag event to drag handlers of controller for swipe effect
+      onVerticalDragUpdate: bottomBarControler.onDrag,
+      onVerticalDragEnd: bottomBarControler.onDragEnd,
+      child: DescribedFeatureOverlay(
+        featureId: feature3,
+        tapTarget: Icon(
+          MdiIcons.arrowExpandUp,
+          color: Colors.black,
+        ),
+        backgroundColor: Colors.blue,
+        contentLocation: ContentLocation.above,
+        title: Text('${S.current.swipe_top}',
+            style: GoogleFonts.lato(fontWeight: FontWeight.bold)),
+        description: Container(
+          width: 150,
+          child: Text(
+            '${S.current.msg_swipe_top}',
+            style: GoogleFonts.lato(),
+          ),
+        ),
+        onBackgroundTap: () async {
+          await FeatureDiscovery.completeCurrentStep(context);
+          return true;
+        },
+        child: FloatingActionRow(
+          children: [
+            FloatingActionRowButton(
+                icon: (editMode)
+                    ? Icon(
+                  Icons.add,
+                  color: Colors.white,
+                )
+                    : Icon(
+                  Icons.print,
+                  color: Colors.white,
+                ),
+                color: editMode ? Colors.blue : Colors.redAccent,
+                foregroundColor: Colors.white,
+                //Set onPressed event to swap state of bottom bar
+                onTap: editMode
+                    ? () async {
+                  await showDialog(
+                      context: context,
+                      builder: (BuildContext context) {
+                        return addArticleDialog();
+                      }).then((val) {
+                    if (_piece.piece == PieceType.avoirClient ||
+                        _piece.piece == PieceType.retourClient ||
+                        _piece.piece ==
+                            PieceType.retourFournisseur ||
+                        _piece.piece ==
+                            PieceType.avoirFournisseur) {
+                      var message = S.current.msg_info_article;
+                      Helpers.showFlushBar(context, message);
+                    }
+                    calculPiece();
+                  });
+                }
+                    : () async {
+                  if (_myParams.versionType == "demo") {
+                    AwesomeDialog(
+                      context: context,
+                      dialogType: DialogType.QUESTION,
+                      animType: AnimType.BOTTOMSLIDE,
+                      body: printChoicesDialog(),
+                      closeIcon: Icon(
+                        Icons.cancel_sharp,
+                        color: Colors.red,
+                        size: 26,
+                      ),
+                      showCloseIcon: true,
+                    )..show();
+                  } else {
+                    if (DateTime.now().isBefore(
+                        Helpers.getDateExpiration(_myParams))) {
+                      AwesomeDialog(
+                        context: context,
+                        dialogType: DialogType.QUESTION,
+                        animType: AnimType.BOTTOMSLIDE,
+                        body: printChoicesDialog(),
+                        closeIcon: Icon(
+                          Icons.cancel_sharp,
+                          color: Colors.red,
+                          size: 26,
+                        ),
+                        showCloseIcon: true,
+                      )..show();
+                    } else {
+                      Navigator.pushNamed(
+                          context, RoutesKeys.appPurchase);
+                      var message = S.current.msg_premium_exp;
+                      Helpers.showFlushBar(context, message);
+                    }
+                  }
+                }),
+            (editMode &&
+                (_piece.piece == PieceType.avoirClient ||
+                    _piece.piece == PieceType.retourClient ||
+                    _piece.piece == PieceType.retourFournisseur ||
+                    _piece.piece == PieceType.avoirFournisseur))
+                ? FloatingActionRowButton(
+                icon: Icon(
+                  Icons.insert_drive_file_outlined,
+                  color: Colors.white,
+                ),
+                color: Colors.redAccent,
+                onTap: () async {
+                  await showDialog(
+                      context: context,
+                      builder: (BuildContext context) {
+                        return addJournauxDialog();
+                      }).then((val) {
+                    calculPiece();
+                  });
+                })
+                : SizedBox(
+              height: 0,
+            ),
+          ],
+        ),
+      ),
+    );
   }
 
   Widget fichetab() {
@@ -1278,8 +1290,6 @@ class _AddPiecePageState extends State<AddPiecePage>
           onConfirmSelectedItem: (selectedItem) {
             setState(() {
               _selectedClient = selectedItem;
-              // _piece.tier_id = _selectedClient.id;
-              // _piece.raisonSociale = _selectedClient.raisonSociale;
               _clientControl.text = _selectedClient.raisonSociale;
 
               if (selectedItem.tarification > _myParams.tarification) {

@@ -426,9 +426,7 @@ class _PreviewPieceState extends State<PreviewPiece> {
           floatingActionButton: (widget.format == 45)
               ? FloatingActionButton(
                   backgroundColor: Colors.blue,
-                  onPressed: () {
-                    _sharePdfFile(context);
-                  },
+                  onPressed: ()=>_sharePdfFile(context),
                   child: Icon(
                     Icons.share,
                     color: Colors.white,
@@ -437,9 +435,7 @@ class _PreviewPieceState extends State<PreviewPiece> {
                 )
               : (widget.format != 0)
                   ? FloatingActionButton(
-                      onPressed: () {
-                        _printTicket(context);
-                      },
+                      onPressed: () => _printTicket(context),
                       child: Icon(
                         Icons.print_rounded,
                         color: Theme.of(context)

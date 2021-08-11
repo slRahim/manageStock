@@ -319,9 +319,7 @@ class _JournalFragmentState extends State<JournalFragment> {
     return Scaffold(
         appBar: getAppBar(setState),
         floatingActionButton: FloatingActionButton(
-          onPressed: () {
-            scanBarCode();
-          },
+          onPressed: () => scanBarCode(),
           child: Icon(MdiIcons.barcode),
           tooltip: S.current.scan_qr,
         ),
@@ -371,44 +369,45 @@ class _JournalFragmentState extends State<JournalFragment> {
         mainContext: widget.onConfirmSelectedItems != null ? null : context,
         title: S.current.journaux,
         isFilterOn: isFilterOn,
-        onSearchChanged: (String search) =>
-            _dataSource.updateSearchTerm(search.trim()),
-        onFilterPressed: () async {
-          AwesomeDialog(
-              context: context,
-              dialogType: DialogType.INFO,
-              animType: AnimType.BOTTOMSLIDE,
-              title: S.current.supp,
-              body: addFilterdialogue(),
-              btnOkText: S.current.filtrer_btn,
-              closeIcon: Icon(
-                Icons.cancel_sharp,
-                color: Colors.red,
-                size: 26,
-              ),
-              showCloseIcon: true,
-              btnOkOnPress: () async {
-                setState(() {
-                  _savedSelectedMarque = _marqueItems.indexOf(_selectedMarque);
-                  _savedSelectedFamille =
-                      _familleItems.indexOf(_selectedFamille);
-                  _savedFilterStartDate = _filterStartDate;
-                  _savedFilterEndDate = _filterEndDate;
-
-                  fillFilter(_filterMap);
-
-                  if (_filterMap.toString() == _emptyFilterMap.toString()) {
-                    isFilterOn = false;
-                  } else {
-                    isFilterOn = true;
-                  }
-                  _dataSource.updateFilters(_filterMap);
-                });
-              })
-            ..show();
-        },
+        onSearchChanged: (String search) => _dataSource.updateSearchTerm(search.trim()),
+        onFilterPressed: _pressFilter,
       );
     }
+  }
+
+  _pressFilter(){
+    AwesomeDialog(
+        context: context,
+        dialogType: DialogType.INFO,
+        animType: AnimType.BOTTOMSLIDE,
+        title: S.current.supp,
+        body: addFilterdialogue(),
+        btnOkText: S.current.filtrer_btn,
+        closeIcon: Icon(
+          Icons.cancel_sharp,
+          color: Colors.red,
+          size: 26,
+        ),
+        showCloseIcon: true,
+        btnOkOnPress: () async {
+          setState(() {
+            _savedSelectedMarque = _marqueItems.indexOf(_selectedMarque);
+            _savedSelectedFamille =
+                _familleItems.indexOf(_selectedFamille);
+            _savedFilterStartDate = _filterStartDate;
+            _savedFilterEndDate = _filterEndDate;
+
+            fillFilter(_filterMap);
+
+            if (_filterMap.toString() == _emptyFilterMap.toString()) {
+              isFilterOn = false;
+            } else {
+              isFilterOn = true;
+            }
+            _dataSource.updateFilters(_filterMap);
+          });
+        })
+      ..show();
   }
 
   Future scanBarCode() async {

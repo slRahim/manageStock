@@ -20,7 +20,7 @@ import 'package:gestmob/search/sliver_list_data_source.dart';
 import 'package:gestmob/services/push_notifications.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
-import 'package:gestmob/Helpers/string_cap_extension.dart' ;
+import 'package:gestmob/Helpers/string_cap_extension.dart';
 
 class ProfilePage extends StatefulWidget {
   @override
@@ -111,6 +111,7 @@ class _ProfilePageState extends State<ProfilePage>
     _tabController.dispose();
     super.dispose();
   }
+
   //****************************************************************************************************************************************************************************
   //*************************************************************************partie special pour l'initialisation********************************************************************
 
@@ -261,48 +262,13 @@ class _ProfilePageState extends State<ProfilePage>
                 editMode: editMode,
                 modification: modification,
                 title: appBarTitle,
-                onCancelPressed: () => {
-                  if (modification)
-                    {
-                      if (editMode)
-                        {
-                          Navigator.of(context).pushReplacementNamed(
-                              RoutesKeys.profilePage,
-                              arguments: arguments)
-                        }
-                      else
-                        {Navigator.pop(context)}
-                    }
-                  else
-                    {
-                      Navigator.pop(context),
-                    }
-                },
+                onCancelPressed: _pressCancel,
                 onEditPressed: () {
                   setState(() {
                     editMode = true;
                   });
                 },
-                onSavePressed: () async {
-                  if (_formKey.currentState != null) {
-                    if (_formKey.currentState.validate()) {
-                      int id = await addItemToDb();
-                      if (id > -1) {
-                        setState(() {
-                          modification = true;
-                          editMode = false;
-                        });
-                      }
-                    } else {
-                      Helpers.showFlushBar(
-                          context, "${S.current.msg_champs_obg}");
-                    }
-                  } else {
-                    setState(() {
-                      _tabController.index = 0;
-                    });
-                  }
-                },
+                onSavePressed: _pressSave,
               ),
               bottomNavigationBar: BottomTabBar(
                 controller: _tabController,
@@ -352,6 +318,39 @@ class _ProfilePageState extends State<ProfilePage>
                   ],
                 ),
               )));
+    }
+  }
+
+  _pressCancel() {
+    if (modification) {
+      if (editMode) {
+        Navigator.of(context)
+            .pushReplacementNamed(RoutesKeys.profilePage, arguments: arguments);
+      } else {
+        Navigator.pop(context);
+      }
+    } else {
+      Navigator.pop(context);
+    }
+  }
+
+  _pressSave() async {
+    if (_formKey.currentState != null) {
+      if (_formKey.currentState.validate()) {
+        int id = await addItemToDb();
+        if (id > -1) {
+          setState(() {
+            modification = true;
+            editMode = false;
+          });
+        }
+      } else {
+        Helpers.showFlushBar(context, "${S.current.msg_champs_obg}");
+      }
+    } else {
+      setState(() {
+        _tabController.index = 0;
+      });
     }
   }
 
@@ -1059,11 +1058,11 @@ class _ProfilePageState extends State<ProfilePage>
                   extentOffset: _capitalsocialControl.value.text.length),
               keyboardType: TextInputType.number,
               validator: (value) {
-                if(!value.isNumericUsingRegularExpression){
-                  return S.current.msg_val_valide ;
+                if (!value.isNumericUsingRegularExpression) {
+                  return S.current.msg_val_valide;
                 }
-                if(value.isNotEmpty && double.parse(value) < 0){
-                  return S.current.msg_prix_supp_zero ;
+                if (value.isNotEmpty && double.parse(value) < 0) {
+                  return S.current.msg_prix_supp_zero;
                 }
                 return null;
               },
