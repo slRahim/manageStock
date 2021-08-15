@@ -3532,6 +3532,14 @@ class _AddPiecePageState extends State<AddPiecePage>
                   ),
                   pw.Container(
                     padding: pw.EdgeInsets.only(left: 5, right: 5, bottom: 2),
+                    child: pw.Text("${S.current.colis}",
+                        style: pw.TextStyle(
+                            fontWeight: pw.FontWeight.bold,
+                            font: arial,
+                            fontSize: 10)),
+                  ),
+                  pw.Container(
+                    padding: pw.EdgeInsets.only(left: 5, right: 5, bottom: 2),
                     child: pw.Text("${S.current.prix}",
                         style: pw.TextStyle(
                             fontWeight: pw.FontWeight.bold,
@@ -3575,6 +3583,12 @@ class _AddPiecePageState extends State<AddPiecePage>
                       padding: pw.EdgeInsets.only(left: 5, right: 5),
                       child: pw.Text(
                           "${Helpers.numberFormat(e.selectedQuantite)}",
+                          style: pw.TextStyle(fontSize: 9)),
+                    ),
+                    pw.Container(
+                      padding: pw.EdgeInsets.only(left: 5, right: 5),
+                      child: pw.Text(
+                          "${Helpers.numberFormat(e.selectedQuantite/e.quantiteColis)}",
                           style: pw.TextStyle(fontSize: 9)),
                     ),
                     pw.Container(

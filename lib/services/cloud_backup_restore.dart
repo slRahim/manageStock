@@ -29,12 +29,9 @@ class GoogleApi {
 
   //Get Authenticated Http Client
   Future<http.Client> getHttpClient() async {
-    var user ;
-    if (_googleSignIn.currentUser == null){
-     user = await GoogleLogin();
-    }
+    if (_googleSignIn.currentUser == null) await _googleSignIn.signIn();
 
-    final authHeaders = await user.authHeaders;
+    final authHeaders = await _googleSignIn.currentUser.authHeaders;
     if (authHeaders == null) {
       GoogleLogout();
       return null;
@@ -53,7 +50,6 @@ class GoogleApi {
     if (_googleSignIn.currentUser == null) await GoogleLogout();
     await _googleSignIn.signIn();
     var user = _googleSignIn.currentUser;
-    // _GoogleLogout();
     return user;
   }
 

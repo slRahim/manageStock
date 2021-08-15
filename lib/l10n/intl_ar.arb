@@ -20,8 +20,8 @@
 
   "avoir_client" : "فاتورة عودة لزبون",
   "avoir_fournisseur": "فاتورة عودة لمورد",
-  "retour_client": "وسل عودة لزبون",
-  "retour_fournisseur": "وسل عودة لمورد",
+  "retour_client": "وصل عودة لزبون",
+  "retour_fournisseur": "وصل عودة لمورد",
   "bon_commande": "أمر شراء",
 
   "profile_titre" : "الملف الشخصي",

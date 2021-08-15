@@ -117,6 +117,7 @@ class Article {
     this._qte = obj["qte_article"];
     this._cmdClient = obj["Cmd_client"];
     this._selectedQuantite = (obj["Qte"] > 0) ? obj["Qte"] : obj["Qte"] * -1;
+    this._qteColis = obj['Qte_Colis'];
     this._selectedPrice = obj["Prix_ht"];
     this._tva = obj["Tva"];
     this._selectedPriceTTC = ((this._selectedPrice * this.tva)/100) + this._selectedPrice ;
