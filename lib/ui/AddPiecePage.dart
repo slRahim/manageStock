@@ -1801,12 +1801,15 @@ class _AddPiecePageState extends State<AddPiecePage>
           _resteControler.text = "0.0";
         }
       } else {
+        // cet else est pour le cas de creation modification = false
         // le verssement est 0 tjr tq l'utilisateur ne le modifie pas
-        // _verssementpiece = _net_a_payer;
-        // if(_piece.piece == PieceType.commandeClient){
-        //   _verssementpiece = 0.0 ;
-        // }
         _verssementpiece = 0.0;
+        if(_piece.piece == PieceType.bonLivraison ||
+            _piece.piece == PieceType.factureClient ||
+            _piece.piece == PieceType.bonReception ||
+            _piece.piece == PieceType.factureFournisseur){
+          _verssementpiece = _net_a_payer;
+        }
         _verssementControler.text = _verssementpiece.toStringAsFixed(2);
         _restepiece = _net_a_payer - _verssementpiece;
       }

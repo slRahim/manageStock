@@ -664,6 +664,17 @@ class _AddArticlePageState extends State<AddArticlePage>
                               baseOffset: 0,
                               extentOffset:
                                   _stockInitialControl.value.text.length),
+                      onChanged: (value){
+                        if(value.trim() != ''){
+                          _qteColisCotrol.text = '1.0' ;
+                          _colisControl.text = value ;
+
+                        }else{
+                          _qteColisCotrol.text = '' ;
+                          _colisControl.text = '' ;
+                        }
+
+                      },
                       keyboardType: TextInputType.number,
                       validator: (value) {
                         if (!value.isNumericUsingRegularExpression) {
@@ -770,10 +781,19 @@ class _AddArticlePageState extends State<AddArticlePage>
                         if (!value.isNumericUsingRegularExpression) {
                           return S.current.msg_val_valide;
                         }
-                        if (value.isNotEmpty && double.parse(value) < 0) {
+                        if (value.isNotEmpty && double.parse(value) <= 0) {
                           return S.current.msg_prix_supp_zero;
                         }
                         return null;
+                      },
+                      onChanged: (value){
+                        if(value.trim() != ''){
+                          _colisControl.text =
+                              (double.parse(_stockInitialControl.text)/double.parse(_qteColisCotrol.text)).toString();
+                        }else{
+                          _colisControl.text = '';
+                        }
+
                       },
                       decoration: InputDecoration(
                         labelText: S.current.qte_colis,
@@ -856,9 +876,10 @@ class _AddArticlePageState extends State<AddArticlePage>
               ],
             ),
             Visibility(
-              visible: (modification && !editMode) && _stockable,
+              visible: _stockable,
               child: TextFormField(
-                enabled: false,
+                enabled: editMode,
+                readOnly: true,
                 controller: _colisControl,
                 onTap: () => _colisControl.selection = TextSelection(
                     baseOffset: 0,
@@ -1025,32 +1046,35 @@ class _AddArticlePageState extends State<AddArticlePage>
               ),
             ),
             dropdowns(),
-            Container(
-                decoration: editMode
-                    ? new BoxDecoration(
-                        border: Border.all(
-                          color: Colors.blueAccent,
-                        ),
-                        borderRadius: BorderRadius.circular(20.0),
-                      )
-                    : null,
-                child: SwitchListTile(
-                  title: Text(
-                    S.current.bloquer,
-                    style: GoogleFonts.lato(
-                        textStyle: TextStyle(
-                            color: Theme.of(context).primaryColorDark)),
-                  ),
-                  value: _controlBloquer,
-                  activeColor: Theme.of(context).primaryColor,
-                  onChanged: editMode
-                      ? (bool value) {
-                          setState(() {
-                            _controlBloquer = value;
-                          });
-                        }
-                      : (bool value) {},
-                )),
+            Visibility(
+              visible: modification,
+              child: Container(
+                  decoration: editMode
+                      ? new BoxDecoration(
+                          border: Border.all(
+                            color: Colors.blueAccent,
+                          ),
+                          borderRadius: BorderRadius.circular(20.0),
+                        )
+                      : null,
+                  child: SwitchListTile(
+                    title: Text(
+                      S.current.bloquer,
+                      style: GoogleFonts.lato(
+                          textStyle: TextStyle(
+                              color: Theme.of(context).primaryColorDark)),
+                    ),
+                    value: _controlBloquer,
+                    activeColor: Theme.of(context).primaryColor,
+                    onChanged: editMode
+                        ? (bool value) {
+                            setState(() {
+                              _controlBloquer = value;
+                            });
+                          }
+                        : (bool value) {},
+                  )),
+            ),
           ],
         ),
       ),

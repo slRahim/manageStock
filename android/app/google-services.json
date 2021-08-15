@@ -15,19 +15,19 @@
       },
       "oauth_client": [
         {
-          "client_id": "29868595195-0okfso45fl1rg4sdnj2p1prj0l8eg8su.apps.googleusercontent.com",
-          "client_type": 1,
-          "android_info": {
-            "package_name": "com.cirtait.mobile.gestmob",
-            "certificate_hash": "0349856eed4546ef975ad293d0c42a80dd748106"
-          }
-        },
-        {
-          "client_id": "29868595195-4t6kssre075ttrdr94evk1ek8b3es4bn.apps.googleusercontent.com",
+          "client_id": "29868595195-659gfk496b0369n9se5mvk5ppjrlp62m.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
             "package_name": "com.cirtait.mobile.gestmob",
             "certificate_hash": "f5d64c6ef00f8d20fa78136be36c1d670d4cc11e"
+          }
+        },
+        {
+          "client_id": "29868595195-da16q63vobq251plgl7jc0vrfmsqs810.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.cirtait.mobile.gestmob",
+            "certificate_hash": "0349856eed4546ef975ad293d0c42a80dd748106"
           }
         },
         {

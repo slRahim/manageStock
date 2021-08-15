@@ -1,12 +1,13 @@
 import 'dart:io';
 
-import 'package:google_sign_in/google_sign_in.dart' show GoogleSignIn;
+import 'package:google_sign_in/google_sign_in.dart' as signIn;
 import 'package:googleapis/drive/v3.dart' as ga;
 import 'package:http/http.dart' as http;
 import 'package:http/http.dart';
 import 'package:http/io_client.dart';
 import 'package:path/path.dart' as p;
 import 'package:path_provider/path_provider.dart' as pathprovider;
+
 
 class GoogleHttpClient extends IOClient {
   Map<String, String> _headers;
@@ -22,17 +23,18 @@ class GoogleHttpClient extends IOClient {
 }
 
 class GoogleApi {
-  final _googleSignIn = new GoogleSignIn(
-    scopes: [
-      'https://www.googleapis.com/auth/drive',
-    ],
-  );
+  final _googleSignIn = signIn.GoogleSignIn.standard(scopes: [
+    ga.DriveApi.DriveFileScope,
+  ]);
 
   //Get Authenticated Http Client
   Future<http.Client> getHttpClient() async {
-    if (_googleSignIn.currentUser == null) await _googleSignIn.signIn();
+    var user ;
+    if (_googleSignIn.currentUser == null){
+     user = await GoogleLogin();
+    }
 
-    final authHeaders = await _googleSignIn.currentUser.authHeaders;
+    final authHeaders = await user.authHeaders;
     if (authHeaders == null) {
       GoogleLogout();
       return null;

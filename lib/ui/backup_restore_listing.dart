@@ -45,7 +45,7 @@ class _SelectfromdriveState extends State<Selectfromdrive> {
           appBar: AppBar(
             actions: <Widget>[
               IconButton(
-                  icon: Icon(Icons.account_circle),
+                  icon: Icon(Icons.logout),
                   onPressed: () async {
                     await googleapi.GoogleLogout();
                     setState(() {
