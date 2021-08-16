@@ -823,6 +823,7 @@ class _IntroPageState extends State<IntroPage> {
         2,
         false,
         false,
+        true,
         1,
         true,
         PaperSize.mm80,

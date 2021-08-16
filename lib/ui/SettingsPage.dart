@@ -12,6 +12,7 @@ import 'package:gestmob/generated/l10n.dart';
 import 'package:gestmob/models/MyParams.dart';
 import 'package:gestmob/services/push_notifications.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:settings_ui/settings_ui.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter/src/services/asset_bundle.dart';
@@ -31,6 +32,7 @@ class _SettingsPageState extends State<SettingsPage> {
   int _tarification;
   bool _tva;
   bool _timbre;
+  bool _autoVerssement ;
   bool _credit;
   String _formatPrintDisplay;
   String _language;
@@ -130,6 +132,7 @@ class _SettingsPageState extends State<SettingsPage> {
     _tarification = item.tarification;
     _tva = item.tva;
     _timbre = item.timbre;
+    _autoVerssement = item.autoverssement;
     _credit = item.creditTier;
     _formatPrintDisplay = Statics.printDisplayItems[item.printDisplay];
     _notifications = item.notifications;
@@ -367,6 +370,20 @@ class _SettingsPageState extends State<SettingsPage> {
                     onToggle: (bool value) {
                       setState(() {
                         _timbre = value;
+                      });
+                    },
+                  ),
+                  SettingsTile.switchTile(
+                    title: '${S.current.auto_verssment}',
+                    titleTextStyle: GoogleFonts.lato(),
+                    subtitleTextStyle: GoogleFonts.lato(),
+                    leading: Icon(MdiIcons.sigma,
+                        color: Theme.of(context).primaryColorDark),
+                    switchValue: _autoVerssement,
+                    switchActiveColor: Theme.of(context).primaryColor,
+                    onToggle: (bool value) {
+                      setState(() {
+                        _autoVerssement = value;
                       });
                     },
                   ),
@@ -1123,6 +1140,7 @@ class _SettingsPageState extends State<SettingsPage> {
     _myParams.tarification = _tarification;
     _myParams.tva = _tva;
     _myParams.timbre = _timbre;
+    _myParams.autoverssement = _autoVerssement ;
     _myParams.printDisplay =
         Statics.printDisplayItems.indexOf(_formatPrintDisplay);
     _myParams.creditTier = _credit;

@@ -5894,6 +5894,26 @@ class S {
       args: [],
     );
   }
+
+  /// `Invoice always paid`
+  String get auto_verssment {
+    return Intl.message(
+      'Invoice always paid',
+      name: 'auto_verssment',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `P`
+  String get colis_abr {
+    return Intl.message(
+      'P',
+      name: 'colis_abr',
+      desc: '',
+      args: [],
+    );
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<S> {

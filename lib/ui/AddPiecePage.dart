@@ -1804,10 +1804,11 @@ class _AddPiecePageState extends State<AddPiecePage>
         // cet else est pour le cas de creation modification = false
         // le verssement est 0 tjr tq l'utilisateur ne le modifie pas
         _verssementpiece = 0.0;
-        if(_piece.piece == PieceType.bonLivraison ||
+        if((_myParams.autoverssement) &&
+            (_piece.piece == PieceType.bonLivraison ||
             _piece.piece == PieceType.factureClient ||
             _piece.piece == PieceType.bonReception ||
-            _piece.piece == PieceType.factureFournisseur){
+            _piece.piece == PieceType.factureFournisseur)){
           _verssementpiece = _net_a_payer;
         }
         _verssementControler.text = _verssementpiece.toStringAsFixed(2);
@@ -2914,7 +2915,7 @@ class _AddPiecePageState extends State<AddPiecePage>
                   width: 6),
           PosColumn(
               text:
-                  '${Helpers.numberFormat(element.selectedQuantite).toString()}',
+                  '${Helpers.numberFormat(element.selectedQuantite)} [${(element.selectedQuantite/element.quantiteColis).toInt()} ${S.current.colis_abr}]',
               width: 2),
           PosColumn(
               text: '${Helpers.numberFormat(element.selectedPrice).toString()}',
@@ -3194,7 +3195,7 @@ class _AddPiecePageState extends State<AddPiecePage>
                   width: 6),
           PosColumn(
               textEncoded: await CharsetConverter.encode("ISO-8859-6",
-                  '${Helpers.numberFormat(element.selectedQuantite).toString()}'),
+                  '${Helpers.numberFormat(element.selectedQuantite).toString()} [${(element.selectedQuantite/element.quantiteColis).toInt()} ${S.current.colis_abr}]'),
               width: 2),
           PosColumn(
               textEncoded: await CharsetConverter.encode("ISO-8859-6",
@@ -3588,7 +3589,7 @@ class _AddPiecePageState extends State<AddPiecePage>
                     pw.Container(
                       padding: pw.EdgeInsets.only(left: 5, right: 5),
                       child: pw.Text(
-                          "${Helpers.numberFormat(e.selectedQuantite/e.quantiteColis)}",
+                          "${(e.selectedQuantite/e.quantiteColis).toInt()}",
                           style: pw.TextStyle(fontSize: 9)),
                     ),
                     pw.Container(
@@ -3643,7 +3644,7 @@ class _AddPiecePageState extends State<AddPiecePage>
                               style: pw.TextStyle(font: arial))
                           : pw.SizedBox(),
                       pw.Divider(height: 2),
-                      pw.Text('Arreter le présent document à la somme de : ' ,
+                      pw.Text(S.current.msg_arret_somme,
                       style: pw.TextStyle(font: arial , fontSize: 10)),
                       pw.Text(getPieceSuminLetters(),
                           style: pw.TextStyle(

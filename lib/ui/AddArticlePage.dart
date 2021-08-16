@@ -81,7 +81,7 @@ class _AddArticlePageState extends State<AddArticlePage>
   TextEditingController _libelleMarqueControl = new TextEditingController();
   TextEditingController _tauxTVAControl = new TextEditingController();
   TextEditingController _colisControl = new TextEditingController();
-  TextEditingController _qteColisCotrol = new TextEditingController();
+  TextEditingController _qteColisCotrol = new TextEditingController(text: "1.0");
   TextEditingController _qteCmdCotrol = new TextEditingController();
   bool _controlBloquer = false;
 
@@ -664,17 +664,6 @@ class _AddArticlePageState extends State<AddArticlePage>
                               baseOffset: 0,
                               extentOffset:
                                   _stockInitialControl.value.text.length),
-                      onChanged: (value){
-                        if(value.trim() != ''){
-                          _qteColisCotrol.text = '1.0' ;
-                          _colisControl.text = value ;
-
-                        }else{
-                          _qteColisCotrol.text = '' ;
-                          _colisControl.text = '' ;
-                        }
-
-                      },
                       keyboardType: TextInputType.number,
                       validator: (value) {
                         if (!value.isNumericUsingRegularExpression) {
@@ -686,6 +675,13 @@ class _AddArticlePageState extends State<AddArticlePage>
                           return S.current.msg_prix_supp_zero;
                         }
                         return null;
+                      },
+                      onChanged: (value){
+                        if(value.trim() != ''){
+                          _colisControl.text = ((double.parse(value) / double.parse(_qteColisCotrol.text)).toInt()).toString() ;
+                        }else{
+                          _colisControl.text = '' ;
+                        }
                       },
                       decoration: InputDecoration(
                         labelText: modification
@@ -789,7 +785,7 @@ class _AddArticlePageState extends State<AddArticlePage>
                       onChanged: (value){
                         if(value.trim() != ''){
                           _colisControl.text =
-                              (double.parse(_stockInitialControl.text)/double.parse(_qteColisCotrol.text)).toString();
+                              (double.parse(_stockInitialControl.text)/double.parse(_qteColisCotrol.text)).toInt().toString();
                         }else{
                           _colisControl.text = '';
                         }
@@ -879,7 +875,6 @@ class _AddArticlePageState extends State<AddArticlePage>
               visible: _stockable,
               child: TextFormField(
                 enabled: editMode,
-                readOnly: true,
                 controller: _colisControl,
                 onTap: () => _colisControl.selection = TextSelection(
                     baseOffset: 0,
@@ -889,10 +884,17 @@ class _AddArticlePageState extends State<AddArticlePage>
                   if (!value.isNumericUsingRegularExpression) {
                     return S.current.msg_val_valide;
                   }
-                  // if (value.isNotEmpty && double.parse(value) < 0) {
-                  //   return S.current.msg_prix_supp_zero;
-                  // }
+                  if (value.isNotEmpty && double.parse(value) <= 0) {
+                    return S.current.msg_prix_supp_zero;
+                  }
                   return null;
+                },
+                onChanged: (value){
+                  if(value.trim() != ''){
+                    _stockInitialControl.text = (double.parse(value) * double.parse(_qteColisCotrol.text)).toString();
+                  }else{
+                    _stockInitialControl.text = '' ;
+                  }
                 },
                 decoration: InputDecoration(
                   prefixIcon: Icon(

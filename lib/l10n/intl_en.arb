@@ -629,7 +629,10 @@
   "msg_config_auth" : "Go to settings",
   "msg_aut_lockout" : "Biometric authentication is disabled",
   "msg_auth_success" : "Fingerprint has been recognized",
-  "msg_auth_fail" : "Fingerprint not recognized, Try again!"
+  "msg_auth_fail" : "Fingerprint not recognized, Try again!",
+
+  "auto_verssment" : "Invoice always paid",
+  "colis_abr" : "P"
 
 
 

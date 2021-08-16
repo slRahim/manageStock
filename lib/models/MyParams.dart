@@ -6,6 +6,7 @@ class MyParams {
   int _tarification ;
   bool _tva ;
   bool _timbre ;
+  bool _autoverssement ;
   int _printDisplay ;
   bool _creditTier ;
   PaperSize _defaultFormatPrint ;
@@ -15,13 +16,14 @@ class MyParams {
   int _echeance ;
   String _pays;
   String _devise ;
+
   String _versionType ;
   DateTime _startDate ;
   String _codeAbonnement ;
 
   MyParams.init();
 
-  MyParams(this._id, this._tarification, this._tva , this._timbre , this._printDisplay , this._creditTier,
+  MyParams(this._id, this._tarification, this._tva , this._timbre , this._autoverssement, this._printDisplay , this._creditTier,
       this._defaultFormatPrint,this._notifications , this._notificationTime , this._notificationDay , this._echeance
       ,this._pays ,this._devise , this._versionType , this._startDate , this._codeAbonnement);
 
@@ -30,6 +32,7 @@ class MyParams {
     this._tarification=map["Tarification"];
     this._tva=(map["Tva"] == 1)?true:false;
     this._timbre = (map["Timbre"] == 1)?true : false;
+    this._autoverssement = (map["AutoVerssement"] == 1 || map["AutoVerssement"] == null)?true : false;
     this._printDisplay=map["Print_display"];
     this._creditTier = (map["Credit_tier"] == 1)?true : false;
     this._defaultFormatPrint = (map["Default_format_print"] == "80")?PaperSize.mm80 : PaperSize.mm58 ;
@@ -50,6 +53,7 @@ class MyParams {
     map["tarification"]=this._tarification;
     map["Tva"] = (this._tva)?1:0;
     map["Timbre"]=(this._timbre)?1:0;
+    map["AutoVerssement"]=(this._autoverssement)?1:0;
     map["Print_display"]=this._printDisplay;
     map["Credit_tier"] = (this._creditTier)?1:0 ;
     map["Default_format_print"]=(this._defaultFormatPrint == PaperSize.mm80) ? "80" : "58" ;
@@ -64,6 +68,12 @@ class MyParams {
     map["Code_abonnement"]=this._codeAbonnement ;
 
     return map ;
+  }
+
+  bool get autoverssement => _autoverssement;
+
+  set autoverssement(bool value) {
+    _autoverssement = value;
   }
 
   bool get creditTier => _creditTier;

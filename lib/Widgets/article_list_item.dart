@@ -232,7 +232,7 @@ class _ArticleListItemState extends State<ArticleListItem> {
                           SizedBox(
                             width: 3,
                           ),
-                          Text("${widget.article.selectedQuantite.toString()}",
+                          Text("${Helpers.numberFormat(widget.article.selectedQuantite)} [${((widget.article.selectedQuantite/widget.article.quantiteColis).toInt()).toString()} ${S.current.colis_abr}]",
                               style: GoogleFonts.lato(
                                 textStyle: TextStyle(fontSize: 16.0),
                               )),
@@ -282,7 +282,7 @@ class _ArticleListItemState extends State<ArticleListItem> {
                           ),
                           (widget.article.stockable)
                               ? Text(
-                                  "${(widget.article.quantite - widget.article.cmdClient).toString()}",
+                                  "${Helpers.numberFormat(widget.article.quantite - widget.article.cmdClient)}",
                                   style: GoogleFonts.lato(
                                       textStyle: TextStyle(
                                           color: widget.article.quantite <=
@@ -523,9 +523,9 @@ class _ArticleListItemState extends State<ArticleListItem> {
                       },
                       onChanged: (value){
                         if(value.trim() != ''){
-                          _colisControler.text = (double.parse(value) / widget.article.quantiteColis).toString();
+                          _colisControler.text = ((double.parse(value) / widget.article.quantiteColis).toInt()).toString();
                         }else{
-                          _colisControler.text = '0.0' ;
+                          _colisControler.text = '0' ;
                         }
                       },
                       decoration: InputDecoration(
@@ -684,11 +684,11 @@ class _ArticleListItemState extends State<ArticleListItem> {
                                       _quntiteControler.text = widget
                                           .article.selectedQuantite
                                           .toString();
-                                      var res = widget.article.selectedQuantite / widget.article.quantiteColis ;
+                                      var res = (widget.article.selectedQuantite / widget.article.quantiteColis).toInt();
                                        if(res > 0){
                                          _colisControler.text = res.toString();
                                        }else{
-                                         _colisControler.text = '0.0';
+                                         _colisControler.text = '0';
                                        }
                                       _priceControler.text = widget
                                           .article.selectedPriceTTC
@@ -825,11 +825,11 @@ class _ArticleListItemState extends State<ArticleListItem> {
       );
 
       _quntiteControler.text = widget.article.selectedQuantite.toString();
-      var res = widget.article.selectedQuantite / widget.article.quantiteColis ;
+      var res = (widget.article.selectedQuantite / widget.article.quantiteColis).toInt() ;
       if(res > 0){
         _colisControler.text = res.toString();
       }else{
-        _colisControler.text = '0.0';
+        _colisControler.text = '0';
       }
       _priceControler.text = widget.article.selectedPriceTTC.toStringAsFixed(2);
       return dialog;

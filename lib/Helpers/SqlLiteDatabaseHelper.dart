@@ -21,7 +21,7 @@ class SqlLiteDatabaseHelper {
   SqlLiteDatabaseHelper.internal();
 
   static const SECRET_KEY = "2020_PRIVATES_KEYS_ENCRYPTS_2020";
-  static const DATABASE_VERSION = 1;
+  static const DATABASE_VERSION = 2;
   static Database _db;
   GoogleApi _googleApi = new GoogleApi();
 
@@ -94,7 +94,11 @@ class SqlLiteDatabaseHelper {
   }
 
   Map<String, Function> _onUpgrades = {
-    'from_version_1_to_version_2': (Database db) async {},
+    'from_version_1_to_version_2': (Database db) async {
+      await db.execute("""
+          ALTER TABLE MyParams ADD COLUMN AutoVerssement INTEGER NOT NULL DEFAULT 1 ;
+        )""");
+    },
   };
 
   Future deleteDB() async {
@@ -421,7 +425,8 @@ class SqlLiteDatabaseHelper {
         Devise varchar(255),
         Verssion_type varchar(255),
         Start_date integer ,
-        Code_abonnement varchar(255)
+        Code_abonnement varchar(255),
+        AutoVerssement INTEGER NOT NULL DEFAULT 1 
         )""");
 
     await db.execute('''CREATE TABLE IF NOT EXISTS DefaultPrinters (
@@ -1498,7 +1503,7 @@ class SqlLiteDatabaseHelper {
         'INSERT INTO FormatPiece(Format , Piece , Current_index,Year) VALUES("XXXX/YYYY"  , "TR" , 0 , ${DateTime.now().year.toString()})');
 
     batch.rawInsert(
-        "INSERT INTO MyParams VALUES(1,2,0,0,1,1,'80',1,'9:01',0,0,'United States of America','USD' , 'demo' , 0 , 'mensuel')");
+        "INSERT INTO MyParams VALUES(1,2,0,0,1,1,'80',1,'9:01',0,0,'United States of America','USD' , 'demo' , 0 , 'mensuel' , 1)");
 
     await batch.commit();
   }

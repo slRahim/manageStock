@@ -628,7 +628,10 @@
   "msg_config_auth" : "Aller aux paramétres",
   "msg_aut_lockout" : "L'authentification biometrique est désactivée",
   "msg_auth_success" : "Empreinte digitale a bien été reconnue",
-  "msg_auth_fail" : "Empreinte digitale non reconnue, Reessayer !"
+  "msg_auth_fail" : "Empreinte digitale non reconnue, Reessayer !",
+
+  "auto_verssment" : "Pièces toujours payées",
+  "colis_abr" : "C"
 
 
 
