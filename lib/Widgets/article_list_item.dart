@@ -232,7 +232,12 @@ class _ArticleListItemState extends State<ArticleListItem> {
                           SizedBox(
                             width: 3,
                           ),
-                          Text("${Helpers.numberFormat(widget.article.selectedQuantite)} [${((widget.article.selectedQuantite/widget.article.quantiteColis).toInt()).toString()} ${S.current.colis_abr}]",
+                          ((widget.article.selectedQuantite/widget.article.quantiteColis) - (widget.article.selectedQuantite/widget.article.quantiteColis).truncate() > 0)?
+                          Text("${Helpers.numberFormat(widget.article.selectedQuantite)} [${((widget.article.selectedQuantite/widget.article.quantiteColis).toInt()).toString()}+ ${S.current.colis_abr}]",
+                              style: GoogleFonts.lato(
+                                textStyle: TextStyle(fontSize: 16.0),
+                              ))
+                          :Text("${Helpers.numberFormat(widget.article.selectedQuantite)} [${((widget.article.selectedQuantite/widget.article.quantiteColis).toInt()).toString()} ${S.current.colis_abr}]",
                               style: GoogleFonts.lato(
                                 textStyle: TextStyle(fontSize: 16.0),
                               )),
@@ -523,7 +528,12 @@ class _ArticleListItemState extends State<ArticleListItem> {
                       },
                       onChanged: (value){
                         if(value.trim() != ''){
-                          _colisControler.text = ((double.parse(value) / widget.article.quantiteColis).toInt()).toString();
+                          double res = (double.parse(value) / widget.article.quantiteColis) ;
+                          _colisControler.text = (res.toInt()).toString() ;
+                          if(res-res.truncate() > 0){
+                             var a =((res-res.truncate()) * widget.article.quantiteColis).round().toInt();
+                            _colisControler.text += ' +$a' ;
+                          }
                         }else{
                           _colisControler.text = '0' ;
                         }
@@ -604,8 +614,18 @@ class _ArticleListItemState extends State<ArticleListItem> {
                                 onPressed: () {
                                   double _qte =
                                       double.parse(_quntiteControler.text) - 1;
-                                  _quntiteControler.text =
-                                      _qte.toStringAsFixed(2);
+                                  _quntiteControler.text = _qte.toStringAsFixed(2);
+                                  String value =  _qte.toStringAsFixed(2);
+                                  if(value.trim() != ''){
+                                    double res = (double.parse(value) / widget.article.quantiteColis) ;
+                                    _colisControler.text = (res.toInt()).toString() ;
+                                    if(res-res.truncate() > 0){
+                                      var a =((res-res.truncate()) * widget.article.quantiteColis).round().toInt();
+                                      _colisControler.text += ' +$a' ;
+                                    }
+                                  }else{
+                                    _colisControler.text = '0' ;
+                                  }
                                 },
                                 elevation: 2.0,
                                 fillColor: Colors.redAccent,
@@ -620,8 +640,19 @@ class _ArticleListItemState extends State<ArticleListItem> {
                                 onPressed: () {
                                   double _qte =
                                       double.parse(_quntiteControler.text) + 1;
-                                  _quntiteControler.text =
-                                      _qte.toStringAsFixed(2);
+                                  _quntiteControler.text = _qte.toStringAsFixed(2);
+                                  String value =  _qte.toStringAsFixed(2);
+                                  if(value.trim() != ''){
+                                    double res = (double.parse(value) / widget.article.quantiteColis) ;
+                                    _colisControler.text = (res.toInt()).toString() ;
+                                    if(res-res.truncate() > 0){
+                                      var a =((res-res.truncate()) * widget.article.quantiteColis).round().toInt();
+                                      _colisControler.text += ' +$a' ;
+                                    }
+                                  }else{
+                                    _colisControler.text = '0' ;
+                                  }
+
                                 },
                                 elevation: 2.0,
                                 fillColor: Colors.greenAccent[700],
@@ -684,9 +715,13 @@ class _ArticleListItemState extends State<ArticleListItem> {
                                       _quntiteControler.text = widget
                                           .article.selectedQuantite
                                           .toString();
-                                      var res = (widget.article.selectedQuantite / widget.article.quantiteColis).toInt();
+                                      double res = (widget.article.selectedQuantite / widget.article.quantiteColis);
                                        if(res > 0){
-                                         _colisControler.text = res.toString();
+                                         _colisControler.text = res.toInt().toString();
+                                         if(res-res.truncate() > 0){
+                                           var a =((res-res.truncate()) * widget.article.quantiteColis).round().toInt();
+                                           _colisControler.text += ' +$a' ;
+                                         }
                                        }else{
                                          _colisControler.text = '0';
                                        }
@@ -744,13 +779,14 @@ class _ArticleListItemState extends State<ArticleListItem> {
                                   } else {
                                     _validateColisError = null;
                                     if (!_colisControler.text
+                                        .split('+').first
                                         .trim()
                                         .isNumericUsingRegularExpression) {
                                       _validateColisError =
                                           S.current.msg_val_valide;
                                     }
                                     if (double.parse(
-                                        _colisControler.text.trim()) <=
+                                        _colisControler.text.split('+').first.trim()) <=
                                         0) {
                                       _validateColisError = S.current.msg_qte_err;
                                     }
@@ -825,9 +861,13 @@ class _ArticleListItemState extends State<ArticleListItem> {
       );
 
       _quntiteControler.text = widget.article.selectedQuantite.toString();
-      var res = (widget.article.selectedQuantite / widget.article.quantiteColis).toInt() ;
+      double res = (widget.article.selectedQuantite / widget.article.quantiteColis);
       if(res > 0){
-        _colisControler.text = res.toString();
+        _colisControler.text = res.toInt().toString();
+        if(res-res.truncate() > 0){
+          var a =((res-res.truncate()) * widget.article.quantiteColis).round().toInt();
+          _colisControler.text += ' +$a' ;
+        }
       }else{
         _colisControler.text = '0';
       }

@@ -309,7 +309,12 @@ class _PreviewPieceState extends State<PreviewPiece> {
                                           "${e.ref}",
                                           style: TextStyle(color: Colors.black),
                                         ),
+                                  ((e.selectedQuantite/e.quantiteColis) - (e.selectedQuantite/e.quantiteColis).truncate() > 0)?
                                   Text(
+                                    "${Helpers.numberFormat(e.selectedQuantite)} [${(e.selectedQuantite/e.quantiteColis).toInt()}+ ${S.current.colis_abr}]",
+                                    style: TextStyle(color: Colors.black),
+                                  )
+                                  :Text(
                                     "${Helpers.numberFormat(e.selectedQuantite)} [${(e.selectedQuantite/e.quantiteColis).toInt()} ${S.current.colis_abr}]",
                                     style: TextStyle(color: Colors.black),
                                   ),
@@ -711,7 +716,12 @@ class _PreviewPieceState extends State<PreviewPiece> {
                   textEncoded: await CharsetConverter.encode("ISO-8859-6",
                       "${element.designation.substring(0, ((element.designation.length < 8 ? element.designation.length : 8)))}"),
                   width: 6),
+          ((element.selectedQuantite/element.quantiteColis) - (element.selectedQuantite/element.quantiteColis).truncate() > 0)?
           PosColumn(
+              text:
+              '${Helpers.numberFormat(element.selectedQuantite).toString()} [${(element.selectedQuantite/element.quantiteColis).toInt()}+ ${S.current.colis_abr}]',
+              width: 2)
+          :PosColumn(
               text:
                   '${Helpers.numberFormat(element.selectedQuantite).toString()} [${(element.selectedQuantite/element.quantiteColis).toInt()} ${S.current.colis_abr}]',
               width: 2),
@@ -992,7 +1002,12 @@ class _PreviewPieceState extends State<PreviewPiece> {
                   text:
                       '${element.designation.substring(0, (element.designation.length < 8 ? element.designation.length : 8))}',
                   width: 6),
+          ((element.selectedQuantite/element.quantiteColis) - (element.selectedQuantite/element.quantiteColis).truncate() > 0)?
           PosColumn(
+              textEncoded: await CharsetConverter.encode("ISO-8859-6",
+                  '${Helpers.numberFormat(element.selectedQuantite).toString()} [${(element.selectedQuantite/element.quantiteColis).toInt()}+ ${S.current.colis_abr}]'),
+              width: 2)
+          :PosColumn(
               textEncoded: await CharsetConverter.encode("ISO-8859-6",
                   '${Helpers.numberFormat(element.selectedQuantite).toString()} [${(element.selectedQuantite/element.quantiteColis).toInt()} ${S.current.colis_abr}]'),
               width: 2),

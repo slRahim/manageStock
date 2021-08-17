@@ -2913,7 +2913,12 @@ class _AddPiecePageState extends State<AddPiecePage>
                   textEncoded: await CharsetConverter.encode("ISO-8859-6",
                       "${element.designation.substring(0, (element.designation.length < 8 ? element.designation.length : 8))}"),
                   width: 6),
+          ((element.selectedQuantite/element.quantiteColis) - (element.selectedQuantite/element.quantiteColis).truncate() > 0)?
           PosColumn(
+              text:
+              '${Helpers.numberFormat(element.selectedQuantite)} [${(element.selectedQuantite/element.quantiteColis).toInt()}+ ${S.current.colis_abr}]',
+              width: 2)
+          :PosColumn(
               text:
                   '${Helpers.numberFormat(element.selectedQuantite)} [${(element.selectedQuantite/element.quantiteColis).toInt()} ${S.current.colis_abr}]',
               width: 2),
@@ -3193,7 +3198,12 @@ class _AddPiecePageState extends State<AddPiecePage>
                   text:
                       '${element.designation.substring(0, (element.designation.length < 8 ? element.designation.length : 8))}',
                   width: 6),
+          ((element.selectedQuantite/element.quantiteColis) - (element.selectedQuantite/element.quantiteColis).truncate() > 0)?
           PosColumn(
+              textEncoded: await CharsetConverter.encode("ISO-8859-6",
+                  '${Helpers.numberFormat(element.selectedQuantite).toString()} [${(element.selectedQuantite/element.quantiteColis).toInt()}+ ${S.current.colis_abr}]'),
+              width: 2)
+          :PosColumn(
               textEncoded: await CharsetConverter.encode("ISO-8859-6",
                   '${Helpers.numberFormat(element.selectedQuantite).toString()} [${(element.selectedQuantite/element.quantiteColis).toInt()} ${S.current.colis_abr}]'),
               width: 2),
@@ -3586,7 +3596,14 @@ class _AddPiecePageState extends State<AddPiecePage>
                           "${Helpers.numberFormat(e.selectedQuantite)}",
                           style: pw.TextStyle(fontSize: 9)),
                     ),
+                    ((e.selectedQuantite/e.quantiteColis) - (e.selectedQuantite/e.quantiteColis).truncate() > 0)?
                     pw.Container(
+                      padding: pw.EdgeInsets.only(left: 5, right: 5),
+                      child: pw.Text(
+                          "${(e.selectedQuantite/e.quantiteColis).toInt()}+",
+                          style: pw.TextStyle(fontSize: 9)),
+                    )
+                    :pw.Container(
                       padding: pw.EdgeInsets.only(left: 5, right: 5),
                       child: pw.Text(
                           "${(e.selectedQuantite/e.quantiteColis).toInt()}",
