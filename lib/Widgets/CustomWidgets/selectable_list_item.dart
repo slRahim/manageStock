@@ -469,7 +469,7 @@ class _ArticleListItemSelectedState extends State<ArticleListItemSelected> {
                                           S.current.msg_val_valide;
                                     }
                                     if (double.parse(
-                                        _colisControler.text.split('+').first.trim()) <=
+                                        _colisControler.text.split('+').first.trim()) <
                                         0) {
                                       _validateColisError = S.current.msg_qte_err;
                                     }
