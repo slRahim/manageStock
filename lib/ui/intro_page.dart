@@ -957,8 +957,8 @@ class _IntroPageState extends State<IntroPage> {
         charges.add(new ChargeTresorie(null,"Loyer"));
         charges.add(new ChargeTresorie(null,"Salaire"));
         comptes.add(new CompteTresorie(null, "00001", "Caisse", "0000", 0.0, 0.0));
-        tier0.raisonSociale = "Client inconnus";
-        tier2.raisonSociale = "Fournisseur inconnus";
+        tier0.raisonSociale = "Client inconnu";
+        tier2.raisonSociale = "Fournisseur inconnu";
         break;
 
       case ("عربية (AR)"):

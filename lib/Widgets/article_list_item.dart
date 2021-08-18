@@ -95,7 +95,7 @@ class _ArticleListItemState extends State<ArticleListItem> {
         description: Container(
             width: 150,
             child: Text(
-              S.current.msg_long_press_select,
+              S.current.msg_tap,
               style: GoogleFonts.lato(),
             )),
         onBackgroundTap: () async {
@@ -168,7 +168,7 @@ class _ArticleListItemState extends State<ArticleListItem> {
                 description: Container(
                     width: 150,
                     child: Text(
-                      S.current.msg_tap,
+                      S.current.msg_long_press_select,
                       style: GoogleFonts.lato(),
                     )),
                 onBackgroundTap: () async {
@@ -333,37 +333,10 @@ class _ArticleListItemState extends State<ArticleListItem> {
   _longpressItem(){
     if (widget.onItemSelected != null &&
         widget.article.selectedQuantite >= 0) {
-      showDialog(
-          context: context,
-          builder: (BuildContext context) {
-            return addQtedialogue();
-          }).then((val) {
-        if (widget.article.stockable &&
-            (widget.pieceOrigin == 'BL' ||
-                widget.pieceOrigin == 'FC') &&
-            ((widget.article.quantite - widget.article.cmdClient) <
-                widget.article.selectedQuantite)) {
-          AwesomeDialog(
-              context: context,
-              dialogType: DialogType.WARNING,
-              dismissOnBackKeyPress: false,
-              dismissOnTouchOutside: false,
-              animType: AnimType.BOTTOMSLIDE,
-              title: "",
-              desc: S.current.msg_qte_select_sup,
-              btnCancelText: S.current.confirme,
-              btnCancelOnPress: () {},
-              btnOkText: S.current.annuler,
-              btnOkOnPress: () {
-                setState(() {
-                  widget.article.selectedQuantite = 1;
-                });
-              })
-            ..show();
 
-        }
-        setState(() {});
-      });
+        widget.article.selectedQuantite = -1;
+        widget.onItemSelected(widget.article);
+
     }
   }
 
@@ -380,12 +353,10 @@ class _ArticleListItemState extends State<ArticleListItem> {
         }
       });
     } else {
-      if (widget.article.selectedQuantite > 0) {
-        widget.article.selectedQuantite = -1;
-        widget.onItemSelected(widget.article);
-      } else {
-        selectThisItem();
-        showDialog(
+        if(widget.article.selectedQuantite == -1){
+          selectThisItem();
+        }
+        await showDialog(
             context: context,
             builder: (BuildContext context) {
               return addQtedialogue();
@@ -414,9 +385,8 @@ class _ArticleListItemState extends State<ArticleListItem> {
                 })
               ..show();
           }
-          setState(() {});
+          // setState(() {});
         });
-      }
     }
   }
 
@@ -489,7 +459,42 @@ class _ArticleListItemState extends State<ArticleListItem> {
     }
   }
 
-  //dialog pour modifier le prix et la quantité
+  void selectThisItem() {
+    widget.article.selectedQuantite = 1;
+    if (widget.pieceOrigin == 'BC' ||
+        widget.pieceOrigin == 'BR' ||
+        widget.pieceOrigin == 'FF' ||
+        widget.pieceOrigin == 'RF' ||
+        widget.pieceOrigin == 'AF') {
+      widget.article.selectedPrice = widget.article.prixAchat;
+      widget.article.selectedPriceTTC = widget.article.prixAchatTTC;
+    } else {
+      switch (widget.tarification) {
+        case 1:
+          widget.article.selectedPrice = widget.article.prixVente1;
+          widget.article.selectedPriceTTC = widget.article.prixVente1TTC;
+          break;
+        case 2:
+          widget.article.selectedPrice = widget.article.prixVente2;
+          widget.article.selectedPriceTTC = widget.article.prixVente2TTC;
+          break;
+        case 3:
+          widget.article.selectedPrice = widget.article.prixVente3;
+          widget.article.selectedPriceTTC = widget.article.prixVente3TTC;
+          break;
+        default:
+          if (widget.article.selectedPrice == null) {
+            widget.article.selectedPrice = widget.article.prixVente1;
+            widget.article.selectedPriceTTC = widget.article.prixVente1TTC;
+          }
+          break;
+      }
+    }
+
+    widget.onItemSelected(widget.article);
+  }
+  //****************************************************************************************************************************************************************************
+  //*********************************************************dialog pour modifier le prix et la quantité**************************************************************************
   Widget addQtedialogue() {
     return StatefulBuilder(builder: (context, StateSetter _setState) {
       Widget dialog = Dialog(
@@ -611,22 +616,7 @@ class _ArticleListItemState extends State<ArticleListItem> {
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
                               RawMaterialButton(
-                                onPressed: () {
-                                  double _qte =
-                                      double.parse(_quntiteControler.text) - 1;
-                                  _quntiteControler.text = _qte.toStringAsFixed(2);
-                                  String value =  _qte.toStringAsFixed(2);
-                                  if(value.trim() != ''){
-                                    double res = (double.parse(value) / widget.article.quantiteColis) ;
-                                    _colisControler.text = (res.toInt()).toString() ;
-                                    if(res-res.truncate() > 0){
-                                      var a =((res-res.truncate()) * widget.article.quantiteColis).round().toInt();
-                                      _colisControler.text += ' +$a' ;
-                                    }
-                                  }else{
-                                    _colisControler.text = '0' ;
-                                  }
-                                },
+                                onPressed: _qteDialogMinusButton,
                                 elevation: 2.0,
                                 fillColor: Colors.redAccent,
                                 child: Icon(
@@ -637,23 +627,7 @@ class _ArticleListItemState extends State<ArticleListItem> {
                                 shape: CircleBorder(),
                               ),
                               RawMaterialButton(
-                                onPressed: () {
-                                  double _qte =
-                                      double.parse(_quntiteControler.text) + 1;
-                                  _quntiteControler.text = _qte.toStringAsFixed(2);
-                                  String value =  _qte.toStringAsFixed(2);
-                                  if(value.trim() != ''){
-                                    double res = (double.parse(value) / widget.article.quantiteColis) ;
-                                    _colisControler.text = (res.toInt()).toString() ;
-                                    if(res-res.truncate() > 0){
-                                      var a =((res-res.truncate()) * widget.article.quantiteColis).round().toInt();
-                                      _colisControler.text += ' +$a' ;
-                                    }
-                                  }else{
-                                    _colisControler.text = '0' ;
-                                  }
-
-                                },
+                                onPressed: _qteDialogPlusButton,
                                 elevation: 2.0,
                                 fillColor: Colors.greenAccent[700],
                                 child: Icon(
@@ -709,31 +683,8 @@ class _ArticleListItemState extends State<ArticleListItem> {
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
                               InkWell(
-                                onTap: () {
-                                  if (mounted) {
-                                    setState(() {
-                                      _quntiteControler.text = widget
-                                          .article.selectedQuantite
-                                          .toString();
-                                      double res = (widget.article.selectedQuantite / widget.article.quantiteColis);
-                                       if(res > 0){
-                                         _colisControler.text = res.toInt().toString();
-                                         if(res-res.truncate() > 0){
-                                           var a =((res-res.truncate()) * widget.article.quantiteColis).round().toInt();
-                                           _colisControler.text += ' +$a' ;
-                                         }
-                                       }else{
-                                         _colisControler.text = '0';
-                                       }
-                                      _priceControler.text = widget
-                                          .article.selectedPriceTTC
-                                          .toString();
-                                      _validateQteError = null;
-                                      _validateColisError = null ;
-                                      _validatePriceError = null;
-                                    });
-                                  }
-                                  Navigator.pop(context);
+                                onTap:(){
+                                  _qteDialogCancelButton(context) ;
                                 },
                                 child: Container(
                                   padding: EdgeInsets.all(8.0),
@@ -754,81 +705,8 @@ class _ArticleListItemState extends State<ArticleListItem> {
                               ),
                               SizedBox(width: 10),
                               InkWell(
-                                onTap: () {
-                                  if (_quntiteControler.text.trim() == '') {
-                                    _validateQteError =
-                                        S.current.msg_champs_obg;
-                                  } else {
-                                    _validateQteError = null;
-                                    if (!_quntiteControler.text
-                                        .trim()
-                                        .isNumericUsingRegularExpression) {
-                                      _validateQteError =
-                                          S.current.msg_val_valide;
-                                    }
-                                    if (double.parse(
-                                            _quntiteControler.text.trim()) <=
-                                        0) {
-                                      _validateQteError = S.current.msg_qte_err;
-                                    }
-                                  }
-
-                                  if (_colisControler.text.trim() == '') {
-                                    // _validateColisError =
-                                    //     S.current.msg_champs_obg;
-                                  } else {
-                                    _validateColisError = null;
-                                    if (!_colisControler.text
-                                        .split('+').first
-                                        .trim()
-                                        .isNumericUsingRegularExpression) {
-                                      _validateColisError =
-                                          S.current.msg_val_valide;
-                                    }
-                                    if (double.parse(
-                                        _colisControler.text.split('+').first.trim()) <
-                                        0) {
-                                      _validateColisError = S.current.msg_qte_err;
-                                    }
-                                  }
-
-                                  if (_priceControler.text.trim() == '') {
-                                    _validatePriceError =
-                                        S.current.msg_champs_obg;
-                                  } else {
-                                    _validatePriceError = null;
-                                    if (!_priceControler.text
-                                        .trim()
-                                        .isNumericUsingRegularExpression) {
-                                      _validatePriceError =
-                                          S.current.msg_val_valide;
-                                    }
-                                    if (double.parse(
-                                            _priceControler.text.trim()) <
-                                        0) {
-                                      _validatePriceError =
-                                          S.current.msg_prix_supp_zero;
-                                    }
-                                  }
-
-                                  if (_validateQteError == null &&
-                                      _validateColisError == null &&
-                                      _validatePriceError == null) {
-                                    double _qte = double.parse(
-                                        _quntiteControler.text.trim());
-                                    double _price = double.parse(
-                                        _priceControler.text.trim());
-
-                                    widget.article.selectedQuantite = _qte;
-                                    widget.article.selectedPriceTTC = _price;
-                                    widget.article.selectedPrice =
-                                        (_price * 100) /
-                                            (100 + widget.article.tva);
-                                    widget.onItemSelected(null);
-                                    Navigator.pop(context);
-                                  } else {
-                                    _setState(() {});
-                                  }
+                                onTap:(){
+                                  _qteDialogConfirmButton(context , _setState);
                                 },
                                 child: Container(
                                   padding: EdgeInsets.all(8.0),
@@ -872,45 +750,152 @@ class _ArticleListItemState extends State<ArticleListItem> {
         _colisControler.text = '0';
       }
       _priceControler.text = widget.article.selectedPriceTTC.toStringAsFixed(2);
+
       return dialog;
     });
   }
 
-  void selectThisItem() {
-    widget.article.selectedQuantite = 1;
-    if (widget.pieceOrigin == 'BC' ||
-        widget.pieceOrigin == 'BR' ||
-        widget.pieceOrigin == 'FF' ||
-        widget.pieceOrigin == 'RF' ||
-        widget.pieceOrigin == 'AF') {
-      widget.article.selectedPrice = widget.article.prixAchat;
-      widget.article.selectedPriceTTC = widget.article.prixAchatTTC;
-    } else {
-      switch (widget.tarification) {
-        case 1:
-          widget.article.selectedPrice = widget.article.prixVente1;
-          widget.article.selectedPriceTTC = widget.article.prixVente1TTC;
-          break;
-        case 2:
-          widget.article.selectedPrice = widget.article.prixVente2;
-          widget.article.selectedPriceTTC = widget.article.prixVente2TTC;
-          break;
-        case 3:
-          widget.article.selectedPrice = widget.article.prixVente3;
-          widget.article.selectedPriceTTC = widget.article.prixVente3TTC;
-          break;
-        default:
-          if (widget.article.selectedPrice == null) {
-            widget.article.selectedPrice = widget.article.prixVente1;
-            widget.article.selectedPriceTTC = widget.article.prixVente1TTC;
+  _qteDialogMinusButton(){
+    double _qte =
+        double.parse(_quntiteControler.text) - 1;
+    _quntiteControler.text = _qte.toStringAsFixed(2);
+    String value =  _qte.toStringAsFixed(2);
+    if(value.trim() != ''){
+      double res = (double.parse(value) / widget.article.quantiteColis) ;
+      _colisControler.text = (res.toInt()).toString() ;
+      if(res-res.truncate() > 0){
+        var a =((res-res.truncate()) * widget.article.quantiteColis).round().toInt();
+        _colisControler.text += ' +$a' ;
+      }
+    }else{
+      _colisControler.text = '0' ;
+    }
+  }
+
+  _qteDialogPlusButton(){
+    double _qte =
+        double.parse(_quntiteControler.text) + 1;
+    _quntiteControler.text = _qte.toStringAsFixed(2);
+    String value =  _qte.toStringAsFixed(2);
+    if(value.trim() != ''){
+      double res = (double.parse(value) / widget.article.quantiteColis) ;
+      _colisControler.text = (res.toInt()).toString() ;
+      if(res-res.truncate() > 0){
+        var a =((res-res.truncate()) * widget.article.quantiteColis).round().toInt();
+        _colisControler.text += ' +$a' ;
+      }
+    }else{
+      _colisControler.text = '0' ;
+    }
+  }
+
+  _qteDialogCancelButton(context){
+    if (mounted) {
+      setState(() {
+        _quntiteControler.text = widget
+            .article.selectedQuantite
+            .toString();
+        double res = (widget.article.selectedQuantite / widget.article.quantiteColis);
+        if(res > 0){
+          _colisControler.text = res.toInt().toString();
+          if(res-res.truncate() > 0){
+            var a =((res-res.truncate()) * widget.article.quantiteColis).round().toInt();
+            _colisControler.text += ' +$a' ;
           }
-          break;
+        }else{
+          _colisControler.text = '0';
+        }
+        _priceControler.text = widget
+            .article.selectedPriceTTC
+            .toString();
+        _validateQteError = null;
+        _validateColisError = null ;
+        _validatePriceError = null;
+      });
+    }
+    Navigator.pop(context);
+  }
+
+  _qteDialogConfirmButton(context , _setState){
+    if (_quntiteControler.text.trim() == '') {
+      _validateQteError =
+          S.current.msg_champs_obg;
+    } else {
+      _validateQteError = null;
+      if (!_quntiteControler.text
+          .trim()
+          .isNumericUsingRegularExpression) {
+        _validateQteError =
+            S.current.msg_val_valide;
+      }
+      if (double.parse(
+          _quntiteControler.text.trim()) <=
+          0) {
+        _validateQteError = S.current.msg_qte_err;
       }
     }
 
-    widget.onItemSelected(widget.article);
-  }
+    if (_colisControler.text.trim() == '') {
+      // _validateColisError =
+      //     S.current.msg_champs_obg;
+    } else {
+      _validateColisError = null;
+      if (!_colisControler.text
+          .split('+').first
+          .trim()
+          .isNumericUsingRegularExpression) {
+        _validateColisError =
+            S.current.msg_val_valide;
+      }
+      if (double.parse(
+          _colisControler.text.split('+').first.trim()) <
+          0) {
+        _validateColisError = S.current.msg_qte_err;
+      }
+    }
 
+    if (_priceControler.text.trim() == '') {
+      _validatePriceError =
+          S.current.msg_champs_obg;
+    } else {
+      _validatePriceError = null;
+      if (!_priceControler.text
+          .trim()
+          .isNumericUsingRegularExpression) {
+        _validatePriceError =
+            S.current.msg_val_valide;
+      }
+      if (double.parse(
+          _priceControler.text.trim()) <
+          0) {
+        _validatePriceError =
+            S.current.msg_prix_supp_zero;
+      }
+    }
+
+    if (_validateQteError == null &&
+        _validateColisError == null &&
+        _validatePriceError == null) {
+      double _qte = double.parse(
+          _quntiteControler.text.trim());
+      double _price = double.parse(
+          _priceControler.text.trim());
+
+      widget.article.selectedQuantite = _qte;
+      widget.article.selectedPriceTTC = _price;
+      widget.article.selectedPrice =
+          (_price * 100) /
+              (100 + widget.article.tva);
+
+      widget.onItemSelected(null);
+
+      Navigator.pop(context);
+    } else {
+      _setState(() {});
+    }
+  }
+  //*********************************************************************************************************************************************************************
+  //*********************************************************************************************************************************************************
   Widget dellDialog(BuildContext context) {
     AwesomeDialog(
       context: context,

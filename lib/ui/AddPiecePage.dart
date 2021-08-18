@@ -2080,7 +2080,8 @@ class _AddPiecePageState extends State<AddPiecePage>
           }
 
           if (_piece.piece != PieceType.devis &&
-              _piece.piece != PieceType.bonCommande) {
+              _piece.piece != PieceType.bonCommande &&
+          _verssementpiece != 0) {
             await addTresorie(_piece, transferer: false);
           }
 
@@ -2112,7 +2113,8 @@ class _AddPiecePageState extends State<AddPiecePage>
           });
 
           if (_piece.piece != PieceType.devis &&
-              _piece.piece != PieceType.bonCommande) {
+              _piece.piece != PieceType.bonCommande &&
+          _verssementpiece != 0) {
             await addTresorie(_piece, transferer: false);
           }
 
@@ -2517,9 +2519,9 @@ class _AddPiecePageState extends State<AddPiecePage>
       var resTrans = await _queryCtr.addItemToTable(DbTablesNames.transformer, transformer);
 
       // FP ou BC vers bl/Fc ou BR/FF
-      if (_oldMov == 0) {
-        await addTresorie(_newPiece, transferer: true);
-      }
+      // if (_oldMov == 0) {
+      //   await addTresorie(_newPiece, transferer: true);
+      // }
 
       var message = S.current.msg_transfere_err;
       if (resTrans > 0) {
