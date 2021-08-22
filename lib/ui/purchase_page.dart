@@ -331,7 +331,7 @@ class _PurchasePageState extends State<PurchasePage> {
                     TextStyle(fontWeight: FontWeight.bold, fontSize: 22)),
           ),
           subtitle: Text(
-            "${productDetail.title.replaceAll('(Gestmob)', '')}",
+            translateProductSubTitle(productDetail.title).toString(),
             style: GoogleFonts.lato(
                 textStyle: TextStyle(fontWeight: FontWeight.bold)),
           ),
@@ -386,6 +386,23 @@ class _PurchasePageState extends State<PurchasePage> {
         ),
       ),
     );
+  }
+
+  translateProductSubTitle(String subtitle){
+    String sub = subtitle.replaceAll('(Gestmob)', '');
+    switch (subtitle){
+      case "mensuel" :
+        sub =  S.current.mensuel ;
+        break;
+      case "annuel" :
+        sub = S.current.annuel ;
+        break;
+      case "à vie" :
+        sub = S.current.a_vie ;
+        break;
+    }
+
+    return sub ;
   }
 
   //*****************************************************************************************************************************************************************************

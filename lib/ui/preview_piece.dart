@@ -15,9 +15,13 @@ import 'package:gestmob/models/MyParams.dart';
 import 'package:gestmob/models/Piece.dart';
 import 'package:gestmob/models/Profile.dart';
 import 'package:gestmob/models/Tiers.dart';
+import 'package:gestmob/services/push_notifications.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:image/image.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:printing/printing.dart';
+
+import 'package:flutter/src/services/asset_bundle.dart';
 
 class PreviewPiece extends StatefulWidget {
   final Piece piece;
@@ -88,6 +92,7 @@ class _PreviewPieceState extends State<PreviewPiece> {
     }
     await _queryCtr.updateItemInDb(DbTablesNames.myparams, _myParams);
   }
+
 
   @override
   Widget build(BuildContext context) {
@@ -459,7 +464,7 @@ class _PreviewPieceState extends State<PreviewPiece> {
           bytes: await widget.pdfDoc.save(), filename: 'my-document.pdf');
     } else {
       var message = S.current.msg_demo_option;
-      Helpers.showFlushBar(context, message);
+      Helpers.showToast(message);
     }
   }
 
@@ -471,12 +476,18 @@ class _PreviewPieceState extends State<PreviewPiece> {
       widget.ticket(ticket);
     } else {
       var message = S.current.msg_demo_option;
-      Helpers.showFlushBar(context, message);
+      Helpers.showToast(message);
     }
   }
 
   Future<Ticket> _ticket(PaperSize paper) async {
     final ticket = Ticket(paper);
+
+    // final ByteData data = await rootBundle.load('assets/logo.png');
+    final Uint8List bytes = _profile.imageUint8List;
+    final logo = decodeImage(bytes);
+
+    ticket.image(logo);
 
     if (directionRtl) {
       var input = "${_profile.raisonSociale}";

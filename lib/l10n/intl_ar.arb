@@ -632,6 +632,13 @@
   "msg_auth_fail" : "لم يتم التعرف على بصمة الإصبع ، حاول مرة أخرى!",
 
   "auto_verssment" : "الفواتير دائما مدفوعة",
-  "colis_abr" : "ص"
+  "colis_abr" : "ص",
+  "unite" : "وحدة",
+
+  "fournisseur_imp" : "مورد",
+  "prix_unite" : "سعر الوحدة",
+  "mensuel" : "شهريا",
+  "annuel" : "سنوي",
+  "a_vie" : "إلى الأبد"
 
 }

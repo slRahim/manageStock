@@ -463,7 +463,7 @@ class _CategoryListItemState extends State<CategoryListItem> {
         } else {
           message = S.current.msg_ereure;
         }
-        Helpers.showFlushBar(context, message);
+        Helpers.showToast(message);
       },
     )..show();
   }

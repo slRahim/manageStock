@@ -598,8 +598,7 @@ class _SettingsPageState extends State<SettingsPage> {
                                   ),
                                 ));
                       } else {
-                        Helpers.showFlushBar(
-                            context, S.current.msg_demo_option);
+                        Helpers.showToast(S.current.msg_demo_option);
                       }
                     },
                   ),
@@ -619,8 +618,7 @@ class _SettingsPageState extends State<SettingsPage> {
                           DateTime.now().isBefore(Helpers.getDateExpiration(_myParams))) {
                         Navigator.pushNamed(context, RoutesKeys.driveListing);
                       } else {
-                        Helpers.showFlushBar(
-                            context, S.current.msg_demo_option);
+                        Helpers.showToast(S.current.msg_demo_option);
                       }
                     },
                   ),
@@ -1167,7 +1165,7 @@ class _SettingsPageState extends State<SettingsPage> {
     }
 
     Navigator.pop(context);
-    Helpers.showFlushBar(context, message);
+    Helpers.showToast(message);
   }
 
   Future updateProfileCountry() async {

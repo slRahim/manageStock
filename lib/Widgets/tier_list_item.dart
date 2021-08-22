@@ -292,7 +292,7 @@ class _TierListItemState extends State<TierListItem> {
       btnOkOnPress: () async {
         if (widget.tier.id == 1 || widget.tier.id == 2) {
           var message = S.current.msg_supp_err1;
-          Helpers.showFlushBar(context, message);
+          Helpers.showToast(message);
         } else {
           bool hasItems = await _queryCtr.checkTierItems(widget.tier);
           if (hasItems == false) {
@@ -305,7 +305,7 @@ class _TierListItemState extends State<TierListItem> {
             } else {
               message = S.current.msg_ereure;
             }
-            Helpers.showFlushBar(context, message);
+            Helpers.showToast(message);
             if (_confirmDell) {
               setState(() {
                 _visible = false;
@@ -313,7 +313,7 @@ class _TierListItemState extends State<TierListItem> {
             }
           } else {
             var message = S.current.msg_supp_err2;
-            Helpers.showFlushBar(context, message);
+            Helpers.showToast(message);
           }
         }
       },

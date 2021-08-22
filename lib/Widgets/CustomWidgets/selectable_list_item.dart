@@ -171,8 +171,23 @@ class _ArticleListItemSelectedState extends State<ArticleListItemSelected> {
         ]);
   }
 
-  //dialog pour modifier le prix et la quantité
+  //****************************************************************************************************************************************************************************
+  //*********************************************************dialog pour modifier le prix et la quantité**************************************************************************
   Widget addQtedialogue() {
+    _quntiteControler.text = widget.article.selectedQuantite.toString();
+    double res = (widget.article.selectedQuantite / widget.article.quantiteColis);
+    if(res > 0){
+      _colisControler.text = res.toInt().toString();
+      if(res-res.truncate() > 0){
+        var a =((res-res.truncate()) * widget.article.quantiteColis).round().toInt();
+        _colisControler.text += ' +$a' ;
+      }
+    }else{
+      _colisControler.text = '0';
+    }
+    _priceControler.text = widget.article.selectedPriceTTC.toStringAsFixed(2);
+
+    bool _showColis = res.toInt() > 1 ;
     return StatefulBuilder(builder: (context, StateSetter _setState) {
       Widget dialog = Dialog(
         //this right here
@@ -197,6 +212,48 @@ class _ArticleListItemSelectedState extends State<ArticleListItemSelected> {
                               )),
                         ),
                       )),
+                  Visibility(
+                    visible: _showColis,
+                    child: Padding(
+                      padding: EdgeInsetsDirectional.only(
+                          start: 5, end: 5, bottom: 20),
+                      child: TextField(
+                        controller: _colisControler,
+                        keyboardType: TextInputType.number,
+                        onTap: () => {
+                          _colisControler.selection = TextSelection(
+                              baseOffset: 0,
+                              extentOffset: _colisControler.value.text.length),
+                        },
+                        onChanged: (value){
+                          if(value.trim() != ''){
+                            _quntiteControler.text = (double.parse(value) * widget.article.quantiteColis).toString();
+                          }else{
+                            _quntiteControler.text = '0.0' ;
+                          }
+                        },
+                        decoration: InputDecoration(
+                          errorText: _validateColisError ?? null,
+                          prefixIcon: Icon(
+                            Icons.archive,
+                            color: Colors.orange[900],
+                          ),
+                          focusedBorder: OutlineInputBorder(
+                              borderSide: BorderSide(color: Colors.orange[900]),
+                              borderRadius: BorderRadius.circular(20)),
+                          contentPadding: EdgeInsets.only(left: 10),
+                          labelText: "${S.current.colis} +${S.current.unite}",
+                          labelStyle: GoogleFonts.lato(
+                              textStyle: TextStyle(color: Colors.orange[900])),
+                          enabledBorder: OutlineInputBorder(
+                            gapPadding: 3.3,
+                            borderRadius: BorderRadius.circular(20),
+                            borderSide: BorderSide(color: Colors.orange[900]),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
                   Padding(
                     padding: EdgeInsetsDirectional.only(
                         start: 5, end: 5, bottom: 20),
@@ -216,8 +273,13 @@ class _ArticleListItemSelectedState extends State<ArticleListItemSelected> {
                             var a =((res-res.truncate()) * widget.article.quantiteColis).round().toInt();
                             _colisControler.text += ' +$a' ;
                           }
+                          _setState(() {
+                            _showColis = res.toInt() > 1 ;
+                          });
+
                         }else{
                           _colisControler.text = '0' ;
+                          _showColis = false ;
                         }
                       },
                       decoration: InputDecoration(
@@ -241,45 +303,6 @@ class _ArticleListItemSelectedState extends State<ArticleListItemSelected> {
                       ),
                     ),
                   ),
-                  Padding(
-                    padding: EdgeInsetsDirectional.only(
-                        start: 5, end: 5, bottom: 20),
-                    child: TextField(
-                      controller: _colisControler,
-                      keyboardType: TextInputType.number,
-                      onTap: () => {
-                        _colisControler.selection = TextSelection(
-                            baseOffset: 0,
-                            extentOffset: _colisControler.value.text.length),
-                      },
-                      onChanged: (value){
-                        if(value.trim() != ''){
-                          _quntiteControler.text = (double.parse(value) * widget.article.quantiteColis).toString();
-                        }else{
-                          _quntiteControler.text = '0.0' ;
-                        }
-                      },
-                      decoration: InputDecoration(
-                        errorText: _validateColisError ?? null,
-                        prefixIcon: Icon(
-                          Icons.archive,
-                          color: Colors.orange[900],
-                        ),
-                        focusedBorder: OutlineInputBorder(
-                            borderSide: BorderSide(color: Colors.orange[900]),
-                            borderRadius: BorderRadius.circular(20)),
-                        contentPadding: EdgeInsets.only(left: 10),
-                        labelText: S.current.colis,
-                        labelStyle: GoogleFonts.lato(
-                            textStyle: TextStyle(color: Colors.orange[900])),
-                        enabledBorder: OutlineInputBorder(
-                          gapPadding: 3.3,
-                          borderRadius: BorderRadius.circular(20),
-                          borderSide: BorderSide(color: Colors.orange[900]),
-                        ),
-                      ),
-                    ),
-                  ),
                   SizedBox(
                     width: 320.0,
                     child: Padding(
@@ -293,23 +316,7 @@ class _ArticleListItemSelectedState extends State<ArticleListItemSelected> {
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
                               RawMaterialButton(
-                                onPressed: () {
-                                  double _qte =
-                                      double.parse(_quntiteControler.text) - 1;
-                                  _quntiteControler.text =
-                                      _qte.toStringAsFixed(2);
-                                  String value =  _qte.toStringAsFixed(2);
-                                  if(value.trim() != ''){
-                                    double res = (double.parse(value) / widget.article.quantiteColis) ;
-                                    _colisControler.text = (res.toInt()).toString() ;
-                                    if(res-res.truncate() > 0){
-                                      var a =((res-res.truncate()) * widget.article.quantiteColis).round().toInt();
-                                      _colisControler.text += ' +$a' ;
-                                    }
-                                  }else{
-                                    _colisControler.text = '0' ;
-                                  }
-                                },
+                                onPressed: _qteDialogMinusButton,
                                 elevation: 2.0,
                                 fillColor: Colors.redAccent,
                                 child: Icon(
@@ -320,23 +327,7 @@ class _ArticleListItemSelectedState extends State<ArticleListItemSelected> {
                                 shape: CircleBorder(),
                               ),
                               RawMaterialButton(
-                                onPressed: () {
-                                  double _qte =
-                                      double.parse(_quntiteControler.text) + 1;
-                                  _quntiteControler.text =
-                                      _qte.toStringAsFixed(2);
-                                  String value =  _qte.toStringAsFixed(2);
-                                  if(value.trim() != ''){
-                                    double res = (double.parse(value) / widget.article.quantiteColis) ;
-                                    _colisControler.text = (res.toInt()).toString() ;
-                                    if(res-res.truncate() > 0){
-                                      var a =((res-res.truncate()) * widget.article.quantiteColis).round().toInt();
-                                      _colisControler.text += ' +$a' ;
-                                    }
-                                  }else{
-                                    _colisControler.text = '0' ;
-                                  }
-                                },
+                                onPressed: _qteDialogPlusButton,
                                 elevation: 2.0,
                                 fillColor: Colors.greenAccent[700],
                                 child: Icon(
@@ -372,7 +363,7 @@ class _ArticleListItemSelectedState extends State<ArticleListItemSelected> {
                                     BorderSide(color: Colors.orange[900]),
                                     borderRadius: BorderRadius.circular(20)),
                                 contentPadding: EdgeInsets.only(left: 10),
-                                labelText: S.current.montant,
+                                labelText: S.current.prix_unite,
                                 labelStyle: GoogleFonts.lato(
                                     textStyle:
                                     TextStyle(color: Colors.orange[900])),
@@ -392,31 +383,8 @@ class _ArticleListItemSelectedState extends State<ArticleListItemSelected> {
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
                               InkWell(
-                                onTap: () {
-                                  if (mounted) {
-                                    setState(() {
-                                      _quntiteControler.text = widget
-                                          .article.selectedQuantite
-                                          .toString();
-                                      double res = (widget.article.selectedQuantite / widget.article.quantiteColis);
-                                      if(res > 0){
-                                        _colisControler.text = res.toInt().toString();
-                                        if(res-res.truncate() > 0){
-                                          var a =((res-res.truncate()) * widget.article.quantiteColis).round().toInt();
-                                          _colisControler.text += ' +$a' ;
-                                        }
-                                      }else{
-                                        _colisControler.text = '0';
-                                      }
-                                      _priceControler.text = widget
-                                          .article.selectedPriceTTC
-                                          .toString();
-                                      _validateQteError = null;
-                                      _validateColisError = null ;
-                                      _validatePriceError = null;
-                                    });
-                                  }
-                                  Navigator.pop(context);
+                                onTap:(){
+                                  _qteDialogCancelButton(context) ;
                                 },
                                 child: Container(
                                   padding: EdgeInsets.all(8.0),
@@ -437,81 +405,8 @@ class _ArticleListItemSelectedState extends State<ArticleListItemSelected> {
                               ),
                               SizedBox(width: 10),
                               InkWell(
-                                onTap: () {
-                                  if (_quntiteControler.text.trim() == '') {
-                                    _validateQteError =
-                                        S.current.msg_champs_obg;
-                                  } else {
-                                    _validateQteError = null;
-                                    if (!_quntiteControler.text
-                                        .trim()
-                                        .isNumericUsingRegularExpression) {
-                                      _validateQteError =
-                                          S.current.msg_val_valide;
-                                    }
-                                    if (double.parse(
-                                        _quntiteControler.text.trim()) <=
-                                        0) {
-                                      _validateQteError = S.current.msg_qte_err;
-                                    }
-                                  }
-
-                                  if (_colisControler.text.trim() == '') {
-                                    // _validateColisError =
-                                    //     S.current.msg_champs_obg;
-                                  } else {
-                                    _validateColisError = null;
-                                    if (!_colisControler.text
-                                        .split('+').first
-                                        .trim()
-                                        .isNumericUsingRegularExpression) {
-                                      _validateColisError =
-                                          S.current.msg_val_valide;
-                                    }
-                                    if (double.parse(
-                                        _colisControler.text.split('+').first.trim()) <
-                                        0) {
-                                      _validateColisError = S.current.msg_qte_err;
-                                    }
-                                  }
-
-                                  if (_priceControler.text.trim() == '') {
-                                    _validatePriceError =
-                                        S.current.msg_champs_obg;
-                                  } else {
-                                    _validatePriceError = null;
-                                    if (!_priceControler.text
-                                        .trim()
-                                        .isNumericUsingRegularExpression) {
-                                      _validatePriceError =
-                                          S.current.msg_val_valide;
-                                    }
-                                    if (double.parse(
-                                        _priceControler.text.trim()) <
-                                        0) {
-                                      _validatePriceError =
-                                          S.current.msg_prix_supp_zero;
-                                    }
-                                  }
-
-                                  if (_validateQteError == null &&
-                                      _validateColisError == null &&
-                                      _validatePriceError == null) {
-                                    double _qte = double.parse(
-                                        _quntiteControler.text.trim());
-                                    double _price = double.parse(
-                                        _priceControler.text.trim());
-
-                                    widget.article.selectedQuantite = _qte;
-                                    widget.article.selectedPriceTTC = _price;
-                                    widget.article.selectedPrice =
-                                        (_price * 100) /
-                                            (100 + widget.article.tva);
-                                    widget.onItemSelected(null);
-                                    Navigator.pop(context);
-                                  } else {
-                                    _setState(() {});
-                                  }
+                                onTap:(){
+                                  _qteDialogConfirmButton(context , _setState);
                                 },
                                 child: Container(
                                   padding: EdgeInsets.all(8.0),
@@ -543,20 +438,148 @@ class _ArticleListItemSelectedState extends State<ArticleListItemSelected> {
         ),
       );
 
-      _quntiteControler.text = widget.article.selectedQuantite.toString();
-      double res = (widget.article.selectedQuantite / widget.article.quantiteColis);
-      if(res > 0){
-        _colisControler.text = res.toInt().toString();
-        if(res-res.truncate() > 0){
-          var a =((res-res.truncate()) * widget.article.quantiteColis).round().toInt();
-          _colisControler.text += ' +$a' ;
-        }
-      }else{
-        _colisControler.text = '0';
-      }
-      _priceControler.text = widget.article.selectedPriceTTC.toStringAsFixed(2);
       return dialog;
     });
+  }
+
+  _qteDialogMinusButton(){
+    double _qte =
+        double.parse(_quntiteControler.text) - 1;
+    _quntiteControler.text = _qte.toStringAsFixed(2);
+    String value =  _qte.toStringAsFixed(2);
+    if(value.trim() != ''){
+      double res = (double.parse(value) / widget.article.quantiteColis) ;
+      _colisControler.text = (res.toInt()).toString() ;
+      if(res-res.truncate() > 0){
+        var a =((res-res.truncate()) * widget.article.quantiteColis).round().toInt();
+        _colisControler.text += ' +$a' ;
+      }
+    }else{
+      _colisControler.text = '0' ;
+    }
+  }
+
+  _qteDialogPlusButton(){
+    double _qte =
+        double.parse(_quntiteControler.text) + 1;
+    _quntiteControler.text = _qte.toStringAsFixed(2);
+    String value =  _qte.toStringAsFixed(2);
+    if(value.trim() != ''){
+      double res = (double.parse(value) / widget.article.quantiteColis) ;
+      _colisControler.text = (res.toInt()).toString() ;
+      if(res-res.truncate() > 0){
+        var a =((res-res.truncate()) * widget.article.quantiteColis).round().toInt();
+        _colisControler.text += ' +$a' ;
+      }
+    }else{
+      _colisControler.text = '0' ;
+    }
+  }
+
+  _qteDialogCancelButton(context){
+    if (mounted) {
+      setState(() {
+        _quntiteControler.text = widget
+            .article.selectedQuantite
+            .toString();
+        double res = (widget.article.selectedQuantite / widget.article.quantiteColis);
+        if(res > 0){
+          _colisControler.text = res.toInt().toString();
+          if(res-res.truncate() > 0){
+            var a =((res-res.truncate()) * widget.article.quantiteColis).round().toInt();
+            _colisControler.text += ' +$a' ;
+          }
+        }else{
+          _colisControler.text = '0';
+        }
+        _priceControler.text = widget
+            .article.selectedPriceTTC
+            .toString();
+        _validateQteError = null;
+        _validateColisError = null ;
+        _validatePriceError = null;
+      });
+    }
+    Navigator.pop(context);
+  }
+
+  _qteDialogConfirmButton(context , _setState){
+    if (_quntiteControler.text.trim() == '') {
+      _validateQteError =
+          S.current.msg_champs_obg;
+    } else {
+      _validateQteError = null;
+      if (!_quntiteControler.text
+          .trim()
+          .isNumericUsingRegularExpression) {
+        _validateQteError =
+            S.current.msg_val_valide;
+      }
+      if (double.parse(
+          _quntiteControler.text.trim()) <=
+          0) {
+        _validateQteError = S.current.msg_qte_err;
+      }
+    }
+
+    if (_colisControler.text.trim() == '') {
+      // _validateColisError =
+      //     S.current.msg_champs_obg;
+    } else {
+      _validateColisError = null;
+      if (!_colisControler.text
+          .split('+').first
+          .trim()
+          .isNumericUsingRegularExpression) {
+        _validateColisError =
+            S.current.msg_val_valide;
+      }
+      if (double.parse(
+          _colisControler.text.split('+').first.trim()) <
+          0) {
+        _validateColisError = S.current.msg_qte_err;
+      }
+    }
+
+    if (_priceControler.text.trim() == '') {
+      _validatePriceError =
+          S.current.msg_champs_obg;
+    } else {
+      _validatePriceError = null;
+      if (!_priceControler.text
+          .trim()
+          .isNumericUsingRegularExpression) {
+        _validatePriceError =
+            S.current.msg_val_valide;
+      }
+      if (double.parse(
+          _priceControler.text.trim()) <
+          0) {
+        _validatePriceError =
+            S.current.msg_prix_supp_zero;
+      }
+    }
+
+    if (_validateQteError == null &&
+        _validateColisError == null &&
+        _validatePriceError == null) {
+      double _qte = double.parse(
+          _quntiteControler.text.trim());
+      double _price = double.parse(
+          _priceControler.text.trim());
+
+      widget.article.selectedQuantite = _qte;
+      widget.article.selectedPriceTTC = _price;
+      widget.article.selectedPrice =
+          (_price * 100) /
+              (100 + widget.article.tva);
+
+      widget.onItemSelected(null);
+
+      Navigator.pop(context);
+    } else {
+      _setState(() {});
+    }
   }
 }
 

@@ -1066,11 +1066,11 @@ class QueryCtr {
     switch (rapport) {
       case 0:
         query = """
-         Select designation,  referance , qte ,  marge , total
+         Select referance , designation , qte ,  marge , total
          From
            (Select Articles.id , Articles.Designation as designation, Articles.Ref as referance , Sum(Journaux.Qte) as qte , 
-                  IFNULL(Sum(Journaux.Marge*Journaux.Qte)/Sum(Journaux.Qte),0) as marge ,
-                  IFNULL((Sum(Journaux.Marge*Journaux.Qte)/Sum(Journaux.Qte)*Sum(Journaux.Qte)),0) as total
+                  IFNULL(Sum(Journaux.Marge)/Sum(Journaux.Qte),0) as marge ,
+                  IFNULL((Sum(Journaux.Marge)/Sum(Journaux.Qte)*Sum(Journaux.Qte)),0) as total
            From Journaux 
            Join Articles ON Journaux.Article_id = Articles.id 
            Where Journaux.Mov = 1 AND (Piece_type like 'BL' OR Piece_type like 'FC'  OR Piece_type like 'RC'  OR Piece_type like 'AC') 
@@ -1081,7 +1081,7 @@ class QueryCtr {
         break;
       case 1:
         query = """
-         Select designation, referance, qte , prix, montant_ht
+         Select referance,designation, qte , prix, montant_ht
          From
            (Select Articles.id , Articles.Designation as designation, Articles.Ref as referance, Sum(Journaux.Qte) as qte , 
                   IFNULL(Sum(Journaux.Net_ht*Journaux.Qte)/Sum(Journaux.Qte),0) as prix_moyen,
@@ -1137,7 +1137,7 @@ class QueryCtr {
     switch (rapport) {
       case 0:
         query = """
-         Select designation , referance, qte , prix_moyen, total
+         Select referance, designation , qte , prix_moyen, total
          From 
            (Select Articles.id, Articles.Designation as designation, Articles.Ref as referance, Sum(Journaux.Qte) as qte , 
                   IFNULL(Sum(Journaux.Net_ht*Journaux.Qte)/Sum(Journaux.Qte),0) as  prix_moyen,
@@ -1152,7 +1152,7 @@ class QueryCtr {
         break;
       case 1:
         query = """
-         Select designation, referance, qte , prix, montant_ht
+         Select referance , designation, qte , prix, montant_ht
          From 
            (Select Articles.id, Articles.Designation as designation, Articles.Ref as referance, Sum(Journaux.Qte) as qte , 
                   IFNULL(Sum(Journaux.Net_ht*Journaux.Qte)/Sum(Journaux.Qte),0) as prix_moyen,
@@ -1209,21 +1209,21 @@ class QueryCtr {
     switch (rapport) {
       case 0:
         query = """
-        Select Designation as designation, Ref as referance , Qte as qte, 
+        Select Ref as referance , Designation as designation , Qte as qte, 
                 PMP as pmp, TVA as tva, (Qte*PMP) as montant_ht , ((((TVA*PMP)/100)+PMP)*Qte) as montant
         From Articles where Qte > 0
         """;
         break;
       case 1:
         query = """
-        Select Designation as designation, Ref as referance , Qte as qte, Qte_Min as qte_min, PMP as pmp, 
+        Select Ref as referance , Designation as designation , Qte as qte, Qte_Min as qte_min, PMP as pmp, 
                TVA as tva, (Qte*PMP) as montant_ht , ((((TVA*PMP)/100)+PMP)*Qte) as montant
         From Articles where Qte < 1 OR Qte < Qte_Min
         """;
         break;
       case 2:
         query = """
-        Select Designation as designation, Ref as referance, Qte as qte, 
+        Select Ref as referance ,Designation as designation, Qte as qte, 
               PrixVente1 as prix, TVA as tva , (Qte*PrixVente1) as montant_ht, (Qte*PrixVente1TTC) as total_ttc
         From Articles where Qte > 0
         """;

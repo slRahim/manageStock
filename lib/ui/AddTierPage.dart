@@ -501,7 +501,7 @@ class _AddTierPageState extends State<AddTierPage>
           });
         }
       } else {
-        Helpers.showFlushBar(context, "${S.current.msg_champs_obg}");
+        Helpers.showToast("${S.current.msg_champs_obg}");
       }
     } else {
       setState(() {
@@ -1280,7 +1280,7 @@ class _AddTierPageState extends State<AddTierPage>
                                 });
                               } else {
                                 var message = S.current.msg_gen_qr;
-                                Helpers.showFlushBar(context, message);
+                                Helpers.showToast(message);
                               }
                             }
                           : null,
@@ -1316,11 +1316,11 @@ class _AddTierPageState extends State<AddTierPage>
                               await _captureAndSharePng();
                             } else {
                               var message = S.current.msg_demo_option;
-                              Helpers.showFlushBar(context, message);
+                              Helpers.showToast(message);
                             }
                           } else {
                             var message = S.current.msg_no_qr;
-                            Helpers.showFlushBar(context, message);
+                            Helpers.showToast(message);
                           }
                         }),
                   ),
@@ -1349,11 +1349,11 @@ class _AddTierPageState extends State<AddTierPage>
                             await _printQr();
                           } else {
                             var message = S.current.msg_demo_option;
-                            Helpers.showFlushBar(context, message);
+                            Helpers.showToast(message);
                           }
                         } else {
                           var message = S.current.msg_no_qr;
-                          Helpers.showFlushBar(context, message);
+                          Helpers.showToast(message);
                         }
                       },
                     ),
@@ -1562,10 +1562,10 @@ class _AddTierPageState extends State<AddTierPage>
       if (!modification && editMode) {
         Navigator.pop(context);
       }
-      Helpers.showFlushBar(context, message);
+      Helpers.showToast(message);
       return Future.value(id);
     } catch (e) {
-      Helpers.showFlushBar(context, S.current.msg_ereure);
+      Helpers.showToast(S.current.msg_ereure);
       return Future.value(-1);
     }
   }

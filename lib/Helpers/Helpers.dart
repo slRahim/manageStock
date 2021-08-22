@@ -182,7 +182,7 @@ class Helpers {
                 ),
               ));
     } else {
-      Helpers.showFlushBar(context, S.current.msg_demo_option);
+      Helpers.showToast(S.current.msg_demo_option);
     }
   }
 
@@ -361,7 +361,7 @@ class Helpers {
           ? 2500
           : (ttc >= 500)
               ? ttc * 0.01
-              : 5;
+              : (ttc > 0) ? 5 : 0.0;
       val = val.roundToDouble();
     }
     return val;

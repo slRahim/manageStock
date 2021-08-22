@@ -207,7 +207,7 @@ class _IntroPageState extends State<IntroPage> {
           if (_formKey.currentState.validate()) {
             await saveConfig().then((value) => Phoenix.rebirth(context));
           } else {
-            Helpers.showFlushBar(context, "${S.current.msg_champs_obg}");
+            Helpers.showToast("${S.current.msg_champs_obg}");
           }
         },
         dotsDecorator: DotsDecorator(

@@ -53,6 +53,7 @@ class _GridHomeWidgetState extends State<GridHomeWidget> {
   String _devise;
   bool _finishLoading = false;
   String feature11 = 'feature11';
+  SharedPreferences _prefs;
 
   @override
   Future<void> initState() {
@@ -116,6 +117,7 @@ class _GridHomeWidgetState extends State<GridHomeWidget> {
 
   Future futurInit() async {
     _indiceFinanciere = await _queryCtr.statHomePage();
+    _prefs = await SharedPreferences.getInstance();
   }
 
   _addButtonWidget() {
@@ -446,7 +448,9 @@ class _GridHomeWidgetState extends State<GridHomeWidget> {
 
   _pressHelp() async {
     // Navigator.pushNamed(context, RoutesKeys.supportPage);
-    var url = "https://gestmob.com/#contact%20us";
+    var url = "https://doc.gestmob.com/";
+    String lang = await _prefs.getString("myLocale");
+    url = url+lang ;
     if (await canLaunch(url)) {
       await launch(
         url,

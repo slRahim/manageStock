@@ -57,7 +57,7 @@ class _ListTileCardState extends State<ListTileCard> {
           controller: widget.slidingCardController,
           slidingCardWidth: SizeConfig.horizontalBloc * 95,
           visibleCardHeight: (Helpers.isDirectionRTL(context))
-              ? (widget.from is Tiers)
+              ? (widget.from is Tiers || widget.from is Article)
                   ? 110
                   : 105
               : 105,

@@ -171,7 +171,7 @@ class _AddArticlePageState extends State<AddArticlePage>
     _codeBarControl.text = article.codeBar;
     _qteColisCotrol.text = article.quantiteColis.toString();
     _qteCmdCotrol.text = article.cmdClient.toString();
-    _colisControl.text = article.colis.toString();
+    _colisControl.text = article.colis.toInt().toString();
     _controlBloquer = article.bloquer;
 
     if (_pmpControl.text != null) {
@@ -398,7 +398,7 @@ class _AddArticlePageState extends State<AddArticlePage>
           });
         }
       } else {
-        Helpers.showFlushBar(context, "${S.current.msg_champs_obg}");
+        Helpers.showToast("${S.current.msg_champs_obg}");
       }
     } else {
       setState(() {
@@ -490,11 +490,13 @@ class _AddArticlePageState extends State<AddArticlePage>
             ),
             InkWell(
               onDoubleTap: () async {
+                FocusScope.of(context).requestFocus(FocusNode());
                 await scanBarCode();
               },
               child: TextFormField(
                 enabled: editMode,
                 controller: _codeBarControl,
+
                 onTap: () => _codeBarControl.selection = TextSelection(
                     baseOffset: 0,
                     extentOffset: _codeBarControl.value.text.length),
@@ -651,115 +653,6 @@ class _AddArticlePageState extends State<AddArticlePage>
                     borderSide: BorderSide(color: Colors.red),
                   )),
             ),
-            Visibility(
-              visible: _stockable,
-              child: Row(
-                children: [
-                  Flexible(
-                    child: TextFormField(
-                      enabled: editMode,
-                      controller: _stockInitialControl,
-                      onTap: () => _stockInitialControl.selection =
-                          TextSelection(
-                              baseOffset: 0,
-                              extentOffset:
-                                  _stockInitialControl.value.text.length),
-                      keyboardType: TextInputType.number,
-                      validator: (value) {
-                        if (!value.isNumericUsingRegularExpression) {
-                          return S.current.msg_val_valide;
-                        }
-                        if (!modification &&
-                            value.isNotEmpty &&
-                            double.parse(value) < 0) {
-                          return S.current.msg_prix_supp_zero;
-                        }
-                        return null;
-                      },
-                      onChanged: (value){
-                        if(value.trim() != ''){
-                          _colisControl.text = ((double.parse(value) / double.parse(_qteColisCotrol.text)).toInt()).toString() ;
-                        }else{
-                          _colisControl.text = '' ;
-                        }
-                      },
-                      decoration: InputDecoration(
-                        labelText: modification
-                            ? S.current.quantit
-                            : S.current.stock_init,
-                        labelStyle: GoogleFonts.lato(
-                          textStyle:
-                              TextStyle(color: Theme.of(context).hintColor),
-                        ),
-                        prefixIcon: Icon(
-                          Icons.apps,
-                          color: Colors.blue,
-                        ),
-                        focusedBorder: OutlineInputBorder(
-                            borderSide: BorderSide(color: Colors.blue),
-                            borderRadius: BorderRadius.circular(20)),
-                        enabledBorder: OutlineInputBorder(
-                          gapPadding: 3.3,
-                          borderRadius: BorderRadius.circular(20),
-                          borderSide: BorderSide(color: Colors.blue),
-                        ),
-                        errorBorder: OutlineInputBorder(
-                          gapPadding: 3.3,
-                          borderRadius: BorderRadius.circular(20),
-                          borderSide: BorderSide(color: Colors.red),
-                        ),
-                      ),
-                    ),
-                  ),
-                  Padding(padding: EdgeInsets.all(4)),
-                  Flexible(
-                    child: TextFormField(
-                      enabled: editMode,
-                      controller: _stockMinimumControl,
-                      onTap: () => _stockMinimumControl.selection =
-                          TextSelection(
-                              baseOffset: 0,
-                              extentOffset:
-                                  _stockMinimumControl.value.text.length),
-                      keyboardType: TextInputType.number,
-                      validator: (value) {
-                        if (!value.isNumericUsingRegularExpression) {
-                          return S.current.msg_val_valide;
-                        }
-                        if (value.isNotEmpty && double.parse(value) < 0) {
-                          return S.current.msg_prix_supp_zero;
-                        }
-                        return null;
-                      },
-                      decoration: InputDecoration(
-                        labelText: S.current.stock_min,
-                        labelStyle: GoogleFonts.lato(
-                          textStyle:
-                              TextStyle(color: Theme.of(context).hintColor),
-                        ),
-                        prefixIcon: Icon(
-                          Icons.apps,
-                          color: Colors.blue,
-                        ),
-                        focusedBorder: OutlineInputBorder(
-                            borderSide: BorderSide(color: Colors.blue),
-                            borderRadius: BorderRadius.circular(20)),
-                        enabledBorder: OutlineInputBorder(
-                          gapPadding: 3.3,
-                          borderRadius: BorderRadius.circular(20),
-                          borderSide: BorderSide(color: Colors.blue),
-                        ),
-                        errorBorder: OutlineInputBorder(
-                          gapPadding: 3.3,
-                          borderRadius: BorderRadius.circular(20),
-                          borderSide: BorderSide(color: Colors.red),
-                        ),
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-            ),
             Row(
               children: [
                 Visibility(
@@ -884,7 +777,7 @@ class _AddArticlePageState extends State<AddArticlePage>
                   if (!value.isNumericUsingRegularExpression) {
                     return S.current.msg_val_valide;
                   }
-                  if (value.isNotEmpty && double.parse(value) <= 0) {
+                  if (value.isNotEmpty && double.parse(value) < 0) {
                     return S.current.msg_prix_supp_zero;
                   }
                   return null;
@@ -919,6 +812,115 @@ class _AddArticlePageState extends State<AddArticlePage>
                     borderSide: BorderSide(color: Colors.red),
                   ),
                 ),
+              ),
+            ),
+            Visibility(
+              visible: _stockable,
+              child: Row(
+                children: [
+                  Flexible(
+                    child: TextFormField(
+                      enabled: editMode,
+                      controller: _stockInitialControl,
+                      onTap: () => _stockInitialControl.selection =
+                          TextSelection(
+                              baseOffset: 0,
+                              extentOffset:
+                              _stockInitialControl.value.text.length),
+                      keyboardType: TextInputType.number,
+                      validator: (value) {
+                        if (!value.isNumericUsingRegularExpression) {
+                          return S.current.msg_val_valide;
+                        }
+                        if (!modification &&
+                            value.isNotEmpty &&
+                            double.parse(value) < 0) {
+                          return S.current.msg_prix_supp_zero;
+                        }
+                        return null;
+                      },
+                      onChanged: (value){
+                        if(value.trim() != ''){
+                          _colisControl.text = ((double.parse(value) / double.parse(_qteColisCotrol.text)).toInt()).toString() ;
+                        }else{
+                          _colisControl.text = '' ;
+                        }
+                      },
+                      decoration: InputDecoration(
+                        labelText: modification
+                            ? S.current.quantit
+                            : S.current.stock_init,
+                        labelStyle: GoogleFonts.lato(
+                          textStyle:
+                          TextStyle(color: Theme.of(context).hintColor),
+                        ),
+                        prefixIcon: Icon(
+                          Icons.apps,
+                          color: Colors.blue,
+                        ),
+                        focusedBorder: OutlineInputBorder(
+                            borderSide: BorderSide(color: Colors.blue),
+                            borderRadius: BorderRadius.circular(20)),
+                        enabledBorder: OutlineInputBorder(
+                          gapPadding: 3.3,
+                          borderRadius: BorderRadius.circular(20),
+                          borderSide: BorderSide(color: Colors.blue),
+                        ),
+                        errorBorder: OutlineInputBorder(
+                          gapPadding: 3.3,
+                          borderRadius: BorderRadius.circular(20),
+                          borderSide: BorderSide(color: Colors.red),
+                        ),
+                      ),
+                    ),
+                  ),
+                  Padding(padding: EdgeInsets.all(4)),
+                  Flexible(
+                    child: TextFormField(
+                      enabled: editMode,
+                      controller: _stockMinimumControl,
+                      onTap: () => _stockMinimumControl.selection =
+                          TextSelection(
+                              baseOffset: 0,
+                              extentOffset:
+                              _stockMinimumControl.value.text.length),
+                      keyboardType: TextInputType.number,
+                      validator: (value) {
+                        if (!value.isNumericUsingRegularExpression) {
+                          return S.current.msg_val_valide;
+                        }
+                        if (value.isNotEmpty && double.parse(value) < 0) {
+                          return S.current.msg_prix_supp_zero;
+                        }
+                        return null;
+                      },
+                      decoration: InputDecoration(
+                        labelText: S.current.stock_min,
+                        labelStyle: GoogleFonts.lato(
+                          textStyle:
+                          TextStyle(color: Theme.of(context).hintColor),
+                        ),
+                        prefixIcon: Icon(
+                          Icons.apps,
+                          color: Colors.blue,
+                        ),
+                        focusedBorder: OutlineInputBorder(
+                            borderSide: BorderSide(color: Colors.blue),
+                            borderRadius: BorderRadius.circular(20)),
+                        enabledBorder: OutlineInputBorder(
+                          gapPadding: 3.3,
+                          borderRadius: BorderRadius.circular(20),
+                          borderSide: BorderSide(color: Colors.blue),
+                        ),
+                        errorBorder: OutlineInputBorder(
+                          gapPadding: 3.3,
+                          borderRadius: BorderRadius.circular(20),
+                          borderSide: BorderSide(color: Colors.red),
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
               ),
             ),
             TextFormField(
@@ -1579,10 +1581,10 @@ class _AddArticlePageState extends State<AddArticlePage>
       if (!modification && editMode) {
         Navigator.pop(context);
       }
-      Helpers.showFlushBar(context, message);
+      Helpers.showToast(message);
       return Future.value(id);
     } catch (e) {
-      Helpers.showFlushBar(context, S.current.msg_ereure);
+      Helpers.showToast(S.current.msg_ereure);
       return Future.value(-1);
     }
   }

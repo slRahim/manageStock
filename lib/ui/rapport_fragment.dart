@@ -382,7 +382,7 @@ class _RapportState extends State<Rapport> {
                               });
                         } else {
                           var message = "${S.current.msg_rapport_vide}";
-                          Helpers.showFlushBar(context, message);
+                          Helpers.showToast(message);
                         }
                       },
                     ),
@@ -407,11 +407,11 @@ class _RapportState extends State<Rapport> {
                                     doc.save());
                           } else {
                             var message = "${S.current.msg_rapport_vide}";
-                            Helpers.showFlushBar(context, message);
+                            Helpers.showToast(message);
                           }
                         } else {
                           var message = S.current.msg_demo_option;
-                          Helpers.showFlushBar(context, message);
+                          Helpers.showToast(message);
                         }
                       },
                     ),

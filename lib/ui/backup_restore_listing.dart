@@ -183,11 +183,10 @@ class _SelectfromdriveState extends State<Selectfromdrive> {
             if (value != null) {
               backup = value ;
             } else {
-              Helpers.showFlushBar(
-                  context, "${S.current.msg_ereure}");
+              Helpers.showToast("${S.current.msg_ereure}");
             }
           }).catchError((e)=>{
-            Helpers.showFlushBar(context, "${S.current.msg_ereure}")
+            Helpers.showToast("${S.current.msg_ereure}")
           }),
           message: Text('${S.current.telechargement}...'),
           progress: CircularProgressIndicator(),

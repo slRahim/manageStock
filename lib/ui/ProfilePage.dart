@@ -345,7 +345,7 @@ class _ProfilePageState extends State<ProfilePage>
           });
         }
       } else {
-        Helpers.showFlushBar(context, "${S.current.msg_champs_obg}");
+        Helpers.showToast("${S.current.msg_champs_obg}");
       }
     } else {
       setState(() {
@@ -1208,10 +1208,10 @@ class _ProfilePageState extends State<ProfilePage>
           message = S.current.msg_ajout_err;
         }
       }
-      Helpers.showFlushBar(context, message);
+      Helpers.showToast(message);
       return Future.value(id);
     } catch (error) {
-      Helpers.showFlushBar(context, S.current.msg_ereure);
+      Helpers.showToast(S.current.msg_ereure);
       return Future.value(-1);
     }
   }

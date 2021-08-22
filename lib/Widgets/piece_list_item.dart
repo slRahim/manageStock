@@ -450,7 +450,7 @@ class _PieceListItemState extends State<PieceListItem> {
           } else {
             message = S.current.msg_ereure;
           }
-          Helpers.showFlushBar(context, message);
+          Helpers.showToast(message);
           if (_confirmDell) {
             setState(() {
               _visible = false;
@@ -473,7 +473,7 @@ class _PieceListItemState extends State<PieceListItem> {
           var message = "";
           if (res < 0) {
             message = S.current.msg_err_tresorie;
-            Helpers.showFlushBar(context, message);
+            Helpers.showToast(message);
 
           }else{
             int res1 = await _queryCtr.removeItemFromTable(
@@ -487,7 +487,7 @@ class _PieceListItemState extends State<PieceListItem> {
               message = S.current.msg_ereure;
             }
 
-            Helpers.showFlushBar(context, message);
+            Helpers.showToast(message);
             if (_confirmDell) {
               setState(() {
                 _visible = false;
@@ -506,7 +506,7 @@ class _PieceListItemState extends State<PieceListItem> {
           } else {
             message = S.current.msg_ereure;
           }
-          Helpers.showFlushBar(context, message);
+          Helpers.showToast(message);
           if (_confirmDell) {
             setState(() {
               _visible = false;

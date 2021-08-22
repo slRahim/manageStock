@@ -421,7 +421,7 @@ class _ArticlesFragmentState extends State<ArticlesFragment> {
       } else {
         Navigator.pushNamed(context, RoutesKeys.appPurchase);
         var message = S.current.msg_demo_exp;
-        Helpers.showFlushBar(context, message);
+        Helpers.showToast(message);
       }
     } else {
       if (DateTime.now().isBefore(Helpers.getDateExpiration(_myParams))) {
@@ -433,7 +433,7 @@ class _ArticlesFragmentState extends State<ArticlesFragment> {
       } else {
         Navigator.pushNamed(context, RoutesKeys.appPurchase);
         var message = S.current.msg_premium_exp;
-        Helpers.showFlushBar(context, message);
+        Helpers.showToast(message);
       }
     }
   }

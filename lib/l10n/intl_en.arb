@@ -632,7 +632,14 @@
   "msg_auth_fail" : "Fingerprint not recognized, Try again!",
 
   "auto_verssment" : "Invoice always paid",
-  "colis_abr" : "P"
+  "colis_abr" : "P",
+  "unite" : "unit",
+
+  "fournisseur_imp" : "Provider",
+  "prix_unite" : "Unit price",
+  "mensuel" : "Monthly",
+  "annuel" : "Annual",
+  "a_vie" : "For life"
 
 
 

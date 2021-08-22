@@ -336,8 +336,7 @@ class _AddPiecePageState extends State<AddPiecePage>
               onEditPressed: (_piece.etat == 0)
                   ? _pressEdit
                   : () {
-                      Helpers.showFlushBar(
-                          context, S.current.msg_no_edit_transformer);
+                      Helpers.showToast(S.current.msg_no_edit_transformer);
                     },
               onSavePressed: _pressSave,
               onTrensferPressed: (_piece.etat == 0 &&
@@ -351,7 +350,7 @@ class _AddPiecePageState extends State<AddPiecePage>
             // extendBody: true,
             bottomNavigationBar: BottomExpandableAppBar(
               appBarHeight: 70,
-              expandedHeight: 180,
+              expandedHeight:(directionRtl)? 250 : 200,
               controller: bottomBarControler,
               horizontalMargin: 10,
               shape: AutomaticNotchedShape(
@@ -553,7 +552,10 @@ class _AddPiecePageState extends State<AddPiecePage>
                                       title: S.current.supp,
                                       body: addVerssementdialogue(),
                                       btnCancelText: S.current.annuler,
-                                      btnCancelOnPress: () {},
+                                      btnCancelOnPress: () {
+                                        _verssementControler.text = _verssementpiece.toString();
+                                        _resteControler.text = _restepiece.toString();
+                                      },
                                       btnOkText: S.current.confirme,
                                       btnOkOnPress: () {
                                         if(_verssementControler.text.trim()  == ''){
@@ -781,10 +783,10 @@ class _AddPiecePageState extends State<AddPiecePage>
           showCloseIcon: true,
         )..show();
       } else {
-        Helpers.showFlushBar(context, S.current.msg_select_art);
+        Helpers.showToast(S.current.msg_select_art);
       }
     } else {
-      Helpers.showFlushBar(context, "${S.current.msg_champs_obg}");
+      Helpers.showToast("${S.current.msg_champs_obg}");
     }
   }
 
@@ -802,7 +804,7 @@ class _AddPiecePageState extends State<AddPiecePage>
       } else {
         Navigator.pushNamed(context, RoutesKeys.appPurchase);
         var message = S.current.msg_premium_exp;
-        Helpers.showFlushBar(context, message);
+        Helpers.showToast(message);
       }
     }
   }
@@ -810,7 +812,7 @@ class _AddPiecePageState extends State<AddPiecePage>
   _pressTransfer(){
     if (_piece.mov == 2) {
       var message = S.current.msg_err_transfer;
-      Helpers.showFlushBar(context, message);
+      Helpers.showToast(message);
     } else {
       AwesomeDialog(
         context: context,
@@ -883,7 +885,7 @@ class _AddPiecePageState extends State<AddPiecePage>
                         _piece.piece ==
                             PieceType.avoirFournisseur) {
                       var message = S.current.msg_info_article;
-                      Helpers.showFlushBar(context, message);
+                      Helpers.showToast(message);
                     }
                     calculPiece();
                   });
@@ -921,7 +923,7 @@ class _AddPiecePageState extends State<AddPiecePage>
                       Navigator.pushNamed(
                           context, RoutesKeys.appPurchase);
                       var message = S.current.msg_premium_exp;
-                      Helpers.showFlushBar(context, message);
+                      Helpers.showToast(message);
                     }
                   }
                 }),
@@ -1313,6 +1315,7 @@ class _AddPiecePageState extends State<AddPiecePage>
           _piece.piece == PieceType.bonLivraison ||
           _piece.piece == PieceType.factureClient) {
 
+        if(_selectedItems.isNotEmpty)
           dialogChangeTarif(fromClientDialog: true);
       }
     });
@@ -2095,7 +2098,7 @@ class _AddPiecePageState extends State<AddPiecePage>
         } else {
           Navigator.pop(context);
           var message = S.current.msg_num_existe;
-          Helpers.showFlushBar(context, message);
+          Helpers.showToast(message);
           return Future.value(id);
         }
       } else {
@@ -2128,7 +2131,7 @@ class _AddPiecePageState extends State<AddPiecePage>
         } else {
           Navigator.pop(context);
           var message = S.current.msg_num_existe;
-          Helpers.showFlushBar(context, message);
+          Helpers.showToast(message);
           return Future.value(id);
         }
       }
@@ -2137,10 +2140,10 @@ class _AddPiecePageState extends State<AddPiecePage>
       if(!modification && editMode){
         Navigator.pop(context);
       }
-      Helpers.showFlushBar(context, message);
+      Helpers.showToast(message);
       return Future.value(id);
     } catch (error) {
-      Helpers.showFlushBar(context, S.current.msg_ereure);
+      Helpers.showToast(S.current.msg_ereure);
       return Future.value(-1);
     }
   }
@@ -2300,7 +2303,7 @@ class _AddPiecePageState extends State<AddPiecePage>
                             onPressed: () async {
                               var msg =
                                   await transfererPiece(context, "toCommande");
-                              Helpers.showFlushBar(context, msg);
+                              Helpers.showToast(msg);
                             },
                             child: Text(
                               S.current.to_commande,
@@ -2329,7 +2332,7 @@ class _AddPiecePageState extends State<AddPiecePage>
                             ),
                             onPressed: () async {
                               var msg = await transfererPiece(context, "toBon");
-                              Helpers.showFlushBar(context, msg);
+                              Helpers.showToast(msg);
                             },
                             child: (_piece.piece == PieceType.bonCommande)
                                 ? Text(
@@ -2367,7 +2370,7 @@ class _AddPiecePageState extends State<AddPiecePage>
                             onPressed: () async {
                               var msg =
                                   await transfererPiece(context, "toFacture");
-                              Helpers.showFlushBar(context, msg);
+                              Helpers.showToast(msg);
                             },
                             child: (_piece.piece == PieceType.devis ||
                                     _piece.piece == PieceType.commandeClient ||
@@ -2409,7 +2412,7 @@ class _AddPiecePageState extends State<AddPiecePage>
                             onPressed: () async {
                               var msg =
                                   await transfererPiece(context, "toRetour");
-                              Helpers.showFlushBar(context, msg);
+                              Helpers.showToast(msg);
                             },
                             color: Colors.redAccent,
                             child: Text(
@@ -2670,7 +2673,7 @@ class _AddPiecePageState extends State<AddPiecePage>
       }
     } else {
       var message = S.current.msg_imp_err;
-      Helpers.showFlushBar(context, message);
+      Helpers.showToast(message);
     }
   }
 
@@ -3441,7 +3444,7 @@ class _AddPiecePageState extends State<AddPiecePage>
                                   _piece.piece == PieceType.retourClient ||
                                   _piece.piece == PieceType.avoirClient)
                               ? "${S.current.client_titre}\t ${_selectedClient.raisonSociale} "
-                              : "${S.current.fournisseur_titre}\t ${_selectedClient.raisonSociale} ",
+                              : "${S.current.fournisseur_imp}\t ${_selectedClient.raisonSociale} ",
                           style: pw.TextStyle(font: arial)),
                       pw.Divider(height: 2),
                       (_selectedClient.adresse != "")
@@ -3718,10 +3721,14 @@ class _AddPiecePageState extends State<AddPiecePage>
                             ),
                             pw.TextSpan(
                                 text: (_piece.net_a_payer >= 0)
-                                    ? "${Helpers.numberFormat(_piece.net_a_payer)}\t  $_devise"
-                                    : "${Helpers.numberFormat(_piece.net_a_payer * -1)}\t  ${_devise}",
-                                style: pw.TextStyle(fontWeight: pw.FontWeight.bold , fontSize: 15)
+                                    ? "${Helpers.numberFormat(_piece.net_a_payer)}\t"
+                                    : "${Helpers.numberFormat(_piece.net_a_payer * -1)}\t",
+                                style: pw.TextStyle(fontWeight: pw.FontWeight.bold , fontSize: 15),
                             ),
+                            pw.TextSpan(
+                              text:  " $_devise",
+                              style: pw.TextStyle(font: arial , fontSize: 15)
+                            )
                           ]
                         )
                       ),

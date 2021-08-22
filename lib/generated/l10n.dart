@@ -5914,6 +5914,66 @@ class S {
       args: [],
     );
   }
+
+  /// `unit`
+  String get unite {
+    return Intl.message(
+      'unit',
+      name: 'unite',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Provider`
+  String get fournisseur_imp {
+    return Intl.message(
+      'Provider',
+      name: 'fournisseur_imp',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Unit price`
+  String get prix_unite {
+    return Intl.message(
+      'Unit price',
+      name: 'prix_unite',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Monthly`
+  String get mensuel {
+    return Intl.message(
+      'Monthly',
+      name: 'mensuel',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Annual`
+  String get annuel {
+    return Intl.message(
+      'Annual',
+      name: 'annuel',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `For life`
+  String get a_vie {
+    return Intl.message(
+      'For life',
+      name: 'a_vie',
+      desc: '',
+      args: [],
+    );
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<S> {

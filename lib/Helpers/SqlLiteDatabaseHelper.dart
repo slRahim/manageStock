@@ -1338,6 +1338,33 @@ class SqlLiteDatabaseHelper {
         END;
       ''');
 
+    await db.execute('''CREATE TRIGGER update_tier_reglement_credit4
+        AFTER UPDATE ON Tresories
+        FOR EACH ROW
+        BEGIN
+             UPDATE Tiers
+               SET Chiffre_affaires = IFNULL((Select Sum(Net_a_payer) From Pieces where Tier_id = OLD.Tier_id AND Mov = 1 AND Piece <> "CC" AND Piece <> "FP" AND Piece <> "BC"),0)
+             WHERE id = OLD.Tier_id;
+            UPDATE Tiers
+              SET Regler = IFNULL((SELECT SUM(Montant) FROM Tresories WHERE Tier_id = OLD.Tier_id AND Mov = 1),0)
+            WHERE id = OLD.Tier_id ;
+             UPDATE Tiers
+               SET  Credit = (Solde_depart + Chiffre_affaires) - Regler
+             WHERE id = OLD.Tier_id;
+
+            UPDATE Tiers
+               SET Chiffre_affaires = IFNULL((Select Sum(Net_a_payer) From Pieces where Tier_id = New.Tier_id AND Mov = 1 AND Piece <> "CC" AND Piece <> "FP" AND Piece <> "BC"),0)
+             WHERE id = New.Tier_id;
+            UPDATE Tiers
+              SET Regler = IFNULL((SELECT SUM(Montant) FROM Tresories WHERE Tier_id = New.Tier_id AND Mov = 1),0)
+            WHERE id = NEW.Tier_id ;
+             UPDATE Tiers
+               SET  Credit = (Solde_depart + Chiffre_affaires) - Regler
+             WHERE id = New.Tier_id;
+
+        END;
+      ''');
+
     // ***************************************************************************************************************
     //**********************************************dell tresorie*******************************************************
     await db.execute('''

@@ -95,7 +95,7 @@ class _ArticleListItemState extends State<ArticleListItem> {
         description: Container(
             width: 150,
             child: Text(
-              S.current.msg_tap,
+              "${S.current.msg_tap}",
               style: GoogleFonts.lato(),
             )),
         onBackgroundTap: () async {
@@ -496,6 +496,20 @@ class _ArticleListItemState extends State<ArticleListItem> {
   //****************************************************************************************************************************************************************************
   //*********************************************************dialog pour modifier le prix et la quantité**************************************************************************
   Widget addQtedialogue() {
+    _quntiteControler.text = widget.article.selectedQuantite.toString();
+    double res = (widget.article.selectedQuantite / widget.article.quantiteColis);
+    if(res > 0){
+      _colisControler.text = res.toInt().toString();
+      if(res-res.truncate() > 0){
+        var a =((res-res.truncate()) * widget.article.quantiteColis).round().toInt();
+        _colisControler.text += ' +$a' ;
+      }
+    }else{
+      _colisControler.text = '0';
+    }
+    _priceControler.text = widget.article.selectedPriceTTC.toStringAsFixed(2);
+
+    bool _showColis = res.toInt() > 1 ;
     return StatefulBuilder(builder: (context, StateSetter _setState) {
       Widget dialog = Dialog(
         //this right here
@@ -520,6 +534,48 @@ class _ArticleListItemState extends State<ArticleListItem> {
                       )),
                     ),
                   )),
+                  Visibility(
+                    visible: _showColis,
+                    child: Padding(
+                      padding: EdgeInsetsDirectional.only(
+                          start: 5, end: 5, bottom: 20),
+                      child: TextField(
+                        controller: _colisControler,
+                        keyboardType: TextInputType.number,
+                        onTap: () => {
+                          _colisControler.selection = TextSelection(
+                              baseOffset: 0,
+                              extentOffset: _colisControler.value.text.length),
+                        },
+                        onChanged: (value){
+                          if(value.trim() != ''){
+                            _quntiteControler.text = (double.parse(value) * widget.article.quantiteColis).toString();
+                          }else{
+                            _quntiteControler.text = '0.0' ;
+                          }
+                        },
+                        decoration: InputDecoration(
+                          errorText: _validateColisError ?? null,
+                          prefixIcon: Icon(
+                            Icons.archive,
+                            color: Colors.orange[900],
+                          ),
+                          focusedBorder: OutlineInputBorder(
+                              borderSide: BorderSide(color: Colors.orange[900]),
+                              borderRadius: BorderRadius.circular(20)),
+                          contentPadding: EdgeInsets.only(left: 10),
+                          labelText: "${S.current.colis} +${S.current.unite}",
+                          labelStyle: GoogleFonts.lato(
+                              textStyle: TextStyle(color: Colors.orange[900])),
+                          enabledBorder: OutlineInputBorder(
+                            gapPadding: 3.3,
+                            borderRadius: BorderRadius.circular(20),
+                            borderSide: BorderSide(color: Colors.orange[900]),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
                   Padding(
                     padding: EdgeInsetsDirectional.only(
                         start: 5, end: 5, bottom: 20),
@@ -536,11 +592,16 @@ class _ArticleListItemState extends State<ArticleListItem> {
                           double res = (double.parse(value) / widget.article.quantiteColis) ;
                           _colisControler.text = (res.toInt()).toString() ;
                           if(res-res.truncate() > 0){
-                             var a =((res-res.truncate()) * widget.article.quantiteColis).round().toInt();
+                            var a =((res-res.truncate()) * widget.article.quantiteColis).round().toInt();
                             _colisControler.text += ' +$a' ;
                           }
+                          _setState(() {
+                            _showColis = res.toInt() > 1 ;
+                          });
+
                         }else{
                           _colisControler.text = '0' ;
+                          _showColis = false ;
                         }
                       },
                       decoration: InputDecoration(
@@ -554,45 +615,6 @@ class _ArticleListItemState extends State<ArticleListItem> {
                             borderRadius: BorderRadius.circular(20)),
                         contentPadding: EdgeInsets.only(left: 10),
                         labelText: S.current.quantit,
-                        labelStyle: GoogleFonts.lato(
-                            textStyle: TextStyle(color: Colors.orange[900])),
-                        enabledBorder: OutlineInputBorder(
-                          gapPadding: 3.3,
-                          borderRadius: BorderRadius.circular(20),
-                          borderSide: BorderSide(color: Colors.orange[900]),
-                        ),
-                      ),
-                    ),
-                  ),
-                  Padding(
-                    padding: EdgeInsetsDirectional.only(
-                        start: 5, end: 5, bottom: 20),
-                    child: TextField(
-                      controller: _colisControler,
-                      keyboardType: TextInputType.number,
-                      onTap: () => {
-                        _colisControler.selection = TextSelection(
-                            baseOffset: 0,
-                            extentOffset: _colisControler.value.text.length),
-                      },
-                      onChanged: (value){
-                        if(value.trim() != ''){
-                          _quntiteControler.text = (double.parse(value) * widget.article.quantiteColis).toString();
-                        }else{
-                          _quntiteControler.text = '0.0' ;
-                        }
-                      },
-                      decoration: InputDecoration(
-                        errorText: _validateColisError ?? null,
-                        prefixIcon: Icon(
-                          Icons.archive,
-                          color: Colors.orange[900],
-                        ),
-                        focusedBorder: OutlineInputBorder(
-                            borderSide: BorderSide(color: Colors.orange[900]),
-                            borderRadius: BorderRadius.circular(20)),
-                        contentPadding: EdgeInsets.only(left: 10),
-                        labelText: S.current.colis,
                         labelStyle: GoogleFonts.lato(
                             textStyle: TextStyle(color: Colors.orange[900])),
                         enabledBorder: OutlineInputBorder(
@@ -663,7 +685,7 @@ class _ArticleListItemState extends State<ArticleListItem> {
                                         BorderSide(color: Colors.orange[900]),
                                     borderRadius: BorderRadius.circular(20)),
                                 contentPadding: EdgeInsets.only(left: 10),
-                                labelText: S.current.montant,
+                                labelText: S.current.prix_unite,
                                 labelStyle: GoogleFonts.lato(
                                     textStyle:
                                         TextStyle(color: Colors.orange[900])),
@@ -737,19 +759,6 @@ class _ArticleListItemState extends State<ArticleListItem> {
           ]),
         ),
       );
-
-      _quntiteControler.text = widget.article.selectedQuantite.toString();
-      double res = (widget.article.selectedQuantite / widget.article.quantiteColis);
-      if(res > 0){
-        _colisControler.text = res.toInt().toString();
-        if(res-res.truncate() > 0){
-          var a =((res-res.truncate()) * widget.article.quantiteColis).round().toInt();
-          _colisControler.text += ' +$a' ;
-        }
-      }else{
-        _colisControler.text = '0';
-      }
-      _priceControler.text = widget.article.selectedPriceTTC.toStringAsFixed(2);
 
       return dialog;
     });
@@ -922,7 +931,7 @@ class _ArticleListItemState extends State<ArticleListItem> {
           message = S.current.msg_article_utilise;
         }
 
-        Helpers.showFlushBar(context, message);
+        Helpers.showToast(message);
         if (_confirmDell) {
           setState(() {
             _visible = false;

@@ -484,7 +484,7 @@ class _AddTresoriePageState extends State<AddTresoriePage>
         });
       }
     } else {
-      Helpers.showFlushBar(context, "${S.current.msg_champs_obg}");
+      Helpers.showToast("${S.current.msg_champs_obg}");
     }
   }
 
@@ -498,7 +498,7 @@ class _AddTresoriePageState extends State<AddTresoriePage>
             });
       } else {
         var message = S.current.msg_select_tier;
-        Helpers.showFlushBar(context, message);
+        Helpers.showToast(message);
       }
     }
   }
@@ -909,7 +909,7 @@ class _AddTresoriePageState extends State<AddTresoriePage>
                       if (!value.isNumericUsingRegularExpression) {
                         return S.current.msg_val_valide;
                       }
-                      if (value.isNotEmpty && double.parse(value) < 0) {
+                      if (value.isNotEmpty && double.parse(value) <= 0) {
                         return S.current.msg_prix_supp_zero;
                       }
                       if (value.isEmpty) {
@@ -1409,23 +1409,28 @@ class _AddTresoriePageState extends State<AddTresoriePage>
                       DbTablesNames.reglementTresorie, item);
                 } else {
                   // le solde de depart est reglé
-                  _selectedPieces.forEach((piece) async {
-                    ReglementTresorie item = new ReglementTresorie.init();
-                    item.piece_id = piece.id;
-                    item.tresorie_id = widget.arguments.id;
+                  if(_selectedPieces.isNotEmpty){
+                    _selectedPieces.forEach((piece) async {
+                      ReglementTresorie item = new ReglementTresorie.init();
+                      item.piece_id = piece.id;
+                      item.tresorie_id = widget.arguments.id;
 
-                    if (_montant >= piece.reste) {
-                      item.regler = piece.reste;
-                      _montant = _montant - piece.reste;
-                    } else if (_montant != 0) {
-                      item.regler = _montant;
-                      _montant = 0;
-                    } else {
-                      return;
-                    }
-                    await _queryCtr.addItemToTable(
-                        DbTablesNames.reglementTresorie, item);
-                  });
+                      if (_montant >= piece.reste) {
+                        item.regler = piece.reste;
+                        _montant = _montant - piece.reste;
+                      } else if (_montant != 0) {
+                        item.regler = _montant;
+                        _montant = 0;
+                      } else {
+                        return;
+                      }
+                      await _queryCtr.addItemToTable(
+                          DbTablesNames.reglementTresorie, item);
+                    });
+                  }else{
+                    _montant = 0 ;
+                  }
+
                 }
               }
               if (_haspiece == false) {
@@ -1470,7 +1475,7 @@ class _AddTresoriePageState extends State<AddTresoriePage>
           }
         } else {
           var message = S.current.msg_num_existe;
-          Helpers.showFlushBar(context, message);
+          Helpers.showToast(message);
           return Future.value(id);
         }
       }
@@ -1515,23 +1520,27 @@ class _AddTresoriePageState extends State<AddTresoriePage>
                     DbTablesNames.reglementTresorie, item);
               } else {
                 // le solde de depart est reglé
-                _selectedPieces.forEach((piece) async {
-                  ReglementTresorie item = new ReglementTresorie.init();
-                  item.piece_id = piece.id;
-                  item.tresorie_id = tresorie.id;
+                if(_selectedPieces.isNotEmpty){
+                  _selectedPieces.forEach((piece) async {
+                    ReglementTresorie item = new ReglementTresorie.init();
+                    item.piece_id = piece.id;
+                    item.tresorie_id = tresorie.id;
 
-                  if (_montant >= piece.reste) {
-                    item.regler = piece.reste;
-                    _montant = _montant - piece.reste;
-                  } else if (_montant != 0) {
-                    item.regler = _montant;
-                    _montant = 0;
-                  } else {
-                    return;
-                  }
-                  await _queryCtr.addItemToTable(
-                      DbTablesNames.reglementTresorie, item);
-                });
+                    if (_montant >= piece.reste) {
+                      item.regler = piece.reste;
+                      _montant = _montant - piece.reste;
+                    } else if (_montant != 0) {
+                      item.regler = _montant;
+                      _montant = 0;
+                    } else {
+                      return;
+                    }
+                    await _queryCtr.addItemToTable(
+                        DbTablesNames.reglementTresorie, item);
+                  });
+                }else{
+                  _montant = 0 ;
+                }
               }
             }
             if (_haspiece == false) {
@@ -1571,17 +1580,17 @@ class _AddTresoriePageState extends State<AddTresoriePage>
           }
         } else {
           var message = S.current.msg_num_existe;
-          Helpers.showFlushBar(context, message);
+          Helpers.showToast(message);
           return Future.value(id);
         }
       }
       if (!modification && editMode) {
         Navigator.pop(context);
       }
-      Helpers.showFlushBar(context, message);
+      Helpers.showToast(message);
       return Future.value(id);
     } catch (error) {
-      Helpers.showFlushBar(context, S.current.msg_ereure);
+      Helpers.showToast(S.current.msg_ereure);
       return Future.value(-1);
     }
   }
