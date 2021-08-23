@@ -65,8 +65,12 @@ class _PieceListItemState extends State<PieceListItem> {
         widget.piece.piece == PieceType.retourFournisseur ||
         widget.piece.piece == PieceType.avoirFournisseur) && widget.fromTresory == null ){
 
-      widget.piece.regler =(widget.piece.regler != 0)? widget.piece.regler *-1 : widget.piece.regler;
-      widget.piece.reste = (widget.piece.reste != 0)? widget.piece.reste *-1 : widget.piece.reste;
+      if(widget.piece.regler <= 0 ){
+        widget.piece.regler =(widget.piece.regler != 0)? widget.piece.regler *-1 : widget.piece.regler;
+      }
+      if(widget.piece.reste <= 0){
+        widget.piece.reste = (widget.piece.reste != 0)? widget.piece.reste *-1 : widget.piece.reste;
+      }
 
     }
     return Visibility(
@@ -363,14 +367,14 @@ class _PieceListItemState extends State<PieceListItem> {
   Color getColor() {
     if (widget.piece.piece == PieceType.devis) {
       if (widget.piece.etat == 1) {
-        return Colors.green;
+        return Colors.yellow[700];
       } else {
         switch (widget.piece.mov) {
           case 2:
             return Colors.black26;
             break;
           case 0:
-            return Colors.red;
+            return Colors.green;
             break;
         }
       }

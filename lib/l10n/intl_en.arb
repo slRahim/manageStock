@@ -639,7 +639,8 @@
   "prix_unite" : "Unit price",
   "mensuel" : "Monthly",
   "annuel" : "Annual",
-  "a_vie" : "For life"
+  "a_vie" : "For life",
+  "marges" : "Profits"
 
 
 

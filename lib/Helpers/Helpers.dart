@@ -354,15 +354,23 @@ class Helpers {
     }
   }
 
-  static double calcTimber(ttc, myparams) {
+  static double calcTimber(ttc, MyParams myparams) {
     double val = 0.0;
     if (myparams.timbre) {
-      val = (ttc >= 1000000)
-          ? 2500
-          : (ttc >= 500)
+      switch (myparams.devise){
+        case ("DZD") :
+          val = (ttc >= 1000000)
+              ? 2500
+              : (ttc >= 500)
               ? ttc * 0.01
               : (ttc > 0) ? 5 : 0.0;
-      val = val.roundToDouble();
+          val = val.roundToDouble();
+          break;
+        case ("TND") :
+          val = (ttc > 0) ? ttc * 0.06 : 0.0;
+          val = val.roundToDouble();
+          break;
+      }
     }
     return val;
   }

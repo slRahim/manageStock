@@ -168,8 +168,10 @@ class QueryCtr {
     }
 
     tableName = DbTablesNames.tresorie;
-    res = await dbClient.rawQuery(query);
-    if (res.first["COUNT(*)"] > 0) {
+    query = "SELECT COUNT(*) FROM $tableName WHERE Tier_id = ${item.id}";
+
+    var res1 = await dbClient.rawQuery(query);
+    if (res1.first["COUNT(*)"] > 0) {
       return true;
     }
 

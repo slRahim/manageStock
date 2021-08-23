@@ -5974,6 +5974,16 @@ class S {
       args: [],
     );
   }
+
+  /// `Profits`
+  String get marges {
+    return Intl.message(
+      'Profits',
+      name: 'marges',
+      desc: '',
+      args: [],
+    );
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<S> {

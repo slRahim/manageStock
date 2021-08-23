@@ -46,6 +46,7 @@ import 'package:pdf/pdf.dart';
 import 'package:pdf/widgets.dart' as pw;
 import 'package:printing/printing.dart';
 import 'package:collection/collection.dart';
+import 'package:image/image.dart';
 
 class AddPiecePage extends StatefulWidget {
   var arguments;
@@ -666,7 +667,7 @@ class _AddPiecePageState extends State<AddPiecePage>
           AwesomeDialog(
               context: context,
               title: "",
-              desc: "${S.current.msg_retour_no_save} ?",
+              desc: "${S.current.msg_retour_no_save}",
               dialogType: DialogType.QUESTION,
               animType: AnimType.BOTTOMSLIDE,
               btnCancelText: S.current.non,
@@ -691,7 +692,7 @@ class _AddPiecePageState extends State<AddPiecePage>
         AwesomeDialog(
             context: context,
             title: "",
-            desc: "${S.current.msg_retour_no_save} ?",
+            desc: "${S.current.msg_retour_no_save}",
             dialogType: DialogType.QUESTION,
             animType: AnimType.BOTTOMSLIDE,
             btnCancelText: S.current.non,
@@ -723,7 +724,7 @@ class _AddPiecePageState extends State<AddPiecePage>
           AwesomeDialog(
               context: context,
               title: "",
-              desc: "${S.current.msg_retour_no_save} ?",
+              desc: "${S.current.msg_retour_no_save}",
               dialogType: DialogType.QUESTION,
               animType: AnimType.BOTTOMSLIDE,
               btnCancelText: S.current.non,
@@ -748,7 +749,7 @@ class _AddPiecePageState extends State<AddPiecePage>
         AwesomeDialog(
             context: context,
             title: "",
-            desc: "${S.current.msg_retour_no_save} ?",
+            desc: "${S.current.msg_retour_no_save}",
             dialogType: DialogType.QUESTION,
             animType: AnimType.BOTTOMSLIDE,
             btnCancelText: S.current.non,
@@ -1634,9 +1635,6 @@ class _AddPiecePageState extends State<AddPiecePage>
                                 builder: (BuildContext context) {
                                   return previewItem(_piece, 80, null);
                                 });
-                            if (_ticket != null) {
-                              await printItem(_ticket);
-                            }
                           },
                           child: Text(
                             S.current.format_80,
@@ -1665,12 +1663,6 @@ class _AddPiecePageState extends State<AddPiecePage>
                                 builder: (BuildContext context) {
                                   return previewItem(_piece, 58, null);
                                 });
-                            if (_ticket != null) {
-                              await printItem(_ticket);
-                              setState(() {
-                                _ticket = null;
-                              });
-                            }
                           },
                           child: Text(
                             S.current.format_58,
@@ -1907,7 +1899,6 @@ class _AddPiecePageState extends State<AddPiecePage>
                           onPressed: () async {
                             int mov = getMovForPiece();
                             await saveItem(mov, isFromTransfer: false);
-                            Navigator.pop(context);
                             AwesomeDialog(
                               context: context,
                               dialogType: DialogType.QUESTION,
@@ -2028,26 +2019,8 @@ class _AddPiecePageState extends State<AddPiecePage>
         piece: item,
         articles: _selectedItems,
         tier: _selectedClient,
-        ticket: (ticket) {
-          setState(() {
-            _ticket = ticket;
-          });
-        },
         format: format,
         pdfDoc: doc);
-  }
-
-  printItem(ticket) async {
-    await showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return Print(ticket);
-      },
-    ).then((value) {
-      setState(() {
-        _ticket = null;
-      });
-    });
   }
 
   //**********************************************************************************************************************************************
@@ -2679,6 +2652,12 @@ class _AddPiecePageState extends State<AddPiecePage>
 
   Future<Ticket> _maketicket(formatPrint) async {
     final ticket = Ticket(formatPrint);
+
+    final Uint8List bytes = _profile.imageUint8List;
+    final logo = copyResize(decodeImage(bytes), width: 120 , height: 120);
+
+    ticket.imageRaster(logo);
+    ticket.feed(1);
 
     if (directionRtl) {
       var input = "${_profile.raisonSociale}";
@@ -3754,36 +3733,80 @@ class _AddPiecePageState extends State<AddPiecePage>
   String getPiecetype(item) {
     switch (item.piece) {
       case "FP":
+        if(directionRtl){
+          return S.current.devis;
+          break;
+        }
         return S.current.fp;
         break;
       case "CC":
+        if(directionRtl){
+          return S.current.commande_client;
+          break;
+        }
         return S.current.cc;
         break;
       case "BL":
+        if(directionRtl){
+          return S.current.bon_livraison;
+          break;
+        }
         return S.current.bl;
         break;
       case "FC":
+        if(directionRtl){
+          return S.current.facture_vente;
+          break;
+        }
         return S.current.fc;
         break;
       case "RC":
+        if(directionRtl){
+          return S.current.retour_client;
+          break;
+        }
         return S.current.rc;
         break;
       case "AC":
+        if(directionRtl){
+          return S.current.avoir_client;
+          break;
+        }
         return S.current.ac;
         break;
       case "BC":
+        if(directionRtl){
+          return S.current.bon_commande;
+          break;
+        }
         return S.current.bc;
         break;
       case "BR":
+        if(directionRtl){
+          return S.current.bon_reception;
+          break;
+        }
         return S.current.br;
         break;
       case "FF":
+        if(directionRtl){
+          return S.current.facture_achat;
+          break;
+        }
         return S.current.ff;
         break;
       case "RF":
+        if(directionRtl){
+          return S.current.retour_fournisseur;
+          break;
+        }
         return S.current.rf;
         break;
       case "AF":
+        if(directionRtl){
+          return S.current.avoir_fournisseur;
+          break;
+        }
         return S.current.af;
         break;
     }

@@ -1096,7 +1096,7 @@ class SqlLiteDatabaseHelper {
         When  (Old.Etat <> New.Etat) AND New.Etat = 1
         BEGIN
             UPDATE Pieces
-              SET Regler = IFNULL((SELECT SUM(Regler)-OLD.Regler FROM ReglementTresorie WHERE Piece_id = OLD.id ),0)
+              SET Regler = IFNULL((SELECT SUM(Regler) FROM ReglementTresorie WHERE Piece_id = OLD.id ),0)
             WHERE id =  OLD.id ;
 
              UPDATE Pieces

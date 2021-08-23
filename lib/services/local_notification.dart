@@ -123,19 +123,19 @@ class NotificationPlugin {
 
       switch (_prefs.getString("myLocale")) {
         case ("en"):
-          credit = 'Credit' ;
+          credit = 'GestMob credit' ;
           msg_credit = 'You have unpaid invoices';
           break;
         case ("fr"):
-          credit = 'Credit' ;
+          credit = 'GestMob crédit' ;
           msg_credit = 'Vous avez des pièces non payer';
           break;
         case ("ar"):
-          credit = 'ديون' ;
+          credit = 'تسييرموب ديون' ;
           msg_credit = '"لديك فواتير بها ديون';
           break;
         default:
-          credit = 'Credit' ;
+          credit = 'GestMob crédit' ;
           msg_credit = 'You have unpaid invoices';
           break;
       }
@@ -164,19 +164,19 @@ class NotificationPlugin {
 
       switch (_prefs.getString("myLocale")) {
         case ("en"):
-          backup = 'Backup' ;
+          backup = 'GestMob backup' ;
           backupMsg = 'backup your data of the last day';
           break;
         case ("fr"):
-          backup = 'Sauvegarde' ;
+          backup = 'GestMob sauvegarde' ;
           backupMsg = 'sauvegardez vos données du dernier jour';
           break;
         case ("ar"):
-          backup = 'نسخة إحتياطية' ;
+          backup = 'تسييرموب نسخة إحتياطية' ;
           backupMsg = 'احتفظ بنسخة احتياطية من بياناتك  لليوم الأخير';
           break;
         default:
-          backup = 'Backup' ;
+          backup = 'GestMob backup' ;
           backupMsg = 'backup your data of the last day';
           break;
       }
@@ -230,19 +230,19 @@ class NotificationPlugin {
 
       switch (_prefs.getString("myLocale")) {
         case ("en"):
-          credit = 'Credit' ;
+          credit = 'GestMob credit' ;
           msg_credit = 'You have unpaid invoices';
           break;
         case ("fr"):
-          credit = 'Credit' ;
+          credit = 'GestMob crédit' ;
           msg_credit = 'Vous avez des pièces non payer';
           break;
         case ("ar"):
-          credit = 'ديون' ;
+          credit = 'تسييرموب ديون' ;
           msg_credit = '"لديك فواتير بها ديون';
           break;
         default:
-          credit = 'Credit' ;
+          credit = 'GestMob crédit' ;
           msg_credit = 'You have unpaid invoices';
           break;
       }
@@ -271,19 +271,19 @@ class NotificationPlugin {
 
       switch (_prefs.getString("myLocale")) {
         case ("en"):
-          backup = 'Backup' ;
+          backup = 'GestMob backup' ;
           backupMsg = 'backup your data of the last day';
           break;
         case ("fr"):
-          backup = 'Sauvegarde' ;
+          backup = 'GestMob sauvegarde' ;
           backupMsg = 'sauvegardez vos données du dernier jour';
           break;
         case ("ar"):
-          backup = 'نسخة إحتياطية' ;
+          backup = 'تسييرموب نسخة إحتياطية' ;
           backupMsg = 'احتفظ بنسخة احتياطية من بياناتك  لليوم الأخير';
           break;
         default:
-          backup = 'Backup' ;
+          backup = 'GestMob backup' ;
           backupMsg = 'backup your data of the last day';
           break;
       }

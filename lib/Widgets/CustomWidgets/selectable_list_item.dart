@@ -74,14 +74,15 @@ class _ArticleListItemSelectedState extends State<ArticleListItemSelected> {
                           dismissOnTouchOutside: false,
                           title: "",
                           desc: S.current.msg_qte_select_sup,
-                          btnCancelText: S.current.confirme,
-                          btnCancelOnPress: () {},
-                          btnOkText: S.current.annuler,
-                          btnOkOnPress: () {
+                          btnCancelText: S.current.annuler,
+                          btnCancelOnPress: () {
                             setState(() {
-                              widget.article.selectedQuantite = 1;
+                              widget.article.selectedQuantite = -1;
+                              widget.onItemSelected(widget.article);
                             });
-                          })
+                          },
+                          btnOkText: S.current.confirme,
+                          btnOkOnPress: () {})
                         ..show();
                       // Helpers.showFlushBar(context, S.current.msg_qte_select_sup);
                     }

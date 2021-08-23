@@ -410,7 +410,7 @@ class _AddTierPageState extends State<AddTierPage>
         AwesomeDialog(
             context: context,
             title: "",
-            desc: "${S.current.msg_retour_no_save} ?",
+            desc: "${S.current.msg_retour_no_save}",
             dialogType: DialogType.QUESTION,
             animType: AnimType.BOTTOMSLIDE,
             btnCancelText: S.current.non,
@@ -431,7 +431,7 @@ class _AddTierPageState extends State<AddTierPage>
         AwesomeDialog(
             context: context,
             title: "",
-            desc: "${S.current.msg_retour_no_save} ?",
+            desc: "${S.current.msg_retour_no_save}",
             dialogType: DialogType.QUESTION,
             animType: AnimType.BOTTOMSLIDE,
             btnCancelText: S.current.non,
@@ -455,7 +455,7 @@ class _AddTierPageState extends State<AddTierPage>
         AwesomeDialog(
             context: context,
             title: "",
-            desc: "${S.current.msg_retour_no_save} ?",
+            desc: "${S.current.msg_retour_no_save}",
             dialogType: DialogType.QUESTION,
             animType: AnimType.BOTTOMSLIDE,
             btnCancelText: S.current.non,
@@ -474,7 +474,7 @@ class _AddTierPageState extends State<AddTierPage>
         AwesomeDialog(
             context: context,
             title: "",
-            desc: "${S.current.msg_retour_no_save} ?",
+            desc: "${S.current.msg_retour_no_save}",
             dialogType: DialogType.QUESTION,
             animType: AnimType.BOTTOMSLIDE,
             btnCancelText: S.current.non,
@@ -948,9 +948,9 @@ class _AddTierPageState extends State<AddTierPage>
                 if (!value.isNumericUsingRegularExpression) {
                   return S.current.msg_val_valide;
                 }
-                if (value.isNotEmpty && double.parse(value) < 0) {
-                  return S.current.msg_prix_supp_zero;
-                }
+                // if (value.isNotEmpty && double.parse(value) < 0) {
+                //   return S.current.msg_prix_supp_zero;
+                // }
                 return null;
               },
               onChanged: (value) {

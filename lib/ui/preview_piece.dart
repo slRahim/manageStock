@@ -20,12 +20,10 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:image/image.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:printing/printing.dart';
-
-import 'package:flutter/src/services/asset_bundle.dart';
+import 'package:gestmob/ui/printer_screen.dart';
 
 class PreviewPiece extends StatefulWidget {
   final Piece piece;
-  final ValueChanged ticket;
   final List<Article> articles;
   final Tiers tier;
   final int format;
@@ -36,7 +34,6 @@ class PreviewPiece extends StatefulWidget {
       @required this.piece,
       this.articles,
       this.tier,
-      this.ticket,
       this.format,
       this.pdfDoc})
       : super(key: key);
@@ -473,21 +470,31 @@ class _PreviewPieceState extends State<PreviewPiece> {
       await updateFormatPrint();
       Ticket ticket = await _ticket(_default_format);
       Navigator.pop(context);
-      widget.ticket(ticket);
+      printItem(ticket);
+      // widget.ticket(ticket);
     } else {
       var message = S.current.msg_demo_option;
       Helpers.showToast(message);
     }
   }
 
+  printItem(ticket) async {
+    await showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return Print(ticket);
+      },
+    );
+  }
+
   Future<Ticket> _ticket(PaperSize paper) async {
     final ticket = Ticket(paper);
 
-    // final ByteData data = await rootBundle.load('assets/logo.png');
     final Uint8List bytes = _profile.imageUint8List;
-    final logo = decodeImage(bytes);
+    final logo = copyResize(decodeImage(bytes), width: 120 , height: 120);
 
-    ticket.image(logo);
+    ticket.imageRaster(logo);
+    ticket.feed(1);
 
     if (directionRtl) {
       var input = "${_profile.raisonSociale}";
@@ -1141,36 +1148,80 @@ class _PreviewPieceState extends State<PreviewPiece> {
   String getPiecetype() {
     switch (widget.piece.piece) {
       case "FP":
+        if(directionRtl){
+          return S.current.devis;
+          break;
+        }
         return S.current.fp;
         break;
       case "CC":
+        if(directionRtl){
+          return S.current.commande_client;
+          break;
+        }
         return S.current.cc;
         break;
       case "BL":
+        if(directionRtl){
+          return S.current.bon_livraison;
+          break;
+        }
         return S.current.bl;
         break;
       case "FC":
+        if(directionRtl){
+          return S.current.facture_vente;
+          break;
+        }
         return S.current.fc;
         break;
       case "RC":
+        if(directionRtl){
+          return S.current.retour_client;
+          break;
+        }
         return S.current.rc;
         break;
       case "AC":
+        if(directionRtl){
+          return S.current.avoir_client;
+          break;
+        }
         return S.current.ac;
         break;
       case "BC":
+        if(directionRtl){
+          return S.current.bon_commande;
+          break;
+        }
         return S.current.bc;
         break;
       case "BR":
+        if(directionRtl){
+          return S.current.bon_reception;
+          break;
+        }
         return S.current.br;
         break;
       case "FF":
+        if(directionRtl){
+          return S.current.facture_achat;
+          break;
+        }
         return S.current.ff;
         break;
       case "RF":
+        if(directionRtl){
+          return S.current.retour_fournisseur;
+          break;
+        }
         return S.current.rf;
         break;
       case "AF":
+        if(directionRtl){
+          return S.current.avoir_fournisseur;
+          break;
+        }
         return S.current.af;
         break;
     }

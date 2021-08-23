@@ -520,7 +520,22 @@ class _RapportState extends State<Rapport> {
                   pw.Text("${S.current.rapport_date}",
                       style: pw.TextStyle(
                           font: ttf, fontWeight: pw.FontWeight.bold)),
+                  (directionRtl) ?
                   (Statics.rapportItems.indexOf(_selectedParent) == 4 &&
+                      Statics.rapportGeneralItems.indexOf(_selectedSubItem) == 1)
+                      ? pw.Text("31-12-${_yearControl.text} / 01-01-${_yearControl.text}",
+                      style: pw.TextStyle(
+                          fontWeight: pw.FontWeight.bold, font: ttf))
+                      :(Statics.rapportItems.indexOf(_selectedParent) == 4 &&
+                      Statics.rapportGeneralItems.indexOf(_selectedSubItem) == 2)
+                      ?pw.Text("${DateTime.now().year.toString()} / ${_resultList.first.values.first}",
+                      style: pw.TextStyle(
+                          fontWeight: pw.FontWeight.bold, font: ttf))
+                      :pw.Text("${_dateControl.text.split("/").last} / ${_dateControl.text.split("/").first}",
+                      style: pw.TextStyle(
+                          fontWeight: pw.FontWeight.bold, font: ttf))
+
+                  : (Statics.rapportItems.indexOf(_selectedParent) == 4 &&
                       Statics.rapportGeneralItems.indexOf(_selectedSubItem) == 1)
                       ? pw.Text("01-01-${_yearControl.text} / 31-12-${_yearControl.text}",
                       style: pw.TextStyle(

@@ -131,7 +131,7 @@ class _ArticleListItemState extends State<ArticleListItem> {
               from: widget.article,
               alreadySelected: widget.alreadySelected,
               onLongPress: _longpressItem,
-              onTap: _tapItem,
+              onTap:_tapItem,
               slidingCardController: controller,
               onCardTapped: () {
                 if (controller.isCardSeparated == true) {
@@ -360,13 +360,15 @@ class _ArticleListItemState extends State<ArticleListItem> {
             context: context,
             builder: (BuildContext context) {
               return addQtedialogue();
-            }).then((val) {
-          if (widget.article.stockable &&
-              (widget.pieceOrigin == 'BL' ||
-                  widget.pieceOrigin == 'FC') &&
-              ((widget.article.quantite -
-                  widget.article.cmdClient) <
-                  widget.article.selectedQuantite)) {
+            });
+
+        if (widget.article.stockable &&
+            (widget.pieceOrigin == 'BL' ||
+                widget.pieceOrigin == 'FC') &&
+            ((widget.article.quantite -
+                widget.article.cmdClient) <
+                widget.article.selectedQuantite)) {
+          try{
             AwesomeDialog(
                 context: context,
                 dialogType: DialogType.WARNING,
@@ -375,18 +377,22 @@ class _ArticleListItemState extends State<ArticleListItem> {
                 animType: AnimType.BOTTOMSLIDE,
                 title: "",
                 desc: S.current.msg_qte_select_sup,
-                btnCancelText: S.current.confirme,
-                btnCancelOnPress: () {},
-                btnOkText: S.current.annuler,
-                btnOkOnPress: () {
+                btnCancelText: S.current.annuler,
+                btnCancelOnPress: () {
                   setState(() {
-                    widget.article.selectedQuantite = 1;
+                    widget.article.selectedQuantite = -1;
+                    widget.onItemSelected(widget.article);
                   });
-                })
-              ..show();
+                },
+                btnOkText: S.current.confirme,
+                btnOkOnPress: () {}
+                )..show();
+          }catch(e){
+            Helpers.showToast(S.current.msg_qte_select_sup);
           }
-          // setState(() {});
-        });
+
+        }
+
     }
   }
 
@@ -459,7 +465,7 @@ class _ArticleListItemState extends State<ArticleListItem> {
     }
   }
 
-  void selectThisItem() {
+  void selectThisItem(){
     widget.article.selectedQuantite = 1;
     if (widget.pieceOrigin == 'BC' ||
         widget.pieceOrigin == 'BR' ||
@@ -820,6 +826,7 @@ class _ArticleListItemState extends State<ArticleListItem> {
         _validateQteError = null;
         _validateColisError = null ;
         _validatePriceError = null;
+
       });
     }
     Navigator.pop(context);

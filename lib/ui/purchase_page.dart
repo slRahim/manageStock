@@ -169,7 +169,7 @@ class _PurchasePageState extends State<PurchasePage> {
                                               .selectedRowColor),
                                       child: ListTile(
                                           title: Text(
-                                            "${item.productID == '010101' ? "Mensuel" : item.productID == '121212' ? "Annuel" : "A vie"}",
+                                            "${item.productID == '010101' ? S.current.mensuel : item.productID == '121212' ? S.current.annuel : S.current.a_vie}",
                                             style: GoogleFonts.lato(
                                                 textStyle: GoogleFonts.lato(
                                                     textStyle: TextStyle(
@@ -331,7 +331,7 @@ class _PurchasePageState extends State<PurchasePage> {
                     TextStyle(fontWeight: FontWeight.bold, fontSize: 22)),
           ),
           subtitle: Text(
-            translateProductSubTitle(productDetail.title).toString(),
+            "${translateProductSubTitle(productDetail.title).toString()}",
             style: GoogleFonts.lato(
                 textStyle: TextStyle(fontWeight: FontWeight.bold)),
           ),
@@ -389,20 +389,17 @@ class _PurchasePageState extends State<PurchasePage> {
   }
 
   translateProductSubTitle(String subtitle){
-    String sub = subtitle.replaceAll('(Gestmob)', '');
     switch (subtitle){
-      case "mensuel" :
-        sub =  S.current.mensuel ;
+      case "mensuel (Gestmob)" :
+        return  S.current.mensuel ;
         break;
-      case "annuel" :
-        sub = S.current.annuel ;
+      case "annuel (Gestmob)" :
+        return S.current.annuel ;
         break;
-      case "à vie" :
-        sub = S.current.a_vie ;
+      case "à vie  (Gestmob)" :
+        return S.current.a_vie ;
         break;
     }
-
-    return sub ;
   }
 
   //*****************************************************************************************************************************************************************************

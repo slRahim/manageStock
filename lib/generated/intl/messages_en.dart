@@ -350,6 +350,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "mail" : MessageLookupByLibrary.simpleMessage("Email"),
     "map" : MessageLookupByLibrary.simpleMessage("Map"),
     "marge" : MessageLookupByLibrary.simpleMessage("Profit"),
+    "marges" : MessageLookupByLibrary.simpleMessage("Profits"),
     "marque" : MessageLookupByLibrary.simpleMessage("Brand"),
     "marque_article" : MessageLookupByLibrary.simpleMessage("Item Brands"),
     "masquer" : MessageLookupByLibrary.simpleMessage("Hide"),

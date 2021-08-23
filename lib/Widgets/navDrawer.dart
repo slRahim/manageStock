@@ -166,11 +166,14 @@ class NavDrawer extends StatelessWidget {
           )),
     ];
 
-    if (myparams.versionType == "demo" ||
-        Helpers.getDateExpiration(myparams).isBefore(DateTime.now())) {
-      homeItemWidgetList.add(getDrawerItemWidget(context, drawerItemPurchase));
-      homeItemWidgetList.add(new Divider());
-    }
+    // if (myparams.versionType == "demo" ||
+    //     Helpers.getDateExpiration(myparams).isBefore(DateTime.now())) {
+    //   homeItemWidgetList.add(getDrawerItemWidget(context, drawerItemPurchase));
+    //   homeItemWidgetList.add(new Divider());
+    // }
+
+    homeItemWidgetList.add(getDrawerItemWidget(context, drawerItemPurchase));
+    homeItemWidgetList.add(new Divider());
 
     homeItemList.forEach((data) => {
           homeItemWidgetList.add(getDrawerItemWidget(context, data)),

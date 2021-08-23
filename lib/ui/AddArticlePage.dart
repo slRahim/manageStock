@@ -307,7 +307,7 @@ class _AddArticlePageState extends State<AddArticlePage>
         AwesomeDialog(
             context: context,
             title: "",
-            desc: "${S.current.msg_retour_no_save} ?",
+            desc: "${S.current.msg_retour_no_save}",
             dialogType: DialogType.QUESTION,
             animType: AnimType.BOTTOMSLIDE,
             btnCancelText: S.current.non,
@@ -328,7 +328,7 @@ class _AddArticlePageState extends State<AddArticlePage>
         AwesomeDialog(
             context: context,
             title: "",
-            desc: "${S.current.msg_retour_no_save} ?",
+            desc: "${S.current.msg_retour_no_save}",
             dialogType: DialogType.QUESTION,
             animType: AnimType.BOTTOMSLIDE,
             btnCancelText: S.current.non,
@@ -352,7 +352,7 @@ class _AddArticlePageState extends State<AddArticlePage>
         AwesomeDialog(
             context: context,
             title: "",
-            desc: "${S.current.msg_retour_no_save} ?",
+            desc: "${S.current.msg_retour_no_save}",
             dialogType: DialogType.QUESTION,
             animType: AnimType.BOTTOMSLIDE,
             btnCancelText: S.current.non,
@@ -371,7 +371,7 @@ class _AddArticlePageState extends State<AddArticlePage>
         AwesomeDialog(
             context: context,
             title: "",
-            desc: "${S.current.msg_retour_no_save} ?",
+            desc: "${S.current.msg_retour_no_save}",
             dialogType: DialogType.QUESTION,
             animType: AnimType.BOTTOMSLIDE,
             btnCancelText: S.current.non,

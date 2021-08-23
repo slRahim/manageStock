@@ -307,7 +307,7 @@ class _SettingsPageState extends State<SettingsPage> {
                             setState(() {
                               _countryname = country.name;
                               _currencycode = country.currencyCode;
-                              if(_currencycode != 'DZD'){
+                              if(_currencycode != 'DZD' && _currencycode != "TND"){
                                 _timbre = false ;
                               }
                             });
@@ -360,9 +360,9 @@ class _SettingsPageState extends State<SettingsPage> {
                     title: '${S.current.param_timbre}',
                     titleTextStyle: GoogleFonts.lato(
                         textStyle: TextStyle(
-                            color: (_currencycode != "DZD") ? Theme.of(context).tabBarTheme.unselectedLabelColor : null)),
+                            color: (_currencycode != "DZD" && _currencycode != "TND") ? Theme.of(context).tabBarTheme.unselectedLabelColor : null)),
                     subtitleTextStyle: GoogleFonts.lato(),
-                    enabled: (_currencycode == "DZD"),
+                    enabled: (_currencycode == "DZD" || _currencycode == "TND"),
                     leading: Icon(Icons.fact_check,
                         color: Theme.of(context).primaryColorDark),
                     switchValue: _timbre,

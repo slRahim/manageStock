@@ -195,7 +195,7 @@ class _ChartBarState extends State<ChartBar> {
             return "${S.current.achat}";
             break;
           case 4:
-            return "${S.current.marge}";
+            return "${S.current.marges}";
             break;
         }
       }else{

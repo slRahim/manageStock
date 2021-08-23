@@ -21,7 +21,7 @@ class Print extends StatefulWidget {
 
 class _PrintState extends State<Print> {
   PrinterBluetoothManager _printerManager = PrinterBluetoothManager();
-  List<PrinterBluetooth> _devices = [];
+  List<dynamic> _devices = [];
   String _devicesMsg;
   BluetoothManager bluetoothManager = BluetoothManager.instance;
 
@@ -29,23 +29,24 @@ class _PrintState extends State<Print> {
   DefaultPrinter defaultPrinter = new DefaultPrinter.init();
 
   ScrollController _controller = new ScrollController();
-  ScrollController _controller1 = new ScrollController();
 
   @override
   void initState() {
-    if (Platform.isAndroid) {
+    if (Platform.isIOS) {
+      initBlPrinter();
+    } else {
       bluetoothManager.state.listen((val) {
+        print("state = $val");
         if (!mounted) return;
         if (val == 12) {
           initBlPrinter();
         } else if (val == 10) {
-          setState(() => _devicesMsg = S.current.blue_off);
+          setState(() {
+            _devicesMsg = S.current.blue_off;
+          });
         }
       });
-    } else {
-      initBlPrinter();
     }
-
     super.initState();
   }
 
@@ -53,10 +54,12 @@ class _PrintState extends State<Print> {
     _printerManager.startScan(Duration(seconds: 2));
     _printerManager.scanResults.listen((val) {
       if (!mounted) return;
+      print(val);
       setState(() => _devices = val);
       if (_devices.isEmpty) setState(() => _devicesMsg = S.current.no_device);
     });
   }
+
 
   @override
   void dispose() {
@@ -102,6 +105,15 @@ class _PrintState extends State<Print> {
         ),
         centerTitle: true,
         backgroundColor: Colors.green,
+        actions: [
+          IconButton(
+            icon: Icon(Icons.refresh , color: Colors.white,),
+            onPressed: (){
+              _printerManager.stopScan();
+              _printerManager.startScan(Duration(seconds: 20));
+            },
+          )
+        ],
       ),
       body: ListView(
         padding: EdgeInsets.all(10),
@@ -121,8 +133,29 @@ class _PrintState extends State<Print> {
               margin: EdgeInsets.only(top: 5, bottom: 5),
               padding: EdgeInsets.all(5),
               height: 600,
-              child: (_devices.isEmpty)
-                  ? Center(
+              child: (_devices.isNotEmpty)
+                  ? ListView.builder(
+                    controller: _controller,
+                    itemCount: _devices.length,
+                    itemBuilder: (c, i) {
+                      return ListTile(
+                        leading: Icon(Icons.print),
+                        title: Text(
+                          _devices[i].name,
+                          style: GoogleFonts.lato(),
+                        ),
+                        subtitle: Text(
+                          _devices[i].address,
+                          style: GoogleFonts.lato(),
+                        ),
+                        onTap: () async {
+                          await printTicket(context, _devices[i]);
+                          Navigator.pop(context);
+                        },
+                      );
+                    },
+                  )
+                  : Center(
                       child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
@@ -143,32 +176,7 @@ class _PrintState extends State<Print> {
                                   TextStyle(fontWeight: FontWeight.bold)),
                         ),
                       ],
-                    ))
-                  : Scrollbar(
-                      isAlwaysShown: true,
-                      controller: _controller,
-                      child: ListView.builder(
-                        controller: _controller,
-                        itemCount: _devices.length,
-                        itemBuilder: (c, i) {
-                          return ListTile(
-                            leading: Icon(Icons.print),
-                            title: Text(
-                              _devices[i].name,
-                              style: GoogleFonts.lato(),
-                            ),
-                            subtitle: Text(
-                              _devices[i].address,
-                              style: GoogleFonts.lato(),
-                            ),
-                            onTap: () async {
-                              await printTicket(context, _devices[i]);
-                              Navigator.pop(context);
-                            },
-                          );
-                        },
-                      ),
-                    )),
+                    ))),
         ],
       ),
     );
