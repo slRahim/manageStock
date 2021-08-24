@@ -43,127 +43,102 @@ class HomeItem {
 HomeItem homeItemAccueil = new HomeItem(
     id: homeItemAccueilId,
     title: S.current.accueil,
-    img: "assets/dashboard.png",
     active: true);
 HomeItem homeItemTableauDeBord = new HomeItem(
     id: homeItemTableauDeBordId,
     title: S.current.tableau_bord,
-    img: "assets/dashboard.png",
     active: true);
 HomeItem homeItemArticles = new HomeItem(
     id: homeItemArticlesId,
     title: S.current.articles,
-    img: "assets/article.png",
     active: true);
 HomeItem homeItemClients = new HomeItem(
     id: homeItemClientsId,
     title: S.current.client,
-    img: "assets/client.png",
     active: true);
 HomeItem homeItemDevis = new HomeItem(
     id: homeItemDevisId,
     title: S.current.devis,
-    img: "assets/devis.png",
     active: true);
 HomeItem homeItemCommandeClient = new HomeItem(
     id: homeItemCommandeClientId,
     title: S.current.commande_client,
-    img: "assets/commandeClient.png",
     active: true);
 HomeItem homeItemBonDeLivraison = new HomeItem(
     id: homeItemBonDeLivraisonId,
     title: S.current.bon_livraison,
-    img: "assets/bonLivraison.png",
     active: true);
 HomeItem homeItemFactureDeVente = new HomeItem(
     id: homeItemFactureDeVenteId,
     title: S.current.facture_vente,
-    img: "assets/invoice.png",
     active: true);
 HomeItem homeItemFournisseurs = new HomeItem(
     id: homeItemFournisseursId,
     title: S.current.fournisseur,
-    img: "assets/fournisseurs.png",
     active: true);
 HomeItem homeItemBonDeReception = new HomeItem(
     id: homeItemBonDeReceptionId,
     title: S.current.bon_reception,
-    img: "assets/BonReception.png",
     active: true);
 HomeItem homeItemFactureDachat = new HomeItem(
     id: homeItemFactureDachatId,
     title: S.current.facture_achat,
-    img: "assets/factureAchat.png",
     active: true);
 HomeItem homeItemTresorerie = new HomeItem(
     id: homeItemTresorerieId,
     title: S.current.tresories,
-    img: "assets/Tresorerie.png",
     active: true);
 HomeItem homeItemRapports = new HomeItem(
     id: homeItemRapportsId,
     title: S.current.rapports,
-    img: "assets/rapport.png",
     active: true);
 HomeItem homeItemParametres = new HomeItem(
     id: homeItemParametresId,
     title: S.current.settings,
-    img: "assets/setting.png",
     active: true);
 HomeItem drawerItemRetourClient = new HomeItem(
     id: drawerItemRetourClientId,
     title: S.current.retour_client,
-    img: "assets/setting.png",
     active: true);
 HomeItem drawerItemRetourFournisseur = new HomeItem(
     id: drawerItemRetourFournisseurId,
     title: S.current.retour_fournisseur,
-    img: "assets/setting.png",
     active: true);
 HomeItem drawerItemAvoirClient = new HomeItem(
     id: drawerItemAvoirClientId,
     title: S.current.avoir_client,
-    img: "assets/setting.png",
     active: true);
 HomeItem drawerItemAvoirFournisseur = new HomeItem(
     id: drawerItemAvoirFournisseurId,
     title: S.current.avoir_fournisseur,
-    img: "assets/setting.png",
     active: true);
 HomeItem drawerItemBonDeCommande = new HomeItem(
     id: drawerItemBonDeCommandeId,
     title: S.current.bon_commande,
-    img: "assets/setting.png",
     active: true);
 HomeItem drawerItemExit = new HomeItem(
     id: drawerItemExitId,
     title: S.current.quitter,
-    img: "assets/setting.png",
     active: true);
 HomeItem drawerItemPurchase = new HomeItem(
     id: drawerItemPurchaseId,
     title: S.current.abonnement,
-    img: "assets/setting.png",
     active: true);
 HomeItem drawerItemVente = new HomeItem(
     id: drawerItemVenteId,
     title: S.current.vente,
-    img: "assets/setting.png",
     active: true);
 HomeItem drawerItemAchat = new HomeItem(
     id: drawerItemAchatId,
     title: S.current.achat,
-    img: "assets/setting.png",
     active: true);
 HomeItem drawerItemFamilleMarque = new HomeItem(
     id: drawerItemFamilleMarqueId,
     title: S.current.famille_marque,
-    img: "assets/setting.png",
     active: true);
 HomeItem drawerItemBackup = new HomeItem(
     id: drawerItemBackupId,
     title: S.current.param_backup,
-    img: "assets/setting.png",
     active: true);
 
 Widget iconsSet(String itemId, double iconSize) {

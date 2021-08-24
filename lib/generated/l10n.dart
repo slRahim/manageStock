@@ -1675,10 +1675,10 @@ class S {
     );
   }
 
-  /// `No Printer is find`
+  /// `No printer found`
   String get no_device {
     return Intl.message(
-      'No Printer is find',
+      'No printer found',
       name: 'no_device',
       desc: '',
       args: [],
@@ -2445,10 +2445,10 @@ class S {
     );
   }
 
-  /// `Do you want to save last changes ...`
+  /// `Do you want to save last changes ?`
   String get param_msg_save {
     return Intl.message(
-      'Do you want to save last changes ...',
+      'Do you want to save last changes ?',
       name: 'param_msg_save',
       desc: '',
       args: [],
@@ -5595,10 +5595,10 @@ class S {
     );
   }
 
-  /// `Do you want to change the rates?`
+  /// `Do you want to change the rates ?`
   String get msg_change_tarif {
     return Intl.message(
-      'Do you want to change the rates?',
+      'Do you want to change the rates ?',
       name: 'msg_change_tarif',
       desc: '',
       args: [],
@@ -5695,10 +5695,10 @@ class S {
     );
   }
 
-  /// `Do you want to quit without validating the last changes`
+  /// `Do you want to quit without validating the last changes ?`
   String get msg_retour_no_save {
     return Intl.message(
-      'Do you want to quit without validating the last changes',
+      'Do you want to quit without validating the last changes ?',
       name: 'msg_retour_no_save',
       desc: '',
       args: [],
@@ -5980,6 +5980,26 @@ class S {
     return Intl.message(
       'Profits',
       name: 'marges',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `NB: Please allow the application to always use your location to detect the printer`
+  String get msg_bl_localisation {
+    return Intl.message(
+      'NB: Please allow the application to always use your location to detect the printer',
+      name: 'msg_bl_localisation',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Designation`
+  String get compte_designation {
+    return Intl.message(
+      'Designation',
+      name: 'compte_designation',
       desc: '',
       args: [],
     );

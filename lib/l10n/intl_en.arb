@@ -171,7 +171,7 @@
   "msg_login_pin": "Enter PinCode",
   "msg_search": "Enter text",
   "blue_off" : "Your blutoothe is OFF",
-  "no_device" : "No Printer is find",
+  "no_device" : "No printer found",
   "printer_titre" : "Printer (s)",
   "format_58" : "Format 58Cm",
   "format_80" : "Format 80Cm",
@@ -256,7 +256,7 @@
   "blue_device" : "Bluetooth Printers",
 
   "param_save" : "Save Changes",
-  "param_msg_save" : "Do you want to save last changes ...",
+  "param_msg_save" : "Do you want to save last changes ?",
   "param_general" : "General",
   "param_lang" : "Language",
   "param_lang_title" : "Choose a language",
@@ -594,7 +594,7 @@
   "THB_name" : "Thai baht",
   "UGX_name" : "Ugandan shilling",
 
-  "msg_change_tarif" : "Do you want to change the rates?",
+  "msg_change_tarif" : "Do you want to change the rates ?",
   "chargement" : "Loading",
 
   "service" : "Service",
@@ -607,7 +607,7 @@
   "famille_tiers" : "Families of third parties",
   "cat_charge" : "charges Categories",
 
-  "msg_retour_no_save" : "Do you want to quit without validating the last changes",
+  "msg_retour_no_save" : "Do you want to quit without validating the last changes ?",
   "msg_map_add_position" : "Click on map to pick position",
 
   "code_pin1" : "Key",
@@ -640,7 +640,9 @@
   "mensuel" : "Monthly",
   "annuel" : "Annual",
   "a_vie" : "For life",
-  "marges" : "Profits"
+  "marges" : "Profits",
+  "msg_bl_localisation" : "NB: Please allow the application to always use your location to detect the printer",
+  "compte_designation" : "Designation"
 
 
 

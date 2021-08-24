@@ -256,7 +256,7 @@
   "blue_device" : "Imprimante Bluetooth",
 
   "param_save" : "Enregistrer les modifications",
-  "param_msg_save" : "Voulez-vous sauvegarder les derniers changements",
+  "param_msg_save" : "Voulez-vous sauvegarder les derniers changements ?",
   "param_general" : "General",
   "param_lang" : "Langue",
   "param_lang_title" : "Choisir une langue",
@@ -606,7 +606,7 @@
   "famille_tiers" : "Familles des tiers",
   "cat_charge" : "Catégories des charges",
 
-  "msg_retour_no_save" : "Voulez-vous quitter sans valider les dernier changements",
+  "msg_retour_no_save" : "Voulez-vous quitter sans valider les dernier changements ?",
   "msg_map_add_position" : "Cliquez sur la carte pour choisir la position",
 
   "code_pin1" : "Clé",
@@ -639,7 +639,9 @@
   "mensuel" : "Mensuel",
   "annuel" : "Annuel",
   "a_vie" : "À vie",
-  "marges" : "Marges"
+  "marges" : "Marges",
+  "msg_bl_localisation" : "NB : Veuillez autoriser l'application à utiliser toujours votre localisation afin de détecter l'imprimante",
+  "compte_designation" : "Désignation"
 
 
 

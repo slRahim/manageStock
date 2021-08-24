@@ -1,5 +1,6 @@
 import 'dart:io' show Platform;
 
+import 'package:app_settings/app_settings.dart';
 import 'package:esc_pos_bluetooth/esc_pos_bluetooth.dart';
 import 'package:esc_pos_utils/esc_pos_utils.dart';
 import 'package:flutter/material.dart' hide Image;
@@ -9,6 +10,8 @@ import 'package:gestmob/Helpers/Statics.dart';
 import 'package:gestmob/generated/l10n.dart';
 import 'package:gestmob/models/DefaultPrinter.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class Print extends StatefulWidget {
   final Ticket data;
@@ -29,6 +32,8 @@ class _PrintState extends State<Print> {
   DefaultPrinter defaultPrinter = new DefaultPrinter.init();
 
   ScrollController _controller = new ScrollController();
+  SharedPreferences _prefs;
+
 
   @override
   void initState() {
@@ -51,7 +56,7 @@ class _PrintState extends State<Print> {
   }
 
   void initBlPrinter() {
-    _printerManager.startScan(Duration(seconds: 2));
+    _printerManager.startScan(Duration(seconds: 10));
     _printerManager.scanResults.listen((val) {
       if (!mounted) return;
       print(val);
@@ -77,8 +82,9 @@ class _PrintState extends State<Print> {
     await _queryCtr.addItemToTable(
         DbTablesNames.defaultPrinter, defaultPrinter);
 
-    _printerManager.printTicket(ticket).then((result) {
-      showDialog(
+    _printerManager.stopScan();
+    await _printerManager.printTicket(ticket).then((result) {
+       showDialog(
         context: context,
         builder: (_) => AlertDialog(
           content: Text(result.msg),
@@ -95,6 +101,24 @@ class _PrintState extends State<Print> {
     });
   }
 
+  _pressHelp() async {
+    _prefs = await SharedPreferences.getInstance();
+    var url = "https://doc.gestmob.com/";
+    String lang = await _prefs.getString("myLocale");
+    url = url+'en' ;
+    if (await canLaunch(url)) {
+      await launch(
+        url,
+        forceSafariVC: true,
+        forceWebView: true,
+        enableJavaScript: true,
+        headers: <String, String>{'my_header_key': 'my_header_value'},
+      );
+    } else {
+      throw 'Could not launch $url';
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -107,11 +131,12 @@ class _PrintState extends State<Print> {
         backgroundColor: Colors.green,
         actions: [
           IconButton(
-            icon: Icon(Icons.refresh , color: Colors.white,),
-            onPressed: (){
-              _printerManager.stopScan();
-              _printerManager.startScan(Duration(seconds: 20));
-            },
+            icon: Icon(Icons.settings , color: Colors.white,),
+            onPressed: ()=> AppSettings.openAppSettings(),
+          ),
+          IconButton(
+            icon: Icon(Icons.help_outline_outlined),
+            onPressed:_pressHelp,
           )
         ],
       ),
@@ -129,54 +154,83 @@ class _PrintState extends State<Print> {
               )),
             ),
           ),
+          (_devices.isEmpty)? Container(
+            padding: EdgeInsets.all(5),
+            child: Text(
+              S.current.msg_bl_localisation,
+              style: GoogleFonts.lato(
+                  textStyle: TextStyle(
+                    fontWeight: FontWeight.bold,
+                    fontSize: 12,
+                    color: Colors.red
+                  )),
+            ),
+          ) : SizedBox(),
           Container(
               margin: EdgeInsets.only(top: 5, bottom: 5),
               padding: EdgeInsets.all(5),
               height: 600,
-              child: (_devices.isNotEmpty)
-                  ? ListView.builder(
-                    controller: _controller,
-                    itemCount: _devices.length,
-                    itemBuilder: (c, i) {
-                      return ListTile(
-                        leading: Icon(Icons.print),
-                        title: Text(
-                          _devices[i].name,
-                          style: GoogleFonts.lato(),
-                        ),
-                        subtitle: Text(
-                          _devices[i].address,
-                          style: GoogleFonts.lato(),
-                        ),
-                        onTap: () async {
-                          await printTicket(context, _devices[i]);
-                          Navigator.pop(context);
+              child: Column(
+                children: [
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: [
+                      IconButton(
+                        icon: Icon(Icons.refresh),
+                        onPressed: (){
+                          _printerManager.stopScan();
+                          _printerManager.startScan(Duration(seconds: 10));
                         },
-                      );
+                      )
+                    ],
+                  ),
+              (_devices.isNotEmpty)
+                  ? ListView.builder(
+                controller: _controller,
+                itemCount: _devices.length,
+                itemBuilder: (c, i) {
+                  return ListTile(
+                    leading: Icon(Icons.print),
+                    title: Text(
+                      _devices[i].name,
+                      style: GoogleFonts.lato(),
+                    ),
+                    subtitle: Text(
+                      _devices[i].address,
+                      style: GoogleFonts.lato(),
+                    ),
+                    onTap: () async {
+                      await printTicket(context, _devices[i]);
+                      Navigator.pop(context);
                     },
-                  )
+                  );
+                },
+              )
                   : Center(
-                      child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        (_devicesMsg != null)
-                            ? Icon(
-                                Icons.warning,
-                                color: Colors.yellow[700],
-                                size: 60,
-                              )
-                            : SizedBox(),
-                        SizedBox(
-                          height: 5,
-                        ),
-                        Text(
-                          _devicesMsg ?? '',
-                          style: GoogleFonts.lato(
-                              textStyle:
-                                  TextStyle(fontWeight: FontWeight.bold)),
-                        ),
-                      ],
-                    ))),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      (_devicesMsg != null)
+                          ? Icon(
+                        Icons.warning,
+                        color: Colors.yellow[700],
+                        size: 60,
+                      )
+                          : SizedBox(),
+                      SizedBox(
+                        height: 5,
+                      ),
+                      Text(
+                        _devicesMsg ?? '',
+                        style: GoogleFonts.lato(
+                            textStyle:
+                            TextStyle(fontWeight: FontWeight.bold)),
+                      ),
+                    ],
+                  )),
+                ],
+              )
+          ),
         ],
       ),
     );

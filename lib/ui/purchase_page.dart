@@ -178,7 +178,7 @@ class _PurchasePageState extends State<PurchasePage> {
                                                         fontSize: 22))),
                                           ),
                                           subtitle: Text(
-                                            "${item.transactionDate}",
+                                            "${DateTime.fromMillisecondsSinceEpoch((item.billingClientPurchase.purchaseTime))}",
                                             style: GoogleFonts.lato(
                                                 textStyle: TextStyle(
                                                     fontWeight:

@@ -15,7 +15,7 @@ publish_to: 'none' # Remove this line if you wish to publish to pub.dev
 # In iOS, build-name is used as CFBundleShortVersionString while build-number used as CFBundleVersion.
 # Read more about iOS versioning at
 # https://developer.apple.com/library/archive/documentation/General/Reference/InfoPlistKeyReference/Articles/CoreFoundationKeys.html
-version: 1.0.0+80
+version: 1.0.0+82
 
 environment:
   sdk: ">=2.7.0 <3.0.0"
@@ -78,6 +78,7 @@ dependencies:
   flutter_bluetooth_basic: ^0.1.5
   image:
   charset_converter:
+  app_settings:
   advance_pdf_viewer:
 
   flutter_phoenix:
@@ -144,24 +145,8 @@ flutter:
     - assets/data/country.json
     - assets/article.png
     - assets/logos/profile_logo.png
-    - assets/logos/PowerByCirta.png
-    - assets/bonLivraison.png
-    - assets/box.png
-    - assets/BonReception.png
-    - assets/commandeClient.png
     - assets/client.png
-    - assets/dashboard.png
-    - assets/devis.png
-    - assets/factureAchat.png
-    - assets/fournisseurs.png
     - assets/festival.png
-    - assets/invoice.png
-    - assets/map.png
-    - assets/notification.png
-    - assets/rapport.png
-    - assets/setting.png
-    - assets/Tresorerie.png
-    - assets/addArticle.png
     - assets/planet.png
     - assets/map_pin.png
     - assets/edit_pen.png

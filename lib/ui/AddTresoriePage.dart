@@ -1025,7 +1025,6 @@ class _AddTresoriePageState extends State<AddTresoriePage>
   Widget addCompte() {
     TextEditingController _libelleCompteControl = new TextEditingController();
     TextEditingController _numCompteControl = new TextEditingController();
-    TextEditingController _codeCompteControl = new TextEditingController();
     TextEditingController _soldeCompteControl = new TextEditingController();
     CompteTresorie _compteTresorie = new CompteTresorie.init();
     ScrollController _controller = new ScrollController();
@@ -1074,7 +1073,7 @@ class _AddTresoriePageState extends State<AddTresoriePage>
                                     borderSide: BorderSide(color: Colors.blue),
                                     borderRadius: BorderRadius.circular(20)),
                                 contentPadding: EdgeInsets.only(left: 10),
-                                labelText: S.current.designation,
+                                labelText: S.current.compte_designation,
                                 labelStyle: GoogleFonts.lato(),
                                 enabledBorder: OutlineInputBorder(
                                   gapPadding: 3.3,
@@ -1105,36 +1104,6 @@ class _AddTresoriePageState extends State<AddTresoriePage>
                                     borderRadius: BorderRadius.circular(20)),
                                 contentPadding: EdgeInsets.only(left: 10),
                                 labelText: S.current.n,
-                                labelStyle: GoogleFonts.lato(),
-                                enabledBorder: OutlineInputBorder(
-                                  gapPadding: 3.3,
-                                  borderRadius: BorderRadius.circular(20),
-                                  borderSide: BorderSide(color: Colors.blue),
-                                ),
-                              ),
-                            ),
-                            SizedBox(
-                              height: 10,
-                            ),
-                            TextFormField(
-                              controller: _codeCompteControl,
-                              keyboardType: TextInputType.text,
-                              // validator: (value) {
-                              //   if (value.isEmpty) {
-                              //     return S.current.msg_champ_oblg;
-                              //   }
-                              //   return null;
-                              // },
-                              decoration: InputDecoration(
-                                prefixIcon: Icon(
-                                  Icons.vpn_key,
-                                  color: Colors.blue,
-                                ),
-                                focusedBorder: OutlineInputBorder(
-                                    borderSide: BorderSide(color: Colors.blue),
-                                    borderRadius: BorderRadius.circular(20)),
-                                contentPadding: EdgeInsets.only(left: 10),
-                                labelText: S.current.code_pin1,
                                 labelStyle: GoogleFonts.lato(),
                                 enabledBorder: OutlineInputBorder(
                                   gapPadding: 3.3,
@@ -1197,9 +1166,7 @@ class _AddTresoriePageState extends State<AddTresoriePage>
                                         _compteTresorie.nomCompte =
                                             _libelleCompteControl.text.trim();
                                         _libelleCompteControl.text = "";
-                                        _compteTresorie.codeCompte =
-                                            _codeCompteControl.text.trim();
-                                        _codeCompteControl.text = "";
+                                        _compteTresorie.codeCompte = "";
                                         _compteTresorie.soldeDepart =
                                             (_soldeCompteControl.text.trim() !=
                                                     '')
