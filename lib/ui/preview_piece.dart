@@ -52,6 +52,7 @@ class _PreviewPieceState extends State<PreviewPiece> {
   bool directionRtl = false;
   String _devise;
   Profile _profile;
+  File imageFile ;
 
   @override
   void initState() {
@@ -74,6 +75,7 @@ class _PreviewPieceState extends State<PreviewPiece> {
       _doc = await PDFDocument.fromFile(file);
     } else {
       _profile = await _queryCtr.getProfileById(1);
+      imageFile = await Helpers.getFileFromUint8List(_profile.imageUint8List);
       _devise = Helpers.getDeviseTranslate(_myParams.devise);
     }
   }
@@ -141,6 +143,11 @@ class _PreviewPieceState extends State<PreviewPiece> {
                             ? CrossAxisAlignment.center
                             : CrossAxisAlignment.start,
                         children: [
+                          CircleAvatar(
+                            backgroundColor: Colors.transparent,
+                            backgroundImage: new FileImage(imageFile),
+                            radius: 30.0,
+                          ),
                           Text(
                             "${_profile.raisonSociale}",
                             style: TextStyle(color: Colors.black),

@@ -411,7 +411,7 @@ class _PieceListItemState extends State<PieceListItem> {
       dialogType: DialogType.WARNING,
       animType: AnimType.BOTTOMSLIDE,
       title: S.current.supp,
-      desc: '${S.current.msg_supp} ... ',
+      desc: '${S.current.msg_supp}',
       closeIcon: Icon(
         Icons.cancel_sharp,
         color: Colors.red,

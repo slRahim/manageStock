@@ -285,7 +285,7 @@ class _TierListItemState extends State<TierListItem> {
       dialogType: DialogType.QUESTION,
       animType: AnimType.BOTTOMSLIDE,
       title: S.current.supp,
-      desc: '${S.current.msg_supp} ... ',
+      desc: '${S.current.msg_supp}',
       btnCancelText: S.current.non,
       btnCancelOnPress: () {},
       btnOkText: S.current.oui,

@@ -642,7 +642,8 @@
   "a_vie" : "For life",
   "marges" : "Profits",
   "msg_bl_localisation" : "NB: Please allow the application to always use your location to detect the printer",
-  "compte_designation" : "Designation"
+  "compte_designation" : "Designation",
+  "imp_bl_android" : "Connect to printer from settings then refresh"
 
 
 

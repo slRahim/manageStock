@@ -327,6 +327,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "illimite" : MessageLookupByLibrary.simpleMessage("Illimité"),
     "illimite_desc" : MessageLookupByLibrary.simpleMessage("Créer des articles , des pièces , des clients et des fournisseurs en illimité"),
     "imp_affichage" : MessageLookupByLibrary.simpleMessage("Afficher par"),
+    "imp_bl_android" : MessageLookupByLibrary.simpleMessage("Connectez-vous à l\'imprimante à partir des paramètres, puis actualiser"),
     "imp_rapide_btn" : MessageLookupByLibrary.simpleMessage("Impression rapide"),
     "impression_titre" : MessageLookupByLibrary.simpleMessage("Impression"),
     "imprime" : MessageLookupByLibrary.simpleMessage("Imprimer"),

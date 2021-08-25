@@ -327,6 +327,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "illimite" : MessageLookupByLibrary.simpleMessage("غير محدود"),
     "illimite_desc" : MessageLookupByLibrary.simpleMessage("إضافة عدد غير محدود من البضائع , الفواتير , العملاء و الموردين"),
     "imp_affichage" : MessageLookupByLibrary.simpleMessage("عرض ب"),
+    "imp_bl_android" : MessageLookupByLibrary.simpleMessage("اتصل بالطابعة من الإعدادات ، ثم قم بالتحديث"),
     "imp_rapide_btn" : MessageLookupByLibrary.simpleMessage("طباعة مباشرة"),
     "impression_titre" : MessageLookupByLibrary.simpleMessage("طباعة"),
     "imprime" : MessageLookupByLibrary.simpleMessage("طباعة"),

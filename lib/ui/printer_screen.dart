@@ -1,6 +1,7 @@
 import 'dart:io' show Platform;
 
 import 'package:app_settings/app_settings.dart';
+import 'package:bluetooth_thermal_printer/bluetooth_thermal_printer.dart';
 import 'package:esc_pos_bluetooth/esc_pos_bluetooth.dart';
 import 'package:esc_pos_utils/esc_pos_utils.dart';
 import 'package:flutter/material.dart' hide Image;
@@ -24,16 +25,16 @@ class Print extends StatefulWidget {
 
 class _PrintState extends State<Print> {
   PrinterBluetoothManager _printerManager = PrinterBluetoothManager();
-  List<dynamic> _devices = [];
-  String _devicesMsg;
   BluetoothManager bluetoothManager = BluetoothManager.instance;
 
   QueryCtr _queryCtr = new QueryCtr();
   DefaultPrinter defaultPrinter = new DefaultPrinter.init();
 
   ScrollController _controller = new ScrollController();
-  SharedPreferences _prefs;
 
+  List<dynamic> _devices = [];
+  bool connected = false;
+  String _devicesMsg;
 
   @override
   void initState() {
@@ -44,7 +45,7 @@ class _PrintState extends State<Print> {
         print("state = $val");
         if (!mounted) return;
         if (val == 12) {
-          initBlPrinter();
+          getBluetooth();
         } else if (val == 10) {
           setState(() {
             _devicesMsg = S.current.blue_off;
@@ -55,6 +56,15 @@ class _PrintState extends State<Print> {
     super.initState();
   }
 
+  @override
+  void dispose() {
+    _printerManager.stopScan();
+    super.dispose();
+  }
+
+  //*******************************************************************************************************************************************************************************
+  //************************************************************************* for ios devices ******************************************************************************************************
+  //special esc_pos_blue
   void initBlPrinter() {
     _printerManager.startScan(Duration(seconds: 10));
     _printerManager.scanResults.listen((val) {
@@ -65,13 +75,7 @@ class _PrintState extends State<Print> {
     });
   }
 
-
-  @override
-  void dispose() {
-    _printerManager.stopScan();
-    super.dispose();
-  }
-
+  //special package esc_pos_blue
   printTicket(context, device) async {
     _printerManager.selectPrinter(device);
     Ticket ticket = widget.data;
@@ -84,7 +88,7 @@ class _PrintState extends State<Print> {
 
     _printerManager.stopScan();
     await _printerManager.printTicket(ticket).then((result) {
-       showDialog(
+      showDialog(
         context: context,
         builder: (_) => AlertDialog(
           content: Text(result.msg),
@@ -101,22 +105,71 @@ class _PrintState extends State<Print> {
     });
   }
 
-  _pressHelp() async {
-    _prefs = await SharedPreferences.getInstance();
-    var url = "https://doc.gestmob.com/";
-    String lang = await _prefs.getString("myLocale");
-    url = url+'en' ;
-    if (await canLaunch(url)) {
-      await launch(
-        url,
-        forceSafariVC: true,
-        forceWebView: true,
-        enableJavaScript: true,
-        headers: <String, String>{'my_header_key': 'my_header_value'},
-      );
+  //********************************************************************************************************************************************************************************
+  //************************************************************************** for android devices ******************************************************************************************
+  //special package bluetooth_thermal_printer
+  Future<void> getBluetooth() async {
+    final List bluetooths = await BluetoothThermalPrinter.getBluetooths;
+    print("Print $bluetooths");
+    setState(() {
+      _devices = bluetooths;
+    });
+  }
+
+  //special package bluetooth_thermal_printer
+  Future<void> printTicket2(context, {name, mac, type}) async {
+    final String result = await BluetoothThermalPrinter.connect(mac);
+
+    defaultPrinter.name = name;
+    defaultPrinter.adress = mac;
+    defaultPrinter.type = type;
+    await _queryCtr.addItemToTable(
+        DbTablesNames.defaultPrinter, defaultPrinter);
+
+    String isConnected = await BluetoothThermalPrinter.connectionStatus;
+    if (isConnected == "true") {
+      Ticket ticket = widget.data;
+      List<int> bytes = ticket.bytes;
+      final result = await BluetoothThermalPrinter.writeBytes(bytes);
+      print("Print $result");
     } else {
-      throw 'Could not launch $url';
+      //Hadnle Not Connected Senario
     }
+  }
+
+  //**************************************************************************************************************************************************************
+  //************************************************************************** display **********************************************************************
+
+  Widget printerListItem(device) {
+    if (Platform.isAndroid) {
+      return ListTile(
+        onTap: () {
+          printTicket2(context,
+              name: device.split('#').first,
+              mac: device.split('#').last,
+              type: 1);
+        },
+        leading: Icon(Icons.print),
+        title: Text('${device.split('#').first}'),
+        subtitle: Text("${device.split('#').last}"),
+      );
+    }
+
+    return ListTile(
+      leading: Icon(Icons.print),
+      title: Text(
+        device.name,
+        style: GoogleFonts.lato(),
+      ),
+      subtitle: Text(
+        device.address,
+        style: GoogleFonts.lato(),
+      ),
+      onTap: () async {
+        await printTicket(context, device);
+        Navigator.pop(context);
+      },
+    );
   }
 
   @override
@@ -130,14 +183,13 @@ class _PrintState extends State<Print> {
         centerTitle: true,
         backgroundColor: Colors.green,
         actions: [
-          IconButton(
-            icon: Icon(Icons.settings , color: Colors.white,),
-            onPressed: ()=> AppSettings.openAppSettings(),
-          ),
-          IconButton(
-            icon: Icon(Icons.help_outline_outlined),
-            onPressed:_pressHelp,
-          )
+          (Platform.isAndroid)?IconButton(
+            icon: Icon(
+              Icons.bluetooth_connected,
+              color: Colors.white,
+            ),
+            onPressed: () => AppSettings.openBluetoothSettings(),
+          ):SizedBox(),
         ],
       ),
       body: ListView(
@@ -154,18 +206,19 @@ class _PrintState extends State<Print> {
               )),
             ),
           ),
-          (_devices.isEmpty)? Container(
-            padding: EdgeInsets.all(5),
-            child: Text(
-              S.current.msg_bl_localisation,
-              style: GoogleFonts.lato(
-                  textStyle: TextStyle(
-                    fontWeight: FontWeight.bold,
-                    fontSize: 12,
-                    color: Colors.red
-                  )),
-            ),
-          ) : SizedBox(),
+          (_devices.isEmpty)
+              ? Container(
+                  padding: EdgeInsets.all(5),
+                  child: Text(
+                    (Platform.isAndroid)? S.current.imp_bl_android :S.current.msg_bl_localisation,
+                    style: GoogleFonts.lato(
+                        textStyle: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: 12,
+                            color: Colors.red)),
+                  ),
+                )
+              : SizedBox(),
           Container(
               margin: EdgeInsets.only(top: 5, bottom: 5),
               padding: EdgeInsets.all(5),
@@ -177,60 +230,47 @@ class _PrintState extends State<Print> {
                     children: [
                       IconButton(
                         icon: Icon(Icons.refresh),
-                        onPressed: (){
-                          _printerManager.stopScan();
-                          _printerManager.startScan(Duration(seconds: 10));
+                        onPressed: () {
+                          getBluetooth();
                         },
                       )
                     ],
                   ),
-              (_devices.isNotEmpty)
-                  ? ListView.builder(
-                controller: _controller,
-                itemCount: _devices.length,
-                itemBuilder: (c, i) {
-                  return ListTile(
-                    leading: Icon(Icons.print),
-                    title: Text(
-                      _devices[i].name,
-                      style: GoogleFonts.lato(),
-                    ),
-                    subtitle: Text(
-                      _devices[i].address,
-                      style: GoogleFonts.lato(),
-                    ),
-                    onTap: () async {
-                      await printTicket(context, _devices[i]);
-                      Navigator.pop(context);
-                    },
-                  );
-                },
-              )
-                  : Center(
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      (_devicesMsg != null)
-                          ? Icon(
-                        Icons.warning,
-                        color: Colors.yellow[700],
-                        size: 60,
-                      )
-                          : SizedBox(),
-                      SizedBox(
-                        height: 5,
-                      ),
-                      Text(
-                        _devicesMsg ?? '',
-                        style: GoogleFonts.lato(
-                            textStyle:
-                            TextStyle(fontWeight: FontWeight.bold)),
-                      ),
-                    ],
-                  )),
+                  (_devices.isNotEmpty)
+                      ? Container(
+                          height: 200,
+                          child: ListView.builder(
+                            itemCount:
+                                _devices.length > 0 ? _devices.length : 0,
+                            itemBuilder: (context, index) {
+                              return printerListItem(_devices[index]);
+                            },
+                          ),
+                        )
+                      : Center(
+                          child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            (_devicesMsg != null)
+                                ? Icon(
+                                    Icons.warning,
+                                    color: Colors.yellow[700],
+                                    size: 60,
+                                  )
+                                : SizedBox(),
+                            SizedBox(
+                              height: 5,
+                            ),
+                            Text(
+                              _devicesMsg ?? '',
+                              style: GoogleFonts.lato(
+                                  textStyle:
+                                      TextStyle(fontWeight: FontWeight.bold)),
+                            ),
+                          ],
+                        )),
                 ],
-              )
-          ),
+              )),
         ],
       ),
     );

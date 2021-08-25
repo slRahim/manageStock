@@ -327,6 +327,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "illimite" : MessageLookupByLibrary.simpleMessage("Unlimited"),
     "illimite_desc" : MessageLookupByLibrary.simpleMessage("number of products , invoices , customers , and providers"),
     "imp_affichage" : MessageLookupByLibrary.simpleMessage("Display by"),
+    "imp_bl_android" : MessageLookupByLibrary.simpleMessage("Connect to printer from settings then refresh"),
     "imp_rapide_btn" : MessageLookupByLibrary.simpleMessage("Quick print"),
     "impression_titre" : MessageLookupByLibrary.simpleMessage("Print"),
     "imprime" : MessageLookupByLibrary.simpleMessage("Print"),

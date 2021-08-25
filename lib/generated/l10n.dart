@@ -6004,6 +6004,16 @@ class S {
       args: [],
     );
   }
+
+  /// `Connect to printer from settings then refresh`
+  String get imp_bl_android {
+    return Intl.message(
+      'Connect to printer from settings then refresh',
+      name: 'imp_bl_android',
+      desc: '',
+      args: [],
+    );
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<S> {
