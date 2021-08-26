@@ -642,7 +642,9 @@
   "marges" : "Marges",
   "msg_bl_localisation" : "NB : Veuillez autoriser l'application à utiliser toujours votre localisation afin de détecter l'imprimante",
   "compte_designation" : "Désignation",
-  "imp_bl_android" : "Connectez-vous à l'imprimante à partir des paramètres, puis actualiser"
+  "imp_bl_android" : "Connectez-vous à l'imprimante à partir des paramètres, puis actualiser",
+
+  "days" : "Jours"
 
 
 

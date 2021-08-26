@@ -270,6 +270,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "date" : MessageLookupByLibrary.simpleMessage("Date"),
     "date_d_f" : MessageLookupByLibrary.simpleMessage("Date (Début / Fin) :"),
     "day" : MessageLookupByLibrary.simpleMessage("Jour"),
+    "days" : MessageLookupByLibrary.simpleMessage("Jours"),
     "decaissement" : MessageLookupByLibrary.simpleMessage("Décaissement"),
     "demo" : MessageLookupByLibrary.simpleMessage("Version Démo"),
     "demonstration" : MessageLookupByLibrary.simpleMessage("Date du rapport "),

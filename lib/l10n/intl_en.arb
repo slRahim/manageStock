@@ -268,7 +268,7 @@
   "param_notif_time" : "Notification time",
   "param_notif_repeat" : "Repeat notification",
   "param_echeance" : "Deadline",
-  "day" : "day",
+  "day" : "Day",
   "param_back_title" : "Backup & Restore",
   "param_backup" : "Create Backup",
   "msg_back_suce" : "Success, Backup has been created",
@@ -643,7 +643,9 @@
   "marges" : "Profits",
   "msg_bl_localisation" : "NB: Please allow the application to always use your location to detect the printer",
   "compte_designation" : "Designation",
-  "imp_bl_android" : "Connect to printer from settings then refresh"
+  "imp_bl_android" : "Connect to printer from settings then refresh",
+
+  "days" : "Days"
 
 
 

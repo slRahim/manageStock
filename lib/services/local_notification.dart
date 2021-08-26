@@ -165,19 +165,19 @@ class NotificationPlugin {
       switch (_prefs.getString("myLocale")) {
         case ("en"):
           backup = 'GestMob backup' ;
-          backupMsg = 'backup your data of the last day';
+          backupMsg = 'please back up your data to the cloud';
           break;
         case ("fr"):
           backup = 'GestMob sauvegarde' ;
-          backupMsg = 'sauvegardez vos données du dernier jour';
+          backupMsg = 'veuillez effectuer une sauvegarde de vos données sur le cloud';
           break;
         case ("ar"):
           backup = 'تسييرموب نسخة إحتياطية' ;
-          backupMsg = 'احتفظ بنسخة احتياطية من بياناتك  لليوم الأخير';
+          backupMsg = 'يرجى نسخ بياناتك احتياطيًا إلى التخزين السحابي';
           break;
         default:
           backup = 'GestMob backup' ;
-          backupMsg = 'backup your data of the last day';
+          backupMsg = 'please back up your data to the cloud';
           break;
       }
 
@@ -272,19 +272,19 @@ class NotificationPlugin {
       switch (_prefs.getString("myLocale")) {
         case ("en"):
           backup = 'GestMob backup' ;
-          backupMsg = 'backup your data of the last day';
+          backupMsg = 'please back up your data to the cloud';
           break;
         case ("fr"):
           backup = 'GestMob sauvegarde' ;
-          backupMsg = 'sauvegardez vos données du dernier jour';
+          backupMsg = 'veuillez effectuer une sauvegarde de vos données sur le cloud';
           break;
         case ("ar"):
           backup = 'تسييرموب نسخة إحتياطية' ;
-          backupMsg = 'احتفظ بنسخة احتياطية من بياناتك  لليوم الأخير';
+          backupMsg = 'يرجى نسخ بياناتك احتياطيًا إلى التخزين السحابي';
           break;
         default:
           backup = 'GestMob backup' ;
-          backupMsg = 'backup your data of the last day';
+          backupMsg = 'please back up your data to the cloud';
           break;
       }
 

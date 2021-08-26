@@ -1030,7 +1030,7 @@ class _SettingsPageState extends State<SettingsPage> {
                           value: Statics.echeances[1],
                           groupValue: _echeance,
                           title: Text(
-                            '3 ${S.current.day} (s)',
+                            '3 ${S.current.days}',
                             style: GoogleFonts.lato(),
                           ),
                           onChanged: (value) {
@@ -1043,7 +1043,7 @@ class _SettingsPageState extends State<SettingsPage> {
                           value: Statics.echeances[2],
                           groupValue: _echeance,
                           title: Text(
-                            '7 ${S.current.day} (s)',
+                            '7 ${S.current.days}',
                             style: GoogleFonts.lato(),
                           ),
                           onChanged: (value) {
@@ -1056,7 +1056,7 @@ class _SettingsPageState extends State<SettingsPage> {
                           value: Statics.echeances[3],
                           groupValue: _echeance,
                           title: Text(
-                            '15 ${S.current.day} (s)',
+                            '15 ${S.current.days}',
                             style: GoogleFonts.lato(),
                           ),
                           onChanged: (value) {
@@ -1069,7 +1069,7 @@ class _SettingsPageState extends State<SettingsPage> {
                           value: Statics.echeances[4],
                           groupValue: _echeance,
                           title: Text(
-                            '21 ${S.current.day} (s)',
+                            '21 ${S.current.days}',
                             style: GoogleFonts.lato(),
                           ),
                           onChanged: (value) {
@@ -1082,7 +1082,7 @@ class _SettingsPageState extends State<SettingsPage> {
                           value: Statics.echeances[5],
                           groupValue: _echeance,
                           title: Text(
-                            '30 ${S.current.day} (s)',
+                            '30 ${S.current.days}',
                             style: GoogleFonts.lato(),
                           ),
                           onChanged: (value) {

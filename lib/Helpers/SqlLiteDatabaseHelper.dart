@@ -20,7 +20,7 @@ class SqlLiteDatabaseHelper {
   SqlLiteDatabaseHelper.internal();
 
   static const SECRET_KEY = "2020_PRIVATES_KEYS_ENCRYPTS_2020";
-  static const DATABASE_VERSION = 3;
+  static const DATABASE_VERSION = 4;
   static Database _db;
   GoogleApi _googleApi = new GoogleApi();
 
@@ -101,23 +101,19 @@ class SqlLiteDatabaseHelper {
 
     'from_version_2_to_version_3': (Database db) async {
       await db.execute("""
-          DROP TRIGGER update_articles_qte_onUpdate_fournisseur ;
+          DROP TRIGGER IF EXISTS update_articles_qte_onUpdate_fournisseur ;
       """);
 
       await db.execute("""
-          DROP TRIGGER update_articles_qte_onUpdate_retour ;
+          DROP TRIGGER IF EXISTS update_articles_qte_onUpdate_retour ;
       """);
 
       await db.execute("""
-          DROP TRIGGER update_articles_qte_onUpdate_retour_four ;
+          DROP TRIGGER IF EXISTS update_articles_qte_onUpdate_retour_four ;
       """);
 
       await db.execute("""
-          DROP TRIGGER update_piece_transformer ;
-      """);
-
-      await db.execute("""
-          DROP TRIGGER update_tier_reglement_credit_4 ;
+          DROP TRIGGER IF EXISTS update_piece_transformer ;
       """);
 
       await db.execute('''
@@ -232,6 +228,138 @@ class SqlLiteDatabaseHelper {
       ''');
     },
 
+    'from_version_3_to_version_4': (Database db) async {
+      await db.execute("""
+          DROP TRIGGER IF EXISTS update_articles_qte_onUpdate_fournisseur ;
+      """);
+
+      await db.execute("""
+          DROP TRIGGER IF EXISTS update_articles_qte_onUpdate_retour ;
+      """);
+
+      await db.execute("""
+          DROP TRIGGER IF EXISTS update_articles_qte_onUpdate_retour_four ;
+      """);
+
+      await db.execute("""
+          DROP TRIGGER IF EXISTS update_piece_transformer ;
+      """);
+
+      await db.execute("""
+          DROP TRIGGER IF EXISTS update_tier_reglement_credit_4 ;
+      """);
+
+      await db.execute('''
+        CREATE TRIGGER update_articles_qte_onUpdate_fournisseur
+        AFTER UPDATE ON Journaux
+        FOR EACH ROW
+        WHEN NEW.Mov = 1 AND (NEW.Piece_type = 'BR' OR NEW.Piece_type = 'FF')
+        BEGIN
+            UPDATE Articles
+             SET PMP = IFNULL(((Qte * PMP) - (OLD.Qte * OLD.Net_ht)) / (Qte -OLD.Qte) , 0), 
+                 Qte = Qte - OLD.Qte
+            WHERE id = New.Article_id;
+        
+            UPDATE Articles
+               SET PMP = IFNULL(((Qte * PMP)+(NEW.Qte * NEW.Net_ht))/(Qte + NEW.Qte) , 0) , 
+                   Qte = Qte + NEW.Qte,
+                   Colis = IFNULL((Qte + NEW.Qte) / Qte_Colis , 0),
+                   PrixAchat = NEW.Net_ht
+             WHERE id = New.Article_id;
+             
+            Update Pieces
+              Set Marge = IFNULL((Select SUM(Marge) from Journaux where Piece_id = NEW.Piece_id AND New.Mov <> -2),0)
+            where id = New.Piece_id ;
+        END;
+        
+     ''');
+
+      await db.execute('''
+        CREATE TRIGGER update_articles_qte_onUpdate_retour
+        AFTER UPDATE ON Journaux
+        FOR EACH ROW
+        WHEN NEW.Mov = 1 AND (NEW.Piece_type = 'RC' OR NEW.Piece_type = 'AC')
+        BEGIN
+             UPDATE Articles
+               SET PMP = IFNULL(((Qte * PMP)-((OLD.Qte*-1) * OLD.Prix_revient)) / (Qte - (OLD.Qte*-1)) , 0) , 
+                   Qte = Qte - (OLD.Qte*-1)
+             WHERE id = New.Article_id;
+             
+            UPDATE Articles
+               SET PMP = IFNULL(((Qte * PMP)+((NEW.Qte*-1) * NEW.Prix_revient)) / (Qte + (NEW.Qte*-1)) , 0) , 
+                   Qte = Qte + (NEW.Qte*-1),
+                   Colis = IFNULL((Qte + (NEW.Qte*-1)) / Qte_Colis , 0)
+             WHERE id = New.Article_id;
+            
+            Update Pieces
+              Set Marge = IFNULL((Select SUM(Marge) from Journaux where Piece_id = NEW.Piece_id AND New.Mov <> -2),0) * -1 
+            where id = New.Piece_id ;
+        END;
+     ''');
+
+      await db.execute('''
+        CREATE TRIGGER update_articles_qte_onUpdate_retour_four
+        AFTER UPDATE ON Journaux
+        FOR EACH ROW
+        WHEN NEW.Mov = 1 AND (NEW.Piece_type = 'RF' OR NEW.Piece_type = 'AF')
+        BEGIN
+             UPDATE Articles
+               SET PMP = IFNULL(((Qte * PMP)+((OLD.Qte*-1) * OLD.Net_ht))/(Qte + (OLD.Qte*-1)),0) ,
+                   Qte = Qte + (OLD.Qte*-1)
+             WHERE id = NEW.Article_id ;
+             
+            UPDATE Articles
+               SET PMP = IFNULL(((Qte * PMP) - ((NEW.Qte*-1) * NEW.Net_ht))/(Qte - (NEW.Qte*-1)),0) ,
+                   Qte = Qte - (NEW.Qte*-1),
+                   Colis = IFNULL((Qte - (NEW.Qte*-1)) / Qte_Colis , 0)
+             WHERE id = NEW.Article_id ;
+             
+        END;
+     ''');
+
+      await db.execute('''
+        CREATE TRIGGER update_piece_transformer
+        AFTER UPDATE ON Pieces
+        FOR EACH ROW
+        When  (Old.Etat <> New.Etat) AND New.Etat = 1
+        BEGIN
+            UPDATE Pieces
+              SET Regler = IFNULL((SELECT SUM(Regler) FROM ReglementTresorie WHERE Piece_id = OLD.id ),0)
+            WHERE id =  OLD.id ;
+
+             UPDATE Pieces
+               SET  Reste = Net_a_payer - Regler 
+             WHERE id = OLD.id;
+        END;
+     ''');
+
+      await db.execute('''CREATE TRIGGER update_tier_reglement_credit_4
+        AFTER UPDATE ON Tresories
+        FOR EACH ROW
+        BEGIN
+             UPDATE Tiers
+               SET Chiffre_affaires = IFNULL((Select Sum(Net_a_payer) From Pieces where Tier_id = OLD.Tier_id AND Mov = 1 AND Piece <> "CC" AND Piece <> "FP" AND Piece <> "BC"),0)
+             WHERE id = OLD.Tier_id;
+            UPDATE Tiers
+              SET Regler = IFNULL((SELECT SUM(Montant) FROM Tresories WHERE Tier_id = OLD.Tier_id AND Mov = 1),0)
+            WHERE id = OLD.Tier_id ;
+             UPDATE Tiers
+               SET  Credit = (Solde_depart + Chiffre_affaires) - Regler
+             WHERE id = OLD.Tier_id;
+
+            UPDATE Tiers
+               SET Chiffre_affaires = IFNULL((Select Sum(Net_a_payer) From Pieces where Tier_id = New.Tier_id AND Mov = 1 AND Piece <> "CC" AND Piece <> "FP" AND Piece <> "BC"),0)
+             WHERE id = New.Tier_id;
+            UPDATE Tiers
+              SET Regler = IFNULL((SELECT SUM(Montant) FROM Tresories WHERE Tier_id = New.Tier_id AND Mov = 1),0)
+            WHERE id = NEW.Tier_id ;
+             UPDATE Tiers
+               SET  Credit = (Solde_depart + Chiffre_affaires) - Regler
+             WHERE id = New.Tier_id;
+
+        END;
+      ''');
+    },
   };
 
   Future deleteDB() async {

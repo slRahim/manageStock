@@ -2565,10 +2565,10 @@ class S {
     );
   }
 
-  /// `day`
+  /// `Day`
   String get day {
     return Intl.message(
-      'day',
+      'Day',
       name: 'day',
       desc: '',
       args: [],
@@ -6010,6 +6010,16 @@ class S {
     return Intl.message(
       'Connect to printer from settings then refresh',
       name: 'imp_bl_android',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Days`
+  String get days {
+    return Intl.message(
+      'Days',
+      name: 'days',
       desc: '',
       args: [],
     );
