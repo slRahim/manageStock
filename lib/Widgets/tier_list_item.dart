@@ -20,9 +20,11 @@ import 'CustomWidgets/list_tile_card.dart';
 
 // element à afficher lors de listing des clients ou des fournisseurs
 class TierListItem extends StatefulWidget {
-  TierListItem(
-      {@required this.tier, Key key, this.onItemSelected,})
-      : assert(tier != null),
+  TierListItem({
+    @required this.tier,
+    Key key,
+    this.onItemSelected,
+  })  : assert(tier != null),
         super(key: key);
 
   Tiers tier;
@@ -64,7 +66,7 @@ class _TierListItemState extends State<TierListItem> {
     return Visibility(
       visible: _visible,
       child: DescribedFeatureOverlay(
-        featureId: feature7 ,
+        featureId: feature7,
         tapTarget: Icon(
           MdiIcons.arrowExpandRight,
           color: Colors.black,
@@ -139,9 +141,13 @@ class _TierListItemState extends State<TierListItem> {
                     )
                   : null,
               trailingChildren: [
-                Text(
-                  "${S.current.regler}: ${Helpers.numberFormat(widget.tier.regler).toString()} $_devise",
-                ),
+                (widget.tier.clientFour == 2)
+                    ? Text(
+                        "${S.current.regler_four}: ${Helpers.numberFormat(widget.tier.regler).toString()} $_devise",
+                      )
+                    : Text(
+                        "${S.current.regler_client}: ${Helpers.numberFormat(widget.tier.regler).toString()} $_devise",
+                      ),
                 Text(
                   "${Helpers.numberFormat(widget.tier.credit).toString()} $_devise",
                   style: GoogleFonts.lato(
@@ -213,56 +219,57 @@ class _TierListItemState extends State<TierListItem> {
               ],
             ),
           ),
-          actions: (widget.onItemSelected == null) ? <Widget>[
-            IconSlideAction(
-                color: Colors.white10,
-                iconWidget: Icon(
-                  Icons.delete_forever,
-                  size: 50,
-                  color: Colors.red,
-                ),
-                onTap: () async {
-                  dellDialog(context);
-                }),
-          ] : null ,
+          actions: (widget.onItemSelected == null)
+              ? <Widget>[
+                  IconSlideAction(
+                      color: Colors.white10,
+                      iconWidget: Icon(
+                        Icons.delete_forever,
+                        size: 50,
+                        color: Colors.red,
+                      ),
+                      onTap: () async {
+                        dellDialog(context);
+                      }),
+                ]
+              : null,
           secondaryActions: <Widget>[
-            (widget.tier.mobile != '' || widget.tier.telephone != '')?IconSlideAction(
-              color: Colors.white10,
-              iconWidget: Icon(
-                Icons.phone_enabled,
-                size: 50,
-                color: Colors.green,
-              ),
-              onTap: () async {
-                if(widget.tier.telephone != ''){
-                  await _makePhoneCall("tel:${widget.tier.telephone}");
-                }else{
-                  await _makePhoneCall("tel:${widget.tier.mobile}");
-                }
-
-              },
-              foregroundColor: Colors.green,
-            ) : null,
+            (widget.tier.mobile != '' || widget.tier.telephone != '')
+                ? IconSlideAction(
+                    color: Colors.white10,
+                    iconWidget: Icon(
+                      Icons.phone_enabled,
+                      size: 50,
+                      color: Colors.green,
+                    ),
+                    onTap: () async {
+                      if (widget.tier.telephone != '') {
+                        await _makePhoneCall("tel:${widget.tier.telephone}");
+                      } else {
+                        await _makePhoneCall("tel:${widget.tier.mobile}");
+                      }
+                    },
+                    foregroundColor: Colors.green,
+                  )
+                : null,
           ],
         ),
       ),
     );
   }
 
-  _longpressItem(){
-    widget.onItemSelected != null
-        ? widget.onItemSelected(widget.tier)
-        : null ;
+  _longpressItem() {
+    widget.onItemSelected != null ? widget.onItemSelected(widget.tier) : null;
   }
 
-  _tapItem(){
+  _tapItem() {
     if (widget.onItemSelected == null) {
       Navigator.of(context)
           .pushNamed(RoutesKeys.addTier, arguments: widget.tier)
           .then((value) {
-        if(value is Tiers){
+        if (value is Tiers) {
           setState(() {
-            widget.tier = value ;
+            widget.tier = value;
           });
         }
       });

@@ -450,14 +450,15 @@ class _GridHomeWidgetState extends State<GridHomeWidget> {
     // Navigator.pushNamed(context, RoutesKeys.supportPage);
     var url = "https://doc.gestmob.com/";
     String lang = await _prefs.getString("myLocale");
-    url = url+lang ;
+    url = url+'$lang/' ;
     if (await canLaunch(url)) {
       await launch(
         url,
-        forceSafariVC: true,
-        forceWebView: true,
+        forceSafariVC: false,
+        forceWebView: false,
         enableJavaScript: true,
         headers: <String, String>{'my_header_key': 'my_header_value'},
+
       );
     } else {
       throw 'Could not launch $url';

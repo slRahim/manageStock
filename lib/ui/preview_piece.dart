@@ -52,7 +52,7 @@ class _PreviewPieceState extends State<PreviewPiece> {
   bool directionRtl = false;
   String _devise;
   Profile _profile;
-  File imageFile ;
+  File imageFile;
 
   @override
   void initState() {
@@ -91,7 +91,6 @@ class _PreviewPieceState extends State<PreviewPiece> {
     }
     await _queryCtr.updateItemInDb(DbTablesNames.myparams, _myParams);
   }
-
 
   @override
   Widget build(BuildContext context) {
@@ -182,17 +181,17 @@ class _PreviewPieceState extends State<PreviewPiece> {
                                   style: TextStyle(color: Colors.black),
                                 )
                               : SizedBox(),
-                          (_profile.nif != '' )
+                          (_profile.nif != '')
                               ? Text(
                                   "${_profile.nif}",
                                   style: TextStyle(color: Colors.black),
                                 )
                               : SizedBox(),
-                          (_profile.nis != '' )
+                          (_profile.nis != '')
                               ? Text(
-                            "${_profile.nis}",
-                            style: TextStyle(color: Colors.black),
-                          )
+                                  "${_profile.nis}",
+                                  style: TextStyle(color: Colors.black),
+                                )
                               : SizedBox(),
                           (_profile.ai != '')
                               ? Text(
@@ -230,7 +229,7 @@ class _PreviewPieceState extends State<PreviewPiece> {
                                   style: TextStyle(color: Colors.black),
                                 )
                               : SizedBox(),
-                          (widget.tier.nif != ''&&
+                          (widget.tier.nif != '' &&
                                   (widget.piece.piece ==
                                           PieceType.factureClient ||
                                       widget.piece.piece ==
@@ -244,22 +243,20 @@ class _PreviewPieceState extends State<PreviewPiece> {
                                   style: TextStyle(color: Colors.black),
                                 )
                               : SizedBox(),
-
-                          (widget.tier.nis != ''&&
-                              (widget.piece.piece ==
-                                  PieceType.factureClient ||
-                                  widget.piece.piece ==
-                                      PieceType.factureFournisseur ||
-                                  widget.piece.piece ==
-                                      PieceType.avoirClient ||
-                                  widget.piece.piece ==
-                                      PieceType.avoirFournisseur))
+                          (widget.tier.nis != '' &&
+                                  (widget.piece.piece ==
+                                          PieceType.factureClient ||
+                                      widget.piece.piece ==
+                                          PieceType.factureFournisseur ||
+                                      widget.piece.piece ==
+                                          PieceType.avoirClient ||
+                                      widget.piece.piece ==
+                                          PieceType.avoirFournisseur))
                               ? Text(
-                            "${S.current.nis} : ${widget.tier.nis}",
-                            style: TextStyle(color: Colors.black),
-                          )
+                                  "${S.current.nis} : ${widget.tier.nis}",
+                                  style: TextStyle(color: Colors.black),
+                                )
                               : SizedBox(),
-
                           (widget.tier.ai != '' &&
                                   (widget.piece.piece ==
                                           PieceType.factureClient ||
@@ -318,15 +315,19 @@ class _PreviewPieceState extends State<PreviewPiece> {
                                           "${e.ref}",
                                           style: TextStyle(color: Colors.black),
                                         ),
-                                  ((e.selectedQuantite/e.quantiteColis) - (e.selectedQuantite/e.quantiteColis).truncate() > 0)?
-                                  Text(
-                                    "${Helpers.numberFormat(e.selectedQuantite)} [${(e.selectedQuantite/e.quantiteColis).toInt()}+ ${S.current.colis_abr}]",
-                                    style: TextStyle(color: Colors.black),
-                                  )
-                                  :Text(
-                                    "${Helpers.numberFormat(e.selectedQuantite)} [${(e.selectedQuantite/e.quantiteColis).toInt()} ${S.current.colis_abr}]",
-                                    style: TextStyle(color: Colors.black),
-                                  ),
+                                  ((e.selectedQuantite / e.quantiteColis) -
+                                              (e.selectedQuantite /
+                                                      e.quantiteColis)
+                                                  .truncate() >
+                                          0)
+                                      ? Text(
+                                          "${Helpers.numberFormat(e.selectedQuantite)} [${(e.selectedQuantite / e.quantiteColis).toInt()}+ ${S.current.colis_abr}]",
+                                          style: TextStyle(color: Colors.black),
+                                        )
+                                      : Text(
+                                          "${Helpers.numberFormat(e.selectedQuantite)} [${(e.selectedQuantite / e.quantiteColis).toInt()} ${S.current.colis_abr}]",
+                                          style: TextStyle(color: Colors.black),
+                                        ),
                                   Text(
                                     "${Helpers.numberFormat(e.selectedPrice)}",
                                     style: TextStyle(color: Colors.black),
@@ -399,18 +400,39 @@ class _PreviewPieceState extends State<PreviewPiece> {
                           Row(
                             children: [
                               Expanded(
-                                child: (widget.piece.piece != PieceType.bonCommande &&
-                                       widget.piece.piece != PieceType.devis)
-                                    ? Text(
-                                  (widget.piece.regler >= 0)
-                                      ? "${S.current.regler} :${Helpers.numberFormat(widget.piece.regler)}"
-                                      : "${S.current.regler} :${Helpers.numberFormat(widget.piece.regler * -1)}",
-                                  style: TextStyle(color: Colors.black),
-                                ) : SizedBox(),
+                                child: (widget.piece.piece !=
+                                            PieceType.bonCommande &&
+                                        widget.piece.piece != PieceType.devis)
+                                    ? (widget.piece.piece ==
+                                                PieceType.bonLivraison ||
+                                            widget.piece.piece ==
+                                                PieceType.factureClient ||
+                                            widget.piece.piece ==
+                                                PieceType.retourFournisseur ||
+                                            widget.piece.piece ==
+                                                PieceType.avoirFournisseur)
+                                        ? Text(
+                                            (widget.piece.regler >= 0)
+                                                ? "${S.current.regler_client} :${Helpers.numberFormat(widget.piece.regler)}"
+                                                : "${S.current.regler_client} :${Helpers.numberFormat(widget.piece.regler * -1)}",
+                                            style:
+                                                TextStyle(color: Colors.black),
+                                          )
+                                        : Text(
+                                            (widget.piece.regler >= 0)
+                                                ? "${S.current.regler_four} :${Helpers.numberFormat(widget.piece.regler)}"
+                                                : "${S.current.regler_four} :${Helpers.numberFormat(widget.piece.regler * -1)}",
+                                            style:
+                                                TextStyle(color: Colors.black),
+                                          )
+                                    : SizedBox(),
                               ),
                               Expanded(
-                                child: (widget.piece.reste != 0 && (widget.piece.piece != PieceType.bonCommande &&
-                                    widget.piece.piece != PieceType.devis))
+                                child: (widget.piece.reste != 0 &&
+                                        (widget.piece.piece !=
+                                                PieceType.bonCommande &&
+                                            widget.piece.piece !=
+                                                PieceType.devis))
                                     ? Text(
                                         (widget.piece.reste > 0)
                                             ? "${S.current.reste} :${Helpers.numberFormat(widget.piece.reste)}"
@@ -421,7 +443,8 @@ class _PreviewPieceState extends State<PreviewPiece> {
                               )
                             ],
                           ),
-                          (_myParams.creditTier && widget.piece.piece != PieceType.devis)
+                          (_myParams.creditTier &&
+                                  widget.piece.piece != PieceType.devis)
                               ? Row(
                                   mainAxisAlignment: MainAxisAlignment.start,
                                   children: [
@@ -440,7 +463,7 @@ class _PreviewPieceState extends State<PreviewPiece> {
           floatingActionButton: (widget.format == 45)
               ? FloatingActionButton(
                   backgroundColor: Colors.blue,
-                  onPressed: ()=>_sharePdfFile(context),
+                  onPressed: () => _sharePdfFile(context),
                   child: Icon(
                     Icons.share,
                     color: Colors.white,
@@ -498,7 +521,7 @@ class _PreviewPieceState extends State<PreviewPiece> {
     final ticket = Ticket(paper);
 
     final Uint8List bytes = _profile.imageUint8List;
-    final logo = copyResize(decodeImage(bytes), width: 120 , height: 120);
+    final logo = copyResize(decodeImage(bytes), width: 120, height: 120);
 
     ticket.imageRaster(logo);
     ticket.feed(1);
@@ -590,7 +613,7 @@ class _PreviewPieceState extends State<PreviewPiece> {
                     ? PosAlign.center
                     : PosAlign.left));
       }
-      if (_profile.ai != "" ) {
+      if (_profile.ai != "") {
         input = "${_profile.ai}";
         encArabic = await CharsetConverter.encode(
             "ISO-8859-6", "${input.split('').reversed.join()}");
@@ -741,15 +764,18 @@ class _PreviewPieceState extends State<PreviewPiece> {
                   textEncoded: await CharsetConverter.encode("ISO-8859-6",
                       "${element.designation.substring(0, ((element.designation.length < 8 ? element.designation.length : 8)))}"),
                   width: 6),
-          ((element.selectedQuantite/element.quantiteColis) - (element.selectedQuantite/element.quantiteColis).truncate() > 0)?
-          PosColumn(
-              text:
-              '${Helpers.numberFormat(element.selectedQuantite).toString()} [${(element.selectedQuantite/element.quantiteColis).toInt()}+ ${S.current.colis_abr}]',
-              width: 2)
-          :PosColumn(
-              text:
-                  '${Helpers.numberFormat(element.selectedQuantite).toString()} [${(element.selectedQuantite/element.quantiteColis).toInt()} ${S.current.colis_abr}]',
-              width: 2),
+          ((element.selectedQuantite / element.quantiteColis) -
+                      (element.selectedQuantite / element.quantiteColis)
+                          .truncate() >
+                  0)
+              ? PosColumn(
+                  text:
+                      '${Helpers.numberFormat(element.selectedQuantite).toString()} [${(element.selectedQuantite / element.quantiteColis).toInt()}+ ${S.current.colis_abr}]',
+                  width: 2)
+              : PosColumn(
+                  text:
+                      '${Helpers.numberFormat(element.selectedQuantite).toString()} [${(element.selectedQuantite / element.quantiteColis).toInt()} ${S.current.colis_abr}]',
+                  width: 2),
           PosColumn(
               text: '${Helpers.numberFormat(element.selectedPrice).toString()}',
               width: 2),
@@ -848,15 +874,29 @@ class _PreviewPieceState extends State<PreviewPiece> {
 
       ticket.row([
         (widget.piece.piece != PieceType.bonCommande &&
-            widget.piece.piece != PieceType.devis) ? PosColumn(
-            textEncoded: (widget.piece.regler >= 0)
-                ? await CharsetConverter.encode("ISO-8859-6",
-                    "${Helpers.numberFormat(widget.piece.regler).toString()}: ${S.current.regler.split('').reversed.join()}")
-                : await CharsetConverter.encode("ISO-8859-6",
-                    "${Helpers.numberFormat(widget.piece.regler * -1).toString()}: ${S.current.regler.split('').reversed.join()}"),
-            width: 6) : PosColumn(width: 6),
-        (widget.piece.reste != 0 && (widget.piece.piece != PieceType.bonCommande &&
-            widget.piece.piece != PieceType.devis))
+                widget.piece.piece != PieceType.devis)
+            ? (widget.piece.piece == PieceType.bonLivraison ||
+                    widget.piece.piece == PieceType.factureClient ||
+                    widget.piece.piece == PieceType.retourFournisseur ||
+                    widget.piece.piece == PieceType.avoirFournisseur)
+                ? PosColumn(
+                    textEncoded: (widget.piece.regler >= 0)
+                        ? await CharsetConverter.encode("ISO-8859-6",
+                            "${Helpers.numberFormat(widget.piece.regler).toString()}: ${S.current.regler_client.split('').reversed.join()}")
+                        : await CharsetConverter.encode("ISO-8859-6",
+                            "${Helpers.numberFormat(widget.piece.regler * -1).toString()}: ${S.current.regler_client.split('').reversed.join()}"),
+                    width: 6)
+                : PosColumn(
+                    textEncoded: (widget.piece.regler >= 0)
+                        ? await CharsetConverter.encode("ISO-8859-6",
+                            "${Helpers.numberFormat(widget.piece.regler).toString()}: ${S.current.regler_four.split('').reversed.join()}")
+                        : await CharsetConverter.encode("ISO-8859-6",
+                            "${Helpers.numberFormat(widget.piece.regler * -1).toString()}: ${S.current.regler_four.split('').reversed.join()}"),
+                    width: 6)
+            : PosColumn(width: 6),
+        (widget.piece.reste != 0 &&
+                (widget.piece.piece != PieceType.bonCommande &&
+                    widget.piece.piece != PieceType.devis))
             ? PosColumn(
                 textEncoded: (widget.piece.reste > 0)
                     ? await CharsetConverter.encode("ISO-8859-6",
@@ -910,21 +950,21 @@ class _PreviewPieceState extends State<PreviewPiece> {
                     ? PosAlign.center
                     : PosAlign.left));
       }
-      if (_profile.rc != "" ) {
+      if (_profile.rc != "") {
         ticket.text("${_profile.rc}",
             styles: PosStyles(
                 align: (_default_format == PaperSize.mm80)
                     ? PosAlign.center
                     : PosAlign.left));
       }
-      if (_profile.nif != "" ) {
+      if (_profile.nif != "") {
         ticket.text("${_profile.nif}",
             styles: PosStyles(
                 align: (_default_format == PaperSize.mm80)
                     ? PosAlign.center
                     : PosAlign.left));
       }
-      if (_profile.nis != "" ) {
+      if (_profile.nis != "") {
         ticket.text("${_profile.nis}",
             styles: PosStyles(
                 align: (_default_format == PaperSize.mm80)
@@ -957,7 +997,7 @@ class _PreviewPieceState extends State<PreviewPiece> {
               align: (_default_format == PaperSize.mm80)
                   ? PosAlign.center
                   : PosAlign.left));
-      if (widget.tier.rc != ""  &&
+      if (widget.tier.rc != "" &&
           (widget.piece.piece == PieceType.factureClient ||
               widget.piece.piece == PieceType.factureFournisseur ||
               widget.piece.piece == PieceType.avoirClient ||
@@ -990,7 +1030,7 @@ class _PreviewPieceState extends State<PreviewPiece> {
                     ? PosAlign.center
                     : PosAlign.left));
       }
-      if (widget.tier.ai != ""  &&
+      if (widget.tier.ai != "" &&
           (widget.piece.piece == PieceType.factureClient ||
               widget.piece.piece == PieceType.factureFournisseur ||
               widget.piece.piece == PieceType.avoirClient ||
@@ -1027,15 +1067,18 @@ class _PreviewPieceState extends State<PreviewPiece> {
                   text:
                       '${element.designation.substring(0, (element.designation.length < 8 ? element.designation.length : 8))}',
                   width: 6),
-          ((element.selectedQuantite/element.quantiteColis) - (element.selectedQuantite/element.quantiteColis).truncate() > 0)?
-          PosColumn(
-              textEncoded: await CharsetConverter.encode("ISO-8859-6",
-                  '${Helpers.numberFormat(element.selectedQuantite).toString()} [${(element.selectedQuantite/element.quantiteColis).toInt()}+ ${S.current.colis_abr}]'),
-              width: 2)
-          :PosColumn(
-              textEncoded: await CharsetConverter.encode("ISO-8859-6",
-                  '${Helpers.numberFormat(element.selectedQuantite).toString()} [${(element.selectedQuantite/element.quantiteColis).toInt()} ${S.current.colis_abr}]'),
-              width: 2),
+          ((element.selectedQuantite / element.quantiteColis) -
+                      (element.selectedQuantite / element.quantiteColis)
+                          .truncate() >
+                  0)
+              ? PosColumn(
+                  textEncoded: await CharsetConverter.encode("ISO-8859-6",
+                      '${Helpers.numberFormat(element.selectedQuantite).toString()} [${(element.selectedQuantite / element.quantiteColis).toInt()}+ ${S.current.colis_abr}]'),
+                  width: 2)
+              : PosColumn(
+                  textEncoded: await CharsetConverter.encode("ISO-8859-6",
+                      '${Helpers.numberFormat(element.selectedQuantite).toString()} [${(element.selectedQuantite / element.quantiteColis).toInt()} ${S.current.colis_abr}]'),
+                  width: 2),
           PosColumn(
               textEncoded: await CharsetConverter.encode("ISO-8859-6",
                   '${Helpers.numberFormat(element.selectedPrice).toString()}'),
@@ -1120,15 +1163,29 @@ class _PreviewPieceState extends State<PreviewPiece> {
       ticket.hr(ch: '=');
       ticket.row([
         (widget.piece.piece != PieceType.bonCommande &&
-            widget.piece.piece != PieceType.devis) ? PosColumn(
-            textEncoded: (widget.piece.regler >= 0)
-                ? await CharsetConverter.encode("ISO-8859-6",
-                    "${S.current.regler} : ${Helpers.numberFormat(widget.piece.regler).toString()}")
-                : await CharsetConverter.encode("ISO-8859-6",
-                    "${S.current.regler} : ${Helpers.numberFormat(widget.piece.regler * -1).toString()}"),
-            width: 6) : PosColumn(width: 6),
-        (widget.piece.reste != 0 && (widget.piece.piece != PieceType.bonCommande &&
-            widget.piece.piece != PieceType.devis))
+                widget.piece.piece != PieceType.devis)
+            ? (widget.piece.piece == PieceType.bonLivraison ||
+                    widget.piece.piece == PieceType.factureClient ||
+                    widget.piece.piece == PieceType.retourFournisseur ||
+                    widget.piece.piece == PieceType.avoirFournisseur)
+                ? PosColumn(
+                    textEncoded: (widget.piece.regler >= 0)
+                        ? await CharsetConverter.encode("ISO-8859-6",
+                            "${S.current.regler_client} : ${Helpers.numberFormat(widget.piece.regler).toString()}")
+                        : await CharsetConverter.encode("ISO-8859-6",
+                            "${S.current.regler_client} : ${Helpers.numberFormat(widget.piece.regler * -1).toString()}"),
+                    width: 6)
+                : PosColumn(
+                    textEncoded: (widget.piece.regler >= 0)
+                        ? await CharsetConverter.encode("ISO-8859-6",
+                            "${S.current.regler_four} : ${Helpers.numberFormat(widget.piece.regler).toString()}")
+                        : await CharsetConverter.encode("ISO-8859-6",
+                            "${S.current.regler_four} : ${Helpers.numberFormat(widget.piece.regler * -1).toString()}"),
+                    width: 6)
+            : PosColumn(width: 6),
+        (widget.piece.reste != 0 &&
+                (widget.piece.piece != PieceType.bonCommande &&
+                    widget.piece.piece != PieceType.devis))
             ? PosColumn(
                 textEncoded: (widget.piece.reste > 0)
                     ? await CharsetConverter.encode("ISO-8859-6",
@@ -1155,77 +1212,77 @@ class _PreviewPieceState extends State<PreviewPiece> {
   String getPiecetype() {
     switch (widget.piece.piece) {
       case "FP":
-        if(directionRtl){
+        if (directionRtl) {
           return S.current.devis;
           break;
         }
         return S.current.fp;
         break;
       case "CC":
-        if(directionRtl){
+        if (directionRtl) {
           return S.current.commande_client;
           break;
         }
         return S.current.cc;
         break;
       case "BL":
-        if(directionRtl){
+        if (directionRtl) {
           return S.current.bon_livraison;
           break;
         }
         return S.current.bl;
         break;
       case "FC":
-        if(directionRtl){
+        if (directionRtl) {
           return S.current.facture_vente;
           break;
         }
         return S.current.fc;
         break;
       case "RC":
-        if(directionRtl){
+        if (directionRtl) {
           return S.current.retour_client;
           break;
         }
         return S.current.rc;
         break;
       case "AC":
-        if(directionRtl){
+        if (directionRtl) {
           return S.current.avoir_client;
           break;
         }
         return S.current.ac;
         break;
       case "BC":
-        if(directionRtl){
+        if (directionRtl) {
           return S.current.bon_commande;
           break;
         }
         return S.current.bc;
         break;
       case "BR":
-        if(directionRtl){
+        if (directionRtl) {
           return S.current.bon_reception;
           break;
         }
         return S.current.br;
         break;
       case "FF":
-        if(directionRtl){
+        if (directionRtl) {
           return S.current.facture_achat;
           break;
         }
         return S.current.ff;
         break;
       case "RF":
-        if(directionRtl){
+        if (directionRtl) {
           return S.current.retour_fournisseur;
           break;
         }
         return S.current.rf;
         break;
       case "AF":
-        if(directionRtl){
+        if (directionRtl) {
           return S.current.avoir_fournisseur;
           break;
         }

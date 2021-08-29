@@ -43,7 +43,7 @@
   "fax" : "Fax",
   "mail" : "E.mail",
   "adresse_web" : "Adresse Web",
-  "n_rc" : "N°RC",
+  "n_rc" : "N° RC",
   "art_imp" : "ART.IMP",
   "nif" : "NTVA/NIF",
   "nis" : "NIS" ,
@@ -86,7 +86,8 @@
   "msg_scan_qr" : "Cliquez deux fois pour scanner le code-barres",
   "solde_depart" : "Solde de départ",
   "chifre_affaire" : "Chiffre d'affaires ",
-  "regler" : "Réglé",
+  "regler_client" : "Réglé",
+  "regler_four" : "Réglé",
   "credit": "Crédit",
   "client_four" : "Client/Fournisseur",
   "bloquer" : "Bloquer",
@@ -202,8 +203,10 @@
   "rembourcement_client": "Remboursement client",
   "rembourcement_four": "Remboursement fournisseur",
   "rembourcement" : "Remboursement",
-  "sans_tresorie" : "Sans Trésorerie",
-  "avec_tresorie": "Avec Trésorerie",
+  "sans_tresorie_client" : "Sans réglement",
+  "avec_tresorie_client": "Avec réglement",
+  "sans_tresorie_four" : "Sans réglement",
+  "avec_tresorie_four": "Avec réglement",
   "msg_err_tresorie": "Pas de trésorerie associée à la pièce",
   "msg_qte_err" : "La quantité doit être supérieure à 0",
   "msg_prix_err" : "Le prix doit être supérieur à 0",
@@ -636,15 +639,16 @@
 
   "fournisseur_imp" : "Fournisseur",
   "prix_unite" : "Prix unitaire",
-  "mensuel" : "Mensuel",
-  "annuel" : "Annuel",
+  "mensuel" : "Abonnement mensuel",
+  "annuel" : "Abonnement annuel",
   "a_vie" : "À vie",
   "marges" : "Marges",
   "msg_bl_localisation" : "NB : Veuillez autoriser l'application à utiliser toujours votre localisation afin de détecter l'imprimante",
   "compte_designation" : "Désignation",
   "imp_bl_android" : "Connectez-vous à l'imprimante à partir des paramètres, puis actualiser",
 
-  "days" : "Jours"
+  "days" : "Jours",
+  "montant_1" : "Montant"
 
 
 

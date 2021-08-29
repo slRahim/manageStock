@@ -64,13 +64,12 @@ class NavDrawer extends StatelessWidget {
   List<Widget> getNavDrawerWidgetList(context) {
     homeItemWidgetList = <Widget>[
       Container(
-          height: 180,
+          height: 190,
           child: DrawerHeader(
             decoration: BoxDecoration(
               color: Colors.blue[700],
             ),
             child: SingleChildScrollView(
-              scrollDirection: Axis.horizontal,
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.end,
                 children: [
@@ -132,7 +131,7 @@ class NavDrawer extends StatelessWidget {
                                           fontSize: 20)),
                                 ),
                                 SizedBox(
-                                  height: 2,
+                                  height: 1,
                                 ),
                                 Text(
                                   getTranslateVersion(),
@@ -143,7 +142,7 @@ class NavDrawer extends StatelessWidget {
                                           fontSize: 14)),
                                 ),
                                 SizedBox(
-                                  height: 2,
+                                  height: 1,
                                 ),
                                 Text(
                                   (myparams.codeAbonnement != 'illimit')

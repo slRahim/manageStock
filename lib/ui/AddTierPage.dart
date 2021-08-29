@@ -1045,7 +1045,7 @@ class _AddTierPageState extends State<AddTierPage>
                 //   return null;
                 // },
                 decoration: InputDecoration(
-                  labelText: S.current.regler,
+                  labelText:(_clientFourn == 2)? S.current.regler_four : S.current.regler_client,
                   labelStyle: GoogleFonts.lato(
                       textStyle: TextStyle(color: Theme.of(context).hintColor)),
                   prefixIcon: Icon(

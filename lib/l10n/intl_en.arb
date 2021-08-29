@@ -43,7 +43,7 @@
   "fax" : "Fax",
   "mail" : "Email",
   "adresse_web" : "Web Address",
-  "n_rc" : "N°RC",
+  "n_rc" : "N° RC",
   "art_imp" : "ART.IMP",
   "nif" : "NVAT/NIF",
   "nis" : "NIS" ,
@@ -86,7 +86,8 @@
   "msg_scan_qr" : "Double tap to scan qr",
   "solde_depart" : "Starting Balance",
   "chifre_affaire" : "Sales Number ",
-  "regler" : "Payment",
+  "regler_client" : "Payment",
+  "regler_four" : "Payment",
   "credit": "Credit",
   "client_four" : "Customer/Provider",
   "bloquer" : "Bloqued",
@@ -202,8 +203,10 @@
   "rembourcement_client": "Customer Refund",
   "rembourcement_four": "Provider Refund",
   "rembourcement" : "Refund",
-  "sans_tresorie" : "Not Treasury",
-  "avec_tresorie": "With Treasury",
+  "sans_tresorie_client" : "Not payment",
+  "avec_tresorie_client": "With payment",
+  "sans_tresorie_four" : "Not payment",
+  "avec_tresorie_four": "With payment",
   "msg_err_tresorie": "No treasurer is associate",
   "msg_qte_err" : "Qantité can't be less then 0",
   "msg_prix_err" : "Price can't be less then 0",
@@ -637,15 +640,16 @@
 
   "fournisseur_imp" : "Provider",
   "prix_unite" : "Unit price",
-  "mensuel" : "Monthly",
-  "annuel" : "Annual",
+  "mensuel" : "Monthly subscription",
+  "annuel" : "Annual subscription",
   "a_vie" : "For life",
   "marges" : "Profits",
   "msg_bl_localisation" : "NB: Please allow the application to always use your location to detect the printer",
   "compte_designation" : "Designation",
   "imp_bl_android" : "Connect to printer from settings then refresh",
 
-  "days" : "Days"
+  "days" : "Days",
+  "montant_1" : "Amount"
 
 
 

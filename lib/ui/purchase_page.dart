@@ -350,6 +350,19 @@ class _PurchasePageState extends State<PurchasePage> {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       (productDetail.id == "121212")
+                          ? Text(
+                        S.current.economiser,
+                        style: GoogleFonts.lato(
+                            textStyle: TextStyle(
+                                fontWeight: FontWeight.bold,
+                                color: Colors.white,
+                                fontSize: 14)),
+                      )
+                          : SizedBox(),
+                      SizedBox(
+                        height: 5,
+                      ),
+                      (productDetail.id == "121212")
                           ? Text("${_remisePercent.roundToDouble()} %",
                               style: GoogleFonts.lato(
                                 textStyle: TextStyle(
@@ -366,19 +379,7 @@ class _PurchasePageState extends State<PurchasePage> {
                                       color: Colors.white,
                                       fontSize: 14)),
                             ),
-                      SizedBox(
-                        height: 5,
-                      ),
-                      (productDetail.id == "121212")
-                          ? Text(
-                              S.current.economiser,
-                              style: GoogleFonts.lato(
-                                  textStyle: TextStyle(
-                                      fontWeight: FontWeight.bold,
-                                      color: Colors.white,
-                                      fontSize: 14)),
-                            )
-                          : SizedBox()
+
                     ],
                   ),
                 )

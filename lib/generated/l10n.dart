@@ -445,10 +445,10 @@ class S {
     );
   }
 
-  /// `N°RC`
+  /// `N° RC`
   String get n_rc {
     return Intl.message(
-      'N°RC',
+      'N° RC',
       name: 'n_rc',
       desc: '',
       args: [],
@@ -866,10 +866,20 @@ class S {
   }
 
   /// `Payment`
-  String get regler {
+  String get regler_client {
     return Intl.message(
       'Payment',
-      name: 'regler',
+      name: 'regler_client',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Payment`
+  String get regler_four {
+    return Intl.message(
+      'Payment',
+      name: 'regler_four',
       desc: '',
       args: [],
     );
@@ -1965,21 +1975,41 @@ class S {
     );
   }
 
-  /// `Not Treasury`
-  String get sans_tresorie {
+  /// `Not payment`
+  String get sans_tresorie_client {
     return Intl.message(
-      'Not Treasury',
-      name: 'sans_tresorie',
+      'Not payment',
+      name: 'sans_tresorie_client',
       desc: '',
       args: [],
     );
   }
 
-  /// `With Treasury`
-  String get avec_tresorie {
+  /// `With payment`
+  String get avec_tresorie_client {
     return Intl.message(
-      'With Treasury',
-      name: 'avec_tresorie',
+      'With payment',
+      name: 'avec_tresorie_client',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Not payment`
+  String get sans_tresorie_four {
+    return Intl.message(
+      'Not payment',
+      name: 'sans_tresorie_four',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `With payment`
+  String get avec_tresorie_four {
+    return Intl.message(
+      'With payment',
+      name: 'avec_tresorie_four',
       desc: '',
       args: [],
     );
@@ -5945,20 +5975,20 @@ class S {
     );
   }
 
-  /// `Monthly`
+  /// `Monthly subscription`
   String get mensuel {
     return Intl.message(
-      'Monthly',
+      'Monthly subscription',
       name: 'mensuel',
       desc: '',
       args: [],
     );
   }
 
-  /// `Annual`
+  /// `Annual subscription`
   String get annuel {
     return Intl.message(
-      'Annual',
+      'Annual subscription',
       name: 'annuel',
       desc: '',
       args: [],
@@ -6020,6 +6050,16 @@ class S {
     return Intl.message(
       'Days',
       name: 'days',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Amount`
+  String get montant_1 {
+    return Intl.message(
+      'Amount',
+      name: 'montant_1',
       desc: '',
       args: [],
     );

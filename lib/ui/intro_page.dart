@@ -741,7 +741,7 @@ class _IntroPageState extends State<IntroPage> {
                     keyboardType: TextInputType.text,
                     decoration: InputDecoration(
                       labelStyle: GoogleFonts.lato(),
-                      labelText: S.current.rc,
+                      labelText: S.current.n_rc,
                       prefixIcon: Icon(
                         Icons.backup_table_outlined,
                         color: Theme.of(context).accentColor,
@@ -965,7 +965,7 @@ class _IntroPageState extends State<IntroPage> {
         charges.add(new ChargeTresorie(null,"الكهرباء"));
         charges.add(new ChargeTresorie(null,"الإيجار"));
         charges.add(new ChargeTresorie(null,"المرتب"));
-        comptes.add(new CompteTresorie(null, "00001", "الصندوق", "0000", 0.0, 0.0));
+        comptes.add(new CompteTresorie(null, "00001", "الحساب الرئيسي", "0000", 0.0, 0.0));
         tier0.raisonSociale = "زبون غير معرف";
         tier2.raisonSociale = "مورد غير معرف";
         break;

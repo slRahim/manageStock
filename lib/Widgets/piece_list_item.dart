@@ -21,10 +21,7 @@ import 'CustomWidgets/list_tile_card.dart';
 // element à afficher lors de listing des factures
 class PieceListItem extends StatefulWidget {
   PieceListItem(
-      {@required this.piece,
-      Key key,
-      this.onItemSelected,
-      this.fromTresory})
+      {@required this.piece, Key key, this.onItemSelected, this.fromTresory})
       : assert(piece != null),
         super(key: key);
 
@@ -60,18 +57,21 @@ class _PieceListItemState extends State<PieceListItem> {
   @override
   Widget build(BuildContext context) {
     SizeConfig().init(context);
-    if((widget.piece.piece == PieceType.retourClient ||
-        widget.piece.piece == PieceType.avoirClient ||
-        widget.piece.piece == PieceType.retourFournisseur ||
-        widget.piece.piece == PieceType.avoirFournisseur) && widget.fromTresory == null ){
-
-      if(widget.piece.regler <= 0 ){
-        widget.piece.regler =(widget.piece.regler != 0)? widget.piece.regler *-1 : widget.piece.regler;
+    if ((widget.piece.piece == PieceType.retourClient ||
+            widget.piece.piece == PieceType.avoirClient ||
+            widget.piece.piece == PieceType.retourFournisseur ||
+            widget.piece.piece == PieceType.avoirFournisseur) &&
+        widget.fromTresory == null) {
+      if (widget.piece.regler <= 0) {
+        widget.piece.regler = (widget.piece.regler != 0)
+            ? widget.piece.regler * -1
+            : widget.piece.regler;
       }
-      if(widget.piece.reste <= 0){
-        widget.piece.reste = (widget.piece.reste != 0)? widget.piece.reste *-1 : widget.piece.reste;
+      if (widget.piece.reste <= 0) {
+        widget.piece.reste = (widget.piece.reste != 0)
+            ? widget.piece.reste * -1
+            : widget.piece.reste;
       }
-
     }
     return Visibility(
       visible: _visible,
@@ -193,7 +193,10 @@ class _PieceListItemState extends State<PieceListItem> {
                               widget.piece.piece !=
                                   PieceType.avoirFournisseur &&
                               widget.piece.piece != PieceType.retourFournisseur)
-                          ? "${S.current.regler} : "
+                          ? (widget.piece.piece == PieceType.bonLivraison &&
+                                  widget.piece.piece == PieceType.factureClient)
+                              ? "${S.current.regler_client} : "
+                              : "${S.current.regler_four} : "
                           : "${S.current.rembourcement} : ",
                       style: GoogleFonts.lato(
                           textStyle: TextStyle(
@@ -230,29 +233,30 @@ class _PieceListItemState extends State<PieceListItem> {
                 ]),
               ),
               (widget.piece.piece != PieceType.bonReception &&
-                  widget.piece.piece != PieceType.factureFournisseur &&
-                  widget.piece.piece != PieceType.bonCommande &&
-                  widget.piece.piece != PieceType.retourFournisseur &&
-                  widget.piece.piece != PieceType.avoirFournisseur
-              ) ? RichText(
-                text: TextSpan(children: [
-                  TextSpan(
-                      text: "${S.current.marge} : ",
-                      style: GoogleFonts.lato(
-                          textStyle: TextStyle(
-                              fontSize: 14,
-                              fontWeight: FontWeight.bold,
-                              color: Colors.green))),
-                  TextSpan(
-                    text:
-                        "${Helpers.numberFormat(widget.piece.marge)} $_devise",
-                    style: GoogleFonts.lato(
-                        textStyle: TextStyle(
-                            color: Theme.of(context).primaryColorDark,
-                            fontSize: 14.0)),
-                  ),
-                ]),
-              ) : SizedBox(),
+                      widget.piece.piece != PieceType.factureFournisseur &&
+                      widget.piece.piece != PieceType.bonCommande &&
+                      widget.piece.piece != PieceType.retourFournisseur &&
+                      widget.piece.piece != PieceType.avoirFournisseur)
+                  ? RichText(
+                      text: TextSpan(children: [
+                        TextSpan(
+                            text: "${S.current.marge} : ",
+                            style: GoogleFonts.lato(
+                                textStyle: TextStyle(
+                                    fontSize: 14,
+                                    fontWeight: FontWeight.bold,
+                                    color: Colors.green))),
+                        TextSpan(
+                          text:
+                              "${Helpers.numberFormat(widget.piece.marge)} $_devise",
+                          style: GoogleFonts.lato(
+                              textStyle: TextStyle(
+                                  color: Theme.of(context).primaryColorDark,
+                                  fontSize: 14.0)),
+                        ),
+                      ]),
+                    )
+                  : SizedBox(),
             ],
           ),
           actions: (widget.fromTresory == null && widget.onItemSelected == null)
@@ -291,36 +295,33 @@ class _PieceListItemState extends State<PieceListItem> {
     );
   }
 
-  _longpressItem(){
+  _longpressItem() {
     (widget.onItemSelected != null && widget.fromTresory == null)
         ? widget.onItemSelected(widget.piece)
-        : null ;
+        : null;
   }
 
-  _tapItem(){
+  _tapItem() {
     if (widget.fromTresory == null) {
       if (widget.onItemSelected == null) {
         Navigator.of(context)
-            .pushNamed(RoutesKeys.addPiece,
-            arguments: widget.piece)
+            .pushNamed(RoutesKeys.addPiece, arguments: widget.piece)
             .then((value) {
-          if(value is Piece){
-            if(value.piece == PieceType.retourClient ||
+          if (value is Piece) {
+            if (value.piece == PieceType.retourClient ||
                 value.piece == PieceType.avoirClient ||
                 value.piece == PieceType.retourFournisseur ||
-                value.piece == PieceType.avoirFournisseur){
-
-              value.regler =(value.regler != 0)? value.regler *-1 : value.regler;
-              value.reste = (value.reste != 0)? value.reste *-1 : value.reste;
-
+                value.piece == PieceType.avoirFournisseur) {
+              value.regler =
+                  (value.regler != 0) ? value.regler * -1 : value.regler;
+              value.reste = (value.reste != 0) ? value.reste * -1 : value.reste;
             }
             setState(() {
-              widget.piece = value ;
+              widget.piece = value;
             });
           }
         });
-      }
-      else {
+      } else {
         widget.onItemSelected(widget.piece);
       }
     }
@@ -422,28 +423,32 @@ class _PieceListItemState extends State<PieceListItem> {
           widget.piece.etat != 1 &&
           widget.piece.mov != 2),
       btnCancelText: (widget.piece.piece != PieceType.devis &&
-          widget.piece.piece != PieceType.bonCommande &&
-          widget.piece.etat != 1 &&
-          widget.piece.mov != 2)
-          ? S.current.sans_tresorie
+              widget.piece.piece != PieceType.bonCommande &&
+              widget.piece.etat != 1 &&
+              widget.piece.mov != 2)
+          ?(widget.piece.piece == PieceType.bonLivraison ||
+          widget.piece.piece != PieceType.factureClient ||
+          widget.piece.piece != PieceType.retourFournisseur ||
+          widget.piece.piece != PieceType.avoirFournisseur)? S.current.sans_tresorie_client : S.current.sans_tresorie_four
           : S.current.non,
       btnCancelOnPress: () async {
         if (widget.piece.piece != PieceType.devis &&
             widget.piece.piece != PieceType.bonCommande &&
             widget.piece.etat != 1 &&
-            widget.piece.mov != 2 ) {
-
-          if(widget.piece.transformer == 1 &&
+            widget.piece.mov != 2) {
+          if (widget.piece.transformer == 1 &&
               widget.piece.piece != PieceType.retourClient &&
               widget.piece.piece != PieceType.avoirClient &&
               widget.piece.piece != PieceType.retourFournisseur &&
-              widget.piece.piece != PieceType.avoirFournisseur){
-
-            await _queryCtr.updateObjetTresorie(oldPiece : widget.piece , objet : '${S.current.reglement_piece}');
+              widget.piece.piece != PieceType.avoirFournisseur) {
+            await _queryCtr.updateObjetTresorie(
+                oldPiece: widget.piece, objet: '${S.current.reglement_piece}');
           }
 
-          await _queryCtr.removeItemWithForeignKey(DbTablesNames.reglementTresorie, widget.piece.id , 'Piece_id') ;
-          await _queryCtr.updateItemByForeignKey(DbTablesNames.tresorie, 'Piece_id', 'null', 'Piece_id', widget.piece.id);
+          await _queryCtr.removeItemWithForeignKey(
+              DbTablesNames.reglementTresorie, widget.piece.id, 'Piece_id');
+          await _queryCtr.updateItemByForeignKey(DbTablesNames.tresorie,
+              'Piece_id', 'null', 'Piece_id', widget.piece.id);
 
           int res = await _queryCtr.removeItemFromTable(
               DbTablesNames.pieces, widget.piece);
@@ -463,23 +468,25 @@ class _PieceListItemState extends State<PieceListItem> {
         }
       },
       btnOkText: (widget.piece.piece != PieceType.devis &&
-          widget.piece.piece != PieceType.bonCommande &&
-          widget.piece.etat != 1 &&
-          widget.piece.mov != 2)
-          ? S.current.avec_tresorie
+              widget.piece.piece != PieceType.bonCommande &&
+              widget.piece.etat != 1 &&
+              widget.piece.mov != 2)
+          ?(widget.piece.piece == PieceType.bonLivraison ||
+          widget.piece.piece != PieceType.factureClient ||
+          widget.piece.piece != PieceType.retourFournisseur ||
+          widget.piece.piece != PieceType.avoirFournisseur)? S.current.avec_tresorie_client : S.current.avec_tresorie_four
           : S.current.oui,
       btnOkOnPress: () async {
         if (widget.piece.piece != PieceType.devis &&
             widget.piece.piece != PieceType.bonCommande &&
-            widget.piece.etat != 1 ) {
+            widget.piece.etat != 1) {
           int res = await _queryCtr.removeItemWithForeignKey(
               DbTablesNames.tresorie, widget.piece.id, "Piece_id");
           var message = "";
           if (res < 0) {
             message = S.current.msg_err_tresorie;
             Helpers.showToast(message);
-
-          }else{
+          } else {
             int res1 = await _queryCtr.removeItemFromTable(
                 DbTablesNames.pieces, widget.piece);
 
@@ -498,7 +505,6 @@ class _PieceListItemState extends State<PieceListItem> {
               });
             }
           }
-
         } else {
           //ds le cas d'un devis uniquement
           int res = await _queryCtr.removeItemFromTable(

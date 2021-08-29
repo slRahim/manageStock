@@ -1244,14 +1244,14 @@ class QueryCtr {
       case 0:
         query = """
         Select RaisonSociale as rs, Mobile as mobile, Chiffre_affaires as chifre_affaire, 
-              Regler as regler, Credit as credit
+              Regler as regler_client, Credit as credit
         From Tiers where Clientfour = 0 
         """;
         break;
       case 1:
         query = """
         Select RaisonSociale as rs , Mobile as mobile, Chiffre_affaires  as chifre_affaire, 
-              Regler as regler, Credit as credit 
+              Regler as regler_four, Credit as credit 
         From Tiers where Clientfour = 2 
         """;
         break;

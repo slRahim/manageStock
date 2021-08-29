@@ -26,7 +26,6 @@ class _CategoryListItemState extends State<CategoryListItem> {
   bool _visible = true;
   TextEditingController _libelleControl = new TextEditingController();
   TextEditingController _numCompteControl = new TextEditingController();
-  TextEditingController _codeCompteControl = new TextEditingController();
   TextEditingController _soldeInitControl = new TextEditingController();
 
   @override
@@ -98,7 +97,6 @@ class _CategoryListItemState extends State<CategoryListItem> {
                   onPressed: () {
                     setState(() {
                       _libelleControl.text = widget.item.nomCompte;
-                      _codeCompteControl.text = widget.item.codeCompte ;
                       _numCompteControl.text = widget.item.numCompte ;
                       _soldeInitControl.text = widget.item.soldeDepart.toString() ;
                     });
@@ -265,39 +263,6 @@ class _CategoryListItemState extends State<CategoryListItem> {
                         ),
                       ),
                       SizedBox(height: 10,),
-                      Visibility(
-                        visible: widget.item is CompteTresorie,
-                        child: TextFormField(
-                          controller: _codeCompteControl,
-                          keyboardType: TextInputType.text,
-                          // validator: (value) {
-                          //   if (value.isEmpty) {
-                          //     return S.current.msg_champ_oblg;
-                          //   }
-                          //   return null;
-                          // },
-                          decoration: InputDecoration(
-                            prefixIcon: Icon(
-                              Icons.vpn_key,
-                              color: Colors.blue,
-                            ),
-                            focusedBorder: OutlineInputBorder(
-                                borderSide: BorderSide(color: Colors.blue),
-                                borderRadius: BorderRadius.circular(20)),
-                            contentPadding: EdgeInsets.only(left: 10),
-                            labelText: S.current.code_pin1,
-                            labelStyle: GoogleFonts.lato(
-                              textStyle:
-                              TextStyle(color: Theme.of(context).hintColor),
-                            ),
-                            enabledBorder: OutlineInputBorder(
-                              gapPadding: 3.3,
-                              borderRadius: BorderRadius.circular(20),
-                              borderSide: BorderSide(color: Colors.blue),
-                            ),
-                          ),
-                        ),
-                      ),
                       SizedBox(height: 10,),
                       Visibility(
                         visible: widget.item is CompteTresorie,
@@ -351,7 +316,6 @@ class _CategoryListItemState extends State<CategoryListItem> {
                         setState(() {
                           _libelleControl.text = "";
                           _numCompteControl.text = "" ;
-                          _codeCompteControl.text = "" ;
                           _soldeInitControl.text = "";
                         });
                       }
@@ -402,7 +366,7 @@ class _CategoryListItemState extends State<CategoryListItem> {
       }else if (widget.item is CompteTresorie){
         widget.item.nomCompte = _libelleControl.text.trim();
         widget.item.numCompte = _numCompteControl.text.trim();
-        widget.item.codeCompte = _codeCompteControl.text.trim();
+        widget.item.codeCompte = "";
         widget.item.soldeDepart =(_soldeInitControl.text.trim() != '')? double.parse(_soldeInitControl.text.trim()) : 0.0;
 
         res = await _queryCtr.updateItemInDb(

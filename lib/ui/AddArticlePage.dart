@@ -592,7 +592,7 @@ class _AddArticlePageState extends State<AddArticlePage>
                             borderRadius: BorderRadius.circular(20.0),
                           )
                         : null,
-                    child: SwitchListTile(
+                    child: CheckboxListTile(
                       activeColor: Theme.of(context).primaryColor,
                       title: Text(S.current.stockable,
                           maxLines: 1,

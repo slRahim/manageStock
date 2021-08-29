@@ -770,8 +770,11 @@ class _RapportState extends State<Rapport> {
       case "chifre_affaire":
         return S.current.chifre_affaire;
         break;
-      case "regler":
-        return S.current.regler;
+      case "regler_client":
+        return S.current.regler_client;
+        break;
+      case "regler_four":
+        return S.current.regler_four;
         break;
       case "vente":
         return S.current.vente;
