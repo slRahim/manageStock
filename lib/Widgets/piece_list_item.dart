@@ -426,10 +426,12 @@ class _PieceListItemState extends State<PieceListItem> {
               widget.piece.piece != PieceType.bonCommande &&
               widget.piece.etat != 1 &&
               widget.piece.mov != 2)
-          ?(widget.piece.piece == PieceType.bonLivraison ||
-          widget.piece.piece != PieceType.factureClient ||
-          widget.piece.piece != PieceType.retourFournisseur ||
-          widget.piece.piece != PieceType.avoirFournisseur)? S.current.sans_tresorie_client : S.current.sans_tresorie_four
+          ? (widget.piece.piece == PieceType.bonLivraison ||
+                  widget.piece.piece == PieceType.factureClient ||
+                  widget.piece.piece == PieceType.retourFournisseur ||
+                  widget.piece.piece == PieceType.avoirFournisseur)
+              ? S.current.sans_tresorie_client
+              : S.current.sans_tresorie_four
           : S.current.non,
       btnCancelOnPress: () async {
         if (widget.piece.piece != PieceType.devis &&
@@ -471,10 +473,12 @@ class _PieceListItemState extends State<PieceListItem> {
               widget.piece.piece != PieceType.bonCommande &&
               widget.piece.etat != 1 &&
               widget.piece.mov != 2)
-          ?(widget.piece.piece == PieceType.bonLivraison ||
-          widget.piece.piece != PieceType.factureClient ||
-          widget.piece.piece != PieceType.retourFournisseur ||
-          widget.piece.piece != PieceType.avoirFournisseur)? S.current.avec_tresorie_client : S.current.avec_tresorie_four
+          ? (widget.piece.piece == PieceType.bonLivraison ||
+                  widget.piece.piece == PieceType.factureClient ||
+                  widget.piece.piece == PieceType.retourFournisseur ||
+                  widget.piece.piece == PieceType.avoirFournisseur)
+              ? S.current.avec_tresorie_client
+              : S.current.avec_tresorie_four
           : S.current.oui,
       btnOkOnPress: () async {
         if (widget.piece.piece != PieceType.devis &&

@@ -515,7 +515,7 @@ class _ArticleListItemState extends State<ArticleListItem> {
     }
     _priceControler.text = widget.article.selectedPriceTTC.toStringAsFixed(2);
 
-    bool _showColis = res.toInt() > 1 ;
+
     return StatefulBuilder(builder: (context, StateSetter _setState) {
       Widget dialog = Dialog(
         //this right here
@@ -541,7 +541,7 @@ class _ArticleListItemState extends State<ArticleListItem> {
                     ),
                   )),
                   Visibility(
-                    visible: _showColis,
+                    visible: (widget.article.stockable && widget.article.quantiteColis > 1),
                     child: Padding(
                       padding: EdgeInsetsDirectional.only(
                           start: 5, end: 5, bottom: 20),
@@ -601,13 +601,8 @@ class _ArticleListItemState extends State<ArticleListItem> {
                             var a =((res-res.truncate()) * widget.article.quantiteColis).round().toInt();
                             _colisControler.text += ' +$a' ;
                           }
-                          _setState(() {
-                            _showColis = res.toInt() > 1 ;
-                          });
-
                         }else{
                           _colisControler.text = '0' ;
-                          _showColis = false ;
                         }
                       },
                       decoration: InputDecoration(

@@ -6064,6 +6064,26 @@ class S {
       args: [],
     );
   }
+
+  /// `Has credit`
+  String get a_credit_client {
+    return Intl.message(
+      'Has credit',
+      name: 'a_credit_client',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Has credit`
+  String get a_credit_four {
+    return Intl.message(
+      'Has credit',
+      name: 'a_credit_four',
+      desc: '',
+      args: [],
+    );
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<S> {

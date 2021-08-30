@@ -160,7 +160,9 @@ class _ClientFourFragmentState extends State<ClientFourFragment> {
 
   Widget hasCreditCheckBox(StateSetter _setState) {
     return CheckboxListTile(
-      title: Text(S.current.a_credit , style: GoogleFonts.lato(),),
+      title:(_clientFour == 2)
+          ? Text(S.current.a_credit_four , style: GoogleFonts.lato(),)
+          : Text(S.current.a_credit_client , style: GoogleFonts.lato(),),
       value: _filterInHasCredit,
       onChanged: (bool value){
         _setState(() {

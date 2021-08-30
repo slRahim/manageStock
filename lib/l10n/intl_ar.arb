@@ -145,7 +145,7 @@
   "modalite": "طريقة الدفع",
   "num_cheque" : "رقم الصك",
   "montant": "الإجمالي",
-  "categorie" : "المجموعة",
+  "categorie" : "الفئة",
 
   "article_titre" : "الصنف",
   "artcile_titre_ajouter" : "إضافة صنف",
@@ -266,7 +266,7 @@
   "param_lang_title" : "إختار اللغة",
   "param_lang_tarif_title" : "إختيار التسعيرة",
   "param_tva" : "تفعيل الضريبة",
-  "param_timbre" : "تفيل الطابع الضريدي",
+  "param_timbre" : "تفيل الطابع الضريبي",
   "param_notif_title" : "التنبيهات",
   "param_notif" : "تفعيل التنبيهات",
   "param_notif_time" : "وقت التنبيه",
@@ -327,9 +327,9 @@
   "jour_cmd" : "حركة الطلبات",
   "recap_achat_article" : "ملخص الشراء لكل صنف",
   "jour_achat" : "حركة المشتريات",
-  "inventaire" : "الجرد )سعر الشراء(",
+  "inventaire" : "الجرد بسعر الشراء",
   "prod_repture" : "الأصناف الغير متوفرة",
-  "zakat": "الجرد )سعر البيع(",
+  "zakat": "الجرد بسعر البيع",
   "etat_jour" : "الحالة اليومية",
   "etat_mensu" : "الحالة الشهرية",
   "etat_annuel" : "الحالة السنوية",
@@ -606,9 +606,9 @@
 
   "famille_article" : "مجموعات الأصناف",
   "marque_article" : "علامات الأصناف",
-  "tva_article" : "نسب الضريبة",
-  "famille_tiers" : "مجموعات المتعاملين",
-  "cat_charge" : "فئات الأعباء",
+  "tva_article" : "النسب الضريبية",
+  "famille_tiers" : "مجموعات الشركاء",
+  "cat_charge" : "فئات المصاريف",
 
   "msg_retour_no_save" : "هل تريد الرجوع بدون حفط التعديلات الأخيرة ؟",
   "msg_map_add_position" : "حدد الموقع بالنقر على الخريطة",
@@ -649,6 +649,8 @@
   "imp_bl_android" : "اتصل بالطابعة من الإعدادات ، ثم قم بالتحديث",
 
   "days" : "أيام",
-  "montant_1" : "المبلغ"
+  "montant_1" : "المبلغ",
+  "a_credit_client" : "المدينون" ,
+  "a_credit_four" : "الدائنون"
 
 }

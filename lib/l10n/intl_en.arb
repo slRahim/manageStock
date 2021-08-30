@@ -649,7 +649,9 @@
   "imp_bl_android" : "Connect to printer from settings then refresh",
 
   "days" : "Days",
-  "montant_1" : "Amount"
+  "montant_1" : "Amount",
+  "a_credit_client" : "Has credit" ,
+  "a_credit_four" : "Has credit"
 
 
 

@@ -484,7 +484,7 @@ class _RapportState extends State<Rapport> {
   //***************************************************************************************************************************************************************************
   //**************************************************************************get data & make pdf*******************************************************************************
   Future _makePdfDocument() async {
-    var data = await rootBundle.load("assets/arial.ttf");
+    var data = await rootBundle.load("assets/hacen_tunisia.ttf");
     final ttf = pw.Font.ttf(data);
 
     final _resultList = await _getData();
@@ -579,8 +579,11 @@ class _RapportState extends State<Rapport> {
                       pw.Container(
                         padding: pw.EdgeInsets.only(left: 5, right: 5),
                         child: (value is double || value is int)
-                            ? pw.Text("${Helpers.numberFormat(value)}",
-                                style: pw.TextStyle(font: ttf, fontSize: 9))
+                            ?pw.Directionality(
+                          textDirection: pw.TextDirection.ltr,
+                          child:  pw.Text("${Helpers.numberFormat(value)}",
+                              style: pw.TextStyle(font: ttf, fontSize: 9))
+                        )
                             : pw.Text("${getValue(value)}",
                                 style: pw.TextStyle(font: ttf, fontSize: 9)),
                       )
@@ -671,28 +674,40 @@ class _RapportState extends State<Rapport> {
         ){
           result.add (pw.Container(
               padding: pw.EdgeInsets.only(left: 5, right: 5 , top: 3 , bottom: 3),
-              child: pw.Text("${Helpers.numberFormat(valeurs[i] )}",
-                  style: pw.TextStyle(font: ttf, fontSize: 9))
+              child: pw.Directionality(
+                textDirection: pw.TextDirection.ltr,
+                child: pw.Text("${Helpers.numberFormat(valeurs[i] )}",
+                    style: pw.TextStyle(font: ttf, fontSize: 9))
+              )
           ));
         }else if((_selectedParent == Statics.rapportItems[2]) &&
             (i == lastIndex || i == lastIndex-1) ){
           result.add (pw.Container(
               padding: pw.EdgeInsets.only(left: 5, right: 5 , top: 3 , bottom: 3),
-              child: pw.Text("${Helpers.numberFormat(valeurs[i])}",
-                  style: pw.TextStyle(font: ttf, fontSize: 9))
+              child: pw.Directionality(
+                textDirection: pw.TextDirection.ltr,
+                child: pw.Text("${Helpers.numberFormat(valeurs[i])}",
+                    style: pw.TextStyle(font: ttf, fontSize: 9))
+              )
           ));
         }else if ((_selectedParent == Statics.rapportItems[3]) &&
             (i == lastIndex || i == lastIndex-1 || i == lastIndex-2) ){
           result.add (pw.Container(
               padding: pw.EdgeInsets.only(left: 5, right: 5 , top: 3 , bottom: 3),
-              child: pw.Text("${Helpers.numberFormat(valeurs[i])}",
-                  style: pw.TextStyle(font: ttf, fontSize: 9))
+              child: pw.Directionality(
+                textDirection: pw.TextDirection.ltr,
+                child:pw.Text("${Helpers.numberFormat(valeurs[i])}",
+                    style: pw.TextStyle(font: ttf, fontSize: 9))
+              )
           ));
         }else if ((_selectedParent == Statics.rapportItems[4]) && i != 0 ){
           result.add (pw.Container(
               padding: pw.EdgeInsets.only(left: 5, right: 5 , top: 3 , bottom: 3),
-              child: pw.Text("${Helpers.numberFormat(valeurs[i])}",
-                  style: pw.TextStyle(font: ttf, fontSize: 9))
+              child: pw.Directionality(
+                textDirection: pw.TextDirection.ltr,
+                child: pw.Text("${Helpers.numberFormat(valeurs[i])}",
+                    style: pw.TextStyle(font: ttf, fontSize: 9))
+              )
           ));
         } else{
           result.add (pw.Container(

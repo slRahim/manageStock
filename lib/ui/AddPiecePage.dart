@@ -2993,7 +2993,7 @@ class _AddPiecePageState extends State<AddPiecePage>
       if (_myParams.timbre) {
         input = "${S.current.timbre}";
         encArabic = await CharsetConverter.encode("ISO-8859-6",
-            "${(_piece.total_ttc < _piece.net_a_payer) ? Helpers.numberFormat(_piece.timbre).toString() : Helpers.numberFormat(0.0).toString()}: ${input.split('').reversed.join()}");
+            "${(_piece.timbre > 0) ? Helpers.numberFormat(_piece.timbre).toString() : Helpers.numberFormat(0.0).toString()}: ${input.split('').reversed.join()}");
         ticket.textEncoded(encArabic,
             styles: PosStyles(
                 codeTable: PosCodeTable.arabic,
@@ -3283,7 +3283,7 @@ class _AddPiecePageState extends State<AddPiecePage>
 
       if (_myParams.timbre) {
         encode = await CharsetConverter.encode("ISO-8859-6",
-            "${S.current.timbre} : ${(_piece.total_ttc < _piece.net_a_payer) ? Helpers.numberFormat(_piece.timbre).toString() : Helpers.numberFormat(0.0).toString()}");
+            "${S.current.timbre} : ${(_piece.timbre > 0) ? Helpers.numberFormat(_piece.timbre).toString() : Helpers.numberFormat(0.0).toString()}");
         ticket.textEncoded(encode,
             styles: PosStyles(
                 align: (formatPrint == PaperSize.mm80)
@@ -3354,7 +3354,7 @@ class _AddPiecePageState extends State<AddPiecePage>
   }
 
   Future _makePdfDocument() async {
-    var data = await rootBundle.load("assets/arial.ttf");
+    var data = await rootBundle.load("assets/hacen_tunisia.ttf");
     final arial = pw.Font.ttf(data);
 
     final doc = pw.Document();
@@ -3418,7 +3418,7 @@ class _AddPiecePageState extends State<AddPiecePage>
                                     fontWeight: pw.FontWeight.bold))
                             : pw.SizedBox(),
                         (_profile.rc != "")
-                            ? pw.Text("${S.current.rc}\t: ${_profile.rc}",
+                            ? pw.Text("${S.current.n_rc}\t: ${_profile.rc}",
                                 style: pw.TextStyle(
                                     font: arial,
                                     fontWeight: pw.FontWeight.bold))
@@ -3632,9 +3632,11 @@ class _AddPiecePageState extends State<AddPiecePage>
                     ),
                     pw.Container(
                       padding: pw.EdgeInsets.only(left: 5, right: 5),
-                      child: pw.Text(
-                          "${Helpers.numberFormat(e.selectedQuantite)}",
-                          style: pw.TextStyle(fontSize: 9)),
+                      child: pw.Directionality(
+                          textDirection: pw.TextDirection.ltr,
+                          child: pw.Text(
+                              "${Helpers.numberFormat(e.selectedQuantite)}",
+                              style: pw.TextStyle(fontSize: 9))),
                     ),
                     ((e.selectedQuantite / e.quantiteColis) -
                                 (e.selectedQuantite / e.quantiteColis)
@@ -3642,31 +3644,42 @@ class _AddPiecePageState extends State<AddPiecePage>
                             0)
                         ? pw.Container(
                             padding: pw.EdgeInsets.only(left: 5, right: 5),
-                            child: pw.Text(
-                                "${(e.selectedQuantite / e.quantiteColis).toInt()}+",
-                                style: pw.TextStyle(fontSize: 9)),
+                            child: pw.Directionality(
+                                textDirection: pw.TextDirection.ltr,
+                                child: pw.Text(
+                                    "${(e.selectedQuantite / e.quantiteColis).toInt()}+",
+                                    style: pw.TextStyle(fontSize: 9))),
                           )
                         : pw.Container(
                             padding: pw.EdgeInsets.only(left: 5, right: 5),
-                            child: pw.Text(
-                                "${(e.selectedQuantite / e.quantiteColis).toInt()}",
-                                style: pw.TextStyle(fontSize: 9)),
+                            child: pw.Directionality(
+                                textDirection: pw.TextDirection.ltr,
+                                child: pw.Text(
+                                    "${(e.selectedQuantite / e.quantiteColis).toInt()}",
+                                    style: pw.TextStyle(fontSize: 9))),
                           ),
                     pw.Container(
                       padding: pw.EdgeInsets.only(left: 5, right: 5),
-                      child: pw.Text("${Helpers.numberFormat(e.selectedPrice)}",
-                          style: pw.TextStyle(fontSize: 9)),
+                      child: pw.Directionality(
+                          textDirection: pw.TextDirection.ltr,
+                          child: pw.Text(
+                              "${Helpers.numberFormat(e.selectedPrice)}",
+                              style: pw.TextStyle(fontSize: 9))),
                     ),
                     pw.Container(
                       padding: pw.EdgeInsets.only(left: 5, right: 5),
-                      child: pw.Text("${Helpers.numberFormat(e.tva)}",
-                          style: pw.TextStyle(fontSize: 9)),
+                      child: pw.Directionality(
+                          textDirection: pw.TextDirection.ltr,
+                          child: pw.Text("${Helpers.numberFormat(e.tva)}",
+                              style: pw.TextStyle(fontSize: 9))),
                     ),
                     pw.Container(
                       padding: pw.EdgeInsets.only(left: 5, right: 5),
-                      child: pw.Text(
-                          "${Helpers.numberFormat((e.selectedPrice * e.selectedQuantite))}",
-                          style: pw.TextStyle(fontSize: 9)),
+                      child: pw.Directionality(
+                          textDirection: pw.TextDirection.ltr,
+                          child: pw.Text(
+                              "${Helpers.numberFormat((e.selectedPrice * e.selectedQuantite))}",
+                              style: pw.TextStyle(fontSize: 9))),
                     ),
                   ]),
           ]),
@@ -3708,9 +3721,22 @@ class _AddPiecePageState extends State<AddPiecePage>
                               style: pw.TextStyle(font: arial))
                           : pw.SizedBox(),
                       (_myParams.creditTier && _piece.piece != PieceType.devis)
-                          ? pw.Text(
-                              "${S.current.credit}\t ${Helpers.numberFormat(_selectedClient.credit)} ${_devise}",
-                              style: pw.TextStyle(font: arial))
+                          ? (!directionRtl)
+                              ? pw.Text(
+                                  "${S.current.credit}\t ${Helpers.numberFormat(_selectedClient.credit)} ${_devise}",
+                                  style: pw.TextStyle(font: arial))
+                              : pw.Wrap(spacing: 5, runSpacing: 5, children: [
+                                  pw.Text(" ${_devise}",
+                                      style: pw.TextStyle(font: arial)),
+                                  pw.Directionality(
+                                    textDirection: pw.TextDirection.ltr,
+                                    child: pw.Text(
+                                        "${Helpers.numberFormat(_selectedClient.credit)}",
+                                        style: pw.TextStyle(font: arial)),
+                                  ),
+                                  pw.Text("${S.current.credit}\t ",
+                                      style: pw.TextStyle(font: arial)),
+                                ])
                           : pw.SizedBox(),
                       pw.Divider(height: 2),
                       pw.Text(S.current.msg_arret_somme,
@@ -3729,9 +3755,22 @@ class _AddPiecePageState extends State<AddPiecePage>
                     children: [
                       ((_piece.total_tva > 0 && _myParams.tva) ||
                               _piece.remise > 0)
-                          ? pw.Text(
-                              "${S.current.total_ht}\t  ${Helpers.numberFormat(_piece.total_ht)}\t ${_devise}",
-                              style: pw.TextStyle(font: arial))
+                          ? (!directionRtl)
+                              ? pw.Text(
+                                  "${S.current.total_ht}\t  ${Helpers.numberFormat(_piece.total_ht)}\t ${_devise}",
+                                  style: pw.TextStyle(font: arial))
+                              : pw.Wrap(spacing: 5, runSpacing: 5, children: [
+                                  pw.Text(" ${_devise}",
+                                      style: pw.TextStyle(font: arial)),
+                                  pw.Directionality(
+                                    textDirection: pw.TextDirection.ltr,
+                                    child: pw.Text(
+                                        "${Helpers.numberFormat(_piece.total_ht)}\t",
+                                        style: pw.TextStyle(font: arial)),
+                                  ),
+                                  pw.Text("${S.current.total_ht}\t ",
+                                      style: pw.TextStyle(font: arial)),
+                                ])
                           : pw.SizedBox(),
                       (_piece.remise > 0)
                           ? pw.Text(
@@ -3756,7 +3795,7 @@ class _AddPiecePageState extends State<AddPiecePage>
                       pw.Divider(height: 2),
                       (_myParams.timbre)
                           ? pw.Text(
-                              "${S.current.timbre}\t  ${(_piece.total_ttc < _piece.net_a_payer) ? Helpers.numberFormat(_piece.timbre) : Helpers.numberFormat(0.0)}\t  ${_devise}",
+                              "${S.current.timbre}\t  ${(_piece.timbre > 0) ? Helpers.numberFormat(_piece.timbre) : Helpers.numberFormat(0.0)}\t  ${_devise}",
                               style: pw.TextStyle(font: arial))
                           : pw.SizedBox(),
                       pw.RichText(
@@ -3877,11 +3916,15 @@ class _AddPiecePageState extends State<AddPiecePage>
   }
 
   String getPieceSuminLetters() {
+    double val = _piece.net_a_payer;
+    if (val < 0) {
+      val = val * -1;
+    }
     String res = '';
     res = res +
-        "${Helpers.numberToWords((_piece.net_a_payer.toInt()).toString()).capitalizeFirstofEach} ${Helpers.currencyName(_myParams.devise)} ";
+        "${Helpers.numberToWords((val.toInt()).toString()).capitalizeFirstofEach} ${Helpers.currencyName(_myParams.devise)} ";
 
-    int a = (_piece.net_a_payer % 1 * 100).roundToDouble().toInt();
+    int a = (val % 1 * 100).roundToDouble().toInt();
     if (a > 0) {
       res = res +
           "${Helpers.numberToWords(a.toString()).capitalizeFirstofEach} ${S.current.centime}";

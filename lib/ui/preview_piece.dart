@@ -845,7 +845,7 @@ class _PreviewPieceState extends State<PreviewPiece> {
       if (_myParams.timbre) {
         input = "${S.current.timbre}";
         encArabic = await CharsetConverter.encode("ISO-8859-6",
-            "${(widget.piece.total_ttc < widget.piece.net_a_payer) ? Helpers.numberFormat(widget.piece.timbre).toString() : Helpers.numberFormat(0.0).toString()}: ${input.split('').reversed.join()}");
+            "${(widget.piece.timbre > 0) ? Helpers.numberFormat(widget.piece.timbre).toString() : Helpers.numberFormat(0.0).toString()}: ${input.split('').reversed.join()}");
         ticket.textEncoded(encArabic,
             styles: PosStyles(
                 codeTable: PosCodeTable.arabic,
@@ -1138,7 +1138,7 @@ class _PreviewPieceState extends State<PreviewPiece> {
 
       if (_myParams.timbre) {
         encode = await CharsetConverter.encode("ISO-8859-6",
-            "${S.current.timbre} : ${(widget.piece.total_ttc < widget.piece.net_a_payer) ? Helpers.numberFormat(widget.piece.timbre).toString() : Helpers.numberFormat(0.0).toString()}");
+            "${S.current.timbre} : ${(widget.piece.timbre > 0) ? Helpers.numberFormat(widget.piece.timbre).toString() : Helpers.numberFormat(0.0).toString()}");
         ticket.textEncoded(encode,
             styles: PosStyles(
                 align: (_default_format == PaperSize.mm80)

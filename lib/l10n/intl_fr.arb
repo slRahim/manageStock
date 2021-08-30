@@ -648,11 +648,7 @@
   "imp_bl_android" : "Connectez-vous à l'imprimante à partir des paramètres, puis actualiser",
 
   "days" : "Jours",
-  "montant_1" : "Montant"
-
-
-
-
-
-
+  "montant_1" : "Montant",
+  "a_credit_client" : "Avec crédit" ,
+  "a_credit_four" : "Avec crédit"
 }

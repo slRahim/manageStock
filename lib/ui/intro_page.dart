@@ -966,7 +966,7 @@ class _IntroPageState extends State<IntroPage> {
         charges.add(new ChargeTresorie(null,"الإيجار"));
         charges.add(new ChargeTresorie(null,"المرتب"));
         comptes.add(new CompteTresorie(null, "00001", "الحساب الرئيسي", "0000", 0.0, 0.0));
-        tier0.raisonSociale = "زبون غير معرف";
+        tier0.raisonSociale = "عميل غير معرف";
         tier2.raisonSociale = "مورد غير معرف";
         break;
     }

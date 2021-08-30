@@ -178,6 +178,8 @@ class MessageLookup extends MessageLookupByLibrary {
     "ZAR_name" : MessageLookupByLibrary.simpleMessage("South African rand"),
     "ZMW_name" : MessageLookupByLibrary.simpleMessage("Zambian kwacha"),
     "a_credit" : MessageLookupByLibrary.simpleMessage("Has Credit"),
+    "a_credit_client" : MessageLookupByLibrary.simpleMessage("Has credit"),
+    "a_credit_four" : MessageLookupByLibrary.simpleMessage("Has credit"),
     "a_vie" : MessageLookupByLibrary.simpleMessage("For life"),
     "abonnement" : MessageLookupByLibrary.simpleMessage("Pass to Premium"),
     "abonnement_title" : MessageLookupByLibrary.simpleMessage("Upgrade to Premium"),
