@@ -343,7 +343,7 @@ class _PreviewPieceState extends State<PreviewPiece> {
                             "---------------------------------------------------------------------------------------",
                             style: TextStyle(color: Colors.black),
                           ),
-                          ((widget.piece.total_tva > 0 && _myParams.tva) ||
+                          ((widget.piece.total_tva > 0 || _myParams.tva) ||
                                   widget.piece.remise > 0)
                               ? Text(
                                   "\n ${S.current.total_ht}:${Helpers.numberFormat(widget.piece.total_ht)}",
@@ -786,7 +786,7 @@ class _PreviewPieceState extends State<PreviewPiece> {
         ]);
       }
       ticket.hr(ch: '-');
-      if ((widget.piece.total_tva > 0 && _myParams.tva) ||
+      if ((widget.piece.total_tva > 0 || _myParams.tva) ||
           widget.piece.remise > 0) {
         input = "${S.current.total_ht}";
         encArabic = await CharsetConverter.encode("ISO-8859-6",
@@ -1091,7 +1091,7 @@ class _PreviewPieceState extends State<PreviewPiece> {
       });
       ticket.hr(ch: '-');
       var encode;
-      if ((widget.piece.total_tva > 0 && _myParams.tva) ||
+      if ((widget.piece.total_tva > 0 || _myParams.tva) ||
           widget.piece.remise > 0) {
         encode = await CharsetConverter.encode("ISO-8859-6",
             "${S.current.total_ht} : ${Helpers.numberFormat(widget.piece.total_ht).toString()}");

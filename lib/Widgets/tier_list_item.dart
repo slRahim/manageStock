@@ -78,7 +78,7 @@ class _TierListItemState extends State<TierListItem> {
           style: GoogleFonts.lato(fontWeight: FontWeight.bold),
         ),
         description:
-            Container(width: 100, child: Text(S.current.msg_swipe_start)),
+            Container(width: 100, child: Text(S.current.msg_swipe_lr)),
         onBackgroundTap: () async {
           await FeatureDiscovery.completeCurrentStep(context);
           return true;

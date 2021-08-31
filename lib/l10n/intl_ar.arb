@@ -266,7 +266,7 @@
   "param_lang_title" : "إختار اللغة",
   "param_lang_tarif_title" : "إختيار التسعيرة",
   "param_tva" : "تفعيل الضريبة",
-  "param_timbre" : "تفيل الطابع الضريبي",
+  "param_timbre" : "تفعيل الطابع الضريبي",
   "param_notif_title" : "التنبيهات",
   "param_notif" : "تفعيل التنبيهات",
   "param_notif_time" : "وقت التنبيه",
@@ -378,7 +378,7 @@
   "illimite" : "غير محدود",
   "illimite_desc" : "إضافة عدد غير محدود من الأصناف, الفواتير , العملاء و الموردين.",
   "imprime" : "طباعة",
-  "imprime_desc" : "طباعة الفواتير بأشكال متنوعة 80cm , 55cm , A4 et A5",
+  "imprime_desc" : "طباعة الفواتير بصيغ متنوعة 80cm , 55cm , A4 et A5",
   "exporte" : "مشاركة",
   "exporte_desc" : "الفواتير و رموز QR على  شكل ملف PDF",
   "save_rest": "حفظ و إسترجاع",
@@ -413,7 +413,7 @@
   "msg_tap" : "على الصنف ليتم تحديده.",
   "support" : "الدعم",
   "msg_support" : "خدمة البيع وما بعد البيع تحت تصرفك.",
-  "economiser" : "وفر",
+  "economiser" : "وٌفِّر",
 
   "service_comercial" : "خدمة تجارية",
   "service_technique" : "خدمة تقنية",
@@ -651,6 +651,9 @@
   "days" : "أيام",
   "montant_1" : "المبلغ",
   "a_credit_client" : "المدينون" ,
-  "a_credit_four" : "الدائنون"
+  "a_credit_four" : "الدائنون",
+
+  "zero" : "صفر",
+  "msg_change_tier_err" : "لا تستطيع التغيير"
 
 }

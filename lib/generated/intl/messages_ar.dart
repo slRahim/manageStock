@@ -284,7 +284,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "dette" : MessageLookupByLibrary.simpleMessage("الرصيد"),
     "devis" : MessageLookupByLibrary.simpleMessage("فاتورة أولية"),
     "devise" : MessageLookupByLibrary.simpleMessage("العملة"),
-    "economiser" : MessageLookupByLibrary.simpleMessage("وفر"),
+    "economiser" : MessageLookupByLibrary.simpleMessage("وٌفِّر"),
     "encaissement" : MessageLookupByLibrary.simpleMessage("إيداع"),
     "end_date" : MessageLookupByLibrary.simpleMessage("تاريخ النهاية"),
     "espece" : MessageLookupByLibrary.simpleMessage("نقدية"),
@@ -335,7 +335,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "imp_rapide_btn" : MessageLookupByLibrary.simpleMessage("طباعة مباشرة"),
     "impression_titre" : MessageLookupByLibrary.simpleMessage("طباعة"),
     "imprime" : MessageLookupByLibrary.simpleMessage("طباعة"),
-    "imprime_desc" : MessageLookupByLibrary.simpleMessage("طباعة الفواتير بأشكال متنوعة 80cm , 55cm , A4 et A5"),
+    "imprime_desc" : MessageLookupByLibrary.simpleMessage("طباعة الفواتير بصيغ متنوعة 80cm , 55cm , A4 et A5"),
     "indice" : MessageLookupByLibrary.simpleMessage("المؤشر"),
     "init" : MessageLookupByLibrary.simpleMessage(""),
     "intro_infor" : MessageLookupByLibrary.simpleMessage("المعلومات المهنية"),
@@ -384,6 +384,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "msg_champ_oblg" : MessageLookupByLibrary.simpleMessage("حقل إلزامي"),
     "msg_champs_obg" : MessageLookupByLibrary.simpleMessage("الرجاء ملأ كل الفراغات الإلزامية."),
     "msg_change_tarif" : MessageLookupByLibrary.simpleMessage("هل تريد تغيير الأسعار ؟"),
+    "msg_change_tier_err" : MessageLookupByLibrary.simpleMessage("لا تستطيع التغيير"),
     "msg_choix_pin" : MessageLookupByLibrary.simpleMessage("الرقم السري"),
     "msg_config_auth" : MessageLookupByLibrary.simpleMessage("إذهب للاعدادات."),
     "msg_confirm_pin" : MessageLookupByLibrary.simpleMessage("الرقم السري"),
@@ -496,7 +497,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "param_notif_title" : MessageLookupByLibrary.simpleMessage("التنبيهات"),
     "param_resto_data" : MessageLookupByLibrary.simpleMessage("إسترجاع نسخة إحتياطية"),
     "param_save" : MessageLookupByLibrary.simpleMessage("حفظ التعديلات"),
-    "param_timbre" : MessageLookupByLibrary.simpleMessage("تفيل الطابع الضريبي"),
+    "param_timbre" : MessageLookupByLibrary.simpleMessage("تفعيل الطابع الضريبي"),
     "param_tva" : MessageLookupByLibrary.simpleMessage("تفعيل الضريبة"),
     "pays" : MessageLookupByLibrary.simpleMessage("البلد"),
     "photo" : MessageLookupByLibrary.simpleMessage("الصورة"),
@@ -625,6 +626,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "verssement" : MessageLookupByLibrary.simpleMessage("دفع لحساب"),
     "ville" : MessageLookupByLibrary.simpleMessage("المدينة"),
     "virement" : MessageLookupByLibrary.simpleMessage("تحويل"),
-    "zakat" : MessageLookupByLibrary.simpleMessage("الجرد بسعر البيع")
+    "zakat" : MessageLookupByLibrary.simpleMessage("الجرد بسعر البيع"),
+    "zero" : MessageLookupByLibrary.simpleMessage("صفر")
   };
 }

@@ -355,7 +355,7 @@
   "sys_theme" : "Système",
   "selec_pays" : "Choisissez votre pays",
 
-  "abonnement" : "Passer au premium",
+  "abonnement" : "Je veux m'abonner",
   "msg_demo_option" : "Cette option est indisponible sur la version démonstration",
   "msg_demo_exp" : "Votre version d'essai a expirée, Abonnez vous pour continuer",
   "msg_premium_exp" : "Votre licence a expirée, Abonnez vous pour continuer",
@@ -373,7 +373,7 @@
   "choix_city" : "Choisissez la ville",
   "department" : "Département",
 
-  "abonnement_title" : "Passer au Premium",
+  "abonnement_title" : "Abonnement",
   "illimite" : "Illimité",
   "illimite_desc" : "Créer des articles , des pièces , des clients et des fournisseurs en illimité",
   "imprime" : "Imprimer",
@@ -650,5 +650,8 @@
   "days" : "Jours",
   "montant_1" : "Montant",
   "a_credit_client" : "Avec crédit" ,
-  "a_credit_four" : "Avec crédit"
+  "a_credit_four" : "Avec crédit",
+
+  "zero" : "zéro",
+  "msg_change_tier_err" : "vous ne pouvez pas changer"
 }

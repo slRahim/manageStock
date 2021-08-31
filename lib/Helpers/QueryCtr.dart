@@ -21,6 +21,7 @@ import 'package:gestmob/models/Transformer.dart';
 import 'package:gestmob/models/Tresorie.dart';
 import 'package:gestmob/models/TresorieCategories.dart';
 import 'package:sqflite/sqflite.dart';
+import 'package:gestmob/models/ReglementTresorie.dart';
 
 class QueryCtr {
   SqlLiteDatabaseHelper _databaseHelper = SqlLiteDatabaseHelper();
@@ -342,6 +343,31 @@ class QueryCtr {
     }
 
     return false;
+  }
+
+  Future<bool> canChangePieceTier(Piece piece) async {
+    var dbClient = await _databaseHelper.db;
+
+    var res = await dbClient.query(DbTablesNames.reglementTresorie , where: 'Piece_id = ?' , whereArgs: [piece.id]);
+
+    List<ReglementTresorie> listReglementPiece = new List<ReglementTresorie>();
+    res.forEach((element) {
+      var item = ReglementTresorie.fromMap(element);
+      listReglementPiece.add(item);
+    });
+
+    if(listReglementPiece.isEmpty){
+      return true ;
+    }else{
+       for (ReglementTresorie item in listReglementPiece){
+         var res1 = await dbClient.query(DbTablesNames.reglementTresorie , where: "Tresorie_id = ?" , whereArgs: [item.tresorie_id]);
+         if(res1.length > 1){
+           return false ;
+         }
+       }
+    }
+
+    return true ;
   }
 
   Future<List<Article>> getJournalPiece(Piece piece,

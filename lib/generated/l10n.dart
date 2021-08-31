@@ -3345,10 +3345,10 @@ class S {
     );
   }
 
-  /// `Pass to Premium`
+  /// `I want to subscribe`
   String get abonnement {
     return Intl.message(
-      'Pass to Premium',
+      'I want to subscribe',
       name: 'abonnement',
       desc: '',
       args: [],
@@ -3495,10 +3495,10 @@ class S {
     );
   }
 
-  /// `Upgrade to Premium`
+  /// `Subscription`
   String get abonnement_title {
     return Intl.message(
-      'Upgrade to Premium',
+      'Subscription',
       name: 'abonnement_title',
       desc: '',
       args: [],
@@ -6080,6 +6080,26 @@ class S {
     return Intl.message(
       'Has credit',
       name: 'a_credit_four',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `zero`
+  String get zero {
+    return Intl.message(
+      'zero',
+      name: 'zero',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `you can't change`
+  String get msg_change_tier_err {
+    return Intl.message(
+      'you can\'t change',
+      name: 'msg_change_tier_err',
       desc: '',
       args: [],
     );

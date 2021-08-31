@@ -181,8 +181,8 @@ class MessageLookup extends MessageLookupByLibrary {
     "a_credit_client" : MessageLookupByLibrary.simpleMessage("Avec crédit"),
     "a_credit_four" : MessageLookupByLibrary.simpleMessage("Avec crédit"),
     "a_vie" : MessageLookupByLibrary.simpleMessage("À vie"),
-    "abonnement" : MessageLookupByLibrary.simpleMessage("Passer au premium"),
-    "abonnement_title" : MessageLookupByLibrary.simpleMessage("Passer au Premium"),
+    "abonnement" : MessageLookupByLibrary.simpleMessage("Je veux m\'abonner"),
+    "abonnement_title" : MessageLookupByLibrary.simpleMessage("Abonnement"),
     "ac" : MessageLookupByLibrary.simpleMessage("AC"),
     "accueil" : MessageLookupByLibrary.simpleMessage("Accueil"),
     "achat" : MessageLookupByLibrary.simpleMessage("Achats"),
@@ -384,6 +384,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "msg_champ_oblg" : MessageLookupByLibrary.simpleMessage("Champ Obligatoire"),
     "msg_champs_obg" : MessageLookupByLibrary.simpleMessage("Veuillez remplir les champs obligatoires"),
     "msg_change_tarif" : MessageLookupByLibrary.simpleMessage("Voulez-vous changer les tarifs ?"),
+    "msg_change_tier_err" : MessageLookupByLibrary.simpleMessage("vous ne pouvez pas changer"),
     "msg_choix_pin" : MessageLookupByLibrary.simpleMessage("Choisissez votre code PIN"),
     "msg_config_auth" : MessageLookupByLibrary.simpleMessage("Aller aux paramétres"),
     "msg_confirm_pin" : MessageLookupByLibrary.simpleMessage("Confirmez votre code PIN"),
@@ -625,6 +626,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "verssement" : MessageLookupByLibrary.simpleMessage("Versement"),
     "ville" : MessageLookupByLibrary.simpleMessage("Ville"),
     "virement" : MessageLookupByLibrary.simpleMessage("Virement"),
-    "zakat" : MessageLookupByLibrary.simpleMessage("Zakat")
+    "zakat" : MessageLookupByLibrary.simpleMessage("Zakat"),
+    "zero" : MessageLookupByLibrary.simpleMessage("zéro")
   };
 }

@@ -393,7 +393,7 @@ class Helpers {
     int number = int.parse(pnumber);
 // 0 to 999 999 999 999
     if (number == 0) {
-      return "zero";
+      return S.current.zero;
     }
 // pad with "0"
     String mask = "000000000000";

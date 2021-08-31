@@ -67,11 +67,9 @@ class _PieceListItemState extends State<PieceListItem> {
             ? widget.piece.regler * -1
             : widget.piece.regler;
       }
-      if (widget.piece.reste <= 0) {
-        widget.piece.reste = (widget.piece.reste != 0)
-            ? widget.piece.reste * -1
-            : widget.piece.reste;
-      }
+      widget.piece.reste = (widget.piece.net_a_payer * -1)-widget.piece.regler ;
+    }else{
+      widget.piece.reste = widget.piece.net_a_payer -widget.piece.regler ;
     }
     return Visibility(
       visible: _visible,

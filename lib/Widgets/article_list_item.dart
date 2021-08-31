@@ -131,7 +131,7 @@ class _ArticleListItemState extends State<ArticleListItem> {
               from: widget.article,
               alreadySelected: widget.alreadySelected,
               onLongPress: _longpressItem,
-              onTap:_tapItem,
+              onTap: () => _tapItem(),
               slidingCardController: controller,
               onCardTapped: () {
                 if (controller.isCardSeparated == true) {
@@ -232,15 +232,29 @@ class _ArticleListItemState extends State<ArticleListItem> {
                           SizedBox(
                             width: 3,
                           ),
-                          ((widget.article.selectedQuantite/widget.article.quantiteColis) - (widget.article.selectedQuantite/widget.article.quantiteColis).truncate() > 0)?
-                          Text("${Helpers.numberFormat(widget.article.selectedQuantite)} [${((widget.article.selectedQuantite/widget.article.quantiteColis).toInt()).toString()}+ ${S.current.colis_abr}]",
-                              style: GoogleFonts.lato(
-                                textStyle: TextStyle(fontSize: 16.0),
-                              ))
-                          :Text("${Helpers.numberFormat(widget.article.selectedQuantite)} [${((widget.article.selectedQuantite/widget.article.quantiteColis).toInt()).toString()} ${S.current.colis_abr}]",
-                              style: GoogleFonts.lato(
-                                textStyle: TextStyle(fontSize: 16.0),
-                              )),
+                          (!widget.article.stockable ||
+                                  widget.article.quantiteColis == 1)
+                              ? Text(
+                                  "${Helpers.numberFormat(widget.article.selectedQuantite)}",
+                                  style: GoogleFonts.lato(
+                                    textStyle: TextStyle(fontSize: 16.0),
+                                  ))
+                              : ((widget.article.selectedQuantite /
+                                              widget.article.quantiteColis) -
+                                          (widget.article.selectedQuantite /
+                                                  widget.article.quantiteColis)
+                                              .truncate() >
+                                      0)
+                                  ? Text(
+                                      "${Helpers.numberFormat(widget.article.selectedQuantite)} [${((widget.article.selectedQuantite / widget.article.quantiteColis).toInt()).toString()}+ ${S.current.colis_abr}]",
+                                      style: GoogleFonts.lato(
+                                        textStyle: TextStyle(fontSize: 16.0),
+                                      ))
+                                  : Text(
+                                      "${Helpers.numberFormat(widget.article.selectedQuantite)} [${((widget.article.selectedQuantite / widget.article.quantiteColis).toInt()).toString()} ${S.current.colis_abr}]",
+                                      style: GoogleFonts.lato(
+                                        textStyle: TextStyle(fontSize: 16.0),
+                                      )),
                         ],
                       ),
                       Text(
@@ -330,21 +344,18 @@ class _ArticleListItemState extends State<ArticleListItem> {
     );
   }
 
-  _longpressItem(){
-    if (widget.onItemSelected != null &&
-        widget.article.selectedQuantite >= 0) {
-
-        widget.article.selectedQuantite = -1;
-        widget.onItemSelected(widget.article);
-
+  _longpressItem() {
+    if (widget.onItemSelected != null && widget.article.selectedQuantite >= 0) {
+      widget.article.selectedQuantite = -1;
+      widget.onItemSelected(widget.article);
     }
   }
 
-  _tapItem() async{
+  _tapItem() async {
+    setState(() {});
     if (widget.onItemSelected == null) {
       Navigator.of(context)
-          .pushNamed(RoutesKeys.addArticle,
-          arguments: widget.article)
+          .pushNamed(RoutesKeys.addArticle, arguments: widget.article)
           .then((value) {
         if (value is Article) {
           setState(() {
@@ -353,45 +364,49 @@ class _ArticleListItemState extends State<ArticleListItem> {
         }
       });
     } else {
-        if(widget.article.selectedQuantite == -1){
-          selectThisItem();
-        }
-        await showDialog(
-            context: context,
-            builder: (BuildContext context) {
-              return addQtedialogue();
-            });
+      if (widget.article.selectedQuantite == -1) {
+        selectThisItem();
+      }
+       AwesomeDialog(
+          context: context,
+          dialogType: DialogType.NO_HEADER,
+          animType: AnimType.BOTTOMSLIDE,
+          title: "",
+          body: addQtedialogue())
+        ..show().then((value) {
 
-        if (widget.article.stockable &&
-            (widget.pieceOrigin == 'BL' ||
-                widget.pieceOrigin == 'FC') &&
-            ((widget.article.quantite -
-                widget.article.cmdClient) <
-                widget.article.selectedQuantite)) {
-          try{
-            AwesomeDialog(
-                context: context,
-                dialogType: DialogType.WARNING,
-                dismissOnBackKeyPress: false,
-                dismissOnTouchOutside: false,
-                animType: AnimType.BOTTOMSLIDE,
-                title: "",
-                desc: S.current.msg_qte_select_sup,
-                btnCancelText: S.current.annuler,
-                btnCancelOnPress: () {
-                  setState(() {
-                    widget.article.selectedQuantite = -1;
-                    widget.onItemSelected(widget.article);
-                  });
-                },
-                btnOkText: S.current.confirme,
-                btnOkOnPress: () {}
-                )..show();
-          }catch(e){
+          print(value);
+          if (widget.article.stockable &&
+              (widget.pieceOrigin == 'BL' || widget.pieceOrigin == 'FC') &&
+              ((widget.article.quantite - widget.article.cmdClient) <
+                  widget.article.selectedQuantite)) {
             Helpers.showToast(S.current.msg_qte_select_sup);
-          }
 
-        }
+            // try {
+            // AwesomeDialog(
+            //     context: context,
+            //     dialogType: DialogType.WARNING,
+            //     dismissOnBackKeyPress: false,
+            //     dismissOnTouchOutside: false,
+            //     animType: AnimType.BOTTOMSLIDE,
+            //     title: "",
+            //     desc: S.current.msg_qte_select_sup,
+            //     btnCancelText: S.current.annuler,
+            //     btnCancelOnPress: () {
+            //       // setState(() {
+            //       //   widget.article.selectedQuantite = -1;
+            //       //   widget.onItemSelected(widget.article);
+            //       // });
+            //     },
+            //     btnOkText: S.current.confirme,
+            //     btnOkOnPress: () {})
+            //   ..show();
+            // } catch (e) {
+            //   Helpers.showToast(S.current.msg_qte_select_sup);
+            // }
+          }
+        });
+
 
     }
   }
@@ -465,7 +480,7 @@ class _ArticleListItemState extends State<ArticleListItem> {
     }
   }
 
-  void selectThisItem(){
+  void selectThisItem() {
     widget.article.selectedQuantite = 1;
     if (widget.pieceOrigin == 'BC' ||
         widget.pieceOrigin == 'BR' ||
@@ -499,349 +514,352 @@ class _ArticleListItemState extends State<ArticleListItem> {
 
     widget.onItemSelected(widget.article);
   }
+
   //****************************************************************************************************************************************************************************
   //*********************************************************dialog pour modifier le prix et la quantité**************************************************************************
   Widget addQtedialogue() {
     _quntiteControler.text = widget.article.selectedQuantite.toString();
-    double res = (widget.article.selectedQuantite / widget.article.quantiteColis);
-    if(res > 0){
+    double res =
+        (widget.article.selectedQuantite / widget.article.quantiteColis);
+    if (res > 0) {
       _colisControler.text = res.toInt().toString();
-      if(res-res.truncate() > 0){
-        var a =((res-res.truncate()) * widget.article.quantiteColis).round().toInt();
-        _colisControler.text += ' +$a' ;
+      if (res - res.truncate() > 0) {
+        var a = ((res - res.truncate()) * widget.article.quantiteColis)
+            .round()
+            .toInt();
+        _colisControler.text += ' +$a';
       }
-    }else{
+    } else {
       _colisControler.text = '0';
     }
     _priceControler.text = widget.article.selectedPriceTTC.toStringAsFixed(2);
 
-
     return StatefulBuilder(builder: (context, StateSetter _setState) {
-      Widget dialog = Dialog(
-        //this right here
-        child: Container(
-          margin: EdgeInsets.all(10),
-          child: Wrap(children: [
-            Padding(
-              padding: EdgeInsets.all(10),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Center(
-                      child: Padding(
-                    padding: const EdgeInsets.only(bottom: 20),
-                    child: Text(
-                      S.current.modification_titre,
-                      style: GoogleFonts.lato(
-                          textStyle: TextStyle(
-                        fontSize: 18,
-                        fontWeight: FontWeight.w400,
-                      )),
+      Widget dialog = Container(
+        margin: EdgeInsets.all(10),
+        child: Wrap(children: [
+      Padding(
+        padding: EdgeInsets.all(10),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Center(
+                child: Padding(
+              padding: const EdgeInsets.only(bottom: 20),
+              child: Text(
+                S.current.modification_titre,
+                style: GoogleFonts.lato(
+                    textStyle: TextStyle(
+                  fontSize: 18,
+                  fontWeight: FontWeight.w400,
+                )),
+              ),
+            )),
+            Visibility(
+              visible: (widget.article.stockable &&
+                  widget.article.quantiteColis > 1),
+              child: Padding(
+                padding: EdgeInsetsDirectional.only(
+                    start: 5, end: 5, bottom: 20),
+                child: TextField(
+                  controller: _colisControler,
+                  keyboardType: TextInputType.number,
+                  onTap: () => {
+                    _colisControler.selection = TextSelection(
+                        baseOffset: 0,
+                        extentOffset: _colisControler.value.text.length),
+                  },
+                  onChanged: (value) {
+                    if (value.trim() != '') {
+                      _quntiteControler.text = (double.parse(value) *
+                              widget.article.quantiteColis)
+                          .toString();
+                    } else {
+                      _quntiteControler.text = '0.0';
+                    }
+                  },
+                  decoration: InputDecoration(
+                    errorText: _validateColisError ?? null,
+                    prefixIcon: Icon(
+                      Icons.archive,
+                      color: Colors.orange[900],
                     ),
-                  )),
-                  Visibility(
-                    visible: (widget.article.stockable && widget.article.quantiteColis > 1),
-                    child: Padding(
-                      padding: EdgeInsetsDirectional.only(
-                          start: 5, end: 5, bottom: 20),
+                    focusedBorder: OutlineInputBorder(
+                        borderSide: BorderSide(color: Colors.orange[900]),
+                        borderRadius: BorderRadius.circular(20)),
+                    contentPadding: EdgeInsets.only(left: 10),
+                    labelText: "${S.current.colis} +${S.current.unite}",
+                    labelStyle: GoogleFonts.lato(
+                        textStyle: TextStyle(color: Colors.orange[900])),
+                    enabledBorder: OutlineInputBorder(
+                      gapPadding: 3.3,
+                      borderRadius: BorderRadius.circular(20),
+                      borderSide: BorderSide(color: Colors.orange[900]),
+                    ),
+                  ),
+                ),
+              ),
+            ),
+            Padding(
+              padding:
+                  EdgeInsetsDirectional.only(start: 5, end: 5, bottom: 20),
+              child: TextField(
+                controller: _quntiteControler,
+                keyboardType: TextInputType.number,
+                onTap: () => {
+                  _quntiteControler.selection = TextSelection(
+                      baseOffset: 0,
+                      extentOffset: _quntiteControler.value.text.length),
+                },
+                onChanged: (value) {
+                  if (value.trim() != '') {
+                    double res = (double.parse(value) /
+                        widget.article.quantiteColis);
+                    _colisControler.text = (res.toInt()).toString();
+                    if (res - res.truncate() > 0) {
+                      var a = ((res - res.truncate()) *
+                              widget.article.quantiteColis)
+                          .round()
+                          .toInt();
+                      _colisControler.text += ' +$a';
+                    }
+                  } else {
+                    _colisControler.text = '0';
+                  }
+                },
+                decoration: InputDecoration(
+                  errorText: _validateQteError ?? null,
+                  prefixIcon: Icon(
+                    Icons.add_shopping_cart,
+                    color: Colors.orange[900],
+                  ),
+                  focusedBorder: OutlineInputBorder(
+                      borderSide: BorderSide(color: Colors.orange[900]),
+                      borderRadius: BorderRadius.circular(20)),
+                  contentPadding: EdgeInsets.only(left: 10),
+                  labelText: S.current.quantit,
+                  labelStyle: GoogleFonts.lato(
+                      textStyle: TextStyle(color: Colors.orange[900])),
+                  enabledBorder: OutlineInputBorder(
+                    gapPadding: 3.3,
+                    borderRadius: BorderRadius.circular(20),
+                    borderSide: BorderSide(color: Colors.orange[900]),
+                  ),
+                ),
+              ),
+            ),
+            SizedBox(
+              width: 320.0,
+              child: Padding(
+                padding: EdgeInsets.only(right: 0, left: 0),
+                child: Column(
+                  mainAxisSize: MainAxisSize.max,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Row(
+                      mainAxisSize: MainAxisSize.max,
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        RawMaterialButton(
+                          onPressed: _qteDialogMinusButton,
+                          elevation: 2.0,
+                          fillColor: Colors.redAccent,
+                          child: Icon(
+                            Icons.remove,
+                            color: Colors.white,
+                          ),
+                          padding: EdgeInsets.all(15.0),
+                          shape: CircleBorder(),
+                        ),
+                        RawMaterialButton(
+                          onPressed: _qteDialogPlusButton,
+                          elevation: 2.0,
+                          fillColor: Colors.greenAccent[700],
+                          child: Icon(
+                            Icons.add,
+                            color: Colors.white,
+                          ),
+                          padding: EdgeInsets.all(15.0),
+                          shape: CircleBorder(),
+                        )
+                      ],
+                    ),
+                    SizedBox(height: 20),
+                    Padding(
+                      padding:
+                          EdgeInsets.only(left: 5, right: 5, bottom: 20),
                       child: TextField(
-                        controller: _colisControler,
+                        controller: _priceControler,
                         keyboardType: TextInputType.number,
                         onTap: () => {
-                          _colisControler.selection = TextSelection(
+                          _priceControler.selection = TextSelection(
                               baseOffset: 0,
-                              extentOffset: _colisControler.value.text.length),
-                        },
-                        onChanged: (value){
-                          if(value.trim() != ''){
-                            _quntiteControler.text = (double.parse(value) * widget.article.quantiteColis).toString();
-                          }else{
-                            _quntiteControler.text = '0.0' ;
-                          }
+                              extentOffset:
+                                  _priceControler.value.text.length),
                         },
                         decoration: InputDecoration(
-                          errorText: _validateColisError ?? null,
+                          errorText: _validatePriceError ?? null,
                           prefixIcon: Icon(
-                            Icons.archive,
+                            Icons.attach_money,
                             color: Colors.orange[900],
                           ),
                           focusedBorder: OutlineInputBorder(
-                              borderSide: BorderSide(color: Colors.orange[900]),
+                              borderSide:
+                                  BorderSide(color: Colors.orange[900]),
                               borderRadius: BorderRadius.circular(20)),
                           contentPadding: EdgeInsets.only(left: 10),
-                          labelText: "${S.current.colis} +${S.current.unite}",
+                          labelText: S.current.prix_unite,
                           labelStyle: GoogleFonts.lato(
-                              textStyle: TextStyle(color: Colors.orange[900])),
+                              textStyle:
+                                  TextStyle(color: Colors.orange[900])),
                           enabledBorder: OutlineInputBorder(
                             gapPadding: 3.3,
                             borderRadius: BorderRadius.circular(20),
-                            borderSide: BorderSide(color: Colors.orange[900]),
+                            borderSide:
+                                BorderSide(color: Colors.orange[900]),
                           ),
                         ),
                       ),
                     ),
-                  ),
-                  Padding(
-                    padding: EdgeInsetsDirectional.only(
-                        start: 5, end: 5, bottom: 20),
-                    child: TextField(
-                      controller: _quntiteControler,
-                      keyboardType: TextInputType.number,
-                      onTap: () => {
-                        _quntiteControler.selection = TextSelection(
-                            baseOffset: 0,
-                            extentOffset: _quntiteControler.value.text.length),
-                      },
-                      onChanged: (value){
-                        if(value.trim() != ''){
-                          double res = (double.parse(value) / widget.article.quantiteColis) ;
-                          _colisControler.text = (res.toInt()).toString() ;
-                          if(res-res.truncate() > 0){
-                            var a =((res-res.truncate()) * widget.article.quantiteColis).round().toInt();
-                            _colisControler.text += ' +$a' ;
-                          }
-                        }else{
-                          _colisControler.text = '0' ;
-                        }
-                      },
-                      decoration: InputDecoration(
-                        errorText: _validateQteError ?? null,
-                        prefixIcon: Icon(
-                          Icons.add_shopping_cart,
-                          color: Colors.orange[900],
-                        ),
-                        focusedBorder: OutlineInputBorder(
-                            borderSide: BorderSide(color: Colors.orange[900]),
-                            borderRadius: BorderRadius.circular(20)),
-                        contentPadding: EdgeInsets.only(left: 10),
-                        labelText: S.current.quantit,
-                        labelStyle: GoogleFonts.lato(
-                            textStyle: TextStyle(color: Colors.orange[900])),
-                        enabledBorder: OutlineInputBorder(
-                          gapPadding: 3.3,
-                          borderRadius: BorderRadius.circular(20),
-                          borderSide: BorderSide(color: Colors.orange[900]),
-                        ),
-                      ),
-                    ),
-                  ),
-                  SizedBox(
-                    width: 320.0,
-                    child: Padding(
-                      padding: EdgeInsets.only(right: 0, left: 0),
-                      child: Column(
-                        mainAxisSize: MainAxisSize.max,
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Row(
-                            mainAxisSize: MainAxisSize.max,
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              RawMaterialButton(
-                                onPressed: _qteDialogMinusButton,
-                                elevation: 2.0,
-                                fillColor: Colors.redAccent,
-                                child: Icon(
-                                  Icons.remove,
+                    SizedBox(height: 10),
+                    //buttons
+                    Row(
+                      mainAxisSize: MainAxisSize.max,
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        InkWell(
+                          onTap: () {
+                            _qteDialogCancelButton(context, _setState);
+                          },
+                          child: Container(
+                            padding: EdgeInsets.all(8.0),
+                            width: 100,
+                            decoration: BoxDecoration(
+                                color: Colors.red,
+                                borderRadius:
+                                    BorderRadius.all(Radius.circular(100))),
+                            child: Text(
+                              S.current.annuler,
+                              textAlign: TextAlign.center,
+                              style: TextStyle(
                                   color: Colors.white,
-                                ),
-                                padding: EdgeInsets.all(15.0),
-                                shape: CircleBorder(),
-                              ),
-                              RawMaterialButton(
-                                onPressed: _qteDialogPlusButton,
-                                elevation: 2.0,
-                                fillColor: Colors.greenAccent[700],
-                                child: Icon(
-                                  Icons.add,
-                                  color: Colors.white,
-                                ),
-                                padding: EdgeInsets.all(15.0),
-                                shape: CircleBorder(),
-                              )
-                            ],
-                          ),
-                          SizedBox(height: 20),
-                          Padding(
-                            padding:
-                                EdgeInsets.only(left: 5, right: 5, bottom: 20),
-                            child: TextField(
-                              controller: _priceControler,
-                              keyboardType: TextInputType.number,
-                              onTap: () => {
-                                _priceControler.selection = TextSelection(
-                                    baseOffset: 0,
-                                    extentOffset:
-                                        _priceControler.value.text.length),
-                              },
-                              decoration: InputDecoration(
-                                errorText: _validatePriceError ?? null,
-                                prefixIcon: Icon(
-                                  Icons.attach_money,
-                                  color: Colors.orange[900],
-                                ),
-                                focusedBorder: OutlineInputBorder(
-                                    borderSide:
-                                        BorderSide(color: Colors.orange[900]),
-                                    borderRadius: BorderRadius.circular(20)),
-                                contentPadding: EdgeInsets.only(left: 10),
-                                labelText: S.current.prix_unite,
-                                labelStyle: GoogleFonts.lato(
-                                    textStyle:
-                                        TextStyle(color: Colors.orange[900])),
-                                enabledBorder: OutlineInputBorder(
-                                  gapPadding: 3.3,
-                                  borderRadius: BorderRadius.circular(20),
-                                  borderSide:
-                                      BorderSide(color: Colors.orange[900]),
-                                ),
-                              ),
+                                  fontWeight: FontWeight.w700,
+                                  fontSize: 14),
                             ),
                           ),
-                          SizedBox(height: 10),
-                          //buttons
-                          Row(
-                            mainAxisSize: MainAxisSize.max,
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              InkWell(
-                                onTap:(){
-                                  _qteDialogCancelButton(context) ;
-                                },
-                                child: Container(
-                                  padding: EdgeInsets.all(8.0),
-                                  width: 100,
-                                  decoration: BoxDecoration(
-                                      color: Colors.red,
-                                      borderRadius: BorderRadius.all(
-                                          Radius.circular(100))),
-                                  child: Text(
-                                    S.current.annuler,
-                                    textAlign: TextAlign.center,
-                                    style: TextStyle(
-                                        color: Colors.white,
-                                        fontWeight: FontWeight.w700,
-                                        fontSize: 14),
-                                  ),
-                                ),
-                              ),
-                              SizedBox(width: 10),
-                              InkWell(
-                                onTap:(){
-                                  _qteDialogConfirmButton(context , _setState);
-                                },
-                                child: Container(
-                                  padding: EdgeInsets.all(8.0),
-                                  width: 100,
-                                  decoration: BoxDecoration(
-                                      color: Color(0xFF00CA71),
-                                      borderRadius: BorderRadius.all(
-                                          Radius.circular(100))),
-                                  child: Text(
-                                    S.current.confirme,
-                                    textAlign: TextAlign.center,
-                                    style: TextStyle(
-                                        color: Colors.white,
-                                        fontWeight: FontWeight.w700,
-                                        fontSize: 14),
-                                  ),
-                                ),
-                              ),
-                            ],
+                        ),
+                        SizedBox(width: 10),
+                        InkWell(
+                          onTap: () {
+                            _qteDialogConfirmButton(context, _setState);
+                          },
+                          child: Container(
+                            padding: EdgeInsets.all(8.0),
+                            width: 100,
+                            decoration: BoxDecoration(
+                                color: Color(0xFF00CA71),
+                                borderRadius:
+                                    BorderRadius.all(Radius.circular(100))),
+                            child: Text(
+                              S.current.confirme,
+                              textAlign: TextAlign.center,
+                              style: TextStyle(
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.w700,
+                                  fontSize: 14),
+                            ),
                           ),
-                        ],
-                      ),
+                        ),
+                      ],
                     ),
-                  )
-                ],
+                  ],
+                ),
               ),
-            ),
-          ]),
+            )
+          ],
         ),
+      ),
+        ]),
       );
 
       return dialog;
     });
   }
 
-  _qteDialogMinusButton(){
-    double _qte =
-        double.parse(_quntiteControler.text) - 1;
+  _qteDialogMinusButton() {
+    double _qte = double.parse(_quntiteControler.text) - 1;
     _quntiteControler.text = _qte.toStringAsFixed(2);
-    String value =  _qte.toStringAsFixed(2);
-    if(value.trim() != ''){
-      double res = (double.parse(value) / widget.article.quantiteColis) ;
-      _colisControler.text = (res.toInt()).toString() ;
-      if(res-res.truncate() > 0){
-        var a =((res-res.truncate()) * widget.article.quantiteColis).round().toInt();
-        _colisControler.text += ' +$a' ;
+    String value = _qte.toStringAsFixed(2);
+    if (value.trim() != '') {
+      double res = (double.parse(value) / widget.article.quantiteColis);
+      _colisControler.text = (res.toInt()).toString();
+      if (res - res.truncate() > 0) {
+        var a = ((res - res.truncate()) * widget.article.quantiteColis)
+            .round()
+            .toInt();
+        _colisControler.text += ' +$a';
       }
-    }else{
-      _colisControler.text = '0' ;
+    } else {
+      _colisControler.text = '0';
     }
   }
 
-  _qteDialogPlusButton(){
-    double _qte =
-        double.parse(_quntiteControler.text) + 1;
+  _qteDialogPlusButton() {
+    double _qte = double.parse(_quntiteControler.text) + 1;
     _quntiteControler.text = _qte.toStringAsFixed(2);
-    String value =  _qte.toStringAsFixed(2);
-    if(value.trim() != ''){
-      double res = (double.parse(value) / widget.article.quantiteColis) ;
-      _colisControler.text = (res.toInt()).toString() ;
-      if(res-res.truncate() > 0){
-        var a =((res-res.truncate()) * widget.article.quantiteColis).round().toInt();
-        _colisControler.text += ' +$a' ;
+    String value = _qte.toStringAsFixed(2);
+    if (value.trim() != '') {
+      double res = (double.parse(value) / widget.article.quantiteColis);
+      _colisControler.text = (res.toInt()).toString();
+      if (res - res.truncate() > 0) {
+        var a = ((res - res.truncate()) * widget.article.quantiteColis)
+            .round()
+            .toInt();
+        _colisControler.text += ' +$a';
       }
-    }else{
-      _colisControler.text = '0' ;
+    } else {
+      _colisControler.text = '0';
     }
   }
 
-  _qteDialogCancelButton(context){
-    if (mounted) {
-      setState(() {
-        _quntiteControler.text = widget
-            .article.selectedQuantite
-            .toString();
-        double res = (widget.article.selectedQuantite / widget.article.quantiteColis);
-        if(res > 0){
-          _colisControler.text = res.toInt().toString();
-          if(res-res.truncate() > 0){
-            var a =((res-res.truncate()) * widget.article.quantiteColis).round().toInt();
-            _colisControler.text += ' +$a' ;
-          }
-        }else{
-          _colisControler.text = '0';
+  _qteDialogCancelButton(context, setState) {
+    setState(() {
+      _quntiteControler.text = widget.article.selectedQuantite.toString();
+      double res =
+          (widget.article.selectedQuantite / widget.article.quantiteColis);
+      if (res > 0) {
+        _colisControler.text = res.toInt().toString();
+        if (res - res.truncate() > 0) {
+          var a = ((res - res.truncate()) * widget.article.quantiteColis)
+              .round()
+              .toInt();
+          _colisControler.text += ' +$a';
         }
-        _priceControler.text = widget
-            .article.selectedPriceTTC
-            .toString();
-        _validateQteError = null;
-        _validateColisError = null ;
-        _validatePriceError = null;
+      } else {
+        _colisControler.text = '0';
+      }
+      _priceControler.text = widget.article.selectedPriceTTC.toString();
+      _validateQteError = null;
+      _validateColisError = null;
+      _validatePriceError = null;
 
-      });
-    }
+      widget.article.selectedQuantite = -1;
+      widget.onItemSelected(widget.article);
+    });
+
     Navigator.pop(context);
   }
 
-  _qteDialogConfirmButton(context , _setState){
+  _qteDialogConfirmButton(context, _setState) {
     if (_quntiteControler.text.trim() == '') {
-      _validateQteError =
-          S.current.msg_champs_obg;
+      _validateQteError = S.current.msg_champs_obg;
     } else {
       _validateQteError = null;
-      if (!_quntiteControler.text
-          .trim()
-          .isNumericUsingRegularExpression) {
-        _validateQteError =
-            S.current.msg_val_valide;
+      if (!_quntiteControler.text.trim().isNumericUsingRegularExpression) {
+        _validateQteError = S.current.msg_val_valide;
       }
-      if (double.parse(
-          _quntiteControler.text.trim()) <=
-          0) {
+      if (double.parse(_quntiteControler.text.trim()) <= 0) {
         _validateQteError = S.current.msg_qte_err;
       }
     }
@@ -852,51 +870,39 @@ class _ArticleListItemState extends State<ArticleListItem> {
     } else {
       _validateColisError = null;
       if (!_colisControler.text
-          .split('+').first
+          .split('+')
+          .first
           .trim()
           .isNumericUsingRegularExpression) {
-        _validateColisError =
-            S.current.msg_val_valide;
+        _validateColisError = S.current.msg_val_valide;
       }
-      if (double.parse(
-          _colisControler.text.split('+').first.trim()) <
-          0) {
+      if (double.parse(_colisControler.text.split('+').first.trim()) < 0) {
         _validateColisError = S.current.msg_qte_err;
       }
     }
 
     if (_priceControler.text.trim() == '') {
-      _validatePriceError =
-          S.current.msg_champs_obg;
+      _validatePriceError = S.current.msg_champs_obg;
     } else {
       _validatePriceError = null;
-      if (!_priceControler.text
-          .trim()
-          .isNumericUsingRegularExpression) {
-        _validatePriceError =
-            S.current.msg_val_valide;
+      if (!_priceControler.text.trim().isNumericUsingRegularExpression) {
+        _validatePriceError = S.current.msg_val_valide;
       }
-      if (double.parse(
-          _priceControler.text.trim()) <
-          0) {
-        _validatePriceError =
-            S.current.msg_prix_supp_zero;
+      if (double.parse(_priceControler.text.trim()) < 0) {
+        _validatePriceError = S.current.msg_prix_supp_zero;
       }
     }
 
     if (_validateQteError == null &&
         _validateColisError == null &&
         _validatePriceError == null) {
-      double _qte = double.parse(
-          _quntiteControler.text.trim());
-      double _price = double.parse(
-          _priceControler.text.trim());
+      double _qte = double.parse(_quntiteControler.text.trim());
+      double _price = double.parse(_priceControler.text.trim());
 
       widget.article.selectedQuantite = _qte;
       widget.article.selectedPriceTTC = _price;
       widget.article.selectedPrice =
-          (_price * 100) /
-              (100 + widget.article.tva);
+          (_price * 100) / (100 + widget.article.tva);
 
       widget.onItemSelected(null);
 
@@ -905,6 +911,7 @@ class _ArticleListItemState extends State<ArticleListItem> {
       _setState(() {});
     }
   }
+
   //*********************************************************************************************************************************************************************
   //*********************************************************************************************************************************************************
   Widget dellDialog(BuildContext context) {

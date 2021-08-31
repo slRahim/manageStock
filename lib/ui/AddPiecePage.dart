@@ -1134,8 +1134,17 @@ class _AddPiecePageState extends State<AddPiecePage>
                         flex: 6,
                         child: GestureDetector(
                           onTap: editMode
-                              ? () {
-                                  chooseClientDialog();
+                              ? () async{
+                                  if(modification){
+                                    var res = await _queryCtr.canChangePieceTier(_piece);
+                                    if(res){
+                                      chooseClientDialog();
+                                    }else{
+                                      Helpers.showToast(S.current.msg_change_tier_err);
+                                    }
+                                  }else{
+                                    chooseClientDialog();
+                                  }
                                 }
                               : null,
                           child: TextField(
@@ -2936,7 +2945,7 @@ class _AddPiecePageState extends State<AddPiecePage>
         ]);
       }
       ticket.hr(ch: '-');
-      if ((_piece.total_tva > 0 && _myParams.tva) || _piece.remise > 0) {
+      if ((_piece.total_tva > 0 || _myParams.tva) || _piece.remise > 0) {
         input = "${S.current.total_ht}";
         encArabic = await CharsetConverter.encode("ISO-8859-6",
             "${Helpers.numberFormat(_piece.total_ht).toString()}: ${input.split('').reversed.join()}");
@@ -2968,7 +2977,7 @@ class _AddPiecePageState extends State<AddPiecePage>
                     ? PosAlign.center
                     : PosAlign.left));
       }
-      if (_piece.total_tva > 0 && _myParams.tva) {
+      if (_piece.total_tva > 0 ) {
         input = "${S.current.total_tva}";
         encArabic = await CharsetConverter.encode("ISO-8859-6",
             "${Helpers.numberFormat(_piece.total_tva).toString()}: ${input.split('').reversed.join()}");
@@ -3237,7 +3246,7 @@ class _AddPiecePageState extends State<AddPiecePage>
       });
       ticket.hr(ch: '-');
       var encode;
-      if ((_piece.total_tva > 0 && _myParams.tva) || _piece.remise > 0) {
+      if ((_piece.total_tva > 0 || _myParams.tva) || _piece.remise > 0) {
         encode = await CharsetConverter.encode("ISO-8859-6",
             "${S.current.total_ht} : ${Helpers.numberFormat(_piece.total_ht).toString()}");
         ticket.textEncoded(encode,
@@ -3263,7 +3272,7 @@ class _AddPiecePageState extends State<AddPiecePage>
                     ? PosAlign.center
                     : PosAlign.left));
       }
-      if (_piece.total_tva > 0 && _myParams.tva) {
+      if (_piece.total_tva > 0 ) {
         encode = await CharsetConverter.encode("ISO-8859-6",
             "${S.current.total_tva} : ${Helpers.numberFormat(_piece.total_tva).toString()}");
         ticket.textEncoded(encode,
@@ -3597,14 +3606,14 @@ class _AddPiecePageState extends State<AddPiecePage>
                             font: arial,
                             fontSize: 10)),
                   ),
-                  pw.Container(
+                  (_myParams.tva || _piece.total_tva > 0)?pw.Container(
                     padding: pw.EdgeInsets.only(left: 5, right: 5, bottom: 2),
                     child: pw.Text("${S.current.tva}",
                         style: pw.TextStyle(
                             fontWeight: pw.FontWeight.bold,
                             font: arial,
                             fontSize: 10)),
-                  ),
+                  ):pw.SizedBox(),
                   pw.Container(
                       padding: pw.EdgeInsets.only(left: 5, right: 5, bottom: 2),
                       child: pw.Text("${S.current.montant_ht}",
@@ -3666,13 +3675,13 @@ class _AddPiecePageState extends State<AddPiecePage>
                               "${Helpers.numberFormat(e.selectedPrice)}",
                               style: pw.TextStyle(fontSize: 9))),
                     ),
-                    pw.Container(
+                    (_piece.total_tva > 0 ||_myParams.tva)?pw.Container(
                       padding: pw.EdgeInsets.only(left: 5, right: 5),
                       child: pw.Directionality(
                           textDirection: pw.TextDirection.ltr,
                           child: pw.Text("${Helpers.numberFormat(e.tva)}",
                               style: pw.TextStyle(fontSize: 9))),
-                    ),
+                    ):pw.SizedBox(),
                     pw.Container(
                       padding: pw.EdgeInsets.only(left: 5, right: 5),
                       child: pw.Directionality(
@@ -3753,24 +3762,12 @@ class _AddPiecePageState extends State<AddPiecePage>
                         ? pw.CrossAxisAlignment.end
                         : pw.CrossAxisAlignment.start,
                     children: [
-                      ((_piece.total_tva > 0 && _myParams.tva) ||
+                      ((_piece.total_tva > 0 || _myParams.tva) ||
                               _piece.remise > 0)
-                          ? (!directionRtl)
-                              ? pw.Text(
+                          ? pw.Text(
                                   "${S.current.total_ht}\t  ${Helpers.numberFormat(_piece.total_ht)}\t ${_devise}",
                                   style: pw.TextStyle(font: arial))
-                              : pw.Wrap(spacing: 5, runSpacing: 5, children: [
-                                  pw.Text(" ${_devise}",
-                                      style: pw.TextStyle(font: arial)),
-                                  pw.Directionality(
-                                    textDirection: pw.TextDirection.ltr,
-                                    child: pw.Text(
-                                        "${Helpers.numberFormat(_piece.total_ht)}\t",
-                                        style: pw.TextStyle(font: arial)),
-                                  ),
-                                  pw.Text("${S.current.total_ht}\t ",
-                                      style: pw.TextStyle(font: arial)),
-                                ])
+
                           : pw.SizedBox(),
                       (_piece.remise > 0)
                           ? pw.Text(
@@ -3782,12 +3779,12 @@ class _AddPiecePageState extends State<AddPiecePage>
                               "${S.current.net_ht}\t  ${Helpers.numberFormat(_piece.net_ht)}\t ${_devise}",
                               style: pw.TextStyle(font: arial))
                           : pw.SizedBox(),
-                      (_piece.total_tva > 0 && _myParams.tva)
+                      (_piece.total_tva > 0 )
                           ? pw.Text(
                               "${S.current.total_tva}\t  ${Helpers.numberFormat(_piece.total_tva)}\t  ${_devise}",
                               style: pw.TextStyle(font: arial))
                           : pw.SizedBox(),
-                      (_piece.total_tva > 0 && _myParams.tva)
+                      (_piece.total_tva > 0 )
                           ? pw.Text(
                               "${S.current.total_ttc}\t  ${Helpers.numberFormat(_piece.total_ttc)}\t  ${_devise}",
                               style: pw.TextStyle(font: arial))

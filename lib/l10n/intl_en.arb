@@ -355,7 +355,7 @@
   "sys_theme" : "System",
   "selec_pays" : "Select country",
 
-  "abonnement" : "Pass to Premium",
+  "abonnement" : "I want to subscribe",
   "msg_demo_option" : "This option does not avalaible for demo version",
   "msg_demo_exp" : "Your demonstration licence has expired, Please subscribe to get premium version",
   "msg_premium_exp" : "Your premium subscription has expired, Please resubscribe to service",
@@ -373,7 +373,7 @@
   "choix_city" : "Choose City",
   "department" : "Departement",
 
-  "abonnement_title" : "Upgrade to Premium",
+  "abonnement_title" : "Subscription",
   "illimite" : "Unlimited",
   "illimite_desc" : "number of products , invoices , customers , and providers",
   "imprime" : "Print",
@@ -651,8 +651,10 @@
   "days" : "Days",
   "montant_1" : "Amount",
   "a_credit_client" : "Has credit" ,
-  "a_credit_four" : "Has credit"
+  "a_credit_four" : "Has credit",
 
+  "zero" : "zero",
+  "msg_change_tier_err" : "you can't change"
 
 
 }
