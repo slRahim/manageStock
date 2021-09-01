@@ -131,7 +131,7 @@ class _ArticleListItemState extends State<ArticleListItem> {
               from: widget.article,
               alreadySelected: widget.alreadySelected,
               onLongPress: _longpressItem,
-              onTap: () => _tapItem(),
+              onTap: _tapItem,
               slidingCardController: controller,
               onCardTapped: () {
                 if (controller.isCardSeparated == true) {
@@ -352,7 +352,7 @@ class _ArticleListItemState extends State<ArticleListItem> {
   }
 
   _tapItem() async {
-    setState(() {});
+
     if (widget.onItemSelected == null) {
       Navigator.of(context)
           .pushNamed(RoutesKeys.addArticle, arguments: widget.article)
@@ -367,6 +367,7 @@ class _ArticleListItemState extends State<ArticleListItem> {
       if (widget.article.selectedQuantite == -1) {
         selectThisItem();
       }
+
        AwesomeDialog(
           context: context,
           dialogType: DialogType.NO_HEADER,
@@ -375,7 +376,6 @@ class _ArticleListItemState extends State<ArticleListItem> {
           body: addQtedialogue())
         ..show().then((value) {
 
-          print(value);
           if (widget.article.stockable &&
               (widget.pieceOrigin == 'BL' || widget.pieceOrigin == 'FC') &&
               ((widget.article.quantite - widget.article.cmdClient) <

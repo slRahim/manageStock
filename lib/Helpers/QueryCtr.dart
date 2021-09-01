@@ -919,13 +919,13 @@ class QueryCtr {
     for(int i =0 ; i< comptes.length ; i++){
       query = ''' 
             UPDATE CompteTresorie
-               SET Solde = IFNULL(Solde_depart + (SELECT Sum(Montant) FROM Tresories 
+               SET Solde = Solde_depart + IFNULL((SELECT Sum(Montant) FROM Tresories 
                                             WHERE Compte_id = ${comptes[i].id} AND (Categorie_id = 2 OR Categorie_id = 4 OR Categorie_id = 6)
-                                            ) 
-                                            + (SELECT  -1 * Sum(Montant) FROM Tresories 
+                                            ) ,0)
+                                            + IFNULL((SELECT  -1 * Sum(Montant) FROM Tresories 
                                               WHERE Compte_id = ${comptes[i].id} AND (Categorie_id = 3 OR Categorie_id = 5 OR Categorie_id = 7 OR Categorie_id = 8)
-                                              ) 
-                                  ,0)
+                                              ),0) 
+                                  
             WHERE id = ${comptes[i].id}; 
     ''';
 

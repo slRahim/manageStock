@@ -1134,15 +1134,17 @@ class _AddPiecePageState extends State<AddPiecePage>
                         flex: 6,
                         child: GestureDetector(
                           onTap: editMode
-                              ? () async{
-                                  if(modification){
-                                    var res = await _queryCtr.canChangePieceTier(_piece);
-                                    if(res){
+                              ? () async {
+                                  if (modification) {
+                                    var res = await _queryCtr
+                                        .canChangePieceTier(_piece);
+                                    if (res) {
                                       chooseClientDialog();
-                                    }else{
-                                      Helpers.showToast(S.current.msg_change_tier_err);
+                                    } else {
+                                      Helpers.showToast(
+                                          S.current.msg_change_tier_err);
                                     }
-                                  }else{
+                                  } else {
                                     chooseClientDialog();
                                   }
                                 }
@@ -2923,18 +2925,22 @@ class _AddPiecePageState extends State<AddPiecePage>
                   textEncoded: await CharsetConverter.encode("ISO-8859-6",
                       "${element.designation.substring(0, (element.designation.length < 8 ? element.designation.length : 8))}"),
                   width: 6),
-          ((element.selectedQuantite / element.quantiteColis) -
-                      (element.selectedQuantite / element.quantiteColis)
-                          .truncate() >
-                  0)
+          (!element.stockable || element.quantiteColis == 1)
               ? PosColumn(
-                  text:
-                      '${Helpers.numberFormat(element.selectedQuantite)} [${(element.selectedQuantite / element.quantiteColis).toInt()}+ ${S.current.colis_abr}]',
+                  text: '${Helpers.numberFormat(element.selectedQuantite)}',
                   width: 2)
-              : PosColumn(
-                  text:
-                      '${Helpers.numberFormat(element.selectedQuantite)} [${(element.selectedQuantite / element.quantiteColis).toInt()} ${S.current.colis_abr}]',
-                  width: 2),
+              : ((element.selectedQuantite / element.quantiteColis) -
+                          (element.selectedQuantite / element.quantiteColis)
+                              .truncate() >
+                      0)
+                  ? PosColumn(
+                      text:
+                          '${Helpers.numberFormat(element.selectedQuantite)} [${(element.selectedQuantite / element.quantiteColis).toInt()}+ ${S.current.colis_abr}]',
+                      width: 2)
+                  : PosColumn(
+                      text:
+                          '${Helpers.numberFormat(element.selectedQuantite)} [${(element.selectedQuantite / element.quantiteColis).toInt()} ${S.current.colis_abr}]',
+                      width: 2),
           PosColumn(
               text: '${Helpers.numberFormat(element.selectedPrice).toString()}',
               width: 2),
@@ -2977,7 +2983,7 @@ class _AddPiecePageState extends State<AddPiecePage>
                     ? PosAlign.center
                     : PosAlign.left));
       }
-      if (_piece.total_tva > 0 ) {
+      if (_piece.total_tva > 0) {
         input = "${S.current.total_tva}";
         encArabic = await CharsetConverter.encode("ISO-8859-6",
             "${Helpers.numberFormat(_piece.total_tva).toString()}: ${input.split('').reversed.join()}");
@@ -3222,18 +3228,23 @@ class _AddPiecePageState extends State<AddPiecePage>
                   text:
                       '${element.designation.substring(0, (element.designation.length < 8 ? element.designation.length : 8))}',
                   width: 6),
-          ((element.selectedQuantite / element.quantiteColis) -
-                      (element.selectedQuantite / element.quantiteColis)
-                          .truncate() >
-                  0)
+          (!element.stockable || element.quantiteColis == 1)
               ? PosColumn(
                   textEncoded: await CharsetConverter.encode("ISO-8859-6",
-                      '${Helpers.numberFormat(element.selectedQuantite).toString()} [${(element.selectedQuantite / element.quantiteColis).toInt()}+ ${S.current.colis_abr}]'),
+                      '${Helpers.numberFormat(element.selectedQuantite).toString()}'),
                   width: 2)
-              : PosColumn(
-                  textEncoded: await CharsetConverter.encode("ISO-8859-6",
-                      '${Helpers.numberFormat(element.selectedQuantite).toString()} [${(element.selectedQuantite / element.quantiteColis).toInt()} ${S.current.colis_abr}]'),
-                  width: 2),
+              : ((element.selectedQuantite / element.quantiteColis) -
+                          (element.selectedQuantite / element.quantiteColis)
+                              .truncate() >
+                      0)
+                  ? PosColumn(
+                      textEncoded: await CharsetConverter.encode("ISO-8859-6",
+                          '${Helpers.numberFormat(element.selectedQuantite).toString()} [${(element.selectedQuantite / element.quantiteColis).toInt()}+ ${S.current.colis_abr}]'),
+                      width: 2)
+                  : PosColumn(
+                      textEncoded: await CharsetConverter.encode("ISO-8859-6",
+                          '${Helpers.numberFormat(element.selectedQuantite).toString()} [${(element.selectedQuantite / element.quantiteColis).toInt()} ${S.current.colis_abr}]'),
+                      width: 2),
           PosColumn(
               textEncoded: await CharsetConverter.encode("ISO-8859-6",
                   '${Helpers.numberFormat(element.selectedPrice).toString()}'),
@@ -3272,7 +3283,7 @@ class _AddPiecePageState extends State<AddPiecePage>
                     ? PosAlign.center
                     : PosAlign.left));
       }
-      if (_piece.total_tva > 0 ) {
+      if (_piece.total_tva > 0) {
         encode = await CharsetConverter.encode("ISO-8859-6",
             "${S.current.total_tva} : ${Helpers.numberFormat(_piece.total_tva).toString()}");
         ticket.textEncoded(encode,
@@ -3606,14 +3617,17 @@ class _AddPiecePageState extends State<AddPiecePage>
                             font: arial,
                             fontSize: 10)),
                   ),
-                  (_myParams.tva || _piece.total_tva > 0)?pw.Container(
-                    padding: pw.EdgeInsets.only(left: 5, right: 5, bottom: 2),
-                    child: pw.Text("${S.current.tva}",
-                        style: pw.TextStyle(
-                            fontWeight: pw.FontWeight.bold,
-                            font: arial,
-                            fontSize: 10)),
-                  ):pw.SizedBox(),
+                  (_myParams.tva || _piece.total_tva > 0)
+                      ? pw.Container(
+                          padding:
+                              pw.EdgeInsets.only(left: 5, right: 5, bottom: 2),
+                          child: pw.Text("${S.current.tva}",
+                              style: pw.TextStyle(
+                                  fontWeight: pw.FontWeight.bold,
+                                  font: arial,
+                                  fontSize: 10)),
+                        )
+                      : pw.SizedBox(),
                   pw.Container(
                       padding: pw.EdgeInsets.only(left: 5, right: 5, bottom: 2),
                       child: pw.Text("${S.current.montant_ht}",
@@ -3675,13 +3689,15 @@ class _AddPiecePageState extends State<AddPiecePage>
                               "${Helpers.numberFormat(e.selectedPrice)}",
                               style: pw.TextStyle(fontSize: 9))),
                     ),
-                    (_piece.total_tva > 0 ||_myParams.tva)?pw.Container(
-                      padding: pw.EdgeInsets.only(left: 5, right: 5),
-                      child: pw.Directionality(
-                          textDirection: pw.TextDirection.ltr,
-                          child: pw.Text("${Helpers.numberFormat(e.tva)}",
-                              style: pw.TextStyle(fontSize: 9))),
-                    ):pw.SizedBox(),
+                    (_piece.total_tva > 0 || _myParams.tva)
+                        ? pw.Container(
+                            padding: pw.EdgeInsets.only(left: 5, right: 5),
+                            child: pw.Directionality(
+                                textDirection: pw.TextDirection.ltr,
+                                child: pw.Text("${Helpers.numberFormat(e.tva)}",
+                                    style: pw.TextStyle(fontSize: 9))),
+                          )
+                        : pw.SizedBox(),
                     pw.Container(
                       padding: pw.EdgeInsets.only(left: 5, right: 5),
                       child: pw.Directionality(
@@ -3765,9 +3781,8 @@ class _AddPiecePageState extends State<AddPiecePage>
                       ((_piece.total_tva > 0 || _myParams.tva) ||
                               _piece.remise > 0)
                           ? pw.Text(
-                                  "${S.current.total_ht}\t  ${Helpers.numberFormat(_piece.total_ht)}\t ${_devise}",
-                                  style: pw.TextStyle(font: arial))
-
+                              "${S.current.total_ht}\t  ${Helpers.numberFormat(_piece.total_ht)}\t ${_devise}",
+                              style: pw.TextStyle(font: arial))
                           : pw.SizedBox(),
                       (_piece.remise > 0)
                           ? pw.Text(
@@ -3779,12 +3794,12 @@ class _AddPiecePageState extends State<AddPiecePage>
                               "${S.current.net_ht}\t  ${Helpers.numberFormat(_piece.net_ht)}\t ${_devise}",
                               style: pw.TextStyle(font: arial))
                           : pw.SizedBox(),
-                      (_piece.total_tva > 0 )
+                      (_piece.total_tva > 0)
                           ? pw.Text(
                               "${S.current.total_tva}\t  ${Helpers.numberFormat(_piece.total_tva)}\t  ${_devise}",
                               style: pw.TextStyle(font: arial))
                           : pw.SizedBox(),
-                      (_piece.total_tva > 0 )
+                      (_piece.total_tva > 0)
                           ? pw.Text(
                               "${S.current.total_ttc}\t  ${Helpers.numberFormat(_piece.total_ttc)}\t  ${_devise}",
                               style: pw.TextStyle(font: arial))
