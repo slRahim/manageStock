@@ -2881,6 +2881,14 @@ class _AddPiecePageState extends State<AddPiecePage>
       ticket.hr(ch: '-');
       ticket.row([
         PosColumn(
+            textEncoded: await CharsetConverter.encode(
+                "ISO-8859-6", "${S.current.qte.split('').reversed.join()}"),
+            width: 2,
+            styles: PosStyles(
+              bold: true,
+              codeTable: PosCodeTable.arabic,
+            )),
+        PosColumn(
             textEncoded: await CharsetConverter.encode("ISO-8859-6",
                 "${S.current.articles.split('').reversed.join()}"),
             width: 6,
@@ -2890,15 +2898,7 @@ class _AddPiecePageState extends State<AddPiecePage>
             )),
         PosColumn(
             textEncoded: await CharsetConverter.encode(
-                "ISO-8859-6", "${S.current.qte.split('').reversed.join()}"),
-            width: 2,
-            styles: PosStyles(
-              bold: true,
-              codeTable: PosCodeTable.arabic,
-            )),
-        PosColumn(
-            textEncoded: await CharsetConverter.encode(
-                "ISO-8859-6", "${S.current.prix.split('').reversed.join()}"),
+                "ISO-8859-6", "${S.current.prix_ticket.split('').reversed.join()}"),
             width: 2,
             styles: PosStyles(
               bold: true,
@@ -2916,6 +2916,22 @@ class _AddPiecePageState extends State<AddPiecePage>
       for (int i = 0; i < _selectedItems.length; i++) {
         var element = _selectedItems[i];
         ticket.row([
+          (!element.stockable || element.quantiteColis == 1)
+              ? PosColumn(
+              text: '${Helpers.numberFormat(element.selectedQuantite)}',
+              width: 2)
+              : ((element.selectedQuantite / element.quantiteColis) -
+              (element.selectedQuantite / element.quantiteColis)
+                  .truncate() >
+              0)
+              ? PosColumn(
+              text:
+              '${Helpers.numberFormat(element.selectedQuantite)} [${(element.selectedQuantite / element.quantiteColis).toInt()}+ ${S.current.colis_abr}]',
+              width: 2)
+              : PosColumn(
+              text:
+              '${Helpers.numberFormat(element.selectedQuantite)} [${(element.selectedQuantite / element.quantiteColis).toInt()} ${S.current.colis_abr}]',
+              width: 2),
           (_myParams.printDisplay == 0)
               ? PosColumn(
                   textEncoded: await CharsetConverter.encode("ISO-8859-6",
@@ -2925,22 +2941,6 @@ class _AddPiecePageState extends State<AddPiecePage>
                   textEncoded: await CharsetConverter.encode("ISO-8859-6",
                       "${element.designation.substring(0, (element.designation.length < 8 ? element.designation.length : 8))}"),
                   width: 6),
-          (!element.stockable || element.quantiteColis == 1)
-              ? PosColumn(
-                  text: '${Helpers.numberFormat(element.selectedQuantite)}',
-                  width: 2)
-              : ((element.selectedQuantite / element.quantiteColis) -
-                          (element.selectedQuantite / element.quantiteColis)
-                              .truncate() >
-                      0)
-                  ? PosColumn(
-                      text:
-                          '${Helpers.numberFormat(element.selectedQuantite)} [${(element.selectedQuantite / element.quantiteColis).toInt()}+ ${S.current.colis_abr}]',
-                      width: 2)
-                  : PosColumn(
-                      text:
-                          '${Helpers.numberFormat(element.selectedQuantite)} [${(element.selectedQuantite / element.quantiteColis).toInt()} ${S.current.colis_abr}]',
-                      width: 2),
           PosColumn(
               text: '${Helpers.numberFormat(element.selectedPrice).toString()}',
               width: 2),
@@ -3205,20 +3205,38 @@ class _AddPiecePageState extends State<AddPiecePage>
       ticket.hr(ch: '-');
       ticket.row([
         PosColumn(
-            text: '${S.current.articles}',
-            width: 6,
-            styles: PosStyles(bold: true)),
-        PosColumn(
             text: '${S.current.qte}', width: 2, styles: PosStyles(bold: true)),
         PosColumn(
-            text: '${S.current.prix}', width: 2, styles: PosStyles(bold: true)),
+            text: '${S.current.articles}',
+            width: 6,
+            styles: PosStyles(bold: true , )),
+        PosColumn(
+            text: '${S.current.prix_ticket}', width: 2, styles: PosStyles(bold: true)),
         PosColumn(
             text: '${S.current.montant}',
             width: 2,
             styles: PosStyles(bold: true)),
       ]);
-      _selectedItems.forEach((element) async {
+      for(var i = 0 ; i< _selectedItems.length ; i++){
+        var element = _selectedItems[i];
         ticket.row([
+          (!element.stockable || element.quantiteColis == 1)
+              ? PosColumn(
+              textEncoded: await CharsetConverter.encode("ISO-8859-6",
+                  '${Helpers.numberFormat(element.selectedQuantite).toString()}'),
+              width: 2)
+              : ((element.selectedQuantite / element.quantiteColis) -
+              (element.selectedQuantite / element.quantiteColis)
+                  .truncate() >
+              0)
+              ? PosColumn(
+              textEncoded: await CharsetConverter.encode("ISO-8859-6",
+                  '${Helpers.numberFormat(element.selectedQuantite).toString()} [${(element.selectedQuantite / element.quantiteColis).toInt()}+ ${S.current.colis_abr}]'),
+              width: 2)
+              : PosColumn(
+              textEncoded: await CharsetConverter.encode("ISO-8859-6",
+                  '${Helpers.numberFormat(element.selectedQuantite).toString()} [${(element.selectedQuantite / element.quantiteColis).toInt()} ${S.current.colis_abr}]'),
+              width: 2),
           (_myParams.printDisplay == 0)
               ? PosColumn(
                   text:
@@ -3228,23 +3246,6 @@ class _AddPiecePageState extends State<AddPiecePage>
                   text:
                       '${element.designation.substring(0, (element.designation.length < 8 ? element.designation.length : 8))}',
                   width: 6),
-          (!element.stockable || element.quantiteColis == 1)
-              ? PosColumn(
-                  textEncoded: await CharsetConverter.encode("ISO-8859-6",
-                      '${Helpers.numberFormat(element.selectedQuantite).toString()}'),
-                  width: 2)
-              : ((element.selectedQuantite / element.quantiteColis) -
-                          (element.selectedQuantite / element.quantiteColis)
-                              .truncate() >
-                      0)
-                  ? PosColumn(
-                      textEncoded: await CharsetConverter.encode("ISO-8859-6",
-                          '${Helpers.numberFormat(element.selectedQuantite).toString()} [${(element.selectedQuantite / element.quantiteColis).toInt()}+ ${S.current.colis_abr}]'),
-                      width: 2)
-                  : PosColumn(
-                      textEncoded: await CharsetConverter.encode("ISO-8859-6",
-                          '${Helpers.numberFormat(element.selectedQuantite).toString()} [${(element.selectedQuantite / element.quantiteColis).toInt()} ${S.current.colis_abr}]'),
-                      width: 2),
           PosColumn(
               textEncoded: await CharsetConverter.encode("ISO-8859-6",
                   '${Helpers.numberFormat(element.selectedPrice).toString()}'),
@@ -3254,7 +3255,7 @@ class _AddPiecePageState extends State<AddPiecePage>
                   '${Helpers.numberFormat((element.selectedPrice * element.selectedQuantite)).toString()}'),
               width: 2),
         ]);
-      });
+      }
       ticket.hr(ch: '-');
       var encode;
       if ((_piece.total_tva > 0 || _myParams.tva) || _piece.remise > 0) {

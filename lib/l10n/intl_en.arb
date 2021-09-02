@@ -654,7 +654,8 @@
   "a_credit_four" : "Has credit",
 
   "zero" : "zero",
-  "msg_change_tier_err" : "you can't change"
+  "msg_change_tier_err" : "you can't change",
+  "prix_ticket" : "Price"
 
 
 }

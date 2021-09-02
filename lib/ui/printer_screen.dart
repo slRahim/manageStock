@@ -143,11 +143,12 @@ class _PrintState extends State<Print> {
   Widget printerListItem(device) {
     if (Platform.isAndroid) {
       return ListTile(
-        onTap: () {
-          printTicket2(context,
+        onTap: () async{
+          await printTicket2(context,
               name: device.split('#').first,
               mac: device.split('#').last,
               type: 1);
+          Navigator.pop(context);
         },
         leading: Icon(Icons.print),
         title: Text('${device.split('#').first}'),

@@ -510,6 +510,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "prix" : MessageLookupByLibrary.simpleMessage("Price excl. tax"),
     "prix_achat" : MessageLookupByLibrary.simpleMessage("Buying price excl. tax"),
     "prix_moyen" : MessageLookupByLibrary.simpleMessage("Average price"),
+    "prix_ticket" : MessageLookupByLibrary.simpleMessage("Price"),
     "prix_unite" : MessageLookupByLibrary.simpleMessage("Unit price"),
     "prix_v1" : MessageLookupByLibrary.simpleMessage("Price excl. tax 1"),
     "prix_v2" : MessageLookupByLibrary.simpleMessage("Price excl. tax 2"),

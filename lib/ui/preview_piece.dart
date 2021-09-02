@@ -280,19 +280,19 @@ class _PreviewPieceState extends State<PreviewPiece> {
                             children: [
                               TableRow(children: [
                                 Text(
-                                  "${S.current.articles}",
-                                  style: TextStyle(
-                                      fontWeight: FontWeight.bold,
-                                      color: Colors.black),
-                                ),
-                                Text(
                                   "${S.current.qte}",
                                   style: TextStyle(
                                       fontWeight: FontWeight.bold,
                                       color: Colors.black),
                                 ),
                                 Text(
-                                  "${S.current.prix}",
+                                  "${S.current.articles}",
+                                  style: TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      color: Colors.black),
+                                ),
+                                Text(
+                                  "${S.current.prix_ticket}",
                                   style: TextStyle(
                                       fontWeight: FontWeight.bold,
                                       color: Colors.black),
@@ -306,6 +306,27 @@ class _PreviewPieceState extends State<PreviewPiece> {
                               ]),
                               for (var e in widget.articles)
                                 TableRow(children: [
+                                  (!e.stockable || e.quantiteColis == 1)
+                                      ? Text(
+                                    "${Helpers.numberFormat(e.selectedQuantite)}",
+                                    style: TextStyle(color: Colors.black),
+                                  )
+                                      : ((e.selectedQuantite /
+                                      e.quantiteColis) -
+                                      (e.selectedQuantite /
+                                          e.quantiteColis)
+                                          .truncate() >
+                                      0)
+                                      ? Text(
+                                    "${Helpers.numberFormat(e.selectedQuantite)} [${(e.selectedQuantite / e.quantiteColis).toInt()}+ ${S.current.colis_abr}]",
+                                    style: TextStyle(
+                                        color: Colors.black),
+                                  )
+                                      : Text(
+                                    "${Helpers.numberFormat(e.selectedQuantite)} [${(e.selectedQuantite / e.quantiteColis).toInt()} ${S.current.colis_abr}]",
+                                    style: TextStyle(
+                                        color: Colors.black),
+                                  ),
                                   (_myParams.printDisplay != 0)
                                       ? Text(
                                           "${e.designation}",
@@ -315,27 +336,6 @@ class _PreviewPieceState extends State<PreviewPiece> {
                                           "${e.ref}",
                                           style: TextStyle(color: Colors.black),
                                         ),
-                                  (!e.stockable || e.quantiteColis == 1)
-                                      ? Text(
-                                          "${Helpers.numberFormat(e.selectedQuantite)}",
-                                          style: TextStyle(color: Colors.black),
-                                        )
-                                      : ((e.selectedQuantite /
-                                                      e.quantiteColis) -
-                                                  (e.selectedQuantite /
-                                                          e.quantiteColis)
-                                                      .truncate() >
-                                              0)
-                                          ? Text(
-                                              "${Helpers.numberFormat(e.selectedQuantite)} [${(e.selectedQuantite / e.quantiteColis).toInt()}+ ${S.current.colis_abr}]",
-                                              style: TextStyle(
-                                                  color: Colors.black),
-                                            )
-                                          : Text(
-                                              "${Helpers.numberFormat(e.selectedQuantite)} [${(e.selectedQuantite / e.quantiteColis).toInt()} ${S.current.colis_abr}]",
-                                              style: TextStyle(
-                                                  color: Colors.black),
-                                            ),
                                   Text(
                                     "${Helpers.numberFormat(e.selectedPrice)}",
                                     style: TextStyle(color: Colors.black),
@@ -728,6 +728,14 @@ class _PreviewPieceState extends State<PreviewPiece> {
       ticket.hr(ch: '-');
       ticket.row([
         PosColumn(
+            textEncoded: await CharsetConverter.encode(
+                "ISO-8859-6", "${S.current.qte.split('').reversed.join()}"),
+            width: 2,
+            styles: PosStyles(
+              bold: true,
+              codeTable: PosCodeTable.arabic,
+            )),
+        PosColumn(
             textEncoded: await CharsetConverter.encode("ISO-8859-6",
                 "${S.current.articles.split('').reversed.join()}"),
             width: 6,
@@ -737,15 +745,7 @@ class _PreviewPieceState extends State<PreviewPiece> {
             )),
         PosColumn(
             textEncoded: await CharsetConverter.encode(
-                "ISO-8859-6", "${S.current.qte.split('').reversed.join()}"),
-            width: 2,
-            styles: PosStyles(
-              bold: true,
-              codeTable: PosCodeTable.arabic,
-            )),
-        PosColumn(
-            textEncoded: await CharsetConverter.encode(
-                "ISO-8859-6", "${S.current.prix.split('').reversed.join()}"),
+                "ISO-8859-6", "${S.current.prix_ticket.split('').reversed.join()}"),
             width: 2,
             styles: PosStyles(
               bold: true,
@@ -763,6 +763,23 @@ class _PreviewPieceState extends State<PreviewPiece> {
       for (int i = 0; i < widget.articles.length; i++) {
         var element = widget.articles[i];
         ticket.row([
+          (!element.stockable || element.quantiteColis == 1)
+              ? PosColumn(
+              text:
+              '${Helpers.numberFormat(element.selectedQuantite).toString()}',
+              width: 2)
+              : ((element.selectedQuantite / element.quantiteColis) -
+              (element.selectedQuantite / element.quantiteColis)
+                  .truncate() >
+              0)
+              ? PosColumn(
+              text:
+              '${Helpers.numberFormat(element.selectedQuantite).toString()} [${(element.selectedQuantite / element.quantiteColis).toInt()}+ ${S.current.colis_abr}]',
+              width: 2)
+              : PosColumn(
+              text:
+              '${Helpers.numberFormat(element.selectedQuantite).toString()} [${(element.selectedQuantite / element.quantiteColis).toInt()} ${S.current.colis_abr}]',
+              width: 2),
           (_myParams.printDisplay == 0)
               ? PosColumn(
                   textEncoded: await CharsetConverter.encode("ISO-8859-6",
@@ -772,23 +789,6 @@ class _PreviewPieceState extends State<PreviewPiece> {
                   textEncoded: await CharsetConverter.encode("ISO-8859-6",
                       "${element.designation.substring(0, ((element.designation.length < 8 ? element.designation.length : 8)))}"),
                   width: 6),
-          (!element.stockable || element.quantiteColis == 1)
-              ? PosColumn(
-                  text:
-                      '${Helpers.numberFormat(element.selectedQuantite).toString()}',
-                  width: 2)
-              : ((element.selectedQuantite / element.quantiteColis) -
-                          (element.selectedQuantite / element.quantiteColis)
-                              .truncate() >
-                      0)
-                  ? PosColumn(
-                      text:
-                          '${Helpers.numberFormat(element.selectedQuantite).toString()} [${(element.selectedQuantite / element.quantiteColis).toInt()}+ ${S.current.colis_abr}]',
-                      width: 2)
-                  : PosColumn(
-                      text:
-                          '${Helpers.numberFormat(element.selectedQuantite).toString()} [${(element.selectedQuantite / element.quantiteColis).toInt()} ${S.current.colis_abr}]',
-                      width: 2),
           PosColumn(
               text: '${Helpers.numberFormat(element.selectedPrice).toString()}',
               width: 2),
@@ -1057,46 +1057,47 @@ class _PreviewPieceState extends State<PreviewPiece> {
       ticket.hr(ch: '-');
       ticket.row([
         PosColumn(
+            text: '${S.current.qte}', width: 2, styles: PosStyles(bold: true)),
+        PosColumn(
             text: '${S.current.articles}',
             width: 6,
             styles: PosStyles(bold: true)),
         PosColumn(
-            text: '${S.current.qte}', width: 2, styles: PosStyles(bold: true)),
-        PosColumn(
-            text: '${S.current.prix}', width: 2, styles: PosStyles(bold: true)),
+            text: '${S.current.prix_ticket}', width: 2, styles: PosStyles(bold: true)),
         PosColumn(
             text: '${S.current.montant}',
             width: 2,
             styles: PosStyles(bold: true)),
       ]);
-      widget.articles.forEach((element) async {
+      for(var i = 0 ; i< widget.articles.length ; i++){
+        var element = widget.articles[i];
         ticket.row([
-          (_myParams.printDisplay == 0)
-              ? PosColumn(
-                  text:
-                      '${element.ref.substring(0, (element.ref.length < 8 ? element.ref.length : 8))}',
-                  width: 6)
-              : PosColumn(
-                  text:
-                      '${element.designation.substring(0, (element.designation.length < 8 ? element.designation.length : 8))}',
-                  width: 6),
           (!element.stockable || element.quantiteColis == 1)
               ? PosColumn(
-                  textEncoded: await CharsetConverter.encode("ISO-8859-6",
-                      '${Helpers.numberFormat(element.selectedQuantite).toString()}'),
-                  width: 2)
+              textEncoded: await CharsetConverter.encode("ISO-8859-6",
+                  '${Helpers.numberFormat(element.selectedQuantite).toString()}'),
+              width: 2)
               : ((element.selectedQuantite / element.quantiteColis) -
-                          (element.selectedQuantite / element.quantiteColis)
-                              .truncate() >
-                      0)
-                  ? PosColumn(
-                      textEncoded: await CharsetConverter.encode("ISO-8859-6",
-                          '${Helpers.numberFormat(element.selectedQuantite).toString()} [${(element.selectedQuantite / element.quantiteColis).toInt()}+ ${S.current.colis_abr}]'),
-                      width: 2)
-                  : PosColumn(
-                      textEncoded: await CharsetConverter.encode("ISO-8859-6",
-                          '${Helpers.numberFormat(element.selectedQuantite).toString()} [${(element.selectedQuantite / element.quantiteColis).toInt()} ${S.current.colis_abr}]'),
-                      width: 2),
+              (element.selectedQuantite / element.quantiteColis)
+                  .truncate() >
+              0)
+              ? PosColumn(
+              textEncoded: await CharsetConverter.encode("ISO-8859-6",
+                  '${Helpers.numberFormat(element.selectedQuantite).toString()} [${(element.selectedQuantite / element.quantiteColis).toInt()}+ ${S.current.colis_abr}]'),
+              width: 2)
+              : PosColumn(
+              textEncoded: await CharsetConverter.encode("ISO-8859-6",
+                  '${Helpers.numberFormat(element.selectedQuantite).toString()} [${(element.selectedQuantite / element.quantiteColis).toInt()} ${S.current.colis_abr}]'),
+              width: 2),
+          (_myParams.printDisplay == 0)
+              ? PosColumn(
+              text:
+              '${element.ref.substring(0, (element.ref.length < 8 ? element.ref.length : 8))}',
+              width: 6)
+              : PosColumn(
+              text:
+              '${element.designation.substring(0, (element.designation.length < 8 ? element.designation.length : 8))}',
+              width: 6),
           PosColumn(
               textEncoded: await CharsetConverter.encode("ISO-8859-6",
                   '${Helpers.numberFormat(element.selectedPrice).toString()}'),
@@ -1106,7 +1107,7 @@ class _PreviewPieceState extends State<PreviewPiece> {
                   '${Helpers.numberFormat((element.selectedPrice * element.selectedQuantite)).toString()}'),
               width: 2),
         ]);
-      });
+      }
       ticket.hr(ch: '-');
       var encode;
       if ((widget.piece.total_tva > 0 || _myParams.tva) ||

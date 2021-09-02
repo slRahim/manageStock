@@ -653,5 +653,6 @@
   "a_credit_four" : "Avec crédit",
 
   "zero" : "zéro",
-  "msg_change_tier_err" : "vous ne pouvez pas changer"
+  "msg_change_tier_err" : "vous ne pouvez pas changer",
+  "prix_ticket" : "Prix"
 }

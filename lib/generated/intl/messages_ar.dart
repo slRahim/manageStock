@@ -510,6 +510,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "prix" : MessageLookupByLibrary.simpleMessage("السعر"),
     "prix_achat" : MessageLookupByLibrary.simpleMessage("سعر الشراء"),
     "prix_moyen" : MessageLookupByLibrary.simpleMessage("متوسط السعر"),
+    "prix_ticket" : MessageLookupByLibrary.simpleMessage("السعر"),
     "prix_unite" : MessageLookupByLibrary.simpleMessage("سعر الوحدة"),
     "prix_v1" : MessageLookupByLibrary.simpleMessage("سعر البيع 1"),
     "prix_v2" : MessageLookupByLibrary.simpleMessage("سعر البيع 2"),

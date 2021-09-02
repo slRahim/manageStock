@@ -6104,6 +6104,16 @@ class S {
       args: [],
     );
   }
+
+  /// `Price`
+  String get prix_ticket {
+    return Intl.message(
+      'Price',
+      name: 'prix_ticket',
+      desc: '',
+      args: [],
+    );
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<S> {

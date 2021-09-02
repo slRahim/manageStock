@@ -510,6 +510,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "prix" : MessageLookupByLibrary.simpleMessage("Prix HT"),
     "prix_achat" : MessageLookupByLibrary.simpleMessage("Prix d\'achat HT"),
     "prix_moyen" : MessageLookupByLibrary.simpleMessage("Prix moyen"),
+    "prix_ticket" : MessageLookupByLibrary.simpleMessage("Prix"),
     "prix_unite" : MessageLookupByLibrary.simpleMessage("Prix unitaire"),
     "prix_v1" : MessageLookupByLibrary.simpleMessage("Prix de vente HT 1"),
     "prix_v2" : MessageLookupByLibrary.simpleMessage("Prix de vente HT 2"),
