@@ -1705,20 +1705,20 @@ class S {
     );
   }
 
-  /// `Format 58Cm`
+  /// `Format 58 mm`
   String get format_58 {
     return Intl.message(
-      'Format 58Cm',
+      'Format 58 mm',
       name: 'format_58',
       desc: '',
       args: [],
     );
   }
 
-  /// `Format 80Cm`
+  /// `Format 80 mm`
   String get format_80 {
     return Intl.message(
-      'Format 80Cm',
+      'Format 80 mm',
       name: 'format_80',
       desc: '',
       args: [],
@@ -4055,11 +4055,61 @@ class S {
     );
   }
 
-  /// `centime`
+  /// `Centimes`
+  String get centimes {
+    return Intl.message(
+      'Centimes',
+      name: 'centimes',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Centime`
   String get centime {
     return Intl.message(
-      'centime',
+      'Centime',
       name: 'centime',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Cents`
+  String get cents {
+    return Intl.message(
+      'Cents',
+      name: 'cents',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Cent`
+  String get cent {
+    return Intl.message(
+      'Cent',
+      name: 'cent',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Millimes`
+  String get millimes {
+    return Intl.message(
+      'Millimes',
+      name: 'millimes',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Millime`
+  String get millime {
+    return Intl.message(
+      'Millime',
+      name: 'millime',
       desc: '',
       args: [],
     );
@@ -6110,6 +6160,16 @@ class S {
     return Intl.message(
       'Price',
       name: 'prix_ticket',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Decimal unit of currency`
+  String get param_decimal_unite_title {
+    return Intl.message(
+      'Decimal unit of currency',
+      name: 'param_decimal_unite_title',
       desc: '',
       args: [],
     );

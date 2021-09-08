@@ -44,6 +44,7 @@ class _SettingsPageState extends State<SettingsPage> {
 
   String _repeateNotification;
   int _echeance;
+  String _currencyDecimalText ;
 
   QueryCtr _queryCtr = new QueryCtr();
   MyParams _myParams;
@@ -64,6 +65,10 @@ class _SettingsPageState extends State<SettingsPage> {
     Statics.themeStyle[0] = S.current.light_theme;
     Statics.themeStyle[1] = S.current.dark_them;
     Statics.themeStyle[2] = S.current.sys_theme;
+
+    Statics.currencyDecimalTextList[0] = S.current.cent;
+    Statics.currencyDecimalTextList[1] = S.current.centime;
+    Statics.currencyDecimalTextList[2] = S.current.millime;
 
     Statics.repeateNotifications[0] = S.current.ev_day;
     Statics.repeateNotifications[1] = S.current.ev_sun;
@@ -125,6 +130,15 @@ class _SettingsPageState extends State<SettingsPage> {
         break;
     }
 
+    if(_prefs.getInt("currencyDecimalText") == null){
+      setState(() {
+        _currencyDecimalText = Statics.currencyDecimalTextList.elementAt(0);
+      });
+    }else{
+      setState(() {
+        _currencyDecimalText = Statics.currencyDecimalTextList.elementAt(_prefs.getInt("currencyDecimalText"));
+      });
+    }
     await setDataFromItem(_myParams);
   }
 
@@ -314,6 +328,31 @@ class _SettingsPageState extends State<SettingsPage> {
                           },
                         ),
                       );
+                    },
+                  ),
+                  SettingsTile(
+                    title: S.current.param_decimal_unite_title,
+                    subtitle: ("$_currencyDecimalText"),
+                    titleTextStyle: GoogleFonts.lato(),
+                    subtitleTextStyle: GoogleFonts.lato(),
+                    leading: Icon(MdiIcons.decimal,
+                        color: Theme.of(context).primaryColorDark),
+                    onTap: () async {
+                      AwesomeDialog(
+                          context: context,
+                          dialogType: DialogType.QUESTION,
+                          animType: AnimType.BOTTOMSLIDE,
+                          title: S.current.unite,
+                          body: _currencyDecimalDialog(),
+                          btnCancelText: S.current.non,
+                          btnCancelOnPress: () {},
+                          btnOkText: S.current.oui,
+                          btnOkOnPress: () async {
+                            setState(() {
+                              _currencyDecimalText;
+                            });
+                          })
+                        ..show();
                     },
                   ),
                   SettingsTile(
@@ -756,6 +795,66 @@ class _SettingsPageState extends State<SettingsPage> {
         ],
       );
 
+  _currencyDecimalDialog() {
+    ScrollController _controller = new ScrollController();
+    return StatefulBuilder(
+        builder: (context, setState) => Wrap(
+          children: [
+            Container(
+              height: 180,
+              child: Scrollbar(
+                isAlwaysShown: true,
+                controller: _controller,
+                child: ListView(
+                  controller: _controller,
+                  children: [
+                    RadioListTile(
+                      value: Statics.currencyDecimalTextList[0],
+                      groupValue: _currencyDecimalText,
+                      title: Text(
+                        S.current.cent,
+                        style: GoogleFonts.lato(),
+                      ),
+                      onChanged: (value) {
+                        setState(() {
+                          _currencyDecimalText = value;
+                        });
+                      },
+                    ),
+                    RadioListTile(
+                      value: Statics.currencyDecimalTextList[1],
+                      groupValue: _currencyDecimalText,
+                      title: Text(
+                        S.current.centime,
+                        style: GoogleFonts.lato(),
+                      ),
+                      onChanged: (value) {
+                        setState(() {
+                          _currencyDecimalText = value;
+                        });
+                      },
+                    ),
+                    RadioListTile(
+                      value: Statics.currencyDecimalTextList[2],
+                      groupValue: _currencyDecimalText,
+                      title: Text(
+                        S.current.millime,
+                        style: GoogleFonts.lato(),
+                      ),
+                      onChanged: (value) {
+                        setState(() {
+                          _currencyDecimalText = value;
+                        });
+                      },
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ],
+        ));
+  }
+
   _tarificationDialog() {
     ScrollController _controller = new ScrollController();
     return StatefulBuilder(
@@ -1149,13 +1248,14 @@ class _SettingsPageState extends State<SettingsPage> {
     _myParams.echeance = Statics.echeances.indexOf(_echeance);
     _myParams.pays = _countryname;
     _myParams.devise = _currencycode;
+    _myParams.currencyDecimalText = Statics.currencyDecimalTextList.indexOf(_currencyDecimalText);
 
     int id = -1;
     await _savelocale();
     await _saveStyle();
+    await _prefs.setInt("currencyDecimalText", _myParams.currencyDecimalText);
     id = await _queryCtr.updateItemInDb(DbTablesNames.myparams, _myParams);
     updateProfileCountry();
-    // await showNotification();
     var message = "";
     if (id > -1) {
       PushNotificationsManager.of(context).onMyParamsChange(_myParams);
@@ -1163,9 +1263,8 @@ class _SettingsPageState extends State<SettingsPage> {
     } else {
       message = "${S.current.msg_err_upd_param}";
     }
-
-    Navigator.pop(context);
     Helpers.showToast(message);
+    Navigator.pop(context);
   }
 
   Future updateProfileCountry() async {

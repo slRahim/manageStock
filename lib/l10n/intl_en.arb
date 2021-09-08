@@ -174,8 +174,8 @@
   "blue_off" : "Your blutoothe is OFF",
   "no_device" : "No printer found",
   "printer_titre" : "Printer (s)",
-  "format_58" : "Format 58Cm",
-  "format_80" : "Format 80Cm",
+  "format_58" : "Format 58 mm",
+  "format_80" : "Format 80 mm",
   "par_ref" : "By Reference",
   "par_desgn": "By Designation",
   "preview_titre" : "Preview",
@@ -439,7 +439,12 @@
   "lan_print" : "Print A4/A5",
   "export_pdf" : "Export as pdf",
 
-  "centime" : "centime",
+  "centimes" : "Centimes",
+  "centime" : "Centime",
+  "cents" : "Cents",
+  "cent" : "Cent",
+  "millimes" : "Millimes",
+  "millime" : "Millime",
   "DZD_name" : "Dinar algérien",
   "AFN_name" : "Afghan afghani",
   "EUR_name" : "Euro",
@@ -655,7 +660,7 @@
 
   "zero" : "zero",
   "msg_change_tier_err" : "you can't change",
-  "prix_ticket" : "Price"
+  "prix_ticket" : "Price",
 
-
+  "param_decimal_unite_title" : "Decimal unit of currency"
 }

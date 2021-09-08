@@ -50,6 +50,12 @@ class Statics {
     S.current.sys_theme
   ];
 
+  static List<String> currencyDecimalTextList = [
+    S.current.cent,
+    S.current.centime,
+    S.current.millime
+  ];
+
   static List<String> rapportItems = [
     S.current.vente,
     S.current.achat,

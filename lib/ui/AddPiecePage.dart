@@ -47,6 +47,7 @@ import 'package:pdf/widgets.dart' as pw;
 import 'package:printing/printing.dart';
 import 'package:collection/collection.dart';
 import 'package:image/image.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class AddPiecePage extends StatefulWidget {
   var arguments;
@@ -162,9 +163,11 @@ class _AddPiecePageState extends State<AddPiecePage>
   //**************************************************************************************************************************************
   //*********************************************** init le screen **********************************************************************
   Future<bool> futureInitState() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
     _profile = await _queryCtr.getProfileById(1);
     _myParams = await _queryCtr.getAllParams();
     _devise = Helpers.getDeviseTranslate(_myParams.devise);
+    _myParams.currencyDecimalText= prefs.getInt('currencyDecimalText');
 
     buildTarification(_myParams.tarification);
     _tarificationDropdownItems =
@@ -3375,7 +3378,7 @@ class _AddPiecePageState extends State<AddPiecePage>
   }
 
   Future _makePdfDocument() async {
-    var data = await rootBundle.load("assets/hacen_tunisia.ttf");
+    var data = await rootBundle.load("assets/arial.ttf");
     final arial = pw.Font.ttf(data);
 
     final doc = pw.Document();
@@ -3940,7 +3943,31 @@ class _AddPiecePageState extends State<AddPiecePage>
     int a = (val % 1 * 100).roundToDouble().toInt();
     if (a > 0) {
       res = res +
-          "${Helpers.numberToWords(a.toString()).capitalizeFirstofEach} ${S.current.centime}";
+          "${Helpers.numberToWords(a.toString()).capitalizeFirstofEach}";
+
+      switch(_myParams.currencyDecimalText){
+        case 0 :
+          if(a > 1){
+            res = res+ " ${S.current.cents}";
+          }else{
+            res = res + " ${S.current.cent}";
+          }
+          break;
+        case 1 :
+          if(a > 1){
+            res = res+ " ${S.current.centimes}";
+          }else{
+            res = res + " ${S.current.centime}";
+          }
+          break;
+        case 2 :
+          if(a > 1){
+            res = res+ " ${S.current.millimes}";
+          }else{
+            res = res + " ${S.current.millime}";
+          }
+          break;
+      }
     }
 
     return res;

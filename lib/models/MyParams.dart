@@ -17,6 +17,10 @@ class MyParams {
   String _pays;
   String _devise ;
 
+  //get from sharedPreferances
+  //unused in constructors
+  int _currencyDecimalText;
+
   String _versionType ;
   DateTime _startDate ;
   String _codeAbonnement ;
@@ -170,6 +174,12 @@ class MyParams {
 
   set id(int value) {
     _id = value;
+  }
+
+  int get currencyDecimalText => _currencyDecimalText;
+
+  set currencyDecimalText(int value) {
+    _currencyDecimalText = value;
   }
 
   @override

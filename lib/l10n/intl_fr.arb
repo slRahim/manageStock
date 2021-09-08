@@ -174,8 +174,8 @@
   "blue_off" : "Votre bluetooth est OFF",
   "no_device" : "Aucune imprimante trouvée",
   "printer_titre" : "Imprimante (s)",
-  "format_58" : "Format 58Cm",
-  "format_80" : "Format 80Cm",
+  "format_58" : "Format 58 mm",
+  "format_80" : "Format 80 mm",
   "par_ref" : "Par référence",
   "par_desgn": "Par désignation",
   "preview_titre" : "Aperçu",
@@ -438,7 +438,12 @@
   "lan_print" : "Impression A4/A5",
   "export_pdf" : "Exporter pdf",
 
-  "centime" : "centimes",
+  "centimes" : "Centimes",
+  "centime" : "Centime",
+  "cents" : "Cents",
+  "cent" : "Cent",
+  "millimes" : "Millimes",
+  "millime" : "Millime",
   "DZD_name" : "Dinars Algériens",
   "AFN_name" : "Afghan afghani",
   "EUR_name" : "Euro",
@@ -654,5 +659,7 @@
 
   "zero" : "zéro",
   "msg_change_tier_err" : "vous ne pouvez pas changer",
-  "prix_ticket" : "Prix"
+  "prix_ticket" : "Prix",
+
+  "param_decimal_unite_title" : "Unité décimale du devise"
 }

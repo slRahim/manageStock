@@ -175,8 +175,8 @@
   "blue_off" : "البلوتوث غير مفعل.",
   "no_device" : "لا توجد طابعة.",
   "printer_titre" : "الطابعة",
-  "format_58" : "شكل 58سم",
-  "format_80" : "شكل 80سم",
+  "format_58" : "شكل 58مم",
+  "format_80" : "شكل 80مم",
   "par_ref" : "رمز الصنف",
   "par_desgn": "إسم الصنف",
   "preview_titre" : "معاينة",
@@ -439,7 +439,12 @@
   "lan_print" : "طباعة A4/A5",
   "export_pdf" : "مشاركة pdf",
 
+  "centimes" : "سنتيم",
   "centime" : "سنتيم",
+  "cents" : "سنت",
+  "cent" : "سنت",
+  "millimes" : "مليم",
+  "millime" : "مليم",
   "DZD_name" : "دينار جزائري",
   "AFN_name" : "أفغان أفغاني",
   "EUR_name" : "يورو",
@@ -655,6 +660,8 @@
 
   "zero" : "صفر",
   "msg_change_tier_err" : "لا تستطيع التغيير",
-  "prix_ticket" : "السعر"
+  "prix_ticket" : "السعر",
+
+  "param_decimal_unite_title" : "الوحدة العشرية للعملة"
 
 }

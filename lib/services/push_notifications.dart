@@ -5,6 +5,7 @@ import 'package:gestmob/Helpers/Statics.dart';
 import 'package:gestmob/models/MyParams.dart';
 import 'package:gestmob/models/Profile.dart';
 import 'package:gestmob/Helpers/Helpers.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'local_notification.dart';
 
 class PushNotificationsManager extends StatefulWidget {
@@ -107,8 +108,16 @@ class PushNotificationsManagerState extends State<PushNotificationsManager> {
   }
 
   configureLocalNotification() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
     _profile = await _queryCtr.getProfileById(1);
     _myParams = await _queryCtr.getAllParams();
+
+    if(prefs.getInt("currencyDecimalText") == null){
+      _myParams.currencyDecimalText = 0;
+      await prefs.setInt("currencyDecimalText",0);
+    }else{
+      _myParams.currencyDecimalText = prefs.getInt("currencyDecimalText");
+    }
 
     if (_myParams.notifications) {
 
