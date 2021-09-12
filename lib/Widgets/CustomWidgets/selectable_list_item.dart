@@ -249,6 +249,7 @@ class _ArticleListItemSelectedState extends State<ArticleListItemSelected> {
                           _quntiteControler.text = '0.0';
                         }
                       },
+                      autofocus: (widget.article.quantiteColis > 1),
                       decoration: InputDecoration(
                         errorText: _validateColisError ?? null,
                         prefixIcon: Icon(
@@ -298,6 +299,7 @@ class _ArticleListItemSelectedState extends State<ArticleListItemSelected> {
                         _colisControler.text = '0';
                       }
                     },
+                    autofocus: (widget.article.quantiteColis<=1),
                     decoration: InputDecoration(
                       errorText: _validateQteError ?? null,
                       prefixIcon: Icon(
@@ -458,39 +460,78 @@ class _ArticleListItemSelectedState extends State<ArticleListItemSelected> {
   }
 
   _qteDialogMinusButton() {
-    double _qte = double.parse(_quntiteControler.text) - 1;
-    _quntiteControler.text = _qte.toStringAsFixed(2);
-    String value = _qte.toStringAsFixed(2);
-    if (value.trim() != '') {
-      double res = (double.parse(value) / widget.article.quantiteColis);
-      _colisControler.text = (res.toInt()).toString();
-      if (res - res.truncate() > 0) {
-        var a = ((res - res.truncate()) * widget.article.quantiteColis)
-            .round()
-            .toInt();
-        _colisControler.text += ' +$a';
+    if(widget.article.quantiteColis <= 1){
+      double _qte = double.parse(_quntiteControler.text) - 1;
+      _quntiteControler.text = _qte.toStringAsFixed(2);
+      String value = _qte.toStringAsFixed(2);
+      if (value.trim() != '') {
+        double res = (double.parse(value) / widget.article.quantiteColis);
+        _colisControler.text = (res.toInt()).toString();
+        if (res - res.truncate() > 0) {
+          var a = ((res - res.truncate()) * widget.article.quantiteColis)
+              .round()
+              .toInt();
+          _colisControler.text += ' +$a';
+        }
+      } else {
+        _colisControler.text = '0';
       }
-    } else {
-      _colisControler.text = '0';
+
+    }else{
+      double _colis = 0 ;
+      try{
+        _colis = double.parse(_colisControler.text.split("+").first) - 1;
+        _colisControler.text = _colis.toString();
+      }catch(e){
+        _colis = _colis -1 ;
+        _colisControler.text = (_colis).toString();
+      }
+      if(_colisControler.text.trim() != ""){
+        double qte = _colis * widget.article.quantiteColis ;
+        _quntiteControler.text = qte.toStringAsFixed(2);
+      }else{
+        _quntiteControler.text = "0";
+      }
     }
+
   }
 
   _qteDialogPlusButton() {
-    double _qte = double.parse(_quntiteControler.text) + 1;
-    _quntiteControler.text = _qte.toStringAsFixed(2);
-    String value = _qte.toStringAsFixed(2);
-    if (value.trim() != '') {
-      double res = (double.parse(value) / widget.article.quantiteColis);
-      _colisControler.text = (res.toInt()).toString();
-      if (res - res.truncate() > 0) {
-        var a = ((res - res.truncate()) * widget.article.quantiteColis)
-            .round()
-            .toInt();
-        _colisControler.text += ' +$a';
+    if(widget.article.quantiteColis <= 1){
+      double _qte = double.parse(_quntiteControler.text) + 1;
+      _quntiteControler.text = _qte.toStringAsFixed(2);
+      String value = _qte.toStringAsFixed(2);
+      if (value.trim() != '') {
+        double res = (double.parse(value) / widget.article.quantiteColis);
+        _colisControler.text = (res.toInt()).toString();
+        if (res - res.truncate() > 0) {
+          var a = ((res - res.truncate()) * widget.article.quantiteColis)
+              .round()
+              .toInt();
+          _colisControler.text += ' +$a';
+        }
+      } else {
+        _colisControler.text = '0';
       }
-    } else {
-      _colisControler.text = '0';
+
+    }else{
+      double _colis = 0 ;
+      try{
+        _colis = double.parse(_colisControler.text.split("+").first) + 1;
+        _colisControler.text = _colis.toString();
+      }catch(e){
+        _colis = _colis +1 ;
+        _colisControler.text = (_colis).toString();
+      }
+
+      if(_colisControler.text.trim() != ""){
+        double qte = _colis * widget.article.quantiteColis ;
+        _quntiteControler.text = qte.toStringAsFixed(2);
+      }else{
+        _quntiteControler.text = "0";
+      }
     }
+
   }
 
   _qteDialogCancelButton(context, setState) {

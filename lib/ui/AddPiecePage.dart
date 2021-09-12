@@ -3396,24 +3396,33 @@ class _AddPiecePageState extends State<AddPiecePage>
                       crossAxisAlignment: pw.CrossAxisAlignment.start,
                       children: [
                         (_profile.raisonSociale != null)
-                            ? pw.Text("${_profile.raisonSociale} ",
-                                style: pw.TextStyle(
-                                    font: arial,
-                                    fontWeight: pw.FontWeight.bold,
-                                    fontSize: 20))
+                            ? pw.Directionality(
+                          textDirection: pw.TextDirection.rtl,
+                          child : pw.Text("${_profile.raisonSociale} ",
+                              style: pw.TextStyle(
+                                  font: arial,
+                                  fontWeight: pw.FontWeight.bold,
+                                  fontSize: 20))
+                        )
                             : pw.SizedBox(),
                         (_profile.activite != "")
-                            ? pw.Text("${_profile.activite} ",
-                                style: pw.TextStyle(
-                                    font: arial,
-                                    fontWeight: pw.FontWeight.bold))
+                            ? pw.Directionality(
+                          textDirection: pw.TextDirection.rtl,
+                          child: pw.Text("${_profile.activite} ",
+                              style: pw.TextStyle(
+                                  font: arial,
+                                  fontWeight: pw.FontWeight.bold))
+                        )
                             : pw.SizedBox(),
                         (_profile.adresse != "")
-                            ? pw.Text(
-                                "${_profile.adresse} ${_profile.departement} ${_profile.ville} ${_profile.pays}",
-                                style: pw.TextStyle(
-                                    font: arial,
-                                    fontWeight: pw.FontWeight.bold))
+                            ? pw.Directionality(
+                          textDirection: pw.TextDirection.rtl,
+                          child : pw.Text(
+                              "${_profile.adresse} ${_profile.departement} ${_profile.ville} ${_profile.pays}",
+                              style: pw.TextStyle(
+                                  font: arial,
+                                  fontWeight: pw.FontWeight.bold))
+                        )
                             : pw.SizedBox(),
                         (_profile.telephone != "")
                             ? pw.Text(
@@ -3495,26 +3504,35 @@ class _AddPiecePageState extends State<AddPiecePage>
                 child: pw.Column(
                     crossAxisAlignment: pw.CrossAxisAlignment.start,
                     children: [
-                      pw.Text(
-                          (_piece.piece == PieceType.devis ||
-                                  _piece.piece == PieceType.bonLivraison ||
-                                  _piece.piece == PieceType.factureClient ||
-                                  _piece.piece == PieceType.commandeClient ||
-                                  _piece.piece == PieceType.retourClient ||
-                                  _piece.piece == PieceType.avoirClient)
-                              ? "${S.current.client_titre}\t ${_selectedClient.raisonSociale} "
-                              : "${S.current.fournisseur_imp}\t ${_selectedClient.raisonSociale} ",
-                          style: pw.TextStyle(font: arial)),
+                      pw.Directionality(
+                        textDirection :pw.TextDirection.rtl,
+                        child: pw.Text(
+                            (_piece.piece == PieceType.devis ||
+                                _piece.piece == PieceType.bonLivraison ||
+                                _piece.piece == PieceType.factureClient ||
+                                _piece.piece == PieceType.commandeClient ||
+                                _piece.piece == PieceType.retourClient ||
+                                _piece.piece == PieceType.avoirClient)
+                                ? "${S.current.client_titre}\t ${_selectedClient.raisonSociale} "
+                                : "${S.current.fournisseur_imp}\t ${_selectedClient.raisonSociale} ",
+                            style: pw.TextStyle(font: arial))
+                      ),
                       pw.Divider(height: 2),
                       (_selectedClient.adresse != "")
-                          ? pw.Text(
-                              "${S.current.adresse}\t  ${_selectedClient.adresse} ",
-                              style: pw.TextStyle(font: arial))
+                          ? pw.Directionality(
+                        textDirection: pw.TextDirection.rtl,
+                        child: pw.Text(
+                            "${S.current.adresse}\t  ${_selectedClient.adresse} ",
+                            style: pw.TextStyle(font: arial))
+                      )
                           : pw.SizedBox(),
                       (_selectedClient.ville != "")
-                          ? pw.Text(
-                              "${S.current.ville}\t  ${_selectedClient.ville}",
-                              style: pw.TextStyle(font: arial))
+                          ? pw.Directionality(
+                        textDirection: pw.TextDirection.rtl,
+                        child: pw.Text(
+                            "${S.current.ville}\t  ${_selectedClient.ville}",
+                            style: pw.TextStyle(font: arial))
+                      )
                           : pw.SizedBox(),
                       ((_piece.piece == PieceType.factureClient ||
                                   _piece.piece ==
@@ -3649,13 +3667,19 @@ class _AddPiecePageState extends State<AddPiecePage>
                   children: [
                     pw.Container(
                       padding: pw.EdgeInsets.only(left: 5, right: 5),
-                      child: pw.Text((e.ref != '') ? "${e.ref}" : "##",
-                          style: pw.TextStyle(font: arial, fontSize: 9)),
+                      child: pw.Directionality(
+                        textDirection: pw.TextDirection.rtl,
+                        child : pw.Text((e.ref != '') ? "${e.ref}" : "##",
+                            style: pw.TextStyle(font: arial, fontSize: 9))
+                      ),
                     ),
                     pw.Container(
                       padding: pw.EdgeInsets.only(left: 5, right: 5),
-                      child: pw.Text("${e.designation}",
-                          style: pw.TextStyle(font: arial, fontSize: 9)),
+                      child: pw.Directionality(
+                        textDirection: pw.TextDirection.rtl,
+                        child : pw.Text("${e.designation}",
+                            style: pw.TextStyle(font: arial, fontSize: 9))
+                      ),
                     ),
                     pw.Container(
                       padding: pw.EdgeInsets.only(left: 5, right: 5),

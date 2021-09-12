@@ -584,8 +584,11 @@ class _RapportState extends State<Rapport> {
                           child:  pw.Text("${Helpers.numberFormat(value)}",
                               style: pw.TextStyle(font: ttf, fontSize: 9))
                         )
-                            : pw.Text("${getValue(value)}",
-                                style: pw.TextStyle(font: ttf, fontSize: 9)),
+                            : pw.Directionality(
+                          textDirection: pw.TextDirection.rtl,
+                          child:pw.Text("${getValue(value)}",
+                              style: pw.TextStyle(font: ttf, fontSize: 9))
+                        ),
                       )
                   ]),
 
