@@ -135,10 +135,10 @@ class S {
     );
   }
 
-  /// `Providers`
+  /// `Vendors`
   String get fournisseur {
     return Intl.message(
-      'Providers',
+      'Vendors',
       name: 'fournisseur',
       desc: '',
       args: [],
@@ -155,10 +155,10 @@ class S {
     );
   }
 
-  /// `Delivery Forms`
+  /// `Delivery notes`
   String get bon_livraison {
     return Intl.message(
-      'Delivery Forms',
+      'Delivery notes',
       name: 'bon_livraison',
       desc: '',
       args: [],
@@ -205,20 +205,20 @@ class S {
     );
   }
 
-  /// `Customer Feedback`
+  /// `Customer returns`
   String get retour_client {
     return Intl.message(
-      'Customer Feedback',
+      'Customer returns',
       name: 'retour_client',
       desc: '',
       args: [],
     );
   }
 
-  /// `Provider FeedBack`
+  /// `Vendor returns`
   String get retour_fournisseur {
     return Intl.message(
-      'Provider FeedBack',
+      'Vendor returns',
       name: 'retour_fournisseur',
       desc: '',
       args: [],
@@ -235,10 +235,10 @@ class S {
     );
   }
 
-  /// `Provider Invoice Feedback`
+  /// `Vendor credit note`
   String get avoir_fournisseur {
     return Intl.message(
-      'Provider Invoice Feedback',
+      'Vendor credit note',
       name: 'avoir_fournisseur',
       desc: '',
       args: [],
@@ -285,10 +285,10 @@ class S {
     );
   }
 
-  /// `Veulliez entrez un raison social`
+  /// `Please enter a name/company name.`
   String get msg_entre_rs {
     return Intl.message(
-      'Veulliez entrez un raison social',
+      'Please enter a name/company name.',
       name: 'msg_entre_rs',
       desc: '',
       args: [],
@@ -325,10 +325,10 @@ class S {
     );
   }
 
-  /// `Social Code`
+  /// `name/company name`
   String get rs {
     return Intl.message(
-      'Social Code',
+      'name/company name',
       name: 'rs',
       desc: '',
       args: [],
@@ -445,10 +445,10 @@ class S {
     );
   }
 
-  /// `N° RC`
+  /// `CRN`
   String get n_rc {
     return Intl.message(
-      'N° RC',
+      'CRN',
       name: 'n_rc',
       desc: '',
       args: [],
@@ -465,50 +465,50 @@ class S {
     );
   }
 
-  /// `NVAT/NIF`
+  /// `Tax ID`
   String get nif {
     return Intl.message(
-      'NVAT/NIF',
+      'Tax ID',
       name: 'nif',
       desc: '',
       args: [],
     );
   }
 
-  /// `NIS`
+  /// `Tax ID2`
   String get nis {
     return Intl.message(
-      'NIS',
+      'Tax ID2',
       name: 'nis',
       desc: '',
       args: [],
     );
   }
 
-  /// `Social Capital`
+  /// `Share capital`
   String get capitale_sociale {
     return Intl.message(
-      'Social Capital',
+      'Share capital',
       name: 'capitale_sociale',
       desc: '',
       args: [],
     );
   }
 
-  /// `Enable Code Pin`
+  /// `Enable password`
   String get code_pin {
     return Intl.message(
-      'Enable Code Pin',
+      'Enable password',
       name: 'code_pin',
       desc: '',
       args: [],
     );
   }
 
-  /// `You didn't set password yet`
+  /// `You didn't set a password yet.`
   String get msg_no_pass {
     return Intl.message(
-      'You didn\'t set password yet',
+      'You didn\'t set a password yet.',
       name: 'msg_no_pass',
       desc: '',
       args: [],
@@ -525,80 +525,80 @@ class S {
     );
   }
 
-  /// `Click edit to set your password`
+  /// `Tap edit to set your password.`
   String get msg_edit_pass {
     return Intl.message(
-      'Click edit to set your password',
+      'Tap edit to set your password.',
       name: 'msg_edit_pass',
       desc: '',
       args: [],
     );
   }
 
-  /// `Click edit to change your password`
+  /// `Tap edit to change your password.`
   String get msg_edit_pass1 {
     return Intl.message(
-      'Click edit to change your password',
+      'Tap edit to change your password.',
       name: 'msg_edit_pass1',
       desc: '',
       args: [],
     );
   }
 
-  /// `Click save to store your password`
+  /// `Tap save to store your password.`
   String get msg_save_pass {
     return Intl.message(
-      'Click save to store your password',
+      'Tap save to store your password.',
       name: 'msg_save_pass',
       desc: '',
       args: [],
     );
   }
 
-  /// `Incorrect Pin`
+  /// `Incorrect password.`
   String get msg_pass_incorrecte {
     return Intl.message(
-      'Incorrect Pin',
+      'Incorrect password.',
       name: 'msg_pass_incorrecte',
       desc: '',
       args: [],
     );
   }
 
-  /// `Choose PinCode`
+  /// `Choose a password.`
   String get msg_choix_pin {
     return Intl.message(
-      'Choose PinCode',
+      'Choose a password.',
       name: 'msg_choix_pin',
       desc: '',
       args: [],
     );
   }
 
-  /// `Confirm PinCode`
+  /// `Confirm password.`
   String get msg_confirm_pin {
     return Intl.message(
-      'Confirm PinCode',
+      'Confirm password.',
       name: 'msg_confirm_pin',
       desc: '',
       args: [],
     );
   }
 
-  /// `Add PinCode To Protect Data`
+  /// `Add a password to protect data.`
   String get msg_entre_pin {
     return Intl.message(
-      'Add PinCode To Protect Data',
+      'Add a password to protect data.',
       name: 'msg_entre_pin',
       desc: '',
       args: [],
     );
   }
 
-  /// `Confirm PinCode To Protect Data`
+  /// `Confirm password to protect data`
   String get msg_confirm_pin1 {
     return Intl.message(
-      'Confirm PinCode To Protect Data',
+      'Confirm password to protect data',
       name: 'msg_confirm_pin1',
       desc: '',
       args: [],
@@ -675,10 +675,10 @@ class S {
     );
   }
 
-  /// `Filer`
+  /// `Apply`
   String get filtrer_btn {
     return Intl.message(
-      'Filer',
+      'Apply',
       name: 'filtrer_btn',
       desc: '',
       args: [],
@@ -715,10 +715,10 @@ class S {
     );
   }
 
-  /// `Provider`
+  /// `Vendor`
   String get fournisseur_titre {
     return Intl.message(
-      'Provider',
+      'Vendor',
       name: 'fournisseur_titre',
       desc: '',
       args: [],
@@ -735,10 +735,10 @@ class S {
     );
   }
 
-  /// `Bloqued`
+  /// `Blocked`
   String get aff_bloquer {
     return Intl.message(
-      'Bloqued',
+      'Blocked',
       name: 'aff_bloquer',
       desc: '',
       args: [],
@@ -785,10 +785,10 @@ class S {
     );
   }
 
-  /// `Error : Unknown Error`
+  /// `Error : Unknown Error.`
   String get msg_ereure {
     return Intl.message(
-      'Error : Unknown Error',
+      'Error : Unknown Error.',
       name: 'msg_ereure',
       desc: '',
       args: [],
@@ -825,20 +825,20 @@ class S {
     );
   }
 
-  /// `Required Field`
+  /// `Required Field.`
   String get msg_champ_oblg {
     return Intl.message(
-      'Required Field',
+      'Required Field.',
       name: 'msg_champ_oblg',
       desc: '',
       args: [],
     );
   }
 
-  /// `Double tap to scan qr`
+  /// `Double tap to scan QR.`
   String get msg_scan_qr {
     return Intl.message(
-      'Double tap to scan qr',
+      'Double tap to scan QR.',
       name: 'msg_scan_qr',
       desc: '',
       args: [],
@@ -855,10 +855,10 @@ class S {
     );
   }
 
-  /// `Sales Number `
+  /// `Turnover`
   String get chifre_affaire {
     return Intl.message(
-      'Sales Number ',
+      'Turnover',
       name: 'chifre_affaire',
       desc: '',
       args: [],
@@ -895,40 +895,40 @@ class S {
     );
   }
 
-  /// `Customer/Provider`
+  /// `Customer/Vendor`
   String get client_four {
     return Intl.message(
-      'Customer/Provider',
+      'Customer/Vendor',
       name: 'client_four',
       desc: '',
       args: [],
     );
   }
 
-  /// `Bloqued`
+  /// `Blocked`
   String get bloquer {
     return Intl.message(
-      'Bloqued',
+      'Blocked',
       name: 'bloquer',
       desc: '',
       args: [],
     );
   }
 
-  /// `No QrCode was associate to the tier `
+  /// `No Qr Code was associate.`
   String get msg_no_qr {
     return Intl.message(
-      'No QrCode was associate to the tier ',
+      'No Qr Code was associate.',
       name: 'msg_no_qr',
       desc: '',
       args: [],
     );
   }
 
-  /// `Please add at least raison social et mobile`
+  /// `Please add at least a name and mobile number.`
   String get msg_gen_qr {
     return Intl.message(
-      'Please add at least raison social et mobile',
+      'Please add at least a name and mobile number.',
       name: 'msg_gen_qr',
       desc: '',
       args: [],
@@ -945,60 +945,60 @@ class S {
     );
   }
 
-  /// `Price alternative`
+  /// `Price variants`
   String get tarification {
     return Intl.message(
-      'Price alternative',
+      'Price variants',
       name: 'tarification',
       desc: '',
       args: [],
     );
   }
 
-  /// `Familly added`
+  /// `Familly added.`
   String get msg_fam_ajout {
     return Intl.message(
-      'Familly added',
+      'Familly added.',
       name: 'msg_fam_ajout',
       desc: '',
       args: [],
     );
   }
 
-  /// `Element has been added successfully`
+  /// `Element has been added successfully.`
   String get msg_ajout_item {
     return Intl.message(
-      'Element has been added successfully',
+      'Element has been added successfully.',
       name: 'msg_ajout_item',
       desc: '',
       args: [],
     );
   }
 
-  /// `Element has been updated successfully`
+  /// `Element has been updated successfully.`
   String get msg_update_item {
     return Intl.message(
-      'Element has been updated successfully',
+      'Element has been updated successfully.',
       name: 'msg_update_item',
       desc: '',
       args: [],
     );
   }
 
-  /// `Error when adding element to db`
+  /// `Error when adding an element to data base.`
   String get msg_ajout_err {
     return Intl.message(
-      'Error when adding element to db',
+      'Error when adding an element to data base.',
       name: 'msg_ajout_err',
       desc: '',
       args: [],
     );
   }
 
-  /// `Error when updating element`
+  /// `Error when updating an element.`
   String get msg_update_err {
     return Intl.message(
-      'Error when updating element',
+      'Error when updating an element.',
       name: 'msg_update_err',
       desc: '',
       args: [],
@@ -1015,10 +1015,10 @@ class S {
     );
   }
 
-  /// `Do you wont to delete the element'`
+  /// `Do you wont to delete the element?`
   String get msg_supp {
     return Intl.message(
-      'Do you wont to delete the element\'',
+      'Do you wont to delete the element?',
       name: 'msg_supp',
       desc: '',
       args: [],
@@ -1045,30 +1045,30 @@ class S {
     );
   }
 
-  /// `You can't dell a default element`
+  /// `You can't delete a default element.`
   String get msg_supp_err1 {
     return Intl.message(
-      'You can\'t dell a default element',
+      'You can\'t delete a default element.',
       name: 'msg_supp_err1',
       desc: '',
       args: [],
     );
   }
 
-  /// `Element has been deleted successfully`
+  /// `Element has been deleted successfully.`
   String get msg_supp_ok {
     return Intl.message(
-      'Element has been deleted successfully',
+      'Element has been deleted successfully.',
       name: 'msg_supp_ok',
       desc: '',
       args: [],
     );
   }
 
-  /// `You can't dell element. others items are associated`
+  /// `You can't delete an element when items are associated with it.`
   String get msg_supp_err2 {
     return Intl.message(
-      'You can\'t dell element. others items are associated',
+      'You can\'t delete an element when items are associated with it.',
       name: 'msg_supp_err2',
       desc: '',
       args: [],
@@ -1125,10 +1125,10 @@ class S {
     );
   }
 
-  /// `Total HT`
+  /// `Total (Tax excl.)`
   String get total_ht {
     return Intl.message(
-      'Total HT',
+      'Total (Tax excl.)',
       name: 'total_ht',
       desc: '',
       args: [],
@@ -1145,30 +1145,30 @@ class S {
     );
   }
 
-  /// `Total VAT`
+  /// `Total Tax`
   String get total_tva {
     return Intl.message(
-      'Total VAT',
+      'Total Tax',
       name: 'total_tva',
       desc: '',
       args: [],
     );
   }
 
-  /// `Net to pay`
+  /// `Total`
   String get net_payer {
     return Intl.message(
-      'Net to pay',
+      'Total',
       name: 'net_payer',
       desc: '',
       args: [],
     );
   }
 
-  /// `Veuillez séléctionner au moins un article`
+  /// `Please select at least one item.`
   String get msg_select_art {
     return Intl.message(
-      'Veuillez séléctionner au moins un article',
+      'Please select at least one item.',
       name: 'msg_select_art',
       desc: '',
       args: [],
@@ -1225,10 +1225,10 @@ class S {
     );
   }
 
-  /// `Total TTC`
+  /// `Total (VAT incl.)`
   String get total_ttc {
     return Intl.message(
-      'Total TTC',
+      'Total (VAT incl.)',
       name: 'total_ttc',
       desc: '',
       args: [],
@@ -1245,10 +1245,10 @@ class S {
     );
   }
 
-  /// `Choose Action`
+  /// `Choose an Action`
   String get choisir_action {
     return Intl.message(
-      'Choose Action',
+      'Choose an Action',
       name: 'choisir_action',
       desc: '',
       args: [],
@@ -1295,40 +1295,40 @@ class S {
     );
   }
 
-  /// `Num is already exist!`
+  /// `Number already exists!`
   String get msg_num_existe {
     return Intl.message(
-      'Num is already exist!',
+      'Number already exists!',
       name: 'msg_num_existe',
       desc: '',
       args: [],
     );
   }
 
-  /// `Piece has been transferred`
+  /// `Document has been transferred.`
   String get msg_piece_transfere {
     return Intl.message(
-      'Piece has been transferred',
+      'Document has been transferred.',
       name: 'msg_piece_transfere',
       desc: '',
       args: [],
     );
   }
 
-  /// `Error when transforming piece`
+  /// `Error while transferring the document!`
   String get msg_transfere_err {
     return Intl.message(
-      'Error when transforming piece',
+      'Error while transferring the document!',
       name: 'msg_transfere_err',
       desc: '',
       args: [],
     );
   }
 
-  /// `No default printer`
+  /// `No default printer.`
   String get msg_imp_err {
     return Intl.message(
-      'No default printer',
+      'No default printer.',
       name: 'msg_imp_err',
       desc: '',
       args: [],
@@ -1345,10 +1345,10 @@ class S {
     );
   }
 
-  /// `Please select a tier`
+  /// `Please select a tier.`
   String get msg_select_tier {
     return Intl.message(
-      'Please select a tier',
+      'Please select a tier.',
       name: 'msg_select_tier',
       desc: '',
       args: [],
@@ -1365,10 +1365,10 @@ class S {
     );
   }
 
-  /// `Apply to total credit`
+  /// `Apply to total balance.`
   String get msg_credit_total {
     return Intl.message(
-      'Apply to total credit',
+      'Apply to total balance.',
       name: 'msg_credit_total',
       desc: '',
       args: [],
@@ -1445,10 +1445,10 @@ class S {
     );
   }
 
-  /// `Please enter designation`
+  /// `Please enter a designation.`
   String get msg_designation {
     return Intl.message(
-      'Please enter designation',
+      'Please enter a designation.',
       name: 'msg_designation',
       desc: '',
       args: [],
@@ -1465,10 +1465,10 @@ class S {
     );
   }
 
-  /// `Enter designation`
+  /// `Enter a designation.`
   String get msg_entre_design {
     return Intl.message(
-      'Enter designation',
+      'Enter a designation.',
       name: 'msg_entre_design',
       desc: '',
       args: [],
@@ -1495,20 +1495,20 @@ class S {
     );
   }
 
-  /// `Double tap to scan barcode`
+  /// `Double Tap to scan barcode.`
   String get msg_scan_barcode {
     return Intl.message(
-      'Double tap to scan barcode',
+      'Double Tap to scan barcode.',
       name: 'msg_scan_barcode',
       desc: '',
       args: [],
     );
   }
 
-  /// `Buying price excl. tax`
+  /// `Buying price (excl. tax).`
   String get prix_achat {
     return Intl.message(
-      'Buying price excl. tax',
+      'Buying price (excl. tax).',
       name: 'prix_achat',
       desc: '',
       args: [],
@@ -1525,10 +1525,10 @@ class S {
     );
   }
 
-  /// `PMP`
+  /// `VWAP`
   String get pmp {
     return Intl.message(
-      'PMP',
+      'VWAP',
       name: 'pmp',
       desc: '',
       args: [],
@@ -1555,30 +1555,30 @@ class S {
     );
   }
 
-  /// `Initial Stock`
+  /// `Initial Quantity`
   String get stock_init {
     return Intl.message(
-      'Initial Stock',
+      'Initial Quantity',
       name: 'stock_init',
       desc: '',
       args: [],
     );
   }
 
-  /// `Stock min`
+  /// `Min Quantity`
   String get stock_min {
     return Intl.message(
-      'Stock min',
+      'Min Quantity',
       name: 'stock_min',
       desc: '',
       args: [],
     );
   }
 
-  /// `Qte in package`
+  /// `Qte in a package`
   String get qte_colis {
     return Intl.message(
-      'Qte in package',
+      'Qte in a package',
       name: 'qte_colis',
       desc: '',
       args: [],
@@ -1595,40 +1595,40 @@ class S {
     );
   }
 
-  /// `Price excl. tax 1`
+  /// `Price 1 (excl. tax)`
   String get prix_v1 {
     return Intl.message(
-      'Price excl. tax 1',
+      'Price 1 (excl. tax)',
       name: 'prix_v1',
       desc: '',
       args: [],
     );
   }
 
-  /// `Price excl. tax 2`
+  /// `Price 2 (excl. tax)`
   String get prix_v2 {
     return Intl.message(
-      'Price excl. tax 2',
+      'Price 2 (excl. tax)',
       name: 'prix_v2',
       desc: '',
       args: [],
     );
   }
 
-  /// `Price excl. tax 3`
+  /// `Price 3 (excl. tax)`
   String get prix_v3 {
     return Intl.message(
-      'Price excl. tax 3',
+      'Price 3 (excl. tax)',
       name: 'prix_v3',
       desc: '',
       args: [],
     );
   }
 
-  /// `Enter a description for item`
+  /// `Enter a description for item.`
   String get msg_description {
     return Intl.message(
-      'Enter a description for item',
+      'Enter a description for item.',
       name: 'msg_description',
       desc: '',
       args: [],
@@ -1655,30 +1655,30 @@ class S {
     );
   }
 
-  /// `Enter PinCode`
+  /// `Enter password.`
   String get msg_login_pin {
     return Intl.message(
-      'Enter PinCode',
+      'Enter password.',
       name: 'msg_login_pin',
       desc: '',
       args: [],
     );
   }
 
-  /// `Enter text`
+  /// `Enter text.`
   String get msg_search {
     return Intl.message(
-      'Enter text',
+      'Enter text.',
       name: 'msg_search',
       desc: '',
       args: [],
     );
   }
 
-  /// `Your blutoothe is OFF`
+  /// `Your bluetooth is OFF.`
   String get blue_off {
     return Intl.message(
-      'Your blutoothe is OFF',
+      'Your bluetooth is OFF.',
       name: 'blue_off',
       desc: '',
       args: [],
@@ -1755,10 +1755,10 @@ class S {
     );
   }
 
-  /// `Price excl. tax`
+  /// `Price (excl. tax)`
   String get prix {
     return Intl.message(
-      'Price excl. tax',
+      'Price (excl. tax)',
       name: 'prix',
       desc: '',
       args: [],
@@ -1785,30 +1785,30 @@ class S {
     );
   }
 
-  /// `You can't transform a draft`
+  /// `You can't transform a draft.`
   String get msg_err_transfer {
     return Intl.message(
-      'You can\'t transform a draft',
+      'You can\'t transform a draft.',
       name: 'msg_err_transfer',
       desc: '',
       args: [],
     );
   }
 
-  /// `Attention you maybe add inassociate articles`
+  /// `you risk of adding an item with no previous movement!!`
   String get msg_info_article {
     return Intl.message(
-      'Attention you maybe add inassociate articles',
+      'you risk of adding an item with no previous movement!!',
       name: 'msg_info_article',
       desc: '',
       args: [],
     );
   }
 
-  /// `Species`
+  /// `Cash`
   String get espece {
     return Intl.message(
-      'Species',
+      'Cash',
       name: 'espece',
       desc: '',
       args: [],
@@ -1825,10 +1825,10 @@ class S {
     );
   }
 
-  /// `Transfer`
+  /// `Wire transfer`
   String get virement {
     return Intl.message(
-      'Transfer',
+      'Wire transfer',
       name: 'virement',
       desc: '',
       args: [],
@@ -1895,10 +1895,10 @@ class S {
     );
   }
 
-  /// `Disbursement`
+  /// `Withdrawal`
   String get decaissement {
     return Intl.message(
-      'Disbursement',
+      'Withdrawal',
       name: 'decaissement',
       desc: '',
       args: [],
@@ -1915,20 +1915,20 @@ class S {
     );
   }
 
-  /// `Provider Payment`
+  /// `Vendor Payment`
   String get reglement_fournisseur {
     return Intl.message(
-      'Provider Payment',
+      'Vendor Payment',
       name: 'reglement_fournisseur',
       desc: '',
       args: [],
     );
   }
 
-  /// `Bursement`
+  /// `Deposit`
   String get encaissement {
     return Intl.message(
-      'Bursement',
+      'Deposit',
       name: 'encaissement',
       desc: '',
       args: [],
@@ -1955,10 +1955,10 @@ class S {
     );
   }
 
-  /// `Provider Refund`
+  /// `Vendor Refund`
   String get rembourcement_four {
     return Intl.message(
-      'Provider Refund',
+      'Vendor Refund',
       name: 'rembourcement_four',
       desc: '',
       args: [],
@@ -1975,80 +1975,80 @@ class S {
     );
   }
 
-  /// `Not payment`
+  /// `Keep payment`
   String get sans_tresorie_client {
     return Intl.message(
-      'Not payment',
+      'Keep payment',
       name: 'sans_tresorie_client',
       desc: '',
       args: [],
     );
   }
 
-  /// `With payment`
+  /// `Delete payment`
   String get avec_tresorie_client {
     return Intl.message(
-      'With payment',
+      'Delete payment',
       name: 'avec_tresorie_client',
       desc: '',
       args: [],
     );
   }
 
-  /// `Not payment`
+  /// `Keep payment`
   String get sans_tresorie_four {
     return Intl.message(
-      'Not payment',
+      'Keep payment',
       name: 'sans_tresorie_four',
       desc: '',
       args: [],
     );
   }
 
-  /// `With payment`
+  /// `Delete payment`
   String get avec_tresorie_four {
     return Intl.message(
-      'With payment',
+      'Delete payment',
       name: 'avec_tresorie_four',
       desc: '',
       args: [],
     );
   }
 
-  /// `No treasurer is associate`
+  /// `No account is associated.`
   String get msg_err_tresorie {
     return Intl.message(
-      'No treasurer is associate',
+      'No account is associated.',
       name: 'msg_err_tresorie',
       desc: '',
       args: [],
     );
   }
 
-  /// `Qantité can't be less then 0`
+  /// `Quantity can't be less then 0.`
   String get msg_qte_err {
     return Intl.message(
-      'Qantité can\'t be less then 0',
+      'Quantity can\'t be less then 0.',
       name: 'msg_qte_err',
       desc: '',
       args: [],
     );
   }
 
-  /// `Price can't be less then 0`
+  /// `Price can't be less then 0.`
   String get msg_prix_err {
     return Intl.message(
-      'Price can\'t be less then 0',
+      'Price can\'t be less then 0.',
       name: 'msg_prix_err',
       desc: '',
       args: [],
     );
   }
 
-  /// `Please enter valid numbers`
+  /// `Please enter a valid numbers.`
   String get msg_num_err {
     return Intl.message(
-      'Please enter valid numbers',
+      'Please enter a valid numbers.',
       name: 'msg_num_err',
       desc: '',
       args: [],
@@ -2095,20 +2095,20 @@ class S {
     );
   }
 
-  /// `Feedback`
+  /// `To credit note`
   String get to_retour {
     return Intl.message(
-      'Feedback',
+      'To credit note',
       name: 'to_retour',
       desc: '',
       args: [],
     );
   }
 
-  /// `this option is not avalaible`
+  /// `This option is not avalaible.`
   String get msg_no_dispo {
     return Intl.message(
-      'this option is not avalaible',
+      'This option is not avalaible.',
       name: 'msg_no_dispo',
       desc: '',
       args: [],
@@ -2135,10 +2135,10 @@ class S {
     );
   }
 
-  /// `Sheet`
+  /// `History`
   String get journaux {
     return Intl.message(
-      'Sheet',
+      'History',
       name: 'journaux',
       desc: '',
       args: [],
@@ -2175,10 +2175,10 @@ class S {
     );
   }
 
-  /// `Real Quantity`
+  /// `Quantity`
   String get qte_reel {
     return Intl.message(
-      'Real Quantity',
+      'Quantity',
       name: 'qte_reel',
       desc: '',
       args: [],
@@ -2205,40 +2205,40 @@ class S {
     );
   }
 
-  /// `Net-HT`
+  /// `Net(excl. tax)`
   String get net_ht {
     return Intl.message(
-      'Net-HT',
+      'Net(excl. tax)',
       name: 'net_ht',
       desc: '',
       args: [],
     );
   }
 
-  /// `Stamped`
+  /// `Fiscal Stamp`
   String get timbre {
     return Intl.message(
-      'Stamped',
+      'Fiscal Stamp',
       name: 'timbre',
       desc: '',
       args: [],
     );
   }
 
-  /// `Info Article`
+  /// `Item card`
   String get fiche_art {
     return Intl.message(
-      'Info Article',
+      'Item card',
       name: 'fiche_art',
       desc: '',
       args: [],
     );
   }
 
-  /// `Do You Want to Exit...`
+  /// `Do You Want to Exit?`
   String get msg_quitter {
     return Intl.message(
-      'Do You Want to Exit...',
+      'Do You Want to Exit?',
       name: 'msg_quitter',
       desc: '',
       args: [],
@@ -2305,30 +2305,30 @@ class S {
     );
   }
 
-  /// `restoring your data will remove all unsaved data`
+  /// `Restoring your data will remove all unsaved data.`
   String get restore_msg {
     return Intl.message(
-      'restoring your data will remove all unsaved data',
+      'Restoring your data will remove all unsaved data.',
       name: 'restore_msg',
       desc: '',
       args: [],
     );
   }
 
-  /// `Success, restoration completed`
+  /// `Success, restoration completed.`
   String get msg_succes_restoration {
     return Intl.message(
-      'Success, restoration completed',
+      'Success, restoration completed.',
       name: 'msg_succes_restoration',
       desc: '',
       args: [],
     );
   }
 
-  /// `Error, in restore data`
+  /// `Error, in restore data.`
   String get msg_err_restoration {
     return Intl.message(
-      'Error, in restore data',
+      'Error, in restore data.',
       name: 'msg_err_restoration',
       desc: '',
       args: [],
@@ -2355,20 +2355,20 @@ class S {
     );
   }
 
-  /// `financial`
+  /// `Financial`
   String get financiere {
     return Intl.message(
-      'financial',
+      'Financial',
       name: 'financiere',
       desc: '',
       args: [],
     );
   }
 
-  /// `Charges distribution`
+  /// `Fees distribution`
   String get dash_charge_title {
     return Intl.message(
-      'Charges distribution',
+      'Fees distribution',
       name: 'dash_charge_title',
       desc: '',
       args: [],
@@ -2385,20 +2385,20 @@ class S {
     );
   }
 
-  /// `Sales ranking by item`
+  /// `Sales rankings by item`
   String get dash_vente_art_title {
     return Intl.message(
-      'Sales ranking by item',
+      'Sales rankings by item',
       name: 'dash_vente_art_title',
       desc: '',
       args: [],
     );
   }
 
-  /// `Sales ranking by customer`
+  /// `Sales rankings by customer`
   String get dash_vente_cl_title {
     return Intl.message(
-      'Sales ranking by customer',
+      'Sales rankings by customer',
       name: 'dash_vente_cl_title',
       desc: '',
       args: [],
@@ -2415,20 +2415,20 @@ class S {
     );
   }
 
-  /// `Ranking of Purchases by item`
+  /// `Rankings of Purchases by item`
   String get dash_achat_art_title {
     return Intl.message(
-      'Ranking of Purchases by item',
+      'Rankings of Purchases by item',
       name: 'dash_achat_art_title',
       desc: '',
       args: [],
     );
   }
 
-  /// `Ranking of Purchases by supplier`
+  /// `Rankings of Purchases by vendor`
   String get dash_achat_four_title {
     return Intl.message(
-      'Ranking of Purchases by supplier',
+      'Rankings of Purchases by vendor',
       name: 'dash_achat_four_title',
       desc: '',
       args: [],
@@ -2475,10 +2475,10 @@ class S {
     );
   }
 
-  /// `Do you want to save last changes ?`
+  /// `Do you want to save the last changes?`
   String get param_msg_save {
     return Intl.message(
-      'Do you want to save last changes ?',
+      'Do you want to save the last changes?',
       name: 'param_msg_save',
       desc: '',
       args: [],
@@ -2535,10 +2535,10 @@ class S {
     );
   }
 
-  /// `Enable stamped`
+  /// `Enable fiscal stamp`
   String get param_timbre {
     return Intl.message(
-      'Enable stamped',
+      'Enable fiscal stamp',
       name: 'param_timbre',
       desc: '',
       args: [],
@@ -2625,20 +2625,20 @@ class S {
     );
   }
 
-  /// `Success, Backup has been created`
+  /// `Success, Backup has been created.`
   String get msg_back_suce {
     return Intl.message(
-      'Success, Backup has been created',
+      'Success, Backup has been created.',
       name: 'msg_back_suce',
       desc: '',
       args: [],
     );
   }
 
-  /// `Error, Backup was not created`
+  /// `Error, Backup was not created.`
   String get msg_back_err {
     return Intl.message(
-      'Error, Backup was not created',
+      'Error, Backup was not created.',
       name: 'msg_back_err',
       desc: '',
       args: [],
@@ -2735,20 +2735,20 @@ class S {
     );
   }
 
-  /// `Settings have been modified,Successfully`
+  /// `Settings have been updated,Successfully.`
   String get msg_upd_param {
     return Intl.message(
-      'Settings have been modified,Successfully',
+      'Settings have been updated,Successfully.',
       name: 'msg_upd_param',
       desc: '',
       args: [],
     );
   }
 
-  /// `Error when modifying settings`
+  /// `Error when modifying settings.`
   String get msg_err_upd_param {
     return Intl.message(
-      'Error when modifying settings',
+      'Error when modifying settings.',
       name: 'msg_err_upd_param',
       desc: '',
       args: [],
@@ -2775,30 +2775,30 @@ class S {
     );
   }
 
-  /// `Profit`
+  /// `Profits`
   String get marge {
     return Intl.message(
-      'Profit',
+      'Profits',
       name: 'marge',
       desc: '',
       args: [],
     );
   }
 
-  /// `It's a transforming item`
+  /// `Transformed.`
   String get msg_piece_transfo {
     return Intl.message(
-      'It\'s a transforming item',
+      'Transformed.',
       name: 'msg_piece_transfo',
       desc: '',
       args: [],
     );
   }
 
-  /// `it's original item`
+  /// `Original.`
   String get msg_piece_origin {
     return Intl.message(
-      'it\'s original item',
+      'Original.',
       name: 'msg_piece_origin',
       desc: '',
       args: [],
@@ -2895,10 +2895,10 @@ class S {
     );
   }
 
-  /// `DF`
+  /// `DN`
   String get bl {
     return Intl.message(
-      'DF',
+      'DN',
       name: 'bl',
       desc: '',
       args: [],
@@ -2915,20 +2915,20 @@ class S {
     );
   }
 
-  /// `CIF`
+  /// `CCN`
   String get ac {
     return Intl.message(
-      'CIF',
+      'CCN',
       name: 'ac',
       desc: '',
       args: [],
     );
   }
 
-  /// `CF`
+  /// `CR`
   String get rc {
     return Intl.message(
-      'CF',
+      'CR',
       name: 'rc',
       desc: '',
       args: [],
@@ -2965,20 +2965,20 @@ class S {
     );
   }
 
-  /// `PIF`
+  /// `VCN`
   String get af {
     return Intl.message(
-      'PIF',
+      'VCN',
       name: 'af',
       desc: '',
       args: [],
     );
   }
 
-  /// `PF`
+  /// `VR`
   String get rf {
     return Intl.message(
-      'PF',
+      'VR',
       name: 'rf',
       desc: '',
       args: [],
@@ -2995,20 +2995,20 @@ class S {
     );
   }
 
-  /// `Pay.Cust`
+  /// `Cust.pay`
   String get reg_cl {
     return Intl.message(
-      'Pay.Cust',
+      'Cust.pay',
       name: 'reg_cl',
       desc: '',
       args: [],
     );
   }
 
-  /// `Pay.Prov`
+  /// `Ven.pay`
   String get reg_four {
     return Intl.message(
-      'Pay.Prov',
+      'Ven.pay',
       name: 'reg_four',
       desc: '',
       args: [],
@@ -3065,10 +3065,10 @@ class S {
     );
   }
 
-  /// `Sales Journal`
+  /// `Sales History`
   String get jour_vente {
     return Intl.message(
-      'Sales Journal',
+      'Sales History',
       name: 'jour_vente',
       desc: '',
       args: [],
@@ -3095,10 +3095,10 @@ class S {
     );
   }
 
-  /// `Purchasing Journal`
+  /// `Purchasing History`
   String get jour_achat {
     return Intl.message(
-      'Purchasing Journal',
+      'Purchasing History',
       name: 'jour_achat',
       desc: '',
       args: [],
@@ -3115,20 +3115,20 @@ class S {
     );
   }
 
-  /// `Out of stock product`
+  /// `Product out of stock`
   String get prod_repture {
     return Intl.message(
-      'Out of stock product',
+      'Product out of stock',
       name: 'prod_repture',
       desc: '',
       args: [],
     );
   }
 
-  /// `Zakat`
+  /// `Inventory by buying price`
   String get zakat {
     return Intl.message(
-      'Zakat',
+      'Inventory by buying price',
       name: 'zakat',
       desc: '',
       args: [],
@@ -3205,10 +3205,10 @@ class S {
     );
   }
 
-  /// `Report is empty`
+  /// `Report is empty.`
   String get msg_rapport_vide {
     return Intl.message(
-      'Report is empty',
+      'Report is empty.',
       name: 'msg_rapport_vide',
       desc: '',
       args: [],
@@ -3235,20 +3235,20 @@ class S {
     );
   }
 
-  /// `Customer fee`
+  /// `Customer debt`
   String get creance_cl {
     return Intl.message(
-      'Customer fee',
+      'Customer debt',
       name: 'creance_cl',
       desc: '',
       args: [],
     );
   }
 
-  /// `Supplier debt`
+  /// `Vendor debt`
   String get creance_four {
     return Intl.message(
-      'Supplier debt',
+      'Vendor debt',
       name: 'creance_four',
       desc: '',
       args: [],
@@ -3275,20 +3275,20 @@ class S {
     );
   }
 
-  /// `Ticket Format`
+  /// `Receipt Format`
   String get format_ticket {
     return Intl.message(
-      'Ticket Format',
+      'Receipt Format',
       name: 'format_ticket',
       desc: '',
       args: [],
     );
   }
 
-  /// `Show client credit`
+  /// `Show client debt`
   String get credit_tier {
     return Intl.message(
-      'Show client credit',
+      'Show client debt',
       name: 'credit_tier',
       desc: '',
       args: [],
@@ -3335,10 +3335,10 @@ class S {
     );
   }
 
-  /// `Select country`
+  /// `Select a country`
   String get selec_pays {
     return Intl.message(
-      'Select country',
+      'Select a country',
       name: 'selec_pays',
       desc: '',
       args: [],
@@ -3355,30 +3355,30 @@ class S {
     );
   }
 
-  /// `This option does not avalaible for demo version`
+  /// `This option is not avalaible for the demo version.`
   String get msg_demo_option {
     return Intl.message(
-      'This option does not avalaible for demo version',
+      'This option is not avalaible for the demo version.',
       name: 'msg_demo_option',
       desc: '',
       args: [],
     );
   }
 
-  /// `Your demonstration licence has expired, Please subscribe to get premium version`
+  /// `Your demonstration licence has expired, Please subscribe to get the premium version.`
   String get msg_demo_exp {
     return Intl.message(
-      'Your demonstration licence has expired, Please subscribe to get premium version',
+      'Your demonstration licence has expired, Please subscribe to get the premium version.',
       name: 'msg_demo_exp',
       desc: '',
       args: [],
     );
   }
 
-  /// `Your premium subscription has expired, Please resubscribe to service`
+  /// `Your premium subscription has expired, Please resubscribe to our service.`
   String get msg_premium_exp {
     return Intl.message(
-      'Your premium subscription has expired, Please resubscribe to service',
+      'Your premium subscription has expired, Please resubscribe to our service.',
       name: 'msg_premium_exp',
       desc: '',
       args: [],
@@ -3425,10 +3425,10 @@ class S {
     );
   }
 
-  /// `Please Select Country`
+  /// `Please Select a Country`
   String get intro_select_region {
     return Intl.message(
-      'Please Select Country',
+      'Please Select a Country',
       name: 'intro_select_region',
       desc: '',
       args: [],
@@ -3465,30 +3465,30 @@ class S {
     );
   }
 
-  /// `Choose Department`
+  /// `Choose a state`
   String get choix_province {
     return Intl.message(
-      'Choose Department',
+      'Choose a state',
       name: 'choix_province',
       desc: '',
       args: [],
     );
   }
 
-  /// `Choose City`
+  /// `Choose a city`
   String get choix_city {
     return Intl.message(
-      'Choose City',
+      'Choose a city',
       name: 'choix_city',
       desc: '',
       args: [],
     );
   }
 
-  /// `Departement`
+  /// `State`
   String get department {
     return Intl.message(
-      'Departement',
+      'State',
       name: 'department',
       desc: '',
       args: [],
@@ -3515,10 +3515,10 @@ class S {
     );
   }
 
-  /// `number of products , invoices , customers , and providers`
+  /// `Number of Itmes , invoices , customers , and vendors`
   String get illimite_desc {
     return Intl.message(
-      'number of products , invoices , customers , and providers',
+      'Number of Itmes , invoices , customers , and vendors',
       name: 'illimite_desc',
       desc: '',
       args: [],
@@ -3535,10 +3535,10 @@ class S {
     );
   }
 
-  /// `Your invoices in different formats 80cm , 55cm , A4 et A5`
+  /// `Your invoices in different formats 80mm , 55mm , A4 et A5`
   String get imprime_desc {
     return Intl.message(
-      'Your invoices in different formats 80cm , 55cm , A4 et A5',
+      'Your invoices in different formats 80mm , 55mm , A4 et A5',
       name: 'imprime_desc',
       desc: '',
       args: [],
@@ -3575,40 +3575,40 @@ class S {
     );
   }
 
-  /// `Persist your data to your drive`
+  /// `Upload data to your drive`
   String get save_rest_desc {
     return Intl.message(
-      'Persist your data to your drive',
+      'Upload data to your drive',
       name: 'save_rest_desc',
       desc: '',
       args: [],
     );
   }
 
-  /// `Tap on subscription to restore`
+  /// `Tap on subscription to restore.`
   String get msg_get_abonnement {
     return Intl.message(
-      'Tap on subscription to restore',
+      'Tap on subscription to restore.',
       name: 'msg_get_abonnement',
       desc: '',
       args: [],
     );
   }
 
-  /// `Transformer item to`
+  /// `Transform item to`
   String get transformer_title {
     return Intl.message(
-      'Transformer item to',
+      'Transform item to',
       name: 'transformer_title',
       desc: '',
       args: [],
     );
   }
 
-  /// `Select Currency`
+  /// `Select a Currency`
   String get select_devise {
     return Intl.message(
-      'Select Currency',
+      'Select a Currency',
       name: 'select_devise',
       desc: '',
       args: [],
@@ -3625,20 +3625,20 @@ class S {
     );
   }
 
-  /// `Add discount`
+  /// `Add a discount`
   String get ajout_remise {
     return Intl.message(
-      'Add discount',
+      'Add a discount',
       name: 'ajout_remise',
       desc: '',
       args: [],
     );
   }
 
-  /// `Click here to add a discount on the total amount`
+  /// `Tap here to add a discount on the total amount.`
   String get msg_ajout_remise {
     return Intl.message(
-      'Click here to add a discount on the total amount',
+      'Tap here to add a discount on the total amount.',
       name: 'msg_ajout_remise',
       desc: '',
       args: [],
@@ -3655,10 +3655,10 @@ class S {
     );
   }
 
-  /// `Click here to add the amount paid`
+  /// `Tap here to add the amount paid.`
   String get msg_ajout_verssement {
     return Intl.message(
-      'Click here to add the amount paid',
+      'Tap here to add the amount paid.',
       name: 'msg_ajout_verssement',
       desc: '',
       args: [],
@@ -3675,10 +3675,10 @@ class S {
     );
   }
 
-  /// `To view the calculation details`
+  /// `To view the calculation details.`
   String get msg_swipe_top {
     return Intl.message(
-      'To view the calculation details',
+      'To view the calculation details.',
       name: 'msg_swipe_top',
       desc: '',
       args: [],
@@ -3695,10 +3695,10 @@ class S {
     );
   }
 
-  /// `Click here to transform the item into another`
+  /// `Tap here to transform the item into another.`
   String get msg_transformer {
     return Intl.message(
-      'Click here to transform the item into another',
+      'Tap here to transform the item into another.',
       name: 'msg_transformer',
       desc: '',
       args: [],
@@ -3715,20 +3715,20 @@ class S {
     );
   }
 
-  /// `to the right and to the left for more options`
+  /// `to the right and to the left for more options.`
   String get msg_swipe_lr {
     return Intl.message(
-      'to the right and to the left for more options',
+      'to the right and to the left for more options.',
       name: 'msg_swipe_lr',
       desc: '',
       args: [],
     );
   }
 
-  /// `from left to delete the element`
+  /// `from left to delete the element.`
   String get msg_swipe_start {
     return Intl.message(
-      'from left to delete the element',
+      'from left to delete the element.',
       name: 'msg_swipe_start',
       desc: '',
       args: [],
@@ -3745,10 +3745,10 @@ class S {
     );
   }
 
-  /// `on the array element to modify, delete, or add a new one`
+  /// `on the array element to modify, delete, or add a new one.`
   String get msg_long_presse {
     return Intl.message(
-      'on the array element to modify, delete, or add a new one',
+      'on the array element to modify, delete, or add a new one.',
       name: 'msg_long_presse',
       desc: '',
       args: [],
@@ -3795,10 +3795,10 @@ class S {
     );
   }
 
-  /// `to deselect the element`
+  /// `to deselect the element.`
   String get msg_long_press_select {
     return Intl.message(
-      'to deselect the element',
+      'to deselect the element.',
       name: 'msg_long_press_select',
       desc: '',
       args: [],
@@ -3815,10 +3815,10 @@ class S {
     );
   }
 
-  /// `on the element to edit quantity`
+  /// `on the element to edit quantity.`
   String get msg_tap {
     return Intl.message(
-      'on the element to edit quantity',
+      'on the element to edit quantity.',
       name: 'msg_tap',
       desc: '',
       args: [],
@@ -3835,10 +3835,10 @@ class S {
     );
   }
 
-  /// `a sales and after-sales service is at your disposal`
+  /// `Our sales and customer services are at your disposal.`
   String get msg_support {
     return Intl.message(
-      'a sales and after-sales service is at your disposal',
+      'Our sales and customer services are at your disposal.',
       name: 'msg_support',
       desc: '',
       args: [],
@@ -3855,20 +3855,20 @@ class S {
     );
   }
 
-  /// `Sales Support`
+  /// `Sales department`
   String get service_comercial {
     return Intl.message(
-      'Sales Support',
+      'Sales department',
       name: 'service_comercial',
       desc: '',
       args: [],
     );
   }
 
-  /// `Technical Support`
+  /// `Customer service`
   String get service_technique {
     return Intl.message(
-      'Technical Support',
+      'Customer service',
       name: 'service_technique',
       desc: '',
       args: [],
@@ -3935,10 +3935,10 @@ class S {
     );
   }
 
-  /// `Product is already used you can't delete`
+  /// `Unable to delete an item that has movement.`
   String get msg_article_utilise {
     return Intl.message(
-      'Product is already used you can\'t delete',
+      'Unable to delete an item that has movement.',
       name: 'msg_article_utilise',
       desc: '',
       args: [],
@@ -3955,40 +3955,40 @@ class S {
     );
   }
 
-  /// `The total is less than or equal to the amount already paid`
+  /// `The total is less than or equal to the amount already paid.`
   String get msg_versement_err {
     return Intl.message(
-      'The total is less than or equal to the amount already paid',
+      'The total is less than or equal to the amount already paid.',
       name: 'msg_versement_err',
       desc: '',
       args: [],
     );
   }
 
-  /// `Please note that the available quantity is equal to zero`
+  /// `Please note that the available quantity is equal to zero.`
   String get msg_qte_zero {
     return Intl.message(
-      'Please note that the available quantity is equal to zero',
+      'Please note that the available quantity is equal to zero.',
       name: 'msg_qte_zero',
       desc: '',
       args: [],
     );
   }
 
-  /// `Please note that the selected quantity is greater than the available quantity`
+  /// `Please note that the desired quantity is greater than the available quantity.`
   String get msg_qte_select_sup {
     return Intl.message(
-      'Please note that the selected quantity is greater than the available quantity',
+      'Please note that the desired quantity is greater than the available quantity.',
       name: 'msg_qte_select_sup',
       desc: '',
       args: [],
     );
   }
 
-  /// `You can't edit transformed invoice`
+  /// `You can't edit a transformed invoice.`
   String get msg_no_edit_transformer {
     return Intl.message(
-      'You can\'t edit transformed invoice',
+      'You can\'t edit a transformed invoice.',
       name: 'msg_no_edit_transformer',
       desc: '',
       args: [],
@@ -4115,10 +4115,10 @@ class S {
     );
   }
 
-  /// `Dinar algérien`
+  /// `Algerian dinar`
   String get DZD_name {
     return Intl.message(
-      'Dinar algérien',
+      'Algerian dinar',
       name: 'DZD_name',
       desc: '',
       args: [],
@@ -5675,10 +5675,10 @@ class S {
     );
   }
 
-  /// `Do you want to change the rates ?`
+  /// `Do you want to change the price variants?`
   String get msg_change_tarif {
     return Intl.message(
-      'Do you want to change the rates ?',
+      'Do you want to change the price variants?',
       name: 'msg_change_tarif',
       desc: '',
       args: [],
@@ -5775,20 +5775,20 @@ class S {
     );
   }
 
-  /// `Do you want to quit without validating the last changes ?`
+  /// `Do you want to quit without saving the last changes?`
   String get msg_retour_no_save {
     return Intl.message(
-      'Do you want to quit without validating the last changes ?',
+      'Do you want to quit without saving the last changes?',
       name: 'msg_retour_no_save',
       desc: '',
       args: [],
     );
   }
 
-  /// `Click on map to pick position`
+  /// `Tap on the map to pick a position.`
   String get msg_map_add_position {
     return Intl.message(
-      'Click on map to pick position',
+      'Tap on the map to pick a position.',
       name: 'msg_map_add_position',
       desc: '',
       args: [],
@@ -5805,20 +5805,20 @@ class S {
     );
   }
 
-  /// `Item already exists`
+  /// `Item already exists.`
   String get msg_existe_deja {
     return Intl.message(
-      'Item already exists',
+      'Item already exists.',
       name: 'msg_existe_deja',
       desc: '',
       args: [],
     );
   }
 
-  /// `Coffers`
+  /// `Accountes`
   String get caisse_titre {
     return Intl.message(
-      'Coffers',
+      'Accountes',
       name: 'caisse_titre',
       desc: '',
       args: [],
@@ -5845,30 +5845,30 @@ class S {
     );
   }
 
-  /// `The value must be greater than zero`
+  /// `The value must be greater than zero.`
   String get msg_prix_supp_zero {
     return Intl.message(
-      'The value must be greater than zero',
+      'The value must be greater than zero.',
       name: 'msg_prix_supp_zero',
       desc: '',
       args: [],
     );
   }
 
-  /// `Enter a valid number`
+  /// `Enter a valid number.`
   String get msg_val_valide {
     return Intl.message(
-      'Enter a valid number',
+      'Enter a valid number.',
       name: 'msg_val_valide',
       desc: '',
       args: [],
     );
   }
 
-  /// `Amount excl. tax`
+  /// `Amount (excl. tax)`
   String get montant_ht {
     return Intl.message(
-      'Amount excl. tax',
+      'Amount (excl. tax)',
       name: 'montant_ht',
       desc: '',
       args: [],
@@ -5905,20 +5905,20 @@ class S {
     );
   }
 
-  /// `Prices`
+  /// `Price variants`
   String get tarifs {
     return Intl.message(
-      'Prices',
+      'Price variants',
       name: 'tarifs',
       desc: '',
       args: [],
     );
   }
 
-  /// `Scan your fingerprint to authenticate`
+  /// `Scan your fingerprint to authenticate.`
   String get msg_scaner_empreinte {
     return Intl.message(
-      'Scan your fingerprint to authenticate',
+      'Scan your fingerprint to authenticate.',
       name: 'msg_scaner_empreinte',
       desc: '',
       args: [],
@@ -5935,30 +5935,30 @@ class S {
     );
   }
 
-  /// `Go to settings`
+  /// `Go to settings.`
   String get msg_config_auth {
     return Intl.message(
-      'Go to settings',
+      'Go to settings.',
       name: 'msg_config_auth',
       desc: '',
       args: [],
     );
   }
 
-  /// `Biometric authentication is disabled`
+  /// `Biometric authentication is disabled.`
   String get msg_aut_lockout {
     return Intl.message(
-      'Biometric authentication is disabled',
+      'Biometric authentication is disabled.',
       name: 'msg_aut_lockout',
       desc: '',
       args: [],
     );
   }
 
-  /// `Fingerprint has been recognized`
+  /// `Fingerprint has been recognized.`
   String get msg_auth_success {
     return Intl.message(
-      'Fingerprint has been recognized',
+      'Fingerprint has been recognized.',
       name: 'msg_auth_success',
       desc: '',
       args: [],
@@ -6005,10 +6005,10 @@ class S {
     );
   }
 
-  /// `Provider`
+  /// `Vendor`
   String get fournisseur_imp {
     return Intl.message(
-      'Provider',
+      'Vendor',
       name: 'fournisseur_imp',
       desc: '',
       args: [],
@@ -6065,10 +6065,10 @@ class S {
     );
   }
 
-  /// `NB: Please allow the application to always use your location to detect the printer`
+  /// `NB: Please allow the application to always use your location to detect the printer.`
   String get msg_bl_localisation {
     return Intl.message(
-      'NB: Please allow the application to always use your location to detect the printer',
+      'NB: Please allow the application to always use your location to detect the printer.',
       name: 'msg_bl_localisation',
       desc: '',
       args: [],
@@ -6145,10 +6145,10 @@ class S {
     );
   }
 
-  /// `you can't change`
+  /// `you can't change tier`
   String get msg_change_tier_err {
     return Intl.message(
-      'you can\'t change',
+      'you can\'t change tier',
       name: 'msg_change_tier_err',
       desc: '',
       args: [],

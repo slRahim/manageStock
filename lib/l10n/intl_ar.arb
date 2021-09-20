@@ -659,7 +659,7 @@
   "a_credit_four" : "الدائنون",
 
   "zero" : "صفر",
-  "msg_change_tier_err" : "لا تستطيع التغيير",
+  "msg_change_tier_err" : "لا تستطيع تغيير العميل",
   "prix_ticket" : "السعر",
 
   "param_decimal_unite_title" : "الوحدة العشرية للعملة"

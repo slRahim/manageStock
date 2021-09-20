@@ -389,7 +389,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "msg_champ_oblg" : MessageLookupByLibrary.simpleMessage("حقل إلزامي"),
     "msg_champs_obg" : MessageLookupByLibrary.simpleMessage("الرجاء ملأ كل الفراغات الإلزامية."),
     "msg_change_tarif" : MessageLookupByLibrary.simpleMessage("هل تريد تغيير الأسعار ؟"),
-    "msg_change_tier_err" : MessageLookupByLibrary.simpleMessage("لا تستطيع التغيير"),
+    "msg_change_tier_err" : MessageLookupByLibrary.simpleMessage("لا تستطيع تغيير العميل"),
     "msg_choix_pin" : MessageLookupByLibrary.simpleMessage("الرقم السري"),
     "msg_config_auth" : MessageLookupByLibrary.simpleMessage("إذهب للاعدادات."),
     "msg_confirm_pin" : MessageLookupByLibrary.simpleMessage("الرقم السري"),
