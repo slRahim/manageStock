@@ -930,4 +930,14 @@ class Helpers {
 
     return res.currencyName;
   }
+
+  static String extractPriceInappPurchase(String value) {
+    Pattern pattern = r'([0-9.])';
+    RegExp regex = new RegExp(pattern);
+    String res="";
+    for( var i = 0 ; i <= value.length-1; i++ ) {
+      if (regex.hasMatch(value[i])) res += value[i] ;
+    }
+    return res;
+  }
 }

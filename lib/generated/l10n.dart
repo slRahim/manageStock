@@ -325,10 +325,10 @@ class S {
     );
   }
 
-  /// `name/company name`
+  /// `Name/Company name`
   String get rs {
     return Intl.message(
-      'name/company name',
+      'Name/Company name',
       name: 'rs',
       desc: '',
       args: [],
@@ -5765,10 +5765,10 @@ class S {
     );
   }
 
-  /// `charges Categories`
+  /// `Fees categories`
   String get cat_charge {
     return Intl.message(
-      'charges Categories',
+      'Fees categories',
       name: 'cat_charge',
       desc: '',
       args: [],

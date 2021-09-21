@@ -31,7 +31,7 @@
   "fiche": "Info",
   "logo" : "Logo",
   "securite": "Security",
-  "rs": "name/company name",
+  "rs": "Name/Company name",
   "activite" : "Activity",
   "adresse": "Address",
   "ville": "City",
@@ -613,7 +613,7 @@
   "marque_article" : "Item Brands",
   "tva_article" : "VAT Rate",
   "famille_tiers" : "Families of third parties",
-  "cat_charge" : "charges Categories",
+  "cat_charge" : "Fees categories",
 
   "msg_retour_no_save" : "Do you want to quit without saving the last changes?",
   "msg_map_add_position" : "Tap on the map to pick a position.",

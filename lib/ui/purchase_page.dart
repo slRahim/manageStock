@@ -285,6 +285,7 @@ class _PurchasePageState extends State<PurchasePage> {
           .replaceAll(new RegExp('[a-zA-Z]'), '')
           .trim();
     }
+
     _prix_product = _prix_product.replaceAll('\u00A0', '');
     _prix_product = _prix_product.replaceAll('&nbsp;', '');
 
@@ -299,6 +300,7 @@ class _PurchasePageState extends State<PurchasePage> {
         _prixmensuelle = double.parse(_prix_product);
         break;
       case "121212":
+        _prix_product = Helpers.extractPriceInappPurchase(_prix_product);
         double _prix_annuel = double.parse(_prix_product);
         double _prixmensuelle_12 = _prixmensuelle * 12;
         double _remiseMontant = (_prixmensuelle_12 - _prix_annuel);
@@ -467,4 +469,5 @@ class _PurchasePageState extends State<PurchasePage> {
       );
     }
   }
+
 }
