@@ -105,10 +105,10 @@ class S {
     );
   }
 
-  /// `Purchase Invoice`
+  /// `Purchases Invoice`
   String get facture_achat {
     return Intl.message(
-      'Purchase Invoice',
+      'Purchases Invoice',
       name: 'facture_achat',
       desc: '',
       args: [],
@@ -185,10 +185,10 @@ class S {
     );
   }
 
-  /// `Dashbord`
+  /// `Dashboard`
   String get tableau_bord {
     return Intl.message(
-      'Dashbord',
+      'Dashboard',
       name: 'tableau_bord',
       desc: '',
       args: [],
@@ -435,10 +435,10 @@ class S {
     );
   }
 
-  /// `Web Address`
+  /// `Web address`
   String get adresse_web {
     return Intl.message(
-      'Web Address',
+      'Web address',
       name: 'adresse_web',
       desc: '',
       args: [],
@@ -1865,10 +1865,10 @@ class S {
     );
   }
 
-  /// `No Categorie`
+  /// `No Category`
   String get choisir {
     return Intl.message(
-      'No Categorie',
+      'No Category',
       name: 'choisir',
       desc: '',
       args: [],
@@ -2055,10 +2055,10 @@ class S {
     );
   }
 
-  /// `Forwad to `
+  /// `Forward to `
   String get transferer {
     return Intl.message(
-      'Forwad to ',
+      'Forward to ',
       name: 'transferer',
       desc: '',
       args: [],
@@ -3515,10 +3515,10 @@ class S {
     );
   }
 
-  /// `Number of Itmes , invoices , customers , and vendors`
+  /// `Number of itmes , invoices , customers , and vendors`
   String get illimite_desc {
     return Intl.message(
-      'Number of Itmes , invoices , customers , and vendors',
+      'Number of itmes , invoices , customers , and vendors',
       name: 'illimite_desc',
       desc: '',
       args: [],
@@ -3535,10 +3535,10 @@ class S {
     );
   }
 
-  /// `Your invoices in different formats 80mm , 55mm , A4 et A5`
+  /// `Your invoices in different formats 80mm , 55mm , A4 and A5`
   String get imprime_desc {
     return Intl.message(
-      'Your invoices in different formats 80mm , 55mm , A4 et A5',
+      'Your invoices in different formats 80mm , 55mm , A4 and A5',
       name: 'imprime_desc',
       desc: '',
       args: [],
