@@ -542,17 +542,17 @@ class _AddTierPageState extends State<AddTierPage>
                       ),
                       focusedBorder: OutlineInputBorder(
                           borderSide: BorderSide(color: Colors.green),
-                          borderRadius: BorderRadius.circular(20)),
+                          borderRadius: BorderRadius.circular(5)),
                       labelStyle: GoogleFonts.lato(
                           textStyle: TextStyle(color: Colors.green)),
                       enabledBorder: OutlineInputBorder(
                         gapPadding: 3.3,
-                        borderRadius: BorderRadius.circular(20),
+                        borderRadius: BorderRadius.circular(5),
                         borderSide: BorderSide(color: Colors.green),
                       ),
                       errorBorder: OutlineInputBorder(
                         gapPadding: 3.3,
-                        borderRadius: BorderRadius.circular(20),
+                        borderRadius: BorderRadius.circular(5),
                         borderSide: BorderSide(color: Colors.red),
                       ),
                     ),
@@ -566,7 +566,7 @@ class _AddTierPageState extends State<AddTierPage>
                           border: Border.all(
                             color: Colors.blueAccent,
                           ),
-                          borderRadius: BorderRadius.circular(20.0),
+                          borderRadius: BorderRadius.circular(5),
                         )
                       : null,
                   child: DropdownButtonHideUnderline(
@@ -606,15 +606,15 @@ class _AddTierPageState extends State<AddTierPage>
                 ),
                 focusedBorder: OutlineInputBorder(
                     borderSide: BorderSide(color: Colors.blue),
-                    borderRadius: BorderRadius.circular(20)),
+                    borderRadius: BorderRadius.circular(5)),
                 enabledBorder: OutlineInputBorder(
                   gapPadding: 3.3,
-                  borderRadius: BorderRadius.circular(20),
+                  borderRadius: BorderRadius.circular(5),
                   borderSide: BorderSide(color: Colors.blue),
                 ),
                 errorBorder: OutlineInputBorder(
                   gapPadding: 3.3,
-                  borderRadius: BorderRadius.circular(20),
+                  borderRadius: BorderRadius.circular(5),
                   borderSide: BorderSide(color: Colors.red),
                 ),
               ),
@@ -640,15 +640,15 @@ class _AddTierPageState extends State<AddTierPage>
                 ),
                 focusedBorder: OutlineInputBorder(
                     borderSide: BorderSide(color: Colors.blue),
-                    borderRadius: BorderRadius.circular(20)),
+                    borderRadius: BorderRadius.circular(5)),
                 enabledBorder: OutlineInputBorder(
                   gapPadding: 3.3,
-                  borderRadius: BorderRadius.circular(20),
+                  borderRadius: BorderRadius.circular(5),
                   borderSide: BorderSide(color: Colors.blue),
                 ),
                 errorBorder: OutlineInputBorder(
                   gapPadding: 3.3,
-                  borderRadius: BorderRadius.circular(20),
+                  borderRadius: BorderRadius.circular(5),
                   borderSide: BorderSide(color: Colors.red),
                 ),
               ),
@@ -676,15 +676,15 @@ class _AddTierPageState extends State<AddTierPage>
                 ),
                 focusedBorder: OutlineInputBorder(
                     borderSide: BorderSide(color: Colors.blue),
-                    borderRadius: BorderRadius.circular(20)),
+                    borderRadius: BorderRadius.circular(5)),
                 enabledBorder: OutlineInputBorder(
                   gapPadding: 3.3,
-                  borderRadius: BorderRadius.circular(20),
+                  borderRadius: BorderRadius.circular(5),
                   borderSide: BorderSide(color: Colors.blue),
                 ),
                 errorBorder: OutlineInputBorder(
                   gapPadding: 3.3,
-                  borderRadius: BorderRadius.circular(20),
+                  borderRadius: BorderRadius.circular(5),
                   borderSide: BorderSide(color: Colors.red),
                 ),
               ),
@@ -712,15 +712,15 @@ class _AddTierPageState extends State<AddTierPage>
                 ),
                 focusedBorder: OutlineInputBorder(
                     borderSide: BorderSide(color: Colors.blue),
-                    borderRadius: BorderRadius.circular(20)),
+                    borderRadius: BorderRadius.circular(5)),
                 enabledBorder: OutlineInputBorder(
                   gapPadding: 3.3,
-                  borderRadius: BorderRadius.circular(20),
+                  borderRadius: BorderRadius.circular(5),
                   borderSide: BorderSide(color: Colors.blue),
                 ),
                 errorBorder: OutlineInputBorder(
                   gapPadding: 3.3,
-                  borderRadius: BorderRadius.circular(20),
+                  borderRadius: BorderRadius.circular(5),
                   borderSide: BorderSide(color: Colors.red),
                 ),
               ),
@@ -747,15 +747,15 @@ class _AddTierPageState extends State<AddTierPage>
                 ),
                 focusedBorder: OutlineInputBorder(
                     borderSide: BorderSide(color: Colors.blue),
-                    borderRadius: BorderRadius.circular(20)),
+                    borderRadius: BorderRadius.circular(5)),
                 enabledBorder: OutlineInputBorder(
                   gapPadding: 3.3,
-                  borderRadius: BorderRadius.circular(20),
+                  borderRadius: BorderRadius.circular(5),
                   borderSide: BorderSide(color: Colors.blue),
                 ),
                 errorBorder: OutlineInputBorder(
                   gapPadding: 3.3,
-                  borderRadius: BorderRadius.circular(20),
+                  borderRadius: BorderRadius.circular(5),
                   borderSide: BorderSide(color: Colors.red),
                 ),
               ),
@@ -781,15 +781,15 @@ class _AddTierPageState extends State<AddTierPage>
                 ),
                 focusedBorder: OutlineInputBorder(
                     borderSide: BorderSide(color: Colors.blue),
-                    borderRadius: BorderRadius.circular(20)),
+                    borderRadius: BorderRadius.circular(5)),
                 enabledBorder: OutlineInputBorder(
                   gapPadding: 3.3,
-                  borderRadius: BorderRadius.circular(20),
+                  borderRadius: BorderRadius.circular(5),
                   borderSide: BorderSide(color: Colors.blue),
                 ),
                 errorBorder: OutlineInputBorder(
                   gapPadding: 3.3,
-                  borderRadius: BorderRadius.circular(20),
+                  borderRadius: BorderRadius.circular(5),
                   borderSide: BorderSide(color: Colors.red),
                 ),
               ),
@@ -816,15 +816,15 @@ class _AddTierPageState extends State<AddTierPage>
                 ),
                 focusedBorder: OutlineInputBorder(
                     borderSide: BorderSide(color: Colors.blue),
-                    borderRadius: BorderRadius.circular(20)),
+                    borderRadius: BorderRadius.circular(5)),
                 enabledBorder: OutlineInputBorder(
                   gapPadding: 3.3,
-                  borderRadius: BorderRadius.circular(20),
+                  borderRadius: BorderRadius.circular(5),
                   borderSide: BorderSide(color: Colors.blue),
                 ),
                 errorBorder: OutlineInputBorder(
                   gapPadding: 3.3,
-                  borderRadius: BorderRadius.circular(20),
+                  borderRadius: BorderRadius.circular(5),
                   borderSide: BorderSide(color: Colors.red),
                 ),
               ),
@@ -851,15 +851,15 @@ class _AddTierPageState extends State<AddTierPage>
                 ),
                 focusedBorder: OutlineInputBorder(
                     borderSide: BorderSide(color: Colors.blue),
-                    borderRadius: BorderRadius.circular(20)),
+                    borderRadius: BorderRadius.circular(5)),
                 enabledBorder: OutlineInputBorder(
                   gapPadding: 3.3,
-                  borderRadius: BorderRadius.circular(20),
+                  borderRadius: BorderRadius.circular(5),
                   borderSide: BorderSide(color: Colors.blue),
                 ),
                 errorBorder: OutlineInputBorder(
                   gapPadding: 3.3,
-                  borderRadius: BorderRadius.circular(20),
+                  borderRadius: BorderRadius.circular(5),
                   borderSide: BorderSide(color: Colors.red),
                 ),
               ),
@@ -886,15 +886,15 @@ class _AddTierPageState extends State<AddTierPage>
                 ),
                 focusedBorder: OutlineInputBorder(
                     borderSide: BorderSide(color: Colors.blue),
-                    borderRadius: BorderRadius.circular(20)),
+                    borderRadius: BorderRadius.circular(5)),
                 enabledBorder: OutlineInputBorder(
                   gapPadding: 3.3,
-                  borderRadius: BorderRadius.circular(20),
+                  borderRadius: BorderRadius.circular(5),
                   borderSide: BorderSide(color: Colors.blue),
                 ),
                 errorBorder: OutlineInputBorder(
                   gapPadding: 3.3,
-                  borderRadius: BorderRadius.circular(20),
+                  borderRadius: BorderRadius.circular(5),
                   borderSide: BorderSide(color: Colors.red),
                 ),
               ),
@@ -923,15 +923,15 @@ class _AddTierPageState extends State<AddTierPage>
                   ),
                   focusedBorder: OutlineInputBorder(
                       borderSide: BorderSide(color: Colors.blue),
-                      borderRadius: BorderRadius.circular(20)),
+                      borderRadius: BorderRadius.circular(5)),
                   enabledBorder: OutlineInputBorder(
                     gapPadding: 3.3,
-                    borderRadius: BorderRadius.circular(20),
+                    borderRadius: BorderRadius.circular(5),
                     borderSide: BorderSide(color: Colors.blue),
                   ),
                   errorBorder: OutlineInputBorder(
                     gapPadding: 3.3,
-                    borderRadius: BorderRadius.circular(20),
+                    borderRadius: BorderRadius.circular(5),
                     borderSide: BorderSide(color: Colors.red),
                   ),
                 ),
@@ -975,15 +975,15 @@ class _AddTierPageState extends State<AddTierPage>
                 ),
                 focusedBorder: OutlineInputBorder(
                     borderSide: BorderSide(color: Colors.blue),
-                    borderRadius: BorderRadius.circular(20)),
+                    borderRadius: BorderRadius.circular(5)),
                 enabledBorder: OutlineInputBorder(
                   gapPadding: 3.3,
-                  borderRadius: BorderRadius.circular(20),
+                  borderRadius: BorderRadius.circular(5),
                   borderSide: BorderSide(color: Colors.blue),
                 ),
                 errorBorder: OutlineInputBorder(
                   gapPadding: 3.3,
-                  borderRadius: BorderRadius.circular(20),
+                  borderRadius: BorderRadius.circular(5),
                   borderSide: BorderSide(color: Colors.red),
                 ),
               ),
@@ -1014,15 +1014,15 @@ class _AddTierPageState extends State<AddTierPage>
                   ),
                   focusedBorder: OutlineInputBorder(
                       borderSide: BorderSide(color: Colors.blue),
-                      borderRadius: BorderRadius.circular(20)),
+                      borderRadius: BorderRadius.circular(5)),
                   enabledBorder: OutlineInputBorder(
                     gapPadding: 3.3,
-                    borderRadius: BorderRadius.circular(20),
+                    borderRadius: BorderRadius.circular(5),
                     borderSide: BorderSide(color: Colors.blue),
                   ),
                   errorBorder: OutlineInputBorder(
                     gapPadding: 3.3,
-                    borderRadius: BorderRadius.circular(20),
+                    borderRadius: BorderRadius.circular(5),
                     borderSide: BorderSide(color: Colors.red),
                   ),
                 ),
@@ -1054,15 +1054,15 @@ class _AddTierPageState extends State<AddTierPage>
                   ),
                   focusedBorder: OutlineInputBorder(
                       borderSide: BorderSide(color: Colors.blue),
-                      borderRadius: BorderRadius.circular(20)),
+                      borderRadius: BorderRadius.circular(5)),
                   enabledBorder: OutlineInputBorder(
                     gapPadding: 3.3,
-                    borderRadius: BorderRadius.circular(20),
+                    borderRadius: BorderRadius.circular(5),
                     borderSide: BorderSide(color: Colors.blue),
                   ),
                   errorBorder: OutlineInputBorder(
                     gapPadding: 3.3,
-                    borderRadius: BorderRadius.circular(20),
+                    borderRadius: BorderRadius.circular(5),
                     borderSide: BorderSide(color: Colors.red),
                   ),
                 ),
@@ -1082,13 +1082,13 @@ class _AddTierPageState extends State<AddTierPage>
                   ),
                   focusedBorder: OutlineInputBorder(
                       borderSide: BorderSide(color: Colors.blue),
-                      borderRadius: BorderRadius.circular(20)),
+                      borderRadius: BorderRadius.circular(5)),
                   labelText: S.current.credit,
                   labelStyle: GoogleFonts.lato(
                       textStyle: TextStyle(color: Theme.of(context).hintColor)),
                   enabledBorder: OutlineInputBorder(
                     gapPadding: 3.3,
-                    borderRadius: BorderRadius.circular(20),
+                    borderRadius: BorderRadius.circular(5),
                     borderSide: BorderSide(color: Colors.blue),
                   ),
                 ),
@@ -1103,7 +1103,7 @@ class _AddTierPageState extends State<AddTierPage>
                         border: Border.all(
                           color: Colors.blueAccent,
                         ),
-                        borderRadius: BorderRadius.circular(20.0),
+                        borderRadius: BorderRadius.circular(5),
                       )
                     : null,
                 child: CheckboxListTile(
@@ -1136,7 +1136,7 @@ class _AddTierPageState extends State<AddTierPage>
                           border: Border.all(
                             color: Colors.blueAccent,
                           ),
-                          borderRadius: BorderRadius.circular(20.0),
+                          borderRadius: BorderRadius.circular(5),
                         )
                       : null,
                   child: SwitchListTile(
@@ -1466,7 +1466,7 @@ class _AddTierPageState extends State<AddTierPage>
                           ),
                           focusedBorder: OutlineInputBorder(
                               borderSide: BorderSide(color: Colors.blue),
-                              borderRadius: BorderRadius.circular(20)),
+                              borderRadius: BorderRadius.circular(5)),
                           contentPadding: EdgeInsets.only(left: 10),
                           labelText: S.current.famile,
                           labelStyle: GoogleFonts.lato(
@@ -1475,7 +1475,7 @@ class _AddTierPageState extends State<AddTierPage>
                           ),
                           enabledBorder: OutlineInputBorder(
                             gapPadding: 3.3,
-                            borderRadius: BorderRadius.circular(20),
+                            borderRadius: BorderRadius.circular(5),
                             borderSide: BorderSide(color: Colors.blue),
                           ),
                         ),
@@ -1487,7 +1487,7 @@ class _AddTierPageState extends State<AddTierPage>
                         padding: EdgeInsetsDirectional.only(start: 0, end: 0),
                         child: RaisedButton(
                           shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(18.0),
+                            borderRadius: BorderRadius.circular(5),
                           ),
                           onPressed: () async {
                             setState(() {

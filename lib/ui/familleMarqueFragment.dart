@@ -316,7 +316,7 @@ class _FamilleMarqueFragmentState extends State<FamilleMarqueFragment> {
                           ),
                           focusedBorder: OutlineInputBorder(
                               borderSide: BorderSide(color: Colors.blue),
-                              borderRadius: BorderRadius.circular(20)),
+                              borderRadius: BorderRadius.circular(5)),
                           contentPadding: EdgeInsets.only(left: 10),
                           labelText: S.current.famile,
                           labelStyle: GoogleFonts.lato(
@@ -325,7 +325,7 @@ class _FamilleMarqueFragmentState extends State<FamilleMarqueFragment> {
                           ),
                           enabledBorder: OutlineInputBorder(
                             gapPadding: 3.3,
-                            borderRadius: BorderRadius.circular(20),
+                            borderRadius: BorderRadius.circular(5),
                             borderSide: BorderSide(color: Colors.blue),
                           ),
                         ),
@@ -338,7 +338,7 @@ class _FamilleMarqueFragmentState extends State<FamilleMarqueFragment> {
                       padding: EdgeInsets.only(right: 0, left: 0),
                       child: RaisedButton(
                         shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(18.0),
+                          borderRadius: BorderRadius.circular(5),
                         ),
                         onPressed: () async {
                           if (_formKey.currentState.validate()) {
@@ -428,7 +428,7 @@ class _FamilleMarqueFragmentState extends State<FamilleMarqueFragment> {
                       ),
                       focusedBorder: OutlineInputBorder(
                           borderSide: BorderSide(color: Colors.blue),
-                          borderRadius: BorderRadius.circular(20)),
+                          borderRadius: BorderRadius.circular(5)),
                       contentPadding: EdgeInsets.only(left: 10),
                       hintText: S.current.marque,
                       hintStyle: GoogleFonts.lato(),
@@ -439,7 +439,7 @@ class _FamilleMarqueFragmentState extends State<FamilleMarqueFragment> {
                       ),
                       enabledBorder: OutlineInputBorder(
                         gapPadding: 3.3,
-                        borderRadius: BorderRadius.circular(20),
+                        borderRadius: BorderRadius.circular(5),
                         borderSide: BorderSide(color: Colors.blue),
                       ),
                     ),
@@ -452,7 +452,7 @@ class _FamilleMarqueFragmentState extends State<FamilleMarqueFragment> {
                   padding: EdgeInsets.only(right: 0, left: 0),
                   child: RaisedButton(
                     shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(18.0),
+                      borderRadius: BorderRadius.circular(5),
                     ),
                     onPressed: () async {
                       if (_formKey.currentState.validate()) {
@@ -540,7 +540,7 @@ class _FamilleMarqueFragmentState extends State<FamilleMarqueFragment> {
                       ),
                       focusedBorder: OutlineInputBorder(
                           borderSide: BorderSide(color: Colors.blue),
-                          borderRadius: BorderRadius.circular(20)),
+                          borderRadius: BorderRadius.circular(5)),
                       contentPadding: EdgeInsets.only(left: 10),
                       labelText: S.current.taux_tva,
                       labelStyle: GoogleFonts.lato(
@@ -549,7 +549,7 @@ class _FamilleMarqueFragmentState extends State<FamilleMarqueFragment> {
                       ),
                       enabledBorder: OutlineInputBorder(
                         gapPadding: 3.3,
-                        borderRadius: BorderRadius.circular(20),
+                        borderRadius: BorderRadius.circular(5),
                         borderSide: BorderSide(color: Colors.blue),
                       ),
                     ),
@@ -562,7 +562,7 @@ class _FamilleMarqueFragmentState extends State<FamilleMarqueFragment> {
                   padding: EdgeInsets.only(right: 0, left: 0),
                   child: RaisedButton(
                     shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(18.0),
+                      borderRadius: BorderRadius.circular(5),
                     ),
                     onPressed: () async {
                       if (_formKey.currentState.validate()) {
@@ -638,7 +638,7 @@ class _FamilleMarqueFragmentState extends State<FamilleMarqueFragment> {
                       focusedBorder: OutlineInputBorder(
                           borderSide:
                               BorderSide(color: Colors.blue),
-                          borderRadius: BorderRadius.circular(20)),
+                          borderRadius: BorderRadius.circular(5)),
                       contentPadding: EdgeInsets.only(left: 10),
                       labelText: S.current.famile,
                       labelStyle: GoogleFonts.lato(
@@ -647,7 +647,7 @@ class _FamilleMarqueFragmentState extends State<FamilleMarqueFragment> {
                       ),
                       enabledBorder: OutlineInputBorder(
                         gapPadding: 3.3,
-                        borderRadius: BorderRadius.circular(20),
+                        borderRadius: BorderRadius.circular(5),
                         borderSide:
                             BorderSide(color: Colors.blue),
                       ),
@@ -661,7 +661,7 @@ class _FamilleMarqueFragmentState extends State<FamilleMarqueFragment> {
                         EdgeInsetsDirectional.only(start: 0, end: 0),
                     child: RaisedButton(
                       shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(18.0),
+                        borderRadius: BorderRadius.circular(5),
                       ),
                       onPressed: () async {
                         setState(() {
@@ -755,13 +755,13 @@ class _FamilleMarqueFragmentState extends State<FamilleMarqueFragment> {
                             ),
                             focusedBorder: OutlineInputBorder(
                                 borderSide: BorderSide(color: Colors.blue),
-                                borderRadius: BorderRadius.circular(20)),
+                                borderRadius: BorderRadius.circular(5)),
                             contentPadding: EdgeInsets.only(left: 10),
                             labelText: S.current.compte_designation,
                             labelStyle: GoogleFonts.lato(),
                             enabledBorder: OutlineInputBorder(
                               gapPadding: 3.3,
-                              borderRadius: BorderRadius.circular(20),
+                              borderRadius: BorderRadius.circular(5),
                               borderSide: BorderSide(color: Colors.blue),
                             ),
                           ),
@@ -785,13 +785,13 @@ class _FamilleMarqueFragmentState extends State<FamilleMarqueFragment> {
                             ),
                             focusedBorder: OutlineInputBorder(
                                 borderSide: BorderSide(color: Colors.blue),
-                                borderRadius: BorderRadius.circular(20)),
+                                borderRadius: BorderRadius.circular(5)),
                             contentPadding: EdgeInsets.only(left: 10),
                             labelText: S.current.n,
                             labelStyle: GoogleFonts.lato(),
                             enabledBorder: OutlineInputBorder(
                               gapPadding: 3.3,
-                              borderRadius: BorderRadius.circular(20),
+                              borderRadius: BorderRadius.circular(5),
                               borderSide: BorderSide(color: Colors.blue),
                             ),
                           ),
@@ -818,13 +818,13 @@ class _FamilleMarqueFragmentState extends State<FamilleMarqueFragment> {
                             ),
                             focusedBorder: OutlineInputBorder(
                                 borderSide: BorderSide(color: Colors.blue),
-                                borderRadius: BorderRadius.circular(20)),
+                                borderRadius: BorderRadius.circular(5)),
                             contentPadding: EdgeInsets.only(left: 10),
                             labelText: S.current.solde_depart,
                             labelStyle: GoogleFonts.lato(),
                             enabledBorder: OutlineInputBorder(
                               gapPadding: 3.3,
-                              borderRadius: BorderRadius.circular(20),
+                              borderRadius: BorderRadius.circular(5),
                               borderSide: BorderSide(color: Colors.blue),
                             ),
                           ),
@@ -838,7 +838,7 @@ class _FamilleMarqueFragmentState extends State<FamilleMarqueFragment> {
                             padding: EdgeInsets.only(right: 0, left: 0),
                             child: RaisedButton(
                               shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(18.0),
+                                borderRadius: BorderRadius.circular(5),
                               ),
                               onPressed: () async {
                                 if (_formKey.currentState.validate()) {
@@ -939,7 +939,7 @@ class _FamilleMarqueFragmentState extends State<FamilleMarqueFragment> {
                       ),
                       focusedBorder: OutlineInputBorder(
                         borderSide: BorderSide(color: Colors.blue),
-                        borderRadius: BorderRadius.circular(20),
+                        borderRadius: BorderRadius.circular(5),
                       ),
                       contentPadding: EdgeInsets.only(left: 10),
                       labelText: S.current.categorie,
@@ -949,7 +949,7 @@ class _FamilleMarqueFragmentState extends State<FamilleMarqueFragment> {
                       ),
                       enabledBorder: OutlineInputBorder(
                         gapPadding: 3.3,
-                        borderRadius: BorderRadius.circular(20),
+                        borderRadius: BorderRadius.circular(5),
                         borderSide: BorderSide(color: Colors.blue),
                       ),
                     ),
@@ -961,7 +961,7 @@ class _FamilleMarqueFragmentState extends State<FamilleMarqueFragment> {
                     padding: EdgeInsets.only(right: 0, left: 0),
                     child: RaisedButton(
                       shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(18.0),
+                        borderRadius: BorderRadius.circular(5),
                       ),
                       onPressed: () async {
                         if (_formKey.currentState.validate()) {

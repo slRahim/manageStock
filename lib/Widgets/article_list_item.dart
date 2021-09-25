@@ -588,14 +588,14 @@ class _ArticleListItemState extends State<ArticleListItem> {
                     ),
                     focusedBorder: OutlineInputBorder(
                         borderSide: BorderSide(color: Colors.orange[900]),
-                        borderRadius: BorderRadius.circular(20)),
+                        borderRadius: BorderRadius.circular(5)),
                     contentPadding: EdgeInsets.only(left: 10),
                     labelText: "${S.current.colis} +${S.current.unite}",
                     labelStyle: GoogleFonts.lato(
                         textStyle: TextStyle(color: Colors.orange[900])),
                     enabledBorder: OutlineInputBorder(
                       gapPadding: 3.3,
-                      borderRadius: BorderRadius.circular(20),
+                      borderRadius: BorderRadius.circular(5),
                       borderSide: BorderSide(color: Colors.orange[900]),
                     ),
                   ),
@@ -638,14 +638,14 @@ class _ArticleListItemState extends State<ArticleListItem> {
                   ),
                   focusedBorder: OutlineInputBorder(
                       borderSide: BorderSide(color: Colors.orange[900]),
-                      borderRadius: BorderRadius.circular(20)),
+                      borderRadius: BorderRadius.circular(5)),
                   contentPadding: EdgeInsets.only(left: 10),
                   labelText: S.current.quantit,
                   labelStyle: GoogleFonts.lato(
                       textStyle: TextStyle(color: Colors.orange[900])),
                   enabledBorder: OutlineInputBorder(
                     gapPadding: 3.3,
-                    borderRadius: BorderRadius.circular(20),
+                    borderRadius: BorderRadius.circular(5),
                     borderSide: BorderSide(color: Colors.orange[900]),
                   ),
                 ),
@@ -709,7 +709,7 @@ class _ArticleListItemState extends State<ArticleListItem> {
                           focusedBorder: OutlineInputBorder(
                               borderSide:
                                   BorderSide(color: Colors.orange[900]),
-                              borderRadius: BorderRadius.circular(20)),
+                              borderRadius: BorderRadius.circular(5)),
                           contentPadding: EdgeInsets.only(left: 10),
                           labelText: S.current.prix_unite,
                           labelStyle: GoogleFonts.lato(
@@ -717,7 +717,7 @@ class _ArticleListItemState extends State<ArticleListItem> {
                                   TextStyle(color: Colors.orange[900])),
                           enabledBorder: OutlineInputBorder(
                             gapPadding: 3.3,
-                            borderRadius: BorderRadius.circular(20),
+                            borderRadius: BorderRadius.circular(5),
                             borderSide:
                                 BorderSide(color: Colors.orange[900]),
                           ),

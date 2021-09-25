@@ -130,7 +130,7 @@ class _RapportState extends State<Rapport> {
                 height: 400,
                 decoration: BoxDecoration(
                   color: Theme.of(context).disabledColor,
-                  borderRadius: BorderRadius.circular(10),
+                  borderRadius: BorderRadius.circular(5),
                   boxShadow: [
                     BoxShadow(
                       color: Colors.grey.withOpacity(.2), // soften the shadow
@@ -170,7 +170,7 @@ class _RapportState extends State<Rapport> {
                                   border: Border.all(
                                     color: Colors.blueAccent,
                                   ),
-                                  borderRadius: BorderRadius.circular(20.0),
+                                  borderRadius: BorderRadius.circular(5),
                                 ),
                                 child: DropdownButtonHideUnderline(
                                   child: DropdownButton<String>(
@@ -221,7 +221,7 @@ class _RapportState extends State<Rapport> {
                                   border: Border.all(
                                     color: Colors.blueAccent,
                                   ),
-                                  borderRadius: BorderRadius.circular(20.0),
+                                  borderRadius: BorderRadius.circular(5),
                                 ),
                                 child: DropdownButtonHideUnderline(
                                   child: DropdownButton<String>(
@@ -306,12 +306,12 @@ class _RapportState extends State<Rapport> {
                                                 borderSide: BorderSide(
                                                     color: Colors.blue),
                                                 borderRadius:
-                                                    BorderRadius.circular(20)),
+                                                    BorderRadius.circular(5)),
                                             enabledBorder: OutlineInputBorder(
                                                 borderSide: BorderSide(
                                                     color: Colors.blue),
                                                 borderRadius:
-                                                    BorderRadius.circular(20))),
+                                                    BorderRadius.circular(5))),
                                         keyboardType: TextInputType.number,
                                       ),
                                     ),
@@ -330,7 +330,7 @@ class _RapportState extends State<Rapport> {
                                             color: Colors.blueAccent,
                                           ),
                                           borderRadius:
-                                              BorderRadius.circular(20.0),
+                                              BorderRadius.circular(5),
                                         ),
                                         child: TextField(
                                           controller: _dateControl,
@@ -339,7 +339,7 @@ class _RapportState extends State<Rapport> {
                                                 borderSide: BorderSide(
                                                     color: Colors.blue),
                                                 borderRadius:
-                                                    BorderRadius.circular(20)),
+                                                    BorderRadius.circular(5)),
                                           ),
                                           enabled: false,
                                           keyboardType: TextInputType.text,

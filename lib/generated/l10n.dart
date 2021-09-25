@@ -225,10 +225,10 @@ class S {
     );
   }
 
-  /// `Customer Invoice Feedback`
+  /// `Customer credit note`
   String get avoir_client {
     return Intl.message(
-      'Customer Invoice Feedback',
+      'Customer credit note',
       name: 'avoir_client',
       desc: '',
       args: [],
@@ -605,30 +605,30 @@ class S {
     );
   }
 
-  /// `Mys.`
+  /// `Mr.`
   String get statut_m {
     return Intl.message(
-      'Mys.',
+      'Mr.',
       name: 'statut_m',
       desc: '',
       args: [],
     );
   }
 
-  /// `Mlle.`
+  /// `Ms.`
   String get statut_mlle {
     return Intl.message(
-      'Mlle.',
+      'Ms.',
       name: 'statut_mlle',
       desc: '',
       args: [],
     );
   }
 
-  /// `Mme.`
+  /// `Mrs.`
   String get statut_mme {
     return Intl.message(
-      'Mme.',
+      'Mrs.',
       name: 'statut_mme',
       desc: '',
       args: [],
@@ -815,10 +815,10 @@ class S {
     );
   }
 
-  /// `QRCode`
+  /// `QR Code`
   String get qr_code {
     return Intl.message(
-      'QRCode',
+      'QR Code',
       name: 'qr_code',
       desc: '',
       args: [],
@@ -925,10 +925,10 @@ class S {
     );
   }
 
-  /// `Please add at least a name and mobile number.`
+  /// `Please add at least a name and mobile.`
   String get msg_gen_qr {
     return Intl.message(
-      'Please add at least a name and mobile number.',
+      'Please add at least a name and mobile.',
       name: 'msg_gen_qr',
       desc: '',
       args: [],
@@ -1345,20 +1345,20 @@ class S {
     );
   }
 
-  /// `Please select a tier.`
+  /// `Please select a Customer/Vendor.`
   String get msg_select_tier {
     return Intl.message(
-      'Please select a tier.',
+      'Please select a Customer/Vendor.',
       name: 'msg_select_tier',
       desc: '',
       args: [],
     );
   }
 
-  /// `Select Tier`
+  /// `Select Customer/Vendor`
   String get select_tier {
     return Intl.message(
-      'Select Tier',
+      'Select Customer/Vendor',
       name: 'select_tier',
       desc: '',
       args: [],

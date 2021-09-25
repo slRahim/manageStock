@@ -214,7 +214,7 @@ class _CategoryListItemState extends State<CategoryListItem> {
                           ),
                           focusedBorder: OutlineInputBorder(
                               borderSide: BorderSide(color: Colors.blue),
-                              borderRadius: BorderRadius.circular(20)),
+                              borderRadius: BorderRadius.circular(5)),
                           contentPadding: EdgeInsets.only(left: 10),
                           labelText: S.current.designation,
                           labelStyle: GoogleFonts.lato(
@@ -223,7 +223,7 @@ class _CategoryListItemState extends State<CategoryListItem> {
                           ),
                           enabledBorder: OutlineInputBorder(
                             gapPadding: 3.3,
-                            borderRadius: BorderRadius.circular(20),
+                            borderRadius: BorderRadius.circular(5),
                             borderSide: BorderSide(color: Colors.blue),
                           ),
                         ),
@@ -247,7 +247,7 @@ class _CategoryListItemState extends State<CategoryListItem> {
                             ),
                             focusedBorder: OutlineInputBorder(
                                 borderSide: BorderSide(color: Colors.blue),
-                                borderRadius: BorderRadius.circular(20)),
+                                borderRadius: BorderRadius.circular(5)),
                             contentPadding: EdgeInsets.only(left: 10),
                             labelText: S.current.n,
                             labelStyle: GoogleFonts.lato(
@@ -256,7 +256,7 @@ class _CategoryListItemState extends State<CategoryListItem> {
                             ),
                             enabledBorder: OutlineInputBorder(
                               gapPadding: 3.3,
-                              borderRadius: BorderRadius.circular(20),
+                              borderRadius: BorderRadius.circular(5),
                               borderSide: BorderSide(color: Colors.blue),
                             ),
                           ),
@@ -282,7 +282,7 @@ class _CategoryListItemState extends State<CategoryListItem> {
                             ),
                             focusedBorder: OutlineInputBorder(
                                 borderSide: BorderSide(color: Colors.blue),
-                                borderRadius: BorderRadius.circular(20)),
+                                borderRadius: BorderRadius.circular(5)),
                             contentPadding: EdgeInsets.only(left: 10),
                             labelText: S.current.solde_depart,
                             labelStyle: GoogleFonts.lato(
@@ -291,7 +291,7 @@ class _CategoryListItemState extends State<CategoryListItem> {
                             ),
                             enabledBorder: OutlineInputBorder(
                               gapPadding: 3.3,
-                              borderRadius: BorderRadius.circular(20),
+                              borderRadius: BorderRadius.circular(5),
                               borderSide: BorderSide(color: Colors.blue),
                             ),
                           ),
@@ -307,7 +307,7 @@ class _CategoryListItemState extends State<CategoryListItem> {
                   padding: EdgeInsets.only(right: 0, left: 0),
                   child: RaisedButton(
                     shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(18.0),
+                      borderRadius: BorderRadius.circular(5),
                     ),
                     onPressed: () async {
                       if (_formKey.currentState.validate()) {

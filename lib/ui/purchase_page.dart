@@ -162,7 +162,7 @@ class _PurchasePageState extends State<PurchasePage> {
                                           bottom: 10),
                                       decoration: BoxDecoration(
                                           borderRadius:
-                                              BorderRadius.circular(10),
+                                              BorderRadius.circular(5),
                                           border: Border.all(
                                               color: Colors.indigo, width: 2),
                                           color: Theme.of(context)
@@ -316,7 +316,7 @@ class _PurchasePageState extends State<PurchasePage> {
         padding: EdgeInsets.all(8),
         margin: EdgeInsetsDirectional.only(bottom: 8),
         decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(10),
+            borderRadius: BorderRadius.circular(5),
             border: Border.all(
                 color: (productDetail.id == "010101")
                     ? Colors.blue
@@ -346,7 +346,7 @@ class _PurchasePageState extends State<PurchasePage> {
                         : (productDetail.id == "121212")
                             ? Colors.green[700]
                             : Colors.red[900],
-                    borderRadius: BorderRadius.circular(8),
+                    borderRadius: BorderRadius.circular(5),
                   ),
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,

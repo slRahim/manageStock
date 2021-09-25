@@ -40,7 +40,7 @@ class Statics {
     S.current.ev_sat
   ];
   static List<String> languages = [
-    "English (ENG)",
+    "English (EN)",
     "Français (FR)",
     "عربية (AR)"
   ];

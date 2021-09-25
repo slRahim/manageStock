@@ -387,15 +387,15 @@ class _ProfilePageState extends State<ProfilePage>
                       ),
                       focusedBorder: OutlineInputBorder(
                           borderSide: BorderSide(color: Colors.green),
-                          borderRadius: BorderRadius.circular(20)),
+                          borderRadius: BorderRadius.circular(5)),
                       enabledBorder: OutlineInputBorder(
                         gapPadding: 3.3,
-                        borderRadius: BorderRadius.circular(20),
+                        borderRadius: BorderRadius.circular(5),
                         borderSide: BorderSide(color: Colors.green),
                       ),
                       errorBorder: OutlineInputBorder(
                         gapPadding: 3.3,
-                        borderRadius: BorderRadius.circular(20),
+                        borderRadius: BorderRadius.circular(5),
                         borderSide: BorderSide(color: Colors.red),
                       ),
                     ),
@@ -409,7 +409,7 @@ class _ProfilePageState extends State<ProfilePage>
                           border: Border.all(
                             color: Colors.blueAccent,
                           ),
-                          borderRadius: BorderRadius.circular(20.0),
+                          borderRadius: BorderRadius.circular(5),
                         )
                       : null,
                   child: DropdownButtonHideUnderline(
@@ -449,15 +449,15 @@ class _ProfilePageState extends State<ProfilePage>
                 ),
                 focusedBorder: OutlineInputBorder(
                     borderSide: BorderSide(color: Colors.blue),
-                    borderRadius: BorderRadius.circular(20)),
+                    borderRadius: BorderRadius.circular(5)),
                 enabledBorder: OutlineInputBorder(
                   gapPadding: 3.3,
-                  borderRadius: BorderRadius.circular(20),
+                  borderRadius: BorderRadius.circular(5),
                   borderSide: BorderSide(color: Colors.blue),
                 ),
                 errorBorder: OutlineInputBorder(
                   gapPadding: 3.3,
-                  borderRadius: BorderRadius.circular(20),
+                  borderRadius: BorderRadius.circular(5),
                   borderSide: BorderSide(color: Colors.red),
                 ),
               ),
@@ -483,15 +483,15 @@ class _ProfilePageState extends State<ProfilePage>
                 ),
                 focusedBorder: OutlineInputBorder(
                     borderSide: BorderSide(color: Colors.blue),
-                    borderRadius: BorderRadius.circular(20)),
+                    borderRadius: BorderRadius.circular(5)),
                 enabledBorder: OutlineInputBorder(
                   gapPadding: 3.3,
-                  borderRadius: BorderRadius.circular(20),
+                  borderRadius: BorderRadius.circular(5),
                   borderSide: BorderSide(color: Colors.blue),
                 ),
                 errorBorder: OutlineInputBorder(
                   gapPadding: 3.3,
-                  borderRadius: BorderRadius.circular(20),
+                  borderRadius: BorderRadius.circular(5),
                   borderSide: BorderSide(color: Colors.red),
                 ),
               ),
@@ -504,7 +504,7 @@ class _ProfilePageState extends State<ProfilePage>
                       border: Border.all(
                         color: Colors.blueAccent,
                       ),
-                      borderRadius: BorderRadius.circular(20.0),
+                      borderRadius: BorderRadius.circular(5),
                     )
                   : null,
               child: Row(
@@ -561,7 +561,7 @@ class _ProfilePageState extends State<ProfilePage>
                       border: Border.all(
                         color: Colors.blueAccent,
                       ),
-                      borderRadius: BorderRadius.circular(20.0),
+                      borderRadius: BorderRadius.circular(5),
                     )
                   : null,
               child: Row(
@@ -616,7 +616,7 @@ class _ProfilePageState extends State<ProfilePage>
                       border: Border.all(
                         color: Colors.blueAccent,
                       ),
-                      borderRadius: BorderRadius.circular(20.0),
+                      borderRadius: BorderRadius.circular(5),
                     )
                   : null,
               child: Row(
@@ -683,15 +683,15 @@ class _ProfilePageState extends State<ProfilePage>
                 ),
                 focusedBorder: OutlineInputBorder(
                     borderSide: BorderSide(color: Colors.blue),
-                    borderRadius: BorderRadius.circular(20)),
+                    borderRadius: BorderRadius.circular(5)),
                 enabledBorder: OutlineInputBorder(
                   gapPadding: 3.3,
-                  borderRadius: BorderRadius.circular(20),
+                  borderRadius: BorderRadius.circular(5),
                   borderSide: BorderSide(color: Colors.blue),
                 ),
                 errorBorder: OutlineInputBorder(
                   gapPadding: 3.3,
-                  borderRadius: BorderRadius.circular(20),
+                  borderRadius: BorderRadius.circular(5),
                   borderSide: BorderSide(color: Colors.red),
                 ),
               ),
@@ -719,15 +719,15 @@ class _ProfilePageState extends State<ProfilePage>
                 ),
                 focusedBorder: OutlineInputBorder(
                     borderSide: BorderSide(color: Colors.blue),
-                    borderRadius: BorderRadius.circular(20)),
+                    borderRadius: BorderRadius.circular(5)),
                 enabledBorder: OutlineInputBorder(
                   gapPadding: 3.3,
-                  borderRadius: BorderRadius.circular(20),
+                  borderRadius: BorderRadius.circular(5),
                   borderSide: BorderSide(color: Colors.blue),
                 ),
                 errorBorder: OutlineInputBorder(
                   gapPadding: 3.3,
-                  borderRadius: BorderRadius.circular(20),
+                  borderRadius: BorderRadius.circular(5),
                   borderSide: BorderSide(color: Colors.red),
                 ),
               ),
@@ -755,15 +755,15 @@ class _ProfilePageState extends State<ProfilePage>
                 ),
                 focusedBorder: OutlineInputBorder(
                     borderSide: BorderSide(color: Colors.blue),
-                    borderRadius: BorderRadius.circular(20)),
+                    borderRadius: BorderRadius.circular(5)),
                 enabledBorder: OutlineInputBorder(
                   gapPadding: 3.3,
-                  borderRadius: BorderRadius.circular(20),
+                  borderRadius: BorderRadius.circular(5),
                   borderSide: BorderSide(color: Colors.blue),
                 ),
                 errorBorder: OutlineInputBorder(
                   gapPadding: 3.3,
-                  borderRadius: BorderRadius.circular(20),
+                  borderRadius: BorderRadius.circular(5),
                   borderSide: BorderSide(color: Colors.red),
                 ),
               ),
@@ -791,15 +791,15 @@ class _ProfilePageState extends State<ProfilePage>
                 ),
                 focusedBorder: OutlineInputBorder(
                     borderSide: BorderSide(color: Colors.blue),
-                    borderRadius: BorderRadius.circular(20)),
+                    borderRadius: BorderRadius.circular(5)),
                 enabledBorder: OutlineInputBorder(
                   gapPadding: 3.3,
-                  borderRadius: BorderRadius.circular(20),
+                  borderRadius: BorderRadius.circular(5),
                   borderSide: BorderSide(color: Colors.blue),
                 ),
                 errorBorder: OutlineInputBorder(
                   gapPadding: 3.3,
-                  borderRadius: BorderRadius.circular(20),
+                  borderRadius: BorderRadius.circular(5),
                   borderSide: BorderSide(color: Colors.red),
                 ),
               ),
@@ -826,15 +826,15 @@ class _ProfilePageState extends State<ProfilePage>
                 ),
                 focusedBorder: OutlineInputBorder(
                     borderSide: BorderSide(color: Colors.blue),
-                    borderRadius: BorderRadius.circular(20)),
+                    borderRadius: BorderRadius.circular(5)),
                 enabledBorder: OutlineInputBorder(
                   gapPadding: 3.3,
-                  borderRadius: BorderRadius.circular(20),
+                  borderRadius: BorderRadius.circular(5),
                   borderSide: BorderSide(color: Colors.blue),
                 ),
                 errorBorder: OutlineInputBorder(
                   gapPadding: 3.3,
-                  borderRadius: BorderRadius.circular(20),
+                  borderRadius: BorderRadius.circular(5),
                   borderSide: BorderSide(color: Colors.red),
                 ),
               ),
@@ -860,15 +860,15 @@ class _ProfilePageState extends State<ProfilePage>
                 ),
                 focusedBorder: OutlineInputBorder(
                     borderSide: BorderSide(color: Colors.blue),
-                    borderRadius: BorderRadius.circular(20)),
+                    borderRadius: BorderRadius.circular(5)),
                 enabledBorder: OutlineInputBorder(
                   gapPadding: 3.3,
-                  borderRadius: BorderRadius.circular(20),
+                  borderRadius: BorderRadius.circular(5),
                   borderSide: BorderSide(color: Colors.blue[700]),
                 ),
                 errorBorder: OutlineInputBorder(
                   gapPadding: 3.3,
-                  borderRadius: BorderRadius.circular(20),
+                  borderRadius: BorderRadius.circular(5),
                   borderSide: BorderSide(color: Colors.red),
                 ),
               ),
@@ -894,15 +894,15 @@ class _ProfilePageState extends State<ProfilePage>
                 ),
                 focusedBorder: OutlineInputBorder(
                     borderSide: BorderSide(color: Colors.blue),
-                    borderRadius: BorderRadius.circular(20)),
+                    borderRadius: BorderRadius.circular(5)),
                 enabledBorder: OutlineInputBorder(
                   gapPadding: 3.3,
-                  borderRadius: BorderRadius.circular(20),
+                  borderRadius: BorderRadius.circular(5),
                   borderSide: BorderSide(color: Colors.blue),
                 ),
                 errorBorder: OutlineInputBorder(
                   gapPadding: 3.3,
-                  borderRadius: BorderRadius.circular(20),
+                  borderRadius: BorderRadius.circular(5),
                   borderSide: BorderSide(color: Colors.red),
                 ),
               ),
@@ -929,15 +929,15 @@ class _ProfilePageState extends State<ProfilePage>
                 ),
                 focusedBorder: OutlineInputBorder(
                     borderSide: BorderSide(color: Colors.blue),
-                    borderRadius: BorderRadius.circular(20)),
+                    borderRadius: BorderRadius.circular(5)),
                 enabledBorder: OutlineInputBorder(
                   gapPadding: 3.3,
-                  borderRadius: BorderRadius.circular(20),
+                  borderRadius: BorderRadius.circular(5),
                   borderSide: BorderSide(color: Colors.blue),
                 ),
                 errorBorder: OutlineInputBorder(
                   gapPadding: 3.3,
-                  borderRadius: BorderRadius.circular(20),
+                  borderRadius: BorderRadius.circular(5),
                   borderSide: BorderSide(color: Colors.red),
                 ),
               ),
@@ -966,15 +966,15 @@ class _ProfilePageState extends State<ProfilePage>
                   ),
                   focusedBorder: OutlineInputBorder(
                       borderSide: BorderSide(color: Colors.blue),
-                      borderRadius: BorderRadius.circular(20)),
+                      borderRadius: BorderRadius.circular(5)),
                   enabledBorder: OutlineInputBorder(
                     gapPadding: 3.3,
-                    borderRadius: BorderRadius.circular(20),
+                    borderRadius: BorderRadius.circular(5),
                     borderSide: BorderSide(color: Colors.blue),
                   ),
                   errorBorder: OutlineInputBorder(
                     gapPadding: 3.3,
-                    borderRadius: BorderRadius.circular(20),
+                    borderRadius: BorderRadius.circular(5),
                     borderSide: BorderSide(color: Colors.red),
                   ),
                 ),
@@ -1002,15 +1002,15 @@ class _ProfilePageState extends State<ProfilePage>
                 ),
                 focusedBorder: OutlineInputBorder(
                     borderSide: BorderSide(color: Colors.blue),
-                    borderRadius: BorderRadius.circular(20)),
+                    borderRadius: BorderRadius.circular(5)),
                 enabledBorder: OutlineInputBorder(
                   gapPadding: 3.3,
-                  borderRadius: BorderRadius.circular(20),
+                  borderRadius: BorderRadius.circular(5),
                   borderSide: BorderSide(color: Colors.blue),
                 ),
                 errorBorder: OutlineInputBorder(
                   gapPadding: 3.3,
-                  borderRadius: BorderRadius.circular(20),
+                  borderRadius: BorderRadius.circular(5),
                   borderSide: BorderSide(color: Colors.red),
                 ),
               ),
@@ -1037,15 +1037,15 @@ class _ProfilePageState extends State<ProfilePage>
                 ),
                 focusedBorder: OutlineInputBorder(
                     borderSide: BorderSide(color: Colors.blue),
-                    borderRadius: BorderRadius.circular(20)),
+                    borderRadius: BorderRadius.circular(5)),
                 enabledBorder: OutlineInputBorder(
                   gapPadding: 3.3,
-                  borderRadius: BorderRadius.circular(20),
+                  borderRadius: BorderRadius.circular(5),
                   borderSide: BorderSide(color: Colors.blue),
                 ),
                 errorBorder: OutlineInputBorder(
                   gapPadding: 3.3,
-                  borderRadius: BorderRadius.circular(20),
+                  borderRadius: BorderRadius.circular(5),
                   borderSide: BorderSide(color: Colors.red),
                 ),
               ),
@@ -1076,15 +1076,15 @@ class _ProfilePageState extends State<ProfilePage>
                 ),
                 focusedBorder: OutlineInputBorder(
                     borderSide: BorderSide(color: Colors.blue),
-                    borderRadius: BorderRadius.circular(20)),
+                    borderRadius: BorderRadius.circular(5)),
                 enabledBorder: OutlineInputBorder(
                   gapPadding: 3.3,
-                  borderRadius: BorderRadius.circular(20),
+                  borderRadius: BorderRadius.circular(5),
                   borderSide: BorderSide(color: Colors.blue),
                 ),
                 errorBorder: OutlineInputBorder(
                   gapPadding: 3.3,
-                  borderRadius: BorderRadius.circular(20),
+                  borderRadius: BorderRadius.circular(5),
                   borderSide: BorderSide(color: Colors.red),
                 ),
               ),
@@ -1097,7 +1097,7 @@ class _ProfilePageState extends State<ProfilePage>
                       border: Border.all(
                         color: Colors.blueAccent,
                       ),
-                      borderRadius: BorderRadius.circular(20.0),
+                      borderRadius: BorderRadius.circular(5),
                     )
                   : null,
               child: Row(

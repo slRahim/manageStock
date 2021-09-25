@@ -39,7 +39,7 @@ class _ChartBarState extends State<ChartBar> {
     return AspectRatio(
       aspectRatio: 1,
       child: Card(
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(4)),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5)),
         color: widget.backgroundColor,
         child: Padding(
           padding: const EdgeInsetsDirectional.only(top: 16 , bottom: 16 , start: 10 , end: 10),

@@ -190,13 +190,13 @@ class _JournalFragmentState extends State<JournalFragment> {
           ),
           focusedBorder: OutlineInputBorder(
               borderSide: BorderSide(color: Colors.blue),
-              borderRadius: BorderRadius.circular(20)),
+              borderRadius: BorderRadius.circular(5)),
           labelText: S.current.start_date,
           labelStyle:
               GoogleFonts.lato(textStyle: TextStyle(color: Colors.blue)),
           enabledBorder: OutlineInputBorder(
             gapPadding: 3.3,
-            borderRadius: BorderRadius.circular(20),
+            borderRadius: BorderRadius.circular(5),
             borderSide: BorderSide(color: Colors.blue),
           ),
         ),
@@ -233,13 +233,13 @@ class _JournalFragmentState extends State<JournalFragment> {
           ),
           focusedBorder: OutlineInputBorder(
               borderSide: BorderSide(color: Colors.blue),
-              borderRadius: BorderRadius.circular(20)),
+              borderRadius: BorderRadius.circular(5)),
           labelText: S.current.end_date,
           labelStyle:
               GoogleFonts.lato(textStyle: TextStyle(color: Colors.blue)),
           enabledBorder: OutlineInputBorder(
             gapPadding: 3.3,
-            borderRadius: BorderRadius.circular(20),
+            borderRadius: BorderRadius.circular(5),
             borderSide: BorderSide(color: Colors.blue),
           ),
         ),

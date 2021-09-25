@@ -41,7 +41,7 @@ class ListDropDownState extends State<ListDropDown> {
               border: Border.all(
                 color: Colors.blueAccent,
               ),
-              borderRadius: BorderRadius.circular(20.0),
+              borderRadius: BorderRadius.circular(5),
             )
           : null,
       child: Row(

@@ -1057,14 +1057,14 @@ class _AddPiecePageState extends State<AddPiecePage>
                               focusedBorder: OutlineInputBorder(
                                   borderSide:
                                       BorderSide(color: Colors.orange[900]),
-                                  borderRadius: BorderRadius.circular(20)),
+                                  borderRadius: BorderRadius.circular(5)),
                               labelText: "${S.current.n}",
                               labelStyle: GoogleFonts.lato(
                                   textStyle:
                                       TextStyle(color: Colors.orange[900])),
                               enabledBorder: OutlineInputBorder(
                                 gapPadding: 3.3,
-                                borderRadius: BorderRadius.circular(20),
+                                borderRadius: BorderRadius.circular(5),
                                 borderSide:
                                     BorderSide(color: Colors.orange[900]),
                               ),
@@ -1088,13 +1088,13 @@ class _AddPiecePageState extends State<AddPiecePage>
                                 ),
                                 focusedBorder: OutlineInputBorder(
                                     borderSide: BorderSide(color: Colors.blue),
-                                    borderRadius: BorderRadius.circular(20)),
+                                    borderRadius: BorderRadius.circular(5)),
                                 labelText: S.current.date,
                                 labelStyle: GoogleFonts.lato(
                                     textStyle: TextStyle(color: Colors.blue)),
                                 enabledBorder: OutlineInputBorder(
                                   gapPadding: 3.3,
-                                  borderRadius: BorderRadius.circular(20),
+                                  borderRadius: BorderRadius.circular(5),
                                   borderSide: BorderSide(color: Colors.blue),
                                 ),
                               ),
@@ -1160,7 +1160,7 @@ class _AddPiecePageState extends State<AddPiecePage>
                               ),
                               focusedBorder: OutlineInputBorder(
                                   borderSide: BorderSide(color: Colors.blue),
-                                  borderRadius: BorderRadius.circular(20)),
+                                  borderRadius: BorderRadius.circular(5)),
                               labelText: (_piece.piece == PieceType.devis ||
                                       _piece.piece == PieceType.retourClient ||
                                       _piece.piece == PieceType.avoirClient ||
@@ -1174,7 +1174,7 @@ class _AddPiecePageState extends State<AddPiecePage>
                                   textStyle: TextStyle(color: Colors.blue)),
                               enabledBorder: OutlineInputBorder(
                                 gapPadding: 3.3,
-                                borderRadius: BorderRadius.circular(20),
+                                borderRadius: BorderRadius.circular(5),
                                 borderSide: BorderSide(color: Colors.blue),
                               ),
                             ),
@@ -1449,7 +1449,7 @@ class _AddPiecePageState extends State<AddPiecePage>
                   ),
                   focusedBorder: OutlineInputBorder(
                       borderSide: BorderSide(color: Colors.greenAccent),
-                      borderRadius: BorderRadius.circular(20)),
+                      borderRadius: BorderRadius.circular(5)),
                   contentPadding: EdgeInsets.only(left: 10),
                   // labelText: (_piece.piece == PieceType.retourClient ||
                   //         _piece.piece == PieceType.avoirClient ||
@@ -1462,7 +1462,7 @@ class _AddPiecePageState extends State<AddPiecePage>
                       textStyle: TextStyle(color: Colors.green)),
                   enabledBorder: OutlineInputBorder(
                     gapPadding: 3.3,
-                    borderRadius: BorderRadius.circular(20),
+                    borderRadius: BorderRadius.circular(5),
                     borderSide: BorderSide(color: Colors.green),
                   ),
                 ),
@@ -1489,7 +1489,7 @@ class _AddPiecePageState extends State<AddPiecePage>
                           ),
                           disabledBorder: OutlineInputBorder(
                               borderSide: BorderSide(color: Colors.orange[900]),
-                              borderRadius: BorderRadius.circular(20)),
+                              borderRadius: BorderRadius.circular(5)),
                           contentPadding: EdgeInsetsDirectional.only(start: 10),
                           labelText: S.current.reste,
                           labelStyle: GoogleFonts.lato(
@@ -1555,14 +1555,14 @@ class _AddPiecePageState extends State<AddPiecePage>
                   ),
                   focusedBorder: OutlineInputBorder(
                       borderSide: BorderSide(color: Colors.green[600]),
-                      borderRadius: BorderRadius.circular(20)),
+                      borderRadius: BorderRadius.circular(5)),
                   contentPadding: EdgeInsets.only(left: 10),
                   labelText: "${S.current.montant_1}",
                   labelStyle: GoogleFonts.lato(
                       textStyle: TextStyle(color: Colors.green[400])),
                   enabledBorder: OutlineInputBorder(
                     gapPadding: 3.3,
-                    borderRadius: BorderRadius.circular(20),
+                    borderRadius: BorderRadius.circular(5),
                     borderSide: BorderSide(color: Colors.green),
                   ),
                 ),
@@ -1604,10 +1604,10 @@ class _AddPiecePageState extends State<AddPiecePage>
                           ),
                           focusedBorder: OutlineInputBorder(
                               borderSide: BorderSide(color: Colors.orange[900]),
-                              borderRadius: BorderRadius.circular(20)),
+                              borderRadius: BorderRadius.circular(5)),
                           enabledBorder: OutlineInputBorder(
                               borderSide: BorderSide(color: Colors.orange[600]),
-                              borderRadius: BorderRadius.circular(20)),
+                              borderRadius: BorderRadius.circular(5)),
                           contentPadding: EdgeInsetsDirectional.only(start: 10),
                           labelText: S.current.pourcentage,
                           labelStyle: GoogleFonts.lato(
@@ -1651,7 +1651,7 @@ class _AddPiecePageState extends State<AddPiecePage>
                         padding: EdgeInsetsDirectional.only(end: 0, start: 0),
                         child: RaisedButton(
                           shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(18.0),
+                            borderRadius: BorderRadius.circular(5),
                           ),
                           onPressed: () async {
                             Navigator.pop(context);
@@ -1679,7 +1679,7 @@ class _AddPiecePageState extends State<AddPiecePage>
                         padding: EdgeInsetsDirectional.only(end: 0, start: 0),
                         child: RaisedButton(
                           shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(18.0),
+                            borderRadius: BorderRadius.circular(5),
                           ),
                           onPressed: () async {
                             Navigator.pop(context);
@@ -1707,7 +1707,7 @@ class _AddPiecePageState extends State<AddPiecePage>
                         padding: EdgeInsetsDirectional.only(end: 0, start: 0),
                         child: RaisedButton(
                           shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(18.0),
+                            borderRadius: BorderRadius.circular(5),
                           ),
                           onPressed: () async {
                             Navigator.pop(context);
@@ -1744,7 +1744,7 @@ class _AddPiecePageState extends State<AddPiecePage>
                         padding: EdgeInsetsDirectional.only(end: 0, start: 0),
                         child: RaisedButton(
                           shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(18.0),
+                            borderRadius: BorderRadius.circular(5),
                           ),
                           onPressed: () async {
                             Navigator.pop(context);
@@ -1894,7 +1894,7 @@ class _AddPiecePageState extends State<AddPiecePage>
                         padding: EdgeInsetsDirectional.only(end: 0, start: 0),
                         child: RaisedButton(
                           shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(18.0),
+                            borderRadius: BorderRadius.circular(5),
                           ),
                           onPressed: () async {
                             int mov = getMovForPiece();
@@ -1919,7 +1919,7 @@ class _AddPiecePageState extends State<AddPiecePage>
                         padding: EdgeInsetsDirectional.only(end: 0, start: 0),
                         child: RaisedButton(
                           shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(18.0),
+                            borderRadius: BorderRadius.circular(5),
                           ),
                           onPressed: () async {
                             int mov = getMovForPiece();
@@ -1955,7 +1955,7 @@ class _AddPiecePageState extends State<AddPiecePage>
                         padding: EdgeInsetsDirectional.only(end: 0, start: 0),
                         child: RaisedButton(
                           shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(18.0),
+                            borderRadius: BorderRadius.circular(5),
                           ),
                           onPressed: () async {
                             int mov = getMovForPiece();
@@ -1981,7 +1981,7 @@ class _AddPiecePageState extends State<AddPiecePage>
                           padding: EdgeInsetsDirectional.only(end: 0, start: 0),
                           child: RaisedButton(
                             shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(18.0),
+                              borderRadius: BorderRadius.circular(5),
                             ),
                             onPressed: () async {
                               await saveItemAsDraft();
@@ -2302,7 +2302,7 @@ class _AddPiecePageState extends State<AddPiecePage>
                           padding: EdgeInsetsDirectional.only(end: 0, start: 0),
                           child: RaisedButton(
                             shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(18.0),
+                              borderRadius: BorderRadius.circular(5),
                             ),
                             onPressed: () async {
                               var msg =
@@ -2332,7 +2332,7 @@ class _AddPiecePageState extends State<AddPiecePage>
                           padding: EdgeInsetsDirectional.only(end: 0, start: 0),
                           child: RaisedButton(
                             shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(18.0),
+                              borderRadius: BorderRadius.circular(5),
                             ),
                             onPressed: () async {
                               var msg = await transfererPiece(context, "toBon");
@@ -2369,7 +2369,7 @@ class _AddPiecePageState extends State<AddPiecePage>
                           padding: EdgeInsetsDirectional.only(end: 0, start: 0),
                           child: RaisedButton(
                             shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(18.0),
+                              borderRadius: BorderRadius.circular(5),
                             ),
                             onPressed: () async {
                               var msg =
@@ -2411,7 +2411,7 @@ class _AddPiecePageState extends State<AddPiecePage>
                           padding: EdgeInsets.only(right: 0, left: 0),
                           child: RaisedButton(
                             shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(18.0),
+                              borderRadius: BorderRadius.circular(5),
                             ),
                             onPressed: () async {
                               var msg =

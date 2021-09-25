@@ -172,7 +172,7 @@ class _SettingsPageState extends State<SettingsPage> {
                 AwesomeDialog(
                     context: context,
                     title: "",
-                    desc: "${S.current.msg_retour_no_save} ?",
+                    desc: "${S.current.msg_retour_no_save}",
                     dialogType: DialogType.QUESTION,
                     animType: AnimType.BOTTOMSLIDE,
                     btnCancelText: S.current.non,
@@ -245,7 +245,7 @@ class _SettingsPageState extends State<SettingsPage> {
                             setState(() {
                               _language;
                               // switch (_language) {
-                              //   case ("English (ENG)"):
+                              //   case ("English (EN)"):
                               //     S.load(Locale("en"));
                               //     break;
                               //   case ("French (FR)"):
@@ -301,7 +301,7 @@ class _SettingsPageState extends State<SettingsPage> {
                           searchInputDecoration: InputDecoration(
                             focusedBorder: OutlineInputBorder(
                                 borderSide: BorderSide(color: Colors.blue[600]),
-                                borderRadius: BorderRadius.circular(20)),
+                                borderRadius: BorderRadius.circular(5)),
                             contentPadding:
                                 EdgeInsets.only(left: 20, top: 20, bottom: 20),
                             labelText: S.current.search,
@@ -310,7 +310,7 @@ class _SettingsPageState extends State<SettingsPage> {
                             hintText: S.current.msg_search,
                             enabledBorder: OutlineInputBorder(
                               gapPadding: 3.3,
-                              borderRadius: BorderRadius.circular(20),
+                              borderRadius: BorderRadius.circular(5),
                               borderSide: BorderSide(color: Colors.blue[600]),
                             ),
                           ),
@@ -682,7 +682,7 @@ class _SettingsPageState extends State<SettingsPage> {
                         value: Statics.languages[0],
                         groupValue: _language,
                         title: Text(
-                          'English (ENG)',
+                          'English (EN)',
                           style: GoogleFonts.lato(),
                         ),
                         onChanged: (value) {
@@ -1203,7 +1203,7 @@ class _SettingsPageState extends State<SettingsPage> {
 
   _savelocale() async {
     switch (_language) {
-      case ("English (ENG)"):
+      case ("English (EN)"):
         _prefs.setString("myLocale", "en");
         break;
       case ("Français (FR)"):
@@ -1275,7 +1275,7 @@ class _SettingsPageState extends State<SettingsPage> {
       var model = CountryModel.fromJson(data);
       if(model.name == _profile.pays || model.translations.fr == _profile.pays || model.translations.fa == _profile.pays){
         switch (_language) {
-          case ("English (ENG)"):
+          case ("English (EN)"):
             _profile.pays = model.name ;
             break;
           case ("Français (FR)"):

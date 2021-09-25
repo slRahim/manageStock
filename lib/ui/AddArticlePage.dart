@@ -430,6 +430,7 @@ class _AddArticlePageState extends State<AddArticlePage>
               },
               decoration: InputDecoration(
                 labelText: S.current.designation,
+
                 labelStyle: GoogleFonts.lato(
                   textStyle: TextStyle(color: Colors.green),
                 ),
@@ -441,15 +442,15 @@ class _AddArticlePageState extends State<AddArticlePage>
                 ),
                 focusedBorder: OutlineInputBorder(
                     borderSide: BorderSide(color: Colors.green),
-                    borderRadius: BorderRadius.circular(20)),
+                    borderRadius: BorderRadius.circular(5)),
                 enabledBorder: OutlineInputBorder(
                   gapPadding: 3.3,
-                  borderRadius: BorderRadius.circular(20),
+                  borderRadius: BorderRadius.circular(5),
                   borderSide: BorderSide(color: Colors.green),
                 ),
                 errorBorder: OutlineInputBorder(
                   gapPadding: 3.3,
-                  borderRadius: BorderRadius.circular(20),
+                  borderRadius: BorderRadius.circular(5),
                   borderSide: BorderSide(color: Colors.red),
                 ),
               ),
@@ -475,15 +476,15 @@ class _AddArticlePageState extends State<AddArticlePage>
                 ),
                 focusedBorder: OutlineInputBorder(
                     borderSide: BorderSide(color: Colors.blue),
-                    borderRadius: BorderRadius.circular(20)),
+                    borderRadius: BorderRadius.circular(5)),
                 enabledBorder: OutlineInputBorder(
                   gapPadding: 3.3,
-                  borderRadius: BorderRadius.circular(20),
+                  borderRadius: BorderRadius.circular(5),
                   borderSide: BorderSide(color: Colors.blue),
                 ),
                 errorBorder: OutlineInputBorder(
                   gapPadding: 3.3,
-                  borderRadius: BorderRadius.circular(20),
+                  borderRadius: BorderRadius.circular(5),
                   borderSide: BorderSide(color: Colors.red),
                 ),
               ),
@@ -517,15 +518,15 @@ class _AddArticlePageState extends State<AddArticlePage>
                   ),
                   focusedBorder: OutlineInputBorder(
                       borderSide: BorderSide(color: Colors.blue),
-                      borderRadius: BorderRadius.circular(20)),
+                      borderRadius: BorderRadius.circular(5)),
                   enabledBorder: OutlineInputBorder(
                     gapPadding: 3.3,
-                    borderRadius: BorderRadius.circular(20),
+                    borderRadius: BorderRadius.circular(5),
                     borderSide: BorderSide(color: Colors.blue),
                   ),
                   errorBorder: OutlineInputBorder(
                     gapPadding: 3.3,
-                    borderRadius: BorderRadius.circular(20),
+                    borderRadius: BorderRadius.circular(5),
                     borderSide: BorderSide(color: Colors.red),
                   ),
                 ),
@@ -567,15 +568,15 @@ class _AddArticlePageState extends State<AddArticlePage>
                         ),
                         focusedBorder: OutlineInputBorder(
                             borderSide: BorderSide(color: Colors.blue),
-                            borderRadius: BorderRadius.circular(20)),
+                            borderRadius: BorderRadius.circular(5)),
                         enabledBorder: OutlineInputBorder(
                           gapPadding: 3.3,
-                          borderRadius: BorderRadius.circular(20),
+                          borderRadius: BorderRadius.circular(5),
                           borderSide: BorderSide(color: Colors.blue),
                         ),
                         errorBorder: OutlineInputBorder(
                           gapPadding: 3.3,
-                          borderRadius: BorderRadius.circular(20),
+                          borderRadius: BorderRadius.circular(5),
                           borderSide: BorderSide(color: Colors.red),
                         )),
                   ),
@@ -589,7 +590,7 @@ class _AddArticlePageState extends State<AddArticlePage>
                             border: Border.all(
                               color: Colors.blueAccent,
                             ),
-                            borderRadius: BorderRadius.circular(20.0),
+                            borderRadius: BorderRadius.circular(5),
                           )
                         : null,
                     child: CheckboxListTile(
@@ -641,15 +642,15 @@ class _AddArticlePageState extends State<AddArticlePage>
                   ),
                   focusedBorder: OutlineInputBorder(
                       borderSide: BorderSide(color: Colors.blue),
-                      borderRadius: BorderRadius.circular(20)),
+                      borderRadius: BorderRadius.circular(5)),
                   enabledBorder: OutlineInputBorder(
                     gapPadding: 3.3,
-                    borderRadius: BorderRadius.circular(20),
+                    borderRadius: BorderRadius.circular(5),
                     borderSide: BorderSide(color: Colors.blue),
                   ),
                   errorBorder: OutlineInputBorder(
                     gapPadding: 3.3,
-                    borderRadius: BorderRadius.circular(20),
+                    borderRadius: BorderRadius.circular(5),
                     borderSide: BorderSide(color: Colors.red),
                   )),
             ),
@@ -696,15 +697,15 @@ class _AddArticlePageState extends State<AddArticlePage>
                         ),
                         focusedBorder: OutlineInputBorder(
                             borderSide: BorderSide(color: Colors.blue),
-                            borderRadius: BorderRadius.circular(20)),
+                            borderRadius: BorderRadius.circular(5)),
                         enabledBorder: OutlineInputBorder(
                           gapPadding: 3.3,
-                          borderRadius: BorderRadius.circular(20),
+                          borderRadius: BorderRadius.circular(5),
                           borderSide: BorderSide(color: Colors.blue),
                         ),
                         errorBorder: OutlineInputBorder(
                           gapPadding: 3.3,
-                          borderRadius: BorderRadius.circular(20),
+                          borderRadius: BorderRadius.circular(5),
                           borderSide: BorderSide(color: Colors.red),
                         ),
                       ),
@@ -742,7 +743,7 @@ class _AddArticlePageState extends State<AddArticlePage>
                         ),
                         focusedBorder: OutlineInputBorder(
                             borderSide: BorderSide(color: Colors.blue),
-                            borderRadius: BorderRadius.circular(20)),
+                            borderRadius: BorderRadius.circular(5)),
                         labelText: S.current.qte_cmd,
                         labelStyle: GoogleFonts.lato(
                           textStyle:
@@ -750,12 +751,12 @@ class _AddArticlePageState extends State<AddArticlePage>
                         ),
                         enabledBorder: OutlineInputBorder(
                           gapPadding: 3.3,
-                          borderRadius: BorderRadius.circular(20),
+                          borderRadius: BorderRadius.circular(5),
                           borderSide: BorderSide(color: Colors.blue),
                         ),
                         errorBorder: OutlineInputBorder(
                           gapPadding: 3.3,
-                          borderRadius: BorderRadius.circular(20),
+                          borderRadius: BorderRadius.circular(5),
                           borderSide: BorderSide(color: Colors.red),
                         ),
                       ),
@@ -796,19 +797,19 @@ class _AddArticlePageState extends State<AddArticlePage>
                   ),
                   focusedBorder: OutlineInputBorder(
                       borderSide: BorderSide(color: Colors.blue),
-                      borderRadius: BorderRadius.circular(20)),
+                      borderRadius: BorderRadius.circular(5)),
                   labelText: S.current.colis,
                   labelStyle: GoogleFonts.lato(
                     textStyle: TextStyle(color: Theme.of(context).hintColor),
                   ),
                   enabledBorder: OutlineInputBorder(
                     gapPadding: 3.3,
-                    borderRadius: BorderRadius.circular(20),
+                    borderRadius: BorderRadius.circular(5),
                     borderSide: BorderSide(color: Colors.blue),
                   ),
                   errorBorder: OutlineInputBorder(
                     gapPadding: 3.3,
-                    borderRadius: BorderRadius.circular(20),
+                    borderRadius: BorderRadius.circular(5),
                     borderSide: BorderSide(color: Colors.red),
                   ),
                 ),
@@ -860,15 +861,15 @@ class _AddArticlePageState extends State<AddArticlePage>
                         ),
                         focusedBorder: OutlineInputBorder(
                             borderSide: BorderSide(color: Colors.blue),
-                            borderRadius: BorderRadius.circular(20)),
+                            borderRadius: BorderRadius.circular(5)),
                         enabledBorder: OutlineInputBorder(
                           gapPadding: 3.3,
-                          borderRadius: BorderRadius.circular(20),
+                          borderRadius: BorderRadius.circular(5),
                           borderSide: BorderSide(color: Colors.blue),
                         ),
                         errorBorder: OutlineInputBorder(
                           gapPadding: 3.3,
-                          borderRadius: BorderRadius.circular(20),
+                          borderRadius: BorderRadius.circular(5),
                           borderSide: BorderSide(color: Colors.red),
                         ),
                       ),
@@ -906,15 +907,15 @@ class _AddArticlePageState extends State<AddArticlePage>
                         ),
                         focusedBorder: OutlineInputBorder(
                             borderSide: BorderSide(color: Colors.blue),
-                            borderRadius: BorderRadius.circular(20)),
+                            borderRadius: BorderRadius.circular(5)),
                         enabledBorder: OutlineInputBorder(
                           gapPadding: 3.3,
-                          borderRadius: BorderRadius.circular(20),
+                          borderRadius: BorderRadius.circular(5),
                           borderSide: BorderSide(color: Colors.blue),
                         ),
                         errorBorder: OutlineInputBorder(
                           gapPadding: 3.3,
-                          borderRadius: BorderRadius.circular(20),
+                          borderRadius: BorderRadius.circular(5),
                           borderSide: BorderSide(color: Colors.red),
                         ),
                       ),
@@ -950,15 +951,15 @@ class _AddArticlePageState extends State<AddArticlePage>
                 ),
                 focusedBorder: OutlineInputBorder(
                     borderSide: BorderSide(color: Colors.blue),
-                    borderRadius: BorderRadius.circular(20)),
+                    borderRadius: BorderRadius.circular(5)),
                 enabledBorder: OutlineInputBorder(
                   gapPadding: 3.3,
-                  borderRadius: BorderRadius.circular(20),
+                  borderRadius: BorderRadius.circular(5),
                   borderSide: BorderSide(color: Colors.blue),
                 ),
                 errorBorder: OutlineInputBorder(
                   gapPadding: 3.3,
-                  borderRadius: BorderRadius.circular(20),
+                  borderRadius: BorderRadius.circular(5),
                   borderSide: BorderSide(color: Colors.red),
                 ),
               ),
@@ -992,15 +993,15 @@ class _AddArticlePageState extends State<AddArticlePage>
                   ),
                   focusedBorder: OutlineInputBorder(
                       borderSide: BorderSide(color: Colors.blue),
-                      borderRadius: BorderRadius.circular(20)),
+                      borderRadius: BorderRadius.circular(5)),
                   enabledBorder: OutlineInputBorder(
                     gapPadding: 3.3,
-                    borderRadius: BorderRadius.circular(20),
+                    borderRadius: BorderRadius.circular(5),
                     borderSide: BorderSide(color: Colors.blue),
                   ),
                   errorBorder: OutlineInputBorder(
                     gapPadding: 3.3,
-                    borderRadius: BorderRadius.circular(20),
+                    borderRadius: BorderRadius.circular(5),
                     borderSide: BorderSide(color: Colors.red),
                   ),
                 ),
@@ -1035,15 +1036,15 @@ class _AddArticlePageState extends State<AddArticlePage>
                   ),
                   focusedBorder: OutlineInputBorder(
                       borderSide: BorderSide(color: Colors.blue),
-                      borderRadius: BorderRadius.circular(20)),
+                      borderRadius: BorderRadius.circular(5)),
                   enabledBorder: OutlineInputBorder(
                     gapPadding: 3.3,
-                    borderRadius: BorderRadius.circular(20),
+                    borderRadius: BorderRadius.circular(5),
                     borderSide: BorderSide(color: Colors.blue),
                   ),
                   errorBorder: OutlineInputBorder(
                     gapPadding: 3.3,
-                    borderRadius: BorderRadius.circular(20),
+                    borderRadius: BorderRadius.circular(5),
                     borderSide: BorderSide(color: Colors.red),
                   ),
                 ),
@@ -1058,7 +1059,7 @@ class _AddArticlePageState extends State<AddArticlePage>
                           border: Border.all(
                             color: Colors.blueAccent,
                           ),
-                          borderRadius: BorderRadius.circular(20.0),
+                          borderRadius: BorderRadius.circular(5),
                         )
                       : null,
                   child: SwitchListTile(
@@ -1112,7 +1113,7 @@ class _AddArticlePageState extends State<AddArticlePage>
           decoration: InputDecoration(
             focusedBorder: OutlineInputBorder(
                 borderSide: BorderSide(color: Colors.blue),
-                borderRadius: BorderRadius.circular(20)),
+                borderRadius: BorderRadius.circular(5)),
             contentPadding: EdgeInsets.only(left: 20, top: 20, bottom: 20),
             labelText: S.current.description,
             labelStyle: GoogleFonts.lato(
@@ -1123,7 +1124,7 @@ class _AddArticlePageState extends State<AddArticlePage>
             hintStyle: GoogleFonts.lato(),
             enabledBorder: OutlineInputBorder(
               gapPadding: 3.3,
-              borderRadius: BorderRadius.circular(20),
+              borderRadius: BorderRadius.circular(5),
               borderSide: BorderSide(color: Colors.blue),
             ),
           ),
@@ -1256,7 +1257,7 @@ class _AddArticlePageState extends State<AddArticlePage>
                       ),
                       focusedBorder: OutlineInputBorder(
                           borderSide: BorderSide(color: Colors.blue),
-                          borderRadius: BorderRadius.circular(20)),
+                          borderRadius: BorderRadius.circular(5)),
                       contentPadding: EdgeInsets.only(left: 10),
                       labelText: S.current.marque,
                       labelStyle: GoogleFonts.lato(
@@ -1265,7 +1266,7 @@ class _AddArticlePageState extends State<AddArticlePage>
                       ),
                       enabledBorder: OutlineInputBorder(
                         gapPadding: 3.3,
-                        borderRadius: BorderRadius.circular(20),
+                        borderRadius: BorderRadius.circular(5),
                         borderSide: BorderSide(color: Colors.blue),
                       ),
                     ),
@@ -1278,7 +1279,7 @@ class _AddArticlePageState extends State<AddArticlePage>
                   padding: EdgeInsets.only(right: 0, left: 0),
                   child: RaisedButton(
                     shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(18.0),
+                      borderRadius: BorderRadius.circular(5),
                     ),
                     onPressed: () async {
                       if (_formKey.currentState.validate()) {
@@ -1370,7 +1371,7 @@ class _AddArticlePageState extends State<AddArticlePage>
                       ),
                       focusedBorder: OutlineInputBorder(
                           borderSide: BorderSide(color: Colors.blue),
-                          borderRadius: BorderRadius.circular(20)),
+                          borderRadius: BorderRadius.circular(5)),
                       contentPadding: EdgeInsets.only(left: 10),
                       labelText: S.current.famile,
                       labelStyle: GoogleFonts.lato(
@@ -1379,7 +1380,7 @@ class _AddArticlePageState extends State<AddArticlePage>
                       ),
                       enabledBorder: OutlineInputBorder(
                         gapPadding: 3.3,
-                        borderRadius: BorderRadius.circular(20),
+                        borderRadius: BorderRadius.circular(5),
                         borderSide: BorderSide(color: Colors.blue),
                       ),
                     ),
@@ -1392,7 +1393,7 @@ class _AddArticlePageState extends State<AddArticlePage>
                   padding: EdgeInsets.only(right: 0, left: 0),
                   child: RaisedButton(
                     shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(18.0),
+                      borderRadius: BorderRadius.circular(5),
                     ),
                     onPressed: () async {
                       if (_formKey.currentState.validate()) {
@@ -1482,7 +1483,7 @@ class _AddArticlePageState extends State<AddArticlePage>
                       ),
                       focusedBorder: OutlineInputBorder(
                           borderSide: BorderSide(color: Colors.blue),
-                          borderRadius: BorderRadius.circular(20)),
+                          borderRadius: BorderRadius.circular(5)),
                       contentPadding: EdgeInsets.only(left: 10),
                       labelText: S.current.taux_tva,
                       labelStyle: GoogleFonts.lato(
@@ -1491,7 +1492,7 @@ class _AddArticlePageState extends State<AddArticlePage>
                       ),
                       enabledBorder: OutlineInputBorder(
                         gapPadding: 3.3,
-                        borderRadius: BorderRadius.circular(20),
+                        borderRadius: BorderRadius.circular(5),
                         borderSide: BorderSide(color: Colors.blue),
                       ),
                     ),
@@ -1504,7 +1505,7 @@ class _AddArticlePageState extends State<AddArticlePage>
                   padding: EdgeInsets.only(right: 0, left: 0),
                   child: RaisedButton(
                     shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(18.0),
+                      borderRadius: BorderRadius.circular(5),
                     ),
                     onPressed: () async {
                       if (_formKey.currentState.validate()) {

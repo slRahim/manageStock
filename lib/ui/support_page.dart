@@ -82,7 +82,7 @@ class _SupportPageState extends State<SupportPage> {
                         padding: EdgeInsets.all(20),
                         decoration: BoxDecoration(
                             color: Colors.deepOrangeAccent,
-                            borderRadius: BorderRadius.circular(10)),
+                            borderRadius: BorderRadius.circular(5)),
                         child: Center(
                           child: Text(
                             S.current.get_ticket,

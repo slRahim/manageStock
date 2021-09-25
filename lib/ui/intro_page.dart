@@ -247,15 +247,15 @@ class _IntroPageState extends State<IntroPage> {
           padding: const EdgeInsets.all(8),
           decoration: BoxDecoration(
             border: Border.all(
-              color: Colors.blueAccent,
+              color: Theme.of(context).primaryColor,
             ),
-            borderRadius: BorderRadius.circular(20.0),
+            borderRadius: BorderRadius.circular(5),
           ),
           child: Row(
             children: [
               Icon(
                 Icons.language,
-                color: Theme.of(context).accentColor,
+                color: Theme.of(context).primaryColor,
               ),
               Expanded(
                 child: Center(
@@ -271,7 +271,7 @@ class _IntroPageState extends State<IntroPage> {
                           setState(() {
                             _selectedLanguage = value;
                             switch (_selectedLanguage) {
-                              case ("English (ENG)"):
+                              case ("English (EN)"):
                                 S.load(Locale("en")).then((value) {
                                   _countries.clear();
                                   _countries.add(CountryModel.init(
@@ -365,15 +365,15 @@ class _IntroPageState extends State<IntroPage> {
               padding: const EdgeInsets.all(8),
               decoration: BoxDecoration(
                 border: Border.all(
-                  color: Colors.blueAccent,
+                  color: Theme.of(context).primaryColor,
                 ),
-                borderRadius: BorderRadius.circular(20.0),
+                borderRadius: BorderRadius.circular(5),
               ),
               child: Row(
                 children: [
                   Icon(
                     Icons.pin_drop,
-                    color: Theme.of(context).accentColor,
+                    color: Theme.of(context).primaryColor,
                   ),
                   SizedBox(
                     width: 5,
@@ -433,15 +433,15 @@ class _IntroPageState extends State<IntroPage> {
               width: 300,
               decoration: BoxDecoration(
                 border: Border.all(
-                  color: Colors.blueAccent,
+                  color: Theme.of(context).primaryColor,
                 ),
-                borderRadius: BorderRadius.circular(20.0),
+                borderRadius: BorderRadius.circular(5),
               ),
               child: Row(
                 children: [
                   Icon(
                     Icons.pin_drop,
-                    color: Theme.of(context).accentColor,
+                    color: Theme.of(context).primaryColor,
                   ),
                   SizedBox(
                     width: 5,
@@ -487,15 +487,15 @@ class _IntroPageState extends State<IntroPage> {
               width: 300,
               decoration: BoxDecoration(
                 border: Border.all(
-                  color: Colors.blueAccent,
+                  color: Theme.of(context).primaryColor,
                 ),
-                borderRadius: BorderRadius.circular(20.0),
+                borderRadius: BorderRadius.circular(5),
               ),
               child: Row(
                 children: [
                   Icon(
                     Icons.pin_drop,
-                    color: Theme.of(context).accentColor,
+                    color: Theme.of(context).primaryColor,
                   ),
                   SizedBox(
                     width: 5,
@@ -540,7 +540,7 @@ class _IntroPageState extends State<IntroPage> {
                     searchInputDecoration: InputDecoration(
                       focusedBorder: OutlineInputBorder(
                           borderSide: BorderSide(color: Colors.blue),
-                          borderRadius: BorderRadius.circular(20)),
+                          borderRadius: BorderRadius.circular(5)),
                       contentPadding:
                           EdgeInsets.only(left: 20, top: 20, bottom: 20),
                       labelText: S.current.devise,
@@ -549,7 +549,7 @@ class _IntroPageState extends State<IntroPage> {
                       hintText: S.current.msg_search,
                       enabledBorder: OutlineInputBorder(
                         gapPadding: 3.3,
-                        borderRadius: BorderRadius.circular(20),
+                        borderRadius: BorderRadius.circular(5),
                         borderSide: BorderSide(color: Colors.blue[600]),
                       ),
                     ),
@@ -572,15 +572,15 @@ class _IntroPageState extends State<IntroPage> {
                 width: 300,
                 decoration: BoxDecoration(
                   border: Border.all(
-                    color: Colors.blueAccent,
+                    color: Theme.of(context).primaryColor,
                   ),
-                  borderRadius: BorderRadius.circular(20.0),
+                  borderRadius: BorderRadius.circular(5),
                 ),
                 child: Row(
                   children: [
                     Icon(
                       Icons.monetization_on,
-                      color: Theme.of(context).accentColor,
+                      color: Theme.of(context).primaryColor,
                     ),
                     SizedBox(
                       width: 5,
@@ -640,14 +640,14 @@ class _IntroPageState extends State<IntroPage> {
                       labelStyle: GoogleFonts.lato(),
                       prefixIcon: Icon(
                         MdiIcons.idCard,
-                        color: Theme.of(context).accentColor,
+                        color: Theme.of(context).primaryColor,
                       ),
                       focusedBorder: OutlineInputBorder(
                           borderSide: BorderSide(color: Colors.blue),
-                          borderRadius: BorderRadius.circular(20)),
+                          borderRadius: BorderRadius.circular(5)),
                       enabledBorder: OutlineInputBorder(
                         gapPadding: 3.3,
-                        borderRadius: BorderRadius.circular(20),
+                        borderRadius: BorderRadius.circular(5),
                         borderSide: BorderSide(color: Colors.blue),
                       ),
                     ),
@@ -666,14 +666,14 @@ class _IntroPageState extends State<IntroPage> {
                       labelStyle: GoogleFonts.lato(),
                       prefixIcon: Icon(
                         Icons.local_activity,
-                        color: Theme.of(context).accentColor,
+                        color: Theme.of(context).primaryColor,
                       ),
                       focusedBorder: OutlineInputBorder(
                           borderSide: BorderSide(color: Colors.blue),
-                          borderRadius: BorderRadius.circular(20)),
+                          borderRadius: BorderRadius.circular(5)),
                       enabledBorder: OutlineInputBorder(
                         gapPadding: 3.3,
-                        borderRadius: BorderRadius.circular(20),
+                        borderRadius: BorderRadius.circular(5),
                         borderSide: BorderSide(color: Colors.blue),
                       ),
                     ),
@@ -692,14 +692,14 @@ class _IntroPageState extends State<IntroPage> {
                       labelStyle: GoogleFonts.lato(),
                       prefixIcon: Icon(
                         Icons.phone_enabled,
-                        color: Theme.of(context).accentColor,
+                        color: Theme.of(context).primaryColor,
                       ),
                       focusedBorder: OutlineInputBorder(
                           borderSide: BorderSide(color: Colors.blue),
-                          borderRadius: BorderRadius.circular(20)),
+                          borderRadius: BorderRadius.circular(5)),
                       enabledBorder: OutlineInputBorder(
                         gapPadding: 3.3,
-                        borderRadius: BorderRadius.circular(20),
+                        borderRadius: BorderRadius.circular(5),
                         borderSide: BorderSide(color: Colors.blue),
                       ),
                     ),
@@ -718,14 +718,14 @@ class _IntroPageState extends State<IntroPage> {
                       labelText: S.current.adresse,
                       prefixIcon: Icon(
                         Icons.map,
-                        color: Theme.of(context).accentColor,
+                        color: Theme.of(context).primaryColor,
                       ),
                       focusedBorder: OutlineInputBorder(
                           borderSide: BorderSide(color: Colors.blue),
-                          borderRadius: BorderRadius.circular(20)),
+                          borderRadius: BorderRadius.circular(5)),
                       enabledBorder: OutlineInputBorder(
                         gapPadding: 3.3,
-                        borderRadius: BorderRadius.circular(20),
+                        borderRadius: BorderRadius.circular(5),
                         borderSide: BorderSide(color: Colors.blue),
                       ),
                     ),
@@ -744,14 +744,14 @@ class _IntroPageState extends State<IntroPage> {
                       labelText: S.current.n_rc,
                       prefixIcon: Icon(
                         Icons.backup_table_outlined,
-                        color: Theme.of(context).accentColor,
+                        color: Theme.of(context).primaryColor,
                       ),
                       focusedBorder: OutlineInputBorder(
                           borderSide: BorderSide(color: Colors.blue),
-                          borderRadius: BorderRadius.circular(20)),
+                          borderRadius: BorderRadius.circular(5)),
                       enabledBorder: OutlineInputBorder(
                         gapPadding: 3.3,
-                        borderRadius: BorderRadius.circular(20),
+                        borderRadius: BorderRadius.circular(5),
                         borderSide: BorderSide(color: Colors.blue),
                       ),
                     ),
@@ -770,14 +770,14 @@ class _IntroPageState extends State<IntroPage> {
                       labelStyle: GoogleFonts.lato(),
                       prefixIcon: Icon(
                         Icons.list_alt_outlined,
-                        color: Theme.of(context).accentColor,
+                        color: Theme.of(context).primaryColor,
                       ),
                       focusedBorder: OutlineInputBorder(
                           borderSide: BorderSide(color: Colors.blue),
-                          borderRadius: BorderRadius.circular(20)),
+                          borderRadius: BorderRadius.circular(5)),
                       enabledBorder: OutlineInputBorder(
                         gapPadding: 3.3,
-                        borderRadius: BorderRadius.circular(20),
+                        borderRadius: BorderRadius.circular(5),
                         borderSide: BorderSide(color: Colors.blue),
                       ),
                     ),
@@ -870,7 +870,7 @@ class _IntroPageState extends State<IntroPage> {
     PushNotificationsManager.of(context).onMyParamsChange(_myParams);
     PushNotificationsManager.of(context).onProfileChange(_profile);
     switch (_selectedLanguage) {
-      case ("English (ENG)"):
+      case ("English (EN)"):
         _prefs.setString("myLocale", "en");
         break;
       case ("Français (FR)"):
@@ -946,7 +946,7 @@ class _IntroPageState extends State<IntroPage> {
     List<CompteTresorie> comptes = new List<CompteTresorie> ();
 
     switch (_selectedLanguage) {
-      case("English (ENG)"):
+      case("English (EN)"):
         charges.add(new ChargeTresorie(null,"Electricity"));
         charges.add(new ChargeTresorie(null,"Rent"));
         charges.add(new ChargeTresorie(null,"Salary"));
