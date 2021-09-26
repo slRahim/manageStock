@@ -321,132 +321,129 @@ class _ArticleListItemSelectedState extends State<ArticleListItemSelected> {
                     ),
                   ),
                 ),
-                SizedBox(
-                  width: 320.0,
-                  child: Padding(
-                    padding: EdgeInsets.only(right: 0, left: 0),
-                    child: Column(
-                      mainAxisSize: MainAxisSize.max,
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Row(
-                          mainAxisSize: MainAxisSize.max,
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            RawMaterialButton(
-                              onPressed: _qteDialogMinusButton,
-                              elevation: 2.0,
-                              fillColor: Colors.redAccent,
-                              child: Icon(
-                                Icons.remove,
-                                color: Colors.white,
-                              ),
-                              padding: EdgeInsets.all(15.0),
-                              shape: CircleBorder(),
+                Padding(
+                  padding: EdgeInsets.only(right: 0, left: 0),
+                  child: Column(
+                    mainAxisSize: MainAxisSize.max,
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Row(
+                        mainAxisSize: MainAxisSize.max,
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          RawMaterialButton(
+                            onPressed: _qteDialogMinusButton,
+                            elevation: 2.0,
+                            fillColor: Colors.redAccent,
+                            child: Icon(
+                              Icons.remove,
+                              color: Colors.white,
                             ),
-                            RawMaterialButton(
-                              onPressed: _qteDialogPlusButton,
-                              elevation: 2.0,
-                              fillColor: Colors.greenAccent[700],
-                              child: Icon(
-                                Icons.add,
-                                color: Colors.white,
-                              ),
-                              padding: EdgeInsets.all(15.0),
-                              shape: CircleBorder(),
-                            )
-                          ],
-                        ),
-                        SizedBox(height: 20),
-                        Padding(
-                          padding:
-                              EdgeInsets.only(left: 5, right: 5, bottom: 20),
-                          child: TextField(
-                            controller: _priceControler,
-                            keyboardType: TextInputType.number,
-                            onTap: () => {
-                              _priceControler.selection = TextSelection(
-                                  baseOffset: 0,
-                                  extentOffset:
-                                      _priceControler.value.text.length),
-                            },
-                            decoration: InputDecoration(
-                              errorText: _validatePriceError ?? null,
-                              prefixIcon: Icon(
-                                Icons.attach_money,
-                                color: Colors.orange[900],
-                              ),
-                              focusedBorder: OutlineInputBorder(
-                                  borderSide:
-                                      BorderSide(color: Colors.orange[900]),
-                                  borderRadius: BorderRadius.circular(5)),
-                              contentPadding: EdgeInsets.only(left: 10),
-                              labelText: S.current.prix_unite,
-                              labelStyle: GoogleFonts.lato(
-                                  textStyle:
-                                      TextStyle(color: Colors.orange[900])),
-                              enabledBorder: OutlineInputBorder(
-                                gapPadding: 3.3,
-                                borderRadius: BorderRadius.circular(5),
+                            padding: EdgeInsets.all(15.0),
+                            shape: CircleBorder(),
+                          ),
+                          RawMaterialButton(
+                            onPressed: _qteDialogPlusButton,
+                            elevation: 2.0,
+                            fillColor: Colors.greenAccent[700],
+                            child: Icon(
+                              Icons.add,
+                              color: Colors.white,
+                            ),
+                            padding: EdgeInsets.all(15.0),
+                            shape: CircleBorder(),
+                          )
+                        ],
+                      ),
+                      SizedBox(height: 20),
+                      Padding(
+                        padding:
+                            EdgeInsets.only(left: 5, right: 5, bottom: 20),
+                        child: TextField(
+                          controller: _priceControler,
+                          keyboardType: TextInputType.number,
+                          onTap: () => {
+                            _priceControler.selection = TextSelection(
+                                baseOffset: 0,
+                                extentOffset:
+                                    _priceControler.value.text.length),
+                          },
+                          decoration: InputDecoration(
+                            errorText: _validatePriceError ?? null,
+                            prefixIcon: Icon(
+                              Icons.attach_money,
+                              color: Colors.orange[900],
+                            ),
+                            focusedBorder: OutlineInputBorder(
                                 borderSide:
                                     BorderSide(color: Colors.orange[900]),
-                              ),
+                                borderRadius: BorderRadius.circular(5)),
+                            contentPadding: EdgeInsets.only(left: 10),
+                            labelText: S.current.prix_unite,
+                            labelStyle: GoogleFonts.lato(
+                                textStyle:
+                                    TextStyle(color: Colors.orange[900])),
+                            enabledBorder: OutlineInputBorder(
+                              gapPadding: 3.3,
+                              borderRadius: BorderRadius.circular(5),
+                              borderSide:
+                                  BorderSide(color: Colors.orange[900]),
                             ),
                           ),
                         ),
-                        SizedBox(height: 10),
-                        //buttons
-                        Row(
-                          mainAxisSize: MainAxisSize.max,
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            InkWell(
-                              onTap: () {
-                                _qteDialogCancelButton(context, _setState);
-                              },
-                              child: Container(
-                                padding: EdgeInsets.all(8.0),
-                                width: 100,
-                                decoration: BoxDecoration(
-                                    color: Colors.red,
-                                    borderRadius: BorderRadius.all(
-                                        Radius.circular(100))),
-                                child: Text(
-                                  S.current.annuler,
-                                  textAlign: TextAlign.center,
-                                  style: TextStyle(
-                                      color: Colors.white,
-                                      fontWeight: FontWeight.w700,
-                                      fontSize: 14),
-                                ),
+                      ),
+                      SizedBox(height: 10),
+                      //buttons
+                      Row(
+                        mainAxisSize: MainAxisSize.max,
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          InkWell(
+                            onTap: () {
+                              _qteDialogCancelButton(context, _setState);
+                            },
+                            child: Container(
+                              padding: EdgeInsets.all(8.0),
+                              width: 100,
+                              decoration: BoxDecoration(
+                                  color: Colors.red,
+                                  borderRadius: BorderRadius.all(
+                                      Radius.circular(100))),
+                              child: Text(
+                                S.current.annuler,
+                                textAlign: TextAlign.center,
+                                style: TextStyle(
+                                    color: Colors.white,
+                                    fontWeight: FontWeight.w700,
+                                    fontSize: 14),
                               ),
                             ),
-                            SizedBox(width: 10),
-                            InkWell(
-                              onTap: () {
-                                _qteDialogConfirmButton(context, _setState);
-                              },
-                              child: Container(
-                                padding: EdgeInsets.all(8.0),
-                                width: 100,
-                                decoration: BoxDecoration(
-                                    color: Color(0xFF00CA71),
-                                    borderRadius: BorderRadius.all(
-                                        Radius.circular(100))),
-                                child: Text(
-                                  S.current.confirme,
-                                  textAlign: TextAlign.center,
-                                  style: TextStyle(
-                                      color: Colors.white,
-                                      fontWeight: FontWeight.w700,
-                                      fontSize: 14),
-                                ),
+                          ),
+                          SizedBox(width: 10),
+                          InkWell(
+                            onTap: () {
+                              _qteDialogConfirmButton(context, _setState);
+                            },
+                            child: Container(
+                              padding: EdgeInsets.all(8.0),
+                              width: 100,
+                              decoration: BoxDecoration(
+                                  color: Color(0xFF00CA71),
+                                  borderRadius: BorderRadius.all(
+                                      Radius.circular(100))),
+                              child: Text(
+                                S.current.confirme,
+                                textAlign: TextAlign.center,
+                                style: TextStyle(
+                                    color: Colors.white,
+                                    fontWeight: FontWeight.w700,
+                                    fontSize: 14),
                               ),
                             ),
-                          ],
-                        ),
-                      ],
-                    ),
+                          ),
+                        ],
+                      ),
+                    ],
                   ),
                 )
               ],

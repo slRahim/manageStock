@@ -93,7 +93,7 @@ class _PurchasePageState extends State<PurchasePage> {
     final bool available = await _instance.isAvailable();
     if (available) {
       final QueryPurchaseDetailsResponse response =
-          await _instance.queryPastPurchases();
+      await _instance.queryPastPurchases();
       _purchases = response.pastPurchases;
       if (_purchases.length != 0) {
         _selectedProduct = _purchases[0].productID;
@@ -108,7 +108,7 @@ class _PurchasePageState extends State<PurchasePage> {
     final bool available = await _instance.isAvailable();
     if (available) {
       final ProductDetailsResponse response =
-          await _instance.queryProductDetails(_productIds);
+      await _instance.queryProductDetails(_productIds);
       return new Future(() => response.productDetails);
     }
     return null;
@@ -146,66 +146,66 @@ class _PurchasePageState extends State<PurchasePage> {
                             padding: EdgeInsets.all(8.0),
                             child: Column(
                                 children: products.data.map((item) {
-                              _selectedProduct = item.productID;
-                              _verifyPurchase(context);
-                              return Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  InkWell(
-                                    onTap: () async {
-                                      _selectedProduct = item.productID;
-                                      await _verifyPurchase(context);
-                                    },
-                                    child: Container(
-                                      padding: EdgeInsets.all(8),
-                                      margin: EdgeInsetsDirectional.only(
-                                          bottom: 10),
-                                      decoration: BoxDecoration(
-                                          borderRadius:
+                                  _selectedProduct = item.productID;
+                                  _verifyPurchase(context);
+                                  return Column(
+                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    children: [
+                                      InkWell(
+                                        onTap: () async {
+                                          _selectedProduct = item.productID;
+                                          await _verifyPurchase(context);
+                                        },
+                                        child: Container(
+                                          padding: EdgeInsets.all(8),
+                                          margin: EdgeInsetsDirectional.only(
+                                              bottom: 10),
+                                          decoration: BoxDecoration(
+                                              borderRadius:
                                               BorderRadius.circular(5),
-                                          border: Border.all(
-                                              color: Colors.indigo, width: 2),
-                                          color: Theme.of(context)
-                                              .selectedRowColor),
-                                      child: ListTile(
-                                          title: Text(
-                                            "${item.productID == '010101' ? S.current.mensuel : item.productID == '121212' ? S.current.annuel : S.current.a_vie}",
-                                            style: GoogleFonts.lato(
-                                                textStyle: GoogleFonts.lato(
+                                              border: Border.all(
+                                                  color: Colors.indigo, width: 2),
+                                              color: Theme.of(context)
+                                                  .selectedRowColor),
+                                          child: ListTile(
+                                              title: Text(
+                                                "${item.productID == '010101' ? S.current.mensuel : item.productID == '121212' ? S.current.annuel : S.current.a_vie}",
+                                                style: GoogleFonts.lato(
+                                                    textStyle: GoogleFonts.lato(
+                                                        textStyle: TextStyle(
+                                                            fontWeight:
+                                                            FontWeight.bold,
+                                                            fontSize: 22))),
+                                              ),
+                                              subtitle: Text(
+                                                "${DateTime.fromMillisecondsSinceEpoch((item.billingClientPurchase.purchaseTime))}",
+                                                style: GoogleFonts.lato(
                                                     textStyle: TextStyle(
                                                         fontWeight:
-                                                            FontWeight.bold,
-                                                        fontSize: 22))),
-                                          ),
-                                          subtitle: Text(
-                                            "${DateTime.fromMillisecondsSinceEpoch((item.billingClientPurchase.purchaseTime))}",
-                                            style: GoogleFonts.lato(
-                                                textStyle: TextStyle(
-                                                    fontWeight:
                                                         FontWeight.bold)),
-                                          ),
-                                          trailing: Icon(
-                                            Icons.check_circle,
-                                            color: Colors.green,
-                                            size: 30,
-                                          )),
-                                    ),
-                                  ),
-                                  SizedBox(
-                                    height: 5,
-                                  ),
-                                  Text(
-                                    S.current.msg_get_abonnement,
-                                    style: GoogleFonts.lato(
-                                        textStyle: TextStyle(
-                                            color: Theme.of(context)
-                                                .tabBarTheme
-                                                .unselectedLabelColor,
-                                            fontWeight: FontWeight.bold)),
-                                  )
-                                ],
-                              );
-                            }).toList()));
+                                              ),
+                                              trailing: Icon(
+                                                Icons.check_circle,
+                                                color: Colors.green,
+                                                size: 30,
+                                              )),
+                                        ),
+                                      ),
+                                      SizedBox(
+                                        height: 5,
+                                      ),
+                                      Text(
+                                        S.current.msg_get_abonnement,
+                                        style: GoogleFonts.lato(
+                                            textStyle: TextStyle(
+                                                color: Theme.of(context)
+                                                    .tabBarTheme
+                                                    .unselectedLabelColor,
+                                                fontWeight: FontWeight.bold)),
+                                      )
+                                    ],
+                                  );
+                                }).toList()));
                       } else {
                         // get tous les produits
                         return FutureBuilder<List<ProductDetails>>(
@@ -297,7 +297,8 @@ class _PurchasePageState extends State<PurchasePage> {
 
     switch (productDetail.id) {
       case "010101":
-        _prixmensuelle = double.parse(_prix_product);
+        _prixmensuelle =
+            double.parse(Helpers.extractPriceInappPurchase(_prix_product));
         break;
       case "121212":
         _prix_product = Helpers.extractPriceInappPurchase(_prix_product);
@@ -321,16 +322,16 @@ class _PurchasePageState extends State<PurchasePage> {
                 color: (productDetail.id == "010101")
                     ? Colors.blue
                     : (productDetail.id == "121212")
-                        ? Colors.green
-                        : Colors.red,
+                    ? Colors.green
+                    : Colors.red,
                 width: 2),
             color: Theme.of(context).selectedRowColor),
         child: ListTile(
           title: Text(
-            "$_devise_product ${Helpers.numberFormat(double.parse(_prix_product))}",
+            "$_devise_product ${Helpers.numberFormat(double.parse(Helpers.extractPriceInappPurchase(_prix_product)))}",
             style: GoogleFonts.lato(
                 textStyle:
-                    TextStyle(fontWeight: FontWeight.bold, fontSize: 22)),
+                TextStyle(fontWeight: FontWeight.bold, fontSize: 22)),
           ),
           subtitle: Text(
             "${translateProductSubTitle(productDetail.title).toString()}",
@@ -339,68 +340,67 @@ class _PurchasePageState extends State<PurchasePage> {
           ),
           trailing: (productDetail.id != "010101")
               ? Container(
-                  padding: EdgeInsets.all(4),
-                  decoration: BoxDecoration(
-                    color: (productDetail.id == "010101")
-                        ? Colors.blue[900]
-                        : (productDetail.id == "121212")
-                            ? Colors.green[700]
-                            : Colors.red[900],
-                    borderRadius: BorderRadius.circular(5),
-                  ),
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      (productDetail.id == "121212")
-                          ? Text(
-                        S.current.economiser,
-                        style: GoogleFonts.lato(
-                            textStyle: TextStyle(
-                                fontWeight: FontWeight.bold,
-                                color: Colors.white,
-                                fontSize: 14)),
-                      )
-                          : SizedBox(),
-                      SizedBox(
-                        height: 5,
-                      ),
-                      (productDetail.id == "121212")
-                          ? Text("${_remisePercent.roundToDouble()} %",
-                              style: GoogleFonts.lato(
-                                textStyle: TextStyle(
-                                    fontWeight: FontWeight.bold,
-                                    color: Colors.white,
-                                    fontSize: 14),
-                              ))
-                          : Text(
-                              "${S.current.no_abonnement}",
-                              textAlign: TextAlign.center,
-                              style: GoogleFonts.lato(
-                                  textStyle: TextStyle(
-                                      fontWeight: FontWeight.bold,
-                                      color: Colors.white,
-                                      fontSize: 14)),
-                            ),
-
-                    ],
-                  ),
+            padding: EdgeInsets.all(4),
+            decoration: BoxDecoration(
+              color: (productDetail.id == "010101")
+                  ? Colors.blue[900]
+                  : (productDetail.id == "121212")
+                  ? Colors.green[700]
+                  : Colors.red[900],
+              borderRadius: BorderRadius.circular(5),
+            ),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                (productDetail.id == "121212")
+                    ? Text(
+                  S.current.economiser,
+                  style: GoogleFonts.lato(
+                      textStyle: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          color: Colors.white,
+                          fontSize: 14)),
                 )
+                    : SizedBox(),
+                SizedBox(
+                  height: 5,
+                ),
+                (productDetail.id == "121212")
+                    ? Text("${_remisePercent.roundToDouble()} %",
+                    style: GoogleFonts.lato(
+                      textStyle: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          color: Colors.white,
+                          fontSize: 14),
+                    ))
+                    : Text(
+                  "${S.current.no_abonnement}",
+                  textAlign: TextAlign.center,
+                  style: GoogleFonts.lato(
+                      textStyle: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          color: Colors.white,
+                          fontSize: 14)),
+                ),
+              ],
+            ),
+          )
               : null,
         ),
       ),
     );
   }
 
-  translateProductSubTitle(String subtitle){
-    switch (subtitle){
-      case "mensuel (Gestmob)" :
-        return  S.current.mensuel ;
+  translateProductSubTitle(String subtitle) {
+    switch (subtitle) {
+      case "mensuel (Gestmob)":
+        return S.current.mensuel;
         break;
-      case "annuel (Gestmob)" :
-        return S.current.annuel ;
+      case "annuel (Gestmob)":
+        return S.current.annuel;
         break;
-      case "à vie  (Gestmob)" :
-        return S.current.a_vie ;
+      case "à vie  (Gestmob)":
+        return S.current.a_vie;
         break;
     }
   }
@@ -457,9 +457,9 @@ class _PurchasePageState extends State<PurchasePage> {
   purchaseItem(ProductDetails productDetails) async {
     _selectedProduct = productDetails.id;
     final PurchaseParam purchaseParam =
-        PurchaseParam(productDetails: productDetails);
+    PurchaseParam(productDetails: productDetails);
     if ((Platform.isIOS &&
-            productDetails.skProduct.subscriptionPeriod == null) ||
+        productDetails.skProduct.subscriptionPeriod == null) ||
         (Platform.isAndroid && productDetails.skuDetail.type == SkuType.subs)) {
       await _instance.buyConsumable(
           purchaseParam: purchaseParam, autoConsume: false);
@@ -469,5 +469,4 @@ class _PurchasePageState extends State<PurchasePage> {
       );
     }
   }
-
 }
